@@ -1,5 +1,4 @@
 #pragma once
-#pragma target 5.0
 
 /**
  * This file contains macros used in writing shader templates with support of IDE linter

@@ -1,5 +1,4 @@
-#ifndef __MATRIX_INCLUDED__
-#define __MATRIX_INCLUDED__
+#pragma once
 // source: https://gist.github.com/mattatz/86fff4b32d198d0928d0fa4ff32cf6fa
 
 #define IDENTITY_MATRIX float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
@@ -297,5 +296,3 @@ float4x4 m_rotate(float angle, float3 axis)
         0, 0, 0, 1
     );
 }
-
-#endif // __MATRIX_INCLUDED__

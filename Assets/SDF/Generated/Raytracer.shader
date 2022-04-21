@@ -1,75 +1,69 @@
 Shader "SDF/Domain"
 {
+    // PROP BLOCK
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _TorusSizes ("Torus R and r", Vector) = (.5, .1, 0, 0)
+        _MAX_STEPS ("max steps of raymarcher", Int) = 200
+        _MAX_DISTANCE ("max distance a ray can march", Float) = 200.0
+        _EPSILON_RAY ("minimum distance for ray to consider the surface hit", Float) = 0.001
+        _EPSILON_NORMAL ("epsilon for claculating normal", Float) = 0.001
     }
+
+//    Fallback "Diffuse"
 
     SubShader
     {
         Tags
         {
-            "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"
+            "RenderType"="Geometry"
+            "Queue"="Geometry"
+            "IgnoreProjector"="True"
         }
-        LOD 100
-        ZWrite Off
-        Blend SrcAlpha OneMinusSrcAlpha
+//        ZWrite On
+        ZTest On // When
+        //        Cull Off // When camera is inside domain        
+        // common includes for all passes
+        HLSLINCLUDE
+        #pragma target 5.0
+        #pragma vertex vert
+        #pragma fragment frag
 
+        #include "UnityCG.cginc"
+        #include "HLSLSupport.cginc"
+        #include "Assets/SDF/Includes/primitives.cginc"
+        #include "Assets/SDF/Includes/types.cginc"
+        #include "Assets/SDF/Includes/matrix.cginc"
+        #include "Assets/SDF/Includes/types.cginc"
+
+        sampler2D _MainTex;
+        float4 _MainTex_ST;
+        float4 _TorusSizes;
+        float _EPSILON_RAY;
+        float _EPSILON_NORMAL;
+        float _MAX_DISTANCE;
+        float _MAX_STEPS;
+        ENDHLSL
 
         Pass
         {
             HLSLPROGRAM
-            #pragma target 5.0
-            #pragma vertex vert
-            #pragma fragment frag
-
-            #include "UnityCG.cginc"
-            #include "HLSLSupport.cginc"
-            #include "Assets/SDF/Includes/primitives.cginc"
-            #include "Assets/SDF/Includes/types.cginc"
-            #include "Assets/SDF/Includes/matrix.cginc"
-
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float2 uv: TEXCOORD0;
-            };
-
-            struct v2f
-            {
-                float4 vertex : SV_POSITION;
-                float2 uv : TEXCOORD0;
-            };
-
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
-
             v2f vert(appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.ro = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1));
+                o.hitpos = v.vertex;
                 return o;
             }
 
-            // -----------------------------------
-
-            #define MAX_STEPS 1000
-            #define MAX_DISTANCE 2000.0f
-            #define EPSILON 0.001f
-            #define BACKGROUND float4(0, 0, 0, 0.5)
-            #define NO_ID -1
-
-            // -----------------------------------
-
-
             Hit __SDF(float3 p)
             {
-                p -= float3(.2,.5,.5);
-                float4x4 rot = m_rotate(.15, float3(0,0,1));
-                p = mul(rot, p);
-                //p = mul(float4(p, 1), float4x4 {{0}, {0}, {0}, {0}}).xyz;
-                Hit ret = {sdf::primitives3D::torus(p, 1, .1), 1};
+                // float4x4 rot = m_rotate(_Time.y, float3(0, 0, 1));
+                // p = mul(rot, p);
+                rZ(p, _Time.y/3);
+                Hit ret = {sdf::primitives3D::torus(p, _TorusSizes.x, _TorusSizes.y), 0};
                 return ret;
             }
 
@@ -81,36 +75,36 @@ Shader "SDF/Domain"
                 // EPSILON -- can be adjusted using pixel footprint
                 const float2 k = float2(1, -1);
                 return normalize(
-                    k.xyy * __SDF(p + k.xyy * EPSILON).distance +
-                    k.yyx * __SDF(p + k.yyx * EPSILON).distance +
-                    k.yxy * __SDF(p + k.yxy * EPSILON).distance +
-                    k.xxx * __SDF(p + k.xxx * EPSILON).distance
+                    k.xyy * __SDF(p + k.xyy * _EPSILON_NORMAL).distance +
+                    k.yyx * __SDF(p + k.yyx * _EPSILON_NORMAL).distance +
+                    k.yxy * __SDF(p + k.yxy * _EPSILON_NORMAL).distance +
+                    k.xxx * __SDF(p + k.xxx * _EPSILON_NORMAL).distance
                 );
             }
 
-            float3 __MATERIAL(int id)
+            static fixed4 _COLORS[] = {
+                fixed4(1, 0, 1, 1), // NO_ID
+                // ------------------- VALID MATERIALS BELOW
+                fixed4(0, 1, 0, .5),
+            };
+            
+            fixed4 __MATERIAL(int id)
             {
-                switch (id)
-                {
-                case 1:
-                    return float3(0.2, 0, 0); // RED albedo
-                default:
-                    return float3(1, 0, 1); // MAGENTA
-                }
+                return _COLORS[id+1];
             }
 
             void castRay(inout RayInfo3D ray)
             {
-                Hit hit = {MAX_DISTANCE, NO_ID};
+                Hit hit = {_MAX_DISTANCE, NO_ID};
                 ray.hit = hit;
 
                 float d = 0;
-                for (ray.steps = 0; ray.steps < MAX_STEPS; ray.steps++)
+                for (ray.steps = 0; ray.steps < _MAX_STEPS; ray.steps++)
                 {
                     ray.p = ray.ro + d * ray.rd;
 
-                    const Hit hit = __SDF(ray.p);
-                    if (hit.distance < EPSILON)
+                    Hit hit = __SDF(ray.p);
+                    if (hit.distance < _EPSILON_RAY)
                     {
                         ray.hit.distance = d;
                         ray.hit.id = hit.id;
@@ -119,32 +113,44 @@ Shader "SDF/Domain"
 
                     d += hit.distance;
 
-                    if (d >= MAX_DISTANCE)
+                    if (d >= _MAX_DISTANCE)
                         break;
                 }
             }
 
-            fixed4 frag(v2f i) : SV_Target
+            f2p frag(v2f i)
             {
-                float2 uv = i.uv - .5;
+                RayInfo3D ray = (RayInfo3D)0;
 
-                RayInfo3D ray;
-
-                ray.ro = float3(0, 1, -3);
-                ray.rd = normalize(float3(uv.x, uv.y - .3, 1));
+                ray.ro = i.ro;
+                ray.rd = normalize(i.hitpos - i.ro);
 
                 castRay(ray);
 
-                if (ray.hit.id == NO_ID) // exit if nothing hit
-                    return fixed4(0, 0, 0, 0);
+                // clip(ray.hit.id); // discard unhit rays
 
-                const float3 n = __SDF_NORMAL(ray.p);
+                float3 n = __SDF_NORMAL(ray.p);
 
-                fixed3 col = normalize(n) * .5 + .5;
+                float near = _ProjectionParams.y;
+                float far = _ProjectionParams.z;
 
-                return fixed4(col, 1);
+                float zc = mul(float4( ray.p, 1.0 ), unity_CameraProjection).z;
+                float wc = mul(float4( ray.p, 1.0 ), unity_CameraProjection ).w;
+                float d = zc/wc;
+                
+                // GAMMA
+                // col = pow(col, 0.45);
+                fixed4 col = __MATERIAL(ray.hit.id);
+                fixed3 n_col = normalize(n) * .5 + .5;
+                
+                f2p o = {
+                    {fixed4(n_col, 1)},
+                    {float3(normalize(n) * .5 + .5)},
+                    (ID) ray.hit.id,
+                    d,
+                };
+                return o;
             }
-
             // -----------------------------------
             ENDHLSL
         }

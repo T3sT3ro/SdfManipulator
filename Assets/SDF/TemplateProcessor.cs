@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using UnityEditor.Rendering;
-using UnityEditor.ShaderGraph.Internal;
 
 namespace SDF {
     public class TemplateProcessor {

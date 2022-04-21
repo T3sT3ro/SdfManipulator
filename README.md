@@ -34,8 +34,17 @@ TBD
   - smooth (default)
   - splats (circles/textures)
   - AO approximation
+- Bi/Triplanar texture mapping (sample by normal + blend on edge)
+- depth
+  - [legacy unity but explained depth reymarching](https://adrianb.io/2016/10/01/raymarching.html)
+  - [forum thread](https://forum.unity.com/threads/raymarcher-with-depth-buffer.877936/)
+  - [japanese tutorial on uRaymarchToolkit + alpha + depth](https://tips.hecomi.com/entry/2018/12/31/211448)
+  
 
 # Notes
+
+- [noises](https://lodev.org/cgtutor/randomnoise.html)
+- [volumetric light](https://fvcaputo.github.io/2017/05/02/ray-marching.html)
 
 costs:
 ```

@@ -1,5 +1,4 @@
 #pragma once
-#include "core.cginc"
 
 /**
  * Collection of operators for 3D SDFs centered at origin.
