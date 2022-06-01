@@ -5,36 +5,33 @@ typedef int ID;
 
 struct Hit
 {
-    float distance;
-    ID id;
+    float distance; // distance from sdf
+    ID id; // id of hit object
 };
 
 struct RayInfo3D
 {
-    float3 ro;
-    float3 rd;
-    float3 p; /// 3D point in space where ray is evaluated
-    int steps; /// how many steps did raymarcher do
-    Hit hit; /// ray hit results
+    float3 ro; // ray origin
+    float3 rd; // ray direction
+    float3 p; // mutable 3D point in space where ray is evaluated
+    int steps; // how many steps did raymarcher do
+    Hit hit; // ray hit results
 };
 
-struct appdata
-{
-    float4 vertex : POSITION;
-    float2 uv: TEXCOORD0;
-};
 
 struct v2f
 {
-    float4 vertex : SV_POSITION; // world space vertex pos
-    float3 ro : TEXCOORD0; // ray origin
-    float3 hitpos : TEXCOORD1; // ray's hit position on mesh
+    float4 vertex : SV_POSITION; // clip space vertex pos
+    float3 ro : TEXCOORD0; // world space ray origin - start of frustum
+    float3 re : TEXCOORD1; // world space ray end - end of frustum
+    
+    float3 cam_ro : TEXCOORD2; // ray origin
+    float3 hitpos : TEXCOORD3; // ray's hit position on mesh
 };
 
 struct f2p
 {
     fixed4 color: SV_Target0;
-    float3 normal: SV_Target1;
-    ID ID: SV_Target2;
-    float depth: SV_Depth;
+    float3 normal: SV_Target1; // world normal
+    ID ID: SV_Target2; // ID of object, for picking
 };

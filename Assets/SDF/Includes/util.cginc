@@ -20,41 +20,51 @@ float rand(float2 p) { return frac(sin(dot(p.xy, float2(12.9898, 78.233))) * 437
 
 // rotations from https://www.pouet.net/topic.php?which=7931&page=1&x=3&y=14
 
-void rX(inout float3 p, float a) {
- float c,s; float3 q=p;
- sincos(a, s, c);
- p.y = c * q.y - s * q.z;
- p.z = s * q.y + c * q.z;
+void rotX(inout float3 p, float a)
+{
+    float c, s;
+    float3 q = p;
+    sincos(a, s, c);
+    p.y = c * q.y - s * q.z;
+    p.z = s * q.y + c * q.z;
 }
 
-void rY(inout float3 p, float a) {
- float c,s;float3 q=p;
- sincos(a, s, c);
- p.x = c * q.x + s * q.z;
- p.z = -s * q.x + c * q.z;
+void rotY(inout float3 p, float a)
+{
+    float c, s;
+    float3 q = p;
+    sincos(a, s, c);
+    p.x = c * q.x + s * q.z;
+    p.z = -s * q.x + c * q.z;
 }
 
-void rZ(inout float3 p, float a) {
- float c,s;float3 q=p;
- sincos(a, s, c);
- p.x = c * q.x - s * q.y;
- p.y = s * q.x + c * q.y;
-}
-void rXCS(inout float3 p, float c, float s) {
- float3 q=p;
- p.y = c * q.y - s * q.z;
- p.z = s * q.y + c * q.z;
+void rotZ(inout float3 p, float a)
+{
+    float c, s;
+    float3 q = p;
+    sincos(a, s, c);
+    p.x = c * q.x - s * q.y;
+    p.y = s * q.x + c * q.y;
 }
 
-
-void rYCS(inout float3 p, float c, float s) {
- float3 q=p;
- p.x = c * q.x + s * q.z;
- p.z = -s * q.x + c * q.z;
+// overloads below are used for explicit [c]os and [s]in
+void rotXCS(inout float3 p, float c, float s)
+{
+    float3 q = p;
+    p.y = c * q.y - s * q.z;
+    p.z = s * q.y + c * q.z;
 }
 
-void rZCS(inout float3 p, float c, float s) {
- float3 q=p;
- p.x = c * q.x - s * q.y;
- p.y = s * q.x + c * q.y;
+void rotYCS(inout float3 p, float c, float s)
+{
+    float3 q = p;
+    p.x = c * q.x + s * q.z;
+    p.z = -s * q.x + c * q.z;
+}
+
+void rotZCS(inout float3 p, float c, float s)
+{
+    float3 q = p;
+    p.x = c * q.x - s * q.y;
+    p.y = s * q.x + c * q.y;
 }

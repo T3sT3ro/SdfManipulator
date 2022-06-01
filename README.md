@@ -45,8 +45,10 @@ TBD
 
 - [noises](https://lodev.org/cgtutor/randomnoise.html)
 - [volumetric light](https://fvcaputo.github.io/2017/05/02/ray-marching.html)
+- [depth vs distance and how to convert](https://forum.unity.com/threads/direction-from-camera-to-pixel-is-slightly-shifted-around-the-edges-of-the-screen.1151969/)
+- [comparison to raymarching toolkit](https://kev.town/raymarching-toolkit/limitations/)
 
-costs:
+costs of shader operations:
 ```
 scalar add,sub,mult,div	1
 vec4 add/mul/div/sub	4*1
