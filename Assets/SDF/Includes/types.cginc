@@ -22,11 +22,11 @@ struct RayInfo3D
 struct v2f
 {
     float4 vertex : SV_POSITION; // clip space vertex pos
-    float3 ro : TEXCOORD0; // world space ray origin - start of frustum
-    float3 re : TEXCOORD1; // world space ray end - end of frustum
+    float3 o_ok_ro : TEXCOORD0; // world space ray origin - start of frustum
+    float3 o_ok_re : TEXCOORD1; // world space ray end - end of frustum
     
-    float3 cam_ro : TEXCOORD2; // ray origin
-    float3 hitpos : TEXCOORD3; // ray's hit position on mesh
+    float3 p_ok_ro : TEXCOORD2; // ray origin
+    float3 p_ok_hit : TEXCOORD3; // ray's hit position on mesh
 };
 
 struct f2p

@@ -51,17 +51,26 @@ Shader "SDF/Domain"
         Pass
         {
             HLSLPROGRAM
-            v2f vert(appdata_base v)
+            v2f vert(appdata_base v, uint id: SV_VertexID)
             {
                 v2f o;
+                
                 o.vertex = UnityObjectToClipPos(v.vertex); // clip space
-                o.cam_ro = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1));
-                o.hitpos = v.vertex;
-            
+                //
+                // if(id == 0)
+                // {
+                //     o.vertex.xyzw = float4(-1, -1, 0, 1); 
+                //     
+                // }
+                // // perspective OK
+                o.p_ok_ro = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1));
+                o.p_ok_hit = v.vertex;
+                //
+                // // ortho OK
                 float4x4 INV = inverse(UNITY_MATRIX_MVP); // to world space or UNITY_MATRIX_VP, unity_MatrixMVP 
-                o.ro = mul(INV, float4(o.vertex.xy/o.vertex.w, 0, 1)); // ray start on frustum
-                o.re = mul(INV, float4(o.vertex.xy/o.vertex.w, 1, 1)); // ray end on frustum
-
+                o.o_ok_ro = mul(INV, float4(o.vertex.xy/o.vertex.w, -1, 1)); // ray start on frustum
+                o.o_ok_re = mul(INV, float4(o.vertex.xy/o.vertex.w, 1, 1)); // ray end on frustum
+                //
                 return o;
             }
 
@@ -88,14 +97,14 @@ Shader "SDF/Domain"
                 );
             }
 
-            static fixed4 _COLORS[] = {
-                fixed4(.5, 0, .5, 1), // NO_ID (magenta)
-                // ------------------- VALID MATERIALS BELOW
-                fixed4(0, .7, .2, .5), // tomato :)
-            };
 
             fixed4 __MATERIAL(int id)
             {
+                static fixed4 _COLORS[] = {
+                    fixed4(.5, 0, .5, 1), // NO_ID (magenta)
+                    // ------------------- VALID MATERIALS BELOW
+                    fixed4(0, .7, .2, .5), // tomato :)
+                };
                 return _COLORS[id + 1];
             }
 
@@ -121,24 +130,47 @@ Shader "SDF/Domain"
                 }
             }
 
+            float4x4 PVI;
+            
             f2p frag(v2f i)
             {
                 RayInfo3D ray = (RayInfo3D)0;
                 Hit hit = {_MAX_DISTANCE, NO_ID};
                 ray.hit = hit;
+                
+                // perspective OK -- first implementation
+                    float3 p_ok_ro = i.p_ok_ro;
+                    float3 p_ok_rd = normalize(i.p_ok_hit - i.p_ok_ro);
+                //
 
-                // float4x4 inv = inverse(unity_MatrixVP); //UNITY_MATRIX_VP 
-                // float4 ro = mul(inv, float4(i.vertex.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray start on frustum
-                // float4 re = mul(inv, float4(i.vertex.xy, 1, 1)); // ray end on frustum
+                // ortho OK -- second, cast from perspective matrix
+                    float3 o_ok_ro = i.o_ok_ro;
+                    float3 o_ok_rd = normalize(i.o_ok_re - i.o_ok_ro);    
+                //
 
-                // float3 ro = mul(unity_ObjectToWorld, fixed4(i.ro.xyz, 1.0)).xyz;
-                // float3 re = mul(unity_ObjectToWorld, float4(i.re.xyz, 1.0)).xyz;
+                // fragment based ray calculation
+                    float4x4 inv = inverse(UNITY_MATRIX_MVP); //UNITY_MATRIX_VP 
+                    float3 f_ro = mul(inv, float4(i.vertex.xy/_ScreenParams.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray start on frustum
+                    float3 f_re = mul(inv, float4(i.vertex.xy/_ScreenParams.xy, 1, 1)); // ray end on frustum
+                    float3 f_rd = normalize(f_re-f_ro);
 
-                ray.ro = i.ro;
-                ray.rd = normalize(i.re - i.ro);    
+                // WIP
+                    float4 wip_ro = mul(inv, float4(i.vertex.xy/_ScreenParams.xy, UNITY_NEAR_CLIP_VALUE, 1));
+                    wip_ro/=wip_ro.w;
 
-                ray.ro = lerp(i.cam_ro, i.ro, _DBG.x+_DBG.w);
-                ray.rd = lerp(normalize(i.hitpos - i.cam_ro), normalize(i.re - i.ro), _DBG.y+_DBG.w);
+                    float4 wip_re = mul(inv, float4(i.vertex.xy/_ScreenParams.xy, 1, 1));
+                    wip_re /= wip_re.w;
+                    float3 wip_rd = normalize(wip_re.xyz - wip_ro.xyz);
+                //
+
+                // multi-lerp code
+                float3 ros[] = {{p_ok_ro}, {o_ok_ro}, {f_ro}, {wip_ro.xyz}};
+                float3 rds[] = {{p_ok_rd}, {o_ok_rd}, {f_rd}, {wip_rd.xyz}};
+                
+                ray.ro = lerp(ros[floor(_DBG.x+_DBG.w)], ros[ceil(_DBG.x+_DBG.w)], frac(_DBG.x+_DBG.w)); 
+                ray.rd = lerp(rds[floor(_DBG.y+_DBG.w)], rds[ceil(_DBG.y+_DBG.w)], frac(_DBG.y+_DBG.w));
+                //
+                    
                 castRay(ray);
 
                 // clip(ray.hit.id); // discard no-hit rays
@@ -147,13 +179,18 @@ Shader "SDF/Domain"
 
                 // GAMMA
                 // col = pow(col, 0.45);
-                fixed4 col = __MATERIAL(ray.hit.id); // color
-                fixed4 n_col = fixed4(normalize(n) * .5 + .5, 1); // normal color
-
+                fixed4 mat_col = __MATERIAL(ray.hit.id); // color
+                fixed4 n_col = fixed4(normalize(n) * .5 + .5, 1); // domain normal color
+                fixed4 clip_col = fixed4(i.vertex.xy/_ScreenParams.xy, i.vertex.z, 1); // RG - clip pos of vertex 
+                fixed4 dir_col = fixed4(ray.rd,1);
+            
+                fixed4 colors[] = {{mat_col}, {n_col}, {clip_col}, {dir_col}};
                 // n_col = fixed4(i.vertex.xyz, 1);
+                fixed4 col = lerp(colors[floor(_DBG.z)], colors[ceil(_DBG.z)], frac(_DBG.z)); 
+
 
                 f2p o = {
-                    {lerp(col, n_col, _DBG.z)},
+                    {col},
                     {float3(normalize(n) * .5 + .5)},
                     ray.hit.id,
                 };

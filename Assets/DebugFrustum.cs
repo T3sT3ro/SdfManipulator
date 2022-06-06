@@ -14,14 +14,32 @@ public static class Util {
 
 
 public class DebugFrustum : MonoBehaviour {
-    public Camera       _camera;
-    public MeshFilter[] meshesToView;
+    public Camera         _camera;
+    public MeshRenderer[] renderers;
+    public GameObject     goMatTest;
+    
+    private void Start() {}
 
     // Start is called before the first frame update
     private void OnDrawGizmos() {
-        foreach (var mesh in meshesToView) {
-            visualizePoints(mesh);
+        if(!_camera) _camera      = GetComponent<Camera>();
+        
+        if(!enabled) return;
+        foreach (var renderer in renderers) {
+            if (!renderer.isVisible || SceneVisibilityManager.instance.IsHidden(renderer.gameObject)) continue;
+            
+            visualizePoints(renderer.GetComponent<MeshFilter>());
         }
+
+        var color = new Color();
+    }
+
+    private void Update() {
+        var M   = goMatTest.transform.localToWorldMatrix;
+        var V   = _camera.worldToCameraMatrix;
+        var P   = _camera.projectionMatrix;
+        
+        goMatTest.GetComponent<Material>().SetMatrix("PVI", (P*V*M).inverse);
     }
 
     private void visualizePoints(MeshFilter mf) {
