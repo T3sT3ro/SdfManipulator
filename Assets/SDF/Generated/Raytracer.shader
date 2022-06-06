@@ -10,7 +10,9 @@ Shader "SDF/Domain"
         _EPSILON_RAY ("minimum distance for ray to consider the surface hit", Float) = 0.001
         _EPSILON_NORMAL ("epsilon for claculating normal", Float) = 0.001
         [Header(Debug)]
-        _DBG ("x:ro, y:rd, z:norm, w:ro+rd", Vector) = (0,0,0,0)
+        D1 ("DBG x:ro, y:rd, z:norm, w:ro+rd", Vector) = (0,0,0,0)
+        D2 ("DBG xyz: ro_offset, w: ro+rdDelta", Vector) = (0,0,0,0)
+        D3 ("DBG: xy: edge, z: edgeLen", Vector) = (0,0,0,0)
     }
 
     //    Fallback "Diffuse"
@@ -41,11 +43,14 @@ Shader "SDF/Domain"
         sampler2D _MainTex;
         float4 _MainTex_ST;
         float4 _TorusSizes;
-        float4 _DBG;
+        float4 D1;
+        float4 D2;
+        float4 D3;
         float _EPSILON_RAY;
         float _EPSILON_NORMAL;
         float _MAX_DISTANCE;
         float _MAX_STEPS;
+        static const float3 viewDir = UNITY_MATRIX_IT_MV[2].xyz;
         ENDHLSL
 
         Pass
@@ -130,6 +135,12 @@ Shader "SDF/Domain"
                 }
             }
 
+            float square(float rise, float fall, float t)
+            {
+                return step(rise, t) * step (t, fall);
+            }
+
+            // TODO: remove
             float4x4 PVI;
             
             f2p frag(v2f i)
@@ -137,6 +148,8 @@ Shader "SDF/Domain"
                 RayInfo3D ray = (RayInfo3D)0;
                 Hit hit = {_MAX_DISTANCE, NO_ID};
                 ray.hit = hit;
+                
+                float2 NDC = (i.vertex.xy/_ScreenParams.xy/0.5-1.0); 
                 
                 // perspective OK -- first implementation
                     float3 p_ok_ro = i.p_ok_ro;
@@ -150,15 +163,15 @@ Shader "SDF/Domain"
 
                 // fragment based ray calculation
                     float4x4 inv = inverse(UNITY_MATRIX_MVP); //UNITY_MATRIX_VP 
-                    float3 f_ro = mul(inv, float4(i.vertex.xy/_ScreenParams.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray start on frustum
-                    float3 f_re = mul(inv, float4(i.vertex.xy/_ScreenParams.xy, 1, 1)); // ray end on frustum
+                    float3 f_ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray start on frustum
+                    float3 f_re = mul(inv, float4(NDC.xy, 1, 1)); // ray end on frustum
                     float3 f_rd = normalize(f_re-f_ro);
 
                 // WIP
-                    float4 wip_ro = mul(inv, float4(i.vertex.xy/_ScreenParams.xy, UNITY_NEAR_CLIP_VALUE, 1));
+                    float4 wip_ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1));
                     wip_ro/=wip_ro.w;
 
-                    float4 wip_re = mul(inv, float4(i.vertex.xy/_ScreenParams.xy, 1, 1));
+                    float4 wip_re = mul(inv, float4(NDC.xy, 1, 1));
                     wip_re /= wip_re.w;
                     float3 wip_rd = normalize(wip_re.xyz - wip_ro.xyz);
                 //
@@ -167,8 +180,13 @@ Shader "SDF/Domain"
                 float3 ros[] = {{p_ok_ro}, {o_ok_ro}, {f_ro}, {wip_ro.xyz}};
                 float3 rds[] = {{p_ok_rd}, {o_ok_rd}, {f_rd}, {wip_rd.xyz}};
                 
-                ray.ro = lerp(ros[floor(_DBG.x+_DBG.w)], ros[ceil(_DBG.x+_DBG.w)], frac(_DBG.x+_DBG.w)); 
-                ray.rd = lerp(rds[floor(_DBG.y+_DBG.w)], rds[ceil(_DBG.y+_DBG.w)], frac(_DBG.y+_DBG.w));
+                ray.ro = lerp(ros[floor(D1.x+D1.w)], ros[ceil(D1.x+D1.w)], frac(D1.x+D1.w)); 
+                ray.rd = lerp(rds[floor(D1.y+D1.w)], rds[ceil(D1.y+D1.w)], frac(D1.y+D1.w));
+
+                // adjust ro and rd
+                ray.ro += D2.xyz + D2.w*ray.rd;
+
+                
                 //
                     
                 castRay(ray);
@@ -183,12 +201,19 @@ Shader "SDF/Domain"
                 fixed4 n_col = fixed4(normalize(n) * .5 + .5, 1); // domain normal color
                 fixed4 clip_col = fixed4(i.vertex.xy/_ScreenParams.xy, i.vertex.z, 1); // RG - clip pos of vertex 
                 fixed4 dir_col = fixed4(ray.rd,1);
-            
-                fixed4 colors[] = {{mat_col}, {n_col}, {clip_col}, {dir_col}};
+                fixed4 NDC_col = square(D3.x, D3.y, NDC.x);
+                
+                fixed4 colors[] = {
+                    {mat_col},
+                    {n_col},
+                    {clip_col},
+                    {dir_col},
+                    {NDC_col}
+                };
                 // n_col = fixed4(i.vertex.xyz, 1);
-                fixed4 col = lerp(colors[floor(_DBG.z)], colors[ceil(_DBG.z)], frac(_DBG.z)); 
+                fixed4 col = lerp(colors[floor(D1.z)], colors[ceil(D1.z)], frac(D1.z)); 
 
-
+                
                 f2p o = {
                     {col},
                     {float3(normalize(n) * .5 + .5)},

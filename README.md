@@ -16,6 +16,8 @@ TODO
   - hypothesis 3: direction of rays is flipped, as `z` may be increasing in different direction
   - [UNITY is doing something under the hood](https://forum.unity.com/threads/does-unity_matrix_mv-unity_matrix_it_mv-identity.199032/)
   - [proper clip space to world space](https://feepingcreature.github.io/math.html)
+  - `ro` must probably be at camera's position, not near plane...
+  - [use this working perspective+ortho projection as reference](https://www.shadertoy.com/view/WtfGW2)
 
 # TODO
 
