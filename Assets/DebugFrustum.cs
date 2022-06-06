@@ -16,7 +16,6 @@ public static class Util {
 public class DebugFrustum : MonoBehaviour {
     public Camera         _camera;
     public MeshRenderer[] renderers;
-    public GameObject     goMatTest;
     
     private void Start() {}
 
@@ -30,16 +29,6 @@ public class DebugFrustum : MonoBehaviour {
             
             visualizePoints(renderer.GetComponent<MeshFilter>());
         }
-
-        var color = new Color();
-    }
-
-    private void Update() {
-        var M   = goMatTest.transform.localToWorldMatrix;
-        var V   = _camera.worldToCameraMatrix;
-        var P   = _camera.projectionMatrix;
-        
-        goMatTest.GetComponent<Material>().SetMatrix("PVI", (P*V*M).inverse);
     }
 
     private void visualizePoints(MeshFilter mf) {

@@ -9,10 +9,6 @@ Shader "SDF/Domain"
         _MAX_DISTANCE ("max distance a ray can march", Float) = 200.0
         _EPSILON_RAY ("minimum distance for ray to consider the surface hit", Float) = 0.001
         _EPSILON_NORMAL ("epsilon for claculating normal", Float) = 0.001
-        [Header(Debug)]
-        D1 ("DBG x:ro, y:rd, z:norm, w:ro+rd", Vector) = (0,0,0,0)
-        D2 ("DBG xyz: ro_offset, w: ro+rdDelta", Vector) = (0,0,0,0)
-        D3 ("DBG: xy: edge, z: edgeLen", Vector) = (0,0,0,0)
     }
 
     //    Fallback "Diffuse"
@@ -35,7 +31,6 @@ Shader "SDF/Domain"
         #pragma fragment frag
 
         #include "UnityCG.cginc"
-        #include "HLSLSupport.cginc"
         #include "Assets/SDF/Includes/primitives.cginc"
         #include "Assets/SDF/Includes/types.cginc"
         #include "Assets/SDF/Includes/matrix.cginc" // FIXME: inverse might be a problem
@@ -43,14 +38,13 @@ Shader "SDF/Domain"
         sampler2D _MainTex;
         float4 _MainTex_ST;
         float4 _TorusSizes;
-        float4 D1;
-        float4 D2;
-        float4 D3;
         float _EPSILON_RAY;
         float _EPSILON_NORMAL;
         float _MAX_DISTANCE;
         float _MAX_STEPS;
+
         static const float3 viewDir = UNITY_MATRIX_IT_MV[2].xyz;
+        static const float4x4 inv = inverse(UNITY_MATRIX_MVP);
         ENDHLSL
 
         Pass
@@ -59,26 +53,11 @@ Shader "SDF/Domain"
             v2f vert(appdata_base v, uint id: SV_VertexID)
             {
                 v2f o;
-                
                 o.vertex = UnityObjectToClipPos(v.vertex); // clip space
-                //
-                // if(id == 0)
-                // {
-                //     o.vertex.xyzw = float4(-1, -1, 0, 1); 
-                //     
-                // }
-                // // perspective OK
-                o.p_ok_ro = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos, 1));
-                o.p_ok_hit = v.vertex;
-                //
-                // // ortho OK
-                float4x4 INV = inverse(UNITY_MATRIX_MVP); // to world space or UNITY_MATRIX_VP, unity_MatrixMVP 
-                o.o_ok_ro = mul(INV, float4(o.vertex.xy/o.vertex.w, -1, 1)); // ray start on frustum
-                o.o_ok_re = mul(INV, float4(o.vertex.xy/o.vertex.w, 1, 1)); // ray end on frustum
-                //
                 return o;
             }
 
+            // =======================================================================
             Hit __SDF(float3 p)
             {
                 // float4x4 rot = m_rotate(_Time.y, float3(0, 0, 1));
@@ -137,92 +116,58 @@ Shader "SDF/Domain"
 
             float square(float rise, float fall, float t)
             {
-                return step(rise, t) * step (t, fall);
+                return step(rise, t) * step(t, fall);
             }
 
-            // TODO: remove
-            float4x4 PVI;
-            
+            // =======================================================================
+
             f2p frag(v2f i)
             {
                 RayInfo3D ray = (RayInfo3D)0;
                 Hit hit = {_MAX_DISTANCE, NO_ID};
                 ray.hit = hit;
-                
-                float2 NDC = (i.vertex.xy/_ScreenParams.xy/0.5-1.0); 
-                
-                // perspective OK -- first implementation
-                    float3 p_ok_ro = i.p_ok_ro;
-                    float3 p_ok_rd = normalize(i.p_ok_hit - i.p_ok_ro);
-                //
 
-                // ortho OK -- second, cast from perspective matrix
-                    float3 o_ok_ro = i.o_ok_ro;
-                    float3 o_ok_rd = normalize(i.o_ok_re - i.o_ok_ro);    
-                //
+                // NDC from (-1, -1, -1) to (1, 1, 1) 
+                float2 NDC = 2. * i.vertex.xy / _ScreenParams.xy - 1.;
 
-                // fragment based ray calculation
-                    float4x4 inv = inverse(UNITY_MATRIX_MVP); //UNITY_MATRIX_VP 
-                    float3 f_ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray start on frustum
-                    float3 f_re = mul(inv, float4(NDC.xy, 1, 1)); // ray end on frustum
-                    float3 f_rd = normalize(f_re-f_ro);
+                float4 ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1));
+                ro /= ro.w;
 
-                // WIP
-                    float4 wip_ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1));
-                    wip_ro/=wip_ro.w;
+                float4 re = mul(inv, float4(NDC.xy, 1, 1));
+                re /= re.w;
+                float3 rd = normalize((re - ro).xyz);
 
-                    float4 wip_re = mul(inv, float4(NDC.xy, 1, 1));
-                    wip_re /= wip_re.w;
-                    float3 wip_rd = normalize(wip_re.xyz - wip_ro.xyz);
-                //
+                ray.ro = ro;
+                ray.rd = rd;
 
-                // multi-lerp code
-                float3 ros[] = {{p_ok_ro}, {o_ok_ro}, {f_ro}, {wip_ro.xyz}};
-                float3 rds[] = {{p_ok_rd}, {o_ok_rd}, {f_rd}, {wip_rd.xyz}};
-                
-                ray.ro = lerp(ros[floor(D1.x+D1.w)], ros[ceil(D1.x+D1.w)], frac(D1.x+D1.w)); 
-                ray.rd = lerp(rds[floor(D1.y+D1.w)], rds[ceil(D1.y+D1.w)], frac(D1.y+D1.w));
-
-                // adjust ro and rd
-                ray.ro += D2.xyz + D2.w*ray.rd;
-
-                
-                //
-                    
                 castRay(ray);
 
-                // clip(ray.hit.id); // discard no-hit rays
-
+                clip(ray.hit.id); // discard rays without hit
+    
                 float3 n = __SDF_NORMAL(ray.p);
 
                 // GAMMA
                 // col = pow(col, 0.45);
                 fixed4 mat_col = __MATERIAL(ray.hit.id); // color
-                fixed4 n_col = fixed4(normalize(n) * .5 + .5, 1); // domain normal color
-                fixed4 clip_col = fixed4(i.vertex.xy/_ScreenParams.xy, i.vertex.z, 1); // RG - clip pos of vertex 
-                fixed4 dir_col = fixed4(ray.rd,1);
-                fixed4 NDC_col = square(D3.x, D3.y, NDC.x);
-                
+                fixed4 nd_col = fixed4(n * .5 + .5, 1); // domain normal color
+                fixed4 nw_col = fixed4(UnityObjectToWorldNormal(n) * .5 + .5, 1); // world normal color
+            
                 fixed4 colors[] = {
                     {mat_col},
-                    {n_col},
-                    {clip_col},
-                    {dir_col},
-                    {NDC_col}
+                    {nd_col},
+                    {nw_col},
                 };
-                // n_col = fixed4(i.vertex.xyz, 1);
-                fixed4 col = lerp(colors[floor(D1.z)], colors[ceil(D1.z)], frac(D1.z)); 
+                // lerp(colors[floor(t)], colors[ceil(t)], frac(t))
 
-                
                 f2p o = {
-                    {col},
+                    {mat_col},
                     {float3(normalize(n) * .5 + .5)},
                     ray.hit.id,
                 };
                 return o;
             }
 
-            // -----------------------------------
+            // =======================================================================
             ENDHLSL
         }
     }
