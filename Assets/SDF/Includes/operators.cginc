@@ -1,4 +1,5 @@
 #pragma once
+#include "util.cginc"
 
 /**
  * Collection of operators for 3D SDFs centered at origin.
@@ -16,36 +17,51 @@
  * - <c>dim</c>         dimensions vector for X,Y,Z sizes
  * - <c>transform</c>   rigidbody(!) transformation matrix
  */
-namespace sdf::operators
+namespace sdf
 {
-    
-    float3 transform(float3 p, float4x4 invTransform)
+    namespace operators
     {
-        return mul(invTransform, float4(p, 1));
-    }
+        float3 transform(float3 p, float4x4 invTransform)
+        {
+            return mul(invTransform, float4(p, 1));
+        }
 
-    float round(in float distance, float R)
-    {
-        return distance - R;
-    }
+        float round_sdf(in float distance, float R)
+        {
+            return distance - R;
+        }
 
-    /**
-     * Elongate the primitive. This is a prefix operation that transforms point passed to primitive.
-     * This method produces exact 1D elongations but produces kernel of 0 distances inside 2D/3D elongations.
-     */
-    float elongate_fast(float3 p, float3 dim)
-    {
-        return p - clamp(p, -dim, dim);
+        /**
+         * repeat in period of c units in each axis 
+         */
+        float3 repeat(in float3 p, in float3 c)
+        {
+            return fmod(abs(p)+0.5*c,c)-0.5*c;
+        }
+
+        float3 repeatLim(in float3 p, in float3 c, in float3 l, out int3 index)
+        {
+            index = clamp(round(p/c),-l,l);
+            return p-c*index;
+        }
+        
+        /**
+         * Elongate the primitive. This is a prefix operation that transforms point passed to primitive.
+         * This method produces exact 1D elongations but produces kernel of 0 distances inside 2D/3D elongations.
+         */
+        float elongate_fast(float3 p, float3 dim)
+        {
+            return p - clamp(p, -dim, dim);
+        }
+
+        /**
+         * Elongate the primitive. This is a prefix operation that transforms point passed to primitive.
+         * This is the exact method 
+         */
+        // float elongate_exact(float3 p, float3 dim)
+        // {
+        //     float3 q = abs(p) - dim;
+        //     return __SDF(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+        // }
     }
-    
-    /**
-     * Elongate the primitive. This is a prefix operation that transforms point passed to primitive.
-     * This is the exact method 
-     */
-    // float elongate_exact(float3 p, float3 dim)
-    // {
-    //     float3 q = abs(p) - dim;
-    //     return __SDF(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
-    // }
-    
 }

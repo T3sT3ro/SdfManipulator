@@ -4,6 +4,9 @@
  * This file includes common utility functions for writing more conscience code
  */
 
+/// for an array of values returns lerp between two adjacent values 
+#define LEVELS(levels, t) lerp(levels[floor(t)], levels[ceil(t)], frac(t))
+
 // 3 component utils
 float max(in float3 v) { return max(v.x, max(v.y, v.z)); }
 float max(in float a, in float b, in float c) { return max(a, max(b, c)); }
@@ -14,9 +17,6 @@ float max(in float4 v) { return max(max(v.x, v.y), max(v.z, v.w)); }
 float max(in float a, in float b, in float c, in float d) { return max(max(a, b), max(c, d)); }
 float min(in float4 v) { return min(min(v.x, v.y), min(v.z, v.w)); }
 float min(in float a, in float b, in float c, in float d) { return min(min(a, b), min(c, d)); }
-
-// cheap noise
-float rand(float2 p) { return frac(sin(dot(p.xy, float2(12.9898, 78.233))) * 43758.5453); }
 
 // rotations from https://www.pouet.net/topic.php?which=7931&page=1&x=3&y=14
 
@@ -67,4 +67,9 @@ void rotZCS(inout float3 p, float c, float s)
     float3 q = p;
     p.x = c * q.x - s * q.y;
     p.y = s * q.x + c * q.y;
+}
+
+float square(float rise, float fall, float t)
+{
+    return step(rise, t) * step(t, fall);
 }
