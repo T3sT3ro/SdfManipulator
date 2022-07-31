@@ -7,7 +7,7 @@ Shader "SDF/Domain"
         _TorusSizes ("Torus R, r, rot, mat", Vector) = (.5, .1, 0, 0)
         _MAX_STEPS ("max steps of raymarcher", Int) = 200
         _MAX_DISTANCE ("max distance a ray can march", Float) = 200.0
-        _START_BIAS ("ray start offset from the ray's origin", Float) = 0.01
+        _START_BIAS ("ray start distance bias", Float) = 0
         _EPSILON_RAY ("minimum distance for ray to consider the surface hit", Float) = 0.001
         _EPSILON_NORMAL ("epsilon for claculating normal", Float) = 0.001
         _DBG ("x - step value", Vector) = (0,0,0,0)
@@ -25,7 +25,7 @@ Shader "SDF/Domain"
         }
         //        Blend SrcAlpha OneMinusSrcAlpha
         ZTest Off // When
-        Cull Off // When camera is inside domain
+        Cull Back // When camera is inside domain
 
         // common includes for all passes
         HLSLINCLUDE
@@ -92,7 +92,7 @@ Shader "SDF/Domain"
             {
                 // float4x4 rot = m_rotate(_Time.y, float3(0, 0, 1));
                 // p = mul(rot, p);
-                // rotZ(p, _TorusSizes.z); //_Time.y / 3);
+                rotZ(p, _TorusSizes.z); //_Time.y / 3);
                 // Hit ret = {sdf::primitives3D::torus(p, _TorusSizes.x, _TorusSizes.y), 0};
                 int3 ix;
                 p = sdf::operators::repeatLim(p, 1, float3(1, 0, 1), ix);
@@ -156,6 +156,9 @@ Shader "SDF/Domain"
                 ray.hit = hit;
                 for (ray.steps = 0; ray.steps < _MAX_STEPS; ray.steps++)
                 {
+                    if (d >= _MAX_DISTANCE || d >= max_distance)
+                        return;
+                    
                     ray.p = ray.ro + d * ray.rd;
 
                     Hit hit = __SDF(ray.p);
@@ -167,9 +170,6 @@ Shader "SDF/Domain"
                     }
 
                     d += hit.distance;
-
-                    if (d >= _MAX_DISTANCE || d >= max_distance)
-                        return;
                 }
             }
 
