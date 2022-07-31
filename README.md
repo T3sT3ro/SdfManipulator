@@ -45,12 +45,14 @@ TODO
   - smooth (default)
   - splats (circles/textures)
   - AO approximation
-- Bi/Triplanar texture mapping (sample by normal + blend on edge)
-- depth
+- [x] Triplanar texture mapping (sample by normal + blend on edge)
+  - [lengthy tutorial](https://catlikecoding.com/unity/tutorials/advanced-rendering/triplanar-mapping/)
+  - [ ] maybe biplanar projection as well, based on IQ's notes
+- [ ] depth to max ray distance
   - [legacy unity but explained depth reymarching](https://adrianb.io/2016/10/01/raymarching.html)
   - [forum thread](https://forum.unity.com/threads/raymarcher-with-depth-buffer.877936/)
   - [japanese tutorial on uRaymarchToolkit + alpha + depth](https://tips.hecomi.com/entry/2018/12/31/211448)
-- ortho+perspective generalized ray origin and direction
+- [x] ortho+perspective generalized ray origin and direction
   - [stack question asking for the same](https://stackoverflow.com/questions/2354821/raycasting-how-to-properly-apply-a-projection-matrix)
   - [Post with graphic about coordinates at different stages of shader](https://forum.unity.com/threads/what-does-the-function-computescreenpos-in-unitycg-cginc-do.294470/)
 
@@ -61,7 +63,13 @@ TODO
 - [depth vs distance and how to convert](https://forum.unity.com/threads/direction-from-camera-to-pixel-is-slightly-shifted-around-the-edges-of-the-screen.1151969/)
 - [comparison to raymarching toolkit](https://kev.town/raymarching-toolkit/limitations/)
 - [on unity matrices](https://forum.unity.com/threads/does-unity_matrix_mv-unity_matrix_it_mv-identity.199032/#post-1350131)
-
+- [graphical representation of depth buffer (in GL!)](https://twitter.com/warrenm/status/511672050625163264)
+- [depth buffer for water effect](https://www.edraflame.com/blog/custom-shader-depth-texture-sampling/)
+- [depth raymarching](https://www.youtube.com/watch?v=iZ6ARyKnD-k)
+- [depth buffer effects](https://www.youtube.com/watch?v=yUVrtPCsCb0)
+- [project grid onto world with depth](https://github.com/keijiro/DepthInverseProjection)
+- [world pos from depth](https://forum.unity.com/threads/world-position-from-depth.151466/)
+- [depth buffer line effect](https://www.ronja-tutorials.com/post/017-postprocessing-depth/)
 
 costs of shader operations:
 ```

@@ -14,14 +14,19 @@ struct RayInfo3D
     float3 ro; // ray origin
     float3 rd; // ray direction
     float3 p; // mutable 3D point in space where ray is evaluated
+    float3 n; // normal at point
     int steps; // how many steps did raymarcher do
     Hit hit; // ray hit results
+    float4 screenPos;
 };
 
 
 struct v2f
 {
     float4 vertex : SV_POSITION; // clip space vertex pos
+    float4 screenPos: TEXCOORD1;
+    float2 uv : TEXCOORD2; // UV of the model
+    float3 hitpos : TEXCOORD3; // hit position in model space
 };
 
 struct f2p

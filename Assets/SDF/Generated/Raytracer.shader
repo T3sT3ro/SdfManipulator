@@ -7,6 +7,7 @@ Shader "SDF/Domain"
         _TorusSizes ("Torus R, r, rot, mat", Vector) = (.5, .1, 0, 0)
         _MAX_STEPS ("max steps of raymarcher", Int) = 200
         _MAX_DISTANCE ("max distance a ray can march", Float) = 200.0
+        _START_BIAS ("ray start offset from the ray's origin", Float) = 0.01
         _EPSILON_RAY ("minimum distance for ray to consider the surface hit", Float) = 0.001
         _EPSILON_NORMAL ("epsilon for claculating normal", Float) = 0.001
         _DBG ("x - step value", Vector) = (0,0,0,0)
@@ -47,6 +48,7 @@ Shader "SDF/Domain"
         float _EPSILON_RAY;
         float _EPSILON_NORMAL;
         float _MAX_DISTANCE;
+        float _START_BIAS;
         float _MAX_STEPS;
         int _WORLD_SPACE;
 
@@ -54,11 +56,12 @@ Shader "SDF/Domain"
 
         UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
-        #define WORLDSPACE
+        // #define WORLDSPACE
+        #define START_AT_FACE
 
 
         // https://gist.github.com/unitycoder/c5847a82343a8e721035
-        static const float3 camera_forward = UNITY_MATRIX_IT_MV[2].xyz;
+        // static const float3 camera_forward = UNITY_MATRIX_IT_MV[2].xyz;
         static const float4x4 inv = inverse(
             #ifdef WORLDSPACE
             UNITY_MATRIX_VP
@@ -66,6 +69,8 @@ Shader "SDF/Domain"
             UNITY_MATRIX_MVP
             #endif
         );
+        //const float near = _ProjectionParams.y; // those go into frag
+        //const float far = _ProjectionParams.z;
         ENDHLSL
 
         Pass
@@ -77,7 +82,7 @@ Shader "SDF/Domain"
                 o.vertex = UnityObjectToClipPos(v.vertex); // clip space
                 o.screenPos = ComputeScreenPos(o.vertex); // UV on from 0,0 to 1,1
                 o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
-                
+                o.hitpos = v.vertex; 
                 COMPUTE_EYEDEPTH(o.screenPos.z);
                 return o;
             }
@@ -92,9 +97,11 @@ Shader "SDF/Domain"
                 int3 ix;
                 p = sdf::operators::repeatLim(p, 1, float3(1, 0, 1), ix);
                 Hit ret = {
-                    sdf::primitives3D::box_frame(
-                        p,
-                        _TorusSizes.x, _TorusSizes.y),
+                    sdf::primitives3D::sphere(
+                        p
+                        , _TorusSizes.x
+                        // , _TorusSizes.y
+                    ),
                     ix.x + 1 // random number for instance
                 };
                 return ret;
@@ -144,9 +151,9 @@ Shader "SDF/Domain"
 
             void castRay(inout RayInfo3D ray, in float max_distance)
             {
+                float d = ray.hit.distance;
                 Hit hit = {_MAX_DISTANCE, NO_ID};
                 ray.hit = hit;
-                float d = 0;
                 for (ray.steps = 0; ray.steps < _MAX_STEPS; ray.steps++)
                 {
                     ray.p = ray.ro + d * ray.rd;
@@ -161,15 +168,19 @@ Shader "SDF/Domain"
 
                     d += hit.distance;
 
-                    if (d >= max_distance)
+                    if (d >= _MAX_DISTANCE || d >= max_distance)
                         return;
                 }
             }
 
+            // returns correct depth in both persp and ortho
+            // from https://forum.unity.com/threads/depth-buffer-with-orthographic-camera.355878/
+            // from https://forum.unity.com/threads/getting-scene-depth-z-buffer-of-the-orthographic-camera.601825/#post-4966334
+            
             float CorrectDepth(float rawDepth)
             {
                 float persp = LinearEyeDepth(rawDepth);
-                float ortho = (_ProjectionParams.z - _ProjectionParams.y) * (1 - rawDepth) + _ProjectionParams.y;
+                float ortho = (_ProjectionParams.z - _ProjectionParams.y) * rawDepth + _ProjectionParams.y;
                 return lerp(persp, ortho, unity_OrthoParams.w);
             }
 
@@ -177,10 +188,8 @@ Shader "SDF/Domain"
 
             f2p frag(v2f i)
             {
-                const float near = _ProjectionParams.y;
-                const float far = _ProjectionParams.z;
-                const float2 screenPos = i.screenPos.xyz/i.screenPos.w; // 0,0 to 1,1 on screen
-            
+                const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
+
                 RayInfo3D ray = (RayInfo3D)0;
 
                 // NDC from (-1, -1, -1) to (1, 1, 1) 
@@ -195,20 +204,21 @@ Shader "SDF/Domain"
 
                 ray.ro = ro; // in object space
                 ray.rd = rd; // in object space
-            
-                // read camera depth texture to correctly blend with scene geometry
-                float depth = LinearEyeDepth(tex2D(_CameraDepthTexture, screenPos.xy).r);
 
-                float4 ce = mul(inv, float4(0, 0, 1, 1)); // ray end on far plane
-                ce /= ce.w;
-                float4 co = mul(inv, float4(0, 0, UNITY_NEAR_CLIP_VALUE, 1)); // ray end on far plane
-                co /= co.w;
-                float3 forward = normalize((ce-co).xyz);
+                #ifdef START_AT_FACE
+                    ray.hit.distance = length(i.hitpos - ro) + _START_BIAS;
+                #endif
+
+                // read camera depth texture to correctly blend with scene geometry
+                float depth = CorrectDepth(tex2D(_CameraDepthTexture, screenPos.xy).r);
+
+                float4 forward = mul(inv, float4(0, 0, 1, 1)); // ray end on far plane
+                forward = normalize(forward / forward.w); // forward in object space
 
                 float3 dots = dot(forward, rd);
                 fixed4 color_dot = fixed4(pow(dots.xyz, 10), 1.0);
 
-                castRay(ray, depth/dots);
+                castRay(ray, depth / dots);
 
 
                 clip(ray.hit.id); // discard rays without hit
@@ -223,7 +233,7 @@ Shader "SDF/Domain"
                 fixed4 color_normal_domain = fixed4(ray.n * .5 + .5, 1); // domain normal color
                 fixed4 color_normal_world = fixed4(UnityObjectToWorldNormal(ray.n) * .5 + .5, 1); // world normal color
 
-            
+
                 // not working
                 fixed4 colors[] = {
                     {color_material},
