@@ -10,13 +10,12 @@ TODO
 
 # Problems
 
-- unified perspective and ortho rays - something wrong with the inverse projection of ray origin and ends
-  - hypothesis 1: coordinates are in different coordinate systems in vertex and fragment shader - NDC, `(w, w, w)` etc.
+- [x] unified perspective and ortho rays - something wrong with the inverse projection of ray origin and ends
+  - hypothesis 1 [x]: coordinates are in different coordinate systems in vertex and fragment shader - NDC, `(w, w, w)` etc. (indeed, NDC was wrong)
   - hypothesis 2: perspective division is setting up `w` for GPU to do projection division. Inverse Projection division is not working, because the fragment shader W coordinate is already 1.0. Maybe pass undivided screen pos via texture coordinate (to skip perspective division and get proper coords, but then maybe `w` param may be different and invalid for projections onto near and far clip planes)
   - hypothesis 3: direction of rays is flipped, as `z` may be increasing in different direction
   - [UNITY is doing something under the hood](https://forum.unity.com/threads/does-unity_matrix_mv-unity_matrix_it_mv-identity.199032/)
   - [proper clip space to world space](https://feepingcreature.github.io/math.html)
-  - `ro` must probably be at camera's position, not near plane...
   - [use this working perspective+ortho projection as reference](https://www.shadertoy.com/view/WtfGW2)
 
 # TODO
@@ -70,6 +69,9 @@ TODO
 - [project grid onto world with depth](https://github.com/keijiro/DepthInverseProjection)
 - [world pos from depth](https://forum.unity.com/threads/world-position-from-depth.151466/)
 - [depth buffer line effect](https://www.ronja-tutorials.com/post/017-postprocessing-depth/)
+- [japanese blog uRaymarching](https://tips.hecomi.com/entry/2019/01/27/233137)
+  - [about deffered and depth reads+writes](https://tips.hecomi.com/entry/2018/12/31/211448)
+- [Order Independent Transparency](http://casual-effects.blogspot.com/2014/03/weighted-blended-order-independent.html)
 
 costs of shader operations:
 ```

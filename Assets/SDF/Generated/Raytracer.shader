@@ -7,10 +7,14 @@ Shader "SDF/Domain"
         _TorusSizes ("Torus R, r, rot, mat", Vector) = (.5, .1, 0, 0)
         _MAX_STEPS ("max steps of raymarcher", Int) = 200
         _MAX_DISTANCE ("max distance a ray can march", Float) = 200.0
-        _START_BIAS ("ray start distance bias", Float) = 0
+        _RAY_ORIGIN_BIAS ("ray origin offset bias along the ray", Float) = 0
         _EPSILON_RAY ("minimum distance for ray to consider the surface hit", Float) = 0.001
         _EPSILON_NORMAL ("epsilon for claculating normal", Float) = 0.001
         _DBG ("x - step value", Vector) = (0,0,0,0)
+        [KeywordEnum(World, Local)] _Origin("Origin", Int) = 0
+        [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
+        [KeywordEnum(Base, Material, Texture, NormalLocal, NormalWorld, ID)] _DrawMode("Draw mode", Int) = 0
+//        [Toggle(BLUE)] _Blue ("Blue", Int) = 0
     }
 
     //    Fallback "Diffuse"
@@ -24,8 +28,8 @@ Shader "SDF/Domain"
             "IgnoreProjector"="True"
         }
         //        Blend SrcAlpha OneMinusSrcAlpha
-        ZTest Off // When
-        Cull Back // When camera is inside domain
+        ZTest On // Manual blend with 
+        Cull Off // Draw also when camera is inside domain
 
         // common includes for all passes
         HLSLINCLUDE
@@ -48,22 +52,23 @@ Shader "SDF/Domain"
         float _EPSILON_RAY;
         float _EPSILON_NORMAL;
         float _MAX_DISTANCE;
-        float _START_BIAS;
+        float _RAY_ORIGIN_BIAS;
         float _MAX_STEPS;
-        int _WORLD_SPACE;
 
         float4 _DBG;
 
         UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
-        // #define WORLDSPACE
-        #define START_AT_FACE
+        #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
+        #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
+        #pragma shader_feature_local _DRAWMODE_BASE _DRAWMODE_MATERIAL _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL _DRAWMODE_NORMALWORLD _DRAWMODE_ID
+        // #pragma shader_feature_local BLUE
 
 
         // https://gist.github.com/unitycoder/c5847a82343a8e721035
         // static const float3 camera_forward = UNITY_MATRIX_IT_MV[2].xyz;
         static const float4x4 inv = inverse(
-            #ifdef WORLDSPACE
+            #ifdef _ORIGIN_WORLD
             UNITY_MATRIX_VP
             #else
             UNITY_MATRIX_MVP
@@ -193,21 +198,30 @@ Shader "SDF/Domain"
                 RayInfo3D ray = (RayInfo3D)0;
 
                 // NDC from (-1, -1, -1) to (1, 1, 1) 
-                float2 NDC = 2. * screenPos.xy - 1.;
+                float3 NDC = 2. * screenPos.xyz - 1.;
 
-                float4 ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray origin on near plane
+                float4 ro;
+                #ifdef _RAYORIGIN_NEAR
+                ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray origin on near plane
                 ro /= ro.w;
+                #else
+                    ro = 
+                    #ifdef _ORIGIN_WORLD
+                        mul(UNITY_MATRIX_M, float4(i.hitpos, 1));
+                    #else
+                        fixed4(i.hitpos, 1);
+                    #endif
+                #endif
 
                 float4 re = mul(inv, float4(NDC.xy, 1, 1)); // ray end on far plane
                 re /= re.w;
                 float3 rd = normalize((re - ro).xyz); // ray direction
 
+                
                 ray.ro = ro; // in object space
                 ray.rd = rd; // in object space
-
-                #ifdef START_AT_FACE
-                    ray.hit.distance = length(i.hitpos - ro) + _START_BIAS;
-                #endif
+            
+                ray.hit.distance = _RAY_ORIGIN_BIAS;
 
                 // read camera depth texture to correctly blend with scene geometry
                 float depth = CorrectDepth(tex2D(_CameraDepthTexture, screenPos.xy).r);
@@ -215,14 +229,11 @@ Shader "SDF/Domain"
                 float4 forward = mul(inv, float4(0, 0, 1, 1)); // ray end on far plane
                 forward = normalize(forward / forward.w); // forward in object space
 
-                float3 dots = dot(forward, rd);
-                fixed4 color_dot = fixed4(pow(dots.xyz, 10), 1.0);
-
-                castRay(ray, depth / dots);
+                castRay(ray, depth / dot(forward, rd));
 
 
                 clip(ray.hit.id); // discard rays without hit
-
+                
                 ray.n = __SDF_NORMAL(ray.p);
 
                 // GAMMA
@@ -234,18 +245,34 @@ Shader "SDF/Domain"
                 fixed4 color_normal_world = fixed4(UnityObjectToWorldNormal(ray.n) * .5 + .5, 1); // world normal color
 
 
+                fixed4 color_id = ray.hit.id;
+            
                 // not working
                 fixed4 colors[] = {
                     {color_material},
+                    {color_trimap},
                     {color_normal_domain},
                     {color_normal_world},
-                    {color_dot},
-                    {color_trimap}
+                    {color_id},
                 };
 
-
+            
                 f2p o = {
-                    {LEVELS(colors, _TorusSizes.w)},
+                     {
+                         #ifdef _DRAWMODE_BASE
+                         color_material
+                         #elif _DRAWMODE_MATERIAL
+                         color_material*color_trimap
+                         #elif _DRAWMODE_TEXTURE
+                         color_trimap
+                         #elif _DRAWMODE_NORMALLOCAL
+                         color_normal_domain
+                         #elif _DRAWMODE_NORMALWORLD
+                         color_normal_world
+                         #elif _DRAWMODE_ID
+                         color_id
+                         #endif
+                     },
                     {float3(normalize(ray.n) * .5 + .5)},
                     ray.hit.id,
                 };
