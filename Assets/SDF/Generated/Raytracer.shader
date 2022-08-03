@@ -13,7 +13,7 @@ Shader "SDF/Domain"
         _DBG ("x - step value", Vector) = (0,0,0,0)
         [KeywordEnum(World, Local)] _Origin("Origin", Int) = 0
         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
-        [KeywordEnum(Base, Material, Texture, NormalLocal, NormalWorld, ID)] _DrawMode("Draw mode", Int) = 0
+        [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID)] _DrawMode("Draw mode", Int) = 0
 //        [Toggle(BLUE)] _Blue ("Blue", Int) = 0
     }
 
@@ -61,7 +61,7 @@ Shader "SDF/Domain"
 
         #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
         #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
-        #pragma shader_feature_local _DRAWMODE_BASE _DRAWMODE_MATERIAL _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL _DRAWMODE_NORMALWORLD _DRAWMODE_ID
+        #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL _DRAWMODE_NORMALWORLD _DRAWMODE_ID
         // #pragma shader_feature_local BLUE
 
 
@@ -200,17 +200,18 @@ Shader "SDF/Domain"
                 // NDC from (-1, -1, -1) to (1, 1, 1) 
                 float3 NDC = 2. * screenPos.xyz - 1.;
 
-                float4 ro;
-                #ifdef _RAYORIGIN_NEAR
-                ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray origin on near plane
+                float4 ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray origin on near plane
                 ro /= ro.w;
+                #ifdef _RAYORIGIN_NEAR
                 #else
-                    ro = 
+                { float4 rs = 
                     #ifdef _ORIGIN_WORLD
                         mul(UNITY_MATRIX_M, float4(i.hitpos, 1));
                     #else
                         fixed4(i.hitpos, 1);
                     #endif
+                    ray.hit.distance = distance(rs, ro); // start on ray
+                }
                 #endif
 
                 float4 re = mul(inv, float4(NDC.xy, 1, 1)); // ray end on far plane
@@ -221,7 +222,7 @@ Shader "SDF/Domain"
                 ray.ro = ro; // in object space
                 ray.rd = rd; // in object space
             
-                ray.hit.distance = _RAY_ORIGIN_BIAS;
+                ray.hit.distance += _RAY_ORIGIN_BIAS;
 
                 // read camera depth texture to correctly blend with scene geometry
                 float depth = CorrectDepth(tex2D(_CameraDepthTexture, screenPos.xy).r);
@@ -259,10 +260,10 @@ Shader "SDF/Domain"
             
                 f2p o = {
                      {
-                         #ifdef _DRAWMODE_BASE
-                         color_material
-                         #elif _DRAWMODE_MATERIAL
+                         #ifdef _DRAWMODE_MATERIAL
                          color_material*color_trimap
+                         #elif _DRAWMODE_ALBEDO
+                         color_material
                          #elif _DRAWMODE_TEXTURE
                          color_trimap
                          #elif _DRAWMODE_NORMALLOCAL
