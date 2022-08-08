@@ -47,13 +47,23 @@ TODO
 - [x] Triplanar texture mapping (sample by normal + blend on edge)
   - [lengthy tutorial](https://catlikecoding.com/unity/tutorials/advanced-rendering/triplanar-mapping/)
   - [ ] maybe biplanar projection as well, based on IQ's notes
-- [ ] depth to max ray distance
+- [x] depth to max ray distance
   - [legacy unity but explained depth reymarching](https://adrianb.io/2016/10/01/raymarching.html)
   - [forum thread](https://forum.unity.com/threads/raymarcher-with-depth-buffer.877936/)
   - [japanese tutorial on uRaymarchToolkit + alpha + depth](https://tips.hecomi.com/entry/2018/12/31/211448)
 - [x] ortho+perspective generalized ray origin and direction
   - [stack question asking for the same](https://stackoverflow.com/questions/2354821/raycasting-how-to-properly-apply-a-projection-matrix)
   - [Post with graphic about coordinates at different stages of shader](https://forum.unity.com/threads/what-does-the-function-computescreenpos-in-unitycg-cginc-do.294470/)
+- [ ] write depth of pixel
+- [ ] display 3D texture holding SDV or voxel data
+- [ ] local scale not affecting rays
+- [ ] triplanar texture swizzle and mapping
+
+# Important to remember while documenting
+
+- be wary of combination of ZTest, Cull, ZWrite, Origin on face vs near plane, as that can render confusing geometry when combined in weird ways. E.g.: 
+  - Cull Off, Origin Face -- camera inside domain won't render the object "in the center of domain", as the origin would lie on a back face.
+  - No ZWrite, Depth read, Cull Off, Origin Face - backface marched objects would layer on top of front marched objects
 
 # Notes
 
@@ -72,6 +82,7 @@ TODO
 - [japanese blog uRaymarching](https://tips.hecomi.com/entry/2019/01/27/233137)
   - [about deffered and depth reads+writes](https://tips.hecomi.com/entry/2018/12/31/211448)
 - [Order Independent Transparency](http://casual-effects.blogspot.com/2014/03/weighted-blended-order-independent.html)
+- [Some raymarching effects in unity5](https://github.com/i-saint/Unity5Effects)
 
 costs of shader operations:
 ```

@@ -17,7 +17,6 @@ struct RayInfo3D
     float3 n; // normal at point
     int steps; // how many steps did raymarcher do
     Hit hit; // ray hit results
-    float4 screenPos;
 };
 
 
@@ -34,4 +33,7 @@ struct f2p
     fixed4 color: SV_Target0;
     float3 normal: SV_Target1; // world normal
     ID ID: SV_Target2; // ID of object, for picking
+    // #ifdef _WRITE_DEPTH
+    // float depth: SV_Depth;
+    // #endif
 };

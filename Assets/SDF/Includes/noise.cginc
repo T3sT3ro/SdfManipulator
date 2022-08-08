@@ -1012,5 +1012,6 @@ namespace noise
         return h32 ^ (h32 >> 16);
     }
 
-    #undef c1 c2
+    #undef c1
+    #undef c2
 }
