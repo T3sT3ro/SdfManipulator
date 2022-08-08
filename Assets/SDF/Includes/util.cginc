@@ -84,13 +84,3 @@ float CorrectDepth(float rawDepth)
     float ortho = (_ProjectionParams.z - _ProjectionParams.y) * rawDepth + _ProjectionParams.y;
     return lerp(persp, ortho, unity_OrthoParams.w);
 }
-
-// model scale
-inline float3 LocalScale()
-{
-    return float3(
-        length(float3(UNITY_MATRIX_M[0].x, UNITY_MATRIX_M[1].x, UNITY_MATRIX_M[2].x)),
-        length(float3(UNITY_MATRIX_M[0].y, UNITY_MATRIX_M[1].y, UNITY_MATRIX_M[2].y)),
-        length(float3(UNITY_MATRIX_M[0].z, UNITY_MATRIX_M[1].z, UNITY_MATRIX_M[2].z))
-    );
-}

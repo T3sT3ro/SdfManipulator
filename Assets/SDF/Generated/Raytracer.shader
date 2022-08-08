@@ -6,7 +6,7 @@ Shader "SDF/Domain"
         [Header(Shader properties)]
         //        [Toggle][KeyEnum(Off, On)] _ZWRITE ("ZWrite", Float) = 0
         //        [Toggle(_SCENEVIEW)] _SCENEVIEW ("Scene view", Int) = 0
-        //        [HideInInspector] _MainTex ("MainTex", 2D) = "white" {}
+        //        [HideInInspector] _MainTex ("MainTex", 2D) = "white" {} // used for image effect shader in sceneview
         [Enum(UnityEngine.Rendering.CullMode)] _CULL("Cull", Int) = 0
 
         [Header(Raymarcher)]
@@ -20,9 +20,11 @@ Shader "SDF/Domain"
         [Header(SDF Scene)]
         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
-        _DBG ("x - step value", Vector) = (0,0,0,0)
-        _BoxmapTex ("Texture for Triplanar mapping", 2D) = "white" {}
+        [Toggle] _PRESERVE_SCALE ("Preserve local scale", Int) = 1
+
         _Control ("size1, size2, rot1, rot2", Vector) = (.5, .1, 0, 0)
+        _BoxmapTex ("Texture for Triplanar mapping", 2D) = "white" {}
+        _DBG ("DBG", Vector) = (0,0,0,0)
     }
 
     //    Fallback "Diffuse"
@@ -49,6 +51,7 @@ Shader "SDF/Domain"
         #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
         #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
             _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH
+        #pragma shader_feature_local _SCALE_INVARIANT
         // #pragma shader_feature_local _SCENEVIEW
         // #pragma shader_feature_local _WRITE_DEPTH
 
@@ -60,8 +63,32 @@ Shader "SDF/Domain"
         #include "Assets/SDF/Includes/util.cginc"
         #include "Assets/SDF/Includes/matrix.cginc" // FIXME: inverse might be a problem
 
+        #pragma shader_feature_local _PRESERVE_SCALE_ON
+        static const float4x4 SCALE_MATRIX =
+        #if defined(_PRESERVE_SCALE_ON) && defined(_ORIGIN_LOCAL)
+            {
+                {length(float3(UNITY_MATRIX_M[0].x, UNITY_MATRIX_M[1].x, UNITY_MATRIX_M[2].x)), 0, 0, 0},
+                {0, length(float3(UNITY_MATRIX_M[0].y, UNITY_MATRIX_M[1].y, UNITY_MATRIX_M[2].y)), 0, 0},
+                {0, 0, length(float3(UNITY_MATRIX_M[0].z, UNITY_MATRIX_M[1].z, UNITY_MATRIX_M[2].z)), 0},
+                {0, 0, 0, 1}
+            };
+        #else
+            MATRIX_ID;
+        #endif
+
+        // https://gist.github.com/unitycoder/c5847a82343a8e721035
+        // static const float3 camera_forward = UNITY_MATRIX_IT_MV[2].xyz;
+        static const float4x4 inv = mul(SCALE_MATRIX, inverse(
+        #ifdef _ORIGIN_WORLD
+            UNITY_MATRIX_VP
+        #else
+            UNITY_MATRIX_MVP
+        #endif
+        ));
+
         sampler2D _BoxmapTex;
         float4 _BoxmapTex_ST;
+
         UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
         float4 _Control;
@@ -73,15 +100,7 @@ Shader "SDF/Domain"
 
         float4 _DBG;
 
-        // https://gist.github.com/unitycoder/c5847a82343a8e721035
-        // static const float3 camera_forward = UNITY_MATRIX_IT_MV[2].xyz;
-        static const float4x4 inv = inverse(
-            #ifdef _ORIGIN_WORLD
-            UNITY_MATRIX_VP
-            #else
-            UNITY_MATRIX_MVP
-            #endif
-        );
+
         //const float near = _ProjectionParams.y; // those go into frag
         //const float far = _ProjectionParams.z;
         ENDHLSL
@@ -209,15 +228,12 @@ Shader "SDF/Domain"
                         #else
                         fixed4(i.hitpos, 1);
                     #endif
-                    rs.xyz *= LocalScale();
-                    ray.hit.distance = distance(rs, ro); // start on ray
+                    ray.hit.distance = distance(mul(rs, SCALE_MATRIX), ro); // start on ray
                 }
                 #endif
 
                 float4 re = mul(inv, float4(NDC.xy, 1, 1)); // ray end on far plane
                 re /= re.w;
-                ro.xyz *= LocalScale();
-                re.xyz *= LocalScale();
                 float3 rd = normalize((re - ro).xyz); // ray direction
 
 
@@ -231,7 +247,6 @@ Shader "SDF/Domain"
 
                 float4 forward = mul(inv, float4(0, 0, 1, 1)); // ray end on far plane
                 forward /= forward.w;
-                forward.xyz *= LocalScale();
                 forward = normalize(forward); // forward in object space
 
                 castRay(ray, depth / dot(forward, rd));
