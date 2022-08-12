@@ -84,3 +84,11 @@ float CorrectDepth(float rawDepth)
     float ortho = (_ProjectionParams.z - _ProjectionParams.y) * rawDepth + _ProjectionParams.y;
     return lerp(persp, ortho, unity_OrthoParams.w);
 }
+
+// should be an inverse function of CorrectDepth() above
+float EncodeCorrectDepth(float eyeDepth)
+{
+    float persp = (1.0 / eyeDepth - _ZBufferParams.w) / _ZBufferParams.z;
+    float ortho = (eyeDepth - _ProjectionParams.y) / (_ProjectionParams.z - _ProjectionParams.y);
+    return lerp(persp, ortho, unity_OrthoParams.w);
+}

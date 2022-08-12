@@ -12,18 +12,24 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _DRAWMODE_MATERIAL
+  - _DRAWMODE_TEXTURE
   - _ORIGIN_LOCAL
-  - _RAYORIGIN_NEAR
+  - _PRESERVE_SCALE_ON
+  - _RAYORIGIN_FACE
+  - _ZWRITE_OFF
+  - _ZWRITE_ON
   m_InvalidKeywords:
   - SCENE
   - SCENE_VIEW
   - Scene_view
   - _CULL_UNITYENGINE.RENDERING.CULLMODE
   - _DRAWMODE_BASE
+  - _LOCALSCALE
+  - _PRESERVE_SCALE_OFF
   - _RAY_ORIGIN_NEAR
   - _SCENEVIEW
   - _WORLDSPACE_ON
+  - _ZTEST_LEQUAL
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -37,6 +43,18 @@ Material:
     - _BoxmapTex:
         m_Texture: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _BoxmapTex_X:
+        m_Texture: {fileID: 2800000, guid: cc55b6d3cd5bb3000b01594599750f2f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BoxmapTex_Y:
+        m_Texture: {fileID: 2800000, guid: cc55b6d3cd5bb3000b01594599750f2f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BoxmapTex_Z:
+        m_Texture: {fileID: 2800000, guid: cc55b6d3cd5bb3000b01594599750f2f, type: 3}
+        m_Scale: {x: -1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
@@ -83,18 +101,21 @@ Material:
     - RO_OFF: 0
     - _Blue: 0
     - _BumpScale: 1
-    - _CULL: 1
+    - _CULL: 0
+    - _Cull: 0
     - _Cutoff: 0.5
     - _DBG_A: 0
     - _DEBUG_NORMAL: 1
     - _DetailNormalMapScale: 1
-    - _DrawMode: 0
+    - _DrawMode: 2
     - _DstBlend: 0
     - _EPSILON_NORMAL: 0.0001
     - _EPSILON_RAY: 0.0001
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LOCALSCALE: 1
+    - _LOCAL_SCALE: 0
     - _MAX_DISTANCE: 200
     - _MAX_STEPS: 300
     - _Metallic: 0
@@ -103,11 +124,12 @@ Material:
     - _OVERLAY: 0
     - _OcclusionStrength: 1
     - _Origin: 1
+    - _PRESERVE_SCALE: 1
     - _Parallax: 0.02
     - _RAND_INSTANCE_COL: 0
     - _RAY_EPSILON: 0.001
     - _RAY_ORIGIN_BIAS: 0
-    - _RayOrigin: 0
+    - _RayOrigin: 1
     - _Ray_Origin: 0
     - _SCENEVIEW: 1
     - _SCENE_VIEW: 1
@@ -120,9 +142,11 @@ Material:
     - _WORLDSPACE: 1
     - _WORLD_SPACE: 0
     - _WRITE_DEPTH: 0
+    - _ZTest: 3
     - _ZWRITE: 0
     - _ZWrite: 1
     - _Z_WRITE: 0
+    - _Zwrite: 0
     m_Colors:
     - D1: {r: 0, g: 0, b: 1, a: 3}
     - D2: {r: 0, g: 0, b: 0, a: 0}
@@ -131,8 +155,9 @@ Material:
     - RD_OFF: {r: 0, g: 0, b: 0, a: 0}
     - RO_OFF: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Control: {r: 0.4, g: 0.1, b: 0, a: 0}
-    - _DBG: {r: 7, g: 2.83, b: 0.35, a: 2}
+    - _Control: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _DBG: {r: 0.5, g: 0.5, b: -2.56, a: 2}
+    - _DBG2: {r: 0, g: 0, b: 0, a: 0}
     - _DBG_V: {r: 0, g: 0, b: 4, a: 4}
     - _DEBUG_NORMAL: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

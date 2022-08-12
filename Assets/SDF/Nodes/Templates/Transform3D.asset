@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Raytracer
-  m_EditorClassIdentifier: Assembly-CSharp-Editor:SDF:NodeTemplate
-  template: 
+  m_Script: {fileID: 11500000, guid: a5f4aa9eb446434284de310f7302c48e, type: 3}
+  m_Name: Transform3D
+  m_EditorClassIdentifier: 
+  hlslTemplate: mul({{MATRIX}}, {{RAYINFO}})
+  includes: []
+  requires: []
+  provides: []

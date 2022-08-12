@@ -54,10 +54,15 @@ TODO
 - [x] ortho+perspective generalized ray origin and direction
   - [stack question asking for the same](https://stackoverflow.com/questions/2354821/raycasting-how-to-properly-apply-a-projection-matrix)
   - [Post with graphic about coordinates at different stages of shader](https://forum.unity.com/threads/what-does-the-function-computescreenpos-in-unitycg-cginc-do.294470/)
-- [ ] write depth of pixel
-- [ ] display 3D texture holding SDV or voxel data
-- [ ] local scale not affecting rays
-- [ ] triplanar texture swizzle and mapping
+  - [ ] write depth of pixel -- to properly mix many domains 
+- [ ] display 3D texture holding SDF or voxel data
+- [X] local scale not affecting rays
+  - [ ] fix normals
+- [X] correct ZTest when inside of a domain
+- [X] triplanar texture swizzle and mapping
+- [X] limit ray by doing depth prepass over backfaces
+  - prepass has unexpected (but logical) behavior while multiple domains overlap
+- [ ] Runtime attribute that would transform inputs in editor to toggles/properties etc, but make them constant after compilation
 
 # Important to remember while documenting
 

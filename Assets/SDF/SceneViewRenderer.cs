@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// scene view rendering of fullscreen raymarching objects
 namespace SDF {
     
     [ExecuteInEditMode]
