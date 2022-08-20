@@ -88,6 +88,7 @@ TODO
   - [about deffered and depth reads+writes](https://tips.hecomi.com/entry/2018/12/31/211448)
 - [Order Independent Transparency](http://casual-effects.blogspot.com/2014/03/weighted-blended-order-independent.html)
 - [Some raymarching effects in unity5](https://github.com/i-saint/Unity5Effects)
+- [Some SDF tool in WebGL](https://www.gsn-lib.org/docs/gallery.php?projectName=RaymarchingSDF&graphName=SignedDistanceField3D)
 
 costs of shader operations:
 ```
