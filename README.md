@@ -89,6 +89,7 @@ TODO
 - [Order Independent Transparency](http://casual-effects.blogspot.com/2014/03/weighted-blended-order-independent.html)
 - [Some raymarching effects in unity5](https://github.com/i-saint/Unity5Effects)
 - [Some SDF tool in WebGL](https://www.gsn-lib.org/docs/gallery.php?projectName=RaymarchingSDF&graphName=SignedDistanceField3D)
+- [Access internal shadergraph methods](https://forum.unity.com/threads/how-to-modify-unity-packages-using-custom-code-and-files-and-also-export-custom-package.799170/)
 
 costs of shader operations:
 ```

@@ -36,7 +36,7 @@ Shader ""SDF/Unlit""
 
         [Header(SDF Scene)]
   
-        {Properties.Select(p => p.ToString())}
+        {Properties.Select(p => p.GetPropertyBlockString())}
     }}
 
     // Fallback ""Diffuse""

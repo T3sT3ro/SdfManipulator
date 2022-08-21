@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Scriban;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -32,7 +31,7 @@ namespace SDF {
     
     #if UNITY_EDITOR    
     [CustomEditor(typeof(Node))]
-    public class NodeEditor : Editor {
+    public class NodeEditor : UnityEditor.Editor {
         public override void OnInspectorGUI() {
             base.OnInspectorGUI();
             

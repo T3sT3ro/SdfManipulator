@@ -28,7 +28,7 @@ namespace SDF {
     
     #if UNITY_EDITOR
     [CustomEditor(typeof(NodeTemplate))]
-    public class NodeTemplateEditor : Editor {
+    public class NodeTemplateEditor : UnityEditor.Editor {
         public override void OnInspectorGUI() {
             NodeTemplate template = (NodeTemplate)target;
             base.OnInspectorGUI();

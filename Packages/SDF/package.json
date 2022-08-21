@@ -1,0 +1,20 @@
+{
+  "name": "me.tooster.sdf",
+  "version": "0.0.1",
+  "displayName": "SDF",
+  "description": "Easily create Signed Distance Field based shaders in unity",
+  "unity": "2022.1",
+  "dependencies": {
+    "com.unity.shadergraph": "13.1.8"
+  },
+  "keywords": [
+    "SDF",
+    "Shader",
+    "Raymarching"
+  ],
+  "author": {
+    "name": "Tooster",
+    "email": "",
+    "url": "https://github.com/T3sT3ro/SdfManipulator"
+  }
+}

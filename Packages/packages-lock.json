@@ -144,6 +144,14 @@
       },
       "url": "https://packages.unity.com"
     },
+    "me.tooster.sdf": {
+      "version": "file:SDF",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.shadergraph": "13.1.8"
+      }
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

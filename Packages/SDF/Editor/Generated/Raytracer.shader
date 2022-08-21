@@ -63,12 +63,12 @@ Shader "SDF/Domain"
         // #pragma shader_feature_local _SCENEVIEW
 
         #include "UnityCG.cginc"
-        #include "Assets/Packages/SDF/Includes/primitives.cginc"
-        #include "Assets/Packages/SDF/Includes/operators.cginc"
-        #include "Assets/Packages/SDF/Includes/noise.cginc"
-        #include "Assets/Packages/SDF/Includes/types.cginc"
-        #include "Assets/Packages/SDF/Includes/util.cginc"
-        #include "Assets/Packages/SDF/Includes/matrix.cginc"
+        #include "Packages/SDF/Editor/Includes/primitives.cginc"
+        #include "Packages/SDF/Editor/Includes/operators.cginc"
+        #include "Packages/SDF/Editor/Includes/noise.cginc"
+        #include "Packages/SDF/Editor/Includes/types.cginc"
+        #include "Packages/SDF/Editor/Includes/util.cginc"
+        #include "Packages/SDF/Editor/Includes/matrix.cginc"
 
         static const float4x4 SCALE_MATRIX =
             #if defined(_PRESERVE_SCALE_ON) && defined(_ORIGIN_LOCAL)

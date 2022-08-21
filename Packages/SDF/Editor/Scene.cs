@@ -1,4 +1,3 @@
-using Scriban;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -18,7 +17,7 @@ namespace SDF {
 
     #if UNITY_EDITOR
     [CustomEditor(typeof(Scene))]
-    public class SceneEditor : Editor {
+    public class SceneEditor : UnityEditor.Editor {
         
         
         public override void OnInspectorGUI() {
