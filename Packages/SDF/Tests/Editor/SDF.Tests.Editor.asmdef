@@ -1,8 +1,6 @@
 {
   "name": "SDF.Tests.Editor",
-  "references": [
-    "Unity.ShaderGraph.Editor"
-  ],
+  "references": [],
   "optionalUnityReferences": [
     "TestAssemblies"
   ],

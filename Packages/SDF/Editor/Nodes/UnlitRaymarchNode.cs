@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Editor.Nodes.Ports;
 using SDF.Interface;
 using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Internal;
 
 namespace UnityEditor.ShaderGraph.Internal {
     public class UnlitRaymarchNode : ISdfMasterNode {
-        public List<AbstractShaderProperty> Properties { get; }
-        public string                       SceneSDF   { get; }
-
+        private List<IPropertyProvider> Properties { get; }
+        private SdfPort                 Sdf;
 
         public string ShaderCode =>
             @$"""
@@ -36,7 +36,7 @@ Shader ""SDF/Unlit""
 
         [Header(SDF Scene)]
   
-        {Properties.Select(p => p.GetPropertyBlockString())}
+        {Properties.Select(p => p.Properties.Select(p => p.ShaderlabBlock))}
     }}
 
     // Fallback ""Diffuse""
@@ -130,7 +130,7 @@ Shader ""SDF/Unlit""
             // =======================================================================
             Hit __SDF(float3 p)
             {{
-                {SceneSDF}
+                {Sdf}
             }}
 
             // -----------------------------------------------------------------------
@@ -223,7 +223,5 @@ Shader ""SDF/Unlit""
     }}
 }}
 """;
-        
-        
     }
 }
