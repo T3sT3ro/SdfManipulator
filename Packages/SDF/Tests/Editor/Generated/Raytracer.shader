@@ -401,7 +401,14 @@ Shader "SDF/Domain"
 
                 fixed4 color_id = sdf.id;
 
-                float eyeDepth = -UnityObjectToViewPos(mul(SCALE_MATRIX_I, sdf.p)).z;
+                float eyeDepth =
+                    -
+                    #ifdef _ORIGIN_WORLD
+                    UnityWorldToViewPos
+                    #else
+                    UnityObjectToViewPos
+                    #endif
+                        (mul(SCALE_MATRIX_I, sdf.p)).z;
 
                 f2p o = {
                     {
