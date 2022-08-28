@@ -1,22 +1,35 @@
 #pragma once
+// Upgrade NOTE: excluded shader from DX11; has structs without semantics (struct v2f members distance)
+#pragma exclude_renderers d3d11
 
-typedef int ID;
-#define NO_ID -1
+typedef fixed4 ID;
+#define NO_ID int4(-1, -1, -1, -1)
 
-struct Hit
+struct Material
 {
-    float distance; // distance from sdf
-    ID id; // id of hit object
+    fixed4 albedo;      // base (diffuse or specular) color + alpha
+    half metallic;      // 0=non-metal, 1=metal
+    half smoothness;    // 0=rough, 1=smooth
+    half3 emission;
+    half occlusion;     // occlusion (default 1)
 };
 
-struct RayInfo3D
+struct SdfResult
+{
+    ID id; // id of hit object
+    float3 p; /// mutable 3D point in space where ray is evaluated in world-space
+    float distance; // distance from sdf
+    fixed3 normal;      // tangent space normal, if written
+    Material material;
+};
+
+struct Ray3D
 {
     float3 ro; /// ray origin in world-space
     float3 rd; /// ray direction in world-space
-    float3 p; /// mutable 3D point in space where ray is evaluated in world-space
-    float3 n; /// normal at point in world-space
     int steps; // how many steps did raymarcher do
-    Hit hit; // ray hit results
+    float startDistance;
+    float maxDistance;
 };
 
 

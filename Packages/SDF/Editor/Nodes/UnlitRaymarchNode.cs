@@ -8,7 +8,7 @@ using UnityEditor.ShaderGraph.Internal;
 
 namespace UnityEditor.ShaderGraph.Internal {
     public class UnlitRaymarchNode : ISdfMasterNode {
-        private List<IPropertyProvider> Properties { get; }
+        private List<IProperty> Properties { get; }
         private SdfPort                 Sdf;
 
         public string ShaderCode =>
@@ -36,7 +36,7 @@ Shader ""SDF/Unlit""
 
         [Header(SDF Scene)]
   
-        {Properties.Select(p => p.Properties.Select(p => p.ShaderlabBlock))}
+        {Properties.Select(p => p.HlslBlock)}
     }}
 
     // Fallback ""Diffuse""

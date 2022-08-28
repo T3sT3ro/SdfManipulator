@@ -7,8 +7,5 @@ namespace SDF.Interface {
         string          Body     { get; }
         string          Name     { get; }
         GUID            guid     => GUID.Generate();
-
-        List<AbstractPort> InputPorts  { get; }
-        List<AbstractPort> OutputPorts { get; }
     }
 }

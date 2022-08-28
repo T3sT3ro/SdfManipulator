@@ -1,7 +1,7 @@
 using SDF.Interface;
 
 namespace SDF.Nodes.Ports {
-    public class VectorAbstractPort : AbstractPort {
+    public class VectorPort : AbstractPort {
                 
     }
 }

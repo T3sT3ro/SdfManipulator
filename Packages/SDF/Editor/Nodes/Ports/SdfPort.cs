@@ -1,7 +1,5 @@
 using SDF.Interface;
 
 namespace Editor.Nodes.Ports {
-    public class SdfPort : AbstractPort{
-        
-    }
+    public class SdfPort : AbstractPort { }
 }

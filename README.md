@@ -54,7 +54,8 @@ TODO
 - [x] ortho+perspective generalized ray origin and direction
   - [stack question asking for the same](https://stackoverflow.com/questions/2354821/raycasting-how-to-properly-apply-a-projection-matrix)
   - [Post with graphic about coordinates at different stages of shader](https://forum.unity.com/threads/what-does-the-function-computescreenpos-in-unitycg-cginc-do.294470/)
-  - [ ] write depth of pixel -- to properly mix many domains 
+  - [x] write depth of pixel -- to properly mix many domains
+    - [ ] fix depth calculation in global origin mode
 - [ ] display 3D texture holding SDF or voxel data
 - [X] local scale not affecting rays
   - [ ] fix normals
@@ -63,6 +64,7 @@ TODO
 - [X] limit ray by doing depth prepass over backfaces
   - prepass has unexpected (but logical) behavior while multiple domains overlap
 - [ ] Runtime attribute that would transform inputs in editor to toggles/properties etc, but make them constant after compilation
+- [ ] Pixelize operator - something like return clamped distance 
 
 # Important to remember while documenting
 
@@ -90,6 +92,18 @@ TODO
 - [Some raymarching effects in unity5](https://github.com/i-saint/Unity5Effects)
 - [Some SDF tool in WebGL](https://www.gsn-lib.org/docs/gallery.php?projectName=RaymarchingSDF&graphName=SignedDistanceField3D)
 - [Access internal shadergraph methods](https://forum.unity.com/threads/how-to-modify-unity-packages-using-custom-code-and-files-and-also-export-custom-package.799170/)
+- [Tracing a sphere](https://bgolus.medium.com/rendering-a-sphere-on-a-quad-13c92025570c) - a tutorial of raytracing sphere in a cube domain with UVs, seams and Z-Write - EPIC in terms of knowledge and useful stuff!
+- [Mud bunny](http://longbunnylabs.com/mudbun/) - a tool for SDF generation that works using similar principles
+- [2D SDF operations](https://www.ronja-tutorials.com/post/035-2d-sdf-combination/)
+- [Scala SDF engine](https://github.com/sungiant/sdf)
+- [Fast quaternion mutliplication](https://blog.molecular-matters.com/2013/05/24/a-faster-quaternion-vector-multiplication/)
+- [SDF cloud marching](https://www.shadertoy.com/view/ssc3z4)
+- [Raymarch transparent bubbles](https://blog.csdn.net/weixin_39967405/article/details/111625326)
+- Cloud volumetric raymarching:
+  - https://www.shadertoy.com/view/Xsc3R4
+  - https://www.shadertoy.com/view/XslGRr
+  - BAD https://www.shadertoy.com/view/4sVfz1
+  - AA https://www.shadertoy.com/view/3lBfDm
 
 costs of shader operations:
 ```

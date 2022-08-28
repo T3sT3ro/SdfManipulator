@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 namespace SDF.Interface {
-    public enum PortType { Input, Output }
+    public enum PortType { INPUT, OUTPUT }
 
     public abstract class AbstractPort {
         public virtual string     Name       { get; }

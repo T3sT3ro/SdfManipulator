@@ -19,7 +19,7 @@ Shader "SDF/Domain"
         _EPSILON_NORMAL ("epsilon for calculating normal", Float) = 0.001
 
         [Space]
-        [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID, Steps, Depth)] _DrawMode("Draw mode", Int) = 0
+        [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Debug)] _DrawMode("Draw mode", Int) = 0
         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
         [Tooltip(Only works for origin type local)]
@@ -44,7 +44,7 @@ Shader "SDF/Domain"
             "IgnoreProjector"="True"
         }
         //        Blend SrcAlpha OneMinusSrcAlpha
-        ZTest LEqual // Can be customized manually, but when meshes intersect SDFs, this helps to draw both properly  
+        ZTest [_ZTest] // Can be customized manually, but when meshes intersect SDFs, this helps to draw both properly  
         Cull [_Cull] // Draw camera inside a domain
         ZWrite [_ZWrite]
 
@@ -56,7 +56,7 @@ Shader "SDF/Domain"
         #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
         #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
         #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
-            _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH
+            _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_DEBUG
         #pragma shader_feature_local _SCALE_INVARIANT
         #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
         #pragma shader_feature_local _PRESERVE_SCALE_ON
@@ -110,6 +110,10 @@ Shader "SDF/Domain"
         float _RAY_ORIGIN_BIAS;
         float _MAX_STEPS;
 
+        // NON-PROEPRTY UNIFORMS
+        float4x4 _BoxFrame1_Transform = MATRIX_ID;
+        float4x4 _Sphere1_Transform = MATRIX_ID;
+
         float4 _DBG;
 
 
@@ -117,13 +121,13 @@ Shader "SDF/Domain"
         //const float far = _ProjectionParams.z;
         ENDHLSL
 
-// DEPTH PREPASS - limits rays going beyond backface of shdaer
-//        Pass {
-//            Cull Front
-//            ZWrite On
-//            ColorMask 0
-//        }
-        
+        // DEPTH PREPASS - limits rays going beyond backface of shdaer
+        //        Pass {
+        //            Cull Front
+        //            ZWrite On
+        //            ColorMask 0
+        //        }
+
         Pass
         {
             HLSLPROGRAM
@@ -138,8 +142,106 @@ Shader "SDF/Domain"
                 return o;
             }
 
-            // =======================================================================
+            /*
+            Hit __SDF_BoxFrame1(float3 p)   
+            {
+                Hit hit = (Hit)0;
+
+                //transform space
+                p = mul(p, _BoxFrame1_Transform);
+
+                hit.distance = sdf::primitives3D::box_frame(p, _Control.x, _Control.y);
+                hit.id = 1;
+
+                Material mat = (Material)0;
+                mat.Albedo = fixed4(0, .7, .2, .5); // grass :)
+                mat.Emission = 0;
+                hit.material = mat;
+                return hit;
+            }
+
+            Hit __SDF_Repeat_Space(float3 p)
+            {
+                // transform point
+                rotX(p, _Control.z); //_Time.y / 3);
+                rotY(p, _Control.w);
+
+                // repeat operator 
+                int3 ix;
+                p = sdf::operators::repeatLim(p, 1, float3(1, 0, 1), ix);
+
+                // primitive 
+                Hit hit = __SDF_BoxFrame1(p);
+
+                // material
+                Material mat = (Material)0;
+                static fixed4 COLORS[] = {
+                    fixed4(0, .7, .2, .5), // grass :)
+                    fixed4(1, .7, .2, .5), // orange :)
+                    fixed4(1, 0, .2, .5) // tomato :)
+                };
+                mat.Albedo = COLORS[ix.x + 1];
+                hit.material = mat;
+
+                return hit;
+            }
+
+            Hit __SDF_Sphere1(float3 p)
+            {
+                p = mul(p, _Sphere1_Transform);
+                Hit hit = (Hit)0;
+                hit.distance = sdf::primitives3D::sphere(p, _Control.z);
+                hit.id = 2;
+            
+                return hit;
+            }
+
+            // smooth min with blending factor from IQ: https://iquilezles.org/articles/smin/
+            float2 sminN(float d1, float d2, float k, float n, out float t)
+            {
+                float h = max(k - abs(d1 - d2), 0.0) / k;
+                t = pow(h, n) * 0.5;
+                float s = t * k / n;
+                if (d1 < d2) return d1 - s;
+                t = 1.0 - t;
+                return d2 - s;
+            }
+
+            Material blendMaterials(Material a, Material b, float t)
+            {
+                Material res;
+                res.Albedo = lerp(a.Albedo, b.Albedo, t);
+                res.Emission = lerp(a.Emission, b.Emission, t);
+                res.Metallic = lerp(a.Metallic, b.Metallic, t);
+                // TODO: move it elsewehere
+                res.Normal = normalize(lerp(a.Normal, b.Normal, t)); // this actually would be better off as another OP
+                res.Occlusion = lerp(a.Occlusion, b.Occlusion, t);
+                res.Smoothness = lerp(a.Smoothness, b.Smoothness, t);
+                return res;
+            }
+
+            Hit __SDF_Smoothmax_BoxFrame1_Sphere1(float3 p)
+            {
+                Hit boxframe1 = __SDF_BoxFrame1(p);
+                Hit sphere1 = __SDF_Sphere1(p);
+                Hit hit;
+                float t;
+                hit.distance = sminN(boxframe1.distance, sphere1.distance, 0.0, 1.0, t);
+                hit.id = lerp(boxframe1.id, sphere1.id, step(0.5, t));
+
+                hit.material = blendMaterials(boxframe1.material, sphere1.material, t);
+                return hit;
+            }
+
             Hit __SDF(float3 p)
+            {
+                return __SDF_Smoothmax_BoxFrame1_Sphere1(p);
+            }
+            
+            */
+            // =======================================================================
+
+            SdfResult __SDF(float3 p)
             {
                 // float4x4 rot = m_rotate(_Time.y, float3(0, 0, 1));
                 // p = mul(rot, p);
@@ -148,14 +250,10 @@ Shader "SDF/Domain"
                 // Hit ret = {sdf::primitives3D::torus(p, _TorusSizes.x, _TorusSizes.y), 0};
                 int3 ix;
                 p = sdf::operators::repeatLim(p, 1, float3(1, 0, 1), ix);
-                Hit ret = {
-                    sdf::primitives3D::box_frame(
-                        p
-                        , _Control.x
-                        , _Control.y
-                    ),
-                    ix.x + 1 // random number for instance
-                };
+                SdfResult ret;
+                ret.distance = sdf::primitives3D::box_frame(p, _Control.x, _Control.y);
+                ret.id.xyz = ix + 1;
+                ret.id.w = 0;
                 return ret;
             }
 
@@ -175,7 +273,7 @@ Shader "SDF/Domain"
 
 
             // TODO: lighting
-            fixed4 __MATERIAL(int id)
+            fixed4 __MATERIAL(fixed4 id)
             {
                 static fixed4 _COLORS[] = {
                     fixed4(.5, 0, .5, 1), // NO_ID (magenta)
@@ -184,7 +282,7 @@ Shader "SDF/Domain"
                     fixed4(1, .7, .2, .5), // orange :)
                     fixed4(1, 0, .2, .5), // tomato :)
                 };
-                return _COLORS[id + 1];
+                return _COLORS[id.x + 1];
             }
 
             // triplanar mapping texture, point, normal, smoothing
@@ -201,37 +299,54 @@ Shader "SDF/Domain"
 
             // -----------------------------------------------------------------------
 
-            void castRay(inout RayInfo3D ray, in float max_distance)
+            // returns sdf and ray point
+            void castRay(inout SdfResult sdf, inout Ray3D ray)
             {
-                float d = ray.hit.distance;
-                Hit hit = {_MAX_DISTANCE, NO_ID};
-                ray.hit = hit;
+                float d = ray.startDistance;
+                sdf.distance = _MAX_DISTANCE;
+                sdf.id = int4(NO_ID);
+
+                sdf.material = (Material)0;
+                sdf.normal = 0;
+
                 for (ray.steps = 0; ray.steps < _MAX_STEPS; ray.steps++)
                 {
-                    if (d >= _MAX_DISTANCE || d >= max_distance)
+                    if (d >= _MAX_DISTANCE || d >= ray.maxDistance)
                         return;
 
-                    ray.p = ray.ro + d * ray.rd;
+                    sdf.p = ray.ro + d * ray.rd;
 
-                    Hit hit = __SDF(ray.p);
-                    if (hit.distance < _EPSILON_RAY)
+                    SdfResult sdfOnRay = __SDF(sdf.p);
+                    if (sdfOnRay.distance < _EPSILON_RAY)
                     {
-                        ray.hit.distance = d;
-                        ray.hit.id = hit.id;
+                        sdf.distance = d;
+                        sdf.id = sdfOnRay.id;
                         return;
                     }
 
-                    d += hit.distance;
+                    d += sdfOnRay.distance;
                 }
             }
 
             // =======================================================================
 
-            f2p frag(v2f i, fixed facing : VFACE)
+            float depthToMaxRayDepth(in float2 screenUV, in float3 rd)
             {
-                const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
+                // read camera depth texture to correctly blend with scene geometry
+                // beware, that _CameraDepthTexture IS NOT the depth buffer!
+                // it is populated in the prepass and doesn't change in subsequent passes
+                // https://forum.unity.com/threads/does-depth-buffer-update-between-passes.620575/
+                float camDepth = CorrectDepth(tex2D(_CameraDepthTexture, screenUV).rg);
 
-                RayInfo3D ray = (RayInfo3D)0;
+                float4 forward = mul(inv, float4(0, 0, 1, 1)); // ray end on far plane
+                forward /= forward.w;
+                forward = normalize(forward); // forward in object space
+                return camDepth / dot(forward, rd);
+            }
+
+            Ray3D getRaysForCamera(float3 screenPos, float3 objectHitpos)
+            {
+                Ray3D ray = (Ray3D)0;
 
                 // NDC from (-1, -1, -1) to (1, 1, 1) 
                 float3 NDC = 2. * screenPos.xyz - 1.;
@@ -242,11 +357,11 @@ Shader "SDF/Domain"
                 {
                     float4 rs =
                         #ifdef _ORIGIN_WORLD
-                        mul(UNITY_MATRIX_M, float4(i.hitpos, 1));
+                            mul(UNITY_MATRIX_M, float4(objectHitpos, 1));
                         #else
-                        fixed4(i.hitpos, 1);
-                    #endif
-                    ray.hit.distance = distance(mul(rs, SCALE_MATRIX), ro); // start on ray
+                            fixed4(objectHitpos, 1);
+                        #endif
+                    ray.startDistance = distance(mul(rs, SCALE_MATRIX), ro); // start on ray
                 }
                 #endif
 
@@ -254,42 +369,39 @@ Shader "SDF/Domain"
                 re /= re.w;
                 float3 rd = normalize((re - ro).xyz); // ray direction
 
+                ray.ro = ro;
+                ray.rd = rd;
+                ray.startDistance += _RAY_ORIGIN_BIAS;
+                ray.maxDistance = depthToMaxRayDepth(screenPos.xy, ray.rd);
+                return ray;
+            }
 
-                ray.ro = ro; // in object space
-                ray.rd = rd; // in object space
+            f2p frag(v2f i, fixed facing : VFACE)
+            {
+                const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
 
-                ray.hit.distance += _RAY_ORIGIN_BIAS;
+                Ray3D ray = getRaysForCamera(screenPos, i.hitpos);
+                SdfResult sdf = (SdfResult)0;
 
-                // read camera depth texture to correctly blend with scene geometry
-                // beware, that _CameraDepthTexture IS NOT the depth buffer!
-                // it is populated in the prepass and doesn't change in subsequent passes
-                // https://forum.unity.com/threads/does-depth-buffer-update-between-passes.620575/
-                float camDepth = CorrectDepth(tex2D(_CameraDepthTexture, screenPos.xy).rg);
+                castRay(sdf, ray);
 
-                float4 forward = mul(inv, float4(0, 0, 1, 1)); // ray end on far plane
-                forward /= forward.w;
-                forward = normalize(forward); // forward in object space
+                clip(sdf.id.w); // discard rays without hit
 
-                castRay(ray, camDepth / dot(forward, rd));
+                sdf.normal = __SDF_NORMAL(sdf.p);
 
+                fixed4 color_material = __MATERIAL(sdf.id.x); // color
+                BoxMapParams3D boxmapParams = {
+                    _BoxmapTex_X, _BoxmapTex_Y, _BoxmapTex_Z, {_BoxmapTex_X_ST}, {_BoxmapTex_Y_ST}, {_BoxmapTex_Z_ST}
+                };
+                fixed4 color_trimap = __BOXMAP(boxmapParams, sdf.p, sdf.normal, 10.);
 
-                clip(ray.hit.id); // discard rays without hit
+                fixed4 color_normal_domain = fixed4(sdf.normal * .5 + .5, 1); // domain normal color
+                fixed4 color_normal_world = fixed4(UnityObjectToWorldNormal(sdf.normal) * .5 + .5, 1);
+                // world normal color
 
-                ray.n = __SDF_NORMAL(ray.p);
+                fixed4 color_id = sdf.id;
 
-                // GAMMA
-                // col = pow(col, 0.45);
-                fixed4 color_material = __MATERIAL(ray.hit.id); // color
-                BoxMapParams3D boxmapParams = {_BoxmapTex_X, _BoxmapTex_Y, _BoxmapTex_Z, {_BoxmapTex_X_ST}, {_BoxmapTex_Y_ST}, {_BoxmapTex_Z_ST}};
-                fixed4 color_trimap = __BOXMAP(boxmapParams, ray.p, ray.n, 10.);
-
-                fixed4 color_normal_domain = fixed4(ray.n * .5 + .5, 1); // domain normal color
-                fixed4 color_normal_world = fixed4(UnityObjectToWorldNormal(ray.n) * .5 + .5, 1); // world normal color
-
-
-                fixed4 color_id = ray.hit.id;
-
-                float eyeDepth = -UnityObjectToViewPos(mul(SCALE_MATRIX_I, ray.p)).z;
+                float eyeDepth = -UnityObjectToViewPos(mul(SCALE_MATRIX_I, sdf.p)).z;
 
                 f2p o = {
                     {
@@ -308,11 +420,13 @@ Shader "SDF/Domain"
                         #elif _DRAWMODE_STEPS
                          lerp(fixed4(0,0,1,1), fixed4(1,0,0,1), ray.steps/_MAX_STEPS)
                         #elif _DRAWMODE_DEPTH
-                         fixed4((float3)eyeDepth/4., 1)
+                         fixed4((float3)eyeDepth/5., 1)
+                        #elif _DRAWMODE_DEBUG
+                         fixed4(i.vertex.xyz, 1)
                         #endif
                     },
-                    {float3(normalize(ray.n) * .5 + .5)},
-                    ray.hit.id,
+                    {float3(normalize(sdf.normal) * .5 + .5)},
+                    {sdf.id},
                     #ifdef _ZWRITE_ON
                     EncodeCorrectDepth(eyeDepth)
                     #endif
