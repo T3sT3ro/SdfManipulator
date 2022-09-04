@@ -310,6 +310,26 @@ float4x4 extract_rotation_matrix(float4x4 m)
     return m;
 }
 
+float3 extract_scale(float4x4 m)
+{
+    float sx = length(float3(m[0][0], m[0][1], m[0][2]));
+    float sy = length(float3(m[1][0], m[1][1], m[1][2]));
+    float sz = length(float3(m[2][0], m[2][1], m[2][2]));
+
+    return float3(sx, sy, sz); 
+}
+
+float4x4 extract_scale_matrix(float4x4 m)
+{
+    float4x4 ret = {
+        {length(float3(m[0].x, m[1].x, m[2].x)), 0, 0, 0},
+        {0, length(float3(m[0].y, m[1].y, m[2].y)), 0, 0},
+        {0, 0, length(float3(m[0].z, m[1].z, m[2].z)), 0},
+        {0, 0, 0, 1}
+    };
+    return ret;
+}
+
 // Rotation with angle (in radians) and axis
 // source: https://gist.github.com/keijiro/ee439d5e7388f3aafc5296005c8c3f33
 float4x4 m_rotate(float angle, float3 axis)

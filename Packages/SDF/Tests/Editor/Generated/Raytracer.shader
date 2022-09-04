@@ -23,7 +23,7 @@ Shader "SDF/Domain"
         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
         [Tooltip(Only works for origin type local)]
-        [Toggle] _PRESERVE_SCALE ("Preserve local scale", Int) = 1
+        [Toggle] _PRESERVE_SPACE_SCALE ("preserve space scale", Int) = 1
 
         [Header(SDF Scene)][Space]
         _Control ("size1, size2, rot1, rot2", Vector) = (.5, .1, 0, 0)
@@ -59,25 +59,20 @@ Shader "SDF/Domain"
             _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_DEBUG
         #pragma shader_feature_local _SCALE_INVARIANT
         #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
-        #pragma shader_feature_local _PRESERVE_SCALE_ON
+        #pragma shader_feature_local _PRESERVE_SPACE_SCALE_ON
         // #pragma shader_feature_local _SCENEVIEW
 
         #include "UnityCG.cginc"
-        #include "Packages/SDF/Editor/Includes/primitives.cginc"
-        #include "Packages/SDF/Editor/Includes/operators.cginc"
-        #include "Packages/SDF/Editor/Includes/noise.cginc"
         #include "Packages/SDF/Editor/Includes/types.cginc"
         #include "Packages/SDF/Editor/Includes/util.cginc"
         #include "Packages/SDF/Editor/Includes/matrix.cginc"
-
+        #include "Packages/SDF/Editor/Includes/primitives.cginc"
+        #include "Packages/SDF/Editor/Includes/operators.cginc"
+        #include "Packages/SDF/Editor/Includes/noise.cginc"
+        
         static const float4x4 SCALE_MATRIX =
-            #if defined(_PRESERVE_SCALE_ON) && defined(_ORIGIN_LOCAL)
-            {
-                {length(float3(UNITY_MATRIX_M[0].x, UNITY_MATRIX_M[1].x, UNITY_MATRIX_M[2].x)), 0, 0, 0},
-                {0, length(float3(UNITY_MATRIX_M[0].y, UNITY_MATRIX_M[1].y, UNITY_MATRIX_M[2].y)), 0, 0},
-                {0, 0, length(float3(UNITY_MATRIX_M[0].z, UNITY_MATRIX_M[1].z, UNITY_MATRIX_M[2].z)), 0},
-                {0, 0, 0, 1}
-            };
+            #if defined(_PRESERVE_SPACE_SCALE_ON) && defined(_ORIGIN_LOCAL)
+            extract_scale_matrix(UNITY_MATRIX_M);
             #else
             MATRIX_ID;
         #endif
@@ -359,8 +354,8 @@ Shader "SDF/Domain"
                         #ifdef _ORIGIN_WORLD
                             mul(UNITY_MATRIX_M, float4(objectHitpos, 1));
                         #else
-                            fixed4(objectHitpos, 1);
-                        #endif
+                        fixed4(objectHitpos, 1);
+                    #endif
                     ray.startDistance = distance(mul(rs, SCALE_MATRIX), ro); // start on ray
                 }
                 #endif
@@ -408,7 +403,7 @@ Shader "SDF/Domain"
                     #else
                     UnityObjectToViewPos
                     #endif
-                        (mul(SCALE_MATRIX_I, sdf.p)).z;
+                    (mul(SCALE_MATRIX_I, sdf.p)).z;
 
                 f2p o = {
                     {

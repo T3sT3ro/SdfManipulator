@@ -55,7 +55,7 @@ TODO
   - [stack question asking for the same](https://stackoverflow.com/questions/2354821/raycasting-how-to-properly-apply-a-projection-matrix)
   - [Post with graphic about coordinates at different stages of shader](https://forum.unity.com/threads/what-does-the-function-computescreenpos-in-unitycg-cginc-do.294470/)
   - [x] write depth of pixel -- to properly mix many domains
-    - [ ] fix depth calculation in global origin mode
+    - [x] fix depth calculation in global origin mode
 - [ ] display 3D texture holding SDF or voxel data
 - [X] local scale not affecting rays
   - [ ] fix normals
