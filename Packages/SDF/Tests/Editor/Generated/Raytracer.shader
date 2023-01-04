@@ -24,6 +24,8 @@ Shader "SDF/Domain"
         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
         [Tooltip(Only works for origin type local)]
         [Toggle] _PRESERVE_SPACE_SCALE ("preserve space scale", Int) = 1
+        _DomainOrigin ("domain origin", Vector) = (0,0,0,0)
+        _DomainRotation ("domain rotation", Vector) = (0,0,0,0)
 
         [Header(SDF Scene)][Space]
         _Control ("size1, size2, rot1, rot2", Vector) = (.5, .1, 0, 0)
@@ -69,25 +71,6 @@ Shader "SDF/Domain"
         #include "Packages/SDF/Editor/Includes/primitives.cginc"
         #include "Packages/SDF/Editor/Includes/operators.cginc"
         #include "Packages/SDF/Editor/Includes/noise.cginc"
-        
-        static const float4x4 SCALE_MATRIX =
-            #if defined(_PRESERVE_SPACE_SCALE_ON) && defined(_ORIGIN_LOCAL)
-            extract_scale_matrix(UNITY_MATRIX_M);
-            #else
-            MATRIX_ID;
-        #endif
-
-        static const float4x4 SCALE_MATRIX_I = inverse(SCALE_MATRIX); // used for non-uniform scale
-
-        // https://gist.github.com/unitycoder/c5847a82343a8e721035
-        // static const float3 camera_forward = UNITY_MATRIX_IT_MV[2].xyz;
-        static const float4x4 inv = mul(SCALE_MATRIX, inverse(
-                                            #ifdef _ORIGIN_WORLD
-                                            UNITY_MATRIX_VP
-                                            #else
-                                            UNITY_MATRIX_MVP
-                                            #endif
-                                        ));
 
         sampler2D _BoxmapTex_X;
         sampler2D _BoxmapTex_Y;
@@ -110,13 +93,44 @@ Shader "SDF/Domain"
         float4x4 _Sphere1_Transform = MATRIX_ID;
 
         float4 _DBG;
+        float4 _DomainOrigin;
+        float4 _DomainRotation;
 
+
+        // calculated stuff
+
+        // static const float4x4 MATRIX_DOMAIN = m_translate(_DomainOrigin);
+        // static const float4x4 MATRIX_I_DOMAIN = m_translate(-_DomainOrigin);
+        
+        static const float4x4 SCALE_MATRIX =
+            #if defined(_PRESERVE_SPACE_SCALE_ON) && defined(_ORIGIN_LOCAL)
+            extract_scale_matrix(UNITY_MATRIX_M);
+            #else
+            MATRIX_ID;
+        #endif
+
+        // inverse 
+        static const float4x4 SCALE_MATRIX_I = inverse_diagonal(SCALE_MATRIX); // used for non-uniform scale
+
+        // inverse projection matrix either to world or to model, depending on the origin type
+        // instead of performing matrix inversion in the shader, use already supplied matrices
+        static const float4x4 inv = mul(SCALE_MATRIX,
+                                        #ifdef _ORIGIN_WORLD
+                                            mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
+                                            // inverse(UNITY_MATRIX_VP)
+                                        #else
+                                        mul(unity_WorldToObject, mul(UNITY_MATRIX_I_V, unity_CameraInvProjection))
+                                        // inverse(UNITY_MATRIX_MVP)
+                                        #endif
+        );
 
         //const float near = _ProjectionParams.y; // those go into frag
         //const float far = _ProjectionParams.z;
+        // https://gist.github.com/unitycoder/c5847a82343a8e721035
+        // static const float3 camera_forward = UNITY_MATRIX_IT_MV[2].xyz;
         ENDHLSL
 
-        // DEPTH PREPASS - limits rays going beyond backface of shdaer
+        // DEPTH PREPASS - limits rays going beyond backface of shader
         //        Pass {
         //            Cull Front
         //            ZWrite On

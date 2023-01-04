@@ -104,6 +104,9 @@ TODO
   - https://www.shadertoy.com/view/XslGRr
   - BAD https://www.shadertoy.com/view/4sVfz1
   - AA https://www.shadertoy.com/view/3lBfDm
+- [Screen Space Reflections](https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html)
+- [Refraction and glass](https://www.shadertoy.com/view/flcSW2)
+- [WOMP online SDF editor in browser](https://alpha.womp3d.com)
 
 costs of shader operations:
 ```

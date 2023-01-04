@@ -164,6 +164,8 @@ Material:
     - _DBG2: {r: 0, g: 0, b: 0, a: 0}
     - _DBG_V: {r: 0, g: 0, b: 4, a: 4}
     - _DEBUG_NORMAL: {r: 0, g: 0, b: 0, a: 0}
+    - _DomainOrigin: {r: 0.94, g: 0, b: 0, a: 0}
+    - _DomainRotation: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SDF_DOMAIN_ORIGIN_POS: {r: 0.37, g: 0, b: 0, a: 1}
     - _SDF_DOMAIN_ORIGIN_ROT: {r: 0, g: 0, b: 0, a: 1}

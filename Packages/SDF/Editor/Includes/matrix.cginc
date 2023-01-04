@@ -4,6 +4,11 @@
 
 #define MATRIX_ID float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 
+float4x4 inverse_diagonal(float4x4 input)
+{
+    return float4x4(1 / input._11, 0, 0, 0, 0, 1 / input._22, 0, 0, 0, 0, 1 / input._33, 0, 0, 0, 0, 1 / input._44);
+}
+
 float4x4 inverse(float4x4 input); // forward declarations
 
 float4x4 inverse(float4x4 input)
@@ -134,26 +139,6 @@ float4 matrix_to_quaternion(float4x4 m)
     return q;
 }
 
-float4x4 m_scale(float4x4 m, float3 v)
-{
-    float x = v.x, y = v.y, z = v.z;
-
-    m[0][0] *= x;
-    m[1][0] *= y;
-    m[2][0] *= z;
-    m[0][1] *= x;
-    m[1][1] *= y;
-    m[2][1] *= z;
-    m[0][2] *= x;
-    m[1][2] *= y;
-    m[2][2] *= z;
-    m[0][3] *= x;
-    m[1][3] *= y;
-    m[2][3] *= z;
-
-    return m;
-}
-
 float4x4 quaternion_to_matrix(float4 quat)
 {
     float4x4 m = float4x4(float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0));
@@ -179,6 +164,81 @@ float4x4 quaternion_to_matrix(float4 quat)
     m[3][3] = 1.0;
 
     return m;
+}
+
+float4x4 m_scale(float3 v)
+{
+    float4x4 m = {v.x, 0, 0, 0, 0, v.y, 0, 0, 0, 0, 0, v.z, 0, 0, 0, 1};
+    return m;
+}
+
+float4x4 m_scale(float4x4 m, float3 v)
+{
+    float x = v.x, y = v.y, z = v.z;
+    m[0][0] *= x;
+    m[1][0] *= y;
+    m[2][0] *= z;
+
+    m[0][1] *= x;
+    m[1][1] *= y;
+    m[2][1] *= z;
+
+    m[0][2] *= x;
+    m[1][2] *= y;
+    m[2][2] *= z;
+
+    m[0][3] *= x;
+    m[1][3] *= y;
+    m[2][3] *= z;
+
+    return m;
+}
+
+// Rotation with angle (in radians) and axis
+// source: https://gist.github.com/keijiro/ee439d5e7388f3aafc5296005c8c3f33
+float4x4 m_rotate(float angle, float3 axis)
+{
+    float c, s;
+    sincos(angle, s, c);
+
+    float t = 1 - c;
+    float x = axis.x;
+    float y = axis.y;
+    float z = axis.z;
+
+    return float4x4(
+        t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0,
+        t * x * y + s * z, t * y * y + c, t * y * z - s * x, 0,
+        t * x * z - s * y, t * y * z + s * x, t * z * z + c, 0,
+        0, 0, 0, 1
+    );
+}
+
+float4x4 m_translate(float3 v)
+{
+    float4x4 m = {1, 0, 0, v.x, 0, 1, 0, v.y, 0, 0, 1, v.z, 0, 0, 0, 1};
+    return m;
+}
+
+
+// Euler angles rotation matrix
+// source: https://github.com/keijiro/ShurikenPlus/blob/master/Assets/ShurikenPlus/Shaders/Common.hlsl
+float4x4 euler_to_rot(float3 v)
+{
+    float sx, cx;
+    float sy, cy;
+    float sz, cz;
+
+    sincos(v.x, sx, cx);
+    sincos(v.y, sy, cy);
+    sincos(v.z, sz, cz);
+
+    return float4x4(
+        float4(sx * sy * sz + cy * cz, sx * sy * cz - cy * sz, cx * sy, 0),
+        float4(sx * cy * sz - sy * cz, sx * cy * cz + sy * sz, cx * cy, 0),
+        float4(cx * sz, cx * cz, -sx, 0),
+        float4(0, 0, 0, 1)
+    );
 }
 
 float4x4 m_translate(float4x4 m, float3 v)
@@ -316,7 +376,7 @@ float3 extract_scale(float4x4 m)
     float sy = length(float3(m[1][0], m[1][1], m[1][2]));
     float sz = length(float3(m[2][0], m[2][1], m[2][2]));
 
-    return float3(sx, sy, sz); 
+    return float3(sx, sy, sz);
 }
 
 float4x4 extract_scale_matrix(float4x4 m)
@@ -328,24 +388,4 @@ float4x4 extract_scale_matrix(float4x4 m)
         {0, 0, 0, 1}
     };
     return ret;
-}
-
-// Rotation with angle (in radians) and axis
-// source: https://gist.github.com/keijiro/ee439d5e7388f3aafc5296005c8c3f33
-float4x4 m_rotate(float angle, float3 axis)
-{
-    float c, s;
-    sincos(angle, s, c);
-
-    float t = 1 - c;
-    float x = axis.x;
-    float y = axis.y;
-    float z = axis.z;
-
-    return float4x4(
-        t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0,
-        t * x * y + s * z, t * y * y + c, t * y * z - s * x, 0,
-        t * x * z - s * y, t * y * z + s * x, t * z * z + c, 0,
-        0, 0, 0, 1
-    );
 }
