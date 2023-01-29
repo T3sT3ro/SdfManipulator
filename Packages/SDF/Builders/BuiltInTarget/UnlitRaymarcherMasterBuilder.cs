@@ -1,50 +1,88 @@
-Shader "SDF/Domain"
-{
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using API;
+using Builders.BuiltInTarget.Properties;
+using Logic.Nodes;
+
+namespace Builders.BuiltInTarget {
+    public class UnlitRaymarcherMasterBuilder : MasterNode.Visitor<FormattableString> {
+        
+        public FormattableString visit(Node node) => throw new NotImplementedException();
+
+        public UnlitRaymarcherMasterBuilder(UnlitRaymarcherMaster masterNode) : base(masterNode) {
+            DeclareIncludes(
+                "UnityCG.cginc",
+                "Assets/SDF/Includes/primitives.cginc",
+                "Assets/SDF/Includes/operators.cginc",
+                "Assets/SDF/Includes/noise.cginc",
+                "Assets/SDF/Includes/types.cginc",
+                "Assets/SDF/Includes/util.cginc",
+                "Assets/SDF/Includes/matrix.cginc"
+            );
+
+            DeclareProperties(masterNode,
+                masterNode.maxSteps,
+                masterNode.maxDistance,
+                masterNode.rayOriginBias,
+                masterNode.epsilonRay,
+                masterNode.epsilonNormal
+            );
+        }
+
+        public IEnumerable<string> BuildShaderlabProperties(params Property[] properties) =>
+            properties
+                .Select(property => new ShaderlabPropertyBuilder(this).Build(property))
+                .Where(built => !String.IsNullOrEmpty(built));
+
+        public IEnumerable<string> BuildHlslProperties(params Property[] properties) =>
+            properties
+                .Select(property => new HlslPropertyBuilder(this).Build(property));
+
+        public FormattableString visit(UnlitRaymarcherMaster master) => $@"
+Shader ""SDF/Domain""
+{{
     // PROP BLOCK
     Properties
-    {
+    {{
         [Header(Shader properties)][Space]
-        //        [Toggle(_SCENEVIEW)] _SCENEVIEW ("Scene view", Int) = 0
-        //        [HideInInspector] _MainTex ("MainTex", 2D) = "white" {} // used for image effect shader in sceneview
-        [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Int) = 0
+        //        [Toggle(_SCENEVIEW)] _SCENEVIEW (""Scene view"", Int) = 0
+        //        [HideInInspector] _MainTex (""MainTex"", 2D) = ""white"" {{}} // used for image effect shader in sceneview
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull (""Cull"", Int) = 0
         [Tooltip(Enable to assure correct blending of multiple domains and backface rendering)]
-        [Toggle][KeyEnum(Off, On)] _ZWrite ("ZWrite", Float) = 0
-        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Int) = 1
+        [Toggle][KeyEnum(Off, On)] _ZWrite (""ZWrite"", Float) = 0
+        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest(""ZTest"", Int) = 1
 
         [Header(Raymarcher)][Space]
-        _MAX_STEPS ("max raymarching steps", Int) = 200
-        _MAX_DISTANCE ("marx raymarching distance", Float) = 200.0
-        _RAY_ORIGIN_BIAS ("ray origin bias", Float) = 0
-        _EPSILON_RAY ("epsilon step for ray to consider hit", Float) = 0.001
-        _EPSILON_NORMAL ("epsilon for calculating normal", Float) = 0.001
+        {String.Join("\n       ", BuildShaderlabProperties(this.declaredProperties.Keys.ToArray()))}
 
         [Space]
-        [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Debug)] _DrawMode("Draw mode", Int) = 0
-        [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
-        [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
+        [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Debug)] _DrawMode(""Draw mode"", Int) = 0
+        [KeywordEnum(Near, Face)] _RayOrigin(""Ray origin"", Int) = 0
+        [KeywordEnum(World, Local)] _Origin(""Scene origin"", Int) = 0
         [Tooltip(Only works for origin type local)]
-        [Toggle] _PRESERVE_SPACE_SCALE ("preserve space scale", Int) = 1
-        _DomainOrigin ("domain origin", Vector) = (0,0,0,0)
-        _DomainRotation ("domain rotation", Vector) = (0,0,0,0)
+        [Toggle] _PRESERVE_SPACE_SCALE (""preserve space scale"", Int) = 1
+        _DomainOrigin (""domain origin"", Vector) = (0,0,0,0)
+        _DomainRotation (""domain rotation"", Vector) = (0,0,0,0)
 
         [Header(SDF Scene)][Space]
-        _Control ("size1, size2, rot1, rot2", Vector) = (.5, .1, 0, 0)
-        _BoxmapTex_X ("Texture for Triplanar mapping", 2D) = "white" {}
-        _BoxmapTex_Y ("Texture for Triplanar mapping", 2D) = "white" {}
-        _BoxmapTex_Z ("Texture for Triplanar mapping", 2D) = "white" {}
-        _DBG ("DBG", Vector) = (0,0,0,0)
-    }
+        _Control (""size1, size2, rot1, rot2"", Vector) = (.5, .1, 0, 0)
+        _BoxmapTex_X (""Texture for Triplanar mapping"", 2D) = ""white"" {{}}
+        _BoxmapTex_Y (""Texture for Triplanar mapping"", 2D) = ""white"" {{}}
+        _BoxmapTex_Z (""Texture for Triplanar mapping"", 2D) = ""white"" {{}}
+        _DBG (""DBG"", Vector) = (0,0,0,0)
+    }}
 
-    //    Fallback "Diffuse"
+    //    Fallback ""Diffuse""
 
     SubShader
-    {
+    {{
         Tags
-        {
-            "RenderType"="Geometry"
-            "Queue"="Geometry+1" // +1 to resolve artifacts when using Cull Off
-            "IgnoreProjector"="True"
-        }
+        {{
+            ""RenderType""=""Geometry""
+            ""Queue""=""Geometry+1"" // +1 to resolve artifacts when using Cull Off
+            ""IgnoreProjector""=""True""
+        }}
         //        Blend SrcAlpha OneMinusSrcAlpha
         ZTest [_ZTest] // Can be customized manually, but when meshes intersect SDFs, this helps to draw both properly  
         Cull [_Cull] // Draw camera inside a domain
@@ -64,13 +102,7 @@ Shader "SDF/Domain"
         #pragma shader_feature_local _PRESERVE_SPACE_SCALE_ON
         // #pragma shader_feature_local _SCENEVIEW
 
-        #include "UnityCG.cginc"
-        #include "Packages/SDF/Logic/Includes/types.cginc"
-        #include "Packages/SDF/Logic/Includes/util.cginc"
-        #include "Packages/SDF/Logic/Includes/matrix.cginc"
-        #include "Packages/SDF/Logic/Includes/primitives.cginc"
-        #include "Packages/SDF/Logic/Includes/operators.cginc"
-        #include "Packages/SDF/Logic/Includes/noise.cginc"
+        {String.Join("\n        ", this.declaredIncludes)}
 
         sampler2D _BoxmapTex_X;
         sampler2D _BoxmapTex_Y;
@@ -82,11 +114,8 @@ Shader "SDF/Domain"
         UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
         float4 _Control;
-        float _EPSILON_RAY;
-        float _EPSILON_NORMAL;
-        float _MAX_DISTANCE;
-        float _RAY_ORIGIN_BIAS;
-        float _MAX_STEPS;
+
+        {String.Join("\n        ", BuildHlslProperties(this.declaredProperties.Keys.ToArray()))}
 
         // NON-PROEPRTY UNIFORMS
         float4x4 _BoxFrame1_Transform = MATRIX_ID;
@@ -132,17 +161,17 @@ Shader "SDF/Domain"
         ENDHLSL
 
         // DEPTH PREPASS - limits rays going beyond backface of shader
-        //        Pass {
+        //        Pass {{
         //            Cull Front
         //            ZWrite On
         //            ColorMask 0
-        //        }
+        //        }}
 
-        Pass
-        {
+        ShaderData.Pass
+        {{
             HLSLPROGRAM
             v2f vert(appdata_base v)
-            {
+            {{
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex); // clip space
                 o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
@@ -150,11 +179,11 @@ Shader "SDF/Domain"
                 o.hitpos = v.vertex;
                 COMPUTE_EYEDEPTH(o.screenPos.z);
                 return o;
-            }
+            }}
 
             /*
             Hit __SDF_BoxFrame1(float3 p)   
-            {
+            {{
                 Hit hit = (Hit)0;
 
                 //transform space
@@ -168,10 +197,10 @@ Shader "SDF/Domain"
                 mat.Emission = 0;
                 hit.material = mat;
                 return hit;
-            }
+            }}
 
             Hit __SDF_Repeat_Space(float3 p)
-            {
+            {{
                 // transform point
                 rotX(p, _Control.z); //_Time.y / 3);
                 rotY(p, _Control.w);
@@ -185,40 +214,40 @@ Shader "SDF/Domain"
 
                 // material
                 Material mat = (Material)0;
-                static fixed4 COLORS[] = {
+                static fixed4 COLORS[] = {{
                     fixed4(0, .7, .2, .5), // grass :)
                     fixed4(1, .7, .2, .5), // orange :)
                     fixed4(1, 0, .2, .5) // tomato :)
-                };
+                }};
                 mat.Albedo = COLORS[ix.x + 1];
                 hit.material = mat;
 
                 return hit;
-            }
+            }}
 
             Hit __SDF_Sphere1(float3 p)
-            {
+            {{
                 p = mul(p, _Sphere1_Transform);
                 Hit hit = (Hit)0;
                 hit.distance = sdf::primitives3D::sphere(p, _Control.z);
                 hit.id = 2;
             
                 return hit;
-            }
+            }}
 
             // smooth min with blending factor from IQ: https://iquilezles.org/articles/smin/
             float2 sminN(float d1, float d2, float k, float n, out float t)
-            {
+            {{
                 float h = max(k - abs(d1 - d2), 0.0) / k;
                 t = pow(h, n) * 0.5;
                 float s = t * k / n;
                 if (d1 < d2) return d1 - s;
                 t = 1.0 - t;
                 return d2 - s;
-            }
+            }}
 
             Material blendMaterials(Material a, Material b, float t)
-            {
+            {{
                 Material res;
                 res.Albedo = lerp(a.Albedo, b.Albedo, t);
                 res.Emission = lerp(a.Emission, b.Emission, t);
@@ -228,10 +257,10 @@ Shader "SDF/Domain"
                 res.Occlusion = lerp(a.Occlusion, b.Occlusion, t);
                 res.Smoothness = lerp(a.Smoothness, b.Smoothness, t);
                 return res;
-            }
+            }}
 
             Hit __SDF_Smoothmax_BoxFrame1_Sphere1(float3 p)
-            {
+            {{
                 Hit boxframe1 = __SDF_BoxFrame1(p);
                 Hit sphere1 = __SDF_Sphere1(p);
                 Hit hit;
@@ -241,23 +270,23 @@ Shader "SDF/Domain"
 
                 hit.material = blendMaterials(boxframe1.material, sphere1.material, t);
                 return hit;
-            }
+            }}
 
             Hit __SDF(float3 p)
-            {
+            {{
                 return __SDF_Smoothmax_BoxFrame1_Sphere1(p);
-            }
+            }}
             
-            */
+            #1#
             // =======================================================================
 
             SdfResult __SDF(float3 p)
-            {
+            {{
                 // float4x4 rot = m_rotate(_Time.y, float3(0, 0, 1));
                 // p = mul(rot, p);
                 rotX(p, _Control.z); //_Time.y / 3);
                 rotY(p, _Control.w);
-                // Hit ret = {sdf::primitives3D::torus(p, _TorusSizes.x, _TorusSizes.y), 0};
+                // Hit ret = {{sdf::primitives3D::torus(p, _TorusSizes.x, _TorusSizes.y), 0}};
                 int3 ix;
                 p = sdf::operators::repeatLim(p, 1, float3(1, 0, 1), ix);
                 SdfResult ret;
@@ -265,11 +294,11 @@ Shader "SDF/Domain"
                 ret.id.xyz = ix + 1;
                 ret.id.w = 0;
                 return ret;
-            }
+            }}
 
             // https://iquilezles.org/www/articles/normalsSDF/normalsSDF.htm
             float3 __SDF_NORMAL(float3 p)
-            {
+            {{
                 // using tetrahedron technique
                 // EPSILON -- can be adjusted using pixel footprint
                 const float2 k = float2(1, -1);
@@ -279,25 +308,25 @@ Shader "SDF/Domain"
                     k.yxy * __SDF(p + k.yxy * _EPSILON_NORMAL).distance +
                     k.xxx * __SDF(p + k.xxx * _EPSILON_NORMAL).distance
                 );
-            }
+            }}
 
 
             // TODO: lighting
             fixed4 __MATERIAL(fixed4 id)
-            {
-                static fixed4 _COLORS[] = {
+            {{
+                static fixed4 _COLORS[] = {{
                     fixed4(.5, 0, .5, 1), // NO_ID (magenta)
                     // ------------------- VALID MATERIALS BELOW
                     fixed4(0, .7, .2, .5), // grass :)
                     fixed4(1, .7, .2, .5), // orange :)
                     fixed4(1, 0, .2, .5), // tomato :)
-                };
+                }};
                 return _COLORS[id.x + 1];
-            }
+            }}
 
             // triplanar mapping texture, point, normal, smoothing
             fixed4 __BOXMAP(BoxMapParams3D params, in float3 p, in float3 n, in float k)
-            {
+            {{
                 fixed4 x = tex2D(params.X, p.zy * params.X_ST.xy + params.X_ST.zw);
                 fixed4 y = tex2D(params.Y, p.zx * params.Y_ST.xy + params.Y_ST.zw);
                 fixed4 z = tex2D(params.Z, p.xy * params.Z_ST.xy + params.Z_ST.zw);
@@ -305,13 +334,13 @@ Shader "SDF/Domain"
                 float3 w = pow(abs(n), k);
 
                 return (x * w.x + y * w.y + z * w.z) / (w.x + w.y + w.z);
-            }
+            }}
 
             // -----------------------------------------------------------------------
 
             // returns sdf and ray point
             void castRay(inout SdfResult sdf, inout Ray3D ray)
-            {
+            {{
                 float d = ray.startDistance;
                 sdf.distance = _MAX_DISTANCE;
                 sdf.id = int4(NO_ID);
@@ -320,7 +349,7 @@ Shader "SDF/Domain"
                 sdf.normal = 0;
 
                 for (ray.steps = 0; ray.steps < _MAX_STEPS; ray.steps++)
-                {
+                {{
                     if (d >= _MAX_DISTANCE || d >= ray.maxDistance)
                         return;
 
@@ -328,20 +357,20 @@ Shader "SDF/Domain"
 
                     SdfResult sdfOnRay = __SDF(sdf.p);
                     if (sdfOnRay.distance < _EPSILON_RAY)
-                    {
+                    {{
                         sdf.distance = d;
                         sdf.id = sdfOnRay.id;
                         return;
-                    }
+                    }}
 
                     d += sdfOnRay.distance;
-                }
-            }
+                }}
+            }}
 
             // =======================================================================
 
             float depthToMaxRayDepth(in float2 screenUV, in float3 rd)
-            {
+            {{
                 // read camera depth texture to correctly blend with scene geometry
                 // beware, that _CameraDepthTexture IS NOT the depth buffer!
                 // it is populated in the prepass and doesn't change in subsequent passes
@@ -352,10 +381,10 @@ Shader "SDF/Domain"
                 forward /= forward.w;
                 forward = normalize(forward); // forward in object space
                 return camDepth / dot(forward, rd);
-            }
+            }}
 
             Ray3D getRaysForCamera(float3 screenPos, float3 objectHitpos)
-            {
+            {{
                 Ray3D ray = (Ray3D)0;
 
                 // NDC from (-1, -1, -1) to (1, 1, 1) 
@@ -364,7 +393,7 @@ Shader "SDF/Domain"
                 float4 ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray origin on near plane
                 ro /= ro.w;
                 #ifndef _RAYORIGIN_NEAR
-                {
+                {{
                     float4 rs =
                         #ifdef _ORIGIN_WORLD
                             mul(UNITY_MATRIX_M, float4(objectHitpos, 1));
@@ -372,7 +401,7 @@ Shader "SDF/Domain"
                         fixed4(objectHitpos, 1);
                     #endif
                     ray.startDistance = distance(mul(rs, SCALE_MATRIX), ro); // start on ray
-                }
+                }}
                 #endif
 
                 float4 re = mul(inv, float4(NDC.xy, 1, 1)); // ray end on far plane
@@ -384,10 +413,10 @@ Shader "SDF/Domain"
                 ray.startDistance += _RAY_ORIGIN_BIAS;
                 ray.maxDistance = depthToMaxRayDepth(screenPos.xy, ray.rd);
                 return ray;
-            }
+            }}
 
             f2p frag(v2f i, fixed facing : VFACE)
-            {
+            {{
                 const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
 
                 Ray3D ray = getRaysForCamera(screenPos, i.hitpos);
@@ -400,9 +429,9 @@ Shader "SDF/Domain"
                 sdf.normal = __SDF_NORMAL(sdf.p);
 
                 fixed4 color_material = __MATERIAL(sdf.id.x); // color
-                BoxMapParams3D boxmapParams = {
-                    _BoxmapTex_X, _BoxmapTex_Y, _BoxmapTex_Z, {_BoxmapTex_X_ST}, {_BoxmapTex_Y_ST}, {_BoxmapTex_Z_ST}
-                };
+                BoxMapParams3D boxmapParams = {{
+                    _BoxmapTex_X, _BoxmapTex_Y, _BoxmapTex_Z, {{_BoxmapTex_X_ST}}, {{_BoxmapTex_Y_ST}}, {{_BoxmapTex_Z_ST}}
+                }};
                 fixed4 color_trimap = __BOXMAP(boxmapParams, sdf.p, sdf.normal, 10.);
 
                 fixed4 color_normal_domain = fixed4(sdf.normal * .5 + .5, 1); // domain normal color
@@ -420,8 +449,8 @@ Shader "SDF/Domain"
                     #endif
                     (mul(SCALE_MATRIX_I, sdf.p)).z;
 
-                f2p o = {
-                    {
+                f2p o = {{
+                    {{
                         #ifdef _DRAWMODE_MATERIAL
                          color_material*color_trimap
                         #elif _DRAWMODE_ALBEDO
@@ -441,18 +470,221 @@ Shader "SDF/Domain"
                         #elif _DRAWMODE_DEBUG
                          fixed4(i.vertex.xyz, 1)
                         #endif
-                    },
-                    {float3(normalize(sdf.normal) * .5 + .5)},
-                    {sdf.id},
+                    }},
+                    {{float3(normalize(sdf.normal) * .5 + .5)}},
+                    {{sdf.id}},
                     #ifdef _ZWRITE_ON
                     EncodeCorrectDepth(eyeDepth)
                     #endif
-                };
+                }};
                 return o;
-            } // End Pass
+            }} // End Pass
 
             // =======================================================================
             ENDHLSL
-        } // END PASS
+        }} // END PASS
+    }}
+}}
+";
+
+        //             return $$"""
+// Shader "SDF/Unlit"
+// {
+//     // PROP BLOCK
+//     Properties
+//     {
+//         [Header(Shader properties)]
+//         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Int) = 0
+//         [KeywordEnum(Less, LEqual, Equal, GEqual, Greater, NotEqual, Always)] _ZTest("ZTest", Int) = 0
+//
+//         [Header(Raymarcher)]
+//
+//         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
+//         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
+//         [Tooltip(Only works for origin type local)]
+//         [Toggle] _PRESERVE_SCALE ("Preserve local scale", Int) = 1
+//
+//         [Header(SDF Scene)]
+//   
+//         {{String.Join("\n       ", builder.GetProperties(this).Select(p => p.ShaderlabBlock))}}
+//     }
+//
+//     // Fallback "Diffuse"
+//
+//     SubShader
+//     {
+//         Tags
+//         {
+//             "RenderType"="Geometry"
+//             "Queue"="Geometry+1" // +1 to resolve artifacts when using Cull Off
+//             "IgnoreProjector"="True"
+//         }
+//         //        Blend SrcAlpha OneMinusSrcAlpha
+//         ZTest [_ZTest] // Can be customized manually, but when meshes intersect SDFs, this helps to draw both properly  
+//         Cull [_Cull] // Draw camera inside a domain
+//         ZWrite [_ZWrite]
+//
+//         // common includes for all passes
+//         HLSLINCLUDE
+//
+//         #pragma target 5.0
+//         #pragma vertex vert
+//         #pragma fragment frag
+//         #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
+//         #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
+//         #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
+//             _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH
+//         #pragma shader_feature_local _SCALE_INVARIANT
+//         #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
+//         // #pragma shader_feature_local _SCENEVIEW
+//
+//         {{String.Join('\n', this.Includes)}}
+//
+//         #pragma shader_feature_local _PRESERVE_SCALE_ON
+//         static const float4x4 SCALE_MATRIX =
+//             #if defined(_PRESERVE_SCALE_ON) && defined(_ORIGIN_LOCAL)
+//             {
+//                 {length(float3(UNITY_MATRIX_M[0].x, UNITY_MATRIX_M[1].x, UNITY_MATRIX_M[2].x)), 0, 0, 0},
+//                 {0, length(float3(UNITY_MATRIX_M[0].y, UNITY_MATRIX_M[1].y, UNITY_MATRIX_M[2].y)), 0, 0},
+//                 {0, 0, length(float3(UNITY_MATRIX_M[0].z, UNITY_MATRIX_M[1].z, UNITY_MATRIX_M[2].z)), 0},
+//                 {0, 0, 0, 1}
+//             };
+//             #else
+//             MATRIX_ID;
+//         #endif
+//
+//         static const float4x4 SCALE_MATRIX_I = inverse(SCALE_MATRIX);
+//         
+//         // https://gist.github.com/unitycoder/c5847a82343a8e721035
+//         // static const float3 camera_forward = UNITY_MATRIX_IT_MV[2].xyz;
+//         static const float4x4 inv = mul(SCALE_MATRIX, inverse(
+//                                             #ifdef _ORIGIN_WORLD
+//                                             UNITY_MATRIX_VP
+//                                             #else
+//                                             UNITY_MATRIX_MVP
+//                                             #endif
+//                                         ));
+//
+//         UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+//
+//         float _EPSILON_RAY;
+//         float _EPSILON_NORMAL;
+//         float _MAX_DISTANCE;
+//         float _RAY_ORIGIN_BIAS;
+//         float _MAX_STEPS;
+//
+//         {{String.Join('\n', CollectProperties.Select(p => p.HlslBlock))}}
+//
+//         ENDHLSL
+//
+//         ShaderData.Pass
+//         {
+//             HLSLPROGRAM
+//             v2f vert(appdata_base v)
+//             {
+//                 v2f o;
+//                 o.vertex = UnityObjectToClipPos(v.vertex); // clip space
+//                 o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
+//                 o.hitpos = v.vertex;
+//                 COMPUTE_EYEDEPTH(o.screenPos.z);
+//                 return o;
+//             }
+//
+//             // =======================================================================
+//             Hit __SDF(float3 p)
+//             {
+//                 {{SdfNode.Body}}
+//             }
+//
+//             // -----------------------------------------------------------------------
+//
+//             void castRay(inout RayInfo3D ray, in float max_distance)
+//             {
+//                 float d = ray.hit.distance;
+//                 Hit hit = {_MAX_DISTANCE, NO_ID};
+//                 ray.hit = hit;
+//                 for (ray.steps = 0; ray.steps < _MAX_STEPS; ray.steps++)
+//                 {
+//                     if (d >= _MAX_DISTANCE || d >= max_distance)
+//                         return;
+//
+//                     ray.p = ray.ro + d * ray.rd;
+//
+//                     Hit hit = __SDF(ray.p);
+//                     if (hit.distance < _EPSILON_RAY)
+//                     {
+//                         ray.hit.distance = d;
+//                         ray.hit.id = hit.id;
+//                         return;
+//                     }
+//
+//                     d += hit.distance;
+//                 }
+//             }
+//
+//             // =======================================================================
+//
+//             fixed4 frag(v2f i, fixed facing : VFACE) : SV_TARGET0
+//             {
+//                 const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
+//
+//                 RayInfo3D ray = (RayInfo3D)0;
+//
+//                 // NDC from (-1, -1, -1) to (1, 1, 1) 
+//                 float3 NDC = 2. * screenPos.xyz - 1.;
+//
+//                 float4 ro = mul(inv, float4(NDC.xy, UNITY_NEAR_CLIP_VALUE, 1)); // ray origin on near plane
+//                 ro /= ro.w;
+//                 #ifdef _RAYORIGIN_NEAR
+//                 #else
+//                 {
+//                     float4 rs =
+//                         #ifdef _ORIGIN_WORLD
+//                         mul(UNITY_MATRIX_M, float4(i.hitpos, 1));
+//                         #else
+//                         fixed4(i.hitpos, 1);
+//                     #endif
+//                     ray.hit.distance = distance(mul(rs, SCALE_MATRIX), ro); // start on ray
+//                 }
+//                 #endif
+//
+//                 float4 re = mul(inv, float4(NDC.xy, 1, 1)); // ray end on far plane
+//                 re /= re.w;
+//                 float3 rd = normalize((re - ro).xyz); // ray direction
+//
+//
+//                 ray.ro = ro; // in object space
+//                 ray.rd = rd; // in object space
+//
+//                 ray.hit.distance += _RAY_ORIGIN_BIAS;
+//
+//                 // read camera depth texture to correctly blend with scene geometry
+//                 // beware, that _CameraDepthTexture IS NOT the depth buffer!
+//                 // it is populated in the prepass and doesn't change in subsequent passes
+//                 // https://forum.unity.com/threads/does-depth-buffer-update-between-passes.620575/
+//                 float camDepth = CorrectDepth(tex2D(_CameraDepthTexture, screenPos.xy).rg);
+//
+//                 float4 forward = mul(inv, float4(0, 0, 1, 1)); // ray end on far plane
+//                 forward /= forward.w;
+//                 forward = normalize(forward); // forward in object space
+//
+//                 castRay(ray, camDepth / dot(forward, rd));
+//
+//
+//                 clip(ray.hit.id); // discard rays without hit
+//
+//                 fixed4 color_material = __MATERIAL(ray.hit.id); // color
+//
+//                 return color_material;
+//             }
+//
+//             // =======================================================================
+//             ENDHLSL
+//         } // End Pass
+//
+//         // Pass {}
+//     }
+// }
+// """;
     }
 }

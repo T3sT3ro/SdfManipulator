@@ -12,7 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _DRAWMODE_DEPTH
+  - _DRAWMODE_MATERIAL
   - _ORIGIN_LOCAL
   - _PRESERVE_SPACE_SCALE_ON
   - _RAYORIGIN_FACE
@@ -109,7 +109,7 @@ Material:
     - _DBG_A: 0
     - _DEBUG_NORMAL: 1
     - _DetailNormalMapScale: 1
-    - _DrawMode: 7
+    - _DrawMode: 0
     - _DstBlend: 0
     - _EPSILON_NORMAL: 0.0001
     - _EPSILON_RAY: 0.0001
@@ -160,11 +160,11 @@ Material:
     - RO_OFF: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Control: {r: 0.44, g: 0.1, b: 0, a: 0}
-    - _DBG: {r: 0.62, g: 0.5, b: -2.56, a: 2}
+    - _DBG: {r: 0.62, g: 0.5, b: -2.56, a: 1.96}
     - _DBG2: {r: 0, g: 0, b: 0, a: 0}
     - _DBG_V: {r: 0, g: 0, b: 4, a: 4}
     - _DEBUG_NORMAL: {r: 0, g: 0, b: 0, a: 0}
-    - _DomainOrigin: {r: 0.94, g: 0, b: 0, a: 0}
+    - _DomainOrigin: {r: 0, g: 0, b: 0, a: 0}
     - _DomainRotation: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SDF_DOMAIN_ORIGIN_POS: {r: 0.37, g: 0, b: 0, a: 1}

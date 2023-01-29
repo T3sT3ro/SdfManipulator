@@ -1,0 +1,6 @@
+{
+  "name": "SDF.Logic",
+  "references": [
+    "SDF.API"
+  ]
+}

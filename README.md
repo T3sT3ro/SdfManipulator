@@ -65,6 +65,9 @@ TODO
   - prepass has unexpected (but logical) behavior while multiple domains overlap
 - [ ] Runtime attribute that would transform inputs in editor to toggles/properties etc, but make them constant after compilation
 - [ ] Pixelize operator - something like return clamped distance 
+- [ ] Check out `noperspective` for generating ray directions out of a vertices in vertex shader (instead of fragment shader). [Check here for reference](https://stackoverflow.com/questions/59786805/wobble-in-volumetric-fixed-step-raymarching#59786805)
+- [ ] Fiz Z-test keyword based on [this response on unity discord](https://discord.com/channels/489222168727519232/497874081329184799/1007638427136700507) - basically [use this](https://docs.unity3d.com/Manual/SL-Stencil.html) i.e. `UnityEngine.Rendering.CompareFunction`
+- [ ] support dynamic node visitors 
 
 # Important to remember while documenting
 
@@ -107,6 +110,32 @@ TODO
 - [Screen Space Reflections](https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html)
 - [Refraction and glass](https://www.shadertoy.com/view/flcSW2)
 - [WOMP online SDF editor in browser](https://alpha.womp3d.com)
+- [RayTK graph editor for generaating SDF shaders](https://derivative.ca/community-post/asset/raytk-raymarching-masses/63620)
+- [Raymarcher - asset in asset store, meh](https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/raymarcher-168069)
+- [GDC - GPU based clay simulation and ray-tracing tech in Claybook](https://www.youtube.com/watch?v=Xpf7Ua3UqOA) - about cone tracing, SDF baking, practical aspects
+- [Accelerated sphere tracing](https://diglib.eg.org/bitstream/handle/10.2312/egs20181037/029-032.pdf) - ways to enhance sphere tracing
+- [Perspective correct texture mapping](https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective-correct-texturemapping.html) - relates to why my view direction in vertex shader differed from those calculated in fragment shader.
+- [Clouds shader (tunnel) with good scattering in the middle of article](https://webglfundamentals.org/webgl/lessons/webgl-shadertoy.html)
+- [Stackoverflow - perspective correct interpolation of values](https://computergraphics.stackexchange.com/questions/4079/perspective-correct-texture-mapping?rq=1) - look into that when trying to move to ray generation in vertex shader
+- [Another one on perspective correct interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes.html)
+  - Additionally: [Depth interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/visibility-problem-depth-buffer-depth-interpolation.html)
+- [Z Test attributes in unity](https://discord.com/channels/489222168727519232/497874081329184799/1007638427136700507)
+- [Nodes - visual graph editor, some references on how it works](https://nodes.io/story/)
+- [Selective visitor pattern](http://www.educery.com/papers/patterns/visitors/selective.visitor.html)
+
+## Discord:
+
+> Cyan — 12.08.2022 15:47
+ZTest is the same thing as Early-Z, kinda. It's a stage in the rendering that occurs after the vertex shader. The depth of the fragment (basically a pixel) is tested against the depth buffer, base on the ZTest compare function.
+If it passes, the value would also be written to the depth buffer (assuming ZWrite On)
+If it doesn't pass, that fragment/pixel isn't drawn.
+>
+> Except, if you use clip(), discard; or alter SV_Depth in the fragment shader, that early-Z can't occur as the depth of the fragment isn't really known. So the depth test then occurs after the fragment stage instead.
+>
+> "Depth or Z Prepass" is also something different, where you render opaque geometry first to the depth buffer only. Then render again normally. I'm not too familiar with it. I guess it saves time rendering pixels from overlapping objects. In URP there's a "Depth Priming" mode on the Universal Renderer asset which does this.
+> 
+> 
+
 
 costs of shader operations:
 ```
