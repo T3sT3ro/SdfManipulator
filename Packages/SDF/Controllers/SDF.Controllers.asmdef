@@ -1,6 +1,8 @@
 {
   "name": "SDF.Controllers",
   "references": [
-    "SDF.API"
+    "SDF.API",
+    "SDF.Logic",
+    "SDF.Builders"
   ]
 }

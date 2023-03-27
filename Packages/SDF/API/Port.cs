@@ -4,31 +4,43 @@ namespace API {
     /// <summary>
     /// Abstraction over connections and their state changes. Typed ports are 
     /// </summary>
-    public interface Port : Representable {
+    public abstract class Port {
         public Node ContainingNode { get; }
+
+        public string DisplayName { get; }
+
         // public bool Enabled        { get; set; }
         // public bool Visible        { get; set; }
+        protected Port(Node containingNode, string displayName) {
+            ContainingNode = containingNode;
+            DisplayName = displayName;
+        }
     }
 
-    // needed for a generic collection of input/outpu ports without type parameters
+    // needed for a generic collection of input/output ports without type parameters
     public abstract class InputPort : Port {
-        public abstract string InternalName   { get; }
-        public abstract string DisplayName    { get; }
-        public abstract Node   ContainingNode { get; }
+        public OutputPort ConnectedPort { get; protected set; } = null;
+
+        protected InputPort(Node containingNode, string displayName) : base(containingNode, displayName) { }
+
+        protected bool ConnectTo(OutputPort outputPort) {
+            if (outputPort == ConnectedPort) return false;
+
+            ConnectedPort = outputPort;
+            return true;
+        }
     }
 
     public abstract class OutputPort : Port {
-        public abstract string InternalName   { get; }
-        public abstract string DisplayName    { get; }
-        public abstract Node   ContainingNode { get; }
+        // public ISet<InputPort> ConnectedPorts { get; } = new HashSet<InputPort>();
+        protected OutputPort(Node containingNode, string displayName) : base(containingNode, displayName) { }
     }
 
-    public abstract class InputPort<T> : InputPort {
-        public InputPort<T> ConnectedPort => null;
-        public bool         IsConnected   => ConnectedPort != null;
+    public class InputPort<T> : InputPort {
+        public InputPort(Node containingNode, string displayName) : base(containingNode, displayName) { }
     }
 
-    public abstract class OutputPort<T> : OutputPort {
-        public ISet<InputPort<T>> ConnectedPorts { get; } = new HashSet<InputPort<T>>();
+    public class OutputPort<T> : OutputPort {
+        public OutputPort(Node containingNode, string displayName) : base(containingNode, displayName) { }
     }
 }

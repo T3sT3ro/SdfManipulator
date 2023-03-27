@@ -122,6 +122,9 @@ TODO
 - [Z Test attributes in unity](https://discord.com/channels/489222168727519232/497874081329184799/1007638427136700507)
 - [Nodes - visual graph editor, some references on how it works](https://nodes.io/story/)
 - [Selective visitor pattern](http://www.educery.com/papers/patterns/visitors/selective.visitor.html)
+- [SDF toolkit - Asset](https://assetstore.unity.com/packages/vfx/shaders/sdf-toolkit-34821#content) - adds one node to shadergraph that implements (?) raymarching with an SDF that is stored in a texture
+- [Deep neural reconstruction of SDF from models](https://mobile.twitter.com/_AlecJacobson/status/1308546141760430080) - here is also [a link to the paper](https://arxiv.org/abs/2009.09808)
+- [Generalized winding number for determining inside/outside of meshes](https://www.cs.utah.edu/~ladislav/jacobson13robust/jacobson13robust.html)
 
 ## Discord:
 

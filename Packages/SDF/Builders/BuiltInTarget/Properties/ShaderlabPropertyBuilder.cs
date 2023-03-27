@@ -1,26 +1,22 @@
 using System;
 using API;
-using JetBrains.Annotations;
-using Logic.Properties;
+using UnityEngine;
 
 // Jumbled as a single visitor because properties are sealed for extension
 namespace Builders.BuiltInTarget.Properties {
-    public class ShaderlabPropertyBuilder : PropertyBuilder,
-                                            IntProperty.Visitor<FormattableString>,
-                                            FloatProperty.Visitor<FormattableString>,
-                                            Vec4Property.Visitor<FormattableString> {
+    public class ShaderlabPropertyBuilder : PropertyBuilder {
         public ShaderlabPropertyBuilder(ShaderBuilder builder) : base(builder) { }
 
         // external properties don't generate shaderlab entries
-        [CanBeNull] public override string Build(Property property) => property.External ? base.Build(property) : null;
+        public override string Build(Property property) => property.External ? this.Build((dynamic)property) : null;
 
-        public FormattableString visit(IntProperty property) =>
+        private FormattableString Build(Property<int> property) =>
             $"{property.InternalName} (\"{property.DisplayName}\", Int) = {property.DefaultValue.ToString()}";
 
-        public FormattableString visit(FloatProperty property) =>
+        private FormattableString Build(Property<float> property) =>
             $"{property.InternalName} (\"{property.DisplayName}\", Float) = {property.DefaultValue:F}";
 
-        public FormattableString visit(Vec4Property property) =>
+        private FormattableString Build(Property<Vector4> property) =>
             $"{property.InternalName} (\"{property.DisplayName}\", Vector) = ({property.DefaultValue.x},{property.DefaultValue.y},{property.DefaultValue.z}, {property.DefaultValue.w})";
     }
 }

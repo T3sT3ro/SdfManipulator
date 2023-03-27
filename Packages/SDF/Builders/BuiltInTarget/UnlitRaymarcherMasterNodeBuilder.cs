@@ -6,12 +6,24 @@ using Builders.BuiltInTarget.Properties;
 using Logic.Nodes;
 
 namespace Builders.BuiltInTarget {
-    public class UnlitRaymarcherMasterBuilder : MasterNode.Visitor<FormattableString> {
-        
-        public FormattableString visit(Node node) => throw new NotImplementedException();
+    /// <summary>
+    /// Implementation of builder for a HLSL+Shaderlab target.
+    /// It is a root node of the graph
+    /// </summary>
+    public class UnlitRaymarcherMasterNodeBuilder : NodeBuilder<UnlitRaymarcherMasterNode> {
+        public UnlitRaymarcherMasterNodeBuilder(ShaderBuilder builder) : base(builder) { }
 
-        public UnlitRaymarcherMasterBuilder(UnlitRaymarcherMaster masterNode) : base(masterNode) {
-            DeclareIncludes(
+        private IEnumerable<string> BuildShaderlabProperties(IEnumerable<Property> properties) =>
+            properties
+                .Select(property => new ShaderlabPropertyBuilder(builder).Build(property))
+                .Where(built => !String.IsNullOrEmpty(built));
+
+        private IEnumerable<string> BuildHlslProperties(IEnumerable<Property> properties) =>
+            properties
+                .Select(property => new HlslPropertyBuilder(builder).Build(property));
+
+        public override string Build(UnlitRaymarcherMasterNode node) {
+            builder.DeclareIncludes(
                 "UnityCG.cginc",
                 "Assets/SDF/Includes/primitives.cginc",
                 "Assets/SDF/Includes/operators.cginc",
@@ -21,25 +33,7 @@ namespace Builders.BuiltInTarget {
                 "Assets/SDF/Includes/matrix.cginc"
             );
 
-            DeclareProperties(masterNode,
-                masterNode.maxSteps,
-                masterNode.maxDistance,
-                masterNode.rayOriginBias,
-                masterNode.epsilonRay,
-                masterNode.epsilonNormal
-            );
-        }
-
-        public IEnumerable<string> BuildShaderlabProperties(params Property[] properties) =>
-            properties
-                .Select(property => new ShaderlabPropertyBuilder(this).Build(property))
-                .Where(built => !String.IsNullOrEmpty(built));
-
-        public IEnumerable<string> BuildHlslProperties(params Property[] properties) =>
-            properties
-                .Select(property => new HlslPropertyBuilder(this).Build(property));
-
-        public FormattableString visit(UnlitRaymarcherMaster master) => $@"
+            return $@"
 Shader ""SDF/Domain""
 {{
     // PROP BLOCK
@@ -54,7 +48,7 @@ Shader ""SDF/Domain""
         [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest(""ZTest"", Int) = 1
 
         [Header(Raymarcher)][Space]
-        {String.Join("\n       ", BuildShaderlabProperties(this.declaredProperties.Keys.ToArray()))}
+        {String.Join("\n       ", BuildShaderlabProperties(builder.DeclaredProperties.Keys))}
 
         [Space]
         [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Debug)] _DrawMode(""Draw mode"", Int) = 0
@@ -102,7 +96,7 @@ Shader ""SDF/Domain""
         #pragma shader_feature_local _PRESERVE_SPACE_SCALE_ON
         // #pragma shader_feature_local _SCENEVIEW
 
-        {String.Join("\n        ", this.declaredIncludes)}
+        {String.Join("\n        ", builder.DeclaredIncludes)}
 
         sampler2D _BoxmapTex_X;
         sampler2D _BoxmapTex_Y;
@@ -115,7 +109,7 @@ Shader ""SDF/Domain""
 
         float4 _Control;
 
-        {String.Join("\n        ", BuildHlslProperties(this.declaredProperties.Keys.ToArray()))}
+        {String.Join("\n        ", BuildHlslProperties(builder.DeclaredProperties.Keys))}
 
         // NON-PROEPRTY UNIFORMS
         float4x4 _BoxFrame1_Transform = MATRIX_ID;
@@ -486,6 +480,7 @@ Shader ""SDF/Domain""
     }}
 }}
 ";
+        }
 
         //             return $$"""
 // Shader "SDF/Unlit"

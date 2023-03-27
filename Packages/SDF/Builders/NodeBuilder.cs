@@ -1,19 +1,22 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using API;
-using Logic.Nodes;
-using static System.FormattableString;
 
 namespace Builders {
     /// <summary>
-    /// Node builder produces 
+    /// Builds a node of specified type
     /// </summary>
-    public abstract class NodeBuilder : Node.Visitor<FormattableString> {
-        private ShaderBuilder builder;
+    /// <typeparam name="NodeT">Node type this builder constructs</typeparam>
+    public abstract class NodeBuilder<NodeT> : Builder<string, NodeT> where NodeT : Node {
+        protected ShaderBuilder builder;
         public NodeBuilder(ShaderBuilder builder) => this.builder = builder;
 
-        public virtual string Build(Node node) => Invariant(node.accept(this));
+        public IEnumerable<Property> DeclaredProperties =>
+            this.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .Where(f => f.GetType().IsSubclassOf(typeof(Property)))
+                .Select(f => f.GetValue(this) as Property);
 
-        public FormattableString visit(Node node) => throw new ShaderGenerationException($"Can't handle node '{node}'");
+        public abstract string Build(NodeT input);
     }
-    
 }
