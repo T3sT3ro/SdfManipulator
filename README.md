@@ -68,6 +68,7 @@ TODO
 - [ ] Check out `noperspective` for generating ray directions out of a vertices in vertex shader (instead of fragment shader). [Check here for reference](https://stackoverflow.com/questions/59786805/wobble-in-volumetric-fixed-step-raymarching#59786805)
 - [ ] Fiz Z-test keyword based on [this response on unity discord](https://discord.com/channels/489222168727519232/497874081329184799/1007638427136700507) - basically [use this](https://docs.unity3d.com/Manual/SL-Stencil.html) i.e. `UnityEngine.Rendering.CompareFunction`
 - [ ] support dynamic node visitors 
+- [ ] fallback evaluators for nodes that are not implemented
 
 # Important to remember while documenting
 
@@ -125,6 +126,9 @@ TODO
 - [SDF toolkit - Asset](https://assetstore.unity.com/packages/vfx/shaders/sdf-toolkit-34821#content) - adds one node to shadergraph that implements (?) raymarching with an SDF that is stored in a texture
 - [Deep neural reconstruction of SDF from models](https://mobile.twitter.com/_AlecJacobson/status/1308546141760430080) - here is also [a link to the paper](https://arxiv.org/abs/2009.09808)
 - [Generalized winding number for determining inside/outside of meshes](https://www.cs.utah.edu/~ladislav/jacobson13robust/jacobson13robust.html)
+- [YT - SDF and Raymarching in blender](https://www.youtube.com/watch?v=TYDhNfyPzdA)
+- [NodeGraphProcessor](https://github.com/alelievr/NodeGraphProcessor) - an implementation of a unity node graph editor, can be SUPER useful later on!!!
+- [Blender nodes in unity](https://forum.unity.com/threads/beta-blender-nodes-in-unity.1249171/) - a package that implements basic shader node graph editor
 
 ## Discord:
 

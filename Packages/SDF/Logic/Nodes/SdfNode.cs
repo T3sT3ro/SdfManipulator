@@ -1,16 +1,16 @@
-using System.Collections.Generic;
 using API;
 using UnityEngine;
 
-namespace Logic.Nodes {
+namespace Nodes {
     public abstract class SdfNode : ConsumerNode, ProducerNode {
-        public abstract string           InternalName { get; }
-        public abstract string           DisplayName  { get; }
+        public abstract string InternalName { get; }
+        public abstract string DisplayName  { get; }
 
-        private InputPort<Vector3> positionPoint;
-        private OutputPort<int>    distancePort;
+        public InputPort<Variable<Vector3>.Evaluator> SamplePoint { get; }
 
-        public          ISet<InputPort>  InputPorts   => new HashSet<InputPort> { positionPoint };
-        public          ISet<OutputPort> OutputPorts  => new HashSet<OutputPort> { distancePort };
+        public OutputPort<Variable<float>.Evaluator> Distance { get; }
+        public OutputPort<Evaluator>                 Sdf      { get; }
+
+        public delegate string Evaluator(Variable<Vector3>.Evaluator point);
     }
 }
