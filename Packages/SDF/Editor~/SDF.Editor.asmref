@@ -1,3 +1,4 @@
 {
-    "reference": "Unity.ShaderGraph.Editor"
+    "reference": "Unity.ShaderGraph.Editor",
+    "reference": "UnityEditor"
 }

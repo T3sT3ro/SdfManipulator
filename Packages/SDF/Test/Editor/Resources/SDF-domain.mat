@@ -15,7 +15,7 @@ Material:
   - _DRAWMODE_MATERIAL
   - _ORIGIN_LOCAL
   - _PRESERVE_SPACE_SCALE_ON
-  - _RAYORIGIN_FACE
+  - _RAYORIGIN_NEAR
   - _ZWRITE_OFF
   - _ZWRITE_ON
   m_InvalidKeywords:
@@ -133,7 +133,7 @@ Material:
     - _RAND_INSTANCE_COL: 0
     - _RAY_EPSILON: 0.001
     - _RAY_ORIGIN_BIAS: 0
-    - _RayOrigin: 1
+    - _RayOrigin: 0
     - _Ray_Origin: 0
     - _SCENEVIEW: 1
     - _SCENE_VIEW: 1
@@ -159,7 +159,7 @@ Material:
     - RD_OFF: {r: 0, g: 0, b: 0, a: 0}
     - RO_OFF: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Control: {r: 0.44, g: 0.1, b: 0, a: 0}
+    - _Control: {r: 0.5, g: 0.1, b: 0, a: 0}
     - _DBG: {r: 0.62, g: 0.5, b: -2.56, a: 1.96}
     - _DBG2: {r: 0, g: 0, b: 0, a: 0}
     - _DBG_V: {r: 0, g: 0, b: 4, a: 4}

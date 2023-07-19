@@ -1,7 +1,7 @@
 using API;
 using Nodes;
 
-namespace Builders.BuiltInTarget.Nodes {
+namespace BuiltInTarget.Nodes {
     public class VariableNodeBuilder : NodeBuilder<VariableNode> {
         public VariableNodeBuilder(VariableNode node) : base(node) { }
 

@@ -6,10 +6,8 @@ namespace Nodes.MasterNodes {
         public string InternalName => "v_in";
         public string DisplayName  => "Vertex Input";
 
-        OutputPort<Variable<Vector4>.Evaluator> Position { get; }
+        OutputPort<Variable<Vector4>> position { get; }
 
-        public VertexInNode() {
-            Position = new OutputPort<Variable<Vector4>.Evaluator>(this, "Vertex position");
-        }
+        public VertexInNode() { position = new OutputPort<Variable<Vector4>>(this, "Vertex position"); }
     }
 }

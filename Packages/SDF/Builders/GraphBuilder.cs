@@ -30,21 +30,24 @@ public class GraphBuilder : AbstractGraphBuilder {
     public string Evaluate() {
         var variables = new List<Variable>();
         var includes = new HashSet<string>();
+        var defines = new HashSet<string>();
         foreach (var node in graph.TopologicalOrderIterator()) {
             includes.UnionWith(node.CollectIncludes());
             variables.AddRange(node.CollectVariables().Where(v => v.Exposed));
+            defines.UnionWith(node.CollectDefines());
         }
 
         // this is where evaluator binding to nodes happens
-
-        return this.evaluator(includes, variables, () => "", () => "", () => "");
+        
+        return this.evaluator(includes, variables, () => "", () => "", () => "", () => "");
     }
 
     public delegate string Evaluator(
         ISet<string>             includes,
         IEnumerable<Variable>    variables,
         VertInNode.Evaluator     vertIn,
-        VertToFragNode.Evaluator v2f,
+        VertToFragNode.VertexEvaluator v2f_out,
+        VertToFragNode.FragmentEvaluator v2f_in,
         FragOutNode.Evaluator    fragOut
     );
 }

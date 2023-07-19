@@ -88,9 +88,10 @@ Shader "SDF/Domain"
         float _RAY_ORIGIN_BIAS;
         float _MAX_STEPS;
 
-        // NON-PROEPRTY UNIFORMS
-        float4x4 _BoxFrame1_Transform = MATRIX_ID;
-        float4x4 _Sphere1_Transform = MATRIX_ID;
+        // NON-PROPERTY UNIFORMS
+        uniform float4x4 _BoxFrame1_Transform = MATRIX_ID;
+        uniform float4x4 _Sphere1_Transform = MATRIX_ID;
+        uniform float4 _DBG_C_color = float4(1,0,1,1);
 
         float4 _DBG;
         float4 _DomainOrigin;
@@ -259,7 +260,8 @@ Shader "SDF/Domain"
                 rotY(p, _Control.w);
                 // Hit ret = {sdf::primitives3D::torus(p, _TorusSizes.x, _TorusSizes.y), 0};
                 int3 ix;
-                p = sdf::operators::repeatLim(p, 1, float3(1, 0, 1), ix);
+                p = mul(_BoxFrame1_Transform, float4(p, 1)).xyz;
+                p = sdf::operators::repeatLim(p, 1.5, float3(1, 0, 1), ix);
                 SdfResult ret;
                 ret.distance = sdf::primitives3D::box_frame(p, _Control.x, _Control.y);
                 ret.id.xyz = ix + 1;
@@ -448,6 +450,7 @@ Shader "SDF/Domain"
                     EncodeCorrectDepth(eyeDepth)
                     #endif
                 };
+            // debug transform gizmo
                 return o;
             } // End Pass
 

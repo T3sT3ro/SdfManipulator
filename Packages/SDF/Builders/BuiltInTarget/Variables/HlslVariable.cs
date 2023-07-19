@@ -4,9 +4,9 @@ using UnityEngine;
 using static System.FormattableString;
 
 // Jumbled as a single visitor because properties are sealed for extension
-namespace Builders.BuiltInTarget.Variables {
+namespace BuiltInTarget.Variables {
     public static class HlslVariable {
-        private static string GetHlslType(Variable variable) => variable switch
+        public static string GetHlslType(Variable variable) => variable switch
         {
             Variable<int> => "int",
             Variable<float> => "float",

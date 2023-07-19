@@ -25,7 +25,7 @@ namespace Test.Editor.SDF {
                 true,
                 new Variable<Vector4>("color", "color", new Vector4(1,0,1,0)));
             
-            colorNode.Value.ConnectTo(fragmentNode.Color);
+            colorNode.Value.ConnectTo(fragmentNode.color);
             
             var graphBuilder = new GraphBuilder(UnlitShaderBuilder.evaluator, graph);
 

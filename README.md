@@ -69,6 +69,9 @@ TODO
 - [ ] Fiz Z-test keyword based on [this response on unity discord](https://discord.com/channels/489222168727519232/497874081329184799/1007638427136700507) - basically [use this](https://docs.unity3d.com/Manual/SL-Stencil.html) i.e. `UnityEngine.Rendering.CompareFunction`
 - [ ] support dynamic node visitors 
 - [ ] fallback evaluators for nodes that are not implemented
+- [ ] allow users to define procedural textures
+- [ ] debug and release variants of source code generation (for in debug include number of steps made by the shader, while strip it from release)
+- [ ] in-editor camera effect shader (without domain) based on [this tutorial](https://www.youtube.com/watch?v=iZ6ARyKnD-k&t=354s)
 
 # Important to remember while documenting
 
@@ -157,3 +160,24 @@ vec4 sin()	        4*(3+2)	(4 * sin)
 mat4 * vec3	        4*3	(4 * dot)
 mat4 * mat4	        4*4*3	(4 * 4 * dot)
 ```
+
+[transform matrix layout inside HLSL while passed via uniform](https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-per-component-math#the-matrix-type):
+```
+_m00, _m01, _m02, _m03
+_m10, _m11, _m12, _m13
+_m20, _m21, _m22, _m23
+_m30, _m31, _m32, _m33
+                    ^ 
+                    transform
+
+// so extracting transform is
+o.color.xyz = _BoxFrame1_Transform._m03_m13_m23;
+```
+
+
+## praca:
+
+- teoria raymarchingu
+- teoria SDF
+- obsługa programu
+- porównania 

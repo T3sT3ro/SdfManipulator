@@ -5,8 +5,8 @@ namespace API {
     /// A constant literal or a uniform. Can be exposed to outside world.
     /// Variables are like uniforms and blackboard properties in shader graph
     /// </summary>
-    public interface Variable : Representable {
-        public bool Exposed { get; set; } // if property is connected to a 
+    public interface Variable : Representable, Port.Data {
+        public bool Exposed  { get; set; } // if property is connected to a 
         public GUID Guid     { get; }
     }
 

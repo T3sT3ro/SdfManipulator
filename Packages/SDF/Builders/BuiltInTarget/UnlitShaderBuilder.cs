@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using API;
-using Builders.BuiltInTarget.Variables;
+using BuiltInTarget.Variables;
 using Nodes;
 
 namespace Builders.BuiltInTarget {
@@ -20,7 +20,7 @@ namespace Builders.BuiltInTarget {
         "Packages/SDF/Logic/Includes/noise.cginc"
     )]
     public static class UnlitShaderBuilder {
-        public static readonly GraphBuilder.Evaluator evaluator = (includes, variables, vertIn, v2f, fragOut) =>
+        public static readonly GraphBuilder.Evaluator evaluator = (includes, variables, vertIn, v2f_in, v2f_out, fragOut) =>
             $@"
 Shader ""SDF/Domain""
 {{

@@ -7,18 +7,16 @@ namespace Nodes.MasterNodes {
         public string InternalName => "v2f_basic";
         public string DisplayName  => "Basic Vertex to Fragment";
 
-        public delegate string Evaluator();
-
-        public InOutPort<Variable<Vector4>.Evaluator> Position { get; }
-        public InOutPort<Variable<Vector4>.Evaluator> Normal   { get; }
-        public InOutPort<Variable<Vector4>.Evaluator> TexCoord { get; }
-        public InOutPort<Variable<Vector4>.Evaluator> Color    { get; }
+        public InOutPort<Variable<Vector4>> position { get; }
+        public InOutPort<Variable<Vector4>> normal   { get; }
+        public InOutPort<Variable<Vector4>> texCoord { get; }
+        public InOutPort<Variable<Vector4>> color    { get; }
 
         public BasicVertToFragNode() {
-            Position = new InOutPort<Variable<Vector4>.Evaluator>(this, "Vertex position");
-            Normal = new InOutPort<Variable<Vector4>.Evaluator>(this, "Vertex normal");
-            TexCoord = new InOutPort<Variable<Vector4>.Evaluator>(this, "Vertex texture coordinate");
-            Color = new InOutPort<Variable<Vector4>.Evaluator>(this, "Vertex color");
+            position = new InOutPort<Variable<Vector4>>(this, "Vertex position");
+            normal = new InOutPort<Variable<Vector4>>(this, "Vertex normal");
+            texCoord = new InOutPort<Variable<Vector4>>(this, "Vertex texture coordinate");
+            color = new InOutPort<Variable<Vector4>>(this, "Vertex color");
         }
     }
 }

@@ -17,14 +17,14 @@ namespace Nodes {
         public override string      DisplayName  { get; }
         public          Variable<T> Variable     { get; }
 
-        public OutputPort<Variable<T>.Evaluator> Value { get; }
+        public OutputPort<Variable<T>> Value { get; }
 
         public VariableNode(string internalName, string displayName, bool exposed, Variable<T> variable) {
             InternalName = internalName;
             DisplayName = displayName;
             Exposed = exposed;
             Variable = variable;
-            Value = new OutputPort<Variable<T>.Evaluator>(this, "value");
+            Value = new OutputPort<Variable<T>>(this, "value");
         }
     }
 }

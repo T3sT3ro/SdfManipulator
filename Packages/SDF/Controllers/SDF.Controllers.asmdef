@@ -3,6 +3,7 @@
   "references": [
     "SDF.API",
     "SDF.Logic",
-    "SDF.Builders"
+    "SDF.Builders",
+    "UnityEngine"
   ]
 }

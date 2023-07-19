@@ -7,8 +7,8 @@ namespace API {
         public ShaderIncludeAttribute(params string[] shaderIncludes) { ShaderIncludes = shaderIncludes; }
     }
 
-    public class NodeEvaluatorAttribute : Attribute {
-        public Type NodeType { get; }
-        public NodeEvaluatorAttribute(Type nodeType) { NodeType = nodeType; }
+    [AttributeUsage(AttributeTargets.Field)]
+    public class ShaderGlobalAttribute : Attribute {
+        public ShaderGlobalAttribute() {}
     }
 }

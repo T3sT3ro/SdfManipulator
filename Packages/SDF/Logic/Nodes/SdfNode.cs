@@ -1,4 +1,5 @@
 using API;
+using PortData;
 using UnityEngine;
 
 namespace Nodes {
@@ -6,11 +7,9 @@ namespace Nodes {
         public abstract string InternalName { get; }
         public abstract string DisplayName  { get; }
 
-        public InputPort<Variable<Vector3>.Evaluator> SamplePoint { get; }
+        public InputPort<Variable<Vector3>> SamplePoint { get; }
 
-        public OutputPort<Variable<float>.Evaluator> Distance { get; }
-        public OutputPort<Evaluator>                 Sdf      { get; }
-
-        public delegate string Evaluator(Variable<Vector3>.Evaluator point);
+        public OutputPort<Variable<float>> Distance { get; }
+        public OutputPort<SdfFunction>       Sdf      { get; }
     }
 }

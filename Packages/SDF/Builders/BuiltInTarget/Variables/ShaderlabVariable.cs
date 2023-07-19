@@ -4,7 +4,7 @@ using UnityEngine;
 using static System.FormattableString;
 
 // Jumbled as a single visitor because properties are sealed for extension
-namespace Builders.BuiltInTarget.Variables {
+namespace BuiltInTarget.Variables {
     public static class ShaderlabVariable {
         private static string GetShaderlabType(Variable variable) => variable switch
         {

@@ -6,18 +6,18 @@ namespace Nodes {
         public string InternalName { get; }
         public string DisplayName  { get; }
 
-        public OutputPort<Variable<float>.Evaluator>   Distance { get; }
-        public OutputPort<Variable<int>.Evaluator>     ObjectID { get; }
-        public OutputPort<Variable<Vector3>.Evaluator> Position { get; }
-        public OutputPort<Variable<Vector3>.Evaluator> Normal   { get; }
+        public OutputPort<Variable<float>>   Distance { get; }
+        public OutputPort<Variable<int>>     ObjectID { get; }
+        public OutputPort<Variable<Vector3>> Position { get; }
+        public OutputPort<Variable<Vector3>> Normal   { get; }
 
         public RaymarcherNode() {
             InternalName = "raymarcher";
             DisplayName = "Raymarcher";
-            Distance = new OutputPort<Variable<float>.Evaluator>(this, "distance");
-            ObjectID = new OutputPort<Variable<int>.Evaluator>(this, "objectId");
-            Position = new OutputPort<Variable<Vector3>.Evaluator>(this, "point");
-            Normal = new OutputPort<Variable<Vector3>.Evaluator>(this, "normal");
+            Distance = new OutputPort<Variable<float>>(this, "distance");
+            ObjectID = new OutputPort<Variable<int>>(this, "objectId");
+            Position = new OutputPort<Variable<Vector3>>(this, "point");
+            Normal = new OutputPort<Variable<Vector3>>(this, "normal");
         }
 
         //         [Header(Raymarcher)]
@@ -28,6 +28,6 @@ namespace Nodes {
         private Variable<float>  epsilonNormal = new Variable<float>("EPSILON_NORMAL", "epsilon for calculating normal", 0.001f);
     }
     
-    public delegate string Evaluator(SdfNode.Evaluator sdf);
+    public delegate string Evaluator(SdfNode sdf);
 
 }

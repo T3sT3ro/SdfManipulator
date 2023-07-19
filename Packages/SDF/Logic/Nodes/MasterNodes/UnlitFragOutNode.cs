@@ -6,12 +6,10 @@ namespace Nodes.MasterNodes {
         public string InternalName => "frag_out";
         public string DisplayName  => "Fragment Output";
 
-        public InputPort<Variable<Vector4>.Evaluator> Color { get; }
+        public InputPort<Variable<Vector4>> color { get; }
 
-        public UnlitFragOutNode() {
-            Color = new InputPort<Variable<Vector4>.Evaluator>(this, "Fragment color");
-        }
-
-        public delegate string Evaluator(Variable<Vector4>.Evaluator color);
+        public UnlitFragOutNode() { color = new InputPort<Variable<Vector4>>(this, "Fragment color"); }
+        //
+        // public delegate string Evaluator(Variable<Vector4>.Evaluator color);
     }
 }

@@ -31,6 +31,15 @@ namespace API {
                 .SelectMany(attr => attr.ShaderIncludes)
                 .ToHashSet();
         }
+
+        public ISet<string> CollectDefines() {
+            // return values of static fields annotated with ShaderDefineAttribute
+            return this.GetType().GetFields(BindingFlags.Static)
+                .Where(info => info.GetCustomAttributes<ShaderGlobalAttribute>().Any())
+                .Select(field => field.GetValue(this) as string)
+                .ToHashSet();
+        }
+        
     }
 
     public interface ConsumerNode : Node {

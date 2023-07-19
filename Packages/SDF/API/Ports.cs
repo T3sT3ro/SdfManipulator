@@ -12,9 +12,12 @@ namespace API {
 
         // public bool Enabled        { get; set; }
         // public bool Visible        { get; set; }
+        
+        public interface Data {}
     }
 
-    public abstract class AbstractPort : Port {
+
+    public abstract class AbstractPort<T> : Port where T : Port.Data  {
         public Node   Node        { get; }
         public string DisplayName { get; }
 
@@ -22,6 +25,8 @@ namespace API {
             Node = node;
             DisplayName = displayName;
         }
+
+        protected Type PortDataType => typeof(T);
     }
 
     // needed for a generic collection of input/output ports without type parameters
@@ -32,14 +37,14 @@ namespace API {
     public interface OutputPort : Port {
         public IReadOnlyCollection<InputPort> OutgoingConnections { get; }
     }
-
-    public class InputPort<T> : AbstractPort, InputPort where T : Delegate {
+    
+    public class InputPort<T> : AbstractPort<T>, InputPort where T : Port.Data {
         public InputPort(Node node, string displayName) : base(node, displayName) { }
 
         public OutputPort IncomingConnection { get; internal set; }
     }
 
-    public class OutputPort<T> : AbstractPort, OutputPort where T : Delegate {
+    public class OutputPort<T> : AbstractPort<T>, OutputPort where T : Port.Data {
         public OutputPort(Node node, string displayName) : base(node, displayName) { }
 
         public IReadOnlyCollection<InputPort> OutgoingConnections { get; } = new HashSet<InputPort>();
@@ -63,7 +68,7 @@ namespace API {
         }
     }
 
-    public class InOutPort<T> : AbstractPort, InputPort, OutputPort where T : Delegate {
+    public class InOutPort<T> : AbstractPort<T>, InputPort, OutputPort where T : Port.Data {
         
         private InputPort<T>  inputPort;
         private OutputPort<T> outputPort;
