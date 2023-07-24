@@ -2,6 +2,7 @@
   "name": "SDF.Builders",
   "references": [
     "SDF.API",
-    "SDF.Logic"
+    "SDF.Logic",
+    "SDF.AST"
   ]
 }

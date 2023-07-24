@@ -305,7 +305,6 @@ Shader "SDF/Domain"
                 fixed4 z = tex2D(params.Z, p.xy * params.Z_ST.xy + params.Z_ST.zw);
 
                 float3 w = pow(abs(n), k);
-
                 return (x * w.x + y * w.y + z * w.z) / (w.x + w.y + w.z);
             }
 
@@ -421,7 +420,6 @@ Shader "SDF/Domain"
                     UnityObjectToViewPos
                     #endif
                     (mul(SCALE_MATRIX_I, sdf.p)).z;
-
                 f2p o = {
                     {
                         #ifdef _DRAWMODE_MATERIAL
@@ -450,7 +448,6 @@ Shader "SDF/Domain"
                     EncodeCorrectDepth(eyeDepth)
                     #endif
                 };
-            // debug transform gizmo
                 return o;
             } // End Pass
 
