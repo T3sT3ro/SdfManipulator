@@ -8,7 +8,7 @@ namespace AST.Hlsl.Syntax {
         public HlslToken SemanticKind { get; internal set; }
         public uint?     index        { get; internal set; }
 
-        public override IList<HlslSyntax>        ChildNodes          => Array.Empty<HlslSyntax>();
-        public override IList<HlslSyntaxOrToken> ChildNodesAndTokens => new HlslSyntaxOrToken[] { SemanticKind };
+        public override IReadOnlyList<HlslSyntax>        ChildNodes          => Array.Empty<HlslSyntax>();
+        public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens => new HlslSyntaxOrToken[] { SemanticKind };
     }
 }

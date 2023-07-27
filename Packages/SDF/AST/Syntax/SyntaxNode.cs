@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
+using System.Text;
 
 namespace AST.Syntax {
     public abstract record SyntaxNode<TNode, TBase>
         : ISyntaxNodeOrToken<TNode, TBase>
         where TNode : SyntaxNode<TNode, TBase>, TBase
         where TBase : ISyntaxNodeOrToken<TNode, TBase> {
-        public          TNode        Parent              { get; internal set; }
-        public abstract IList<TNode> ChildNodes          { get; }
-        public abstract IList<TBase> ChildNodesAndTokens { get; }
+        public          TNode?               Parent              { get; internal set; }
+        public abstract IReadOnlyList<TNode> ChildNodes          { get; }
+        public abstract IReadOnlyList<TBase> ChildNodesAndTokens { get; }
 
         public IEnumerable<TNode> AncestorsAndSelf() {
             var node = (TNode)this;
@@ -16,6 +18,10 @@ namespace AST.Syntax {
 
                 node = node.Parent;
             }
+        }
+
+        public void WriteTo(StringBuilder sb) {
+            
         }
     }
 }

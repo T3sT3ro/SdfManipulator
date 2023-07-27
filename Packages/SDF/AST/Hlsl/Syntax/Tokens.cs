@@ -1,30 +1,30 @@
 using System.Text.RegularExpressions;
 
-namespace AST.Hlsl.Syntax.Tokens {
-    
+namespace AST.Hlsl.Syntax {
     // @formatter OFF
     // Tokens
-    public record TildeToken                            : HlslToken { public override string Text => "~"; }
-    public record NotToken                              : HlslToken { public override string Text => "!"; }
-    public record PercentToken                          : HlslToken { public override string Text => "%"; }
-    public record CaretToken                            : HlslToken { public override string Text => "^"; }
-    public record AmpersandToken                        : HlslToken { public override string Text => "&"; }
-    public record AsteriskToken                         : HlslToken { public override string Text => "*"; }
     public record OpenParenToken                        : HlslToken { public override string Text => "("; }
     public record CloseParenToken                       : HlslToken { public override string Text => ")"; }
-    public record MinusToken                            : HlslToken { public override string Text => "-"; }
-    public record PlusToken                             : HlslToken { public override string Text => "+"; }
-    public record EqualsToken                           : HlslToken { public override string Text => "="; }
     public record OpenBraceToken                        : HlslToken { public override string Text => "{"; }
     public record CloseBraceToken                       : HlslToken { public override string Text => "}"; }
     public record OpenBracketToken                      : HlslToken { public override string Text => "["; }
     public record CloseBracketToken                     : HlslToken { public override string Text => "]"; }
+    
+    public record TildeToken                            : HlslToken { public override string Text => "~"; }
+    public record NotToken                              : HlslToken { public override string Text => "!"; }
+    public record MinusToken                            : HlslToken { public override string Text => "-"; }
+    public record PlusToken                             : HlslToken { public override string Text => "+"; }
+    public record PercentToken                          : HlslToken { public override string Text => "%"; }
+    public record CaretToken                            : HlslToken { public override string Text => "^"; }
+    public record AmpersandToken                        : HlslToken { public override string Text => "&"; }
+    public record AsteriskToken                         : HlslToken { public override string Text => "*"; }
+    public record EqualsToken                           : HlslToken { public override string Text => "="; }
     public record BarToken                              : HlslToken { public override string Text => "|"; }
     public record ColonToken                            : HlslToken { public override string Text => ":"; }
     public record SemiToken                             : HlslToken { public override string Text => ";"; }
     public record LessThanToken                         : HlslToken { public override string Text => "<"; }
-    public record CommaToken                            : HlslToken { public override string Text => ","; }
     public record GreaterThanToken                      : HlslToken { public override string Text => ">"; }
+    public record CommaToken                            : HlslToken { public override string Text => ","; }
     public record DotToken                              : HlslToken { public override string Text => "."; }
     public record QuestionToken                         : HlslToken { public override string Text => "?"; }
     public record HashToken                             : HlslToken { public override string Text => "#"; }
@@ -93,6 +93,7 @@ namespace AST.Hlsl.Syntax.Tokens {
     public record BreakKeyword              : HlslToken { public override string Text => "break"; }
     public record ContinueKeyword           : HlslToken { public override string Text => "continue"; }
     public record ReturnKeyword             : HlslToken { public override string Text => "return"; }
+    public record DiscardKeyword            : HlslToken { public override string Text => "discard"; }
     public record IfKeyword                 : HlslToken { public override string Text => "if"; }
     public record DoKeyword                 : HlslToken { public override string Text => "do"; }
     public record ElseKeyword               : HlslToken { public override string Text => "else"; }
@@ -133,8 +134,13 @@ namespace AST.Hlsl.Syntax.Tokens {
 
     // @formatter ON
 
+    public record LineFeedToken : HlslToken {
+        public override string Text => "\n";
+    }
+
     public record WhitespaceToken : HlslToken {
         public override string Text { get; set; }
+        public static   Regex  WhitespaceRegex = new Regex(@"\s+");
     }
 
     public record MatrixTypeToken : HlslToken {
@@ -147,10 +153,25 @@ namespace AST.Hlsl.Syntax.Tokens {
     public record VectorTypeToken : HlslToken {
         public          HlslToken type  { get; internal set; }
         public          uint      arity { get; internal set; }
-        public override string    Text  => $"{type.Text}{arity}";
+        public override string    Text  => $"{type.Text}{arity.ToString()}";
     }
 
     public record IdentifierToken : HlslToken {
-        public static Regex identifierRegex = new Regex(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
+        public static readonly Regex identifierRegex = new Regex(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
+    }
+
+    public abstract record LiteralToken : HlslToken {
+        public abstract Regex Pattern { get; }    }
+    
+    public record FloatToken: LiteralToken {
+        public override Regex Pattern { get; } = new(@"^((\d*\.\d+|\d+\.\d*)([eE][+-]?\d+)?|\d+([eE][+-]?\d+))[hHfFlL]?$");
+    }
+    
+    public record DecimanToken : LiteralToken {
+        public override Regex Pattern { get; } = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
+    }
+
+    public record BooleanToken : LiteralToken {
+        public override Regex Pattern { get; } = new Regex(@"^(true|false)$");
     }
 }

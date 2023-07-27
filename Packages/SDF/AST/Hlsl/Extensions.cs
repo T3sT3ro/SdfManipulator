@@ -1,10 +1,4 @@
-using System;
-using AST.Hlsl.Syntax;
 using AST.Hlsl.Syntax.Expressions;
-using AST.Hlsl.Syntax.Expressions.Literals;
-using AST.Hlsl.Syntax.Expressions.Operators;
-using Boolean = AST.Hlsl.Syntax.Expressions.Literals.Boolean;
-using Decimal = AST.Hlsl.Syntax.Expressions.Literals.Decimal;
 
 namespace AST.Hlsl {
     public static class Extensions {

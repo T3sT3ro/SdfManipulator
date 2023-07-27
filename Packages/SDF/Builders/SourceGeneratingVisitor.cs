@@ -7,10 +7,11 @@ using AST.Hlsl.Syntax.Expressions;
 using AST.Hlsl.Syntax.Expressions.Literals;
 using AST.Hlsl.Syntax.Expressions.Operators;
 using AST.Hlsl.Syntax.Statements;
+using AST.Hlsl.Syntax.Statements.Declarations;
 
 public class SourceGeneratingVisitor {
     public string Visit(IdentifierName id) =>
-        id.name;
+        id.idToken;
 
     // expressions
 
@@ -42,7 +43,7 @@ public class SourceGeneratingVisitor {
     public string Visit(Indexer node) =>
         $"{node.expression.ParenthesizeFor(node)}[{Visit((dynamic)node.index)}]";
 
-    public string Visit(Assignment node) =>
+    public string Visit(AssignmentExpresion node) =>
         $"{Visit((dynamic)node.left)} {Stringifier.Get(node.kind)} {Visit((dynamic)node.right)}";
 
     public string Visit(Member node) =>
@@ -90,7 +91,7 @@ public class SourceGeneratingVisitor {
             @$"{string.Join(" ", new[] { storage, typeModifier, typeName, id, semantic, init }.Where(s => s != null))};";
     }
 
-    public string Visit(FunctionDeclaration.Argument node) {
+    public string Visit(Argument node) {
         var inputModifier = node.modifier != null ? Stringifier.Get(node.modifier.GetValueOrDefault()) : null;
         var typeName = Visit((dynamic)node.type);
         var id = Visit((dynamic)node.id);

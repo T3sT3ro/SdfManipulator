@@ -411,7 +411,7 @@ Shader "SDF/Domain"
                 // world normal color
 
                 fixed4 color_id = sdf.id;
-
+                
                 float eyeDepth =
                     -
                     #ifdef _ORIGIN_WORLD
