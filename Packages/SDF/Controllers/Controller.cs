@@ -1,8 +1,9 @@
-using System;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Controllers {
+
+
     public abstract class Controller : MonoBehaviour {
         public Renderer sdfDomain;
         public Material sdfDomainSharedMaterial;
@@ -12,5 +13,8 @@ namespace Controllers {
         protected void Update() { UpdateUniforms(); }
 
         protected abstract void UpdateUniforms();
+
+        [MenuItem("GameObject/SDF/Primitive/Box")]
+        public void CreateSdfNode() { }
     }
 }

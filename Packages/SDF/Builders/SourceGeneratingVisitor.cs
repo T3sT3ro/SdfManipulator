@@ -10,7 +10,7 @@ using AST.Hlsl.Syntax.Statements;
 using AST.Hlsl.Syntax.Statements.Declarations;
 
 public class SourceGeneratingVisitor {
-    public string Visit(IdentifierName id) =>
+    /*public string Visit(IdentifierName id) =>
         id.idToken;
 
     // expressions
@@ -134,6 +134,6 @@ public class SourceGeneratingVisitor {
         var @else = node.@else != null ? $"else {Visit((dynamic)node.@else)}" : "";
 
         return $"if ({test}) {ifTrue} {@else}";
-    }
+    }*/
     
 }

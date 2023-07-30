@@ -21,7 +21,15 @@ namespace AST.Syntax {
         }
 
         public void WriteTo(StringBuilder sb) {
-            
+            foreach (var child in ChildNodesAndTokens) {
+                child.WriteTo(sb);
+            }
+        }
+
+        public override string ToString() {
+            var sb = new StringBuilder();
+            WriteTo(sb);
+            return sb.ToString();
         }
     }
 }

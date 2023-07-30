@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using AST.Hlsl.Syntax.Expressions;
 
 namespace AST.Hlsl.Syntax.Statements {
-    public record If : Statement, If.Else {
-        public Expression                test  { get; set; }
-        public IReadOnlyList<Statement>  then  { get; set; }
-        public IReadOnlyList<Statement>? @else { get; set; }
+    public record If : HlslSyntax {
+        public IfKeyword       ifKeyword  { get; set; }
+        public OpenParenToken  openParen  { get; set; }
+        public Expression      test       { get; set; }
+        public CloseParenToken closeParen { get; set; }
+        public Block?          body       { get; set; }
+        public Block?          @else      { get; set; }
 
-        public interface Then { }
+        public override IReadOnlyList<HlslSyntax> ChildNodes => new HlslSyntax[]
+            { test, body, @else };
 
-        public interface Else { }
+        public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens => new HlslSyntaxOrToken[]
+            { ifKeyword, openParen, test, closeParen, body, @else };
     }
 }

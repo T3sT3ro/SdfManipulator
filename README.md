@@ -170,7 +170,7 @@ TODO
 - [HLSL parser - a part of HLSL Tools for Visual Studio, structure similar to Roslyn, a bit dated though, inspecting code yields many code smells](https://github.com/roy-t/HlslParser)
 - [Writing shaders in HLSL](https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-writing-shaders-9#declaring-shader-variables)
 - [Vertex post-processing, what happens, khronos.org](https://www.khronos.org/opengl/wiki/Vertex_Post-Processing)
-- 
+- [Creating Node Graph in Unity](https://blog.devgenius.io/using-unitys-graph-view-e9fb8e78980e) 
 
 ## Discord:
 

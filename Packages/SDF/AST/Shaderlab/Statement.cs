@@ -1,4 +1,6 @@
 #nullable enable
+using System.Collections.Generic;
+using AST.Hlsl;
 using AST.Hlsl.Syntax;
 using AST.Hlsl.Syntax.Statements;
 
@@ -44,9 +46,15 @@ namespace AST.Shaderlab {
             }
         }
 
-        public record HlslInclude : Statement;
+        public record HlslInclude : Statement {
+            public override IReadOnlyList<HlslSyntax>        ChildNodes          { get; }
+            public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens { get; }
+        }
 
-        public record HlslProgram : Statement;
+        public record HlslProgram : Statement {
+            public override IReadOnlyList<HlslSyntax>        ChildNodes          { get; }
+            public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens { get; }
+        }
 
 
         public record CustomEditor {

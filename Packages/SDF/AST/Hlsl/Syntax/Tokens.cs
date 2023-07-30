@@ -1,8 +1,11 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace AST.Hlsl.Syntax {
     // @formatter OFF
     // Tokens
+    public record LineFeedToken                         : HlslToken { public override string Text => "\n"; }
+    
     public record OpenParenToken                        : HlslToken { public override string Text => "("; }
     public record CloseParenToken                       : HlslToken { public override string Text => ")"; }
     public record OpenBraceToken                        : HlslToken { public override string Text => "{"; }
@@ -134,15 +137,6 @@ namespace AST.Hlsl.Syntax {
 
     // @formatter ON
 
-    public record LineFeedToken : HlslToken {
-        public override string Text => "\n";
-    }
-
-    public record WhitespaceToken : HlslToken {
-        public override string Text { get; set; }
-        public static   Regex  WhitespaceRegex = new Regex(@"\s+");
-    }
-
     public record MatrixTypeToken : HlslToken {
         public          HlslToken type { get; internal set; }
         public          uint      rows { get; internal set; }
@@ -156,22 +150,46 @@ namespace AST.Hlsl.Syntax {
         public override string    Text  => $"{type.Text}{arity.ToString()}";
     }
 
-    public record IdentifierToken : HlslToken {
-        public static readonly Regex identifierRegex = new Regex(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
+    public abstract record ValidatedHlslToken : HlslToken {
+        public override string Text {
+            get => base.Text;
+            set {
+                if (!Pattern.IsMatch(value)) throw new ArgumentException($"Invalid token format: {value}");
+
+                base.Text = value;
+            }
+        }
+
+        protected abstract Regex Pattern { get; }
     }
 
-    public abstract record LiteralToken : HlslToken {
-        public abstract Regex Pattern { get; }    }
-    
-    public record FloatToken: LiteralToken {
-        public override Regex Pattern { get; } = new(@"^((\d*\.\d+|\d+\.\d*)([eE][+-]?\d+)?|\d+([eE][+-]?\d+))[hHfFlL]?$");
+    public record WhitespaceToken : ValidatedHlslToken {
+        public override         string Text { get; set; }
+        private static readonly Regex  pattern = new(@"\s+");
+        protected override      Regex  Pattern => pattern;
     }
-    
+
+    public record IdentifierToken : ValidatedHlslToken {
+        private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
+        protected override      Regex Pattern => pattern;
+    }
+
+    public abstract record LiteralToken : ValidatedHlslToken { }
+
+    public record FloatToken : LiteralToken {
+        private static readonly Regex pattern =
+            new(@"^((\d*\.\d+|\d+\.\d*)([eE][+-]?\d+)?|\d+([eE][+-]?\d+))[hHfFlL]?$");
+
+        protected override Regex Pattern => pattern;
+    }
+
     public record DecimanToken : LiteralToken {
-        public override Regex Pattern { get; } = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
+        private static readonly Regex pattern = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
+        protected override      Regex Pattern => pattern;
     }
 
     public record BooleanToken : LiteralToken {
-        public override Regex Pattern { get; } = new Regex(@"^(true|false)$");
+        private static readonly Regex pattern = new(@"^(true|false)$");
+        protected override      Regex Pattern => pattern;
     }
 }
