@@ -1,18 +1,11 @@
-#nullable enable
 using System.Collections.Generic;
-using System.Linq;
-using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
-    //. Known as InvocationExpression 
+    // someFunction(arguments) 
     public record Call : Expression {
-        public IdentifierName id        { get; set; }
-        public ArgumentList   arguments { get; set; }
+        public Identifier               id        { get; init; }
+        public ArgumentList<HlslSyntax> arguments { get; init; }
 
-        public override IReadOnlyList<HlslSyntax> ChildNodes =>
-            (IReadOnlyList<HlslSyntax>)new[] { id }.Concat<HlslSyntax>(arguments.ChildNodes);
-
-        public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens =>
-            (IReadOnlyList<HlslSyntaxOrToken>)new[] { id }.Concat(arguments.ChildNodesAndTokens);
+        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => new HlslSyntax[] { id, arguments };
     }
 }

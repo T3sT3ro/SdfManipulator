@@ -1,3 +1,6 @@
 {
-  "name": "SDF.API"
+  "name": "SDF.API",
+  "references": [
+    "SDF.IsExternalInitShim"
+  ]
 }

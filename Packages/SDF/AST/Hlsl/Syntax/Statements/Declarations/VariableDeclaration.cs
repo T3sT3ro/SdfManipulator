@@ -1,22 +1,17 @@
-#nullable enable
 using System.Collections.Generic;
-using AST.Hlsl.Syntax.Expressions;
 
 namespace AST.Hlsl.Syntax.Statements.Declarations {
+    // float x;
+    // float x[1][2];
+    // float a, b, c;
+    // float x = 7.0f, y = 8.0f;
+    // uniform row_major float4x4 g_mWorldViewProjection : WORLDVIEWPROJECTION;
+    // struct Result {float d; float3 pos;} result = {1.0f, {0.0f, 0.0f, 0.0f}}; 
     public record VariableDeclaration : Statement {
-        public HlslToken?     storage      { get; set; }
-        public HlslToken?     typeModifier { get; set; }
-        public Type           type         { get; set; }
-        public IdentifierName id           { get; set; }
-        public uint[]?        arraySizes   { get; set; }
-        public Semantic?      semantic     { get; set; }
-        public Expression?    initializer  { get; set; }
+        public VariableDeclarator declarator { get; init; }
+        public SemiToken          semiToken  { get; init; } = new();
 
-
-        public override IReadOnlyList<HlslSyntax> ChildNodes =>
-            new HlslSyntax[] { type, id, semantic, initializer };
-
-        public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens =>
-            new HlslSyntaxOrToken[] { storage, typeModifier, type, id, semantic, initializer };
+        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
+            new IHlslSyntaxOrToken[] { declarator, semiToken };
     }
 }

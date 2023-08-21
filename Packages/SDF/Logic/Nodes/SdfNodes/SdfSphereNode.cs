@@ -1,18 +1,30 @@
+#nullable enable
 using API;
+using AST.Hlsl.Syntax.Expressions.Operators;
 using PortData;
-using UnityEngine;
 
 namespace Nodes.SdfNodes {
-    public class SdfSphereNode : SdfNode {
-        private Variable<float> _radius;
+    public record SdfSphereNode : SdfNode {
+        public InputPort<HlslVector> center { get; }
+        public InputPort<HlslScalar> radius { get; }
 
-        public override string InternalName => "sdf_sphere";
-        public override string DisplayName  => "SDF Sphere";
+        // for now uses the primitives include
+        public SdfSphereNode(OutputPort<HlslVector>? center, OutputPort<HlslScalar>? radius)
+            : base("sdf_sphere", "SDF Sphere") {
+            this.center = this.CreateInput("Center", center ?? HlslVector.DefaultNode().Value);
+            this.radius = this.CreateInput("Radius", radius ?? HlslScalar.DefaultFloatNode().Value);
 
-        public InputPort<Variable<Vector3>> center { get; }
-        public InputPort<Variable<Vector3>> radius { get; }
+            this.sdf = CreateOutput("Sdf", () => sdfCallSyntax);
+        }
 
-        public OutputPort<SdfFunction>   sdf      { get; }
-        public OutputPort<Variable<int>> distance { get; }
+        private HlslSdfFunction sdfCallSyntax => new(new Call
+        {
+            id = InternalName,
+            arguments = new[]
+            {
+                this.center.Eval().vectorExpression,
+                this.radius.Eval().scalarExpression
+            }
+        });
     }
 }

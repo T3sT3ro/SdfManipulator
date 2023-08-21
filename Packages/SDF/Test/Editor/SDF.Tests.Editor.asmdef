@@ -2,7 +2,6 @@
   "name": "SDF.Tests.Editor",
   "references": [
     "GUID:87464bf6311c423aa08363aec894ea1b",
-    "GUID:e09afd70eb48450393f510ced6ce2141",
     "GUID:c96f805ecf994545999c6d6135bacd40"
   ],
   "optionalUnityReferences": [

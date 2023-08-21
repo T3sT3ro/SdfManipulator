@@ -23,7 +23,7 @@ Shader "SDF/Domain"
         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
         [Tooltip(Only works for origin type local)]
-        [Toggle] _PRESERVE_SPACE_SCALE ("preserve space scale", Int) = 1
+        [Toggle] _PRESERVE_SPACE_SCALE ("preserve space scale ", Int) = 1
         _DomainOrigin ("domain origin", Vector) = (0,0,0,0)
         _DomainRotation ("domain rotation", Vector) = (0,0,0,0)
 
@@ -39,6 +39,7 @@ Shader "SDF/Domain"
 
     SubShader
     {
+        
         Tags
         {
             "RenderType"="Geometry"
@@ -50,11 +51,10 @@ Shader "SDF/Domain"
         Cull [_Cull] // Draw camera inside a domain
         ZWrite [_ZWrite]
 
+
         // common includes for all passes
         HLSLINCLUDE
         #pragma target 5.0
-        #pragma vertex vert
-        #pragma fragment frag
         #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
         #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
         #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
@@ -65,12 +65,12 @@ Shader "SDF/Domain"
         // #pragma shader_feature_local _SCENEVIEW
 
         #include "UnityCG.cginc"
-        #include "Packages/SDF/Builders/BuiltInTarget/Includes/types.cginc"
-        #include "Packages/SDF/Builders/BuiltInTarget/Includes/util.cginc"
-        #include "Packages/SDF/Builders/BuiltInTarget/Includes/matrix.cginc"
-        #include "Packages/SDF/Builders/BuiltInTarget/Includes/primitives.cginc"
-        #include "Packages/SDF/Builders/BuiltInTarget/Includes/operators.cginc"
-        #include "Packages/SDF/Builders/BuiltInTarget/Includes/noise.cginc"
+        #include "Packages/SDF/Logic/Includes/types.cginc"
+        #include "Packages/SDF/Logic/Includes/util.cginc"
+        #include "Packages/SDF/Logic/Includes/matrix.cginc"
+        #include "Packages/SDF/Logic/Includes/primitives.cginc"
+        #include "Packages/SDF/Logic/Includes/operators.cginc"
+        #include "Packages/SDF/Logic/Includes/noise.cginc"
 
         sampler2D _BoxmapTex_X;
         sampler2D _BoxmapTex_Y;
@@ -91,7 +91,7 @@ Shader "SDF/Domain"
         // NON-PROPERTY UNIFORMS
         uniform float4x4 _BoxFrame1_Transform = MATRIX_ID;
         uniform float4x4 _Sphere1_Transform = MATRIX_ID;
-        uniform float4 _DBG_C_color = float4(1,0,1,1);
+        uniform float4 _DBG_C_color = float4(1, 0, 1, 1);
 
         float4 _DBG;
         float4 _DomainOrigin;
@@ -103,7 +103,7 @@ Shader "SDF/Domain"
         // Domain -> Model -> World -> Projection
         static const float4x4 MATRIX_DOMAIN = m_translate(_DomainOrigin);
         static const float4x4 MATRIX_I_DOMAIN = m_translate(-_DomainOrigin);
-        
+
         static const float4x4 SCALE_MATRIX =
             #if defined(_PRESERVE_SPACE_SCALE_ON) && defined(_ORIGIN_LOCAL)
             extract_scale_matrix(UNITY_MATRIX_M);
@@ -117,13 +117,13 @@ Shader "SDF/Domain"
         // inverse projection matrix either to world or to model, depending on the origin type
         // instead of performing matrix inversion in the shader, use already supplied matrices
         static const float4x4 inv = mul(SCALE_MATRIX,
-                                        #ifdef _ORIGIN_WORLD
-                                            mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
-                                            // inverse(UNITY_MATRIX_VP)
-                                        #else
+            #ifdef _ORIGIN_WORLD
+            mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
+            // inverse(UNITY_MATRIX_VP)
+            #else
                                         mul(unity_WorldToObject, mul(UNITY_MATRIX_I_V, unity_CameraInvProjection))
                                         // inverse(UNITY_MATRIX_MVP)
-                                        #endif
+            #endif
         );
 
         //const float near = _ProjectionParams.y; // those go into frag
@@ -138,10 +138,11 @@ Shader "SDF/Domain"
         //            ZWrite On
         //            ColorMask 0
         //        }
-
         Pass
         {
             HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag            
             v2f vert(appdata_base v)
             {
                 v2f o;
@@ -149,7 +150,8 @@ Shader "SDF/Domain"
                 o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
                 // o.uv = v.texcoord; // TRANSFORM_TEX(v.texcoord, _BoxmapTex);
                 o.hitpos = v.vertex;
-                COMPUTE_EYEDEPTH(o.screenPos.z);
+                float4x4 testInitializer = {{0,1,2,3}, {4,5,6,7}, {8,9,10,11}, {12,13,14,15}}; 
+                COMPUTE_EYEDEPTH(o.screenPos.z); // this uses implicitly defined v.vertex.z... possibly migrate to proper function...
                 return o;
             }
 
@@ -411,7 +413,7 @@ Shader "SDF/Domain"
                 // world normal color
 
                 fixed4 color_id = sdf.id;
-                
+
                 float eyeDepth =
                     -
                     #ifdef _ORIGIN_WORLD
@@ -421,7 +423,7 @@ Shader "SDF/Domain"
                     #endif
                     (mul(SCALE_MATRIX_I, sdf.p)).z;
                 f2p o = {
-                    {
+                    .color = {
                         #ifdef _DRAWMODE_MATERIAL
                          color_material*color_trimap
                         #elif _DRAWMODE_ALBEDO

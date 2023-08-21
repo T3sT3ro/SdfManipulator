@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
+    // a.b.c
     public record Member : Expression {
-        public          Expression                       expression          { get; set; }
-        public DotToken                         dotToken            { get; set; }
-        public          IdentifierName                   member              { get; set; }
-        
-        public override IReadOnlyList<HlslSyntax>        ChildNodes          => new HlslSyntax[] { expression, member };
-        public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens => new HlslSyntaxOrToken[] { expression, dotToken, member };
+        public Expression expression { get; init; }
+        public DotToken   dotToken   { get; set; } = new();
+        public Identifier member     { get; init; }
+
+        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
+            new IHlslSyntaxOrToken[] { expression, dotToken, member };
     }
 }

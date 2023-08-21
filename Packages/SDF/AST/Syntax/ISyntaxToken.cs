@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Text;
-using AST.Hlsl.Syntax;
 
 namespace AST.Syntax {
     // todo: won't abstract class just work?
@@ -8,9 +7,8 @@ namespace AST.Syntax {
         : ISyntaxNodeOrToken<TNode, TBase>
         where TNode : SyntaxNode<TNode, TBase>, TBase
         where TToken : ISyntaxToken<TNode, TToken, TTrivia, TBase>, TBase
-        where TTrivia : ISyntaxTrivia<TToken, TNode, TTrivia, TBase>
+        where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase>
         where TBase : ISyntaxNodeOrToken<TNode, TBase> {
-        
         IReadOnlyList<TTrivia> LeadingTrivia  { get; }
         IReadOnlyList<TTrivia> TrailingTrivia { get; }
 

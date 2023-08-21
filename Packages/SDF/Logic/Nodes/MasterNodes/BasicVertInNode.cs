@@ -1,13 +1,41 @@
 using API;
-using UnityEngine;
+using AST.Hlsl.Syntax;
+using AST.Hlsl.Syntax.Statements.Declarations;
+using PortData;
+using StructMember = AST.Hlsl.Syntax.Type.Struct.Member;
+using MemberAccess = AST.Hlsl.Syntax.Expressions.Operators.Member;
+
 
 namespace Nodes.MasterNodes {
-    public class VertexInNode : VertInNode {
-        public string InternalName => "v_in";
-        public string DisplayName  => "Vertex Input";
+    public record VertexInNode : Node {
+        public OutputPort<HlslVector> position { get; }
 
-        OutputPort<Variable<Vector4>> position { get; }
+        public VertexInNode() : base("v_in", "Vertex Input") {
+            position = this.CreateOutput("Vertex position", () => new HlslVector(PositionMemberAccess));
+        }
 
-        public VertexInNode() { position = new OutputPort<Variable<Vector4>>(this, "Vertex position"); }
+        private const string v2fStructName      = "v_in";
+        private const string positionMemberName = "pos";
+
+        // struct v_in { float4 pos : SV_POSITION; };
+        public static StructDeclaration VInStructDeclaration => new Type.Struct
+        {
+            name = v2fStructName,
+            members = new[]
+            {
+                new StructMember
+                {
+                    type = new VectorToken { arity = 4, type = new FloatKeyword() },
+                    id = positionMemberName,
+                    semantic =  new PositionSemantic()
+                },
+            }
+        };
+
+        public static MemberAccess PositionMemberAccess => new MemberAccess
+        {
+            expression = new Identifier { id = v2fStructName },
+            member = positionMemberName
+        };
     }
 }

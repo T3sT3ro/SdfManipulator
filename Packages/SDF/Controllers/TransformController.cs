@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Controllers {
     [ExecuteInEditMode]
-    public class SdfTransformController : Controller {
+    public class TransformSdfController : SdfController {
         public string   uniformName = "_BoxPosition"; // todo: replace with identifier
         
         protected override void UpdateUniforms() {
@@ -17,7 +17,6 @@ namespace Controllers {
             else {
                 Debug.LogWarning("No assigned renderer for controller " + this);
             }
-            
         }
     }
 }

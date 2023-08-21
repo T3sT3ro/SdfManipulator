@@ -26,9 +26,9 @@ namespace AST.Syntax {
             }
         }
 
-        public static IEnumerable<TBase> DescendantNodesAndTokens<TNode, TBase>(this TNode root) 
-        where TNode : SyntaxNode<TNode, TBase>, TBase
-        where TBase : ISyntaxNodeOrToken<TNode, TBase> {
+        public static IEnumerable<TBase> DescendantNodesAndTokens<TNode, TBase>(this TNode root)
+            where TNode : SyntaxNode<TNode, TBase>, TBase
+            where TBase : ISyntaxNodeOrToken<TNode, TBase> {
             var stack = new Stack<TNode>();
             stack.Push(root);
 

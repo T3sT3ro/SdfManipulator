@@ -1,15 +1,14 @@
+#nullable enable
 using API;
+using Nodes.SdfNodes;
 using PortData;
 using UnityEngine;
 
 namespace Nodes {
-    public abstract class SdfNode : ConsumerNode, ProducerNode {
-        public abstract string InternalName { get; }
-        public abstract string DisplayName  { get; }
-
-        public InputPort<Variable<Vector3>> SamplePoint { get; }
-
-        public OutputPort<Variable<float>> Distance { get; }
-        public OutputPort<SdfFunction>       Sdf      { get; }
+    public abstract record SdfNode(string InternalName, string DisplayName)
+        : Node(InternalName, DisplayName) {
+        public OutputPort<HlslSdfFunction> sdf { get; protected init; }
+        
+        public static SdfNode Default() => new SdfSphereNode(null, null);
     }
 }

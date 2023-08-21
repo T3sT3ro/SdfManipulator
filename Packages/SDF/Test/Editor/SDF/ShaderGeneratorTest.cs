@@ -1,5 +1,4 @@
 using API;
-using BuiltInTarget;
 using Nodes;
 using Nodes.MasterNodes;
 using UnityEditor;
@@ -10,6 +9,18 @@ namespace Test.Editor.SDF {
     public static class ShaderGeneratorTest {
         [UnityTest]
         public static void TestShaderGenerator() {
+
+            var vertNode = new VertexInNode();
+            var v2fNode = new BasicVertToFragNode();
+            var fragmentNode = new UnlitFragOutNode();
+            var colorNode = new ValueNode<,>("vec4_property",
+                "vec4 property node",
+                true,
+                new Property<Vector4>("color", "color", new Vector4(1,0,1,0)));
+            
+            colorNode.Value.ConnectTo(fragmentNode.color);
+            
+            var targetNode = new BuiltInTargetNode("built_in_target");
             
             var graph = new Graph(
                 new VertexInNode(),
@@ -17,23 +28,14 @@ namespace Test.Editor.SDF {
                 new UnlitFragOutNode()
             );
 
-            var vertNode = new VertexInNode();
-            var v2fNode = new BasicVertToFragNode();
-            var fragmentNode = new UnlitFragOutNode();
-            var colorNode = new VariableNode<Vector4>("vec4_property",
-                "vec4 property node",
-                true,
-                new Variable<Vector4>("color", "color", new Vector4(1,0,1,0)));
             
-            colorNode.Value.ConnectTo(fragmentNode.color);
-            
-            var graphBuilder = new GraphBuilder(UnlitShaderBuilder.evaluator, graph);
-
-            var shaderContent = graphBuilder.Evaluate();
+            var shaderContent = graph.BuildShaderForTarget(targetNode);
             var shader = ShaderUtil.CreateShaderAsset(shaderContent);
-            AssetDatabase.CreateAsset(shader, "Test/GeneratedShaders/SimpleShader.hlsl");
+            AssetDatabase.CreateAsset(shader, $"Test/GeneratedShaders/{}.hlsl");
             var material = new Material(shader);
-            AssetDatabase.CreateAsset(shader, "Test/GeneratedShaders/SimpleShader.mat");
+            AssetDatabase.CreateAsset(shader, $"Test/GeneratedShaders/SimpleShader.mat");
         }
+        
+        
     }
 }

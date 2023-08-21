@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
+    // x = y
+    // y <<= 2
     public record AssignmentExpresion : Expression {
-        public Expression left            { get; internal set; }
-        public HlslToken  assignmentToken { get; internal set; }
-        public Expression right           { get; internal set; }
+        public Expression      left            { get; init; }
+        public AssignmentToken assignmentToken { get; set; } = new EqualsToken();
+        public Expression      right           { get; init; }
 
-        public override IReadOnlyList<HlslSyntax>        ChildNodes          => new[] { left, right };
-        public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens => new HlslSyntaxOrToken[] { left, assignmentToken, right };
+        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
+            new IHlslSyntaxOrToken[] { left, assignmentToken, right };
     }
 }

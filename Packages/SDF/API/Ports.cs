@@ -1,6 +1,6 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 
 namespace API {
     /// <summary>
@@ -12,12 +12,27 @@ namespace API {
 
         // public bool Enabled        { get; set; }
         // public bool Visible        { get; set; }
-        
-        public interface Data {}
+
+        /// <summary>
+        /// It's a convenient wrapper for data passed between ports.
+        /// A port data type represents a single logical concept (for example "something that gives a scalar value")
+        /// and provides all necessarry info to use that data at input site.
+        /// </summary>
+        public abstract record Data;
+    }
+
+    // base class used in enumerations and alike
+    public interface InputPort : Port {
+        // non nullable, all input ports must have a connection, even if it's a default value
+        public OutputPort ConnectedOutput { get; }
+    }
+
+    public interface OutputPort : Port {
+        public IReadOnlyCollection<InputPort> ConnectedInputs { get; }
     }
 
 
-    public abstract class AbstractPort<T> : Port where T : Port.Data  {
+    public abstract class AbstractPort : Port {
         public Node   Node        { get; }
         public string DisplayName { get; }
 
@@ -25,57 +40,51 @@ namespace API {
             Node = node;
             DisplayName = displayName;
         }
-
-        protected Type PortDataType => typeof(T);
     }
 
-    // needed for a generic collection of input/output ports without type parameters
-    public interface InputPort : Port {
-        public OutputPort IncomingConnection { get; }
-    }
+    public class InputPort<T> : AbstractPort, InputPort where T : Port.Data {
+        /*
+         * fixme? are these convenience methods even needed?
+         * maybe they should be handled in the Graph class as a view into collection of nodes
+         */
+        public OutputPort<T> ConnectedOutput { get; internal set; }
+        OutputPort InputPort.ConnectedOutput => ConnectedOutput;
 
-    public interface OutputPort : Port {
-        public IReadOnlyCollection<InputPort> OutgoingConnections { get; }
-    }
-    
-    public class InputPort<T> : AbstractPort<T>, InputPort where T : Port.Data {
-        public InputPort(Node node, string displayName) : base(node, displayName) { }
+        public T Eval() => ConnectedOutput.Eval();
 
-        public OutputPort IncomingConnection { get; internal set; }
-    }
-
-    public class OutputPort<T> : AbstractPort<T>, OutputPort where T : Port.Data {
-        public OutputPort(Node node, string displayName) : base(node, displayName) { }
-
-        public IReadOnlyCollection<InputPort> OutgoingConnections { get; } = new HashSet<InputPort>();
-
-        public void ConnectTo([NotNull] InputPort<T> inputPort) {
-            if (inputPort == null) throw new ArgumentNullException(nameof(inputPort));
-
-            if (inputPort.IncomingConnection == this) return;
-
-            inputPort.IncomingConnection = this;
-            ((HashSet<InputPort>)this.OutgoingConnections).Add(inputPort);
-        }
-
-        public void DisconnectFrom([NotNull] in InputPort<T> inputPort) {
-            if (inputPort == null) throw new ArgumentNullException(nameof(inputPort));
-
-            if (inputPort.IncomingConnection != this) return;
-
-            inputPort.IncomingConnection = null;
-            ((HashSet<InputPort>)this.OutgoingConnections).Remove(inputPort);
+        public InputPort(Node node, string displayName, OutputPort<T> outputPort) : base(node, displayName) {
+            this.ConnectedOutput = outputPort;
+            outputPort.connections.Add(this);
         }
     }
 
-    public class InOutPort<T> : AbstractPort<T>, InputPort, OutputPort where T : Port.Data {
-        
-        private InputPort<T>  inputPort;
-        private OutputPort<T> outputPort;
+    public class OutputPort<T> : AbstractPort, OutputPort where T : Port.Data {
+        internal readonly HashSet<InputPort<T>>             connections = new HashSet<InputPort<T>>();
+        public            IReadOnlyCollection<InputPort<T>> ConnectedInputs => connections;
+        IReadOnlyCollection<InputPort> OutputPort.          ConnectedInputs => ConnectedInputs;
+        private event Func<T>                               evaluator;
 
-        public OutputPort                     IncomingConnection  => inputPort.IncomingConnection;
-        public IReadOnlyCollection<InputPort> OutgoingConnections => outputPort.OutgoingConnections;
 
-        public InOutPort(Node node, string displayName) : base(node, displayName) {}
+        public OutputPort(Node node, string displayName, Func<T> evaluator) : base(node, displayName) {
+            this.evaluator = evaluator;
+        }
+
+        public T Eval() => evaluator.Invoke();
+    }
+
+    public class InOutPort<T> : AbstractPort, InputPort, OutputPort where T : Port.Data {
+        // transform translates output from input port to output port
+        public InOutPort(Node node, string displayName, Func<T, T>? transform = null) : base(node, displayName) {
+            Out = new OutputPort<T>(node, displayName, transform == null ? Eval : () => transform(Eval()));
+            In = new InputPort<T>(node, displayName, Out);
+        }
+
+        public InputPort<T>  In  { get; }
+        public OutputPort<T> Out { get; }
+
+        public OutputPort                     ConnectedOutput => In.ConnectedOutput;
+        public IReadOnlyCollection<InputPort> ConnectedInputs => Out.ConnectedInputs;
+
+        public T Eval() => In.Eval();
     }
 }

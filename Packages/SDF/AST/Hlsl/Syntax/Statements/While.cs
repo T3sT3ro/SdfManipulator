@@ -3,15 +3,13 @@ using AST.Hlsl.Syntax.Expressions;
 
 namespace AST.Hlsl.Syntax.Statements {
     public record While : Statement {
-        public          WhileKeyword                     whileKeyword        { get; set; }
-        public          OpenParenToken                   openParen           { get; set; }
-        public          Expression                       test                { get; set; }
-        public          CloseParenToken                  closeParen          { get; set; }
-        public          Block                            body                { get; set; }
-        
-        public override IReadOnlyList<HlslSyntax>        ChildNodes          => new HlslSyntax[]{test, body };
+        public WhileKeyword    whileKeyword { get; set; } = new();
+        public OpenParenToken  openParen    { get; set; } = new();
+        public Expression      test         { get; set; }
+        public CloseParenToken closeParen   { get; set; } = new();
+        public Statement       body         { get; set; }
 
-        public override IReadOnlyList<HlslSyntaxOrToken> ChildNodesAndTokens =>
-            new HlslSyntaxOrToken[] { whileKeyword, openParen, test, closeParen, body };
+        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => new IHlslSyntaxOrToken[]
+            { whileKeyword, openParen, test, closeParen, body };
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using AST.Hlsl.Syntax;
 using AST.Hlsl.Syntax.Expressions;
-using AST.Hlsl.Syntax.Expressions.Literals;
 using AST.Hlsl.Syntax.Expressions.Operators;
 
 namespace AST.Hlsl {
@@ -9,7 +8,6 @@ namespace AST.Hlsl {
         /// Operators whose children have higher precedence require parentheses around children
         public static float Precedence(this Expression expr) => expr switch
         {
-            Literal    => 0, // is that correct?
             Affix.Pre  => 1.1f,
             Affix.Post => 1.2f,
             Call       => 1.3f,
@@ -51,7 +49,7 @@ namespace AST.Hlsl {
             },
             Comma => 15,
 
-            _ => throw new ArgumentOutOfRangeException(nameof(expr))
+            _ => 0, // is that correct?
         };
     }
 }
