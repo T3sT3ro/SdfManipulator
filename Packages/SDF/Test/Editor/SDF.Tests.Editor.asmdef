@@ -1,8 +1,9 @@
 {
   "name": "SDF.Tests.Editor",
   "references": [
-    "GUID:87464bf6311c423aa08363aec894ea1b",
-    "GUID:c96f805ecf994545999c6d6135bacd40"
+    "SDF.Assets",
+    "SDF.Controllers",
+    "SDF.API"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

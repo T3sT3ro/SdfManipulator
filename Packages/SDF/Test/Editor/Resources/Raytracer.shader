@@ -19,7 +19,7 @@ Shader "SDF/Domain"
         _EPSILON_NORMAL ("epsilon for calculating normal", Float) = 0.001
 
         [Space]
-        [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Debug)] _DrawMode("Draw mode", Int) = 0
+        [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Facing, Debug)] _DrawMode("Draw mode", Int) = 0
         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
         [Tooltip(Only works for origin type local)]
@@ -58,19 +58,19 @@ Shader "SDF/Domain"
         #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
         #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
         #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
-            _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_DEBUG
+            _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_FACING _DRAWMODE_DEBUG
         #pragma shader_feature_local _SCALE_INVARIANT
         #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
         #pragma shader_feature_local _PRESERVE_SPACE_SCALE_ON
         // #pragma shader_feature_local _SCENEVIEW
 
         #include "UnityCG.cginc"
-        #include "Packages/SDF/Logic/Includes/types.cginc"
-        #include "Packages/SDF/Logic/Includes/util.cginc"
-        #include "Packages/SDF/Logic/Includes/matrix.cginc"
-        #include "Packages/SDF/Logic/Includes/primitives.cginc"
-        #include "Packages/SDF/Logic/Includes/operators.cginc"
-        #include "Packages/SDF/Logic/Includes/noise.cginc"
+        #include "Packages/SDF/Assets/Includes/types.cginc"
+        #include "Packages/SDF/Assets/Includes/util.cginc"
+        #include "Packages/SDF/Assets/Includes/matrix.cginc"
+        #include "Packages/SDF/Assets/Includes/primitives.cginc"
+        #include "Packages/SDF/Assets/Includes/operators.cginc"
+        #include "Packages/SDF/Assets/Includes/noise.cginc"
 
         sampler2D _BoxmapTex_X;
         sampler2D _BoxmapTex_Y;
@@ -133,6 +133,7 @@ Shader "SDF/Domain"
         ENDHLSL
 
         // DEPTH PREPASS - limits rays going beyond backface of shader
+        // it is WIP because it must rely on some intermediate render target, RWTexture, command buffer, shader replacement or 
         //        Pass {
         //            Cull Front
         //            ZWrite On
@@ -150,7 +151,6 @@ Shader "SDF/Domain"
                 o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
                 // o.uv = v.texcoord; // TRANSFORM_TEX(v.texcoord, _BoxmapTex);
                 o.hitpos = v.vertex;
-                float4x4 testInitializer = {{0,1,2,3}, {4,5,6,7}, {8,9,10,11}, {12,13,14,15}}; 
                 COMPUTE_EYEDEPTH(o.screenPos.z); // this uses implicitly defined v.vertex.z... possibly migrate to proper function...
                 return o;
             }
@@ -321,10 +321,11 @@ Shader "SDF/Domain"
 
                 sdf.material = (Material)0;
                 sdf.normal = 0;
-
+                // ray can start inside SDF, this implementation makes it perform one step onto the surface
+                // is it good or bad, well, depends on the use case 
                 for (ray.steps = 0; ray.steps < _MAX_STEPS; ray.steps++)
                 {
-                    if (d >= _MAX_DISTANCE || d >= ray.maxDistance)
+                    if (d >= _MAX_DISTANCE || d >= ray.maxDistance) 
                         return;
 
                     sdf.p = ray.ro + d * ray.rd;
@@ -389,7 +390,7 @@ Shader "SDF/Domain"
                 return ray;
             }
 
-            f2p frag(v2f i, fixed facing : VFACE)
+            f2p frag(v2f i, bool facing : SV_IsFrontFace)
             {
                 const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
 
@@ -423,7 +424,7 @@ Shader "SDF/Domain"
                     #endif
                     (mul(SCALE_MATRIX_I, sdf.p)).z;
                 f2p o = {
-                    .color = {
+                    {
                         #ifdef _DRAWMODE_MATERIAL
                          color_material*color_trimap
                         #elif _DRAWMODE_ALBEDO
@@ -440,6 +441,8 @@ Shader "SDF/Domain"
                          lerp(fixed4(0,0,1,1), fixed4(1,0,0,1), ray.steps/_MAX_STEPS)
                         #elif _DRAWMODE_DEPTH
                          fixed4((float3)eyeDepth/5., 1)
+                        #elif _DRAWMODE_FACING
+                         fixed4(facing ? 1 : 0, 0, 0, 1)
                         #elif _DRAWMODE_DEBUG
                          fixed4(i.vertex.xyz, 1)
                         #endif

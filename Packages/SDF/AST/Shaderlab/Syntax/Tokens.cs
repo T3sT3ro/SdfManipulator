@@ -191,17 +191,26 @@ namespace AST.Shaderlab.Syntax {
     // @formatter ON
 
     public abstract record ValidatedShaderlabToken : ShaderlabToken {
-        public override string Text {
-            get => base.Text;
-            set {
-                if (!Pattern.IsMatch(value)) throw new ArgumentException($"Invalid token format: {value}");
+        private readonly string validatedText;
 
-                base.Text = value;
-            }
-        }
-        protected string TextUnsafe { set => base.Text = value; }
+        public override string Text => validatedText;
 
         protected abstract Regex Pattern { get; }
+
+        /// <summary>Creates new token by validating the text.</summary>
+        /// <exception cref="ArgumentException">if text doesn't match pattern</exception>
+        public virtual string ValidatedText {
+            init {
+                if (!Pattern.IsMatch(value))
+                    throw new ArgumentException($"Token text: {value} doesn't match pattern: {Pattern}");
+
+                validatedText = value;
+            }
+        }
+
+        protected string TextUnsafe {
+            init => validatedText = value;
+        }
     }
 
     public record IdentifierToken : ValidatedShaderlabToken {
@@ -235,7 +244,7 @@ namespace AST.Shaderlab.Syntax {
         protected override      Regex Pattern => pattern;
 
         public static implicit operator BooleanLiteral(bool value) =>
-            new BooleanLiteral { TextUnsafe = value ? "true" : "false" };
+            new BooleanLiteral { TextUnsafe = value ? bool.TrueString : bool.FalseString };
     }
 
     public abstract record NumberLiteral : Literal;
@@ -251,7 +260,7 @@ namespace AST.Shaderlab.Syntax {
     public record IntLiteral : NumberLiteral {
         private static readonly Regex pattern = new(@"^\d+$");
         protected override      Regex Pattern => pattern;
-        
+
         public static implicit operator IntLiteral(int value) =>
             new IntLiteral { TextUnsafe = value.ToString("D") };
     }

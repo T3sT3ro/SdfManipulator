@@ -1,0 +1,6 @@
+{
+  "name": "Syntax",
+  "references": [
+    "SDF.IsExternalInitShim"
+  ]
+}

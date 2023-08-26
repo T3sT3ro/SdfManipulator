@@ -1,0 +1,8 @@
+{
+  "name": "Shaderlab",
+  "references": [
+    "Syntax",
+    "Hlsl",
+    "SDF.IsExternalInitShim"
+  ]
+}

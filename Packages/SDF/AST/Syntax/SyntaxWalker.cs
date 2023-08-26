@@ -7,12 +7,12 @@ namespace AST.Syntax {
         where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase> {
         protected SyntaxWalker() { }
 
-        public override void Visit(TNode node) {
+        protected override void Visit(TNode node) {
             foreach (var n in node.ChildNodesAndTokens)
                 Visit((dynamic)n);
         }
 
-        public virtual void Visit(TToken token) {
+        protected virtual void Visit(TToken token) {
             foreach (var leadingTrivia in token.LeadingTrivia)
                 Visit(leadingTrivia);
 
@@ -20,7 +20,7 @@ namespace AST.Syntax {
                 Visit(trailingTrivia);
         }
 
-        public virtual void Visit(TTrivia trivia) {
+        protected virtual void Visit(TTrivia trivia) {
             if (trivia.Structure is not null)
                 Visit(trivia.Structure);
         }

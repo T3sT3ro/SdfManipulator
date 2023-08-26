@@ -10,8 +10,8 @@ namespace AST.Hlsl.Syntax {
     // float x[2][2] : VPOS = { { 1, 2 }, { 3, 4 } }
     // struct Result {float d; float3 pos;} result = {1.0f, {0.0f, 0.0f, 0.0f}};
     public record VariableDeclarator : HlslSyntax {
-        public HlslToken?                        storageKeyword { get; set; }
-        public HlslToken?                        typeModifier   { get; set; }
+        public HlslToken?                        storageKeyword { get; init; }
+        public HlslToken?                        typeModifier   { get; init; }
         public Type                              type           { get; init; }
         public SeparatedList<VariableDefinition> variables      { get; init; }
 
@@ -25,9 +25,9 @@ namespace AST.Hlsl.Syntax {
         // x : PSIZE = 3
         public record VariableDefinition : HlslSyntax {
             public Identifier                         id          { get; init; }
-            public IReadOnlyList<ArrayRankSpecifier>? arraySizes  { get; set; }
-            public Semantic?                          semantic    { get; set; }
-            public Initializer?                       initializer { get; set; }
+            public IReadOnlyList<ArrayRankSpecifier>? arraySizes  { get; init; }
+            public Semantic?                          semantic    { get; init; }
+            public Initializer?                       initializer { get; init; }
 
             public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => new HlslSyntax[]
                     { id, }

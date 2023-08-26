@@ -13,10 +13,11 @@ namespace Controllers {
             Graphics.Blit(source,destination,sdfSharedMaterial);
         }
 
-        [MenuItem("GameObject/Print Camera Position"), ]
+        // logs editor camera coordinates
+        [MenuItem("GameObject/Print Camera Position")]
         private void Update() {
             var camTransformt = SceneView.GetAllSceneCameras()[0].transform;
-            Debug.Log(String.Format("pos:{0} rot:{1}", camTransformt.position, camTransformt.rotation));
+            Debug.Log($"CAMERA pos:{camTransformt.position} rot:{camTransformt.rotation}");
         }
     }
 }

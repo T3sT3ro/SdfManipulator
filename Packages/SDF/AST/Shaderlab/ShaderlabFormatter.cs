@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AST.Shaderlab.Syntax.Shader;
 using AST.Shaderlab.Syntax.Trivia;
 using AST.Syntax;
 
 namespace AST.Shaderlab {
+    // TODO: use SyntaxRewriter instead that returns new syntax nodes in the place of the old ones
     public class ShaderlabFormatter : ShaderlabSyntaxWalker {
         public record Options(
             uint indentWidth     = 4,
@@ -26,15 +28,13 @@ namespace AST.Shaderlab {
             formatter.Visit((dynamic)node);
         }
 
-        public override void Visit(ShaderlabSyntax node) { base.Visit(node); }
-
-        public override void Visit(ShaderlabToken token) {
+        protected override void Visit(ShaderlabToken token) {
             token.LeadingTrivia = CompressWhitespace(token.LeadingTrivia);
             token.TrailingTrivia = CompressWhitespace(token.TrailingTrivia);
             base.Visit(token);
         }
 
-        public override void Visit(ShaderlabTrivia trivia) {
+        protected override void Visit(ShaderlabTrivia trivia) {
             if (trivia is Whitespace) trivia.Text = " ";
             base.Visit(trivia);
         }
@@ -56,6 +56,7 @@ namespace AST.Shaderlab {
         }
 
         // We should use the red/green tree here to use dynamically built parent references to format and indent
+        /// 
         private void NormalizeWhitespace(IEnumerable<ShaderlabToken> tokenStream) {
             foreach (var (previous, current) in tokenStream.ConsecutivePairs()) {
                 var firstCurrentTrivia = current.LeadingTrivia.First();

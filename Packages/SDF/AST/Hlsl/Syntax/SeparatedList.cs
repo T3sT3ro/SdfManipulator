@@ -22,6 +22,7 @@ namespace AST.Hlsl.Syntax {
             => ((IHlslSyntaxOrTokenList)this).ToSpliced(index, deleteCount, elements);
     }
 
+    // TODO: remove
     class Test {
         private void test() {
             HlslList list = new HlslList(new IHlslSyntaxOrToken[] { });

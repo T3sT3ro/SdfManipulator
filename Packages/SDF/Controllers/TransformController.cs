@@ -1,22 +1,35 @@
+#nullable enable
 using System;
-using System.Runtime.CompilerServices;
+using API;
+using Assets.Nodes;
+using PortData;
+using Unity.VisualScripting.YamlDotNet.Serialization.NamingConventions;
 using UnityEngine;
 
 namespace Controllers {
     [ExecuteInEditMode]
-    public class TransformSdfController : SdfController {
-        public string   uniformName = "_BoxPosition"; // todo: replace with identifier
+    [RequireComponent(typeof(Transform))]
+    public class TransformController : Controller {
+        protected Property<Matrix4x4> transformProperty;
+        protected MatrixPropertyNode  primitiveTransform;
+
+        private void Start() {
+            transformProperty = sdfDomain.Graph.CreateProperty("transform", Matrix4x4.identity);
+            primitiveTransform = new MatrixPropertyNode(transformProperty);
+        }
         
         protected override void UpdateUniforms() {
-            var spaceTransform = Matrix4x4.Rotate(Quaternion.Inverse(transform.localRotation));
-            spaceTransform *= Matrix4x4.Translate(Vector3.Scale(-transform.localPosition , sdfDomain.transform.localScale));
+            if (sdfDomain == null || sdfDomain.Material == null) 
+                return;
 
-            if (sdfDomainSharedMaterial != null) {
-                sdfDomainSharedMaterial.SetMatrix(uniformName, spaceTransform);
-            }
-            else {
-                Debug.LogWarning("No assigned renderer for controller " + this);
-            }
+            var spaceTransform = Matrix4x4.Rotate(Quaternion.Inverse(transform.localRotation));
+            spaceTransform *=
+                Matrix4x4.Translate(Vector3.Scale(-transform.localPosition, sdfDomain.transform.localScale));
+
+            sdfDomain.Material.SetMatrix(((Representable)transformProperty).IdName,
+                spaceTransform);
         }
+
+        private void OnGUI() { throw new NotImplementedException(); }
     }
 }

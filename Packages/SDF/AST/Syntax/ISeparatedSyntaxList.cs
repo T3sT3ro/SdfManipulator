@@ -76,6 +76,7 @@ namespace AST.Syntax {
 
     // ========================================================================
 
+    /// A list in the form of SYNTAX TOKEN SYNTAX TOKEN ... 
     public interface ISeparatedSyntaxList<TNode, TToken, TBase> : IReadOnlyList<TNode>
         where TNode : SyntaxNode<TNode, TBase>, TBase
         where TToken : TBase

@@ -1,0 +1,7 @@
+{
+  "name": "Hlsl",
+  "references": [
+    "Syntax",
+    "SDF.IsExternalInitShim"
+  ]
+}

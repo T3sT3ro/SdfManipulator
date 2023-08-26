@@ -1,19 +1,31 @@
+using System;
+using API;
+using Assets.Nodes.SdfNodes;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Controllers {
-    
-    public class SphereSdfController : TransformSdfController {
+    public class SphereSdfController : TransformController {
+        private SdfSphereNode sphereNode;
 
-        [MenuItem("GameObject/SDF/Sphere")]
+        protected void Start() {
+            sphereNode ??= new SdfSphereNode(null, null);
+        }
+
+        // TODO: add accelerator
+        [MenuItem("GameObject/SDF/Sphere", priority=-20)]
         public static void CreateSDFSphere() {
+            var target = Selection.activeGameObject;
+            var scene = target.GetComponentInParent<SdfSceneController>();
+            if (scene == null)
+                throw new Exception("Primitives must be added under Sdf Scene Controller");
+            
             var sdf = new GameObject("sphere");
-            sdf.AddComponent<SphereSdfController>();
-            
-            if(Selection.activeObject )
-            
-            sdf.transform.parent = 
-            sdfSphere.name = "SDF Sphere";
+            var controller = sdf.AddComponent<SphereSdfController>();
+
+            if (Selection.activeObject)
+                sdf.transform.SetParent(target.transform);
         }
     }
 }

@@ -187,20 +187,20 @@ namespace AST.Hlsl.Syntax {
     public abstract record IndexedSemantic : SemanticToken {
         protected abstract string Name { get; }
         public             uint?  n    { get; init; } // optional for both variants, e.g. PSIZE and PSIZE0
-        public override    string Text => $"{Name}{n?.ToString() ?? ""}";
+        public override    string Text => String.Intern($"{Name}{n?.ToString() ?? String.Empty}");
     }
 
     public record MatrixToken : PredefinedTypeToken {
         public          ScalarTypeToken type { get; init; }
         public          uint            rows { get; init; }
         public          uint            cols { get; init; }
-        public override string          Text => $"{type.Text}{rows.ToString()}x{cols.ToString()}";
+        public override string          Text => String.Intern($"{type.Text}{rows.ToString()}x{cols.ToString()}");
     }
 
     public record VectorToken : PredefinedTypeToken {
         public          ScalarTypeToken type  { get; init; }
         public          uint            arity { get; init; }
-        public override string          Text  => $"{type.Text}{arity.ToString()}";
+        public override string          Text  => String.Intern($"{type.Text}{arity.ToString()}");
     }
 
     public abstract record ValidatedHlslToken : HlslToken {
@@ -210,10 +210,8 @@ namespace AST.Hlsl.Syntax {
 
         protected abstract Regex Pattern { get; }
 
-        /// <summary>
-        /// Creates new token by validating the text.
-        /// </summary>
-        /// <exception cref="ArgumentException"></exception>
+        /// <summary>Creates new token by validating the text.</summary>
+        /// <exception cref="ArgumentException">if text doesn't match pattern</exception>
         public virtual string ValidatedText {
             init {
                 if (!Pattern.IsMatch(value))

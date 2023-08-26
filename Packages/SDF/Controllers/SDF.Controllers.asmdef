@@ -2,8 +2,6 @@
   "name": "SDF.Controllers",
   "references": [
     "SDF.API",
-    "SDF.Logic",
-    "SDF.Builders",
-    "UnityEngine"
+    "SDF.Assets"
   ]
 }

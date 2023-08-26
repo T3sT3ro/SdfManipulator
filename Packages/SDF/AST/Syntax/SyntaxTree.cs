@@ -1,7 +1,12 @@
 ﻿namespace AST.Syntax {
-    public abstract record SyntaxTree<TNode, TBase>(TNode Root)
+    public interface ISyntaxTree {
+        public string BuildText();
+    }
+
+    public abstract record SyntaxTree<TNode, TBase>(TNode Root) : ISyntaxTree
         where TNode : SyntaxNode<TNode, TBase>, TBase
         where TBase : ISyntaxNodeOrToken<TNode, TBase> {
-        public override string ToString() => Root.ToString();
+        
+        public string BuildText() => Root.BuildText();
     }
 }

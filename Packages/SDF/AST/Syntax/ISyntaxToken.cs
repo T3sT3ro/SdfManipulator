@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace AST.Syntax {
-    // todo: won't abstract class just work?
+    // A terminal node.
     public interface ISyntaxToken<TNode, TToken, TTrivia, TBase>
         : ISyntaxNodeOrToken<TNode, TBase>
         where TNode : SyntaxNode<TNode, TBase>, TBase
         where TToken : ISyntaxToken<TNode, TToken, TTrivia, TBase>, TBase
         where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase>
         where TBase : ISyntaxNodeOrToken<TNode, TBase> {
-        IReadOnlyList<TTrivia> LeadingTrivia  { get; }
-        IReadOnlyList<TTrivia> TrailingTrivia { get; }
+        IReadOnlyList<TTrivia> LeadingTrivia  { get; init; }
+        IReadOnlyList<TTrivia> TrailingTrivia { get; init; }
 
         /// When used for example in literal as '12.0f' returns '12.0f'.
         /// In roslyn there are additional 'valueText', for example when text is '@interface', the valueText is 'interface'.

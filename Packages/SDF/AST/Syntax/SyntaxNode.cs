@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 
 namespace AST.Syntax {
+    // A part of abstract syntax. This node is non-terminal
     public abstract record SyntaxNode<TNode, TBase>
         : ISyntaxNodeOrToken<TNode, TBase>
         where TNode : SyntaxNode<TNode, TBase>, TBase
@@ -15,7 +16,7 @@ namespace AST.Syntax {
                 child.WriteTo(sb);
         }
 
-        public override string ToString() {
+        public string BuildText() {
             var sb = new StringBuilder();
             WriteTo(sb);
             return sb.ToString();

@@ -1,41 +1,46 @@
+using System.Collections.Generic;
 using API;
-using Nodes;
-using Nodes.MasterNodes;
+using Assets.Nodes;
+using Assets.Nodes.MasterNodes;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Node = API.Node;
 
 namespace Test.Editor.SDF {
     public static class ShaderGeneratorTest {
         [UnityTest]
         public static void TestShaderGenerator() {
-
             var vertNode = new VertexInNode();
-            var v2fNode = new BasicVertToFragNode();
-            var fragmentNode = new UnlitFragOutNode();
-            var colorNode = new ValueNode<,>("vec4_property",
-                "vec4 property node",
-                true,
-                new Property<Vector4>("color", "color", new Vector4(1,0,1,0)));
-            
-            colorNode.Value.ConnectTo(fragmentNode.color);
-            
-            var targetNode = new BuiltInTargetNode("built_in_target");
-            
-            var graph = new Graph(
-                new VertexInNode(),
-                new BasicVertToFragNode(),
-                new UnlitFragOutNode()
+            var v2fNode = new BasicVertToFragNode(
+                vertNode.position,
+                null,
+                null,
+                null
             );
 
-            
+            var other = new BasicVertToFragNode(v2fNode.position.In.Source, null, null, null);
+            var fragmentNode = new UnlitFragOutNode(null);
+
+
+            var targetNode = new BuiltInTargetNode("built_in_target");
+
+            var graph = new Graph("test_graph", new HashSet<Node>()
+            {
+                vertNode,
+                v2fNode,
+                fragmentNode,
+                targetNode
+            });
+
+
             var shaderContent = graph.BuildShaderForTarget(targetNode);
             var shader = ShaderUtil.CreateShaderAsset(shaderContent);
-            AssetDatabase.CreateAsset(shader, $"Test/GeneratedShaders/{}.hlsl");
+            var graphName = ((Representable)graph).IdName;
+            var targetName = ((Representable)targetNode).IdName;
+            AssetDatabase.CreateAsset(shader, $"Test/GeneratedShaders/{graphName}-{targetName}.hlsl");
             var material = new Material(shader);
-            AssetDatabase.CreateAsset(shader, $"Test/GeneratedShaders/SimpleShader.mat");
+            AssetDatabase.CreateAsset(material, $"Test/GeneratedShaders/{graphName}-{targetName}.mat");
         }
-        
-        
     }
 }

@@ -5,7 +5,7 @@ namespace AST.Syntax {
         where TToken : ISyntaxToken<TNode, TToken, TTrivia, TBase>, TBase
         where TBase : ISyntaxNodeOrToken<TNode, TBase>
         where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase> {
-        public virtual TResult? Visit(TNode node) { return default; }
+        protected virtual TResult? Visit(TNode node) { return default; }
     }
 
     public abstract class SyntaxVisitor<TNode, TToken, TBase, TTrivia> 
@@ -13,6 +13,6 @@ namespace AST.Syntax {
         where TToken : ISyntaxToken<TNode, TToken, TTrivia, TBase>, TBase
         where TBase : ISyntaxNodeOrToken<TNode, TBase>
         where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase> {
-        public virtual void Visit(TNode node) { }
+        protected virtual void Visit(TNode node) { }
     }
 }

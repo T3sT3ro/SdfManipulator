@@ -1,0 +1,10 @@
+{
+  "name": "SDF.Assets",
+  "references": [
+    "SDF.API",
+    "Hlsl",
+    "Shaderlab",
+    "Syntax",
+    "SDF.IsExternalInitShim"
+  ]
+}
