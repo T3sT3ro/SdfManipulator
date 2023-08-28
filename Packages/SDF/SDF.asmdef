@@ -1,0 +1,11 @@
+{
+  "name": "SDF",
+  "references": [
+    "SDF.API",
+    "SDF.AST.Hlsl",
+    "SDF.AST.Shaderlab",
+    "SDF.AST.Syntax",
+    "SDF.Assets",
+    "SDF.Controllers"
+  ]
+}

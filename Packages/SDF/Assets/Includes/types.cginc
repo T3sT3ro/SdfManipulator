@@ -37,6 +37,7 @@ struct v2f
     float4 vertex : SV_POSITION; // clip space vertex pos
     float4 screenPos: TEXCOORD1;
     float3 hitpos : TEXCOORD2; // hit position in model space
+    float3 rd_cam : TEXCOORD3; // ray direction in camera space
 };
 
 struct f2p

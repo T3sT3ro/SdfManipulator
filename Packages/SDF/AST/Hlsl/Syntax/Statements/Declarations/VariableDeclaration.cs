@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements.Declarations {
     // float x;
@@ -11,7 +12,7 @@ namespace AST.Hlsl.Syntax.Statements.Declarations {
         public VariableDeclarator declarator { get; init; }
         public SemiToken          semiToken  { get; init; } = new();
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
-            new IHlslSyntaxOrToken[] { declarator, semiToken };
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
+            { declarator, semiToken };
     }
 }

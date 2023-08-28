@@ -83,6 +83,6 @@ namespace API {
     // TODO: consider if a target node should have inputs and outputs that take Vertex data and Fragment data
     public abstract record TargetNode(string InternalName, string DisplayName)
         : Node(InternalName, DisplayName) {
-        public abstract ISyntaxTree BuildShaderSyntaxTree();
+        public abstract ITree BuildShaderSyntaxTree();
     }
 }

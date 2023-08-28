@@ -1,16 +1,13 @@
 using System.Collections.Generic;
-using System.Linq;
+using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
     public record Block : Statement {
-        public OpenBraceToken           openBraceToken  { get; set; } = new();
-        public IReadOnlyList<Statement> statements      { get; set; }
-        public CloseBraceToken          closeBraceToken { get; set; } = new();
+        public OpenBraceToken              openBraceToken  { get; init; } = new();
+        public SyntaxList<Hlsl, Statement> statements      { get; init; } = SyntaxList<Hlsl, Statement>.Empty;
+        public CloseBraceToken             closeBraceToken { get; init; } = new();
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
-            statements
-                .Prepend<IHlslSyntaxOrToken>(openBraceToken)
-                .Append(closeBraceToken)
-                .ToList();
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
+            { openBraceToken, statements, closeBraceToken };
     }
 }

@@ -85,8 +85,9 @@ namespace API {
         }
 
         public string BuildActiveTarget() => ActiveTarget == null ? "" : BuildShaderForTarget(ActiveTarget);
-        public string BuildShaderForTarget(TargetNode targetNode) => targetNode.BuildShaderSyntaxTree().BuildText();
+        public string BuildShaderForTarget(TargetNode targetNode) => targetNode.BuildShaderSyntaxTree().ToString();
 
+        // TODO use references and out variables for example TryAddNode<T>(out var newNode). For that a default parameterless ctor should be present in node
         public bool TryAddNode(Node node) {
             if (AllNodes.Contains(node))
                 return false;

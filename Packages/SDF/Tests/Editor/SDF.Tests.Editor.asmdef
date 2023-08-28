@@ -1,0 +1,18 @@
+{
+  "name": "SDF.Tests.Editor",
+  "references": [
+    "SDF.Assets",
+    "SDF.Controllers",
+    "SDF.API",
+    "SDF.AST.Syntax",
+    "SDF.AST.Syntax",
+    "SDF.IsExternalInitShim"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}

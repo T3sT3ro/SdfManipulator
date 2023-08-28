@@ -1,8 +1,8 @@
 {
-  "name": "Shaderlab",
+  "name": "SDF.AST.Shaderlab",
   "references": [
-    "Syntax",
-    "Hlsl",
+    "SDF.AST.Syntax",
+    "SDF.AST.Hlsl",
     "SDF.IsExternalInitShim"
   ]
 }

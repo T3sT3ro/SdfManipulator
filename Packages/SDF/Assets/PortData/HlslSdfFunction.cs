@@ -1,11 +1,9 @@
 #nullable enable
 using System.Linq;
-using API;
 using Assets.Nodes;
 using Assets.Nodes.SdfNodes;
 using AST.Hlsl;
 using AST.Hlsl.Syntax;
-using AST.Hlsl.Syntax.Expressions;
 using AST.Hlsl.Syntax.Expressions.Operators;
 using AST.Syntax;
 
@@ -20,11 +18,12 @@ namespace PortData {
 
         public Call withPosArgument(Expression pointArgument) => callsyntax with
         {
-            // TODO: 
-            arguments = new ArgumentList<HlslSyntax>(
-                new IHlslSyntaxOrToken[] { pointArgument, new Comma() }
-                    .Concat(callsyntax.arguments.ChildNodesAndTokens)
-            )
+            argList = new ArgumentList<Syntax<Hlsl>>
+            {
+                arguments = new SeparatedList<Hlsl, Syntax<Hlsl>>(
+                    new SyntaxOrToken<Hlsl>[] { pointArgument, new CommaToken() }.Concat(callsyntax.argList.arguments)
+                )
+            }
         };
 
         public static Type.Struct SdfResultStructShape => new Type.Struct

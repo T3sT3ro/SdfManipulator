@@ -8,8 +8,8 @@ using AST.Hlsl.Syntax;
 using AST.Shaderlab;
 using AST.Shaderlab.Syntax;
 using AST.Shaderlab.Syntax.Commands;
-using AST.Shaderlab.Syntax.Shader;
-using AST.Shaderlab.Syntax.SubShader;
+using AST.Shaderlab.Syntax.ShaderSpecific;
+using AST.Shaderlab.Syntax.SubShaderSpecific;
 using AST.Syntax;
 using UnityEngine;
 using static Assets.Nodes.Util;
@@ -17,8 +17,9 @@ using FloatKeyword = AST.Shaderlab.Syntax.FloatKeyword;
 using FloatLiteral = AST.Shaderlab.Syntax.FloatLiteral;
 using IntLiteral = AST.Shaderlab.Syntax.IntLiteral;
 using Property = API.Property;
-using PropertySyntax = AST.Shaderlab.Syntax.Shader.Property;
-using Shader = AST.Shaderlab.Syntax.Shader.Shader;
+using PropertySyntax = AST.Shaderlab.Syntax.ShaderSpecific.Property;
+using Shader = AST.Shaderlab.Syntax.Shader;
+using Shaderlab = AST.Shaderlab.Shaderlab;
 
 namespace Assets.Nodes {
     public record BuiltInTargetNode(string targetName)
@@ -32,15 +33,26 @@ namespace Assets.Nodes {
         private void AddDefines(IEnumerable<string>      defines)    => this.defines.UnionWith(defines);
 
 
-        public override ISyntaxTree BuildShaderSyntaxTree() {
+        public override ITree BuildShaderSyntaxTree() {
             foreach (var node in Graph.NodeTopologicalIterator(this)) {
                 AddIncludes(node.CollectIncludes());
                 AddDefines(node.CollectDefines());
                 AddProperties(node.CollectProperties().Where(v => v.Exposed));
             }
 
-            return shaderTree;
+            return new Tree<Shaderlab>(Root: ShaderlabFormatter.Format(shaderTree.Root));
         }
+
+        private Tree<Shaderlab> shaderTree => new Tree<Shaderlab>(new Shader
+            {
+                name = targetName,
+                shaderStatements = new ShaderStatement[]
+                {
+                    MaterialProperties,
+                    SubShader,
+                }
+            }
+        );
 
         private MaterialProperties MaterialProperties => new MaterialProperties
         {
@@ -61,7 +73,7 @@ namespace Assets.Nodes {
                         {
                             propertyType = new PredefinedPropertyType { type = new VectorKeyword() },
                             initializer = new PropertySyntax.Vector
-                                { arguments = Shaderlab.VectorArgumentList(p.DefaultValue) }
+                                { arguments = ShaderlabUtil.VectorArgumentList(p.DefaultValue) }
                         },
                         _ => throw new ArgumentOutOfRangeException(nameof(property))
                     } with
@@ -70,7 +82,7 @@ namespace Assets.Nodes {
                     }).ToList()
         };
 
-        private Tags Tags => new()
+        private TagsBlock TagsBlock => new()
         {
             tags = new Tag[]
             {
@@ -91,7 +103,7 @@ namespace Assets.Nodes {
         {
             statements = new SubShaderOrPassStatement[]
             {
-                Tags,
+                TagsBlock,
                 Pass,
             }.AppendAll(Commands).ToList()
         };
@@ -100,21 +112,15 @@ namespace Assets.Nodes {
         {
             statements = new PassStatement[]
             {
-                new HlslProgram { hlslTree = hlslTree }
+                new HlslProgram { hlsl = new InjectedLanguage<Shaderlab, Hlsl>(hlslTree) }
             }
         };
 
-        private HlslTree hlslTree => new HlslTree(new HlslList());
-
-        private ShaderlabTree shaderTree => new ShaderlabTree(new Shader
+        private Tree<Hlsl> hlslTree => new Tree<Hlsl>(
+            new Statement[]
             {
-                name = targetName,
-                shaderStatements = new ShaderStatement[]
-                {
-                    MaterialProperties,
-                    SubShader,
-                }
-            }
+                
+            }.ToSyntaxList()
         );
     }
 }

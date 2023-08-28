@@ -1,7 +1,7 @@
 {
-  "name": "Hlsl",
+  "name": "SDF.AST.Hlsl",
   "references": [
-    "Syntax",
+    "SDF.AST.Syntax",
     "SDF.IsExternalInitShim"
   ]
 }

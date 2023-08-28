@@ -1,54 +1,55 @@
 using System;
 using System.Text.RegularExpressions;
+using AST.Syntax;
 
 namespace AST.Hlsl.Syntax {
 // @formatter OFF
     // TODO: use interned strings or static strings for token getters
     // Tokens
-    public record LineFeedToken                         : HlslToken { public override string Text => "\n"; }
-    public record OpenParenToken                        : HlslToken { public override string Text => "("; }
-    public record CloseParenToken                       : HlslToken { public override string Text => ")"; }
-    public record OpenBraceToken                        : HlslToken { public override string Text => "{"; }
-    public record CloseBraceToken                       : HlslToken { public override string Text => "}"; }
-    public record OpenBracketToken                      : HlslToken { public override string Text => "["; }
-    public record CloseBracketToken                     : HlslToken { public override string Text => "]"; }
+    public record LineFeedToken                         : Token<Hlsl> { public override string Text => "\n"; }
+    public record OpenParenToken                        : Token<Hlsl> { public override string Text => "("; }
+    public record CloseParenToken                       : Token<Hlsl> { public override string Text => ")"; }
+    public record OpenBraceToken                        : Token<Hlsl> { public override string Text => "{"; }
+    public record CloseBraceToken                       : Token<Hlsl> { public override string Text => "}"; }
+    public record OpenBracketToken                      : Token<Hlsl> { public override string Text => "["; }
+    public record CloseBracketToken                     : Token<Hlsl> { public override string Text => "]"; }
     
-    public record TildeToken                            : HlslToken { public override string Text => "~"; }
-    public record NotToken                              : HlslToken { public override string Text => "!"; }
-    public record MinusToken                            : HlslToken { public override string Text => "-"; }
-    public record PlusToken                             : HlslToken { public override string Text => "+"; }
-    public record PercentToken                          : HlslToken { public override string Text => "%"; }
-    public record CaretToken                            : HlslToken { public override string Text => "^"; }
-    public record AmpersandToken                        : HlslToken { public override string Text => "&"; }
-    public record AsteriskToken                         : HlslToken { public override string Text => "*"; }
+    public record TildeToken                            : Token<Hlsl> { public override string Text => "~"; }
+    public record NotToken                              : Token<Hlsl> { public override string Text => "!"; }
+    public record MinusToken                            : Token<Hlsl> { public override string Text => "-"; }
+    public record PlusToken                             : Token<Hlsl> { public override string Text => "+"; }
+    public record PercentToken                          : Token<Hlsl> { public override string Text => "%"; }
+    public record CaretToken                            : Token<Hlsl> { public override string Text => "^"; }
+    public record AmpersandToken                        : Token<Hlsl> { public override string Text => "&"; }
+    public record AsteriskToken                         : Token<Hlsl> { public override string Text => "*"; }
     
-    public record BarToken                              : HlslToken { public override string Text => "|"; }
-    public record ColonToken                            : HlslToken { public override string Text => ":"; }
-    public record SemiToken                             : HlslToken { public override string Text => ";"; }
-    public record LessThanToken                         : HlslToken { public override string Text => "<"; }
-    public record GreaterThanToken                      : HlslToken { public override string Text => ">"; }
-    public record CommaToken                            : HlslToken { public override string Text => ","; }
-    public record DotToken                              : HlslToken { public override string Text => "."; }
-    public record QuestionToken                         : HlslToken { public override string Text => "?"; }
-    public record HashToken                             : HlslToken { public override string Text => "#"; }
-    public record SlashToken                            : HlslToken { public override string Text => "/"; }
+    public record BarToken                              : Token<Hlsl> { public override string Text => "|"; }
+    public record ColonToken                            : Token<Hlsl> { public override string Text => ":"; }
+    public record SemiToken                             : Token<Hlsl> { public override string Text => ";"; }
+    public record LessThanToken                         : Token<Hlsl> { public override string Text => "<"; }
+    public record GreaterThanToken                      : Token<Hlsl> { public override string Text => ">"; }
+    public record CommaToken                            : Token<Hlsl> { public override string Text => ","; }
+    public record DotToken                              : Token<Hlsl> { public override string Text => "."; }
+    public record QuestionToken                         : Token<Hlsl> { public override string Text => "?"; }
+    public record HashToken                             : Token<Hlsl> { public override string Text => "#"; }
+    public record SlashToken                            : Token<Hlsl> { public override string Text => "/"; }
     
     
-    public record BarBarToken                           : HlslToken { public override string Text => "||"; }
-    public record AmpersandAmpersandToken               : HlslToken { public override string Text => "&&"; }
-    public abstract record AffixOperatorToken           : HlslToken;
-    public record ColonColonToken                       : HlslToken { public override string Text => "::"; }
-    public record ExclamationEqualsToken                : HlslToken { public override string Text => "!="; }
-    public record EqualsEqualsToken                     : HlslToken { public override string Text => "=="; }
-    public record LessThanEqualsToken                   : HlslToken { public override string Text => "<="; }
-    public record LessThanLessThanToken                 : HlslToken { public override string Text => "<<"; }
-    public record GreaterThanEqualsToken                : HlslToken { public override string Text => ">="; }
-    public record GreaterThanGreaterThanToken           : HlslToken { public override string Text => ">>"; }
+    public record BarBarToken                           : Token<Hlsl> { public override string Text => "||"; }
+    public record AmpersandAmpersandToken               : Token<Hlsl> { public override string Text => "&&"; }
+    public abstract record AffixOperatorToken           : Token<Hlsl>;
+    public record ColonColonToken                       : Token<Hlsl> { public override string Text => "::"; }
+    public record ExclamationEqualsToken                : Token<Hlsl> { public override string Text => "!="; }
+    public record EqualsEqualsToken                     : Token<Hlsl> { public override string Text => "=="; }
+    public record LessThanEqualsToken                   : Token<Hlsl> { public override string Text => "<="; }
+    public record LessThanLessThanToken                 : Token<Hlsl> { public override string Text => "<<"; }
+    public record GreaterThanEqualsToken                : Token<Hlsl> { public override string Text => ">="; }
+    public record GreaterThanGreaterThanToken           : Token<Hlsl> { public override string Text => ">>"; }
     
     public record MinusMinusToken                       : AffixOperatorToken { public override string Text => "--"; }
     public record PlusPlusToken                         : AffixOperatorToken { public override string Text => "++"; }
     
-    public abstract record AssignmentToken : HlslToken;
+    public abstract record AssignmentToken : Token<Hlsl>;
     public record EqualsToken                           : AssignmentToken { public override string Text => "="; }
     public record LessThanLessThanEqualsToken           : AssignmentToken { public override string Text => "<<="; }
     public record GreaterThanGreaterThanEqualsToken     : AssignmentToken { public override string Text => ">>="; }
@@ -61,24 +62,24 @@ namespace AST.Hlsl.Syntax {
     public record CaretEqualsToken                      : AssignmentToken { public override string Text => "^="; }
     public record PercentEqualsToken                    : AssignmentToken { public override string Text => "%="; }
     // Keywords
-    public record LinearKeyword             : HlslToken { public override string Text => "linear"; }
-    public record CentroidKeyword           : HlslToken { public override string Text => "centroid"; }
-    public record NoperspectiveKeyword      : HlslToken { public override string Text => "noperspective"; }
-    public record SampleKeyword             : HlslToken { public override string Text => "sample"; }
-    public record NointerpolationKeyword    : HlslToken { public override string Text => "nointerpolation"; }
+    public record LinearKeyword             : Token<Hlsl> { public override string Text => "linear"; }
+    public record CentroidKeyword           : Token<Hlsl> { public override string Text => "centroid"; }
+    public record NoperspectiveKeyword      : Token<Hlsl> { public override string Text => "noperspective"; }
+    public record SampleKeyword             : Token<Hlsl> { public override string Text => "sample"; }
+    public record NointerpolationKeyword    : Token<Hlsl> { public override string Text => "nointerpolation"; }
 
-    public record ConstKeyword              : HlslToken { public override string Text => "const"; }
-    public record RowMajorKeyword           : HlslToken { public override string Text => "row_major"; }
-    public record ColumnMajorKeyword        : HlslToken { public override string Text => "column_major"; }
+    public record ConstKeyword              : Token<Hlsl> { public override string Text => "const"; }
+    public record RowMajorKeyword           : Token<Hlsl> { public override string Text => "row_major"; }
+    public record ColumnMajorKeyword        : Token<Hlsl> { public override string Text => "column_major"; }
     
-    public record ExternKeyword             : HlslToken { public override string Text => "extern"; }
-    public record PreciseKeyword            : HlslToken { public override string Text => "precise"; }
-    public record SharedKeyword             : HlslToken { public override string Text => "shared"; }
-    public record GroupsharedKeyword        : HlslToken { public override string Text => "groupshared"; }
-    public record StaticKeyword             : HlslToken { public override string Text => "static"; }
-    public record UniformKeyword            : HlslToken { public override string Text => "uniform"; }
+    public record ExternKeyword             : Token<Hlsl> { public override string Text => "extern"; }
+    public record PreciseKeyword            : Token<Hlsl> { public override string Text => "precise"; }
+    public record SharedKeyword             : Token<Hlsl> { public override string Text => "shared"; }
+    public record GroupsharedKeyword        : Token<Hlsl> { public override string Text => "groupshared"; }
+    public record StaticKeyword             : Token<Hlsl> { public override string Text => "static"; }
+    public record UniformKeyword            : Token<Hlsl> { public override string Text => "uniform"; }
     
-    public abstract record PredefinedTypeToken : HlslToken;
+    public abstract record PredefinedTypeToken : Token<Hlsl>;
     public abstract record ScalarTypeToken : PredefinedTypeToken;
     public record VoidKeyword               : PredefinedTypeToken { public override string Text => "void"; }
     public record BoolKeyword               : ScalarTypeToken { public override string Text => "bool"; }
@@ -88,51 +89,54 @@ namespace AST.Hlsl.Syntax {
     public record FloatKeyword              : ScalarTypeToken { public override string Text => "float"; }
     public record FixedKeyword              : ScalarTypeToken { public override string Text => "fixed"; }
     public record DoubleKeyword             : ScalarTypeToken { public override string Text => "double"; }
-    public record StructKeyword             : HlslToken { public override string Text => "struct"; }
+    public record StructKeyword             : Token<Hlsl> { public override string Text => "struct"; }
 
-    public record Texture1DKeyword          : HlslToken { public override string Text => "Texture1D"; }
-    public record Texture1DArrayKeyword     : HlslToken { public override string Text => "Texture1DArray"; }
-    public record Texture2DKeyword          : HlslToken { public override string Text => "Texture2D"; }
-    public record Texture2DArrayKeyword     : HlslToken { public override string Text => "Texture2DArray"; }
-    public record Texture3DKeyword          : HlslToken { public override string Text => "Texture3D"; }
-    public record TextureCubeKeyword        : HlslToken { public override string Text => "TextureCube"; }
+    public record Texture1DKeyword          : Token<Hlsl> { public override string Text => "Texture1D"; }
+    public record Texture1DArrayKeyword     : Token<Hlsl> { public override string Text => "Texture1DArray"; }
+    public record Texture2DKeyword          : Token<Hlsl> { public override string Text => "Texture2D"; }
+    public record Texture2DArrayKeyword     : Token<Hlsl> { public override string Text => "Texture2DArray"; }
+    public record Texture3DKeyword          : Token<Hlsl> { public override string Text => "Texture3D"; }
+    public record TextureCubeKeyword        : Token<Hlsl> { public override string Text => "TextureCube"; }
 
-    public record FalseKeyword              : HlslToken { public override string Text => "false"; }
-    public record TrueKeyword               : HlslToken { public override string Text => "true"; }
+    public record FalseKeyword              : Token<Hlsl> { public override string Text => "false"; }
+    public record TrueKeyword               : Token<Hlsl> { public override string Text => "true"; }
 
-    public record SwitchKeyword             : HlslToken { public override string Text => "switch"; }
-    public record CaseKeyword               : HlslToken { public override string Text => "case"; }
-    public record DefaultKeyword            : HlslToken { public override string Text => "default"; }
-    public record BreakKeyword              : HlslToken { public override string Text => "break"; }
-    public record ContinueKeyword           : HlslToken { public override string Text => "continue"; }
-    public record ReturnKeyword             : HlslToken { public override string Text => "return"; }
-    public record DiscardKeyword            : HlslToken { public override string Text => "discard"; }
-    public record IfKeyword                 : HlslToken { public override string Text => "if"; }
-    public record DoKeyword                 : HlslToken { public override string Text => "do"; }
-    public record ElseKeyword               : HlslToken { public override string Text => "else"; }
-    public record WhileKeyword              : HlslToken { public override string Text => "while"; }
-    public record ForKeyword                : HlslToken { public override string Text => "for"; }
+    public record SwitchKeyword             : Token<Hlsl> { public override string Text => "switch"; }
+    public record CaseKeyword               : Token<Hlsl> { public override string Text => "case"; }
+    public record DefaultKeyword            : Token<Hlsl> { public override string Text => "default"; }
+    public record BreakKeyword              : Token<Hlsl> { public override string Text => "break"; }
+    public record ContinueKeyword           : Token<Hlsl> { public override string Text => "continue"; }
+    public record ReturnKeyword             : Token<Hlsl> { public override string Text => "return"; }
+    public record DiscardKeyword            : Token<Hlsl> { public override string Text => "discard"; }
+    public record IfKeyword                 : Token<Hlsl> { public override string Text => "if"; }
+    public record DoKeyword                 : Token<Hlsl> { public override string Text => "do"; }
+    public record ElseKeyword               : Token<Hlsl> { public override string Text => "else"; }
+    public record WhileKeyword              : Token<Hlsl> { public override string Text => "while"; }
+    public record ForKeyword                : Token<Hlsl> { public override string Text => "for"; }
 
-    public record TypedefKeyword            : HlslToken { public override string Text => "typedef"; }
-    public record DefineKeyword             : HlslToken { public override string Text => "define"; }
-    public record UndefKeyword              : HlslToken { public override string Text => "undef"; }
-    public record IfdefKeyword              : HlslToken { public override string Text => "ifdef"; }
-    public record IfndefKeyword             : HlslToken { public override string Text => "ifndef"; }
-    public record EndIfKeyword              : HlslToken { public override string Text => "endif"; }
-    public record ElifKeyword               : HlslToken { public override string Text => "elif"; }
-    public record PragmaKeyword             : HlslToken { public override string Text => "pragma"; }
+    public record TypedefKeyword            : Token<Hlsl> { public override string Text => "typedef"; }
+    public record DefineKeyword             : Token<Hlsl> { public override string Text => "define"; }
+    public record UndefKeyword              : Token<Hlsl> { public override string Text => "undef"; }
+    public record IfdefKeyword              : Token<Hlsl> { public override string Text => "ifdef"; }
+    public record IfndefKeyword             : Token<Hlsl> { public override string Text => "ifndef"; }
+    public record EndIfKeyword              : Token<Hlsl> { public override string Text => "endif"; }
+    public record ElifKeyword               : Token<Hlsl> { public override string Text => "elif"; }
+    public record PragmaKeyword             : Token<Hlsl> { public override string Text => "pragma"; }
 
-    public record ExportKeyword             : HlslToken { public override string Text => "export"; }
-    public record IncludeKeyword            : HlslToken { public override string Text => "include"; }
-    public record LineKeyword               : HlslToken { public override string Text => "line"; }
+    public record ExportKeyword             : Token<Hlsl> { public override string Text => "export"; }
+    public record LineKeyword               : Token<Hlsl> { public override string Text => "line"; }
+    public record ErrorKeyword              : Token<Hlsl> { public override string Text => "error"; }
+    public abstract record IncludePreprocessorKeyword : Token <Hlsl>;
+    public record IncludeKeyword            : IncludePreprocessorKeyword { public override string Text => "include"; }
+    public record IncludeWithPragmasKeyword : IncludePreprocessorKeyword { public override string Text => "include_with_pragmas"; }
 
-    public record InKeyword                 : HlslToken { public override string Text => "in"; }
-    public record InoutKeyword              : HlslToken { public override string Text => "inout"; }
-    public record OutKeyword                : HlslToken { public override string Text => "out"; }
+    public record InKeyword                 : Token<Hlsl> { public override string Text => "in"; }
+    public record InoutKeyword              : Token<Hlsl> { public override string Text => "inout"; }
+    public record OutKeyword                : Token<Hlsl> { public override string Text => "out"; }
     
     // semantics
     
-    public abstract record SemanticToken : HlslToken;
+    public abstract record SemanticToken : Token<Hlsl>;
     //   legacy
     public record PositiontSemantic         : SemanticToken { public override string Text => "POSITIONT";}
     public record FogSemantic               : SemanticToken { public override string Text => "FOG";}
@@ -187,23 +191,23 @@ namespace AST.Hlsl.Syntax {
     public abstract record IndexedSemantic : SemanticToken {
         protected abstract string Name { get; }
         public             uint?  n    { get; init; } // optional for both variants, e.g. PSIZE and PSIZE0
-        public override    string Text => String.Intern($"{Name}{n?.ToString() ?? String.Empty}");
+        public override    string Text => string.Intern($"{Name}{n?.ToString() ?? string.Empty}");
     }
 
     public record MatrixToken : PredefinedTypeToken {
         public          ScalarTypeToken type { get; init; }
         public          uint            rows { get; init; }
         public          uint            cols { get; init; }
-        public override string          Text => String.Intern($"{type.Text}{rows.ToString()}x{cols.ToString()}");
+        public override string          Text => string.Intern($"{type.Text}{rows.ToString()}x{cols.ToString()}");
     }
 
     public record VectorToken : PredefinedTypeToken {
         public          ScalarTypeToken type  { get; init; }
         public          uint            arity { get; init; }
-        public override string          Text  => String.Intern($"{type.Text}{arity.ToString()}");
+        public override string          Text  => string.Intern($"{type.Text}{arity.ToString()}");
     }
 
-    public abstract record ValidatedHlslToken : HlslToken {
+    public abstract record ValidatedToken : Token<Hlsl> {
         private readonly string validatedText;
 
         public override string Text => validatedText;
@@ -226,12 +230,7 @@ namespace AST.Hlsl.Syntax {
         }
     }
 
-    public record WhitespaceToken : ValidatedHlslToken {
-        private static readonly Regex pattern = new(@"\s+");
-        protected override      Regex Pattern => pattern;
-    }
-
-    public record IdentifierToken : ValidatedHlslToken {
+    public record IdentifierToken : ValidatedToken {
         private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
         protected override      Regex Pattern => pattern;
 
@@ -239,7 +238,7 @@ namespace AST.Hlsl.Syntax {
     }
 
     /// <a href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-appendix-grammar">grammar</a>
-    public abstract record Literal : ValidatedHlslToken;
+    public abstract record Literal : ValidatedToken;
 
     public record FloatLiteral : Literal {
         private static readonly Regex pattern =
@@ -263,5 +262,19 @@ namespace AST.Hlsl.Syntax {
 
         public static implicit operator BooleanLiteral(bool value) =>
             new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
+    }
+
+    public record QuotedStringLiteral : Literal {
+        private static readonly Regex pattern = new(@"^""[^""\n\r]*""$");
+        protected override      Regex Pattern => pattern;
+
+        public static implicit operator QuotedStringLiteral(string content) =>
+            new() { ValidatedText = $"\"{content}\"" };
+    }
+
+    // used in preprocessor, can be multiline if there is a "\\n" sequence
+    public record TokenString : ValidatedToken {
+        private static readonly Regex pattern = new(@"^(?:.|\\\n)*$");
+        protected override      Regex Pattern => pattern;
     }
 }

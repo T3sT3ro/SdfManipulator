@@ -1,28 +1,28 @@
 namespace AST.Syntax {
-    public abstract class SyntaxWalker<TNode, TToken, TBase, TTrivia>
-        : SyntaxVisitor<TNode, TToken, TBase, TTrivia>
-        where TBase : ISyntaxNodeOrToken<TNode, TBase>
-        where TNode : SyntaxNode<TNode, TBase>, TBase
-        where TToken : ISyntaxToken<TNode, TToken, TTrivia, TBase>, TBase
-        where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase> {
-        protected SyntaxWalker() { }
+    public abstract class SyntaxWalker<Lang> : SyntaxVisitor<Lang> {
+        private bool DescentIntoStructuredTrivia { get; set; }
 
-        protected override void Visit(TNode node) {
+        protected SyntaxWalker(bool descendIntoStructuredTrivia = false) {
+            DescentIntoStructuredTrivia = descendIntoStructuredTrivia;
+        }
+
+
+        protected override void Visit(Syntax<Lang> node) {
             foreach (var n in node.ChildNodesAndTokens)
                 Visit((dynamic)n);
         }
 
-        protected virtual void Visit(TToken token) {
-            foreach (var leadingTrivia in token.LeadingTrivia)
+        protected virtual void Visit(Token<Lang> token) {
+            foreach (var leadingTrivia in token.LeadingTriviaList)
                 Visit(leadingTrivia);
 
-            foreach (var trailingTrivia in token.TrailingTrivia)
+            foreach (var trailingTrivia in token.TrailingTriviaList)
                 Visit(trailingTrivia);
         }
 
-        protected virtual void Visit(TTrivia trivia) {
-            if (trivia.Structure is not null)
-                Visit(trivia.Structure);
+        protected virtual void Visit(Trivia<Lang> trivia) {
+            if (trivia is StructuredTrivia<Lang> st && DescentIntoStructuredTrivia)
+                Visit(st.Structure);
         }
     }
 }

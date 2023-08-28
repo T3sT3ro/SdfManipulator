@@ -1,6 +1,5 @@
-using API;
 using Assets.Nodes;
-using AST.Hlsl.Syntax.Expressions;
+using AST.Hlsl;
 
 namespace PortData {
     public record HlslScalar(Expression scalarExpression) : API.Port.Data {

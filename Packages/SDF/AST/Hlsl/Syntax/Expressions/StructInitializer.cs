@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Expressions {
     // {EXPR, EPXR, ...}
     public record StructInitializer : Expression {
-        public BracketInitializerList<Expression> components { get; init; }
+        public BracedList<Expression> components { get; init; } = new();
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => components;
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
+            { components };
     }
 }

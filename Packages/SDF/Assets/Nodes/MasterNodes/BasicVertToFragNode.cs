@@ -1,11 +1,12 @@
 #nullable enable
 using API;
+using AST.Hlsl;
 using AST.Hlsl.Syntax;
-using AST.Hlsl.Syntax.Expressions;
 using AST.Hlsl.Syntax.Expressions.Operators;
 using AST.Hlsl.Syntax.Statements;
 using AST.Hlsl.Syntax.Statements.Declarations;
 using PortData;
+using static AST.Hlsl.Syntax.VariableDeclarator;
 using StructMember = AST.Hlsl.Syntax.Type.Struct.Member;
 using AccessMember = AST.Hlsl.Syntax.Expressions.Operators.Member;
 
@@ -80,10 +81,8 @@ namespace Assets.Nodes.MasterNodes {
         {
             declarator = new VariableDeclarator
             {
-                type = v2fStructName, variables = new SeparatedList<VariableDeclarator.VariableDefinition>(new[]
-                {
-                    new VariableDeclarator.VariableDefinition { id = vertOutVarName }
-                })
+                type = v2fStructName,
+                variables = new[] { new VariableDefinition { id = vertOutVarName } }.CommaSeparated()
             },
         };
 

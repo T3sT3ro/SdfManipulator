@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using AST.Syntax;
 
 namespace AST.Shaderlab.Syntax.Commands {
     public record BlendOp : Command {
-        public BlendOp         blendOpKeyword  { get; set; } = new();
-        public CommandArgument operationArg { get; set; }
+        public BlendOp         blendOpKeyword  { get; init; } = new();
+        public CommandArgument operationArg { get; init; }
 
-        public override IReadOnlyList<IShaderlabSyntaxOrToken> ChildNodesAndTokens => new IShaderlabSyntaxOrToken[]
+        public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>[]
             { blendOpKeyword, operationArg };
     }
 }

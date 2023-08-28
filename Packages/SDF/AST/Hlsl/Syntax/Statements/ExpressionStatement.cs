@@ -1,7 +1,6 @@
 #nullable enable
-using System;
 using System.Collections.Generic;
-using AST.Hlsl.Syntax.Expressions;
+using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
     // expression;
@@ -10,9 +9,9 @@ namespace AST.Hlsl.Syntax.Statements {
         public Expression? expression { get; init; }
         public SemiToken   semiToken  { get; init; } = new();
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens =>
             expression != null
-                ? new IHlslSyntaxOrToken[] { expression, semiToken }
-                : new IHlslSyntaxOrToken[] { semiToken };
+                ? new SyntaxOrToken<Hlsl>[] { expression, semiToken }
+                : new SyntaxOrToken<Hlsl>[] { semiToken };
     }
 }

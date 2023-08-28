@@ -1,16 +1,15 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Linq;
-using AST.Hlsl.Syntax.Expressions;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
     public record Return : Statement {
-        public ReturnKeyword returnKeyword { get; set; } = new();
+        public ReturnKeyword returnKeyword { get; init; } = new();
         public Expression?   expression    { get; init; }
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
-            new IHlslSyntaxOrToken[] { returnKeyword }
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens =>
+            new SyntaxOrToken<Hlsl>[] { returnKeyword }
                 .AppendNotNull(expression)
                 .ToList();
     }

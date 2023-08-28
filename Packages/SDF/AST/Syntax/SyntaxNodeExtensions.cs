@@ -3,43 +3,34 @@ using System.Linq;
 
 namespace AST.Syntax {
     public static class SyntaxNodeExtensions {
-        public static IEnumerable<TNode> DescendantNodes<TNode, TBase>(this TNode root)
-            where TNode : SyntaxNode<TNode, TBase>, TBase
-            where TBase : ISyntaxNodeOrToken<TNode, TBase> {
-            return root.DescendantNodesAndSelf<TNode, TBase>().Skip(1);
-        }
+        public static IEnumerable<Syntax<Lang>> DescendantNodes<Lang>(this Syntax<Lang> root) =>
+            root.DescendantNodesAndSelf().Skip(1);
 
-        public static IEnumerable<TNode> DescendantNodesAndSelf<TNode, TBase>(this TNode root)
-            where TNode : SyntaxNode<TNode, TBase>, TBase
-            where TBase : ISyntaxNodeOrToken<TNode, TBase> {
-            var stack = new Stack<TNode>();
+        public static IEnumerable<Syntax<Lang>> DescendantNodesAndSelf<Lang>(this Syntax<Lang> root) {
+            var stack = new Stack<Syntax<Lang>>();
             stack.Push(root);
 
             while (stack.Count > 0) {
                 var current = stack.Pop();
                 yield return current;
 
-                foreach (var child in current.ChildNodes.Reverse()) {
-                    if (child is TNode c)
-                        stack.Push(c);
-                }
+                foreach (var child in current.ChildNodes.Reverse()) 
+                    stack.Push(child);
             }
         }
 
-        public static IEnumerable<TBase> DescendantNodesAndTokens<TNode, TBase>(this TNode root)
-            where TNode : SyntaxNode<TNode, TBase>, TBase
-            where TBase : ISyntaxNodeOrToken<TNode, TBase> {
-            var stack = new Stack<TNode>();
+        public static IEnumerable<SyntaxOrToken<Lang>> DescendantNodesAndTokens<Lang>(this Syntax<Lang> root) {
+            var stack = new Stack<SyntaxOrToken<Lang>>();
             stack.Push(root);
 
             while (stack.Count > 0) {
                 var current = stack.Pop();
                 yield return current;
 
-                foreach (var child in current.ChildNodes.Reverse()) {
-                    if (child is TNode c)
-                        stack.Push(c);
-                }
+                if (current is not Syntax<Lang> node) continue;
+
+                foreach (var child in node.ChildNodesAndTokens.Reverse())
+                    stack.Push(child);
             }
         }
     }

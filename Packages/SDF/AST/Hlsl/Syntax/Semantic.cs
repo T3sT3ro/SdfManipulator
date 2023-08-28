@@ -1,13 +1,14 @@
 using System.Collections.Generic;
+using AST.Syntax;
 
 namespace AST.Hlsl.Syntax {
-    public record Semantic : HlslSyntax {
-        public ColonToken    colonToken    { get; set; } = new ColonToken();
+    public record Semantic : Syntax<Hlsl> {
+        public ColonToken    colonToken    { get; init; } = new();
         public SemanticToken semanticToken { get; init; }
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => new IHlslSyntaxOrToken[]
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { colonToken, semanticToken };
-        
-        public static implicit operator Semantic(SemanticToken token) => new Semantic { semanticToken = token };
+
+        public static implicit operator Semantic(SemanticToken token) => new() { semanticToken = token };
     }
 }

@@ -1,4 +1,0 @@
-Some parts of the code were taken from the tgjones' Hlsl-Tools project licensed under Apache 2.0 license, compatible with MIT
-Copyright tgjones for adequate files.
-
-These parts include several files like SyntaxKind, SyntaxFact or base classes in AST.Syntax directory. Some of them were modified to fit the needs of this project. 

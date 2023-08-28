@@ -1,0 +1,6 @@
+- The shape, structure and many design decisions for the AST package were heavily based on the C# compiler SDK, Roslyn project by Microsoft, licensed under MIT license: https://github.com/dotnet/roslyn
+- Several design decisions and parts of the code are based on the HlslTools repository by tgjones, https://github.com/tgjones/HlslTools, licensed under Apache 2.0.
+- Similarities in naming, structuring and designing code APIs with the aforementioned packages were deliberate to allow for easier transition of knowledge and possible future easier integration of above tools.
+- The majority of the code has been, however, handwritten by me despite similarities.
+- Copyright tgjones and Roslyn team for adequate files.
+- Some code in the Controllers package was inspired by the ShaderGraph code (part of serialization and asset logic).

@@ -2,28 +2,40 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 
 namespace AST.Syntax {
-    public class SyntaxRewriter<TNode, TToken, TBase, TTrivia>
-        : SyntaxVisitor<TNode, TNode, TToken, TBase, TTrivia>
-        where TNode : SyntaxNode<TNode, TBase>, TBase
-        where TToken : TBase, ISyntaxToken<TNode, TToken, TTrivia, TBase>
-        where TBase : ISyntaxNodeOrToken<TNode, TBase>
-        where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase> {
+    // TODO: this solution is suboptimal. It would be better to generate partial SyntaxRewriter methods for each Syntax type
+    //       and Update methods inside syntax classes for updating partial fields of syntax tree parts, just like Roslyn
+    public class SyntaxRewriter<Lang> : SyntaxVisitor<Lang, Syntax<Lang>> {
         public bool DescendIntoStructuredTrivia { get; }
 
         public SyntaxRewriter(bool descendIntoStructuredTrivia = false) {
             DescendIntoStructuredTrivia = descendIntoStructuredTrivia;
         }
 
-        // entrypoint
-        protected override TNode Visit(TNode node) { return Visit((dynamic)new WithParent<dynamic>(node, null)); }
+        // ------------- ENTRYPOINT DISPATCH
+        
+        protected override Syntax<Lang> Visit(Syntax<Lang> node) {
+            return Visit((dynamic)new WithParent<dynamic>(node, null));
+        }
+        
+        /* shouldn't be possible to visit tokens directly
+        protected virtual Token<Lang> Visit(Token<Lang> token) {
+            return Visit((dynamic)new WithParent<Token<Lang>>(token, null));
+        }
 
-        protected virtual TNode Visit(WithParent<TNode> nodeWithParent) {
+        protected virtual Trivia<Lang> Visit(Trivia<Lang> trivia) {
+            return Visit((dynamic)new WithParent<Trivia<Lang>>(trivia, null));
+        }*/
+        
+        // ------------- DYNAMIC RUNTIME DISPATCH
+
+        /// rewrites a syntax node. If it (or children) changed, returns changed node. Otherwise returns original node.
+        protected virtual Syntax<Lang> Visit(WithParent<Syntax<Lang>> nodeWithParent) {
             var node = nodeWithParent.Value;
-            TNode? modified = null; // will create clone only if children changed
-            foreach (var p in node.GetType().GetProperties().Where(p => p.PropertyType.IsSubclassOf(typeof(TBase)))) {
+            Syntax<Lang>? modified = null; // will create clone only if children changed
+            foreach (var p in node.GetType().GetProperties()
+                         .Where(p => p.PropertyType.IsSubclassOf(typeof(SyntaxOrToken<Lang>)))) {
                 var child = p.GetValue(node);
                 object parentedChild = Activator.CreateInstance(typeof(WithParent<>).MakeGenericType(p.PropertyType),
                     child, nodeWithParent);
@@ -32,51 +44,75 @@ namespace AST.Syntax {
                 if (child == newChild)
                     continue;
 
-                modified ??= node with { };
-                p.SetValue(modified, newChild);
+                modified ??= node with { }; // shallow clone, preserves child identities if unmodified
+                p.SetValue(modified, newChild); // set new child
             }
 
             return modified ?? node;
         }
 
-        protected virtual TToken Visit(TToken token) { return Visit((dynamic)new WithParent<TToken>(token, null)); }
-
-        protected virtual TToken Visit(WithParent<TToken> tokenWithParent) {
+        /// rewrites a token. If it (or children) changed, returns changed token. Otherwise returns original token.
+        protected virtual Token<Lang> Visit(WithParent<Token<Lang>> tokenWithParent) {
             var token = tokenWithParent.Value;
-            // TToken? modified = null;
-            var newLeading = new List<TTrivia>();
-            bool leadingChanged = false;
-            foreach (var trivia in token.LeadingTrivia) {
-                var parentedTrivia = Activator.CreateInstance(typeof(WithParent<>).MakeGenericType(trivia.GetType()),
-                    trivia, tokenWithParent);
-                var newTrivia = (TTrivia) Visit((dynamic)parentedTrivia);
-                newLeading.Add(newTrivia);
-                leadingChanged |= newTrivia != trivia;
+            
+            var leading = token.LeadingTriviaList;
+            var trailing = token.TrailingTriviaList;
+            
+            var newLeading = Visit((dynamic)new WithParent<IReadOnlyList<Trivia<Lang>>>(leading, tokenWithParent));
+            var newTrailing = Visit((dynamic)new WithParent<IReadOnlyList<Trivia<Lang>>>(trailing, tokenWithParent));
+            
+            if(newLeading != leading || newTrailing != trailing)
+                return token with { LeadingTriviaList = newLeading, TrailingTriviaList = newTrailing };
+
+            return token;
+        }
+
+        /// rewrite regular trivia, but there is nothing to do so return it
+        protected virtual Trivia<Lang> Visit(WithParent<Trivia<Lang>> triviaWithParent) {
+            return triviaWithParent.Value;
+        }
+
+        /// rewrites a trivia. If it (or children) changed, returns changed trivia. Otherwise returns original trivia.
+        protected virtual Trivia<Lang> Visit(WithParent<StructuredTrivia<Lang>> triviaWithParent) {
+            var trivia = triviaWithParent.Value;
+            if (!DescendIntoStructuredTrivia) 
+                return trivia;
+            var result = Visit((dynamic)trivia.Structure);
+            if (result == trivia) 
+                return trivia;
+            
+            return trivia with { Structure = result };
+        }
+
+        /// rewrites list's elements, if it (or children) changed, returns changed list. Othwerwise returns original list.
+        protected virtual IReadOnlyList<T> Visit<T>(WithParent<IReadOnlyList<T>> listWithParent) where T : class {
+            var list = listWithParent.Value;
+            
+            var newList = (IList<T>)Activator.CreateInstance(typeof(WithParent<>).MakeGenericType(list.GetType()), list);
+            bool anyChanged = false;
+            foreach (T x in list) {
+                var parented = Activator.CreateInstance(typeof(WithParent<>).MakeGenericType(x.GetType()), x, listWithParent);
+                T mapped = (T)Visit((dynamic)parented);
+                newList.Add(mapped);
+                anyChanged |= mapped != x;
             }
 
-            return token with { };
-
-            foreach (var trailingTrivia in token.TrailingTrivia)
-                Visit(trailingTrivia);
+            return anyChanged ? (IReadOnlyList<T>)newList : list;
         }
 
-
-        protected virtual TNode Visit(TTrivia trivia) {
-            if (trivia.Structure is not null)
-                Visit(trivia.Structure);
-        }
-
+        // ------------- HELPERS 
+        
         protected class DynamicParentNode {
-            public DynamicParentNode Parent { get; }
+            public DynamicParentNode? Parent { get; }
 
-            protected DynamicParentNode(DynamicParentNode parent) { Parent = parent; }
+            protected DynamicParentNode(DynamicParentNode? parent) { Parent = parent; }
         }
 
-        // possibly extract to superclass
+        // TODO: get rid of it, use red-green tree like in Roslyn, auto-generated from annotations
         // Instantiating would be possible only with https://stackoverflow.com/questions/8718199/passing-a-type-to-a-generic-constructor
         protected sealed class WithParent<T> : DynamicParentNode {
             public T Value { get; }
-            public WithParent(T value, DynamicParentNode parent) : base(parent) { Value = value; }
+            public WithParent(T value, DynamicParentNode? parent) : base(parent) { Value = value; }
         }
     }
 }

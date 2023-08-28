@@ -1,18 +1,10 @@
 #nullable enable
 namespace AST.Syntax {
-    public abstract class SyntaxVisitor<TResult, TNode, TToken, TBase, TTrivia>
-        where TNode : SyntaxNode<TNode, TBase>, TBase
-        where TToken : ISyntaxToken<TNode, TToken, TTrivia, TBase>, TBase
-        where TBase : ISyntaxNodeOrToken<TNode, TBase>
-        where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase> {
-        protected virtual TResult? Visit(TNode node) { return default; }
+    public abstract class SyntaxVisitor<Lang, TResult> {
+        protected virtual TResult? Visit(Syntax<Lang> node) { return default; }
     }
 
-    public abstract class SyntaxVisitor<TNode, TToken, TBase, TTrivia> 
-        where TNode : SyntaxNode<TNode, TBase>, TBase
-        where TToken : ISyntaxToken<TNode, TToken, TTrivia, TBase>, TBase
-        where TBase : ISyntaxNodeOrToken<TNode, TBase>
-        where TTrivia : SyntaxTrivia<TToken, TNode, TTrivia, TBase> {
-        protected virtual void Visit(TNode node) { }
+    public abstract class SyntaxVisitor<Lang> {
+        protected virtual void Visit(Syntax<Lang> node) { }
     }
 }

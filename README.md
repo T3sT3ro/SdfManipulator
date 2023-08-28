@@ -88,6 +88,10 @@ TODO
 - [ ] in the graph, pass along a vector space metadata, and warn when two different vector spaces are mixed
 - [ ] [create AssetImporter](https://docs.unity3d.com/Manual/ScriptedImporters.html)
 - [ ] fixup init accessors for the syntax packages
+- [ ] sample/ray jittering to avoid banding and similar artifacts
+  - [some info here](https://www.scratchapixel.com/lessons/3d-basic-rendering/volume-rendering-for-developers/ray-marching-get-it-right.html)
+- [ ] generate red factories for syntax etc, based on [SourceWriter.cs](https://github.com/dotnet/roslyn/blob/34268d1bb9370c7b01c742303a895a99daf10d6a/src/Tools/Source/CompilerGeneratorTools/Source/CSharpSyntaxGenerator/SourceWriter.cs#L1423)
+  - consider containing private fields in the syntax class and generate properties from them which add get and init accessors, where init assigns th parent
 
 # Important to remember while documenting
 
@@ -119,6 +123,9 @@ TODO
    ```
 - syntax sugar is added using implicit conversion operators, for example assigning `string` to `InitializerName` creates new initializer token
 - Unfortunately C# doesn't have support for both sum and product types, so creating closed, compile-time, safe syntax is not possible without compromises. Typescript could do that (for example narrow the types of accepted syntax to produce valid syntax tree). The compile-type safety would be nice for constructing syntactically correct trees, however it could lead to problems with representing incorrect trees. This work doesn't focus on parsing nor handling incorrect syntax trees though, so it's good enough.  
+- I came up with another approach, by noticing that tokens and (lists of) trivia form an alternating stream, so maybe it would be useful to represent trivia between two tokens by a single list and just point tokens to left and right trivia, while pointing (red) trivia to left and right tokens. This way, I can essentially create not a tree, but a top-down DAG (it connects on the last trivia layer, where each leaf token points to a previous and next trivia list. The red nodes (dynamic, on demand with parent references) then create special type for trivia list that references previous and next token (or null if it's the first/last token in the tree). With this I don't have to include special EOF token, and what's more, I gain an easy way of iterating token and trivia stream and going back and forward. But it is a bit of a pain to implement, especially when the current syntax tree is not the intended final implementation, so we will see later.
+
+
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)
@@ -137,6 +144,7 @@ TODO
 - [normalization issues](https://www.lighthouse3d.com/tutorials/glsl-12-tutorial/normalization-issues/)
 - [Perspective correct interpolation](https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation)
 - [Data transfer between passes](https://forum.unity.com/threads/transferring-array-data-between-passes.995629/)
+- [Some depth-buffer related talk](https://discussions.unity.com/t/problems-with-depth-values-in-_cameradepthtexture/37786/3)
 
 # Unity docs
 
@@ -182,6 +190,7 @@ TODO
 - [Screen Space Reflections](https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html)
 - [Refraction and glass](https://www.shadertoy.com/view/flcSW2)
 - [WOMP online SDF editor in browser](https://alpha.womp3d.com)
+- [Touc hdesigner - shader writer, manual, node based, but windows and Mac only](https://www.youtube.com/watch?v=ZEQt6_mYplI)
 - [RayTK graph editor for generating SDF shaders](https://derivative.ca/community-post/asset/raytk-raymarching-masses/63620)
 - [Ray-marcher - asset in asset store, meh](https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/raymarcher-168069)
 - [GDC - GPU based clay simulation and ray-tracing tech in Claybook](https://www.youtube.com/watch?v=Xpf7Ua3UqOA) - about cone tracing, SDF baking, practical aspects
@@ -192,6 +201,7 @@ TODO
 - [Another one on perspective correct interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes.html)
   - Additionally: [Depth interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/visibility-problem-depth-buffer-depth-interpolation.html)
 - [depth interpolation or something in NDC](http://simonstechblog.blogspot.com/2012/04/)
+- [depth buffer, spanish article](https://iguagofernando.wordpress.com/2018/03/04/entendiendo-el-buffer-de-profundidad/)
 - [perspective correct z buffer](https://computergraphics.stackexchange.com/questions/10004/perspective-correct-interpolation-z-buffer)
 - [Perspective correct texture interpolation](https://stackoverflow.com/questions/12006132/how-to-correct-for-perspective-when-plotting-a-3d-triangle-with-texture)
 - [Z Test attributes in unity](https://discord.com/channels/489222168727519232/497874081329184799/1007638427136700507)
@@ -206,6 +216,8 @@ TODO
 - [Blender nodes in unity](https://forum.unity.com/threads/beta-blender-nodes-in-unity.1249171/) - a package that implements basic shader node graph editor
 - [Roslyn SyntaxNode vs SyntaxToken](https://joshvarty.com/2014/07/11/learn-roslyn-now-part-3-syntax-nodes-and-syntax-tokens/)
 - [Roslyn docs - Tree, Syntax Nodes, Tokens and Trivia](https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/work-with-syntax)
+- [Roslyn inspired syntax data structure in rust-analyzer](https://github.com/rust-lang/rust-analyzer/blob/master/docs/dev/syntax.md)
+- [Roslyn code generators](https://github.com/dotnet/roslyn/blob/34268d1bb9370c7b01c742303a895a99daf10d6a/src/Tools/Source/CompilerGeneratorTools/Source/CSharpSyntaxGenerator/SourceWriter.cs#L1423)
 - [UAST - unified ast and walking concept, ANLTR and Roslyn](https://github.com/PositiveTechnologies/PT.Doc/blob/master/Articles/Tree-structures-processing-and-unified-AST/English.md#visitor-and-listener)
 - [UAST - comparison of roslyn and antlr source code parsing, good top view of how roslyn works and how it's useful](https://github.com/PositiveTechnologies/PT.Doc/blob/master/Articles/Theory-and-Practice-of-source-code-parsing-with-ANTLR-and-Roslyn/English.md)
 - [HLSL parser - a part of HLSL Tools for Visual Studio, structure similar to Roslyn, a bit dated though, inspecting code yields many code smells](https://github.com/roy-t/HlslParser)
@@ -224,6 +236,16 @@ TODO
 - [Full Screen Render Feature in URP to inject fullscreen render pass](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@16.0/manual/renderer-features/renderer-feature-full-screen-pass.html)
 - [Using command buffers for rendering multipass shaders and reading depth from previous pass](https://forum.unity.com/threads/multi-pass-shader-that-uses-texture-between-passes.561025/)
 - [Raymarching a cloud in shadergraph](https://www.youtube.com/watch?v=hXYOlXVRRL8)
+- [How to structure the unity package](https://docs.unity3d.com/Manual/CustomPackages.html#EmbedMe)
+- [Tree view GUI element in Unity (official API)](https://docs.unity3d.com/ScriptReference/IMGUI.Controls.TreeView.html)
+- [Decals rendering, but there is a bit about world-position depth in shadergraph](https://samdriver.xyz/article/decal-render-intro)
+- [Reversed depth buffer](https://www.danielecarbone.com/reverse-depth-buffer-in-opengl/)
+- [GeoGebra model of direction vectors interpolated correctly and incorrectly](https://www.geogebra.org/calculator/fppufpcf)
+  - The conclusion is that I should use plain hitpos-camera direction, interpolate linearly, normalize only in the fragment AFTER the interpolation
+- [Dude answered me and explained many tings about calculating ray directions and ray origins in vertex shader](https://computergraphics.stackexchange.com/questions/13666/how-to-calculate-ray-origin-and-ray-direction-in-vertex-shader-working-universal/13667#13667)
+- [Shaderbits - a blog about writing HLSL and UE4 shaders, samples with raymarching volumes](https://shaderbits.com/blog/distance-field-ray-tracing-part1)
+- [A blog about rendering and many things from some Nvidia developer](https://www.reedbeta.com/)
+- [Roslyn source generators in unity](https://medium.com/@EnescanBektas/using-source-generators-in-the-unity-game-engine-140ff0cd0dc)
 
 ## Unity internals:
 

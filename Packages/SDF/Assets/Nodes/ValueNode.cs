@@ -1,8 +1,10 @@
 using System;
 using API;
+using AST.Hlsl;
 using AST.Hlsl.Syntax;
 using AST.Hlsl.Syntax.Expressions;
 using AST.Hlsl.Syntax.Expressions.Operators;
+using AST.Syntax;
 using PortData;
 using UnityEngine;
 
@@ -64,7 +66,7 @@ namespace Assets.Nodes {
     public record VectorConstantNode : ValueNode<HlslVector> {
         public VectorConstantNode(Vector4 value)
             : base("vec4_const", "Vector4 Constant",
-                () => new(new Call { id = "float4", arguments = HlslUtil.VectorArgumentList(value) })) { }
+                () => new(new Call { id = "float4", argList = HlslUtil.VectorArgumentList(value) })) { }
     }
 
 
@@ -76,8 +78,7 @@ namespace Assets.Nodes {
     public record MatrixConstantNode : ValueNode<HlslMatrix> {
         public MatrixConstantNode(Matrix4x4 m)
             : base("mat4_const", "Matrix 4x4 Constant", () => new(new Call
-            {
-                id = "float4x4", arguments = HlslUtil.MatrixInitializerList(m).ToArgumentList()
-            })) { }
+                { id = "float4x4", argList = HlslUtil.MatrixInitializerList(m) })
+            ) { }
     }
 }

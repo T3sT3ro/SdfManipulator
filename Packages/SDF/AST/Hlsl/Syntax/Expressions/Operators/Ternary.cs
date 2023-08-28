@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
     public record Ternary : Expression {
-        public Expression    condition     { get; set; }
-        public QuestionToken questionToken { get; set; } = new();
-        public Expression    whenTrue      { get; set; }
-        public ColonToken    colonToken    { get; set; } = new();
-        public Expression    whenFalse     { get; set; }
+        public Expression    condition     { get; init; }
+        public QuestionToken questionToken { get; init; } = new();
+        public Expression    whenTrue      { get; init; }
+        public ColonToken    colonToken    { get; init; } = new();
+        public Expression    whenFalse     { get; init; }
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => new IHlslSyntaxOrToken[]
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { condition, questionToken, whenTrue, colonToken, whenFalse };
     }
 }

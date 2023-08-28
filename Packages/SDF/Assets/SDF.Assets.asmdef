@@ -2,9 +2,9 @@
   "name": "SDF.Assets",
   "references": [
     "SDF.API",
-    "Hlsl",
-    "Shaderlab",
-    "Syntax",
+    "SDF.AST.Hlsl",
+    "SDF.AST.Shaderlab",
+    "SDF.AST.Syntax",
     "SDF.IsExternalInitShim"
   ]
 }

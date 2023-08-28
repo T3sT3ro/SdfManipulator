@@ -1,23 +1,26 @@
 using System.Collections.Generic;
+using AST.Syntax;
 
 namespace AST.Shaderlab.Syntax {
-    public abstract record CommandArgument : ShaderlabSyntax;
+    // fixed argument: Blend Off
+    // calculated argument: Blend [_BlendState]
+    public abstract record CommandArgument : Syntax<Shaderlab>;
 
-    // undocumented feature of syntax along these lines:
-    // Cull [_CullValue]
+    /// Undocumented feature of syntax that uses material property e.g.: Cull [_CullValue]
     public record CalculatedArgument : CommandArgument {
-        public OpenBracketToken  openBracket  { get; set; } = new();
-        public IdentifierToken   id           { get; set; }
-        public CloseBracketToken closeBracket { get; set; } = new();
+        public OpenBracketToken  openBracket  { get; init; } = new();
+        public IdentifierToken   id           { get; init; }
+        public CloseBracketToken closeBracket { get; init; } = new();
 
-        public override IReadOnlyList<IShaderlabSyntaxOrToken> ChildNodesAndTokens => new IShaderlabSyntaxOrToken[]
+        public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>[]
             { openBracket, id, closeBracket };
     }
 
-    // Uses a keyword like "Off", "SrcAlpha" etc.
+    /// Uses a keyword like "Off", "SrcAlpha" etc.
     public record PredefinedArgument : CommandArgument {
-        public ShaderlabToken value { get; set; }
+        public Token<Shaderlab> value { get; init; }
 
-        public override IReadOnlyList<IShaderlabSyntaxOrToken> ChildNodesAndTokens => new[] { value };
+        public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new[] 
+            { value };
     }
 }

@@ -4,42 +4,15 @@ using System.Linq;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
-    public record Switch : Statement {
-        public SwitchKeyword       switchKeyword { get; set; } = new();
-        public OpenParenToken      openParen     { get; set; } = new();
-        public Identifier      selector      { get; set; }
-        public CloseParenToken     closeParen    { get; set; } = new();
-        public IReadOnlyList<Case> cases         { get; set; }
-        public DefaultCase?        @default      { get; set; }
+    public partial record Switch : Statement {
+        public SwitchKeyword          switchKeyword { get; init; } = new();
+        public OpenParenToken         openParen     { get; init; } = new();
+        public Identifier             selector      { get; init; }
+        public CloseParenToken        closeParen    { get; init; } = new();
+        public SyntaxList<Hlsl, Case> cases         { get; init; } = SyntaxList<Hlsl, Case>.Empty;
+        public DefaultCase?           @default      { get; init; }
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => new IHlslSyntaxOrToken[]
-                { switchKeyword, openParen, selector, closeParen }
-            .Concat(cases)
-            .AppendNotNull(@default)
-            .ToList();
-
-
-        public record Case : HlslSyntax {
-            public CaseKeyword              caseKeyword { get; set; } = new();
-            public IntLiteral               label       { get; set; }
-            public ColonToken               colonToken  { get; set; } = new();
-            public IReadOnlyList<Statement> body        { get; set; }
-
-            public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
-                new IHlslSyntaxOrToken[] { caseKeyword, label, colonToken }
-                    .Concat(body)
-                    .ToList();
-        }
-
-        public record DefaultCase : HlslSyntax {
-            public DefaultKeyword           defaultKeyword { get; set; } = new();
-            public ColonToken               colonToken     { get; set; } = new();
-            public IReadOnlyList<Statement> body           { get; set; }
-
-            public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens =>
-                new IHlslSyntaxOrToken[] { defaultKeyword, colonToken }
-                    .Concat(body)
-                    .ToList();
-        }
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]
+            { switchKeyword, openParen, selector, closeParen, cases, @default }.FilterNotNull().ToList();
     }
 }

@@ -1,11 +1,13 @@
 #nullable enable
 using API;
+using AST.Hlsl;
+using AST.Hlsl.Syntax;
 using AST.Hlsl.Syntax.Expressions.Operators;
+using AST.Syntax;
 using PortData;
 
 namespace Assets.Nodes.SdfNodes {
     public record SdfSphereNode : SdfNode {
-
         public override IInputPort<HlslMatrix> transform { get; }
         public          IInputPort<HlslScalar> radius    { get; }
 
@@ -24,11 +26,7 @@ namespace Assets.Nodes.SdfNodes {
         private HlslSdfFunction sdfCallSyntax => new(new Call
         {
             id = InternalName,
-            arguments = new[]
-            {
-                transform.Eval().matrixExpression,
-                radius.Eval().scalarExpression
-            }
+            argList = new[] { transform.Eval().matrixExpression, radius.Eval().scalarExpression }
         });
     }
 }

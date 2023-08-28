@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using AST.Hlsl.Syntax.Expressions;
+using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
     // = y
     // = {{a}, {b}}}
-    public abstract record Initializer : HlslSyntax {
-        public EqualsToken equalsToken { get; set; } = new();
-        public Expression  value       { get; set; }
+    public abstract record Initializer : Syntax<Hlsl> {
+        public EqualsToken equalsToken { get; init; } = new();
+        public Expression  value       { get; init; }
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => new IHlslSyntaxOrToken[]
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { equalsToken, value };
     }
 }

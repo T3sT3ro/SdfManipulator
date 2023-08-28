@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using AST.Shaderlab.Syntax.SubShader;
+using AST.Syntax;
 
 namespace AST.Shaderlab.Syntax.Commands {
     public record ZTest : Command {
-        public ZTestKeyword    zTestKeyword { get; set; } = new();
-        public CommandArgument operation    { get; set; }
+        public ZTestKeyword    zTestKeyword { get; init; } = new();
+        public CommandArgument operation    { get; init; }
 
-        public override IReadOnlyList<IShaderlabSyntaxOrToken> ChildNodesAndTokens => new IShaderlabSyntaxOrToken[]
+        public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>[]
             { zTestKeyword, operation };
     }
 }

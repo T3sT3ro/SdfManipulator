@@ -1,6 +1,5 @@
 #nullable enable
 using System.Collections.Generic;
-using System.Linq;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements.Declarations {
@@ -8,12 +7,12 @@ namespace AST.Hlsl.Syntax.Statements.Declarations {
     // struct x { float pos; x other; };
     // struct {}; anonymous, empty, allowed but... pointless?
     public record StructDeclaration : Statement {
-        public Type.Struct           shape         { get; init; }
-        public SemiToken             semicolon     { get; init; } = new();
+        public Type.Struct shape     { get; init; }
+        public SemiToken   semicolon { get; init; } = new();
 
-        public override IReadOnlyList<IHlslSyntaxOrToken> ChildNodesAndTokens => new IHlslSyntaxOrToken[]
+        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { shape, semicolon };
-        
+
         public static implicit operator StructDeclaration(Type.Struct shape) => new() { shape = shape };
     }
 }

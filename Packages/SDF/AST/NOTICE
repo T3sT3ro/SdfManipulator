@@ -1,4 +1,0 @@
-This code uses parts of HlslTools by tgjones, https://github.com/tgjones/HlslTools, licensed under Apache 2.0
-It is also heavily inspired by Roslyn and the C# compiler by Microsoft, licensed under MIT
-
-Several similarities, like namespaces, class names, and method names are intentional, to make it easier to understand the code and may reassemble parts of the sources mentioned above. The majority of the code has been, however, handwritten by me.
