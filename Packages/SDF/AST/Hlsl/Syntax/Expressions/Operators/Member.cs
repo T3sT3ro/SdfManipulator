@@ -3,10 +3,10 @@ using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
     // a.b.c
-    public record Member : Expression {
-        public Expression expression { get; init; }
-        public DotToken   dotToken   { get; init; } = new();
-        public Identifier member     { get; init; }
+    public partial record Member : Expression {
+        private readonly Expression _expression;
+        private readonly DotToken   _dotToken;
+        private readonly Identifier _member;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { expression, dotToken, member };

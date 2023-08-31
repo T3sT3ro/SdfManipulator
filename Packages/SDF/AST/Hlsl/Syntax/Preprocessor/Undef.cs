@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Preprocessor {
-    public record Undef : PreprocessorSyntax {
-        public UndefKeyword undefKeyword { get; init; } = new();
-        public Identifier   id           { get; init; }
+    public partial record Undef : PreprocessorSyntax {
+        private readonly UndefKeyword _undefKeyword;
+        private readonly Identifier   _id;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { hashToken, undefKeyword, id };

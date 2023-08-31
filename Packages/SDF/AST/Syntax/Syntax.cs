@@ -12,9 +12,12 @@ namespace AST.Syntax {
         public          IReadOnlyList<Syntax<Lang>> ChildNodes => ChildNodesAndTokens.OfType<Syntax<Lang>>().ToList();
         public abstract IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens { get; }
 
-        public override void WriteTo(StringBuilder sb) {
+        public override StringBuilder WriteTo(StringBuilder sb) {
             foreach (var child in ChildNodesAndTokens)
                 child.WriteTo(sb);
+            return sb;
         }
+
+        public override string ToString() => base.ToString();
     }
 }

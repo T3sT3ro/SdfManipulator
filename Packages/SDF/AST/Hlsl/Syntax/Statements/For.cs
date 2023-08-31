@@ -8,16 +8,16 @@ namespace AST.Hlsl.Syntax.Statements {
     // start conditions:
     //    declarations: int i, j = 0;
     //    initializers: i = 0, j = 0;
-    public partial record For(Statement body) : Statement {
-        public ForKeyword                       forKeyword      { get; init; } = new();
-        public OpenParenToken                   openParen       { get; init; } = new();
-        public Initializer?                     initializer     { get; init; }
-        public SemiToken                        firstSemiToken  { get; init; } = new();
-        public Expression?                      condition       { get; init; }
-        public SemiToken                        secondSemiToken { get; init; } = new();
-        public SeparatedList<Hlsl, Expression>? increments      { get; init; }
-        public CloseParenToken                  closeParen      { get; init; } = new();
-        public Statement                        body            { get; init; } = body;
+    public partial record For : Statement {
+        private readonly ForKeyword                       _forKeyword;
+        private readonly OpenParenToken                   _openParen;
+        private readonly Initializer?                     _initializer;
+        private readonly SemiToken                        _firstSemiToken;
+        private readonly Expression?                      _condition;
+        private readonly SemiToken                        _secondSemiToken;
+        private readonly SeparatedList<Hlsl, Expression>? _increments;
+        private readonly CloseParenToken                  _closeParen;
+        private readonly Statement                        _body;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]
             {
@@ -26,6 +26,6 @@ namespace AST.Hlsl.Syntax.Statements {
             }.FilterNotNull()
             .ToList();
 
-        public abstract record Initializer : Syntax<Hlsl>;
+        public abstract partial record Initializer : Syntax<Hlsl>;
     }
 }

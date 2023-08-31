@@ -3,9 +3,9 @@ using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
     // someFunction(arguments) 
-    public record Call : Expression {
-        public Identifier                 id      { get; init; }
-        public ArgumentList<Syntax<Hlsl>> argList { get; init; }
+    public partial record Call : Expression {
+        private readonly Identifier                 _id;
+        private readonly ArgumentList<Syntax<Hlsl>> _argList;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new Syntax<Hlsl>[]
             { id, argList };

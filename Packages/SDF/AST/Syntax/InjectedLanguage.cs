@@ -7,6 +7,6 @@ namespace AST.Syntax {
         public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens =>
             Array.Empty<SyntaxOrToken<Lang>>();
 
-        public override void WriteTo(StringBuilder sb) { tree.Root.WriteTo(sb); }
+        public override StringBuilder WriteTo(StringBuilder sb) => tree.Root.WriteTo(sb);
     }
 }

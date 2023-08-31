@@ -4,6 +4,7 @@ using API;
 using Assets;
 using Assets.Nodes;
 using Assets.Nodes.MasterNodes;
+using AST.Hlsl.Syntax;
 using UnityEditor;
 using UnityEngine;
 
@@ -76,7 +77,11 @@ namespace Controllers {
 
             if (GUILayout.Button("Rebuild shader")) controller.RebuildShader();
             if (GUILayout.Button("Init graph")) controller.InitGraph();
-
+            if (GUILayout.Button("Init graph")) {
+                var x = new VariableDeclarator { type = new Type.Predefined { typeToken = new MatrixToken() } };
+                var y = x.GetHashCode();
+                Debug.Log(x.ToString());
+            }
             GUILayout.Space(16);
 
             base.OnInspectorGUI();

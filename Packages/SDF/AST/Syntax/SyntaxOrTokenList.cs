@@ -16,15 +16,12 @@ namespace AST.Syntax {
         }
         public SyntaxOrTokenList(IEnumerable<SyntaxOrToken<Lang>> list) : this(list.ToList()) { }
         public SyntaxOrTokenList(params SyntaxOrToken<Lang>[]     list) : this(list.AsEnumerable()) { }
+        public SyntaxOrTokenList() : this(Array.Empty<SyntaxOrToken<Lang>>()) { }
 
         public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens => FullList;
         public          IEnumerator<SyntaxOrToken<Lang>>   GetEnumerator()     => FullList.GetEnumerator();
         IEnumerator IEnumerable.                           GetEnumerator()     => GetEnumerator();
         public int                                         Count               => FullList.Count;
-
-        // cached empty
-        public static SyntaxOrTokenList<Lang> Empty { get; } =
-            new SyntaxOrTokenList<Lang>(Array.Empty<SyntaxOrToken<Lang>>());
 
         // indexers
         public SyntaxOrToken<Lang> this[int index] => FullList[index];
@@ -34,5 +31,7 @@ namespace AST.Syntax {
 
         public SyntaxOrTokenList<Lang> Splice(int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements)
             => new SyntaxOrTokenList<Lang>(FullList.Splice(index, deleteCount, elements));
+
+        public override string ToString() => base.ToString();
     }
 }

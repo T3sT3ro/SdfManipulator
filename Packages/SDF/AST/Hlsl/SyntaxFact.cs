@@ -37,7 +37,7 @@ namespace AST.Hlsl {
                 _ => throw new ArgumentOutOfRangeException()
             },
             Ternary => 13,
-            AssignmentExpresion assignment => assignment.assignmentToken switch
+            AssignmentExpression assignment => assignment.assignmentToken switch
             {
                 EqualsToken                                                      => 14.1f,
                 PlusEqualsToken or MinusEqualsToken                              => 14.2f,

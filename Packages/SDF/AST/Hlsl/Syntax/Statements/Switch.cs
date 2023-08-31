@@ -5,11 +5,11 @@ using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
     public partial record Switch : Statement {
-        public SwitchKeyword          switchKeyword { get; init; } = new();
-        public OpenParenToken         openParen     { get; init; } = new();
-        public Identifier             selector      { get; init; }
-        public CloseParenToken        closeParen    { get; init; } = new();
-        public SyntaxList<Hlsl, Case> cases         { get; init; } = SyntaxList<Hlsl, Case>.Empty;
+        private readonly SwitchKeyword          _switchKeyword;
+        private readonly OpenParenToken         _openParen;
+        private readonly Identifier             _selector;
+        private readonly CloseParenToken        _closeParen;
+        private readonly SyntaxList<Hlsl, Case> _cases;
         public DefaultCase?           @default      { get; init; }
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]

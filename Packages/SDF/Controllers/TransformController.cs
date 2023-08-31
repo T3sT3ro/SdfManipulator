@@ -29,7 +29,5 @@ namespace Controllers {
             sdfDomain.Material.SetMatrix(((Representable)transformProperty).IdName,
                 spaceTransform);
         }
-
-        private void OnGUI() { throw new NotImplementedException(); }
     }
 }

@@ -6,10 +6,10 @@ using AST.Syntax;
 
 namespace AST.Hlsl.Syntax {
     // ( T , ... , T ) 
-    public record ArgumentList<T> : Syntax<Hlsl> where T : Syntax<Hlsl> {
-        public OpenParenToken         openParenToken  { get; init; } = new();
-        public SeparatedList<Hlsl, T> arguments       { get; init; } = SeparatedList<Hlsl, T>.Empty;
-        public CloseParenToken        closeParenToken { get; init; } = new();
+    public partial record ArgumentList<T> : Syntax<Hlsl> where T : Syntax<Hlsl> {
+        private readonly OpenParenToken         _openParenToken;
+        private readonly SeparatedList<Hlsl, T> _arguments;
+        private readonly CloseParenToken        _closeParenToken;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { openParenToken, arguments, closeParenToken };
@@ -21,10 +21,10 @@ namespace AST.Hlsl.Syntax {
     }
 
     // { T , ... , T }
-    public record BracedList<T> : Syntax<Hlsl> where T : Syntax<Hlsl> {
-        public OpenBraceToken         openBraceToken  { get; init; } = new();
-        public SeparatedList<Hlsl, T> arguments       { get; init; } = SeparatedList<Hlsl, T>.Empty;
-        public CloseBraceToken        closeBraceToken { get; init; } = new();
+    public partial record BracedList<T> : Syntax<Hlsl> where T : Syntax<Hlsl> {
+        private readonly OpenBraceToken         _openBraceToken;
+        private readonly SeparatedList<Hlsl, T> _arguments;
+        private readonly CloseBraceToken        _closeBraceToken;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { openBraceToken, arguments, closeBraceToken };

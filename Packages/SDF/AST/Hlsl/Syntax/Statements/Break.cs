@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
-    public record Break : Statement {
-        public BreakKeyword breakKeyword { get; init; } = new();
-        public SemiToken    semiToken    { get; init; } = new();
+    public partial record Break : Statement {
+        private readonly BreakKeyword _breakKeyword;
+        private readonly SemiToken    _semiToken;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new Token<Hlsl>[]
             { breakKeyword, semiToken };

@@ -8,23 +8,23 @@ namespace AST.Hlsl.Syntax {
         // anonymous and empty: struct {}
         // regular: struct x { float pos; x other; }
         // Struct shape is a valid type and can be used in function parameter or variable declarations.  
-        public record Struct : Type {
-            public StructKeyword            structKeyword { get; init; } = new();
-            public Identifier?              name          { get; init; }
-            public OpenBraceToken           openBrace     { get; init; } = new();
-            public SyntaxList<Hlsl, Member> members       { get; init; }
-            public CloseBraceToken          closeBrace    { get; init; } = new();
+        public partial record Struct : Type {
+            private readonly StructKeyword            _structKeyword;
+            private readonly Identifier?              _name;
+            private readonly OpenBraceToken           _openBrace;
+            private readonly SyntaxList<Hlsl, Member> _members;
+            private readonly CloseBraceToken          _closeBrace;
 
             public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]
                     { structKeyword, name, openBrace, members, closeBrace }
                 .FilterNotNull().ToList();
 
-            public record Member : Syntax<Hlsl> {
-                public Token<Hlsl>? interpolation { get; init; }
-                public Type         type          { get; init; }
-                public Identifier   id            { get; init; }
-                public Semantic?    semantic      { get; init; }
-                public SemiToken    semicolon     { get; init; } = new();
+            public partial record Member : Syntax<Hlsl> {
+                private readonly Token<Hlsl>? _interpolation;
+                private readonly Type         _type;
+                private readonly Identifier   _id;
+                private readonly Semantic?    _semantic;
+                private readonly SemiToken    _semicolon;
 
                 public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]
                         { interpolation, type, id, semantic, semicolon }

@@ -1,7 +1,7 @@
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Preprocessor {
-    public abstract record PreprocessorSyntax : Syntax<Hlsl> {
-        public HashToken hashToken { get; init; } = new();
+    public abstract partial record PreprocessorSyntax : Syntax<Hlsl> {
+        private readonly HashToken _hashToken;
     }
 }

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
-    public record Unary : Expression {
-        public Token<Hlsl> operatorToken { get; init; }
-        public Expression  expression    { get; init; }
+    public partial record Unary : Expression {
+        private readonly Token<Hlsl> _operatorToken;
+        private readonly Expression  _expression;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { operatorToken, expression };

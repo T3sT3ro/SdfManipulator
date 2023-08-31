@@ -8,7 +8,7 @@ namespace AST.Shaderlab.Syntax.ShaderSpecific {
     public record MaterialProperties : ShaderStatement {
         public PropertiesKeyword               propertiesKeyword { get; init; } = new();
         public OpenBraceToken                  openBraceToken    { get; init; } = new();
-        public SyntaxList<Shaderlab, Property> properties        { get; init; } = SyntaxList<Shaderlab, Property>.Empty;
+        public SyntaxList<Shaderlab, Property> properties        { get; init; } = new();
         public CloseBraceToken                 closeBraceToken   { get; init; } = new();
 
         public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>[]

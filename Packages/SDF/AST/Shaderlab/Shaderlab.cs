@@ -13,6 +13,6 @@ namespace AST.Shaderlab {
     /// statement occuting only inside pass block
     public abstract record PassStatement : SubShaderOrPassStatement;
     
-    /// Predefined command with arguments 
+    /// Predefined command with arguments
     public abstract record Command : SubShaderOrPassStatement;
 }

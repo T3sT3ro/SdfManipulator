@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AST.Hlsl.Syntax;
 using AST.Syntax;
 using NUnit.Framework;
 using UnityEngine.TestTools;
@@ -81,6 +82,13 @@ namespace Tests.Editor.AST {
             var newMul = mulExpr with { Left = mulExpr };
             tree = new Tree<FooLang>(newMul);
             Assert.AreEqual("1*0*0", tree.ToString());
+            yield return null;
+        }
+
+        [UnityTest]
+        public static IEnumerator HlslSyntaxSmokeTest() {
+            var varDeclaration = new VariableDeclarator { type = new Type.Predefined { typeToken = new MatrixToken() } };
+            Assert.AreEqual(varDeclaration, (varDeclaration.type as Type.Predefined)!.typeToken.Parent!.Parent);
             yield return null;
         }
     }

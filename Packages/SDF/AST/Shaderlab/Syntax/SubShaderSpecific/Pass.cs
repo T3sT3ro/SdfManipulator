@@ -6,7 +6,7 @@ namespace AST.Shaderlab.Syntax.SubShaderSpecific {
     public partial record Pass : SubShaderStatement {
         public PassKeyword                          passKeyword     { get; init; } = new();
         public OpenBraceToken                       openBraceToken  { get; init; } = new();
-        public SyntaxList<Shaderlab, PassStatement> statements      { get; init; } = SyntaxList<Shaderlab, PassStatement>.Empty;
+        public SyntaxList<Shaderlab, PassStatement> statements      { get; init; } = new();
         public CloseBraceToken                      closeBraceToken { get; init; } = new();
 
         public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>[]

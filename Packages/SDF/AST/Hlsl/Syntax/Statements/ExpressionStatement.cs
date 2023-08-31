@@ -5,9 +5,9 @@ using AST.Syntax;
 namespace AST.Hlsl.Syntax.Statements {
     // expression;
     // ; <- empty expression statement
-    public record ExpressionStatement : Statement {
-        public Expression? expression { get; init; }
-        public SemiToken   semiToken  { get; init; } = new();
+    public partial record ExpressionStatement : Statement {
+        private readonly Expression? _expression;
+        private readonly SemiToken   _semiToken;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens =>
             expression != null

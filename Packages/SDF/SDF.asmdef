@@ -1,11 +1,21 @@
 {
-  "name": "SDF",
-  "references": [
-    "SDF.API",
-    "SDF.AST.Hlsl",
-    "SDF.AST.Shaderlab",
-    "SDF.AST.Syntax",
-    "SDF.Assets",
-    "SDF.Controllers"
-  ]
+    "name": "SDF",
+    "rootNamespace": "",
+    "references": [
+        "SDF.API",
+        "SDF.AST.Hlsl",
+        "SDF.AST.Shaderlab",
+        "SDF.AST.Syntax",
+        "SDF.Assets",
+        "SDF.Controllers"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

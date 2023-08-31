@@ -5,8 +5,8 @@
     "SDF.Controllers",
     "SDF.API",
     "SDF.AST.Syntax",
-    "SDF.AST.Syntax",
-    "SDF.IsExternalInitShim"
+    "SDF.IsExternalInitShim",
+    "SDF.AST.Hlsl"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

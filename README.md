@@ -297,6 +297,14 @@ _m30, _m31, _m32, _m33
 o.color.xyz = _BoxFrame1_Transform._m03_m13_m23;
 ```
 
+```
+REEGEX for replacing syntax to generate partial classes with parent binders:
+from: (^\s+public partial record (\w+)((?:\s|.)*)\n([^\S]*))public ((?:\S|, )+)\s+(\w+)\s+\{ get; init; \}(.*) 
+to:   $1readonly $5 _$6; /*parent_binder*/ public partial record $2 { public $5 $6 { get => _$6; set => _$6 = value with { Parent = this } } public $2() { _$6$7 } }
+requires multiple steps
+but using grep the names of classes can be extracted later
+```
+
 
 ## thesis:
 

@@ -5,8 +5,8 @@ using AST.Syntax;
 namespace AST.Hlsl.Syntax {
     public abstract partial record Type {
         /// struct names or types introduced by typedef
-        public record UserDefined : Type {
-            public Identifier id { get; init; }
+        public partial record UserDefined : Type {
+            private readonly Identifier _id;
 
             public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new[]
                 { id };

@@ -9,10 +9,6 @@ namespace AST.Syntax {
             where T : class =>
             item is null ? enumerable : enumerable.Append(item);
 
-        public static IEnumerable<T> AppendAll<T>(this IEnumerable<T> enumerable, params T[] items)
-            where T : class? =>
-            enumerable.Concat(items);
-
         public static IEnumerable<T> AppendAll<T>(this IEnumerable<T> enumerable, IEnumerable<T> items)
             where T : class? =>
             enumerable.Concat(items);
@@ -50,6 +46,37 @@ namespace AST.Syntax {
                     continue;
                 
                 yield return elem;
+            }
+        }
+        
+        public static IEnumerable<Syntax<Lang>> DescendantNodes<Lang>(this Syntax<Lang> root) =>
+            root.DescendantNodesAndSelf().Skip(1);
+
+        public static IEnumerable<Syntax<Lang>> DescendantNodesAndSelf<Lang>(this Syntax<Lang> root) {
+            var stack = new Stack<Syntax<Lang>>();
+            stack.Push(root);
+
+            while (stack.Count > 0) {
+                var current = stack.Pop();
+                yield return current;
+
+                foreach (var child in current.ChildNodes.Reverse()) 
+                    stack.Push(child);
+            }
+        }
+
+        public static IEnumerable<SyntaxOrToken<Lang>> DescendantNodesAndTokens<Lang>(this Syntax<Lang> root) {
+            var stack = new Stack<SyntaxOrToken<Lang>>();
+            stack.Push(root);
+
+            while (stack.Count > 0) {
+                var current = stack.Pop();
+                yield return current;
+
+                if (current is not Syntax<Lang> node) continue;
+
+                foreach (var child in node.ChildNodesAndTokens.Reverse())
+                    stack.Push(child);
             }
         }
     }

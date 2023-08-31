@@ -3,10 +3,10 @@ using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
     // a, b
-    public record Comma : Expression {
-        public Expression left  { get; init; }
-        public CommaToken comma { get; init; } = new();
-        public Expression right { get; init; }
+    public partial record Comma : Expression {
+        private readonly Expression _left;
+        private readonly CommaToken _comma;
+        private readonly Expression _right;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { left, comma, right };

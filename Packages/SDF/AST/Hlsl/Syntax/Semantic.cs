@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax {
-    public record Semantic : Syntax<Hlsl> {
-        public ColonToken    colonToken    { get; init; } = new();
-        public SemanticToken semanticToken { get; init; }
+    public partial record Semantic : Syntax<Hlsl> {
+        private readonly ColonToken    _colonToken;
+        private readonly SemanticToken _semanticToken;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { colonToken, semanticToken };

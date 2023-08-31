@@ -90,7 +90,7 @@ namespace Assets.Nodes.MasterNodes {
         private static ExpressionStatement MemberAssignment(string memberName, Expression ValueExpression) =>
             new ExpressionStatement
             {
-                expression = new AssignmentExpresion
+                expression = new AssignmentExpression
                 {
                     left = MemberAccessor(memberName) with { expression = new Identifier { id = fragInArgName } },
                     right = ValueExpression

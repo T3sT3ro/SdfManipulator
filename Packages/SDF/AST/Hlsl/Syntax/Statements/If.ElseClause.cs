@@ -4,9 +4,9 @@ using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
     public partial record If {
-        public record ElseClause : Syntax<Hlsl> {
-            public ElseKeyword elseKeyword { get; init; } = new();
-            public Statement   statement   { get; init; }
+        public partial record ElseClause : Syntax<Hlsl> {
+            private readonly ElseKeyword _elseKeyword;
+            private readonly Statement   _statement;
 
             public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
                 { elseKeyword, statement };

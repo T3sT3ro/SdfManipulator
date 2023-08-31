@@ -9,11 +9,11 @@ namespace AST.Hlsl.Syntax {
     // uniform row_major float4x4 M : WORLDVIEWPROJECTION, N : WORLDVIEWPROJECTION
     // float x[2][2] : VPOS = { { 1, 2 }, { 3, 4 } }
     // struct Result {float d; float3 pos;} result = {1.0f, {0.0f, 0.0f, 0.0f}};
-    public record VariableDeclarator : Syntax<Hlsl> {
-        public Token<Hlsl>?                            storageKeyword { get; init; }
-        public Token<Hlsl>?                            typeModifier   { get; init; }
-        public Type                                    type           { get; init; }
-        public SeparatedList<Hlsl, VariableDefinition> variables      { get; init; }
+    public partial record VariableDeclarator : Syntax<Hlsl> {
+        private readonly Token<Hlsl>?                            _storageKeyword;
+        private readonly Token<Hlsl>?                            _typeModifier;
+        private readonly Type                                    _type;
+        private readonly SeparatedList<Hlsl, VariableDefinition> _variables;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]
                 { storageKeyword, typeModifier, type, variables }
@@ -23,17 +23,14 @@ namespace AST.Hlsl.Syntax {
         // x
         // x[1][2]
         // x : PSIZE = 3
-        public record VariableDefinition : Syntax<Hlsl> {
-            public Identifier                   id          { get; init; }
-            public SyntaxList<Hlsl, ArrayRank>? arraySizes  { get; init; }
-            public Semantic?                    semantic    { get; init; }
-            public Initializer?                 initializer { get; init; }
+        public partial record VariableDefinition : Syntax<Hlsl> {
+            private readonly Identifier                   _id;
+            private readonly SyntaxList<Hlsl, ArrayRank>? _arraySizes;
+            private readonly Semantic?                    _semantic;
+            private readonly Initializer?                 _initializer;
 
-            public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new Syntax<Hlsl>[]
-                    { id }
-                .ConcatNotNull(arraySizes)
-                .AppendNotNull(semantic)
-                .AppendNotNull(initializer)
+            public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new Syntax<Hlsl>?[]
+                    { id, arraySizes, semantic, initializer }.FilterNotNull()
                 .ToList();
         }
     }

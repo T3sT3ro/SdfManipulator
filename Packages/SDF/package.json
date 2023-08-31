@@ -5,7 +5,6 @@
   "description": "Easily create Signed Distance Field based shaders in unity",
   "unity": "2022.1",
   "dependencies": {
-    "com.unity.shadergraph": "13.1.8"
   },
   "keywords": [
     "SDF",

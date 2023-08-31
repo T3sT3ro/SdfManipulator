@@ -2,20 +2,20 @@ using System.Collections.Generic;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Expressions.Operators {
-    public abstract record Affix : Expression { // prefix/postfix increment/decrement
-        public Identifier id { get; init; }
+    public abstract partial record Affix : Expression { // prefix/postfix increment/decrement
+        private readonly Identifier _id;
 
         // ++x, --x
-        public record Pre : Affix {
-            public AffixOperatorToken prefixOperator { get; init; }
+        public partial record Pre : Affix {
+            private readonly AffixOperatorToken _prefixOperator;
 
             public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
                 { prefixOperator, id };
         }
 
         // x++, x--
-        public record Post : Affix {
-            public AffixOperatorToken suffixOperator { get; init; }
+        public partial record Post : Affix {
+            private readonly AffixOperatorToken _suffixOperator;
 
             public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
                 { id, suffixOperator };

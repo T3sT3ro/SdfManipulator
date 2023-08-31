@@ -6,9 +6,9 @@ namespace AST.Hlsl.Syntax.Statements.Declarations {
     // struct x {};
     // struct x { float pos; x other; };
     // struct {}; anonymous, empty, allowed but... pointless?
-    public record StructDeclaration : Statement {
-        public Type.Struct shape     { get; init; }
-        public SemiToken   semicolon { get; init; } = new();
+    public partial record StructDeclaration : Statement {
+        private readonly Type.Struct _shape;
+        private readonly SemiToken   _semicolon;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
             { shape, semicolon };

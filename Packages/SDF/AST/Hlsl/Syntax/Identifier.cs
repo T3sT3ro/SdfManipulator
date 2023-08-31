@@ -3,8 +3,8 @@ using AST.Hlsl.Syntax.Expressions;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax {
-    public record Identifier : Expression {
-        public IdentifierToken id { get; init; }
+    public partial record Identifier : Expression {
+        private readonly IdentifierToken _id;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new[]
             { id };

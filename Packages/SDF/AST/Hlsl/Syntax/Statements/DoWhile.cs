@@ -3,16 +3,16 @@ using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
     // do { body } while (test);
-    public record DoWhile : Statement {
-        public DoKeyword       doKeyword       { get; init; } = new();
-        public OpenBraceToken  openBraceToken  { get; init; } = new();
-        public Statement       body            { get; init; }
-        public CloseBraceToken closeBraceToken { get; init; } = new();
-        public WhileKeyword    whileKeyword    { get; init; } = new();
-        public OpenParenToken  openParenToken  { get; init; } = new();
-        public Expression      test            { get; init; }
-        public CloseParenToken closeParenToken { get; init; } = new();
-        public SemiToken       semicolonToken  { get; init; } = new();
+    public partial record DoWhile : Statement {
+        private readonly DoKeyword       _doKeyword;
+        private readonly OpenBraceToken  _openBraceToken;
+        private readonly Statement       _body;
+        private readonly CloseBraceToken _closeBraceToken;
+        private readonly WhileKeyword    _whileKeyword;
+        private readonly OpenParenToken  _openParenToken;
+        private readonly Expression      _test;
+        private readonly CloseParenToken _closeParenToken;
+        private readonly SemiToken       _semicolonToken;
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
         {

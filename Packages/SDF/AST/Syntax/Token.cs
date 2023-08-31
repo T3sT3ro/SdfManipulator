@@ -5,8 +5,8 @@ using System.Text;
 
 namespace AST.Syntax {
     public abstract record Token<Lang> : SyntaxOrToken<Lang> {
-        private readonly TriviaList<Lang> _leadingTriviaList  = Array.Empty<Trivia<Lang>>();
-        private readonly TriviaList<Lang> _trailingTriviaList = Array.Empty<Trivia<Lang>>();
+        private readonly TriviaList<Lang> _leadingTriviaList  = new();
+        private readonly TriviaList<Lang> _trailingTriviaList = new();
         public abstract  string           Text { get; }
 
         public TriviaList<Lang> LeadingTriviaList {
@@ -19,10 +19,13 @@ namespace AST.Syntax {
             init => _trailingTriviaList = new(value with { Token = this });
         }
 
-        public override void WriteTo(StringBuilder sb) {
-            foreach (var leading in LeadingTriviaList) sb.Append(leading);
+        public override StringBuilder WriteTo(StringBuilder sb) {
+            LeadingTriviaList.WriteTo(sb);
             sb.Append(Text);
-            foreach (var trailing in LeadingTriviaList) sb.Append(trailing);
+            TrailingTriviaList.WriteTo(sb);
+            return sb;
         }
+
+        public override string ToString() => base.ToString();
     }
 }

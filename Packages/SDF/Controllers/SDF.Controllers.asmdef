@@ -2,6 +2,9 @@
   "name": "SDF.Controllers",
   "references": [
     "SDF.API",
-    "SDF.Assets"
+    "SDF.Assets",
+    "SDF.AST.Hlsl",
+    "SDF.IsExternalInitShim",
+    "SDF.AST.Syntax"
   ]
 }

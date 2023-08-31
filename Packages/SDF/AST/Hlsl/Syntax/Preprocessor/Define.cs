@@ -4,15 +4,12 @@ using System.Linq;
 using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Preprocessor {
-    public record Define : PreprocessorSyntax {
-        public DefineKeyword defineKeyword { get; init; } = new();
+    public partial record Define : PreprocessorSyntax {
+        private readonly DefineKeyword _defineKeyword;
+        private readonly ArgumentList<Identifier>? _argList;
 
-        // For the functional macros: #define FUNCTIONAL(X) X*X
-        public ArgumentList<Identifier>? argList { get; init; } =
-            new() { arguments = SeparatedList<Hlsl, Identifier>.Empty };
-
-        public Identifier  id          { get; init; }
-        public TokenString tokenString { get; init; }
+        private readonly Identifier  _id;
+        private readonly TokenString _tokenString;
 
 
         public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]

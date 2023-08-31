@@ -42,7 +42,7 @@ namespace AST.Shaderlab {
             var formatter = new ShaderlabFormatter(options, indentLevel);
             return formatter.Visit((dynamic)node);
         }
-
+/* FIXME: implement
         protected TriviaList Visit(WithParent<TriviaList> triviaListWithParent) {
             var children = base.Visit(triviaListWithParent);
             var normalized = NormalizeWhitespace(children);
@@ -61,7 +61,7 @@ namespace AST.Shaderlab {
         }
 
         private static bool isIndentWhitespace(WithParent<Trivia<Shaderlab>> triviaWithParent) {
-            triviaWithParent.GetType().GetProperties().First().GetSetMethod()
+            triviaWithParent.GetType().GetProperties().First().GetSetMethod();
             var trivia = triviaWithParent.Value;
             var token = triviaWithParent.Value.Token;
             var t1 = trivia.TriviaList == token.LeadingTriviaList;
@@ -163,6 +163,6 @@ namespace AST.Shaderlab {
                 previous.TrailingTrivia = newTrailing;
                 current.LeadingTrivia = newLeading;
             }
-        }
+        }*/
     }
 }

@@ -73,16 +73,16 @@ namespace AST.Syntax {
         }
 
         /// rewrites a trivia. If it (or children) changed, returns changed trivia. Otherwise returns original trivia.
-        protected virtual Trivia<Lang> Visit(WithParent<StructuredTrivia<Lang>> triviaWithParent) {
-            var trivia = triviaWithParent.Value;
-            if (!DescendIntoStructuredTrivia) 
-                return trivia;
-            var result = Visit((dynamic)trivia.Structure);
-            if (result == trivia) 
-                return trivia;
-            
-            return trivia with { Structure = result };
-        }
+        // protected virtual Trivia<Lang> Visit(WithParent<StructuredTrivia<Lang>> triviaWithParent) {
+        //     var trivia = triviaWithParent.Value;
+        //     if (!DescendIntoStructuredTrivia) 
+        //         return trivia;
+        //     var result = Visit((dynamic)trivia.Structure);
+        //     if (result == trivia) 
+        //         return trivia;
+        //     
+        //     return trivia with { Structure = result };
+        // }
 
         /// rewrites list's elements, if it (or children) changed, returns changed list. Othwerwise returns original list.
         protected virtual IReadOnlyList<T> Visit<T>(WithParent<IReadOnlyList<T>> listWithParent) where T : class {

@@ -1,0 +1,10 @@
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/bin/Debug/netstandard2.0/SourceGenerators.deps.json
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/bin/Debug/netstandard2.0/SourceGenerators.dll
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/bin/Debug/netstandard2.0/SourceGenerators.pdb
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/obj/Debug/netstandard2.0/SourceGenerators.csproj.AssemblyReference.cache
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/obj/Debug/netstandard2.0/SourceGenerators.GeneratedMSBuildEditorConfig.editorconfig
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/obj/Debug/netstandard2.0/SourceGenerators.AssemblyInfoInputs.cache
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/obj/Debug/netstandard2.0/SourceGenerators.AssemblyInfo.cs
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/obj/Debug/netstandard2.0/SourceGenerators.csproj.CoreCompileInputs.cache
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/obj/Debug/netstandard2.0/SourceGenerators.dll
+/home/tooster/workspace/ttr/SdfManipulator/Packages/SDF/SourceGenerators~/obj/Debug/netstandard2.0/SourceGenerators.pdb

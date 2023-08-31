@@ -5,8 +5,8 @@ using AST.Syntax;
 
 namespace AST.Hlsl.Syntax.Statements {
     public partial record For {
-        public record VariableInitializer : Initializer {
-            public SeparatedList<Hlsl, AssignmentExpresion> initializers { get; init; }
+        public partial record VariableInitializer : Initializer {
+            private readonly SeparatedList<Hlsl, AssignmentExpression> _initializers;
 
             public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new[]
                 { initializers };

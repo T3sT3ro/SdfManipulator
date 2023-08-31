@@ -195,15 +195,15 @@ namespace AST.Hlsl.Syntax {
     }
 
     public record MatrixToken : PredefinedTypeToken {
-        public          ScalarTypeToken type { get; init; }
-        public          uint            rows { get; init; }
-        public          uint            cols { get; init; }
+        public          ScalarTypeToken type { get; init; } = new FloatKeyword();
+        public          uint            rows { get; init; } = 4;
+        public          uint            cols { get; init; } = 4;
         public override string          Text => string.Intern($"{type.Text}{rows.ToString()}x{cols.ToString()}");
     }
 
     public record VectorToken : PredefinedTypeToken {
-        public          ScalarTypeToken type  { get; init; }
-        public          uint            arity { get; init; }
+        public          ScalarTypeToken type  { get; init; } = new FloatKeyword();
+        public          uint            arity { get; init; } = 4;
         public override string          Text  => string.Intern($"{type.Text}{arity.ToString()}");
     }
 

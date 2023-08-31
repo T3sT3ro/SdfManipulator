@@ -12,9 +12,7 @@ namespace AST.Syntax {
         public SyntaxList(IEnumerable<TSyntax> list) : base(list) { }
         public SyntaxList(params TSyntax[]     list) : this(list.AsEnumerable()) { }
 
-        new public static SyntaxList<Lang, TSyntax> Empty { get; } =
-            new SyntaxList<Lang, TSyntax>(Array.Empty<TSyntax>());
-
+        public SyntaxList() : base() {}
 
         new public TSyntax this[int index] => (TSyntax)base[index];
 
@@ -27,5 +25,7 @@ namespace AST.Syntax {
 
         public static implicit operator SyntaxList<Lang, TSyntax>(TSyntax[]     list) => new(list);
         public static implicit operator SyntaxList<Lang, TSyntax>(List<TSyntax> list) => new(list.AsEnumerable());
+
+        public override string ToString() => base.ToString();
     }
 }
