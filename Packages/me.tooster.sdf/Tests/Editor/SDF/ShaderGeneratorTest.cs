@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using API;
-using Assets.Nodes;
-using Assets.Nodes.MasterNodes;
+using me.tooster.sdf.Editor.API;
+using me.tooster.sdf.Editor.NodeGraph.Nodes;
+using me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Node = API.Node;
+using Node = me.tooster.sdf.Editor.API.Node;
 
 namespace Tests.Editor.SDF {
     public static class ShaderGeneratorTest {

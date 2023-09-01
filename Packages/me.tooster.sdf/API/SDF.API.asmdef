@@ -1,7 +1,0 @@
-{
-  "name": "SDF.API",
-  "references": [
-    "SDF.IsExternalInitShim",
-    "SDF.AST.Syntax"
-  ]
-}

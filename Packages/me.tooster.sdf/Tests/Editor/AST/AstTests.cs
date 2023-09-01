@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using AST.Hlsl.Syntax;
-using AST.Syntax;
+using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Syntax;
 using NUnit.Framework;
 using UnityEngine.TestTools;
+using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
+using VariableDeclarator = me.tooster.sdf.AST.Hlsl.Syntax.VariableDeclarator;
 
-namespace Tests.Editor.AST {
+namespace me.tooster.sdf.Tests.Editor.AST {
 
     interface FooLang {}
     interface BarLang {}
@@ -90,6 +92,10 @@ namespace Tests.Editor.AST {
             var varDeclaration = new VariableDeclarator { type = new Type.Predefined { typeToken = new MatrixToken() } };
             Assert.AreEqual(varDeclaration, (varDeclaration.type as Type.Predefined)!.typeToken.Parent!.Parent);
             yield return null;
+        }
+        
+        public static void test() {
+            HelloWorld.Hello();
         }
     }
 

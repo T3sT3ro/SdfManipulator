@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // scene view rendering of fullscreen raymarching objects
-namespace SDF {
+namespace me.tooster.sdf.Editor {
     [ExecuteInEditMode]
     [RequireComponent(typeof(Camera))]
     public class SDFRenderer : SceneViewFilter {

@@ -1,0 +1,20 @@
+{
+    "name": "me.tooster.sdf.Editor.Controllers",
+    "rootNamespace": "me.tooster.sdf.Editor.Controllers",
+    "references": [
+        "GUID:c96f805ecf994545999c6d6135bacd40",
+        "GUID:87464bf6311c423aa08363aec894ea1b",
+        "GUID:b56098a2d1d04141ae87dc625ea17ce0",
+        "GUID:1d773a5b1f524c7f89714bef6e9aea3e",
+        "GUID:5d2a6c362f9243a39f79a6f8eb3fad9a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

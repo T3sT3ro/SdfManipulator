@@ -1,0 +1,14 @@
+{
+    "name": "me.tooster.sdf.IsExternalInitShim",
+    "rootNamespace": "System.Runtime.CompilerServices",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

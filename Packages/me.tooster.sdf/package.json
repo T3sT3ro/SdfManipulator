@@ -9,11 +9,19 @@
   "keywords": [
     "SDF",
     "Shader",
-    "Raymarching"
+    "Raymarching",
+    "Generator"
   ],
   "author": {
     "name": "Tooster",
     "email": "",
     "url": "https://github.com/T3sT3ro/SdfManipulator"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "SDF",
+      "description": "SDF",
+      "path": "Samples~/Squares"
+    }
+  ]
 }
