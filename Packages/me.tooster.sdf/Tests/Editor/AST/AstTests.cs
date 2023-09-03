@@ -93,10 +93,6 @@ namespace me.tooster.sdf.Tests.Editor.AST {
             Assert.AreEqual(varDeclaration, (varDeclaration.type as Type.Predefined)!.typeToken.Parent!.Parent);
             yield return null;
         }
-        
-        public static void test() {
-            HelloWorld.Hello();
-        }
     }
 
 }

@@ -59,17 +59,17 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
                     {
                         Property<int> p => new PropertySyntax
                         {
-                            propertyType = new PredefinedPropertyType { type = new IntegerKeyword() },
+                            propertyType = new PropertySyntax.PredefinedType { type = new IntegerKeyword() },
                             initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = p.DefaultValue }
                         },
                         Property<float> p => new PropertySyntax
                         {
-                            propertyType = new PredefinedPropertyType { type = new FloatKeyword() },
+                            propertyType = new PropertySyntax.PredefinedType { type = new FloatKeyword() },
                             initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = p.DefaultValue }
                         },
                         Property<Vector4> p => new PropertySyntax
                         {
-                            propertyType = new PredefinedPropertyType { type = new VectorKeyword() },
+                            propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
                             initializer = new PropertySyntax.Vector
                                 { arguments = ShaderlabUtil.VectorArgumentList(p.DefaultValue) }
                         },

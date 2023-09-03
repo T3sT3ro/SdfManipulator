@@ -9,7 +9,6 @@ namespace me.tooster.sdf.Editor.Controllers {
     public partial class TransformController : Controller {
         protected             Property<Matrix4x4> transformProperty;
         protected             MatrixPropertyNode  primitiveTransform;
-        [GetComponent] public Transform           _tr;
         
         private void Start() {
             transformProperty = sdfDomain.Graph.CreateProperty("transform", Matrix4x4.identity);

@@ -5,42 +5,29 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.Commands {
     /// <a href="https://docs.unity3d.com/Manual/SL-Blend.html">Blend</a>
-    public record Blend : Command {
-        public BlendKeyword     _blendKeyword   { get; init; } = new();
-        public CommandArgument? _renderTarget   { get; init; }
-        public BlendArguments   _blendArguments { get; init; }
-
-        public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>?[]
-            { blendKeyword, renderTarget, blendArguments }.FilterNotNull().ToList();
+    [Syntax] public partial record Blend : Command {
+        [Init] private readonly BlendKeyword     _blendKeyword;
+        private readonly        CommandArgument? _renderTarget;
+        private readonly        BlendArguments   _blendArguments;
 
 
-        public abstract record BlendArguments : CommandArgument;
+        [Syntax] public abstract partial record BlendArguments : CommandArgument;
 
-        public record StateArgument : BlendArguments {
-            public CommandArgument _stateArg { get; init; }
-
-            public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new[]
-                { stateArg };
+        [Syntax] public partial record StateArgument : BlendArguments {
+            private readonly CommandArgument _stateArg;
         }
 
-        public record SrcDstArguments : BlendArguments {
-            public CommandArgument _srcFactorArg { get; init; }
-            public CommandArgument _dstFactorArg { get; init; }
-
-            public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new[]
-                { srcFactorArg, dstFactorArg };
+        [Syntax] public partial record SrcDstArguments : BlendArguments {
+            private readonly CommandArgument _srcFactorArg;
+            private readonly CommandArgument _dstFactorArg;
         }
 
-        public record RgbaFactorArguments : BlendArguments {
-            public CommandArgument _srcRgbFactor   { get; init; }
-            public CommandArgument _srcAlphaFactor { get; init; }
-            public CommaToken      _commaToken     { get; init; } = new();
-            public CommandArgument _dstRgbFactor   { get; init; }
-            public CommandArgument _dstAlphaFactor { get; init; }
-
-            public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens =>
-                new SyntaxOrToken<Shaderlab>[]
-                    { srcRgbFactor, srcAlphaFactor, commaToken, dstRgbFactor, dstAlphaFactor };
+        [Syntax] public partial record RgbaFactorArguments : BlendArguments {
+            private readonly        CommandArgument _srcRgbFactor;
+            private readonly        CommandArgument _srcAlphaFactor;
+            [Init] private readonly CommaToken      _commaToken;
+            private readonly        CommandArgument _dstRgbFactor;
+            private readonly        CommandArgument _dstAlphaFactor;
         }
     }
 }

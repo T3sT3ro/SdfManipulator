@@ -2,11 +2,9 @@ using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.Commands {
-    public record ZWrite : Command {
-        public ZWriteKeyword   _zWriteKeyword { get; init; } = new();
-        public CommandArgument _state         { get; init; }
+    [Syntax] public partial record  ZWrite : Command {
+        [Init] private readonly ZWriteKeyword   _zWriteKeyword ;
+        private readonly        CommandArgument _state         ;
 
-        public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>[]
-            { zWriteKeyword, state };
     }
 }

@@ -1,5 +1,5 @@
 using me.tooster.sdf.AST.Hlsl.Syntax;
-using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.Editor.API;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 

@@ -2,11 +2,8 @@ using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
-    public record Tag : Syntax<Shaderlab> {
-        public QuotedStringLiteral _key   { get; init; }
-        public QuotedStringLiteral _value { get; init; }
-
-        public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new[]
-            { key, value };
+    [Syntax] public partial record  Tag : Syntax<Shaderlab> {
+        private readonly  QuotedStringLiteral _key   ;
+        private readonly  QuotedStringLiteral _value ;
     }
 }

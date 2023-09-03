@@ -1,10 +1,11 @@
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations;
 using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.NodeGraph.PortData;
 using Identifier = me.tooster.sdf.AST.Hlsl.Syntax.Identifier;
 using StructMember = me.tooster.sdf.AST.Hlsl.Syntax.Type.Struct.Member;
-using MemberAccess = me.tooster.sdf.AST.Hlsl.Syntax.Member;
+using MemberAccess = me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators.Member;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
 

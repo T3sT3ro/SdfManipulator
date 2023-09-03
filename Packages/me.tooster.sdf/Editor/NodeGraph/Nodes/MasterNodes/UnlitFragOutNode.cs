@@ -1,6 +1,7 @@
 #nullable enable
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations;
 using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.NodeGraph.PortData;
 using StructMember = me.tooster.sdf.AST.Hlsl.Syntax.Type.Struct.Member;
