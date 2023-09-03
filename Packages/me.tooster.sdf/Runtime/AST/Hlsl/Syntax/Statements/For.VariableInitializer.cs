@@ -5,12 +5,9 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
-    public partial record For {
-        public partial record VariableInitializer : Initializer {
-            private readonly SeparatedList<Hlsl, AssignmentExpression> /*_*/initializers;
-
-            public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new[]
-                { initializers };
+   public partial record For {
+       [Syntax] public partial record VariableInitializer : Initializer {
+            [Init] private readonly SeparatedList<Hlsl, AssignmentExpression> _initializers;
         }
     }
 }

@@ -8,20 +8,16 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
     // [Header(header title)]
     // [Enum(One,1,SrcAlpha,5)]
     // [PowerSlider(3.0)]
-    public record Attribute : Syntax<Shaderlab> {
-        public OpenBracketToken              openBracketToken  { get; init; } = new();
-        public AttributeToken                attributeToken    { get; init; }
-        public ArgumentList<AttributeValue>? arguments         { get; init; }
-        public CloseBracketToken             closeBracketToken { get; init; } = new();
+    [Syntax]
+    public partial record Attribute : Syntax<Shaderlab> {
+        public OpenBracketToken              _openBracketToken  { get; init; } = new();
+        public AttributeToken                _attributeToken    { get; init; }
+        public ArgumentList<AttributeValue>? _arguments         { get; init; }
+        public CloseBracketToken             _closeBracketToken { get; init; } = new();
 
-        public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>?[]
-            { openBracketToken, attributeToken, arguments, closeBracketToken }.FilterNotNull().ToList();
-
-        public record AttributeValue : Syntax<Shaderlab> {
-            public AttributeStringLiteral value { get; init; }
-
-            public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new[]
-                { value };
+        [Syntax]
+        public partial record AttributeValue : Syntax<Shaderlab> {
+            public AttributeStringLiteral _value { get; init; }
         }
     }
 }

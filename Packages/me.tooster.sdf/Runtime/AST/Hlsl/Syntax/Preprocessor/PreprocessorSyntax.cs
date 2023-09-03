@@ -1,7 +1,7 @@
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
-    public abstract partial record PreprocessorSyntax : Syntax<Hlsl> {
-        private readonly HashToken /*_*/hashToken;
+    [Syntax] public abstract partial record PreprocessorSyntax : Syntax<Hlsl> {
+        [Init] private readonly HashToken _hashToken;
     }
 }

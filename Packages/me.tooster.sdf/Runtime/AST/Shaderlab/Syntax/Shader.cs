@@ -10,12 +10,12 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     /// <a href="https://docs.unity3d.com/Manual/SL-Fallback.html">Fallback</a>
     /// <a href="https://docs.unity3d.com/Manual/SL-CustomEditor.html">CustomEditor</a>
     public record Shader : Syntax<Shaderlab> {
-        public ShaderKeyword                          shaderKeyword      { get; init; } = new();
-        public QuotedStringLiteral                    name               { get; init; }
-        public OpenBraceToken                         openBraceToken     { get; init; } = new();
-        public MaterialProperties?                    materialProperties { get; init; }
-        public SyntaxList<Shaderlab, ShaderStatement> shaderStatements   { get; init; } = new();
-        public CloseBraceToken                        closeBraceToken    { get; init; } = new();
+        public ShaderKeyword                          _shaderKeyword      { get; init; } = new();
+        public QuotedStringLiteral                    _name               { get; init; }
+        public OpenBraceToken                         _openBraceToken     { get; init; } = new();
+        public MaterialProperties?                    _materialProperties { get; init; }
+        public SyntaxList<Shaderlab, ShaderStatement> _shaderStatements   { get; init; } = new();
+        public CloseBraceToken                        _closeBraceToken    { get; init; } = new();
 
         public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>?[]
                 { shaderKeyword, name, openBraceToken, materialProperties, shaderStatements, closeBraceToken }

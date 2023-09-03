@@ -4,9 +4,9 @@ using me.tooster.sdf.AST.Syntax;
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     // ( SYNTAX TOKEN SYNTAX TOKEN )
     public record ArgumentList<TSyntax> : Syntax<Shaderlab> where TSyntax : Syntax<Shaderlab> {
-        public OpenParenToken                    openParenToken  { get; init; } = new();
-        public SeparatedList<Shaderlab, TSyntax> arguments       { get; init; }
-        public CloseParenToken                   closeParenToken { get; init; } = new();
+        public OpenParenToken                    _openParenToken  { get; init; } = new();
+        public SeparatedList<Shaderlab, TSyntax> _arguments       { get; init; }
+        public CloseParenToken                   _closeParenToken { get; init; } = new();
 
         public override IReadOnlyList<SyntaxOrToken<Shaderlab>> ChildNodesAndTokens => new SyntaxOrToken<Shaderlab>[]
             { openParenToken, arguments, closeParenToken };

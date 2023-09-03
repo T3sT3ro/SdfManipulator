@@ -3,13 +3,10 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
     // ( T , ... , T ) 
-    public partial record ArgumentList<T> : Syntax<Hlsl> where T : Syntax<Hlsl> {
-        private readonly OpenParenToken         /*_*/openParenToken;
-        private readonly SeparatedList<Hlsl, T> /*_*/arguments;
-        private readonly CloseParenToken        /*_*/closeParenToken;
-
-        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
-            { openParenToken, arguments, closeParenToken };
+    [Syntax] public partial record ArgumentList<T> : Syntax<Hlsl> where T : Syntax<Hlsl> {
+        [Init] private readonly OpenParenToken         _openParenToken;
+        [Init] private readonly SeparatedList<Hlsl, T> _arguments;
+        [Init] private readonly CloseParenToken        _closeParenToken;
 
         public static implicit operator ArgumentList<T>(T[] args) => new() { arguments = args.CommaSeparated() };
 
@@ -18,14 +15,12 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     // { T , ... , T }
-    public partial record BracedList<T> : Syntax<Hlsl> where T : Syntax<Hlsl> {
-        private readonly OpenBraceToken         /*_*/openBraceToken;
-        private readonly SeparatedList<Hlsl, T> /*_*/arguments;
-        private readonly CloseBraceToken        /*_*/closeBraceToken;
+    [Syntax] public partial record BracedList<T> : Syntax<Hlsl> where T : Syntax<Hlsl> {
+        [Init] private readonly OpenBraceToken         _openBraceToken;
+        [Init] private readonly SeparatedList<Hlsl, T> _arguments;
+        [Init] private readonly CloseBraceToken        _closeBraceToken;
 
-        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
-            { openBraceToken, arguments, closeBraceToken };
-
-        public static implicit operator BracedList<T>(T[] args) => new() { arguments = args.CommaSeparated() };
+        public static implicit operator BracedList<T>(T[] args)    => new() { arguments = args.CommaSeparated() };
+        public static implicit operator BracedList<T>(T singleton) => new() { arguments = singleton.CommaSeparated() };
     }
 }

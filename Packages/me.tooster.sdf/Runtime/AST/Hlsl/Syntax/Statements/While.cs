@@ -2,14 +2,11 @@ using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
-    public partial record While : Statement {
-        private readonly WhileKeyword    /*_*/whileKeyword;
-        private readonly OpenParenToken  /*_*/openParen;
-        private readonly Expression      /*_*/test;
-        private readonly CloseParenToken /*_*/closeParen;
-        private readonly Statement       /*_*/body;
-
-        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
-            { whileKeyword, openParen, test, closeParen, body };
+    [Syntax] public partial record While : Statement {
+        [Init] private readonly WhileKeyword    _whileKeyword;
+        [Init] private readonly OpenParenToken  _openParen;
+        private readonly        Expression      _test;
+        [Init] private readonly CloseParenToken _closeParen;
+        private readonly        Statement       _body;
     }
 }

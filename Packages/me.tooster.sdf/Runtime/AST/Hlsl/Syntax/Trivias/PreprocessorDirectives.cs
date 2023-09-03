@@ -4,7 +4,7 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Trivias {
     public abstract partial record PreprocessorDirective : StructuredTrivia<Hlsl> {
-        private readonly PreprocessorSyntax /*_*/triviaSyntax;
+        private readonly PreprocessorSyntax _triviaSyntax;
     }
 
     // used to break preprocessor lines

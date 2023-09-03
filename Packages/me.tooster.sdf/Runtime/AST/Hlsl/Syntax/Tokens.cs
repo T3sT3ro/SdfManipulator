@@ -25,7 +25,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     
     public record BarToken                              : Token<Hlsl> { public override string Text => "|"; }
     public record ColonToken                            : Token<Hlsl> { public override string Text => ":"; }
-    public record SemiToken                             : Token<Hlsl> { public override string Text => ";"; }
+    public record SemicolonToken                        : Token<Hlsl> { public override string Text => ";"; }
     public record LessThanToken                         : Token<Hlsl> { public override string Text => "<"; }
     public record GreaterThanToken                      : Token<Hlsl> { public override string Text => ">"; }
     public record CommaToken                            : Token<Hlsl> { public override string Text => ","; }
@@ -69,8 +69,8 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     public record NointerpolationKeyword    : Token<Hlsl> { public override string Text => "nointerpolation"; }
 
     public record ConstKeyword              : Token<Hlsl> { public override string Text => "const"; }
-    public record RowMajorKeyword           : Token<Hlsl> { public override string Text => "row/*_*/major"; }
-    public record ColumnMajorKeyword        : Token<Hlsl> { public override string Text => "column/*_*/major"; }
+    public record RowMajorKeyword           : Token<Hlsl> { public override string Text => "row_major"; }
+    public record ColumnMajorKeyword        : Token<Hlsl> { public override string Text => "column_major"; }
     
     public record ExternKeyword             : Token<Hlsl> { public override string Text => "extern"; }
     public record PreciseKeyword            : Token<Hlsl> { public override string Text => "precise"; }
@@ -128,7 +128,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     public record ErrorKeyword              : Token<Hlsl> { public override string Text => "error"; }
     public abstract record IncludePreprocessorKeyword : Token <Hlsl>;
     public record IncludeKeyword            : IncludePreprocessorKeyword { public override string Text => "include"; }
-    public record IncludeWithPragmasKeyword : IncludePreprocessorKeyword { public override string Text => "include/*_*/with/*_*/pragmas"; }
+    public record IncludeWithPragmasKeyword : IncludePreprocessorKeyword { public override string Text => "include_with_pragmas"; }
 
     public record InKeyword                 : Token<Hlsl> { public override string Text => "in"; }
     public record InoutKeyword              : Token<Hlsl> { public override string Text => "inout"; }
@@ -155,39 +155,39 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     public record DepthSemantic             : IndexedSemantic { protected override string Name => "DEPTH";}
     
     //   System Value Semantics
-    public record SvClipDistanceSemantic    : IndexedSemantic { protected override string Name => "SV/*_*/ClipDistanceSemantic"; }
-    public record SvCullDistanceSemantic    : IndexedSemantic { protected override string Name => "SV/*_*/CullDistanceSemantic"; }
+    public record SvClipDistanceSemantic    : IndexedSemantic { protected override string Name => "SV_ClipDistanceSemantic"; }
+    public record SvCullDistanceSemantic    : IndexedSemantic { protected override string Name => "SV_CullDistanceSemantic"; }
     // where 0 <= n <= 7
-    public record SvTargetSemantic          : IndexedSemantic { protected override string Name => "SV/*_*/TargetSemantic"; } 
+    public record SvTargetSemantic          : IndexedSemantic { protected override string Name => "SV_TargetSemantic"; } 
     
-    public record SvCoverageSemantic               : SemanticToken { public override string Text => "SV/*_*/CoverageSemantic"; } 
-    public record SvDepthSemantic                  : SemanticToken { public override string Text => "SV/*_*/DepthSemantic"; } 
-    public record SvDepthGreaterEqualSemantic      : SemanticToken { public override string Text => "SV/*_*/DepthGreaterEqualSemantic"; } 
-    public record SvDepthLessEqualSemantic         : SemanticToken { public override string Text => "SV/*_*/DepthLessEqualSemantic"; } 
-    public record SvDispatchThreadIDSemantic       : SemanticToken { public override string Text => "SV/*_*/DispatchThreadIDSemantic"; } 
-    public record SvDomainLocationSemantic         : SemanticToken { public override string Text => "SV/*_*/DomainLocationSemantic"; } 
-    public record SvGroupIDSemantic                : SemanticToken { public override string Text => "SV/*_*/GroupIDSemantic"; } 
-    public record SvGroupIndexSemantic             : SemanticToken { public override string Text => "SV/*_*/GroupIndexSemantic"; } 
-    public record SvGroupThreadIDSemantic          : SemanticToken { public override string Text => "SV/*_*/GroupThreadIDSemantic"; } 
-    public record SvGSInstanceIDSemantic           : SemanticToken { public override string Text => "SV/*_*/GSInstanceIDSemantic"; } 
-    public record SvInnerCoverageSemantic          : SemanticToken { public override string Text => "SV/*_*/InnerCoverageSemantic"; } 
-    public record SvInsideTessFactorSemantic       : SemanticToken { public override string Text => "SV/*_*/InsideTessFactorSemantic"; } 
-    public record SvInstanceIDSemantic             : SemanticToken { public override string Text => "SV/*_*/InstanceIDSemantic"; } 
-    public record SvIsFrontFaceSemantic            : SemanticToken { public override string Text => "SV/*_*/IsFrontFaceSemantic"; } 
-    public record SvOutputControlPointIDSemantic   : SemanticToken { public override string Text => "SV/*_*/OutputControlPointIDSemantic"; } 
-    public record SvPositionSemantic               : SemanticToken { public override string Text => "SV/*_*/PositionSemantic"; } 
-    public record SvPrimitiveIDSemantic            : SemanticToken { public override string Text => "SV/*_*/PrimitiveIDSemantic"; } 
-    public record SvRenderTargetArrayIndexSemantic : SemanticToken { public override string Text => "SV/*_*/RenderTargetArrayIndexSemantic"; } 
-    public record SvSampleIndexSemantic            : SemanticToken { public override string Text => "SV/*_*/SampleIndexSemantic"; } 
-    public record SvStencilRefSemantic             : SemanticToken { public override string Text => "SV/*_*/StencilRefSemantic"; } 
-    public record SvTessFactorSemantic             : SemanticToken { public override string Text => "SV/*_*/TessFactorSemantic"; } 
-    public record SvVertexIDSemantic               : SemanticToken { public override string Text => "SV/*_*/VertexIDSemantic"; } 
-    public record SvViewportArrayIndexSemantic     : SemanticToken { public override string Text => "SV/*_*/ViewportArrayIndexSemantic"; } 
-    public record SvShadingRateSemantic            : SemanticToken { public override string Text => "SV/*_*/ShadingRateSemantic"; } 
+    public record SvCoverageSemantic               : SemanticToken { public override string Text => "SV_CoverageSemantic"; } 
+    public record SvDepthSemantic                  : SemanticToken { public override string Text => "SV_DepthSemantic"; } 
+    public record SvDepthGreaterEqualSemantic      : SemanticToken { public override string Text => "SV_DepthGreaterEqualSemantic"; } 
+    public record SvDepthLessEqualSemantic         : SemanticToken { public override string Text => "SV_DepthLessEqualSemantic"; } 
+    public record SvDispatchThreadIDSemantic       : SemanticToken { public override string Text => "SV_DispatchThreadIDSemantic"; } 
+    public record SvDomainLocationSemantic         : SemanticToken { public override string Text => "SV_DomainLocationSemantic"; } 
+    public record SvGroupIDSemantic                : SemanticToken { public override string Text => "SV_GroupIDSemantic"; } 
+    public record SvGroupIndexSemantic             : SemanticToken { public override string Text => "SV_GroupIndexSemantic"; } 
+    public record SvGroupThreadIDSemantic          : SemanticToken { public override string Text => "SV_GroupThreadIDSemantic"; } 
+    public record SvGSInstanceIDSemantic           : SemanticToken { public override string Text => "SV_GSInstanceIDSemantic"; } 
+    public record SvInnerCoverageSemantic          : SemanticToken { public override string Text => "SV_InnerCoverageSemantic"; } 
+    public record SvInsideTessFactorSemantic       : SemanticToken { public override string Text => "SV_InsideTessFactorSemantic"; } 
+    public record SvInstanceIDSemantic             : SemanticToken { public override string Text => "SV_InstanceIDSemantic"; } 
+    public record SvIsFrontFaceSemantic            : SemanticToken { public override string Text => "SV_IsFrontFaceSemantic"; } 
+    public record SvOutputControlPointIDSemantic   : SemanticToken { public override string Text => "SV_OutputControlPointIDSemantic"; } 
+    public record SvPositionSemantic               : SemanticToken { public override string Text => "SV_PositionSemantic"; } 
+    public record SvPrimitiveIDSemantic            : SemanticToken { public override string Text => "SV_PrimitiveIDSemantic"; } 
+    public record SvRenderTargetArrayIndexSemantic : SemanticToken { public override string Text => "SV_RenderTargetArrayIndexSemantic"; } 
+    public record SvSampleIndexSemantic            : SemanticToken { public override string Text => "SV_SampleIndexSemantic"; } 
+    public record SvStencilRefSemantic             : SemanticToken { public override string Text => "SV_StencilRefSemantic"; } 
+    public record SvTessFactorSemantic             : SemanticToken { public override string Text => "SV_TessFactorSemantic"; } 
+    public record SvVertexIDSemantic               : SemanticToken { public override string Text => "SV_VertexIDSemantic"; } 
+    public record SvViewportArrayIndexSemantic     : SemanticToken { public override string Text => "SV_ViewportArrayIndexSemantic"; } 
+    public record SvShadingRateSemantic            : SemanticToken { public override string Text => "SV_ShadingRateSemantic"; } 
 
     // @formatter ON
 
-    // {SEMANTIC/*_*/NAME}[{n}] e.g. : TEXCOORD1 or POSITION
+    // {SEMANTIC_NAME}[{n}] e.g. : TEXCOORD1 or POSITION
     public abstract record IndexedSemantic : SemanticToken {
         protected abstract string Name { get; }
         public             uint?  n    { get; init; } // optional for both variants, e.g. PSIZE and PSIZE0
@@ -231,7 +231,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     public record IdentifierToken : ValidatedToken {
-        private static readonly Regex pattern = new(@"^[a-zA-Z/*_*/][a-zA-Z0-9/*_*/]*$");
+        private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
         protected override      Regex Pattern => pattern;
 
         public static implicit operator IdentifierToken(string name) => new() { ValidatedText = name };
@@ -276,5 +276,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     public record TokenString : ValidatedToken {
         private static readonly Regex pattern = new(@"^(?:.|\\\n)*$");
         protected override      Regex Pattern => pattern;
+
+        public TokenString() { TextUnsafe = ""; }
     }
 }

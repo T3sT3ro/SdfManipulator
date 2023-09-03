@@ -8,24 +8,17 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     // start conditions:
     //    declarations: int i, j = 0;
     //    initializers: i = 0, j = 0;
-    public partial record For : Statement {
-        private readonly ForKeyword                       /*_*/forKeyword;
-        private readonly OpenParenToken                   /*_*/openParen;
-        private readonly Initializer?                     /*_*/initializer;
-        private readonly SemiToken                        /*_*/firstSemiToken;
-        private readonly Expression?                      /*_*/condition;
-        private readonly SemiToken                        /*_*/secondSemiToken;
-        private readonly SeparatedList<Hlsl, Expression>? /*_*/increments;
-        private readonly CloseParenToken                  /*_*/closeParen;
-        private readonly Statement                        /*_*/body;
+    [Syntax] public partial record For : Statement {
+        [Init] private readonly ForKeyword                       _forKeyword;
+        [Init] private readonly OpenParenToken                   _openParen;
+        private readonly        Initializer?                     _initializer;
+        [Init] private readonly SemicolonToken                        _firstSemicolonToken;
+        private readonly        Expression?                      _condition;
+        [Init] private readonly SemicolonToken                        _secondSemicolonToken;
+        [Init] private readonly SeparatedList<Hlsl, Expression>? _increments;
+        [Init] private readonly CloseParenToken                  _closeParen;
+        private readonly        Statement                        _body;
 
-        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]
-            {
-                forKeyword, openParen, initializer, firstSemiToken, condition, secondSemiToken, increments, closeParen,
-                body,
-            }.FilterNotNull()
-            .ToList();
-
-        public abstract partial record Initializer : Syntax<Hlsl>;
+        [Syntax] public abstract partial record Initializer : Syntax<Hlsl>;
     }
 }

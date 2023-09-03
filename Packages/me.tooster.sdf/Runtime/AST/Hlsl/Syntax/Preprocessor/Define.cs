@@ -4,14 +4,10 @@ using System.Linq;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
-    public partial record Define : PreprocessorSyntax {
-        private readonly DefineKeyword             /*_*/defineKeyword;
-        private readonly ArgumentList<Identifier>? /*_*/argList;
-        private readonly Identifier                /*_*/id;
-        private readonly TokenString               /*_*/tokenString;
-
-
-        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]
-            { hashToken, defineKeyword, argList, id, tokenString }.FilterNotNull().ToList();
+    [Syntax] public partial record Define : PreprocessorSyntax {
+        [Init] private readonly DefineKeyword             _defineKeyword;
+        [Init] private readonly ArgumentList<Identifier>? _argList;
+        private readonly        Identifier                _id;
+        [Init] private readonly TokenString               _tokenString;
     }
 }
