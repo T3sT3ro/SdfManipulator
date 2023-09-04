@@ -81,7 +81,6 @@ namespace me.tooster.sdf.Editor.Controllers {
             if (GUILayout.Button("Test AST")) {
                 var x = new VariableDeclarator { type = new Type.Predefined { typeToken = new MatrixToken() } };
                 var y = x.GetHashCode();
-                Debug.Log(x.ToString());
             }
             GUILayout.Space(16);
 
