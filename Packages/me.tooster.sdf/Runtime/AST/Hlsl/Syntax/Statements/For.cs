@@ -12,9 +12,9 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
         [Init] private readonly ForKeyword                       _forKeyword;
         [Init] private readonly OpenParenToken                   _openParen;
         private readonly        Initializer?                     _initializer;
-        [Init] private readonly SemicolonToken                        _firstSemicolonToken;
+        [Init] private readonly SemicolonToken                   _firstSemicolonToken;
         private readonly        Expression?                      _condition;
-        [Init] private readonly SemicolonToken                        _secondSemicolonToken;
+        [Init] private readonly SemicolonToken                   _secondSemicolonToken;
         [Init] private readonly SeparatedList<Hlsl, Expression>? _increments;
         [Init] private readonly CloseParenToken                  _closeParen;
         private readonly        Statement                        _body;

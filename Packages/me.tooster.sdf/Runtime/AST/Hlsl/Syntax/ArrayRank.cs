@@ -6,7 +6,7 @@ using me.tooster.sdf.AST.Syntax;
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
     [Syntax] public partial record ArrayRank : Syntax<Hlsl> {
         [Init] private readonly OpenBracketToken              _openBracketToken;
-        private readonly LiteralExpression<IntLiteral> _dimension;
+        private readonly        LiteralExpression<IntLiteral> _dimension;
         [Init] private readonly CloseBracketToken             _closeBracketToken;
     }
 }

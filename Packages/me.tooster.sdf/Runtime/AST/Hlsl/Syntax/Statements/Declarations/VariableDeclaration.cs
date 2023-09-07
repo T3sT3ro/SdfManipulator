@@ -10,6 +10,6 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations {
     // struct Result {float d; float3 pos;} result = {1.0f, {0.0f, 0.0f, 0.0f}}; 
     [Syntax] public partial record VariableDeclaration : Statement {
         private readonly        VariableDeclarator _declarator;
-        [Init] private readonly SemicolonToken          _semicolonToken;
+        [Init] private readonly SemicolonToken     _semicolonToken;
     }
 }

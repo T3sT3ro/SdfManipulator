@@ -33,22 +33,23 @@ namespace me.tooster.sdf.AST.Syntax {
         }
 
         // Returns elements of collection but starting at index deletes deleteCount elements and inserts other elements
-        public static IEnumerable<T> Splice<T>(this IEnumerable<T> self, int index, int deleteCount, IEnumerable<T> other) {
+        public static IEnumerable<T> Splice<T>(this IEnumerable<T> self, int index, int deleteCount,
+            IEnumerable<T> other) {
             var i = -1;
             foreach (var elem in self) {
                 ++i;
                 if (i == index) {
                     foreach (var inserted in other)
                         yield return inserted;
-                } 
-                
-                if (index <= i && i < index + deleteCount) 
+                }
+
+                if (index <= i && i < index + deleteCount)
                     continue;
-                
+
                 yield return elem;
             }
         }
-        
+
         public static IEnumerable<Syntax<Lang>> DescendantNodes<Lang>(this Syntax<Lang> root) =>
             root.DescendantNodesAndSelf().Skip(1);
 
@@ -60,7 +61,7 @@ namespace me.tooster.sdf.AST.Syntax {
                 var current = stack.Pop();
                 yield return current;
 
-                foreach (var child in current.ChildNodes.Reverse()) 
+                foreach (var child in current.ChildNodes.Reverse())
                     stack.Push(child);
             }
         }

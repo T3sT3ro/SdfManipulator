@@ -4,11 +4,11 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab {
     // TODO: use SyntaxRewriter instead that returns new syntax nodes in the place of the old ones
-    public class ShaderlabFormatter : SyntaxRewriter<Shaderlab> {
+    public class ShaderlabFormatter : Rewriter<Shaderlab> {
         public record Options(
-            int  indentWidth                = 4,
-            char indentCharacter            = ' ',
-            int  maxConsecutiveNewlineCount = 2
+            int indentWidth = 4,
+            char indentCharacter = ' ',
+            int maxConsecutiveNewlineCount = 2
         );
 
         private Options options;
@@ -46,7 +46,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
         // non structured trivia
         protected override Trivia<Shaderlab> Visit(WithParent<Trivia<Shaderlab>> triviaWithParent) {
             var trivia = triviaWithParent.Value;
-            // first leading, non-newline trivia is indent trivia - reformat it 
+            // first leading, non-newline trivia is indent trivia - reformat it
             if (isIndentWhitespace(triviaWithParent))
                 return trivia with { Text = indentString };
 

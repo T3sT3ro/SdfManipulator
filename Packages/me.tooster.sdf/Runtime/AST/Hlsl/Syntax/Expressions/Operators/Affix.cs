@@ -8,8 +8,9 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators {
         // ++x, --x
         [Syntax] public partial record Pre : Affix {
             private readonly AffixOperatorToken _prefixOperator;
-            
-            public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[] {
+
+            public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
+            {
                 _prefixOperator,
                 _id
             };

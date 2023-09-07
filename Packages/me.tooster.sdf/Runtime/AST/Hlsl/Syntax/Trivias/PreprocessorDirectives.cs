@@ -8,5 +8,5 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Trivias {
     }
 
     // used to break preprocessor lines
-    public partial record PreprocessorLineConcatTrivia : Trivia<Hlsl> { }
+    public partial record PreprocessorLineConcatTrivia : SimpleTrivia<Hlsl> { }
 }

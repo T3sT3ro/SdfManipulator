@@ -10,8 +10,7 @@ To see an explanation of nodes, go to [Roslyn Docs](https://learn.microsoft.com/
   - compared to Roslyn, they don't have `Kind` enum property but are distinguished by their class identity
   - Tokens represent for example punctuation characters, string literals, numeric literals, identifiers, keywords etc.
 - `Trivia`: comments, whitespaces, newlines, etc. Never a parent of any other trivia. Attached to tokens and have `someTrivia.Token` property to access it.
-- Compared to roslyn, there is for now no distinction between green (internal syntax) and red nodes (public syntax). This may change in the future when source generators are added
-o the package. Instead, a `Syntax
+- Compared to roslyn, there is for now no distinction between green (internal syntax) and red nodes (public syntax). Syntax generators are instead used to generate properties that attach parent references on assignment. 
 - There are naming similarities like `Identifier` and `IdentifierToken`. In this case `Identifier` is a `Syntax` holding `IdentifierToken`, a `SyntaxToken` holding the actual text value accessible with `Text` property.
 
 [Here is a doc that includes more thorough but still concise explanation of roslyn concepts](https://github.com/xamarin/Workbooks/blob/master/csharp/roslyn/roslyn-syntax-trees.workbook/index.workbook)

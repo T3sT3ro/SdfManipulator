@@ -37,11 +37,11 @@ namespace me.tooster.sdf.AST.Syntax {
     //     public IEnumerable<RedNode<T>> Children =>
     //         value.Children?.Select(c => new RedNode<T>(c, this)) ?? Enumerable.Empty<RedNode<T>>();
     // }
-    
+
     // --------- actual impl 
     // TODO: use source generators to add the red-green-like tree from Roslyn, auto-generated from annotations
     // Instantiating would be possible only with https://stackoverflow.com/questions/8718199/passing-a-type-to-a-generic-constructor
-    
+
     // public class RedNode {
     //     public RedNode? Parent { get; }
     //     protected RedNode(RedNode? parent) { Parent = parent; }

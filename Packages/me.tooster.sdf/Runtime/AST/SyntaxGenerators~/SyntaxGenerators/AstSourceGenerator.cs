@@ -252,12 +252,7 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
                     Token(SyntaxKind.StringKeyword)),
                 Identifier("ToString"))
             .WithModifiers(
-                TokenList(
-                    new[]
-                    {
-                        Token(SyntaxKind.PublicKeyword),
-                        Token(SyntaxKind.OverrideKeyword),
-                    }))
+                TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
             .WithExpressionBody(
                 ArrowExpressionClause(
                     InvocationExpression(
@@ -303,10 +298,7 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
             yield return ExpressionStatement(
                     AssignmentExpression(
                         SyntaxKind.SimpleAssignmentExpression,
-                        IdentifierName(
-                            field.Name
-                                .TrimStart(
-                                    '_')), // without underscore because we route to property init
+                        IdentifierName(field.Name.TrimStart('_')), // route to property
                         initExpression
                     ))
                 .WithSemicolonToken(
@@ -367,12 +359,104 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
     }
 
     /// generates contents of the ChildNodesAndTokens { a, b, c }; 
-    private static IEnumerable<SyntaxNodeOrToken>
-        generateChildrenGetterMembers(IEnumerable<IFieldSymbol> ownFields) {
+    private static IEnumerable<SyntaxNodeOrToken> generateChildrenGetterMembers(IEnumerable<IFieldSymbol> ownFields) {
         foreach (var field in ownFields) {
             yield return IdentifierName(field.Name.TrimStart('_'));
             yield return Token(SyntaxKind.CommaToken); // trailing comma is OK
         }
+    }
+
+    private static IEnumerable<LocalDeclarationStatementSyntax> mapperFieldDeclarations(
+        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
+        foreach (var field in inheritedAndOwnFields) {
+            var fieldName = field.Name.TrimStart('_');
+            yield return LocalDeclarationStatement(
+                VariableDeclaration(IdentifierName(
+                        Identifier(
+                            TriviaList(),
+                            SyntaxKind.VarKeyword,
+                            "var",
+                            "var",
+                            TriviaList())))
+                    .WithVariables(SingletonSeparatedList(VariableDeclarator(Identifier(fieldName))
+                        .WithInitializer(EqualsValueClause(InvocationExpression(
+                                MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+                                    IdentifierName("mapper"),
+                                    IdentifierName("Map")))
+                            .WithArgumentList(ArgumentList(SingletonSeparatedList(
+                                Argument(CastExpression(
+                                    IdentifierName("dynamic"),
+                                    MemberAccessExpression(
+                                        SyntaxKind.SimpleMemberAccessExpression,
+                                        ThisExpression(),
+                                        IdentifierName(fieldName))))))))))));
+        }
+    }
+
+    private static InvocationExpressionSyntax referencesEqualCheck(IFieldSymbol field) {
+        var fieldName = field.Name.TrimStart('_');
+        return InvocationExpression(IdentifierName("ReferenceEquals"))
+            .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(
+                new SyntaxNodeOrToken[]
+                {
+                    Argument(IdentifierName(fieldName)),
+                    Token(SyntaxKind.CommaToken),
+                    Argument(MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        ThisExpression(),
+                        IdentifierName(fieldName)))
+                })));
+    }
+
+    private static IfStatementSyntax mapperIfStatement(
+        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
+        ExpressionSyntax? testExpression = null;
+        foreach (var field in inheritedAndOwnFields) {
+            testExpression = testExpression == null
+                ? referencesEqualCheck(field)
+                : BinaryExpression(SyntaxKind.LogicalAndExpression, testExpression, referencesEqualCheck(field));
+        }
+
+        return IfStatement(
+            testExpression ?? LiteralExpression(SyntaxKind.TrueLiteralExpression),
+            ReturnStatement(ThisExpression()));
+    }
+
+    private static ReturnStatementSyntax mapperObjectCreationExpression(ITypeSymbol recordSymbol,
+        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
+        return ReturnStatement(ObjectCreationExpression(IdentifierName(getTypeNameWithGenericArguments(recordSymbol)))
+            .WithInitializer(InitializerExpression(SyntaxKind.ObjectInitializerExpression,
+                SeparatedList<ExpressionSyntax>(
+                    inheritedAndOwnFields.Select(field =>
+                        AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+                            IdentifierName(field.Name.TrimStart('_')),
+                            IdentifierName(field.Name.TrimStart('_'))))))));
+    }
+
+    private static IEnumerable<StatementSyntax> mapperFunctionStatements(ITypeSymbol recordSymbol,
+        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
+        foreach (var st in mapperFieldDeclarations(inheritedAndOwnFields))
+            yield return st;
+
+        yield return mapperIfStatement(inheritedAndOwnFields);
+
+        yield return mapperObjectCreationExpression(recordSymbol, inheritedAndOwnFields);
+    }
+
+    private static MethodDeclarationSyntax generateMapper(ITypeSymbol recordSymbol,
+        List<IFieldSymbol> inheritedAndOwnFields) {
+        var langName = getQualifiedNameParts(recordSymbol).Last();
+        return MethodDeclaration(GenericName(Identifier("Syntax"))
+                    .WithTypeArgumentList(
+                        TypeArgumentList(SingletonSeparatedList<TypeSyntax>(IdentifierName(langName)))),
+                Identifier("MapWith"))
+            .WithModifiers(
+                TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
+            .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("mapper"))
+                .WithType(GenericName(Identifier("Mapper"))
+                    .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(
+                        IdentifierName(langName))))))))
+            .WithBody(Block(mapperFunctionStatements(recordSymbol, inheritedAndOwnFields)));
     }
 
     // returns type name with generic arguments and nullable annotation (generic args are fully qualified)
@@ -407,17 +491,12 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
         var recordDeclaration = RecordDeclaration(
                 Token(SyntaxKind.RecordKeyword),
                 Identifier(getTypeNameWithGenericArguments(recordSymbol)))
-            .WithModifiers(
-                TokenList(
-                    new[]
-                    {
-                        Token(SyntaxKind.PublicKeyword),
-                        Token(SyntaxKind.PartialKeyword)
-                    }))
+            .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.PartialKeyword)))
             .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
             .AddMembers(generateToStringOverride().ToArray())
             .AddMembers(generateProperties(ownFields).ToArray())
             .WithCloseBraceToken(Token(SyntaxKind.CloseBraceToken));
+
 
         if (!hasDefaultConstructor)
             recordDeclaration =
@@ -425,12 +504,17 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
 
 
         // if it doesn't have the override and is not abstract, generate childrenAccessor
-        var skipChildrenAccessor = recordSymbol.GetMembers("ChildNodesAndTokens").Any()
-         || recordSymbol.IsAbstract;
 
-        if (skipChildrenAccessor) return recordDeclaration;
+        var inheritedAndOwnFields = inheritedFields.Concat(ownFields).ToList();
+        
+        // skip children accessor if it exists
+        if (!(recordSymbol.GetMembers("ChildNodesAndTokens").Any() || recordSymbol.IsAbstract)) 
+            recordDeclaration = recordDeclaration.AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnFields));
 
-        return recordDeclaration.AddMembers(generateChildrenGetter(recordSymbol,
-            inheritedFields.Concat(ownFields)));
+        // skip MapWith if it exists
+        if (!(recordSymbol.GetMembers("MapWith").Any() || recordSymbol.IsAbstract))
+            recordDeclaration = recordDeclaration.AddMembers(generateMapper(recordSymbol, inheritedAndOwnFields));
+                
+        return recordDeclaration;
     }
 }

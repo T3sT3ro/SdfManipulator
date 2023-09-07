@@ -6,7 +6,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     // expression;
     // ; <- empty expression statement
     [Syntax] public partial record ExpressionStatement : Statement {
-        private readonly        Expression? _expression;
-        [Init] private readonly SemicolonToken   _semicolonToken;
+        private readonly        Expression?    _expression;
+        [Init] private readonly SemicolonToken _semicolonToken;
     }
 }

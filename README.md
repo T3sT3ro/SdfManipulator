@@ -79,6 +79,7 @@ TODO
 - [ ] in-editor camera effect shader (without domain) based on [this tutorial](https://www.youtube.com/watch?v=iZ6ARyKnD-k&t=354s)
 - [ ] graph -> dependency tree (with topological sort) -> AST -> code generation 
 - [ ] think about `required` keyword for records, the `init` properties, primary constructors `record class` vs `record struct` (C#10) and `readonly record`
+  - `required`, albeit interesting for constructing syntactically correct trees, prevent from a wide range of lazy-initialized nodes constructed iteratively.
 - [ ] add `SyntaxList` record that implements `IReadOnlyList` and is used instead of IReadOnlyList anywhere in syntax, to allow simpler construction of children (without `Concat`, `Append` etc.)
 - [ ] support `with` syntax for node creation and creating other nodes from already existing nodes
 - [ ] add replace method to graph that handles replacing nodes and reconnecting links (traverses to parents and rebuilds them)
@@ -92,6 +93,7 @@ TODO
   - [some info here](https://www.scratchapixel.com/lessons/3d-basic-rendering/volume-rendering-for-developers/ray-marching-get-it-right.html)
 - [ ] generate red factories for syntax etc, based on [SourceWriter.cs](https://github.com/dotnet/roslyn/blob/34268d1bb9370c7b01c742303a895a99daf10d6a/src/Tools/Source/CompilerGeneratorTools/Source/CSharpSyntaxGenerator/SourceWriter.cs#L1423)
   - consider containing private fields in the syntax class and generate properties from them which add get and init accessors, where init assigns th parent
+- [ ] add `<SyntaxElement>.MapWith(Visitor v)` which uses dynamic dispatch to update fields recursively
 
 # Important to remember while documenting
 
@@ -246,6 +248,7 @@ TODO
 - [Shaderbits - a blog about writing HLSL and UE4 shaders, samples with raymarching volumes](https://shaderbits.com/blog/distance-field-ray-tracing-part1)
 - [A blog about rendering and many things from some Nvidia developer](https://www.reedbeta.com/)
 - [Roslyn source generators in unity](https://medium.com/@EnescanBektas/using-source-generators-in-the-unity-game-engine-140ff0cd0dc)
+- [Math utilities, also includes raymarching SDF textures somehow](https://github.com/zalo/MathUtilities)
 
 ## Unity internals:
 

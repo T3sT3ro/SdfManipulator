@@ -14,8 +14,9 @@ namespace me.tooster.sdf.AST.Syntax {
         public SyntaxOrTokenList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) {
             FullList = fullList.Select(x => x with { Parent = this }).ToList();
         }
+
         public SyntaxOrTokenList(IEnumerable<SyntaxOrToken<Lang>> list) : this(list.ToList()) { }
-        public SyntaxOrTokenList(params SyntaxOrToken<Lang>[]     list) : this(list.AsEnumerable()) { }
+        public SyntaxOrTokenList(params SyntaxOrToken<Lang>[] list) : this(list.AsEnumerable()) { }
         public SyntaxOrTokenList() : this(Array.Empty<SyntaxOrToken<Lang>>()) { }
 
         public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens => FullList;
@@ -26,12 +27,13 @@ namespace me.tooster.sdf.AST.Syntax {
         // indexers
         public SyntaxOrToken<Lang> this[int index] => FullList[index];
 
-        public SyntaxOrTokenList<Lang> Slice(int start, int length) =>
-            new SyntaxOrTokenList<Lang>(FullList.Skip(start).Take(length));
+        public SyntaxOrTokenList<Lang> Slice(int start, int length) => new(FullList.Skip(start).Take(length));
 
         public SyntaxOrTokenList<Lang> Splice(int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements)
-            => new SyntaxOrTokenList<Lang>(FullList.Splice(index, deleteCount, elements));
+            => new(FullList.Splice(index, deleteCount, elements));
 
         public override string ToString() => base.ToString();
+
+        public override Syntax<Lang> MapWith(Mapper<Lang> mapper) => mapper.Map((dynamic)this);
     }
 }

@@ -4,28 +4,40 @@ using me.tooster.sdf.Tests.Runtime.AST.BarLang;
 using me.tooster.sdf.Tests.Runtime.AST.FooLang;
 using NUnit.Framework;
 using UnityEngine.TestTools;
+
 // ReSharper disable NotAccessedPositionalProperty.Global
 namespace me.tooster.sdf.Tests.Runtime.AST.BarLang {
     public interface BarLang { }
     // with custom value
-    
 }
 
 namespace me.tooster.sdf.Tests.Runtime.AST.FooLang {
     public interface FooLang { }
+
     // syntax parts
-    [Syntax] partial record BarInjected(Tree<BarLang.BarLang> tree) : InjectedLanguage<FooLang, BarLang.BarLang>(tree);
+    [Syntax] partial record BarInjected(Tree<BarLang.BarLang> tree) : InjectedLanguage<FooLang, BarLang.BarLang>(tree) {
+        public BarInjected() : this(new Tree<BarLang.BarLang>()) { }
+    }
+
     [Syntax] abstract partial record Expr : Syntax<FooLang>;
-    [Syntax] public partial record Binary(Expr Left, Token<FooLang> Op, Expr Right) : Expr;
-    [Syntax] public partial record Literal(Token<FooLang> Val) : Expr;
+
+    [Syntax] public partial record Binary : Expr {
+        private readonly Expr           _left;
+        private readonly Token<FooLang> _op;
+        private readonly Expr           _right;
+    }
+
+    [Syntax] public partial record Literal : Expr {
+        private readonly Token<FooLang> _val;
+    }
     
     // @formatter off
-    record LangToken : Token<BarLang.BarLang> { public override                          string Text => "BARLANG"; }
-    record DynamicToken(string Value) : Token<FooLang> { public override string Text => Value; }
+    record LangToken : Token<BarLang.BarLang>          { public override string Text => "BARLANG"; }
     abstract record OpToken : Token<FooLang>;
-    record MulToken : OpToken { public override                  string Text => "*"; }
-    record SpaceToken : Token<FooLang> { public override string Text => " "; }
-    record ZeroToken : Token<FooLang> { public override  string Text => "0"; }
+    record MulToken   : OpToken                        { public override string Text => "*"; }
+    record SpaceToken : Token<FooLang>                 { public override string Text => " "; }
+    record ZeroToken  : Token<FooLang>                 { public override string Text => "0"; }
+    abstract record DynamicToken(string Value) : Token<FooLang> { public override string Text => Value; }
     record NumToken(string val) : DynamicToken(val);
     // @formatter on
 }
@@ -33,19 +45,17 @@ namespace me.tooster.sdf.Tests.Runtime.AST.FooLang {
 // ReSharper enable NotAccessedPositionalProperty.Global
 
 namespace me.tooster.sdf.Tests.Runtime.AST {
-    
     // ========= TESTING =========
     // ReSharper disable UnusedVariable
 
     public static class AbstractSyntaxTest {
         [UnityTest]
-        
         public static IEnumerator FoobarSyntaxSmokeTest() {
             var oneToken = new NumToken("1");
-            var oneLiteral = new Literal(oneToken);
-            var zeroLiteral = new Literal(new ZeroToken());
+            var oneLiteral = new Literal {val = oneToken};
+            var zeroLiteral = new Literal { val = new ZeroToken()};
             var op = new MulToken();
-            var mulExpr = new Binary(oneLiteral, op, zeroLiteral);
+            var mulExpr = new Binary { left = oneLiteral, op = op, right = zeroLiteral};
 
             var mixedList = new SyntaxOrTokenList<FooLang.FooLang>(oneLiteral, op, zeroLiteral, mulExpr);
             var x1 = mixedList[1];
@@ -65,7 +75,7 @@ namespace me.tooster.sdf.Tests.Runtime.AST {
 
             var tree = new Tree<FooLang.FooLang>(mulExpr);
             Assert.AreEqual("1*0", tree.ToString());
-            var newMul = mulExpr with { Left = mulExpr };
+            var newMul = mulExpr with { left = mulExpr };
             tree = new Tree<FooLang.FooLang>(newMul);
             Assert.AreEqual("1*0*0", tree.ToString());
             yield return null;
