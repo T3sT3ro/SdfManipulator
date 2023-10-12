@@ -4,9 +4,9 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     public partial record If {
-        [Syntax] public partial record ElseClause : Syntax<Hlsl> {
-            [Init] private readonly ElseKeyword _elseKeyword;
-            private readonly Statement   _statement;
+        [AstSyntax] public partial record ElseClause : Syntax<Hlsl> {
+            public ElseKeyword elseKeyword { get; init; } = new();
+            public        Statement   statement { get; init; }
         }
     }
 }

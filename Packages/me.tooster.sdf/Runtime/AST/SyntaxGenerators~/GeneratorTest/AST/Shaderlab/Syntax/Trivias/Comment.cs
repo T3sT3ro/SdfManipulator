@@ -2,7 +2,7 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.Trivias {
     /// Comment text including the // or /* and */
-    public abstract record Comment : Trivia<Shaderlab> {
+    public abstract record Comment : SimpleTrivia<Shaderlab> {
         public record Line : Comment;
 
         public record Block : Comment;

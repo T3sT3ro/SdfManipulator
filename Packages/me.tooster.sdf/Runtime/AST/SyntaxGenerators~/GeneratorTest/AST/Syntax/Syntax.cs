@@ -9,8 +9,6 @@ namespace me.tooster.sdf.AST.Syntax {
     /// </summary>
     /// <typeparam name="Lang">marker interface of the language, makes language nodes distinct</typeparam>
     public abstract record Syntax<Lang> : SyntaxOrToken<Lang> {
-        public Syntax() { }
-
         public abstract IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens { get; }
         public          IReadOnlyList<Syntax<Lang>> ChildNodes => ChildNodesAndTokens.OfType<Syntax<Lang>>().ToList();
 
@@ -21,6 +19,7 @@ namespace me.tooster.sdf.AST.Syntax {
             return sb;
         }
 
-        public override string ToString() => base.ToString();
+        public override string       ToString() => base.ToString();
+        public abstract Syntax<Lang> MapWith(Mapper<Lang> mapper);
     }
 }

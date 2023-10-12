@@ -4,8 +4,9 @@ using System.Linq;
 
 namespace me.tooster.sdf.AST.Syntax {
     public record SeparatedList<Lang, TSyntax> : SyntaxOrTokenList<Lang> where TSyntax : Syntax<Lang> {
+        public SeparatedList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) : base(fullList) { }
         public SeparatedList(IEnumerable<SyntaxOrToken<Lang>> listWithSeparators) : base(listWithSeparators) { }
-        public SeparatedList() : base() {}
+
         public SeparatedList(params SyntaxOrToken<Lang>[] listWithSeparators) :
             this(listWithSeparators.AsEnumerable()) { }
 

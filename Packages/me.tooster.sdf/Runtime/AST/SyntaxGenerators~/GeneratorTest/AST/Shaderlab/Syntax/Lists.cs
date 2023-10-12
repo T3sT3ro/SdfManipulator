@@ -3,10 +3,10 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     // ( SYNTAX TOKEN SYNTAX TOKEN )
-    [Syntax] public partial record  ArgumentList<TSyntax> : Syntax<Shaderlab> where TSyntax : Syntax<Shaderlab> {
-        [Init] private readonly  OpenParenToken                    _openParenToken  ;
-        [Init] private readonly  SeparatedList<Shaderlab, TSyntax> _arguments       ;
-        [Init] private readonly  CloseParenToken                   _closeParenToken ;
+    [AstSyntax] public partial record ArgumentList<TSyntax> : Syntax<Shaderlab> where TSyntax : Syntax<Shaderlab> {
+        public OpenParenToken                    openParenToken { get; init; } = new();
+        public SeparatedList<Shaderlab, TSyntax> arguments { get; init; } = new();
+        public CloseParenToken                   closeParenToken { get; init; } = new();
 
         public static implicit operator ArgumentList<TSyntax>(TSyntax[] arguments) => new ArgumentList<TSyntax>
             { arguments = SeparatedList<Shaderlab, TSyntax>.With<CommaToken>(arguments) };

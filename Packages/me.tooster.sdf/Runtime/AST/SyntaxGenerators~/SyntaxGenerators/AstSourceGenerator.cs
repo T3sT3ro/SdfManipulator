@@ -5,37 +5,42 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
-
-// TODO: handle nullable fields and generate nullable child getter with null filtering
 
 // from: https://medium.com/@EnescanBektas/using-source-generators-in-the-unity-game-engine-140ff0cd0dc
 
 [Generator]
-public class AstSourceGenerator : ISourceGenerator {
-    internal static readonly string SYNTAX_ATTRIBUTE_NAME = "Syntax";
-    internal static readonly string INIT_ATTRIBUTE_NAME   = "Init";
+public partial class AstSourceGenerator : ISourceGenerator {
+    internal static readonly string SYNTAX_ATTRIBUTE_NAME = "AstSyntax";
+    internal static readonly string TOKEN_ATTRIBUTE_NAME  = "AstToken";
+    internal static readonly string TRIVIA_ATTRIBUTE_NAME = "AstTrivia";
 
     internal static readonly string ATTRIBUTES =
         @$"#nullable enable
 using System;
 
-/// Marks a partial record derived from Syntax for generation of constructors, properties and overrides
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+/*
+ * Below markers are used in by the source generator to generate Red AST nodes (lazy, with parents)  
+ */
+
+/// Marks Syntax for generation
+[AttributeUsage(AttributeTargets.Class, Inherited = true)]
 internal class {SYNTAX_ATTRIBUTE_NAME}Attribute : Attribute {{}}
 
-/// Tells source generator to apply default value to the field using = new T()
-[AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
-    public Type? With {{ get; set; }} = null;
-}}
+/// Marks Token for generation
+[AttributeUsage(AttributeTargets.Class, Inherited = true)]
+internal class {TOKEN_ATTRIBUTE_NAME}Attribute : Attribute {{}}
+
+/// Marks Trivia for generation
+[AttributeUsage(AttributeTargets.Class, Inherited = true)]
+internal class {TRIVIA_ATTRIBUTE_NAME}Attribute : Attribute {{}}
 ";
 
+    private Compilation               compilation;
+    private GeneratorExecutionContext context;
 
     public void Initialize(GeneratorInitializationContext context) {
-        context.RegisterForPostInitialization(i =>
-            i.AddSource("SyntaxAttributes.g.cs", ATTRIBUTES));
+        context.RegisterForPostInitialization(i => i.AddSource("SyntaxAttributes.g.cs", ATTRIBUTES));
         context.RegisterForSyntaxNotifications(() => new AstReceiver());
     }
 
@@ -43,31 +48,35 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
         if (!(context.SyntaxContextReceiver is AstReceiver receiver))
             return;
 
-        foreach (var kv in receiver.Records) {
-            var recordSymbol = kv.Key;
-            var usings = kv.Value;
-            var qualifiedClassName = string.Join(".", getQualifiedNameParts(recordSymbol).Reverse());
+        compilation = context.Compilation;
+        this.context = context;
 
-            var resultCompilation = generateCompilationUnit(recordSymbol, context.Compilation)
-                .WithUsings(List(new[]
-                {
-                    UsingDirective(QualifiedName(
-                            QualifiedName(IdentifierName("System"), IdentifierName("Collections")),
-                            IdentifierName("Generic")))
-                        .WithUsingKeyword(Token(
-                            TriviaList(Trivia(NullableDirectiveTrivia(Token(SyntaxKind.EnableKeyword), true))),
-                            SyntaxKind.UsingKeyword, TriviaList())),
-                    UsingDirective(QualifiedName(IdentifierName("System"), IdentifierName("Linq")))
-                }))
-                .AddUsings(usings.ToArray());
-
-            context.AddSource($"{qualifiedClassName}.g.cs",
-                SourceText.From(resultCompilation.NormalizeWhitespace().SyntaxTree.ToString(), Encoding.UTF8));
+        foreach (var invalid in receiver.Invalid) {
+            report(AstDiagnostic.BAD_ATTRIBUTE_USAGE, invalid);
         }
+
+        foreach (var recordSymbol in receiver.Records) GenerateSyntaxClasses(recordSymbol);
     }
     // ------------------- GENERATION -------------------
 
-    // gets reversed names up to AST namespace
+    public enum AstDiagnostic {
+        BAD_ATTRIBUTE_USAGE,
+    }
+
+    public void report(AstDiagnostic diagnosticKind, ISymbol symbol) {
+        var diagnostic = diagnosticKind switch
+        {
+            AstDiagnostic.BAD_ATTRIBUTE_USAGE => Diagnostic.Create(new DiagnosticDescriptor(
+                "AST0001", "Invalid attribute usage",
+                $"Record {symbol.Name} with [Syntax]/[Token]/[Trivia] attribute must be public, partial and inherit from Syntax/Token/Trivia",
+                "AST", DiagnosticSeverity.Error, true), Location.None),
+            _ => throw new ArgumentOutOfRangeException(nameof(diagnosticKind), diagnosticKind, null),
+        };
+
+        context.ReportDiagnostic(diagnostic);
+    }
+
+    // gets reversed names up to AST namespace without generic type arguments
     private static IEnumerable<string> getQualifiedNameParts(ITypeSymbol record) {
         ISymbol current = record;
         while (current is not INamespaceSymbol { Name: "AST" }) {
@@ -77,173 +86,54 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
         }
     }
 
-    private static CompilationUnitSyntax generateCompilationUnit(ITypeSymbol recordSymbol,
-        Compilation compilation) {
-        var namespaceName = recordSymbol.ContainingNamespace.ToString();
-        var namespaceDeclaration = NamespaceDeclaration(IdentifierName(namespaceName))
-            .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
-            .WithCloseBraceToken(Token(SyntaxKind.CloseBraceToken));
-
-        var currentRecordDeclaration = getPartialRecord(recordSymbol, compilation);
-        var currentWrapperType = recordSymbol.ContainingType;
-        while (currentWrapperType != null) {
-            var accessibility = currentWrapperType.DeclaredAccessibility switch
-            {
-                Accessibility.Public    => SyntaxKind.PublicKeyword,
-                Accessibility.Protected => SyntaxKind.ProtectedKeyword,
-                _                       => throw new ArgumentOutOfRangeException()
-            };
-
-            currentRecordDeclaration = RecordDeclaration(
-                    Token(SyntaxKind.RecordKeyword),
-                    Identifier(getTypeNameWithGenericArguments(currentWrapperType)))
-                .WithModifiers(
-                    TokenList(Token(accessibility), Token(SyntaxKind.PartialKeyword)))
-                .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
-                .AddMembers(currentRecordDeclaration)
-                .WithCloseBraceToken(Token(SyntaxKind.CloseBraceToken));
-
-            currentWrapperType = currentWrapperType.ContainingType;
-        }
-
-        var resultCompilation = CompilationUnit()
-            .WithMembers(SingletonList<MemberDeclarationSyntax>(
-                namespaceDeclaration.AddMembers(currentRecordDeclaration)
-            ));
-        return resultCompilation;
-    }
-
-    private static IEnumerable<ITypeSymbol> getSelfAndOuterClasses(ITypeSymbol recordSymbol) {
-        var currentClass = recordSymbol;
-        while (currentClass != null) {
-            yield return currentClass;
-
-            currentClass = currentClass.ContainingType;
-        }
-    }
-
-    /// returns fields requiring generating property getters 
-    private static IEnumerable<IFieldSymbol> getOwnCompatibleFields(ITypeSymbol recordSymbol) {
-        foreach (var field in recordSymbol.GetMembers().OfType<IFieldSymbol>()
-                     .Where(isFieldCompatible))
-            yield return field;
+    /// returns properties requiring generating property getters 
+    private static IEnumerable<IPropertySymbol> getOwnProperties(ITypeSymbol recordSymbol) {
+        return recordSymbol.GetMembers().OfType<IPropertySymbol>().Where(isPropertyCompatible);
     }
 
 
-    private static IEnumerable<IFieldSymbol> getInheritedCompatibleFields(
-        ITypeSymbol recordSymbol) {
+    private static IEnumerable<IPropertySymbol> getInheritedProperties(ITypeSymbol recordSymbol) {
         var recordType = recordSymbol.BaseType;
-        while (recordType != null && recordType.Name != "Syntax") {
-            foreach (var field in recordType.GetMembers().OfType<IFieldSymbol>()
-                         .Where(f => isTypeOfSyntaxOrTokenSubtype(f.Type)))
-                yield return field;
+        while (recordType != null) {
+            ;
+            foreach (var property in recordType.GetMembers().OfType<IPropertySymbol>().Where(isPropertyCompatible))
+                yield return property;
 
             recordType = recordType.BaseType;
         }
     }
 
-    // returns fields that had the [Init] attribute in this class.
-    private static IEnumerable<IFieldSymbol> getFieldsForInitialization(
-        IEnumerable<IFieldSymbol> ownFields,
-        Compilation compilation) {
-        var initAttribute =
-            compilation.GetTypeByMetadataName($"{INIT_ATTRIBUTE_NAME}Attribute");
-        foreach (var field in ownFields) {
-            var hasInitAttribute = field.GetAttributes()
-                .Any(ad =>
-                    ad.AttributeClass?.Equals(initAttribute, SymbolEqualityComparer.Default)
-                 ?? false);
-            if (hasInitAttribute)
-                yield return field;
-        }
-    }
-
     /// Returns compatible record fields for generation. Field is compatible if it's a private readonly field of
     /// base Syntax or Token type and it's name starts with underscore. 
-    private static bool isFieldCompatible(IFieldSymbol field) {
+    private static bool isPropertyCompatible(IPropertySymbol property) {
         // must be private or protected
-        if (field.DeclaredAccessibility != Accessibility.Private
-         && field.DeclaredAccessibility != Accessibility.Protected)
+        if (property.DeclaredAccessibility != Accessibility.Internal)
             return false;
 
-        // must be readonly and explicit
-        if (!field.IsReadOnly || field.IsImplicitlyDeclared)
+        // must be explicit
+        if (!property.IsImplicitlyDeclared)
             return false;
 
-        // must start with an underscore
-        if (!field.Name.StartsWith("_"))
-            return false;
-
-        // some fields are generic type T with bound Syntax<Lang>, so it must be handled as well
-        if (field.Type is ITypeParameterSymbol tps) {
-            if (tps.ConstraintTypes.Any(isTypeOfSyntaxOrTokenSubtype))
-                return true;
-        }
-
-        // must be of SyntaxOrToken<T> type
-        if (!isTypeOfSyntaxOrTokenSubtype(field.Type))
-            return false;
-
-        return true;
+        // must be of subtype annotated with [Syntax] or [Token]
+        return isTypeAstAnnotated(property.Type);
     }
 
-    private static bool isTypeOfSyntaxOrTokenSubtype(ITypeSymbol type) {
-        var baseType = type.BaseType;
-        while (baseType != null) {
-            if (baseType.MetadataName == "SyntaxOrToken`1")
+    // returns if type (possibly generic) is of base type annotated with [Syntax] or [Token]
+    private static bool isTypeAstAnnotated(ITypeSymbol? type) {
+        if (type is ITypeParameterSymbol tps && tps.ConstraintTypes.Any(isTypeAstAnnotated))
+            return true;
+
+        while (type != null) {
+            if (type.GetAttributes().Any(ad =>
+                    ad.AttributeClass?.Name == SYNTAX_ATTRIBUTE_NAME
+                 || ad.AttributeClass?.Name == TOKEN_ATTRIBUTE_NAME
+                 || ad.AttributeClass?.Name == TRIVIA_ATTRIBUTE_NAME))
                 return true;
 
-            baseType = baseType.BaseType;
+            type = type.BaseType;
         }
 
         return false;
-    }
-
-
-    // generates properties like `public X x { get => _x; set => { _x = value with { Parent = this }; } }`
-    private static IEnumerable<MemberDeclarationSyntax> generateProperties(
-        IEnumerable<IFieldSymbol> ownFields) {
-        var withExpression = WithExpression(
-            IdentifierName("value"),
-            InitializerExpression(
-                SyntaxKind.WithInitializerExpression,
-                SingletonSeparatedList<ExpressionSyntax>(
-                    AssignmentExpression(
-                        SyntaxKind.SimpleAssignmentExpression,
-                        IdentifierName("Parent"),
-                        ThisExpression()))));
-
-        foreach (var field in ownFields) {
-            ExpressionSyntax fieldValueExpression = field.Type.NullableAnnotation != NullableAnnotation.Annotated
-                ? withExpression
-                : ConditionalExpression(BinaryExpression(SyntaxKind.EqualsExpression,
-                        IdentifierName("value"),
-                        LiteralExpression(SyntaxKind.NullLiteralExpression)),
-                    IdentifierName("value"),
-                    withExpression
-                );
-
-
-            yield return PropertyDeclaration(
-                    IdentifierName(
-                        field.Type.ToString()), // fully qualified name, possibly nullable or generic type argument
-                    Identifier(field.Name.TrimStart('_')))
-                .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
-                .WithAccessorList(AccessorList(List(
-                    new[]
-                    {
-                        AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
-                            .WithExpressionBody(ArrowExpressionClause(IdentifierName(field.Name)))
-                            .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
-                        AccessorDeclaration(SyntaxKind.InitAccessorDeclaration)
-                            .WithExpressionBody(ArrowExpressionClause(AssignmentExpression(
-                                SyntaxKind.SimpleAssignmentExpression,
-                                IdentifierName(field.Name),
-                                fieldValueExpression)))
-                            .WithSemicolonToken(
-                                Token(SyntaxKind.SemicolonToken)),
-                    })));
-        }
     }
 
     private static IEnumerable<MemberDeclarationSyntax> generateToStringOverride() {
@@ -264,58 +154,18 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
                 Token(SyntaxKind.SemicolonToken));
     }
 
-    private static IEnumerable<MemberDeclarationSyntax> generateConstructor(
-        ITypeSymbol recordSymbol, IEnumerable<IFieldSymbol> fieldsForInitialization) {
-        yield return ConstructorDeclaration(recordSymbol.Name)
-            .WithInitializer(ConstructorInitializer(SyntaxKind.BaseConstructorInitializer,
-                ArgumentList()))
-            .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
-            .WithBody(Block(generateCtorMemberInitializer(fieldsForInitialization)));
-    }
-
-    private static IEnumerable<ExpressionStatementSyntax> generateCtorMemberInitializer(
-        IEnumerable<IFieldSymbol> fieldsForInitialization) {
-        foreach (var field in fieldsForInitialization) {
-            // if has [Init(typeof(X))], use = new X(); instead
-            var initAttribute = field.GetAttributes()
-                .First(ad => ad.AttributeClass?.Name == "InitAttribute");
-
-            // case for [Init], results in: = new()
-            ExpressionSyntax initExpression;
-            // case for [Init(typeof(X)], results in: = new X()
-            var namedAttributes = initAttribute.NamedArguments.ToDictionary(
-                k => k.Key,
-                v => v.Value);
-            if (namedAttributes.TryGetValue("With", out var typeArg)
-             && typeArg.Value != null) {
-                initExpression =
-                    ObjectCreationExpression(IdentifierName(typeArg.Value.ToString()))
-                        .WithArgumentList(ArgumentList());
-            } else {
-                initExpression = ImplicitObjectCreationExpression();
-            }
-
-            yield return ExpressionStatement(
-                    AssignmentExpression(
-                        SyntaxKind.SimpleAssignmentExpression,
-                        IdentifierName(field.Name.TrimStart('_')), // route to property
-                        initExpression
-                    ))
-                .WithSemicolonToken(
-                    Token(SyntaxKind.SemicolonToken));
-        }
-    }
-
     // generate ChildNodesAndTokens accessor, handle correct nullability
-    private static PropertyDeclarationSyntax generateChildrenGetter(ITypeSymbol recordSymbol,
-        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
+    private static PropertyDeclarationSyntax generateChildrenGetter(
+        ITypeSymbol recordSymbol,
+        IEnumerable<IPropertySymbol> inheritedAndOwnProperties
+    ) {
         var langName = getQualifiedNameParts(recordSymbol).Last();
 
         TypeSyntax itemType = GenericName(Identifier("SyntaxOrToken"))
             .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(IdentifierName(langName))));
 
         var anyFieldNullable =
-            inheritedAndOwnFields.Any(f => f.Type.NullableAnnotation == NullableAnnotation.Annotated);
+            inheritedAndOwnProperties.Any(f => f.Type.NullableAnnotation == NullableAnnotation.Annotated);
 
 
         var arrayCreationExpressionSyntax = ArrayCreationExpression(
@@ -326,7 +176,7 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
             .WithInitializer(InitializerExpression(
                 SyntaxKind.ArrayInitializerExpression,
                 SeparatedList<ExpressionSyntax>(
-                    generateChildrenGetterMembers(inheritedAndOwnFields))));
+                    generateChildrenGetterMembers(inheritedAndOwnProperties))));
 
         return PropertyDeclaration(GenericName(Identifier("IReadOnlyList"))
                     .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList(itemType))),
@@ -359,17 +209,19 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
     }
 
     /// generates contents of the ChildNodesAndTokens { a, b, c }; 
-    private static IEnumerable<SyntaxNodeOrToken> generateChildrenGetterMembers(IEnumerable<IFieldSymbol> ownFields) {
-        foreach (var field in ownFields) {
-            yield return IdentifierName(field.Name.TrimStart('_'));
+    private static IEnumerable<SyntaxNodeOrToken> generateChildrenGetterMembers(
+        IEnumerable<IPropertySymbol> allProperties
+    ) {
+        foreach (var field in allProperties) {
+            yield return IdentifierName(field.Name);
             yield return Token(SyntaxKind.CommaToken); // trailing comma is OK
         }
     }
 
     private static IEnumerable<LocalDeclarationStatementSyntax> mapperFieldDeclarations(
-        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
-        foreach (var field in inheritedAndOwnFields) {
-            var fieldName = field.Name.TrimStart('_');
+        IEnumerable<IPropertySymbol> inheritedAndOwnFields
+    ) {
+        foreach (var prop in inheritedAndOwnFields) {
             yield return LocalDeclarationStatement(
                 VariableDeclaration(IdentifierName(
                         Identifier(
@@ -378,7 +230,7 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
                             "var",
                             "var",
                             TriviaList())))
-                    .WithVariables(SingletonSeparatedList(VariableDeclarator(Identifier(fieldName))
+                    .WithVariables(SingletonSeparatedList(VariableDeclarator(Identifier(prop.Name))
                         .WithInitializer(EqualsValueClause(InvocationExpression(
                                 MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
                                     IdentifierName("mapper"),
@@ -389,32 +241,32 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
                                     MemberAccessExpression(
                                         SyntaxKind.SimpleMemberAccessExpression,
                                         ThisExpression(),
-                                        IdentifierName(fieldName))))))))))));
+                                        IdentifierName(prop.Name))))))))))));
         }
     }
 
-    private static InvocationExpressionSyntax referencesEqualCheck(IFieldSymbol field) {
-        var fieldName = field.Name.TrimStart('_');
+    private static InvocationExpressionSyntax referencesEqualCheck(IPropertySymbol property) {
         return InvocationExpression(IdentifierName("ReferenceEquals"))
             .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(
                 new SyntaxNodeOrToken[]
                 {
-                    Argument(IdentifierName(fieldName)),
+                    Argument(IdentifierName(property.Name)),
                     Token(SyntaxKind.CommaToken),
                     Argument(MemberAccessExpression(
                         SyntaxKind.SimpleMemberAccessExpression,
                         ThisExpression(),
-                        IdentifierName(fieldName)))
+                        IdentifierName(property.Name)))
                 })));
     }
 
     private static IfStatementSyntax mapperIfStatement(
-        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
+        IEnumerable<IPropertySymbol> inheritedAndOwnFields
+    ) {
         ExpressionSyntax? testExpression = null;
-        foreach (var field in inheritedAndOwnFields) {
+        foreach (var prop in inheritedAndOwnFields) {
             testExpression = testExpression == null
-                ? referencesEqualCheck(field)
-                : BinaryExpression(SyntaxKind.LogicalAndExpression, testExpression, referencesEqualCheck(field));
+                ? referencesEqualCheck(prop)
+                : BinaryExpression(SyntaxKind.LogicalAndExpression, testExpression, referencesEqualCheck(prop));
         }
 
         return IfStatement(
@@ -422,29 +274,35 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
             ReturnStatement(ThisExpression()));
     }
 
-    private static ReturnStatementSyntax mapperObjectCreationExpression(ITypeSymbol recordSymbol,
-        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
+    private static ReturnStatementSyntax mapperObjectCreationExpression(
+        ITypeSymbol recordSymbol,
+        IEnumerable<IPropertySymbol> inheritedAndOwnProperties
+    ) {
         return ReturnStatement(ObjectCreationExpression(IdentifierName(getTypeNameWithGenericArguments(recordSymbol)))
             .WithInitializer(InitializerExpression(SyntaxKind.ObjectInitializerExpression,
                 SeparatedList<ExpressionSyntax>(
-                    inheritedAndOwnFields.Select(field =>
+                    inheritedAndOwnProperties.Select(field =>
                         AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-                            IdentifierName(field.Name.TrimStart('_')),
-                            IdentifierName(field.Name.TrimStart('_'))))))));
+                            IdentifierName(field.Name),
+                            IdentifierName(field.Name)))))));
     }
 
-    private static IEnumerable<StatementSyntax> mapperFunctionStatements(ITypeSymbol recordSymbol,
-        IEnumerable<IFieldSymbol> inheritedAndOwnFields) {
-        foreach (var st in mapperFieldDeclarations(inheritedAndOwnFields))
+    private static IEnumerable<StatementSyntax> mapperFunctionStatements(
+        ITypeSymbol recordSymbol,
+        IEnumerable<IPropertySymbol> inheritedAndOwnProperties
+    ) {
+        foreach (var st in mapperFieldDeclarations(inheritedAndOwnProperties))
             yield return st;
 
-        yield return mapperIfStatement(inheritedAndOwnFields);
+        yield return mapperIfStatement(inheritedAndOwnProperties);
 
-        yield return mapperObjectCreationExpression(recordSymbol, inheritedAndOwnFields);
+        yield return mapperObjectCreationExpression(recordSymbol, inheritedAndOwnProperties);
     }
 
-    private static MethodDeclarationSyntax generateMapper(ITypeSymbol recordSymbol,
-        List<IFieldSymbol> inheritedAndOwnFields) {
+    private static MethodDeclarationSyntax generateMapper(
+        ITypeSymbol recordSymbol,
+        List<IPropertySymbol> inheritedAndOwnProperties
+    ) {
         var langName = getQualifiedNameParts(recordSymbol).Last();
         return MethodDeclaration(GenericName(Identifier("Syntax"))
                     .WithTypeArgumentList(
@@ -456,7 +314,7 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
                 .WithType(GenericName(Identifier("Mapper"))
                     .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList<TypeSyntax>(
                         IdentifierName(langName))))))))
-            .WithBody(Block(mapperFunctionStatements(recordSymbol, inheritedAndOwnFields)));
+            .WithBody(Block(mapperFunctionStatements(recordSymbol, inheritedAndOwnProperties)));
     }
 
     // returns type name with generic arguments and nullable annotation (generic args are fully qualified)
@@ -476,45 +334,30 @@ internal class {INIT_ATTRIBUTE_NAME}Attribute : Attribute {{
     }
 
     /// creates partial record with properties, constructor, toString and children getter wrapped in inner classes
-    private static RecordDeclarationSyntax getPartialRecord(
-        ITypeSymbol recordSymbol, Compilation compilation) {
-        var ownFields = getOwnCompatibleFields(recordSymbol).ToList();
-        var fieldsForInitialization =
-            getFieldsForInitialization(ownFields, compilation).ToList();
-        var inheritedFields = getInheritedCompatibleFields(recordSymbol).ToList();
+    private static RecordDeclarationSyntax generateInternalRecord(ITypeSymbol recordSymbol) {
+        var ownProperties = getOwnProperties(recordSymbol).ToList();
+        var inheritedProperties = getInheritedProperties(recordSymbol).ToList();
 
-        var hasDefaultConstructor = recordSymbol.GetMembers().OfType<IMethodSymbol>()
-            .Any(m => m.MethodKind == MethodKind.Constructor
-             && m.Parameters.Length == 0
-             && m.DeclaredAccessibility == Accessibility.Public);
-
-        var recordDeclaration = RecordDeclaration(
-                Token(SyntaxKind.RecordKeyword),
+        var recordDeclaration = RecordDeclaration(Token(SyntaxKind.RecordKeyword),
                 Identifier(getTypeNameWithGenericArguments(recordSymbol)))
             .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.PartialKeyword)))
             .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
             .AddMembers(generateToStringOverride().ToArray())
-            .AddMembers(generateProperties(ownFields).ToArray())
             .WithCloseBraceToken(Token(SyntaxKind.CloseBraceToken));
-
-
-        if (!hasDefaultConstructor)
-            recordDeclaration =
-                recordDeclaration.AddMembers(generateConstructor(recordSymbol, fieldsForInitialization).ToArray());
-
 
         // if it doesn't have the override and is not abstract, generate childrenAccessor
 
-        var inheritedAndOwnFields = inheritedFields.Concat(ownFields).ToList();
-        
+        var inheritedAndOwnProperties = inheritedProperties.Concat(ownProperties).ToList();
+
         // skip children accessor if it exists
-        if (!(recordSymbol.GetMembers("ChildNodesAndTokens").Any() || recordSymbol.IsAbstract)) 
-            recordDeclaration = recordDeclaration.AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnFields));
+        if (!(recordSymbol.GetMembers("ChildNodesAndTokens").Any() || recordSymbol.IsAbstract))
+            recordDeclaration = recordDeclaration
+                .AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnProperties));
 
         // skip MapWith if it exists
         if (!(recordSymbol.GetMembers("MapWith").Any() || recordSymbol.IsAbstract))
-            recordDeclaration = recordDeclaration.AddMembers(generateMapper(recordSymbol, inheritedAndOwnFields));
-                
+            recordDeclaration = recordDeclaration.AddMembers(generateMapper(recordSymbol, inheritedAndOwnProperties));
+
         return recordDeclaration;
     }
 }

@@ -37,40 +37,41 @@ namespace me.tooster.sdf.AST.Syntax {
     //     public IEnumerable<RedNode<T>> Children =>
     //         value.Children?.Select(c => new RedNode<T>(c, this)) ?? Enumerable.Empty<RedNode<T>>();
     // }
-    
+
     // --------- actual impl 
     // TODO: use source generators to add the red-green-like tree from Roslyn, auto-generated from annotations
     // Instantiating would be possible only with https://stackoverflow.com/questions/8718199/passing-a-type-to-a-generic-constructor
-    
-    // public class RedNode {
-    //     public RedNode? Parent { get; }
-    //     protected RedNode(RedNode? parent) { Parent = parent; }
-    // }
-    //
-    // public class RedSyntax<Lang> : RedNode {
-    //     public Syntax<Lang> Syntax { get; }
-    //     protected RedSyntax(Syntax<Lang> syntax, RedNode? parent) : base(parent) { Syntax = syntax;  }
-    // }
-    //
-    // public class RedToken<Lang> : RedNode {
-    //     public Token<Lang> Token { get; }
-    //     protected RedToken(Token<Lang> token, RedSyntax<Lang>? parent) : base(parent) { Token = token; }
-    // }
-    //
-    // public class RedTriviaList<Lang> {
-    //     public RedToken<Lang>?          PreviousToken { get; } 
-    //     public RedToken<Lang>?          NextToken     { get; } 
-    //     public TriviaList<Trivia<Lang>> TriviaList    { get; }
-    //
-    //     protected RedTriviaList(TriviaList<Trivia<Lang>> triviaList, RedToken<Lang>? previousToken = null, RedToken<Lang>? nextToken = null) {
-    //         PreviousToken = previousToken;
-    //         NextToken = nextToken;
-    //         TriviaList = triviaList;
-    //     }
-    // }
-    //
-    // public class RedTrivia<T> : RedNode where T : Trivia<T> {
-    //     public T Trivia { get; }
-    //     protected RedTrivia(T trivia, RedNode? parent) : base(parent) { Trivia = trivia; }
-    // }
+
+    public abstract class RedNode {
+        public RedNode? ParentSyntaxTriviaList { get; }
+        protected RedNode(RedNode? parentSyntaxTriviaList) => ParentSyntaxTriviaList = parentSyntaxTriviaList;
+    }
+
+    public class RedSyntax<Lang> : RedNode {
+        public Syntax<Lang> GreenSyntax { get; }
+
+        protected RedSyntax(Syntax<Lang> greenSyntax, RedNode? parentSyntax) : base(parentSyntax) =>
+            GreenSyntax = greenSyntax;
+    }
+
+    public class RedToken<Lang> : RedNode {
+        public Token<Lang> GreenToken { get; }
+
+        protected RedToken(Token<Lang> greenToken, RedSyntax<Lang>? parentSyntax) : base(parentSyntax) =>
+            GreenToken = greenToken;
+    }
+
+    public class RedTriviaList<Lang> : RedNode {
+        public TriviaList<Trivia<Lang>> GreenTriviaList { get; }
+
+        protected RedTriviaList(TriviaList<Trivia<Lang>> greenTriviaList, RedToken<Lang>? parentToken = null) :
+            base(parentToken) => GreenTriviaList = greenTriviaList;
+    }
+
+    public class RedTrivia<Lang> : RedNode {
+        public Trivia<Lang> GreenTrivia { get; }
+
+        protected RedTrivia(Trivia<Lang> greenTrivia, RedTriviaList<Lang>? parentTriviaList) : base(parentTriviaList) =>
+            GreenTrivia = greenTrivia;
+    }
 }

@@ -3,10 +3,10 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     /// <a href="https://docs.unity3d.com/Manual/SL-SubShaderTags.html">Tags</a>
-    [Syntax] public partial record  TagsBlock : SubShaderOrPassStatement {
-        [Init] private readonly TagsKeyword                _tagsKeyword     ;
-        [Init] private readonly OpenBraceToken             _openBraceToken  ;
-        [Init] private readonly SyntaxList<Shaderlab, Tag> _tags            ;
-        [Init] private readonly CloseBraceToken            _closeBraceToken ;
+    [AstSyntax] public partial record TagsBlock : SubShaderOrPassStatement {
+        public TagsKeyword                tagsKeyword { get; init; } = new();
+        public OpenBraceToken             openBraceToken { get; init; } = new();
+        public SyntaxList<Shaderlab, Tag> tags { get; init; } = new();
+        public CloseBraceToken            closeBraceToken { get; init; } = new();
     }
 }

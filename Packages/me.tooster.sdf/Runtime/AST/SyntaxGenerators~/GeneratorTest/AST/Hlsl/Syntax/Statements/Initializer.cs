@@ -4,8 +4,8 @@ using me.tooster.sdf.AST.Syntax;
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     // = y
     // = {{a}, {b}}}
-    [Syntax] public abstract partial record Initializer : Syntax<Hlsl> {
-        [Init] private readonly EqualsToken _equalsToken;
-        private readonly        Expression  _value;
+    [AstSyntax] public abstract partial record Initializer : Syntax<Hlsl> {
+        public EqualsToken equalsToken { get; init; } = new();
+        public        Expression  value { get; init; }
     }
 }

@@ -9,12 +9,12 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     /// <a href="https://docs.unity3d.com/Manual/SL-Shader.html">Shader</a>
     /// <a href="https://docs.unity3d.com/Manual/SL-Fallback.html">Fallback</a>
     /// <a href="https://docs.unity3d.com/Manual/SL-CustomEditor.html">CustomEditor</a>
-    [Syntax] public partial record  Shader : Syntax<Shaderlab> {
-        [Init] private readonly  ShaderKeyword                          _shaderKeyword      ;
-        private readonly  QuotedStringLiteral                    _name               ;
-        [Init] private readonly  OpenBraceToken                         _openBraceToken     ;
-        private readonly  MaterialProperties?                    _materialProperties ;
-        [Init] private readonly  SyntaxList<Shaderlab, ShaderStatement> _shaderStatements   ;
-        [Init] private readonly  CloseBraceToken                        _closeBraceToken    ;
+    [AstSyntax] public partial record Shader : Syntax<Shaderlab> {
+        public ShaderKeyword                          shaderKeyword { get; init; } = new();
+        public        QuotedStringLiteral                    name { get; init; }
+        public OpenBraceToken                         openBraceToken { get; init; } = new();
+        public        MaterialProperties?                    materialProperties { get; init; }
+        public SyntaxList<Shaderlab, ShaderStatement> shaderStatements { get; init; } = new();
+        public CloseBraceToken                        closeBraceToken { get; init; } = new();
     }
 }

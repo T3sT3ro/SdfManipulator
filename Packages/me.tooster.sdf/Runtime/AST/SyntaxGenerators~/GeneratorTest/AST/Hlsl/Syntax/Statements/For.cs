@@ -8,17 +8,17 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     // start conditions:
     //    declarations: int i, j = 0;
     //    initializers: i = 0, j = 0;
-    [Syntax] public partial record For : Statement {
-        [Init] private readonly ForKeyword                       _forKeyword;
-        [Init] private readonly OpenParenToken                   _openParen;
-        private readonly        Initializer?                     _initializer;
-        [Init] private readonly SemicolonToken                        _firstSemicolonToken;
-        private readonly        Expression?                      _condition;
-        [Init] private readonly SemicolonToken                        _secondSemicolonToken;
-        [Init] private readonly SeparatedList<Hlsl, Expression>? _increments;
-        [Init] private readonly CloseParenToken                  _closeParen;
-        private readonly        Statement                        _body;
+    [AstSyntax] public partial record For : Statement {
+        public ForKeyword                       forKeyword { get; init; } = new();
+        public OpenParenToken                   openParen { get; init; } = new();
+        public        Initializer?                     initializer { get; init; }
+        public SemicolonToken                   firstSemicolonToken { get; init; } = new();
+        public        Expression?                      condition { get; init; }
+        public SemicolonToken                   secondSemicolonToken { get; init; } = new();
+        public SeparatedList<Hlsl, Expression>? increments { get; init; } = new();
+        public CloseParenToken                  closeParen { get; init; } = new();
+        public        Statement                        body { get; init; }
 
-        [Syntax] public abstract partial record Initializer : Syntax<Hlsl>;
+        [AstSyntax] public abstract partial record Initializer : Syntax<Hlsl>;
     }
 }

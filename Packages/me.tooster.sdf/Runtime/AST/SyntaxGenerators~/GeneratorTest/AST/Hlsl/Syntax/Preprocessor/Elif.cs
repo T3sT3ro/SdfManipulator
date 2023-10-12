@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
-    [Syntax] public partial record Elif : PreprocessorSyntax {
-        [Init] private readonly ElifKeyword _elifKeyword;
-        [Init] private readonly TokenString _condition;
+    [AstSyntax] public partial record Elif : PreprocessorSyntax {
+        public ElifKeyword elifKeyword { get; init; } = new();
+        public TokenString condition { get; init; } = new();
     }
 }

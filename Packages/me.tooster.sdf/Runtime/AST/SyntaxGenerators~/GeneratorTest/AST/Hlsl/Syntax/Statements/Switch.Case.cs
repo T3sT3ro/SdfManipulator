@@ -5,11 +5,11 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     public partial record Switch {
-        [Syntax] public partial record Case : Syntax<Hlsl> {
-            [Init] private readonly CaseKeyword                 _caseKeyword;
-            private readonly        IntLiteral                  _label;
-            [Init] private readonly ColonToken                  _colonToken;
-            [Init] private readonly SyntaxList<Hlsl, Statement> _body;
+        [AstSyntax] public partial record Case : Syntax<Hlsl> {
+            public CaseKeyword                 caseKeyword { get; init; } = new();
+            public        IntLiteral                  label { get; init; }
+            public ColonToken                  colonToken { get; init; } = new();
+            public SyntaxList<Hlsl, Statement> body { get; init; } = new();
         }
     }
 }

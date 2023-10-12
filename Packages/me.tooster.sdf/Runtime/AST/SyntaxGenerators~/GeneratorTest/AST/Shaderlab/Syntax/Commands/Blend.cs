@@ -5,29 +5,29 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.Commands {
     /// <a href="https://docs.unity3d.com/Manual/SL-Blend.html">Blend</a>
-    [Syntax] public partial record Blend : Command {
-        [Init] private readonly BlendKeyword     _blendKeyword;
-        private readonly        CommandArgument? _renderTarget;
-        private readonly        BlendArguments   _blendArguments;
+    [AstSyntax] public partial record Blend : Command {
+        public BlendKeyword     blendKeyword { get; init; } = new();
+        public        CommandArgument? renderTarget { get; init; }
+        public        BlendArguments   blendArguments { get; init; }
 
 
-        [Syntax] public abstract partial record BlendArguments : CommandArgument;
+        [AstSyntax] public abstract partial record BlendArguments : CommandArgument;
 
-        [Syntax] public partial record StateArgument : BlendArguments {
-            private readonly CommandArgument _stateArg;
+        [AstSyntax] public partial record StateArgument : BlendArguments {
+            public CommandArgument stateArg { get; init; }
         }
 
-        [Syntax] public partial record SrcDstArguments : BlendArguments {
-            private readonly CommandArgument _srcFactorArg;
-            private readonly CommandArgument _dstFactorArg;
+        [AstSyntax] public partial record SrcDstArguments : BlendArguments {
+            public CommandArgument srcFactorArg { get; init; }
+            public CommandArgument dstFactorArg { get; init; }
         }
 
-        [Syntax] public partial record RgbaFactorArguments : BlendArguments {
-            private readonly        CommandArgument _srcRgbFactor;
-            private readonly        CommandArgument _srcAlphaFactor;
-            [Init] private readonly CommaToken      _commaToken;
-            private readonly        CommandArgument _dstRgbFactor;
-            private readonly        CommandArgument _dstAlphaFactor;
+        [AstSyntax] public partial record RgbaFactorArguments : BlendArguments {
+            public        CommandArgument srcRgbFactor { get; init; }
+            public        CommandArgument srcAlphaFactor { get; init; }
+            public CommaToken      commaToken { get; init; } = new();
+            public        CommandArgument dstRgbFactor { get; init; }
+            public        CommandArgument dstAlphaFactor { get; init; }
         }
     }
 }

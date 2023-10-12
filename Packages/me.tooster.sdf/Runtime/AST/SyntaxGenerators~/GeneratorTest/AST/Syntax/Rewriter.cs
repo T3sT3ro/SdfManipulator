@@ -6,19 +6,19 @@ using System.Linq;
 namespace me.tooster.sdf.AST.Syntax {
     // TODO: this solution is suboptimal. It would be better to generate partial SyntaxRewriter methods for each Syntax type
     //       and Update methods inside syntax classes for updating partial fields of syntax tree parts, just like Roslyn
-    public class SyntaxRewriter<Lang> : SyntaxVisitor<Lang, Syntax<Lang>> {
+    public class Rewriter<Lang> : Visitor<Lang, Syntax<Lang>> {
         public bool DescendIntoStructuredTrivia { get; }
 
-        public SyntaxRewriter(bool descendIntoStructuredTrivia = false) {
+        public Rewriter(bool descendIntoStructuredTrivia = false) {
             DescendIntoStructuredTrivia = descendIntoStructuredTrivia;
         }
 
         // ------------- ENTRYPOINT DISPATCH
-        
-        protected override Syntax<Lang> Visit(Syntax<Lang> node) {
+
+        public override Syntax<Lang> Visit(Syntax<Lang> node) {
             return Visit((dynamic)new WithParent<dynamic>(node, null));
         }
-        
+
         /* shouldn't be possible to visit tokens directly
         protected virtual Token<Lang> Visit(Token<Lang> token) {
             return Visit((dynamic)new WithParent<Token<Lang>>(token, null));
@@ -27,7 +27,7 @@ namespace me.tooster.sdf.AST.Syntax {
         protected virtual Trivia<Lang> Visit(Trivia<Lang> trivia) {
             return Visit((dynamic)new WithParent<Trivia<Lang>>(trivia, null));
         }*/
-        
+
         // ------------- DYNAMIC RUNTIME DISPATCH
 
         /// rewrites a syntax node. If it (or children) changed, returns changed node. Otherwise returns original node.
@@ -44,7 +44,7 @@ namespace me.tooster.sdf.AST.Syntax {
                 if (child == newChild)
                     continue;
 
-                modified ??= node with { }; // shallow clone, preserves child identities if unmodified
+                modified ??= node with { };     // shallow clone, preserves child identities if unmodified
                 p.SetValue(modified, newChild); // set new child
             }
 
@@ -54,14 +54,14 @@ namespace me.tooster.sdf.AST.Syntax {
         /// rewrites a token. If it (or children) changed, returns changed token. Otherwise returns original token.
         protected virtual Token<Lang> Visit(WithParent<Token<Lang>> tokenWithParent) {
             var token = tokenWithParent.Value;
-            
+
             var leading = token.LeadingTriviaList;
             var trailing = token.TrailingTriviaList;
-            
+
             var newLeading = Visit((dynamic)new WithParent<IReadOnlyList<Trivia<Lang>>>(leading, tokenWithParent));
             var newTrailing = Visit((dynamic)new WithParent<IReadOnlyList<Trivia<Lang>>>(trailing, tokenWithParent));
-            
-            if(newLeading != leading || newTrailing != trailing)
+
+            if (newLeading != leading || newTrailing != trailing)
                 return token with { LeadingTriviaList = newLeading, TrailingTriviaList = newTrailing };
 
             return token;
@@ -87,11 +87,13 @@ namespace me.tooster.sdf.AST.Syntax {
         /// rewrites list's elements, if it (or children) changed, returns changed list. Othwerwise returns original list.
         protected virtual IReadOnlyList<T> Visit<T>(WithParent<IReadOnlyList<T>> listWithParent) where T : class {
             var list = listWithParent.Value;
-            
-            var newList = (IList<T>)Activator.CreateInstance(typeof(WithParent<>).MakeGenericType(list.GetType()), list);
+
+            var newList =
+                (IList<T>)Activator.CreateInstance(typeof(WithParent<>).MakeGenericType(list.GetType()), list);
             bool anyChanged = false;
             foreach (T x in list) {
-                var parented = Activator.CreateInstance(typeof(WithParent<>).MakeGenericType(x.GetType()), x, listWithParent);
+                var parented = Activator.CreateInstance(typeof(WithParent<>).MakeGenericType(x.GetType()), x,
+                    listWithParent);
                 T mapped = (T)Visit((dynamic)parented);
                 newList.Add(mapped);
                 anyChanged |= mapped != x;
@@ -101,7 +103,7 @@ namespace me.tooster.sdf.AST.Syntax {
         }
 
         // ------------- HELPERS 
-        
+
         protected class DynamicParentNode {
             public DynamicParentNode? Parent { get; }
 

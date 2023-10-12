@@ -4,15 +4,12 @@ using System.Linq;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
-   [Syntax] public partial record Switch : Statement {
-        private readonly SwitchKeyword                                  _switchKeyword;
-        private readonly OpenParenToken                                 _openParen;
-        private readonly Identifier                    _selector;
-        private readonly CloseParenToken                                _closeParen;
-        private readonly SyntaxList<Hlsl, Switch.Case> _cases;
-        public           Switch.DefaultCase?           @default { get; init; }
-
-        public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>?[]
-            { switchKeyword, openParen, selector, closeParen, cases, @default }.FilterNotNull().ToList();
+    [AstSyntax] public partial record Switch : Statement {
+        public SwitchKeyword          switchKeyword { get; init; }
+        public OpenParenToken         openParen { get; init; }
+        public Identifier             selector { get; init; }
+        public CloseParenToken        closeParen { get; init; }
+        public SyntaxList<Hlsl, Case> cases { get; init; }
+        public           DefaultCase?           @default { get; init; }
     }
 }

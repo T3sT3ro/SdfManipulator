@@ -207,30 +207,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public override string          Text  => string.Intern($"{type.Text}{arity.ToString()}");
     }
 
-    public abstract record ValidatedToken : Token<Hlsl> {
-        private readonly string validatedText;
-
-        public override string Text => validatedText;
-
-        protected abstract Regex Pattern { get; }
-
-        /// <summary>Creates new token by validating the text.</summary>
-        /// <exception cref="ArgumentException">if text doesn't match pattern</exception>
-        public virtual string ValidatedText {
-            init {
-                if (!Pattern.IsMatch(value))
-                    throw new ArgumentException($"Token text: {value} doesn't match pattern: {Pattern}");
-
-                validatedText = value;
-            }
-        }
-
-        protected string TextUnsafe {
-            init => validatedText = value;
-        }
-    }
-
-    public record IdentifierToken : ValidatedToken {
+    public record IdentifierToken : ValidatedToken<Hlsl> {
         private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
         protected override      Regex Pattern => pattern;
 
@@ -238,7 +215,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     /// <a href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-appendix-grammar">grammar</a>
-    public abstract record Literal : ValidatedToken;
+    public abstract record Literal : ValidatedToken<Hlsl>;
 
     public record FloatLiteral : Literal {
         private static readonly Regex pattern =
@@ -273,7 +250,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     // used in preprocessor, can be multiline if there is a "\\n" sequence
-    public record TokenString : ValidatedToken {
+    public record TokenString : ValidatedToken<Hlsl> {
         private static readonly Regex pattern = new(@"^(?:.|\\\n)*$");
         protected override      Regex Pattern => pattern;
 

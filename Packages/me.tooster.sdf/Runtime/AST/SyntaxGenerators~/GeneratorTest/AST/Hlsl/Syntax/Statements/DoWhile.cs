@@ -3,16 +3,15 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     // do { body } while (test);
-   [Syntax] public partial record DoWhile : Statement {
-        [Init] private readonly DoKeyword       _doKeyword;
-        [Init] private readonly OpenBraceToken  _openBraceToken;
-        private readonly Statement       _body;
-        [Init] private readonly CloseBraceToken _closeBraceToken;
-        [Init] private readonly WhileKeyword    _whileKeyword;
-        [Init] private readonly OpenParenToken  _openParenToken;
-        private readonly Expression      _test;
-        [Init] private readonly CloseParenToken _closeParenToken;
-        [Init] private readonly SemicolonToken       _semicolonToken;
-
+    [AstSyntax] public partial record DoWhile : Statement {
+        public DoKeyword       doKeyword { get; init; } = new();
+        public OpenBraceToken  openBraceToken { get; init; } = new();
+        public        Statement       body { get; init; }
+        public CloseBraceToken closeBraceToken { get; init; } = new();
+        public WhileKeyword    whileKeyword { get; init; } = new();
+        public OpenParenToken  openParenToken { get; init; } = new();
+        public        Expression      test { get; init; }
+        public CloseParenToken closeParenToken { get; init; } = new();
+        public SemicolonToken  semicolonToken { get; init; } = new();
     }
 }
