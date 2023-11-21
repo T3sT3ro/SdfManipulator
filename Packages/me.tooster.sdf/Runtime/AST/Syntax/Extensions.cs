@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace me.tooster.sdf.AST.Syntax {
     public static class Extensions {
         /// Appends an item to an enumerable if it is not null.

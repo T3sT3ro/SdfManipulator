@@ -4,10 +4,10 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     public partial record Switch {
-        [Syntax] public partial record DefaultCase : Syntax<Hlsl> {
-            [Init] private readonly DefaultKeyword              _defaultKeyword;
-            [Init] private readonly ColonToken                  _colonToken;
-            [Init] private readonly SyntaxList<Hlsl, Statement> _body;
+        [SyntaxNode] public partial record DefaultCase : Syntax<hlsl> {
+            public DefaultKeyword              defaultKeyword { get; init; } = new();
+            public ColonToken                  colonToken     { get; init; } = new();
+            public SyntaxList<hlsl, Statement> body           { get; init; } = new();
         }
     }
 }

@@ -6,137 +6,139 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 // @formatter off
     // TODO: use interned strings or static strings for token getters
     // Tokens
-    public record LineFeedToken                         : Token<Hlsl> { public override string Text => "\n"; }
-    public record OpenParenToken                        : Token<Hlsl> { public override string Text => "("; }
-    public record CloseParenToken                       : Token<Hlsl> { public override string Text => ")"; }
-    public record OpenBraceToken                        : Token<Hlsl> { public override string Text => "{"; }
-    public record CloseBraceToken                       : Token<Hlsl> { public override string Text => "}"; }
-    public record OpenBracketToken                      : Token<Hlsl> { public override string Text => "["; }
-    public record CloseBracketToken                     : Token<Hlsl> { public override string Text => "]"; }
+    [TokenNode("\n")] public partial record LineFeedToken;
+    [TokenNode("(")] public partial record OpenParenToken;
+    [TokenNode(")")] public partial record CloseParenToken;
+    [TokenNode("{")] public partial record OpenBraceToken;
+    [TokenNode("}")] public partial record CloseBraceToken;
+    [TokenNode("[")] public partial record OpenBracketToken;
+    [TokenNode("]")] public partial record CloseBracketToken;
     
-    public record TildeToken                            : Token<Hlsl> { public override string Text => "~"; }
-    public record NotToken                              : Token<Hlsl> { public override string Text => "!"; }
-    public record MinusToken                            : Token<Hlsl> { public override string Text => "-"; }
-    public record PlusToken                             : Token<Hlsl> { public override string Text => "+"; }
-    public record PercentToken                          : Token<Hlsl> { public override string Text => "%"; }
-    public record CaretToken                            : Token<Hlsl> { public override string Text => "^"; }
-    public record AmpersandToken                        : Token<Hlsl> { public override string Text => "&"; }
-    public record AsteriskToken                         : Token<Hlsl> { public override string Text => "*"; }
+    [TokenNode("~")] public partial record TildeToken;
+    [TokenNode("!")] public partial record NotToken;
+    [TokenNode("-")] public partial record MinusToken;
+    [TokenNode("+")] public partial record PlusToken;
+    [TokenNode("%")] public partial record PercentToken;
+    [TokenNode("^")] public partial record CaretToken;
+    [TokenNode("&")] public partial record AmpersandToken;
+    [TokenNode("*")] public partial record AsteriskToken;
     
-    public record BarToken                              : Token<Hlsl> { public override string Text => "|"; }
-    public record ColonToken                            : Token<Hlsl> { public override string Text => ":"; }
-    public record SemicolonToken                        : Token<Hlsl> { public override string Text => ";"; }
-    public record LessThanToken                         : Token<Hlsl> { public override string Text => "<"; }
-    public record GreaterThanToken                      : Token<Hlsl> { public override string Text => ">"; }
-    public record CommaToken                            : Token<Hlsl> { public override string Text => ","; }
-    public record DotToken                              : Token<Hlsl> { public override string Text => "."; }
-    public record QuestionToken                         : Token<Hlsl> { public override string Text => "?"; }
-    public record HashToken                             : Token<Hlsl> { public override string Text => "#"; }
-    public record SlashToken                            : Token<Hlsl> { public override string Text => "/"; }
+    [TokenNode("|")] public partial record BarToken;
+    [TokenNode(":")] public partial record ColonToken;
+    [TokenNode(";")] public partial record SemicolonToken;
+    [TokenNode("<")] public partial record LessThanToken;
+    [TokenNode(">")] public partial record GreaterThanToken;
+    [TokenNode(",")] public partial record CommaToken;
+    [TokenNode(".")] public partial record DotToken;
+    [TokenNode("?")] public partial record QuestionToken;
+    [TokenNode("#")] public partial record HashToken;
+    [TokenNode("/")] public partial record SlashToken;
     
     
-    public record BarBarToken                           : Token<Hlsl> { public override string Text => "||"; }
-    public record AmpersandAmpersandToken               : Token<Hlsl> { public override string Text => "&&"; }
-    public abstract record AffixOperatorToken           : Token<Hlsl>;
-    public record ColonColonToken                       : Token<Hlsl> { public override string Text => "::"; }
-    public record ExclamationEqualsToken                : Token<Hlsl> { public override string Text => "!="; }
-    public record EqualsEqualsToken                     : Token<Hlsl> { public override string Text => "=="; }
-    public record LessThanEqualsToken                   : Token<Hlsl> { public override string Text => "<="; }
-    public record LessThanLessThanToken                 : Token<Hlsl> { public override string Text => "<<"; }
-    public record GreaterThanEqualsToken                : Token<Hlsl> { public override string Text => ">="; }
-    public record GreaterThanGreaterThanToken           : Token<Hlsl> { public override string Text => ">>"; }
+    [TokenNode("||")] public partial record BarBarToken;
+    [TokenNode("&&")] public partial record AmpersandAmpersandToken;
     
-    public record MinusMinusToken                       : AffixOperatorToken { public override string Text => "--"; }
-    public record PlusPlusToken                         : AffixOperatorToken { public override string Text => "++"; }
+    public abstract partial record AffixOperatorToken : Token<hlsl>;
+    [TokenNode("::")] public partial record ColonColonToken;
+    [TokenNode("!=")] public partial record ExclamationEqualsToken;
+    [TokenNode("==")] public partial record EqualsEqualsToken;
+    [TokenNode("<=")] public partial record LessThanEqualsToken;
+    [TokenNode("<<")] public partial record LessThanLessThanToken;
+    [TokenNode(">=")] public partial record GreaterThanEqualsToken;
+    [TokenNode(">>")] public partial record GreaterThanGreaterThanToken;
     
-    public abstract record AssignmentToken : Token<Hlsl>;
-    public record EqualsToken                           : AssignmentToken { public override string Text => "="; }
-    public record LessThanLessThanEqualsToken           : AssignmentToken { public override string Text => "<<="; }
-    public record GreaterThanGreaterThanEqualsToken     : AssignmentToken { public override string Text => ">>="; }
-    public record SlashEqualsToken                      : AssignmentToken { public override string Text => "/="; }
-    public record AsteriskEqualsToken                   : AssignmentToken { public override string Text => "*="; }
-    public record BarEqualsToken                        : AssignmentToken { public override string Text => "|="; }
-    public record AmpersandEqualsToken                  : AssignmentToken { public override string Text => "&="; }
-    public record PlusEqualsToken                       : AssignmentToken { public override string Text => "+="; }
-    public record MinusEqualsToken                      : AssignmentToken { public override string Text => "-="; }
-    public record CaretEqualsToken                      : AssignmentToken { public override string Text => "^="; }
-    public record PercentEqualsToken                    : AssignmentToken { public override string Text => "%="; }
+    [TokenNode("--")] public partial record MinusMinusToken : AffixOperatorToken;
+    [TokenNode("++")] public partial record PlusPlusToken : AffixOperatorToken;
+    
+    public abstract partial record AssignmentToken : Token<hlsl>;
+    [TokenNode("=")] public partial record EqualsToken : AssignmentToken;
+    [TokenNode("<<=")] public partial record LessThanLessThanEqualsToken : AssignmentToken;
+    [TokenNode(">>=")] public partial record GreaterThanGreaterThanEqualsToken : AssignmentToken;
+    [TokenNode("/=")] public partial record SlashEqualsToken : AssignmentToken;
+    [TokenNode("*=")] public partial record AsteriskEqualsToken : AssignmentToken;
+    [TokenNode("|=")] public partial record BarEqualsToken : AssignmentToken;
+    [TokenNode("&=")] public partial record AmpersandEqualsToken : AssignmentToken;
+    [TokenNode("+=")] public partial record PlusEqualsToken : AssignmentToken;
+    [TokenNode("-=")] public partial record MinusEqualsToken : AssignmentToken;
+    [TokenNode("^=")] public partial record CaretEqualsToken : AssignmentToken;
+    [TokenNode("%=")] public partial record PercentEqualsToken : AssignmentToken;
     // Keywords
-    public record LinearKeyword             : Token<Hlsl> { public override string Text => "linear"; }
-    public record CentroidKeyword           : Token<Hlsl> { public override string Text => "centroid"; }
-    public record NoperspectiveKeyword      : Token<Hlsl> { public override string Text => "noperspective"; }
-    public record SampleKeyword             : Token<Hlsl> { public override string Text => "sample"; }
-    public record NointerpolationKeyword    : Token<Hlsl> { public override string Text => "nointerpolation"; }
+    [TokenNode("linear")] public partial record LinearKeyword;
+    [TokenNode("centroid")] public partial record CentroidKeyword;
+    [TokenNode("noperspective")] public partial record NoperspectiveKeyword;
+    [TokenNode("sample")] public partial record SampleKeyword;
+    [TokenNode("nointerpolation")] public partial record NointerpolationKeyword;
 
-    public record ConstKeyword              : Token<Hlsl> { public override string Text => "const"; }
-    public record RowMajorKeyword           : Token<Hlsl> { public override string Text => "row_major"; }
-    public record ColumnMajorKeyword        : Token<Hlsl> { public override string Text => "column_major"; }
+    [TokenNode("const")] public partial record ConstKeyword;
+    [TokenNode("row_major")] public partial record RowMajorKeyword;
+    [TokenNode("column_major")] public partial record ColumnMajorKeyword;
     
-    public record ExternKeyword             : Token<Hlsl> { public override string Text => "extern"; }
-    public record PreciseKeyword            : Token<Hlsl> { public override string Text => "precise"; }
-    public record SharedKeyword             : Token<Hlsl> { public override string Text => "shared"; }
-    public record GroupsharedKeyword        : Token<Hlsl> { public override string Text => "groupshared"; }
-    public record StaticKeyword             : Token<Hlsl> { public override string Text => "static"; }
-    public record UniformKeyword            : Token<Hlsl> { public override string Text => "uniform"; }
+    [TokenNode("extern")] public partial record ExternKeyword;
+    [TokenNode("precise")] public partial record PreciseKeyword;
+    [TokenNode("shared")] public partial record SharedKeyword;
+    [TokenNode("groupshared")] public partial record GroupsharedKeyword;
+    [TokenNode("static")] public partial record StaticKeyword;
+    [TokenNode("uniform")] public partial record UniformKeyword;
     
-    public abstract record PredefinedTypeToken : Token<Hlsl>;
+    public abstract record PredefinedTypeToken : Token<hlsl>;
     public abstract record ScalarTypeToken : PredefinedTypeToken;
-    public record VoidKeyword               : PredefinedTypeToken { public override string Text => "void"; }
-    public record BoolKeyword               : ScalarTypeToken { public override string Text => "bool"; }
-    public record HalfKeyword               : ScalarTypeToken { public override string Text => "half"; }
-    public record IntKeyword                : ScalarTypeToken { public override string Text => "int"; }
-    public record UintKeyword               : ScalarTypeToken { public override string Text => "uint"; }
-    public record FloatKeyword              : ScalarTypeToken { public override string Text => "float"; }
-    public record FixedKeyword              : ScalarTypeToken { public override string Text => "fixed"; }
-    public record DoubleKeyword             : ScalarTypeToken { public override string Text => "double"; }
-    public record StructKeyword             : Token<Hlsl> { public override string Text => "struct"; }
+    [TokenNode("void")] public partial record VoidKeyword : PredefinedTypeToken;
+    [TokenNode("bool")] public partial record BoolKeyword : ScalarTypeToken;
+    [TokenNode("half")] public partial record HalfKeyword : ScalarTypeToken;
+    [TokenNode("int")] public partial record IntKeyword : ScalarTypeToken;
+    [TokenNode("uint")] public partial record UintKeyword : ScalarTypeToken;
+    [TokenNode("float")] public partial record FloatKeyword : ScalarTypeToken;
+    [TokenNode("fixed")] public partial record FixedKeyword : ScalarTypeToken;
+    [TokenNode("double")] public partial record DoubleKeyword : ScalarTypeToken;
+    [TokenNode("struct")] public partial record StructKeyword;
 
-    public record Texture1DKeyword          : Token<Hlsl> { public override string Text => "Texture1D"; }
-    public record Texture1DArrayKeyword     : Token<Hlsl> { public override string Text => "Texture1DArray"; }
-    public record Texture2DKeyword          : Token<Hlsl> { public override string Text => "Texture2D"; }
-    public record Texture2DArrayKeyword     : Token<Hlsl> { public override string Text => "Texture2DArray"; }
-    public record Texture3DKeyword          : Token<Hlsl> { public override string Text => "Texture3D"; }
-    public record TextureCubeKeyword        : Token<Hlsl> { public override string Text => "TextureCube"; }
+    [TokenNode("Texture1D")] public partial record Texture1DKeyword;
+    [TokenNode("Texture1DArray")] public partial record Texture1DArrayKeyword;
+    [TokenNode("Texture2D")] public partial record Texture2DKeyword;
+    [TokenNode("Texture2DArray")] public partial record Texture2DArrayKeyword;
+    [TokenNode("Texture3D")] public partial record Texture3DKeyword;
+    [TokenNode("TextureCube")] public partial record TextureCubeKeyword;
 
-    public record FalseKeyword              : Token<Hlsl> { public override string Text => "false"; }
-    public record TrueKeyword               : Token<Hlsl> { public override string Text => "true"; }
+    [TokenNode("false")] public partial record FalseKeyword;
+    [TokenNode("true")] public partial record TrueKeyword;
 
-    public record SwitchKeyword             : Token<Hlsl> { public override string Text => "switch"; }
-    public record CaseKeyword               : Token<Hlsl> { public override string Text => "case"; }
-    public record DefaultKeyword            : Token<Hlsl> { public override string Text => "default"; }
-    public record BreakKeyword              : Token<Hlsl> { public override string Text => "break"; }
-    public record ContinueKeyword           : Token<Hlsl> { public override string Text => "continue"; }
-    public record ReturnKeyword             : Token<Hlsl> { public override string Text => "return"; }
-    public record DiscardKeyword            : Token<Hlsl> { public override string Text => "discard"; }
-    public record IfKeyword                 : Token<Hlsl> { public override string Text => "if"; }
-    public record DoKeyword                 : Token<Hlsl> { public override string Text => "do"; }
-    public record ElseKeyword               : Token<Hlsl> { public override string Text => "else"; }
-    public record WhileKeyword              : Token<Hlsl> { public override string Text => "while"; }
-    public record ForKeyword                : Token<Hlsl> { public override string Text => "for"; }
+    [TokenNode("switch")] public partial record SwitchKeyword;
+    [TokenNode("case")] public partial record CaseKeyword;
+    [TokenNode("default")] public partial record DefaultKeyword;
+    [TokenNode("break")] public partial record BreakKeyword;
+    [TokenNode("continue")] public partial record ContinueKeyword;
+    [TokenNode("return")] public partial record ReturnKeyword;
+    [TokenNode("discard")] public partial record DiscardKeyword;
+    [TokenNode("if")] public partial record IfKeyword;
+    [TokenNode("do")] public partial record DoKeyword;
+    [TokenNode("else")] public partial record ElseKeyword;
+    [TokenNode("while")] public partial record WhileKeyword;
+    [TokenNode("for")] public partial record ForKeyword;
 
-    public record TypedefKeyword            : Token<Hlsl> { public override string Text => "typedef"; }
-    public record DefineKeyword             : Token<Hlsl> { public override string Text => "define"; }
-    public record UndefKeyword              : Token<Hlsl> { public override string Text => "undef"; }
-    public record IfdefKeyword              : Token<Hlsl> { public override string Text => "ifdef"; }
-    public record IfndefKeyword             : Token<Hlsl> { public override string Text => "ifndef"; }
-    public record EndIfKeyword              : Token<Hlsl> { public override string Text => "endif"; }
-    public record ElifKeyword               : Token<Hlsl> { public override string Text => "elif"; }
-    public record PragmaKeyword             : Token<Hlsl> { public override string Text => "pragma"; }
+    [TokenNode("typedef")] public partial record TypedefKeyword;
+    [TokenNode("define")] public partial record DefineKeyword;
+    [TokenNode("undef")] public partial record UndefKeyword;
+    [TokenNode("ifdef")] public partial record IfdefKeyword;
+    [TokenNode("ifndef")] public partial record IfndefKeyword;
+    [TokenNode("endif")] public partial record EndIfKeyword;
+    [TokenNode("elif")] public partial record ElifKeyword;
+    [TokenNode("pragma")] public partial record PragmaKeyword;
 
-    public record ExportKeyword             : Token<Hlsl> { public override string Text => "export"; }
-    public record LineKeyword               : Token<Hlsl> { public override string Text => "line"; }
-    public record ErrorKeyword              : Token<Hlsl> { public override string Text => "error"; }
-    public abstract record IncludePreprocessorKeyword : Token <Hlsl>;
-    public record IncludeKeyword            : IncludePreprocessorKeyword { public override string Text => "include"; }
-    public record IncludeWithPragmasKeyword : IncludePreprocessorKeyword { public override string Text => "include_with_pragmas"; }
+    [TokenNode("export")] public partial record ExportKeyword;
+    [TokenNode("line")] public partial record LineKeyword;
+    [TokenNode("error")] public partial record ErrorKeyword;
+    
+    public abstract record IncludePreprocessorKeyword : Token<hlsl>;
+    [TokenNode("include")] public partial record IncludeKeyword : IncludePreprocessorKeyword;
+    [TokenNode("include_with_pragmas")] public partial record IncludeWithPragmasKeyword : IncludePreprocessorKeyword;
 
-    public record InKeyword                 : Token<Hlsl> { public override string Text => "in"; }
-    public record InoutKeyword              : Token<Hlsl> { public override string Text => "inout"; }
-    public record OutKeyword                : Token<Hlsl> { public override string Text => "out"; }
+    [TokenNode("in")] public partial record InKeyword;
+    [TokenNode("inout")] public partial record InoutKeyword;
+    [TokenNode("out")] public partial record OutKeyword;
     
     // semantics
     
-    public abstract record SemanticToken : Token<Hlsl>;
+    public abstract record SemanticToken : Token<hlsl>;
     //   legacy
     public record PositiontSemantic         : SemanticToken { public override string Text => "POSITIONT";}
     public record FogSemantic               : SemanticToken { public override string Text => "FOG";}
@@ -160,30 +162,30 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     // where 0 <= n <= 7
     public record SvTargetSemantic          : IndexedSemantic { protected override string Name => "SV_TargetSemantic"; } 
     
-    public record SvCoverageSemantic               : SemanticToken { public override string Text => "SV_CoverageSemantic"; } 
-    public record SvDepthSemantic                  : SemanticToken { public override string Text => "SV_DepthSemantic"; } 
-    public record SvDepthGreaterEqualSemantic      : SemanticToken { public override string Text => "SV_DepthGreaterEqualSemantic"; } 
-    public record SvDepthLessEqualSemantic         : SemanticToken { public override string Text => "SV_DepthLessEqualSemantic"; } 
-    public record SvDispatchThreadIDSemantic       : SemanticToken { public override string Text => "SV_DispatchThreadIDSemantic"; } 
-    public record SvDomainLocationSemantic         : SemanticToken { public override string Text => "SV_DomainLocationSemantic"; } 
-    public record SvGroupIDSemantic                : SemanticToken { public override string Text => "SV_GroupIDSemantic"; } 
-    public record SvGroupIndexSemantic             : SemanticToken { public override string Text => "SV_GroupIndexSemantic"; } 
-    public record SvGroupThreadIDSemantic          : SemanticToken { public override string Text => "SV_GroupThreadIDSemantic"; } 
-    public record SvGSInstanceIDSemantic           : SemanticToken { public override string Text => "SV_GSInstanceIDSemantic"; } 
-    public record SvInnerCoverageSemantic          : SemanticToken { public override string Text => "SV_InnerCoverageSemantic"; } 
-    public record SvInsideTessFactorSemantic       : SemanticToken { public override string Text => "SV_InsideTessFactorSemantic"; } 
-    public record SvInstanceIDSemantic             : SemanticToken { public override string Text => "SV_InstanceIDSemantic"; } 
-    public record SvIsFrontFaceSemantic            : SemanticToken { public override string Text => "SV_IsFrontFaceSemantic"; } 
-    public record SvOutputControlPointIDSemantic   : SemanticToken { public override string Text => "SV_OutputControlPointIDSemantic"; } 
-    public record SvPositionSemantic               : SemanticToken { public override string Text => "SV_PositionSemantic"; } 
-    public record SvPrimitiveIDSemantic            : SemanticToken { public override string Text => "SV_PrimitiveIDSemantic"; } 
-    public record SvRenderTargetArrayIndexSemantic : SemanticToken { public override string Text => "SV_RenderTargetArrayIndexSemantic"; } 
-    public record SvSampleIndexSemantic            : SemanticToken { public override string Text => "SV_SampleIndexSemantic"; } 
-    public record SvStencilRefSemantic             : SemanticToken { public override string Text => "SV_StencilRefSemantic"; } 
-    public record SvTessFactorSemantic             : SemanticToken { public override string Text => "SV_TessFactorSemantic"; } 
-    public record SvVertexIDSemantic               : SemanticToken { public override string Text => "SV_VertexIDSemantic"; } 
-    public record SvViewportArrayIndexSemantic     : SemanticToken { public override string Text => "SV_ViewportArrayIndexSemantic"; } 
-    public record SvShadingRateSemantic            : SemanticToken { public override string Text => "SV_ShadingRateSemantic"; } 
+    [TokenNode("SV_CoverageSemantic")] public partial record SvCoverageSemantic : SemanticToken;
+    [TokenNode("SV_DepthSemantic")] public partial record SvDepthSemantic : SemanticToken;
+    [TokenNode("SV_DepthGreaterEqualSemantic")] public partial record SvDepthGreaterEqualSemantic : SemanticToken;
+    [TokenNode("SV_DepthLessEqualSemantic")] public partial record SvDepthLessEqualSemantic : SemanticToken;
+    [TokenNode("SV_DispatchThreadIDSemantic")] public partial record SvDispatchThreadIDSemantic : SemanticToken;
+    [TokenNode("SV_DomainLocationSemantic")] public partial record SvDomainLocationSemantic : SemanticToken;
+    [TokenNode("SV_GroupIDSemantic")] public partial record SvGroupIDSemantic : SemanticToken;
+    [TokenNode("SV_GroupIndexSemantic")] public partial record SvGroupIndexSemantic : SemanticToken;
+    [TokenNode("SV_GroupThreadIDSemantic")] public partial record SvGroupThreadIDSemantic : SemanticToken;
+    [TokenNode("SV_GSInstanceIDSemantic")] public partial record SvGSInstanceIDSemantic : SemanticToken;
+    [TokenNode("SV_InnerCoverageSemantic")] public partial record SvInnerCoverageSemantic : SemanticToken;
+    [TokenNode("SV_InsideTessFactorSemantic")] public partial record SvInsideTessFactorSemantic : SemanticToken;
+    [TokenNode("SV_InstanceIDSemantic")] public partial record SvInstanceIDSemantic : SemanticToken;
+    [TokenNode("SV_IsFrontFaceSemantic")] public partial record SvIsFrontFaceSemantic : SemanticToken;
+    [TokenNode("SV_OutputControlPointIDSemantic")] public partial record SvOutputControlPointIDSemantic : SemanticToken;
+    [TokenNode("SV_PositionSemantic")] public partial record SvPositionSemantic : SemanticToken;
+    [TokenNode("SV_PrimitiveIDSemantic")] public partial record SvPrimitiveIDSemantic : SemanticToken;
+    [TokenNode("SV_RenderTargetArrayIndexSemantic")] public partial record SvRenderTargetArrayIndexSemantic : SemanticToken;
+    [TokenNode("SV_SampleIndexSemantic")] public partial record SvSampleIndexSemantic : SemanticToken;
+    [TokenNode("SV_StencilRefSemantic")] public partial record SvStencilRefSemantic : SemanticToken;
+    [TokenNode("SV_TessFactorSemantic")] public partial record SvTessFactorSemantic : SemanticToken;
+    [TokenNode("SV_VertexIDSemantic")] public partial record SvVertexIDSemantic : SemanticToken;
+    [TokenNode("SV_ViewportArrayIndexSemantic")] public partial record SvViewportArrayIndexSemantic : SemanticToken;
+    [TokenNode("SV_ShadingRateSemantic")] public partial record SvShadingRateSemantic : SemanticToken;
 
     // @formatter on
 
@@ -194,20 +196,20 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public override    string Text => string.Intern($"{Name}{n?.ToString() ?? string.Empty}");
     }
 
-    public record MatrixToken : PredefinedTypeToken {
+    public partial record MatrixToken : PredefinedTypeToken {
         public          ScalarTypeToken type { get; init; } = new FloatKeyword();
         public          uint            rows { get; init; } = 4;
         public          uint            cols { get; init; } = 4;
         public override string          Text => string.Intern($"{type.Text}{rows.ToString()}x{cols.ToString()}");
     }
 
-    public record VectorToken : PredefinedTypeToken {
+    public partial record VectorToken : PredefinedTypeToken {
         public          ScalarTypeToken type  { get; init; } = new FloatKeyword();
         public          uint            arity { get; init; } = 4;
         public override string          Text  => string.Intern($"{type.Text}{arity.ToString()}");
     }
 
-    public record IdentifierToken : ValidatedToken<Hlsl> {
+    public partial record IdentifierToken : ValidatedToken<hlsl> {
         private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
         protected override      Regex Pattern => pattern;
 
@@ -215,9 +217,9 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     /// <a href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-appendix-grammar">grammar</a>
-    public abstract record Literal : ValidatedToken<Hlsl>;
+    public abstract record Literal : ValidatedToken<hlsl>;
 
-    public record FloatLiteral : Literal {
+    public partial record FloatLiteral : Literal {
         private static readonly Regex pattern =
             new(@"^((\d*\.\d+|\d+\.\d*)([eE][+-]?\d+)?|\d+([eE][+-]?\d+))[hHfFlL]?$");
 
@@ -226,14 +228,14 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public static implicit operator FloatLiteral(float value) => new() { TextUnsafe = value.ToString("F") };
     }
 
-    public record IntLiteral : Literal {
+    public partial record IntLiteral : Literal {
         private static readonly Regex pattern = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
         protected override      Regex Pattern => pattern;
 
         public static implicit operator IntLiteral(int value) => new() { TextUnsafe = value.ToString("D") };
     }
 
-    public record BooleanLiteral : Literal {
+    public partial record BooleanLiteral : Literal {
         private static readonly Regex pattern = new(@"^(true|false)$");
         protected override      Regex Pattern => pattern;
 
@@ -241,7 +243,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
             new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
     }
 
-    public record QuotedStringLiteral : Literal {
+    public partial record QuotedStringLiteral : Literal {
         private static readonly Regex pattern = new(@"^""[^""\n\r]*""$");
         protected override      Regex Pattern => pattern;
 
@@ -250,10 +252,10 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     // used in preprocessor, can be multiline if there is a "\\n" sequence
-    public record TokenString : ValidatedToken<Hlsl> {
+    public partial record TokenString : ValidatedToken<hlsl> {
         private static readonly Regex pattern = new(@"^(?:.|\\\n)*$");
         protected override      Regex Pattern => pattern;
 
-        public TokenString() { TextUnsafe = ""; }
+        public TokenString() => TextUnsafe = "";
     }
 }

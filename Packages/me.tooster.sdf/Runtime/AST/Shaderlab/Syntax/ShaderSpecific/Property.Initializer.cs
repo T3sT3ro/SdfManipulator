@@ -4,25 +4,25 @@ using me.tooster.sdf.AST.Syntax;
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
     public partial record Property {
         // = ...
-        [Syntax] public abstract partial record Initializer : Syntax<Shaderlab> {
-            [Init] private readonly EqualsToken _equalsToken;
+        [SyntaxNode] public abstract partial record Initializer {
+            public EqualsToken equalsToken { get; init; } = new();
         }
 
         // = (1, 2, 3, 4)
-        [Syntax] public partial record Vector : Initializer {
-            [Init] private readonly ArgumentList<LiteralExpression<NumberLiteral>> _arguments;
+        [SyntaxNode] public partial record Vector : Initializer {
+            public ArgumentList<LiteralExpression<NumberLiteral>> arguments { get; init; } = new();
         }
 
         // = "red" {}
-        [Syntax] public partial record Texture : Initializer {
-            [Init] private readonly QuotedStringLiteral _textureName;
-            [Init] private readonly OpenBraceToken      _openBrace;
-            [Init] private readonly CloseBraceToken     _closeBrace;
+        [SyntaxNode] public partial record Texture : Initializer {
+            public QuotedStringLiteral textureName { get; init; } = new();
+            public OpenBraceToken      openBrace   { get; init; } = new();
+            public CloseBraceToken     closeBrace  { get; init; } = new();
         }
 
         // = 1 
-        [Syntax] public partial record Number<T> : Initializer where T : NumberLiteral {
-            private readonly T _numberLiteral;
+        [SyntaxNode] public partial record Number<T> : Initializer where T : NumberLiteral {
+            public T numberLiteral { get; init; }
         }
     }
 }

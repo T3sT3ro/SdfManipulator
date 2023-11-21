@@ -2,22 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using me.tooster.sdf.Editor.API;
+using me.tooster.sdf.AST;
+using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Shaderlab;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Commands;
-using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
-using me.tooster.sdf.AST.Syntax;
-using me.tooster.sdf.Editor.API;
-using UnityEngine;
-using FloatKeyword = me.tooster.sdf.AST.Shaderlab.Syntax.FloatKeyword;
-using FloatLiteral = me.tooster.sdf.AST.Shaderlab.Syntax.FloatLiteral;
-using IntLiteral = me.tooster.sdf.AST.Shaderlab.Syntax.IntLiteral;
-using Property = me.tooster.sdf.Editor.API.Property;
-using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
 using Shader = me.tooster.sdf.AST.Shaderlab.Syntax.Shader;
-using Shaderlab = me.tooster.sdf.AST.Shaderlab.Shaderlab;
+using MaterialProperties = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.MaterialProperties;
+using SubShader = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.SubShader;
+using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
+using HlslStatement = me.tooster.sdf.AST.Hlsl.Syntax.Statement;
 
 namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
     public record BuiltInTargetNode(string targetName)
@@ -27,21 +25,22 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
         private HashSet<string> defines    = new();
 
         private void AddProperties(IEnumerable<Property> properties) => this.properties.AddRange(properties);
-        private void AddIncludes(IEnumerable<string>     includes)   => this.includes.UnionWith(includes);
-        private void AddDefines(IEnumerable<string>      defines)    => this.defines.UnionWith(defines);
+        private void AddIncludes(IEnumerable<string> includes)       => this.includes.UnionWith(includes);
+        private void AddDefines(IEnumerable<string> defines)         => this.defines.UnionWith(defines);
 
+        public override string BuildShaderSource() => BuildShaderSyntaxTree().ToString();
 
-        public override ITree BuildShaderSyntaxTree() {
+        private Tree<shaderlab> BuildShaderSyntaxTree() {
             foreach (var node in Graph.NodeTopologicalIterator(this)) {
                 AddIncludes(node.CollectIncludes());
                 AddDefines(node.CollectDefines());
                 AddProperties(node.CollectProperties().Where(v => v.Exposed));
             }
 
-            return new Tree<Shaderlab>(Root: ShaderlabFormatter.Format(shaderTree.Root));
+            return new Tree<shaderlab>(Root: ShaderlabFormatter.Format(shaderTree.Root));
         }
 
-        private Tree<Shaderlab> shaderTree => new Tree<Shaderlab>(new Shader
+        private Tree<shaderlab> shaderTree => new Tree<shaderlab>(new Shader
             {
                 name = targetName,
                 shaderStatements = new ShaderStatement[]
@@ -110,15 +109,12 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
         {
             statements = new PassStatement[]
             {
-                new HlslProgram { hlsl = new InjectedLanguage<Shaderlab, Hlsl>(hlslTree) }
+                new HlslProgram { hlsl = new InjectedLanguage<shaderlab, hlsl>(hlslTree) }
             }
         };
 
-        private Tree<Hlsl> hlslTree => new Tree<Hlsl>(
-            new Statement[]
-            {
-                
-            }.ToSyntaxList()
+        private Tree<hlsl> hlslTree => new Tree<hlsl>(
+            new HlslStatement[] { }.ToSyntaxList()
         );
     }
 }

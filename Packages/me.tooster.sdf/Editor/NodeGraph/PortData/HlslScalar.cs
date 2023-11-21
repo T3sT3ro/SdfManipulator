@@ -1,4 +1,4 @@
-using me.tooster.sdf.AST.Hlsl;
+using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.NodeGraph.Nodes;
 

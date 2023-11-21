@@ -1,4 +1,4 @@
-using System;
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -11,71 +11,97 @@ using ITypeSymbol = Microsoft.CodeAnalysis.ITypeSymbol;
 // where getter returns the field and setter assigns the field and uses the with { Parent = this }; syntax
 // This is just a broad phase to sieve required types, it must be very minimal and performant.
 // Runs once for many nodes
-public class AstReceiver : ISyntaxContextReceiver {
-    public HashSet<ITypeSymbol> Records { get; } = new();
-    public HashSet<ITypeSymbol> Tokens  { get; } = new();
-    public HashSet<ITypeSymbol> Trivia  { get; } = new();
+namespace me.tooster.sdf.AST.Generators {
+    public class AstReceiver : ISyntaxContextReceiver {
+        public HashSet<string>      Langs   { get; } = new();
+        public HashSet<ITypeSymbol> Records { get; } = new();
+        public HashSet<ITypeSymbol> Tokens  { get; } = new();
+        public HashSet<ITypeSymbol> Trivia  { get; } = new();
 
-    public HashSet<ITypeSymbol> Invalid { get; } = new();
+        public List<Diagnostic> Diagnostics { get; } = new();
 
-    private ISymbol? syntaxAttribute;
-    private ISymbol? tokenAttribute;
-    private ISymbol? triviaAttribute;
+        public ISymbol? syntaxAttribute;
+        public ISymbol? tokenAttribute;
+        public ISymbol? triviaAttribute;
 
-    public void OnVisitSyntaxNode(GeneratorSyntaxContext context) {
-        if (context.Node is not RecordDeclarationSyntax recordSyntax)
-            return;
+        public void OnVisitSyntaxNode(GeneratorSyntaxContext context) {
+            if (context.Node is not RecordDeclarationSyntax recordSyntax)
+                return;
 
-        syntaxAttribute ??= context.SemanticModel.Compilation.GetTypeByMetadataName(
-            $"{AstSourceGenerator.SYNTAX_ATTRIBUTE_NAME}Attribute");
-        tokenAttribute ??= context.SemanticModel.Compilation.GetTypeByMetadataName(
-            $"{AstSourceGenerator.TOKEN_ATTRIBUTE_NAME}Attribute");
-        triviaAttribute ??= context.SemanticModel.Compilation.GetTypeByMetadataName(
-            $"{AstSourceGenerator.TRIVIA_ATTRIBUTE_NAME}Attribute");
+            syntaxAttribute ??= context.SemanticModel.Compilation.GetTypeByMetadataName(
+                $"{AstSourceGenerator.ROOT_NAMESPACE}.{AstSourceGenerator.SYNTAX_ATTRIBUTE_NAME}");
+            tokenAttribute ??= context.SemanticModel.Compilation.GetTypeByMetadataName(
+                $"{AstSourceGenerator.ROOT_NAMESPACE}.{AstSourceGenerator.TOKEN_ATTRIBUTE_NAME}");
+            triviaAttribute ??= context.SemanticModel.Compilation.GetTypeByMetadataName(
+                $"{AstSourceGenerator.ROOT_NAMESPACE}.{AstSourceGenerator.TRIVIA_ATTRIBUTE_NAME}");
 
+            var symbol = (ModelExtensions.GetDeclaredSymbol(context.SemanticModel, recordSyntax) as ITypeSymbol)!;
 
-        var recordSymbol = (ModelExtensions.GetDeclaredSymbol(context.SemanticModel, recordSyntax) as ITypeSymbol)!;
+            if (Utils.isAnnotated(symbol, syntaxAttribute!)) {
+                if (!assertPartial(recordSyntax, symbol)) return;
+                if (!assertAccess(symbol, recordSyntax, Accessibility.Public)) return;
+                if (!assertSyntaxDerived(symbol, recordSyntax)) return;
 
-        HashSet<ITypeSymbol>? targetList = null;
+                Records.Add(symbol);
+            } else if (Utils.isAnnotated(symbol, tokenAttribute!)) {
+                if (!assertPartial(recordSyntax, symbol)) return;
 
-        if (isRecordAnnotatedWith(recordSymbol, syntaxAttribute!)) {
-            targetList = isConstructedFrom(recordSymbol, "me.tooster.sdf.AST.Syntax.Syntax<Lang>") ? Records : Invalid;
-        } else if (isRecordAnnotatedWith(recordSymbol, tokenAttribute!)) {
-            targetList = isConstructedFrom(recordSymbol, "me.tooster.sdf.AST.Syntax.Token<Lang>") ? Tokens : Invalid;
-        } else if (isRecordAnnotatedWith(recordSymbol, triviaAttribute!)) {
-            targetList = isConstructedFrom(recordSymbol, "me.tooster.sdf.AST.Syntax.Trivia<Lang>") ? Trivia : Invalid;
+                Tokens.Add(symbol);
+            } else if (Utils.isAnnotated(symbol, triviaAttribute!)) {
+                Trivia.Add(symbol);
+            } else return;
+
+            Langs.Add(Utils.getLangName(symbol));
         }
 
-        // if it's not partial, bail
-        if (targetList != null) {
-            if (recordSyntax.Modifiers.All(mod => !mod.IsKind(SyntaxKind.PartialKeyword))
-             || recordSymbol.DeclaredAccessibility != Accessibility.Public) {
-                targetList = Invalid;
-            }
+        private bool assertAccess(ITypeSymbol symbol, RecordDeclarationSyntax recordSyntax, Accessibility accessibility) {
+            if (symbol.DeclaredAccessibility == accessibility) return true;
+
+            Diagnostics.Add(Diagnostic.Create(
+                new DiagnosticDescriptor(
+                    "AST_REQUIRE_PUBLIC",
+                    "Record must be public",
+                    $"Record {symbol.Name} must be public",
+                    "AST-Syntax",
+                    DiagnosticSeverity.Error,
+                    true),
+                recordSyntax.GetLocation()));
+            return false;
         }
 
-        targetList?.Add(recordSymbol);
-    }
-
-
-    // returns fields from inherited records which are of SyntaxOrToken subtype
-
-    // must be internal partial and have [Syntax] attribute. TODO: maybe check later if it's not inheriting after [Syntax]
-
-    internal static bool isRecordAnnotatedWith(ITypeSymbol recordSymbol, ISymbol attribute) {
-        return recordSymbol
-            .GetAttributes()
-            .Any(ad => ad.AttributeClass?.Equals(attribute, SymbolEqualityComparer.Default) ?? false);
-    }
-
-    private bool isConstructedFrom(ITypeSymbol? typeSymbol, string constructedName) {
-        while (typeSymbol != null) {
-            if (typeSymbol.BaseType?.ConstructedFrom.ToString() == constructedName)
+        /// asserts, with diagnostic when needed, that a type is derived from Syntax or is annotated with [Syntax] for generation 
+        private bool assertSyntaxDerived(ITypeSymbol symbol, RecordDeclarationSyntax recordSyntax) {
+            if (Utils.baseTypes(symbol).Any(type => type is INamedTypeSymbol { ConstructedFrom: { Name: "Syntax" } }
+                 || Utils.isAnnotated(type, syntaxAttribute!))) {
                 return true;
+            }
 
-            typeSymbol = typeSymbol.BaseType;
+            Diagnostics.Add(Diagnostic.Create(
+                new DiagnosticDescriptor(
+                    "AST_REQUIRE_SYNTAX",
+                    $"Record must be derived from Syntax",
+                    $"Record {symbol.Name} must be derived from Syntax",
+                    "AST-Syntax",
+                    DiagnosticSeverity.Error,
+                    true),
+                recordSyntax.GetLocation()));
+            return false;
         }
 
-        return false;
+        private bool assertPartial(RecordDeclarationSyntax recordSyntax, ITypeSymbol symbol) {
+            if (recordSyntax.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword))) return true;
+
+            Diagnostics.Add(Diagnostic.Create(
+                new DiagnosticDescriptor(
+                    "AST_REQUIRE_PARTIAL",
+                    "Record must be partial",
+                    $"Record {symbol.Name} must be partial",
+                    "AST-Token",
+                    DiagnosticSeverity.Error,
+                    true),
+                recordSyntax.GetLocation()));
+
+            return false;
+        }
     }
 }

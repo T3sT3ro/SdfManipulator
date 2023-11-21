@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST;
 using UnityEditor;
 
 namespace me.tooster.sdf.Editor.API {
@@ -83,6 +83,6 @@ namespace me.tooster.sdf.Editor.API {
     // TODO: consider if a target node should have inputs and outputs that take Vertex data and Fragment data
     public abstract record TargetNode(string InternalName, string DisplayName)
         : Node(InternalName, DisplayName) {
-        public abstract ITree BuildShaderSyntaxTree();
+        public abstract string BuildShaderSource();
     }
 }

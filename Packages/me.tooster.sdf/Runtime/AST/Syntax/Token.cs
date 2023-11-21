@@ -5,19 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace me.tooster.sdf.AST.Syntax {
     public abstract record Token<Lang> : SyntaxOrToken<Lang> {
-        private readonly TriviaList<Lang>? _leadingTriviaList;
-        private readonly TriviaList<Lang>? _trailingTriviaList;
-        public abstract  string            Text { get; }
-
-        public TriviaList<Lang>? LeadingTriviaList {
-            get => _leadingTriviaList;
-            init => _leadingTriviaList = value == null ? null : new(value with { Token = this });
-        }
-
-        public TriviaList<Lang>? TrailingTriviaList {
-            get => _trailingTriviaList;
-            init => _trailingTriviaList = value == null ? null : new(value with { Token = this });
-        }
+        public TriviaList<Lang>? LeadingTriviaList { get; init; }
+        public TriviaList<Lang>? TrailingTriviaList { get; init; }
 
         public override StringBuilder WriteTo(StringBuilder sb) {
             LeadingTriviaList?.WriteTo(sb);
@@ -25,8 +14,6 @@ namespace me.tooster.sdf.AST.Syntax {
             TrailingTriviaList?.WriteTo(sb);
             return sb;
         }
-
-        public override string ToString() => base.ToString();
     }
 
     public abstract record ValidatedToken<Lang> : Token<Lang> {

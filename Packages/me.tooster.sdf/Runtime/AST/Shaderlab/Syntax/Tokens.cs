@@ -5,188 +5,188 @@ using me.tooster.sdf.AST.Syntax;
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     // @formatter off
     // Keywords
-    public record LineFeedToken                         : Token<Shaderlab> { public override string Text => "\n"; }
+    [TokenNode("\n")] public partial record LineFeedToken;
     
-    public record OpenParenToken                        : Token<Shaderlab> { public override string Text => "("; }
-    public record CloseParenToken                       : Token<Shaderlab> { public override string Text => ")"; }
-    public record OpenBraceToken                        : Token<Shaderlab> { public override string Text => "{"; }
-    public record CloseBraceToken                       : Token<Shaderlab> { public override string Text => "}"; }
-    public record OpenBracketToken                      : Token<Shaderlab> { public override string Text => "["; }
-    public record CloseBracketToken                     : Token<Shaderlab> { public override string Text => "]"; }
+    [TokenNode("(")] public partial record OpenParenToken;
+    [TokenNode(")")] public partial record CloseParenToken;
+    [TokenNode("{")] public partial record OpenBraceToken;
+    [TokenNode("}")] public partial record CloseBraceToken;
+    [TokenNode("[")] public partial record OpenBracketToken;
+    [TokenNode("]")] public partial record CloseBracketToken;
     
-    public record TildeToken                            : Token<Shaderlab> { public override string Text => "~"; }
-    public record NotToken                              : Token<Shaderlab> { public override string Text => "!"; }
-    public record MinusToken                            : Token<Shaderlab> { public override string Text => "-"; }
-    public record PlusToken                             : Token<Shaderlab> { public override string Text => "+"; }
-    public record PercentToken                          : Token<Shaderlab> { public override string Text => "%"; }
-    public record CaretToken                            : Token<Shaderlab> { public override string Text => "^"; }
-    public record AmpersandToken                        : Token<Shaderlab> { public override string Text => "&"; }
-    public record AsteriskToken                         : Token<Shaderlab> { public override string Text => "*"; }
-    public record EqualsToken                           : Token<Shaderlab> { public override string Text => "="; }
-    public record BarToken                              : Token<Shaderlab> { public override string Text => "|"; }
-    public record ColonToken                            : Token<Shaderlab> { public override string Text => ":"; }
-    public record SemiToken                             : Token<Shaderlab> { public override string Text => ";"; }
-    public record LessThanToken                         : Token<Shaderlab> { public override string Text => "<"; }
-    public record GreaterThanToken                      : Token<Shaderlab> { public override string Text => ">"; }
-    public record CommaToken                            : Token<Shaderlab> { public override string Text => ","; }
-    public record DotToken                              : Token<Shaderlab> { public override string Text => "."; }
-    public record QuestionToken                         : Token<Shaderlab> { public override string Text => "?"; }
-    public record HashToken                             : Token<Shaderlab> { public override string Text => "#"; }
-    public record SlashToken                            : Token<Shaderlab> { public override string Text => "/"; }
+    [TokenNode("~")] public partial record TildeToken;
+    [TokenNode("!")] public partial record NotToken;
+    [TokenNode("-")] public partial record MinusToken;
+    [TokenNode("+")] public partial record PlusToken;
+    [TokenNode("%")] public partial record PercentToken;
+    [TokenNode("^")] public partial record CaretToken;
+    [TokenNode("&")] public partial record AmpersandToken;
+    [TokenNode("*")] public partial record AsteriskToken;
+    [TokenNode("=")] public partial record EqualsToken;
+    [TokenNode("|")] public partial record BarToken;
+    [TokenNode(":")] public partial record ColonToken;
+    [TokenNode(";")] public partial record SemiToken;
+    [TokenNode("<")] public partial record LessThanToken;
+    [TokenNode(">")] public partial record GreaterThanToken;
+    [TokenNode(",")] public partial record CommaToken;
+    [TokenNode(".")] public partial record DotToken;
+    [TokenNode("?")] public partial record QuestionToken;
+    [TokenNode("#")] public partial record HashToken;
+    [TokenNode("/")] public partial record SlashToken;
     // compound
-    public record BarBarToken                           : Token<Shaderlab> { public override string Text => "||"; }
-    public record AmpersandAmpersandToken               : Token<Shaderlab> { public override string Text => "&&"; }
-    public record MinusMinusToken                       : Token<Shaderlab> { public override string Text => "--"; }
-    public record PlusPlusToken                         : Token<Shaderlab> { public override string Text => "++"; }
-    public record ColonColonToken                       : Token<Shaderlab> { public override string Text => "::"; }
-    public record ExclamationEqualsToken                : Token<Shaderlab> { public override string Text => "!="; }
-    public record EqualsEqualsToken                     : Token<Shaderlab> { public override string Text => "=="; }
-    public record LessThanEqualsToken                   : Token<Shaderlab> { public override string Text => "<="; }
-    public record LessThanLessThanToken                 : Token<Shaderlab> { public override string Text => "<<"; }
-    public record LessThanLessThanEqualsToken           : Token<Shaderlab> { public override string Text => "<<="; }
-    public record GreaterThanEqualsToken                : Token<Shaderlab> { public override string Text => ">="; }
-    public record GreaterThanGreaterThanToken           : Token<Shaderlab> { public override string Text => ">>"; }
-    public record GreaterThanGreaterThanEqualsToken     : Token<Shaderlab> { public override string Text => ">>="; }
-    public record SlashEqualsToken                      : Token<Shaderlab> { public override string Text => "/="; }
-    public record AsteriskEqualsToken                   : Token<Shaderlab> { public override string Text => "*="; }
-    public record BarEqualsToken                        : Token<Shaderlab> { public override string Text => "|="; }
-    public record AmpersandEqualsToken                  : Token<Shaderlab> { public override string Text => "&="; }
-    public record PlusEqualsToken                       : Token<Shaderlab> { public override string Text => "+="; }
-    public record MinusEqualsToken                      : Token<Shaderlab> { public override string Text => "-="; }
-    public record CaretEqualsToken                      : Token<Shaderlab> { public override string Text => "^="; }
-    public record PercentEqualsToken                    : Token<Shaderlab> { public override string Text => "%="; }
+    [TokenNode("||")] public partial record BarBarToken;
+    [TokenNode("&&")] public partial record AmpersandAmpersandToken;
+    [TokenNode("--")] public partial record MinusMinusToken;
+    [TokenNode("++")] public partial record PlusPlusToken;
+    [TokenNode("::")] public partial record ColonColonToken;
+    [TokenNode("!=")] public partial record ExclamationEqualsToken;
+    [TokenNode("==")] public partial record EqualsEqualsToken;
+    [TokenNode("<=")] public partial record LessThanEqualsToken;
+    [TokenNode("<<")] public partial record LessThanLessThanToken;
+    [TokenNode("<<=")] public partial record LessThanLessThanEqualsToken;
+    [TokenNode(">=")] public partial record GreaterThanEqualsToken;
+    [TokenNode(">>")] public partial record GreaterThanGreaterThanToken;
+    [TokenNode(">>=")] public partial record GreaterThanGreaterThanEqualsToken;
+    [TokenNode("/=")] public partial record SlashEqualsToken;
+    [TokenNode("*=")] public partial record AsteriskEqualsToken;
+    [TokenNode("|=")] public partial record BarEqualsToken;
+    [TokenNode("&=")] public partial record AmpersandEqualsToken;
+    [TokenNode("+=")] public partial record PlusEqualsToken;
+    [TokenNode("-=")] public partial record MinusEqualsToken;
+    [TokenNode("^=")] public partial record CaretEqualsToken;
+    [TokenNode("%=")] public partial record PercentEqualsToken;
     
     // keywords
-    public record ShaderKeyword                         : Token<Shaderlab> { public override string Text => "Shader"; }
-    public record SubShaderKeyword                      : Token<Shaderlab> { public override string Text => "SubShader"; }
-    public record PassKeyword                           : Token<Shaderlab> { public override string Text => "Pass"; }
-    public record HlslIncludeKeyword                    : Token<Shaderlab> { public override string Text => "HLSLINCLUDE"; }
-    public record HlslProgramKeyword                    : Token<Shaderlab> { public override string Text => "HLSLPROGRAM"; }
-    public record EndHlslKeyword                        : Token<Shaderlab> { public override string Text => "ENDHLSL"; }
-    public record FallbackKeyword                       : Token<Shaderlab> { public override string Text => "Fallback"; }
-    public record CustomEditorKeyword                   : Token<Shaderlab> { public override string Text => "CustomEditor"; }
-    public record CustomEditorForRenderPipelineKeyword  : Token<Shaderlab> { public override string Text => "CustomEditorForRenderPipeline"; }
-    public record PropertiesKeyword                     : Token<Shaderlab> { public override string Text => "Properties"; }
-    public record TagsKeyword                           : Token<Shaderlab> { public override string Text => "Tags"; }
-    public record OnKeyword                             : Token<Shaderlab> { public override string Text => "On"; }
-    public record TrueKeyword                           : Token<Shaderlab> { public override string Text => "True"; }
-    public record FalseKeyword                          : Token<Shaderlab> { public override string Text => "False"; }
-    public record LodKeyword                            : Token<Shaderlab> { public override string Text => "LOD"; }
-    public record NameKeyword                           : Token<Shaderlab> { public override string Text => "Name"; }
+    [TokenNode("Shader")] public partial record ShaderKeyword;
+    [TokenNode("SubShader")] public partial record SubShaderKeyword;
+    [TokenNode("Pass")] public partial record PassKeyword;
+    [TokenNode("HLSLINCLUDE")] public partial record HlslIncludeKeyword;
+    [TokenNode("HLSLPROGRAM")] public partial record HlslProgramKeyword;
+    [TokenNode("ENDHLSL")] public partial record EndHlslKeyword;
+    [TokenNode("Fallback")] public partial record FallbackKeyword;
+    [TokenNode("CustomEditor")] public partial record CustomEditorKeyword;
+    [TokenNode("CustomEditorForRenderPipeline")] public partial record CustomEditorForRenderPipelineKeyword;
+    [TokenNode("Properties")] public partial record PropertiesKeyword;
+    [TokenNode("Tags")] public partial record TagsKeyword;
+    [TokenNode("On")] public partial record OnKeyword;
+    [TokenNode("True")] public partial record TrueKeyword;
+    [TokenNode("False")] public partial record FalseKeyword;
+    [TokenNode("LOD")] public partial record LodKeyword;
+    [TokenNode("Name")] public partial record NameKeyword;
     
     // commands
-    public record AlphaToMaskKeyword                    : Token<Shaderlab> { public override string Text => "AlphaToMask"; }
-    public record BlendKeyword                          : Token<Shaderlab> { public override string Text => "Blend"; }
-    public record BlendOpKeyword                        : Token<Shaderlab> { public override string Text => "BlendOp"; }
-    public record ColorMaskKeyword                      : Token<Shaderlab> { public override string Text => "ColorMask"; }
-    public record ConservativeKeyword                   : Token<Shaderlab> { public override string Text => "Conservative"; }
-    public record CullKeyword                           : Token<Shaderlab> { public override string Text => "Cull"; }
-    public record OffsetKeyword                         : Token<Shaderlab> { public override string Text => "Offset"; }
-    public record StencilKeyword                        : Token<Shaderlab> { public override string Text => "Stencil"; }
-    public record ZClipKeyword                          : Token<Shaderlab> { public override string Text => "ZClip"; }
-    public record ZTestKeyword                          : Token<Shaderlab> { public override string Text => "ZTest"; }
-    public record ZWriteKeyword                         : Token<Shaderlab> { public override string Text => "ZWrite"; }
-    public record UsePassKeyword                        : Token<Shaderlab> { public override string Text => "UsePass"; }
-    public record GrabPassKeyword                       : Token<Shaderlab> { public override string Text => "GrabPass"; }
+    [TokenNode("AlphaToMask")] public partial record AlphaToMaskKeyword;
+    [TokenNode("Blend")] public partial record BlendKeyword;
+    [TokenNode("BlendOp")] public partial record BlendOpKeyword;
+    [TokenNode("ColorMask")] public partial record ColorMaskKeyword;
+    [TokenNode("Conservative")] public partial record ConservativeKeyword;
+    [TokenNode("Cull")] public partial record CullKeyword;
+    [TokenNode("Offset")] public partial record OffsetKeyword;
+    [TokenNode("Stencil")] public partial record StencilKeyword;
+    [TokenNode("ZClip")] public partial record ZClipKeyword;
+    [TokenNode("ZTest")] public partial record ZTestKeyword;
+    [TokenNode("ZWrite")] public partial record ZWriteKeyword;
+    [TokenNode("UsePass")] public partial record UsePassKeyword;
+    [TokenNode("GrabPass")] public partial record GrabPassKeyword;
     // CommandARguments
-    public abstract record ArgumentKeyword              : Token<Shaderlab>;
+    public abstract record ArgumentKeyword : Token<shaderlab>;
     // Blend
-    public record OffKeyword                            : ArgumentKeyword { public override string Text => "Off"; }
-    public record OneKeyword                            : ArgumentKeyword { public override string Text => "One"; }
-    public record ZeroKeyword                           : ArgumentKeyword { public override string Text => "Zero"; }
-    public record SrcColorKeyword                       : ArgumentKeyword { public override string Text => "SrcColor"; }
-    public record SrcAlphaKeyword                       : ArgumentKeyword { public override string Text => "SrcAlpha"; }
-    public record SrcAlphaSaturateKeyword               : ArgumentKeyword { public override string Text => "SrcAlphaSaturate"; }
-    public record DstColorKeyword                       : ArgumentKeyword { public override string Text => "DstColor"; }
-    public record DstAlphaKeyword                       : ArgumentKeyword { public override string Text => "DstAlpha"; }
-    public record OneMinusSrcColorKeyword               : ArgumentKeyword { public override string Text => "OneMinusSrcColor"; }
-    public record OneMinusSrcAlphaKeyword               : ArgumentKeyword { public override string Text => "OneMinusSrcAlpha"; }
-    public record OneMinusDstColorKeyword               : ArgumentKeyword { public override string Text => "OneMinusDstColor"; }
-    public record OneMinusDstAlphaKeyword               : ArgumentKeyword { public override string Text => "OneMinusDstAlpha"; }
+    [TokenNode("Off")] public partial record OffKeyword : ArgumentKeyword;
+    [TokenNode("One")] public partial record OneKeyword : ArgumentKeyword;
+    [TokenNode("Zero")] public partial record ZeroKeyword : ArgumentKeyword;
+    [TokenNode("SrcColor")] public partial record SrcColorKeyword : ArgumentKeyword;
+    [TokenNode("SrcAlpha")] public partial record SrcAlphaKeyword : ArgumentKeyword;
+    [TokenNode("SrcAlphaSaturate")] public partial record SrcAlphaSaturateKeyword : ArgumentKeyword;
+    [TokenNode("DstColor")] public partial record DstColorKeyword : ArgumentKeyword;
+    [TokenNode("DstAlpha")] public partial record DstAlphaKeyword : ArgumentKeyword;
+    [TokenNode("OneMinusSrcColor")] public partial record OneMinusSrcColorKeyword : ArgumentKeyword;
+    [TokenNode("OneMinusSrcAlpha")] public partial record OneMinusSrcAlphaKeyword : ArgumentKeyword;
+    [TokenNode("OneMinusDstColor")] public partial record OneMinusDstColorKeyword : ArgumentKeyword;
+    [TokenNode("OneMinusDstAlpha")] public partial record OneMinusDstAlphaKeyword : ArgumentKeyword;
     // BlendOp
-    public record AddKeyword                            : ArgumentKeyword { public override string Text => "Add"; }
-    public record SubKeyword                            : ArgumentKeyword { public override string Text => "Sub"; }
-    public record RevSubKeyword                         : ArgumentKeyword { public override string Text => "RevSub"; }
-    public record MinKeyword                            : ArgumentKeyword { public override string Text => "Min"; }
-    public record MaxKeyword                            : ArgumentKeyword { public override string Text => "Max"; }
-    public record LogicalClearKeyword                   : ArgumentKeyword { public override string Text => "LogicalClear"; }
-    public record LogicalSetKeyword                     : ArgumentKeyword { public override string Text => "LogicalSet"; }
-    public record LogicalCopyKeyword                    : ArgumentKeyword { public override string Text => "LogicalCopy"; }
-    public record LogicalCopyInvertedKeyword            : ArgumentKeyword { public override string Text => "LogicalCopyInverted"; }
-    public record LogicalNoopKeyword                    : ArgumentKeyword { public override string Text => "LogicalNoop"; }
-    public record LogicalInvertKeyword                  : ArgumentKeyword { public override string Text => "LogicalInvert"; }
-    public record LogicalAndKeyword                     : ArgumentKeyword { public override string Text => "LogicalAnd"; }
-    public record LogicalNandKeyword                    : ArgumentKeyword { public override string Text => "LogicalNand"; }
-    public record LogicalOrKeyword                      : ArgumentKeyword { public override string Text => "LogicalOr"; }
-    public record LogicalNorKeyword                     : ArgumentKeyword { public override string Text => "LogicalNor"; }
-    public record LogicalXorKeyword                     : ArgumentKeyword { public override string Text => "LogicalXor"; }
-    public record LogicalEquivKeyword                   : ArgumentKeyword { public override string Text => "LogicalEquiv"; }
-    public record LogicalAndReverseKeyword              : ArgumentKeyword { public override string Text => "LogicalAndReverse"; }
-    public record LogicalAndInvertedKeyword             : ArgumentKeyword { public override string Text => "LogicalAndInverted"; }
-    public record LogicalOrReverseKeyword               : ArgumentKeyword { public override string Text => "LogicalOrReverse"; }
-    public record LogicalOrInvertedKeyword              : ArgumentKeyword { public override string Text => "LogicalOrInverted"; }
-    public record MultiplyKeyword                       : ArgumentKeyword { public override string Text => "Multiply"; }
-    public record ScreenKeyword                         : ArgumentKeyword { public override string Text => "Screen"; }
-    public record OverlayKeyword                        : ArgumentKeyword { public override string Text => "Overlay"; }
-    public record DarkenKeyword                         : ArgumentKeyword { public override string Text => "Darken"; }
-    public record LightenKeyword                        : ArgumentKeyword { public override string Text => "Lighten"; }
-    public record ColorDodgeKeyword                     : ArgumentKeyword { public override string Text => "ColorDodge"; }
-    public record ColorBurnKeyword                      : ArgumentKeyword { public override string Text => "ColorBurn"; }
-    public record HardLightKeyword                      : ArgumentKeyword { public override string Text => "HardLight"; }
-    public record SoftLightKeyword                      : ArgumentKeyword { public override string Text => "SoftLight"; }
-    public record DifferenceKeyword                     : ArgumentKeyword { public override string Text => "Difference"; }
-    public record ExclusionKeyword                      : ArgumentKeyword { public override string Text => "Exclusion"; }
-    public record HSLHueKeyword                         : ArgumentKeyword { public override string Text => "HSLHue"; }
-    public record HSLSaturationKeyword                  : ArgumentKeyword { public override string Text => "HSLSaturation"; }
-    public record HSLColorKeyword                       : ArgumentKeyword { public override string Text => "HSLColor"; }
-    public record HSLLuminosityKeyword                  : ArgumentKeyword { public override string Text => "HSLLuminosity"; }
+    [TokenNode("Add")] public partial record AddKeyword : ArgumentKeyword;
+    [TokenNode("Sub")] public partial record SubKeyword : ArgumentKeyword;
+    [TokenNode("RevSub")] public partial record RevSubKeyword : ArgumentKeyword;
+    [TokenNode("Min")] public partial record MinKeyword : ArgumentKeyword;
+    [TokenNode("Max")] public partial record MaxKeyword : ArgumentKeyword;
+    [TokenNode("LogicalClear")] public partial record LogicalClearKeyword : ArgumentKeyword;
+    [TokenNode("LogicalSet")] public partial record LogicalSetKeyword : ArgumentKeyword;
+    [TokenNode("LogicalCopy")] public partial record LogicalCopyKeyword : ArgumentKeyword;
+    [TokenNode("LogicalCopyInverted")] public partial record LogicalCopyInvertedKeyword : ArgumentKeyword;
+    [TokenNode("LogicalNoop")] public partial record LogicalNoopKeyword : ArgumentKeyword;
+    [TokenNode("LogicalInvert")] public partial record LogicalInvertKeyword : ArgumentKeyword;
+    [TokenNode("LogicalAnd")] public partial record LogicalAndKeyword : ArgumentKeyword;
+    [TokenNode("LogicalNand")] public partial record LogicalNandKeyword : ArgumentKeyword;
+    [TokenNode("LogicalOr")] public partial record LogicalOrKeyword : ArgumentKeyword;
+    [TokenNode("LogicalNor")] public partial record LogicalNorKeyword : ArgumentKeyword;
+    [TokenNode("LogicalXor")] public partial record LogicalXorKeyword : ArgumentKeyword;
+    [TokenNode("LogicalEquiv")] public partial record LogicalEquivKeyword : ArgumentKeyword;
+    [TokenNode("LogicalAndReverse")] public partial record LogicalAndReverseKeyword : ArgumentKeyword;
+    [TokenNode("LogicalAndInverted")] public partial record LogicalAndInvertedKeyword : ArgumentKeyword;
+    [TokenNode("LogicalOrReverse")] public partial record LogicalOrReverseKeyword : ArgumentKeyword;
+    [TokenNode("LogicalOrInverted")] public partial record LogicalOrInvertedKeyword : ArgumentKeyword;
+    [TokenNode("Multiply")] public partial record MultiplyKeyword : ArgumentKeyword;
+    [TokenNode("Screen")] public partial record ScreenKeyword : ArgumentKeyword;
+    [TokenNode("Overlay")] public partial record OverlayKeyword : ArgumentKeyword;
+    [TokenNode("Darken")] public partial record DarkenKeyword : ArgumentKeyword;
+    [TokenNode("Lighten")] public partial record LightenKeyword : ArgumentKeyword;
+    [TokenNode("ColorDodge")] public partial record ColorDodgeKeyword : ArgumentKeyword;
+    [TokenNode("ColorBurn")] public partial record ColorBurnKeyword : ArgumentKeyword;
+    [TokenNode("HardLight")] public partial record HardLightKeyword : ArgumentKeyword;
+    [TokenNode("SoftLight")] public partial record SoftLightKeyword : ArgumentKeyword;
+    [TokenNode("Difference")] public partial record DifferenceKeyword : ArgumentKeyword;
+    [TokenNode("Exclusion")] public partial record ExclusionKeyword : ArgumentKeyword;
+    [TokenNode("HSLHue")] public partial record HSLHueKeyword : ArgumentKeyword;
+    [TokenNode("HSLSaturation")] public partial record HSLSaturationKeyword : ArgumentKeyword;
+    [TokenNode("HSLColor")] public partial record HSLColorKeyword : ArgumentKeyword;
+    [TokenNode("HSLLuminosity")] public partial record HSLLuminosityKeyword : ArgumentKeyword;
     // Cull
-    public record BackKeyword                           : ArgumentKeyword { public override string Text => "Back"; }
-    public record FrontKeyword                          : ArgumentKeyword { public override string Text => "Front"; }
+    [TokenNode("Back")] public partial record BackKeyword : ArgumentKeyword;
+    [TokenNode("Front")] public partial record FrontKeyword : ArgumentKeyword;
     // ZTest from UnityEngine.Rendering.CompareFunction because docs are invalid
-    public record DisabledKeyword                       : ArgumentKeyword { public override string Text => "Disabled"; }
-    public record NeverKeyword                          : ArgumentKeyword { public override string Text => "Never"; }
-    public record LessKeyword                           : ArgumentKeyword { public override string Text => "Less"; }
-    public record EqualKeyword                          : ArgumentKeyword { public override string Text => "Equal"; }
-    public record LessEqualKeyword                      : ArgumentKeyword { public override string Text => "LessEqual"; }
-    public record GreaterKeyword                        : ArgumentKeyword { public override string Text => "Greater"; }
-    public record NotEqualKeyword                       : ArgumentKeyword { public override string Text => "NotEqual"; }
-    public record GreaterEqualKeyword                   : ArgumentKeyword { public override string Text => "GreaterEqual"; }
-    public record AlwaysKeyword                         : ArgumentKeyword { public override string Text => "Always"; }
+    [TokenNode("Disabled")] public partial record DisabledKeyword : ArgumentKeyword;
+    [TokenNode("Never")] public partial record NeverKeyword : ArgumentKeyword;
+    [TokenNode("Less")] public partial record LessKeyword : ArgumentKeyword;
+    [TokenNode("Equal")] public partial record EqualKeyword : ArgumentKeyword;
+    [TokenNode("LessEqual")] public partial record LessEqualKeyword : ArgumentKeyword;
+    [TokenNode("Greater")] public partial record GreaterKeyword : ArgumentKeyword;
+    [TokenNode("NotEqual")] public partial record NotEqualKeyword : ArgumentKeyword;
+    [TokenNode("GreaterEqual")] public partial record GreaterEqualKeyword : ArgumentKeyword;
+    [TokenNode("Always")] public partial record AlwaysKeyword : ArgumentKeyword;
     
     // attributes: https://docs.unity3d.com/Manual/SL-Properties.html
-    public abstract record AttributeToken               : Token<Shaderlab>;
-    public record GammaAttribute                        : AttributeToken { public override string Text => "Gamma"; }
-    public record HDRAttribute                          : AttributeToken { public override string Text => "HDR"; }
-    public record HideInInspectorAttribute              : AttributeToken { public override string Text => "HideInInspector"; }
-    public record MainTextureAttribute                  : AttributeToken { public override string Text => "MainTexture"; }
-    public record MainColorAttribute                    : AttributeToken { public override string Text => "MainColor"; }
-    public record NoScaleOffsetAttribute                : AttributeToken { public override string Text => "NoScaleOffset"; }
-    public record NormalAttribute                       : AttributeToken { public override string Text => "Normal"; }
-    public record PerRendererDataAttribute              : AttributeToken { public override string Text => "PerRendererData"; }
+    public abstract record AttributeToken : Token<shaderlab>;
+    [TokenNode("Gamma")] public partial record GammaAttribute : AttributeToken;
+    [TokenNode("HDR")] public partial record HDRAttribute : AttributeToken;
+    [TokenNode("HideInInspector")] public partial record HideInInspectorAttribute : AttributeToken;
+    [TokenNode("MainTexture")] public partial record MainTextureAttribute : AttributeToken;
+    [TokenNode("MainColor")] public partial record MainColorAttribute : AttributeToken;
+    [TokenNode("NoScaleOffset")] public partial record NoScaleOffsetAttribute : AttributeToken;
+    [TokenNode("Normal")] public partial record NormalAttribute : AttributeToken;
+    [TokenNode("PerRendererData")] public partial record PerRendererDataAttribute : AttributeToken;
     // advanced attributes: https://docs.unity3d.com/ScriptReference/MaterialPropertyDrawer.html
-    public record ToggleAttribute                       : AttributeToken { public override string Text => "Toggle"; }
-    public record ToggleOffAttribute                    : AttributeToken { public override string Text => "ToggleOff"; }
-    public record EnumAttribute                         : AttributeToken { public override string Text => "Enum"; }
-    public record KeywordEnumAttribute                  : AttributeToken { public override string Text => "KeywordEnum"; }
-    public record KeyEnumAttribute                      : AttributeToken { public override string Text => "KeyEnum"; }
-    public record PowerSliderAttribute                  : AttributeToken { public override string Text => "PowerSlider"; }
-    public record IntRangeAttribute                     : AttributeToken { public override string Text => "IntRange"; }
-    public record SpaceAttribute                        : AttributeToken { public override string Text => "Space"; }
-    public record HeaderAttribute                       : AttributeToken { public override string Text => "Header"; }
+    [TokenNode("Toggle")] public partial record ToggleAttribute : AttributeToken;
+    [TokenNode("ToggleOff")] public partial record ToggleOffAttribute : AttributeToken;
+    [TokenNode("Enum")] public partial record EnumAttribute : AttributeToken;
+    [TokenNode("KeywordEnum")] public partial record KeywordEnumAttribute : AttributeToken;
+    [TokenNode("KeyEnum")] public partial record KeyEnumAttribute : AttributeToken;
+    [TokenNode("PowerSlider")] public partial record PowerSliderAttribute : AttributeToken;
+    [TokenNode("IntRange")] public partial record IntRangeAttribute : AttributeToken;
+    [TokenNode("Space")] public partial record SpaceAttribute : AttributeToken;
+    [TokenNode("Header")] public partial record HeaderAttribute : AttributeToken;
     
     // types: https://docs.unity3d.com/Manual/SL-Properties.html
-    public abstract record TypeKeyword                  : Token<Shaderlab>;
-    public record IntegerKeyword                        : TypeKeyword { public override string Text => "Integer"; }
-    public record FloatKeyword                          : TypeKeyword { public override string Text => "Float"; }
-    public record RangeKeyword                          : TypeKeyword { public override string Text => "Range"; }
-    public record Texture2DKeyword                      : TypeKeyword { public override string Text => "2D"; }
-    public record Texture2DArrayKeyword                 : TypeKeyword { public override string Text => "2DArray"; }
-    public record Texture3DKeyword                      : TypeKeyword { public override string Text => "3D"; }
-    public record CubeKeyword                           : TypeKeyword { public override string Text => "Cube"; }
-    public record CubeArrayKeyword                      : TypeKeyword { public override string Text => "CubeArray"; }
-    public record ColorKeyword                          : TypeKeyword { public override string Text => "Color"; }
-    public record VectorKeyword                         : TypeKeyword { public override string Text => "Vector"; }
+    public abstract record TypeKeyword : Token<shaderlab>;
+    [TokenNode("Integer")] public partial record IntegerKeyword : TypeKeyword;
+    [TokenNode("Float")] public partial record FloatKeyword : TypeKeyword;
+    [TokenNode("Range")] public partial record RangeKeyword : TypeKeyword;
+    [TokenNode("2D")] public partial record Texture2DKeyword : TypeKeyword;
+    [TokenNode("2DArray")] public partial record Texture2DArrayKeyword : TypeKeyword;
+    [TokenNode("3D")] public partial record Texture3DKeyword : TypeKeyword;
+    [TokenNode("Cube")] public partial record CubeKeyword : TypeKeyword;
+    [TokenNode("CubeArray")] public partial record CubeArrayKeyword : TypeKeyword;
+    [TokenNode("Color")] public partial record ColorKeyword : TypeKeyword;
+    [TokenNode("Vector")] public partial record VectorKeyword : TypeKeyword;
     
     
     // @formatter on
@@ -209,30 +209,30 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
         }
     }
 
-    public record IdentifierToken : ValidatedToken<Shaderlab> {
+    public record IdentifierToken : ValidatedToken<shaderlab> {
         private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
         protected override      Regex Pattern => pattern;
 
         public static implicit operator IdentifierToken(string name) =>
-            new IdentifierToken { ValidatedText = name };
+            new() { ValidatedText = name };
     }
 
-    public abstract record Literal : ValidatedToken<Shaderlab>;
+    public abstract record Literal : ValidatedToken<shaderlab>;
 
     public record QuotedStringLiteral : Literal {
-        private static readonly Regex pattern = new Regex(@"^""[^""\n\r]*""$");
+        private static readonly Regex pattern = new(@"^""[^""\n\r]*""$");
         protected override      Regex Pattern => pattern;
 
         public static implicit operator QuotedStringLiteral(string content) =>
-            new QuotedStringLiteral { ValidatedText = $"\"{content}\"" };
+            new() { ValidatedText = $"\"{content}\"" };
     }
 
     public record AttributeStringLiteral : Literal {
-        private static readonly Regex pattern = new Regex(@"^[a-zA-Z0-9_#. \t]+$");
+        private static readonly Regex pattern = new(@"^[a-zA-Z0-9_#. \t]+$");
         protected override      Regex Pattern => pattern;
 
         public static implicit operator AttributeStringLiteral(string str) =>
-            new AttributeStringLiteral { ValidatedText = str };
+            new() { ValidatedText = str };
     }
 
     public record BooleanLiteral : Literal {
@@ -240,7 +240,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
         protected override      Regex Pattern => pattern;
 
         public static implicit operator BooleanLiteral(bool value) =>
-            new BooleanLiteral { TextUnsafe = value ? bool.TrueString : bool.FalseString };
+            new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
     }
 
     public abstract record NumberLiteral : Literal;
@@ -250,7 +250,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
         protected override      Regex Pattern => pattern;
 
         public static implicit operator FloatLiteral(float value) =>
-            new FloatLiteral { TextUnsafe = value.ToString("F") };
+            new() { TextUnsafe = value.ToString("F") };
     }
 
     public record IntLiteral : NumberLiteral {
@@ -258,6 +258,6 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
         protected override      Regex Pattern => pattern;
 
         public static implicit operator IntLiteral(int value) =>
-            new IntLiteral { TextUnsafe = value.ToString("D") };
+            new() { TextUnsafe = value.ToString("D") };
     }
 }

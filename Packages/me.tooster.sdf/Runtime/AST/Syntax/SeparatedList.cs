@@ -13,18 +13,17 @@ namespace me.tooster.sdf.AST.Syntax {
         #region specializations
 
         /// Returns number of syntax nodes in this separated list 
-        new public int Count => FullList.Count >> 1;
+        public override int Count => FullList.Count >> 1;
 
-        new public TSyntax this[int index] => (TSyntax)base[index << 1];
+        public TSyntax this[int index] => (TSyntax)base[index << 1];
 
-        new public static SeparatedList<Lang, TSyntax> Empty { get; } =
-            new SeparatedList<Lang, TSyntax>(Array.Empty<SyntaxOrToken<Lang>>());
+        public static SeparatedList<Lang, TSyntax> Empty { get; } = new(Array.Empty<SyntaxOrToken<Lang>>());
 
         /// returns a valid, separated syntax-list with tokens
         /// A, B, C, D -> slice(1, 2) -> B, C
         /// start and length relate to syntax nodes, not tokens
         public SeparatedList<Lang, TSyntax> Slice<TTok>(int start, int length) where TTok : Token<Lang> =>
-            new SeparatedList<Lang, TSyntax>(FullList.OfType<TSyntax>().Skip(start << 1).Take((length << 1) - 1));
+            new(FullList.OfType<TSyntax>().Skip(start << 1).Take((length << 1) - 1));
 
         #endregion
 
@@ -44,7 +43,7 @@ namespace me.tooster.sdf.AST.Syntax {
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        public Token<Lang> GetSeparator(int index) { return (Token<Lang>)this.FullList[(index << 1) + 1]; }
+        public Token<Lang> GetSeparator(int index) => (Token<Lang>)FullList[(index << 1) + 1];
 
         /// Builds list with separators from A B C -> A tok B tok C 
         public static SeparatedList<Lang, TSyntax> With<TTok>(IEnumerable<TSyntax> list)
@@ -59,7 +58,5 @@ namespace me.tooster.sdf.AST.Syntax {
             With<TTok>(list.AsEnumerable());
 
         #endregion
-
-        public override string ToString() => base.ToString();
     }
 }

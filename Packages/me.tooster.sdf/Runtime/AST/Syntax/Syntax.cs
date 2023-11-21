@@ -12,14 +12,12 @@ namespace me.tooster.sdf.AST.Syntax {
         public abstract IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens { get; }
         public          IReadOnlyList<Syntax<Lang>> ChildNodes => ChildNodesAndTokens.OfType<Syntax<Lang>>().ToList();
 
-
         public override StringBuilder WriteTo(StringBuilder sb) {
             foreach (var child in ChildNodesAndTokens)
                 child.WriteTo(sb);
             return sb;
         }
 
-        public override string       ToString() => base.ToString();
         public abstract Syntax<Lang> MapWith(Mapper<Lang> mapper);
     }
 }

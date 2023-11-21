@@ -3,18 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Syntax {
     public record TriviaList<Lang> : Tree<Lang>.Node, IReadOnlyList<Trivia<Lang>> {
-        public           Token<Lang>?                Token { get; init; } // parent binding, initialized on 
         private readonly IReadOnlyList<Trivia<Lang>> Trivias;
-
-        public TriviaList() { Trivias = Array.Empty<Trivia<Lang>>(); }
-
-
-        public TriviaList(IEnumerable<Trivia<Lang>> trivias) {
-            Trivias = trivias.Select(trivia => trivia with { TriviaList = this }).ToList();
-        }
+        
+        public TriviaList() => Trivias = Array.Empty<Trivia<Lang>>();
+        public TriviaList(IEnumerable<Trivia<Lang>> trivias) => Trivias = trivias.ToList();
 
 
         public IEnumerator<Trivia<Lang>>                              GetEnumerator() => Trivias.GetEnumerator();
@@ -31,10 +27,5 @@ namespace me.tooster.sdf.AST.Syntax {
                 trivia.WriteTo(sb);
             return sb;
         }
-
-        public override string ToString() => base.ToString();
-
-        // to avoid stack overflow on circular dependencies when printing with Token
-        protected override bool PrintMembers(StringBuilder builder) => false;
     }
 }

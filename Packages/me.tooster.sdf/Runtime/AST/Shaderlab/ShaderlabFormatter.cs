@@ -1,10 +1,9 @@
 #nullable enable
-using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab {
     // TODO: use SyntaxRewriter instead that returns new syntax nodes in the place of the old ones
-    public class ShaderlabFormatter : Rewriter<Shaderlab> {
+    public class ShaderlabFormatter : Rewriter<shaderlab> {
         public record Options(
             int indentWidth = 4,
             char indentCharacter = ' ',
@@ -31,7 +30,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
             indentString = new string(options.indentCharacter, indentLevel * options.indentWidth);
         }
 
-        public static Syntax<Shaderlab> Format(Syntax<Shaderlab> node, Options? options = null, int indentLevel = 0) {
+        public static Syntax<shaderlab> Format(Syntax<shaderlab> node, Options? options = null, int indentLevel = 0) {
             var formatter = new ShaderlabFormatter(options, indentLevel);
             return formatter.Visit((dynamic)node);
         }

@@ -85,7 +85,7 @@ namespace me.tooster.sdf.Editor.API {
         }
 
         public string BuildActiveTarget() => ActiveTarget == null ? "" : BuildShaderForTarget(ActiveTarget);
-        public string BuildShaderForTarget(TargetNode targetNode) => targetNode.BuildShaderSyntaxTree().ToString();
+        public string BuildShaderForTarget(TargetNode targetNode) => targetNode.BuildShaderSource();
 
         // TODO use references and out variables for example TryAddNode<T>(out var newNode). For that a default parameterless ctor should be present in node
         public bool TryAddNode(Node node) {

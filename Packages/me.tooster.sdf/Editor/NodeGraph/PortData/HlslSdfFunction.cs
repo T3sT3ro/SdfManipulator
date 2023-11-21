@@ -1,7 +1,7 @@
 #nullable enable
 using System.Linq;
+using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl;
-using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Syntax;
@@ -21,10 +21,10 @@ namespace me.tooster.sdf.Editor.NodeGraph.PortData {
 
         public Call withPosArgument(Expression pointArgument) => callsyntax with
         {
-            argList = new AST.Hlsl.Syntax.ArgumentList<Syntax<Hlsl>>
+            argList = new AST.Hlsl.Syntax.ArgumentList<Syntax<hlsl>>
             {
-                arguments = new SeparatedList<Hlsl, Syntax<Hlsl>>(
-                    new SyntaxOrToken<Hlsl>[] { pointArgument, new CommaToken() }.Concat(callsyntax.argList.arguments)
+                arguments = new SeparatedList<hlsl, Syntax<hlsl>>(
+                    new SyntaxOrToken<hlsl>[] { pointArgument, new CommaToken() }.Concat(callsyntax.argList.arguments)
                 )
             }
         };

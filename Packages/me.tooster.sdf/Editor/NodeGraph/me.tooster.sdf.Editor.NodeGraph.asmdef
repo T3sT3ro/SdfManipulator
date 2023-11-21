@@ -3,10 +3,8 @@
     "rootNamespace": "me.tooster.sdf.Editor.NodeGraph",
     "references": [
         "GUID:c96f805ecf994545999c6d6135bacd40",
-        "GUID:b56098a2d1d04141ae87dc625ea17ce0",
-        "GUID:9628c40f385b41b2a821920e0bbfe7b6",
-        "GUID:5d2a6c362f9243a39f79a6f8eb3fad9a",
-        "GUID:1d773a5b1f524c7f89714bef6e9aea3e"
+        "GUID:1d773a5b1f524c7f89714bef6e9aea3e",
+        "GUID:02ab15579b13e2b7c9ac136bbf96633c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

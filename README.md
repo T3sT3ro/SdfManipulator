@@ -249,6 +249,8 @@ TODO
 - [A blog about rendering and many things from some Nvidia developer](https://www.reedbeta.com/)
 - [Roslyn source generators in unity](https://medium.com/@EnescanBektas/using-source-generators-in-the-unity-game-engine-140ff0cd0dc)
 - [Math utilities, also includes raymarching SDF textures somehow](https://github.com/zalo/MathUtilities)
+- [Cables.gl, visual graph programming tool blending logic, visualization and shaders, cool looking](https://cables.gl/)
+- [Setting up syntax generators in unity and referencing unity project, writing some tests, example with Entitas](https://github.com/sschmid/Entitas/issues/957)
 
 ## Unity internals:
 

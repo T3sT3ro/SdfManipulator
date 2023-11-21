@@ -2,23 +2,20 @@ using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators {
-    [Syntax] public abstract partial record Affix : Expression { // prefix/postfix increment/decrement
-        private readonly Identifier _id;
+    [SyntaxNode] public abstract partial record Affix : Expression { // prefix/postfix increment/decrement
+        public Identifier id { get; init; }
 
         // ++x, --x
-        [Syntax] public partial record Pre : Affix {
-            private readonly AffixOperatorToken _prefixOperator;
+        [SyntaxNode] public partial record Pre : Affix {
+            public AffixOperatorToken prefixOperator { get; init; }
 
-            public override IReadOnlyList<SyntaxOrToken<Hlsl>> ChildNodesAndTokens => new SyntaxOrToken<Hlsl>[]
-            {
-                _prefixOperator,
-                _id
-            };
+            public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens => new SyntaxOrToken<hlsl>[]
+                { prefixOperator, id };
         }
 
         // x++, x--
-        [Syntax] public partial record Post : Affix {
-            private readonly AffixOperatorToken _postfixOperator;
+        [SyntaxNode] public partial record Post : Affix {
+            public AffixOperatorToken postfixOperator { get; init; }
         }
     }
 }

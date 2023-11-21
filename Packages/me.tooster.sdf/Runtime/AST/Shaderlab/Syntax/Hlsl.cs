@@ -4,15 +4,15 @@ using System.Linq;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
-    [Syntax] public partial record HlslInclude : SubShaderOrPassStatement {
-        [Init] private readonly HlslIncludeKeyword                      _hlslIncludeKeyword;
-        private readonly        InjectedLanguage<Shaderlab, Hlsl.Hlsl>? _hlsl;
-        [Init] private readonly EndHlslKeyword                          _endHlslKeyword;
+    [SyntaxNode] public partial record HlslInclude : SubShaderOrPassStatement {
+        public HlslIncludeKeyword                 hlslIncludeKeyword { get; init; } = new();
+        public InjectedLanguage<shaderlab, hlsl>? hlsl               { get; init; }
+        public EndHlslKeyword                     endHlslKeyword     { get; init; } = new();
     }
 
-    [Syntax] public partial record HlslProgram : PassStatement {
-        [Init] private readonly HlslProgramKeyword                      _hlslProgramKeyword;
-        private readonly        InjectedLanguage<Shaderlab, Hlsl.Hlsl>? _hlsl;
-        [Init] private readonly EndHlslKeyword                          _endHlslKeyword;
+    [SyntaxNode] public partial record HlslProgram : PassStatement {
+        public HlslProgramKeyword                 hlslProgramKeyword { get; init; } = new();
+        public InjectedLanguage<shaderlab, hlsl>? hlsl               { get; init; }
+        public EndHlslKeyword                     endHlslKeyword     { get; init; } = new();
     }
 }

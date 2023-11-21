@@ -4,7 +4,7 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Trivias {
-    public partial record Whitespace : SimpleTrivia<Hlsl> {
+    public partial record Whitespace : SimpleTrivia<hlsl> {
         private static Regex whitespaceRegex = new(@"\s+", RegexOptions.Compiled);
 
         public override string Text {

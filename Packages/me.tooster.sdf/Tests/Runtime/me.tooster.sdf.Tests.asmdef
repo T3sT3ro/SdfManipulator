@@ -3,12 +3,9 @@
     "rootNamespace": "me.tooster.sdf.Tests.Runtime",
     "references": [
         "GUID:1d773a5b1f524c7f89714bef6e9aea3e",
-        "GUID:12e6b75b4465470ca7e8c9ad95506318",
-        "GUID:5d2a6c362f9243a39f79a6f8eb3fad9a",
-        "GUID:b56098a2d1d04141ae87dc625ea17ce0",
-        "GUID:9628c40f385b41b2a821920e0bbfe7b6",
         "GUID:27619889b8ba8c24980f49ee34dbb44a",
-        "GUID:0acc523941302664db1f4e527237feb3"
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:02ab15579b13e2b7c9ac136bbf96633c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
