@@ -80,7 +80,6 @@ namespace me.tooster.sdf.Editor.Controllers {
             if (GUILayout.Button("Init graph")) controller.InitGraph();
             if (GUILayout.Button("Test AST")) {
                 var x = new VariableDeclarator { type = new Type.Predefined { typeToken = new MatrixToken() } };
-                var y = x.GetHashCode();
             }
             GUILayout.Space(16);
 

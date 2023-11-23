@@ -30,24 +30,24 @@ namespace me.tooster.sdf.AST.FooLang {
     }
     
     // @formatter off
-    record LangToken : Token<barlang>          { public override string Text => "BARLANG"; }
+    record LangToken : Token<barlang>          { public override string FullText => "BARLANG"; }
     abstract record OpToken : Token<foolang>;
-    record MulToken   : OpToken                        { public override string Text => "*"; }
-    record SpaceToken : Token<foolang>                 { public override string Text => " "; }
-    record ZeroToken  : Token<foolang>                 { public override string Text => "0"; }
-    abstract record DynamicToken(string Value) : Token<foolang> { public override string Text => Value; }
+    record MulToken   : OpToken                        { public override string FullText => "*"; }
+    record SpaceToken : Token<foolang>                 { public override string FullText => " "; }
+    record ZeroToken  : Token<foolang>                 { public override string FullText => "0"; }
+    abstract record DynamicToken(string Value) : Token<foolang> { public override string FullText => Value; }
     record NumToken(string val) : DynamicToken(val);
     // @formatter on
 }
 
 // ReSharper enable NotAccessedPositionalProperty.Global
 
-namespace me.tooster.sdf.Tests.Runtime.AST {
+namespace me.tooster.sdf.Tests.Editor.AST {
     // ========= TESTING =========
-    // ReSharper disable UnusedVariable
-
-    public static class AbstractSyntaxTest {
-        public static IEnumerator FoobarSyntaxSmokeTest() {
+    
+    public class FoobarSyntaxTests {
+        [Test]
+        public void FoobarSyntaxSmokeTest() {
             var oneToken = new NumToken("1");
             var oneLiteral = new Literal { val = oneToken };
             var zeroLiteral = new Literal { val = new ZeroToken() };
@@ -71,12 +71,10 @@ namespace me.tooster.sdf.Tests.Runtime.AST {
             var z2 = separatedList[^1];
 
             var tree = new Tree<foolang>(mulExpr);
-            Assert.AreEqual("1*0", tree.ToString());
+            Assert.AreEqual("1*0", tree.Text);
             var newMul = mulExpr with { left = mulExpr };
             tree = new Tree<foolang>(newMul);
-            Assert.AreEqual("1*0*0", tree.ToString());
-            yield return null;
+            Assert.AreEqual("1*0*0", tree.Text);
         }
-        // ReSharper enable UnusedVariable
     }
 }

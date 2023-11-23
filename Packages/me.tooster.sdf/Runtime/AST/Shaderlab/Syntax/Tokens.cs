@@ -193,7 +193,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
 
     public abstract record ValidatedToken<Shaderlab> : Token<Shaderlab> {
         protected          string TextUnsafe { get; init; }
-        public override    string Text       => TextUnsafe;
+        public override    string FullText       => TextUnsafe;
         protected abstract Regex  Pattern    { get; }
 
 

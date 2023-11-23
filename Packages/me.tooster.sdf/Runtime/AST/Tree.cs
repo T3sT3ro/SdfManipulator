@@ -4,7 +4,9 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST {
     public record Tree<Lang>(Syntax<Lang>? Root = null) {
-        public string Text => Root?.Text ?? "";
+        public string Text => Root?.FullText ?? "";
+
+        public override string ToString() => Text;
 
         public abstract record Node {
             /// <summary>
@@ -18,7 +20,7 @@ namespace me.tooster.sdf.AST {
             /// Returns string representation of this tree node.
             /// </summary>
             /// <returns></returns>
-            public virtual string Text => WriteTo(new StringBuilder()).ToString();
+            public virtual string FullText => WriteTo(new StringBuilder()).ToString();
         }
     }
 }

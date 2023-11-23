@@ -10,7 +10,7 @@ namespace me.tooster.sdf.AST.Syntax {
 
         public override StringBuilder WriteTo(StringBuilder sb) {
             LeadingTriviaList?.WriteTo(sb);
-            sb.Append(Text);
+            sb.Append(FullText);
             TrailingTriviaList?.WriteTo(sb);
             return sb;
         }
@@ -19,7 +19,7 @@ namespace me.tooster.sdf.AST.Syntax {
     public abstract record ValidatedToken<Lang> : Token<Lang> {
         private readonly string validatedText;
 
-        public override string Text => validatedText;
+        public override string FullText => validatedText;
 
         protected abstract Regex Pattern { get; }
 

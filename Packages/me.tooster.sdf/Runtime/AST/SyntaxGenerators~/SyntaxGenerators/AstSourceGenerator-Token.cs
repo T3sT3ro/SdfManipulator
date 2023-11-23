@@ -39,7 +39,7 @@ namespace me.tooster.sdf.AST.Generators {
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.PartialKeyword)))
                 .AddMembers(PropertyDeclaration(
                         PredefinedType(Token(SyntaxKind.StringKeyword)),
-                        Identifier("Text"))
+                        Identifier("FullText"))
                     .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
                     .WithExpressionBody(ArrowExpressionClause(LiteralExpression(SyntaxKind.StringLiteralExpression,
                         Literal(token.GetAttributes()

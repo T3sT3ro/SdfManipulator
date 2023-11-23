@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Node = me.tooster.sdf.Editor.API.Node;
 
-namespace Tests.Editor.SDF {
+namespace me.tooster.sdf.Tests.Editor.SDF {
     public static class ShaderGeneratorTest {
         [UnityTest]
         public static IEnumerator TestShaderGenerator() {

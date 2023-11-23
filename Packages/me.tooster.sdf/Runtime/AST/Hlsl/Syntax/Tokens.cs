@@ -140,8 +140,8 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     
     public abstract record SemanticToken : Token<hlsl>;
     //   legacy
-    public record PositiontSemantic         : SemanticToken { public override string Text => "POSITIONT";}
-    public record FogSemantic               : SemanticToken { public override string Text => "FOG";}
+    public record PositiontSemantic         : SemanticToken { public override string FullText => "POSITIONT";}
+    public record FogSemantic               : SemanticToken { public override string FullText => "FOG";}
     public record BinormalSemantic          : IndexedSemantic { protected override string Name => "BINORMAL";}
     public record BlendindicesSemantic      : IndexedSemantic { protected override string Name => "BLENDINDICES";}
     public record BlendweightSemantic       : IndexedSemantic { protected override string Name => "BLENDWEIGHT";}
@@ -193,20 +193,20 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     public abstract record IndexedSemantic : SemanticToken {
         protected abstract string Name { get; }
         public             uint?  n    { get; init; } // optional for both variants, e.g. PSIZE and PSIZE0
-        public override    string Text => string.Intern($"{Name}{n?.ToString() ?? string.Empty}");
+        public override    string FullText => string.Intern($"{Name}{n?.ToString() ?? string.Empty}");
     }
 
     public partial record MatrixToken : PredefinedTypeToken {
         public          ScalarTypeToken type { get; init; } = new FloatKeyword();
         public          uint            rows { get; init; } = 4;
         public          uint            cols { get; init; } = 4;
-        public override string          Text => string.Intern($"{type.Text}{rows.ToString()}x{cols.ToString()}");
+        public override string          FullText => string.Intern($"{type.FullText}{rows.ToString()}x{cols.ToString()}");
     }
 
     public partial record VectorToken : PredefinedTypeToken {
         public          ScalarTypeToken type  { get; init; } = new FloatKeyword();
         public          uint            arity { get; init; } = 4;
-        public override string          Text  => string.Intern($"{type.Text}{arity.ToString()}");
+        public override string          FullText  => string.Intern($"{type.FullText}{arity.ToString()}");
     }
 
     public partial record IdentifierToken : ValidatedToken<hlsl> {

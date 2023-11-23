@@ -38,6 +38,4 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
             normal = CreateOutput<HlslVector>("normal", () => new(HlslSdfFunction.normalAccessor));
         }
     }
-
-    public delegate string Evaluator(SdfNode sdf);
 }

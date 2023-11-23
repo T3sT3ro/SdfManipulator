@@ -1,8 +1,13 @@
 #nullable enable
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using me.tooster.sdf.AST.Shaderlab.Syntax.Trivias;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab {
-    // TODO: use SyntaxRewriter instead that returns new syntax nodes in the place of the old ones
+    // TODO: first improve Rewriter so it returns new syntax nodes in the place of the old ones or use Mapper
+    [Obsolete]
     public class ShaderlabFormatter : Rewriter<shaderlab> {
         public record Options(
             int indentWidth = 4,
@@ -34,28 +39,29 @@ namespace me.tooster.sdf.AST.Shaderlab {
             var formatter = new ShaderlabFormatter(options, indentLevel);
             return formatter.Visit((dynamic)node);
         }
-/* FIXME: implement
-        protected TriviaList Visit(WithParent<TriviaList> triviaListWithParent) {
-            var children = base.Visit(triviaListWithParent);
+
+        /*
+        protected TriviaList<shaderlab> Visit(Navigator.Navigable<TriviaList<shaderlab>> triviaListNavigable) {
+            var children = base.Visit(triviaListNavigable);
             var normalized = NormalizeWhitespace(children);
 
             return normalized;
         }
 
         // non structured trivia
-        protected override Trivia<Shaderlab> Visit(WithParent<Trivia<Shaderlab>> triviaWithParent) {
-            var trivia = triviaWithParent.Value;
+        protected override SimpleTrivia<shaderlab> Visit(Navigator.Navigable<SimpleTrivia<shaderlab>> triviaNavigable) {
+            var trivia = triviaNavigable.Value;
             // first leading, non-newline trivia is indent trivia - reformat it
-            if (isIndentWhitespace(triviaWithParent))
+            if (isIndentWhitespace(triviaNavigable))
                 return trivia with { Text = indentString };
 
             return trivia;
         }
 
-        private static bool isIndentWhitespace(WithParent<Trivia<Shaderlab>> triviaWithParent) {
-            triviaWithParent.GetType().GetProperties().First().GetSetMethod();
-            var trivia = triviaWithParent.Value;
-            var token = triviaWithParent.Value.Token;
+        private static bool isIndentWhitespace(Navigator.Navigable<Trivia<shaderlab>> triviaNavigable) {
+            triviaNavigable.GetType().GetProperties().First().GetSetMethod();
+            var trivia = triviaNavigable.Value;
+            var token = triviaNavigable.Value.Token;
             var t1 = trivia.TriviaList == token.LeadingTriviaList;
             return trivia is Whitespace
              && trivia.TriviaList.First() == token.LeadingTriviaList
@@ -65,21 +71,21 @@ namespace me.tooster.sdf.AST.Shaderlab {
 
         // We should use the red/green tree here to use dynamically built parent references to format and indent
 
-        private IReadOnlyList<Trivia<Shaderlab>> NormalizeWhitespace(IEnumerable<Trivia<Shaderlab>> triviaList) {
-            var newTriviaList = new List<Trivia<Shaderlab>>();
+        private IReadOnlyList<Trivia<shaderlab>> NormalizeWhitespace(IEnumerable<Trivia<shaderlab>> triviaList) {
+            var newTriviaList = new List<Trivia<shaderlab>>();
             var consecutiveEndOfLine = 0;
             foreach (var trivia in triviaList) {
                 // remove consecutive newlines
                 if (trivia is EndOfLine) ++consecutiveEndOfLine;
                 else consecutiveEndOfLine = 0;
 
-                var newTrivia = trivia switch
+                Trivia<shaderlab>? newTrivia = trivia switch
                 {
                     Comment.Line line => throw new NotImplementedException(),
                     Comment comment => throw new NotImplementedException(),
                     EndOfLine endOfLine => consecutiveEndOfLine < options.maxConsecutiveNewlineCount ? endOfLine : null,
-                    Whitespace whitespace =>,
-                    StructuredTrivia<Shaderlab> structuredTrivia => throw new NotImplementedException(),
+                    Whitespace whitespace => whitespace.Text == " " ? null : whitespace,
+                    StructuredTrivia<shaderlab> structuredTrivia => throw new NotImplementedException(),
                     _ => throw new ArgumentOutOfRangeException(nameof(trivia))
                 };
 
@@ -104,14 +110,14 @@ namespace me.tooster.sdf.AST.Shaderlab {
                 if (firstCurrentTrivia is not Whitespace
                  && firstCurrentTrivia is not EndOfLine
                  && previous.TrailingTrivia.Last() is not EndOfLine) {
-                    var newLeading = new List<Trivia<Shaderlab>>(current.LeadingTrivia);
+                    var newLeading = new List<Trivia<shaderlab>>(current.LeadingTrivia);
                     newLeading.Prepend(SyntaxFactory.Whitespace(" "));
-                    previous.TrailingTrivia = new List<Trivia<Shaderlab>>();
+                    previous.TrailingTrivia = new List<Trivia<shaderlab>>();
                 }
             }
         }
 
-        private IEnumerable<Trivia<Shaderlab>> LimitConsecutiveNewlines(IEnumerable<Trivia<Shaderlab>> triviaList) {
+        private IEnumerable<Trivia<shaderlab>> LimitConsecutiveNewlines(IEnumerable<Trivia<shaderlab>> triviaList) {
             var consecutiveEndOfLine = 0;
             foreach (var trivia in triviaList) {
                 if (trivia is EndOfLine) {
@@ -124,11 +130,11 @@ namespace me.tooster.sdf.AST.Shaderlab {
             }
         }
 
-        private IReadOnlyList<Trivia<Shaderlab>> CompresNeighborWhitespaceTrivia(
-            IEnumerable<Trivia<Shaderlab>> triviaList
+        private IReadOnlyList<Trivia<shaderlab>> CompresNeighborWhitespaceTrivia(
+            IEnumerable<Trivia<shaderlab>> triviaList
         ) {
-            var result = new List<Trivia<Shaderlab>>();
-            var lastTrivia = default(Trivia<Shaderlab>);
+            var result = new List<Trivia<shaderlab>>();
+            var lastTrivia = default(Trivia<shaderlab>);
             foreach (var trivia in triviaList) {
                 if (trivia is Whitespace && lastTrivia is Whitespace)
                     result.Add(new Whitespace { Text = lastTrivia.Text + trivia.Text });
@@ -142,10 +148,10 @@ namespace me.tooster.sdf.AST.Shaderlab {
         }
 
         // attaches trailing trivia of previous token (that are after the last end of line trivia) to the leading trivia of the next token
-        private void NormalizeTrivia(IEnumerable<Token<Shaderlab>> tokenStream) {
+        private void NormalizeTrivia(IEnumerable<Token<shaderlab>> tokenStream) {
             foreach (var (previous, current) in tokenStream.ConsecutivePairs()) {
-                var newTrailing = new List<Trivia<Shaderlab>>();
-                var newLeading = new List<Trivia<Shaderlab>>();
+                var newTrailing = new List<Trivia<shaderlab>>();
+                var newLeading = new List<Trivia<shaderlab>>();
                 var currentList = newTrailing;
                 foreach (var trivia in previous.TrailingTrivia) {
                     currentList.Add(trivia);

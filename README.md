@@ -93,13 +93,16 @@ TODO
   - [some info here](https://www.scratchapixel.com/lessons/3d-basic-rendering/volume-rendering-for-developers/ray-marching-get-it-right.html)
 - [ ] generate red factories for syntax etc, based on [SourceWriter.cs](https://github.com/dotnet/roslyn/blob/34268d1bb9370c7b01c742303a895a99daf10d6a/src/Tools/Source/CompilerGeneratorTools/Source/CSharpSyntaxGenerator/SourceWriter.cs#L1423)
   - consider containing private fields in the syntax class and generate properties from them which add get and init accessors, where init assigns th parent
-- [ ] add `<SyntaxElement>.MapWith(Visitor v)` which uses dynamic dispatch to update fields recursively
+- [x] add `<SyntaxElement>.MapWith(Visitor v)` which uses dynamic dispatch to update fields recursively
+  - [ ] test it
+- [ ] add common language syntaxes like "InjectedLanguage", `Expression`, `Statement`, `Literal`
 
 # Important to remember while documenting
 
 - be wary of combination of ZTest, Cull, ZWrite, Origin on face vs near plane, as that can render confusing geometry when combined in weird ways. E.g.: 
   - Cull Off, Origin Face -- camera inside domain won't render the object "in the center of domain", as the origin would lie on a back face.
   - No ZWrite, Depth read, Cull Off, Origin Face - backface marched objects would layer on top of front marched objects
+- use `RoslynAnalyzer` and `SourceGenerator` tags for dlls and do not not referenced directly. They will apply in the assembly
 
 # Design notes, decisions and insights
 
