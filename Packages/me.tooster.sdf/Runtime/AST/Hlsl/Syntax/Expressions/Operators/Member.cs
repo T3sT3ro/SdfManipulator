@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators {
     // a.b.c
     [SyntaxNode] public partial record Member : Expression {

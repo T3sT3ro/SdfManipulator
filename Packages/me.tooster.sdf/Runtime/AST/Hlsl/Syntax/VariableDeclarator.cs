@@ -1,7 +1,4 @@
 #nullable enable
-using System.Collections.Generic;
-using System.Linq;
-using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax;
 
@@ -23,7 +20,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
             public Identifier                   id          { get; init; }
             public SyntaxList<hlsl, ArrayRank>? arraySizes  { get; init; }
             public Semantic?                    semantic    { get; init; }
-            public For.Initializer?             initializer { get; init; }
+            public Initializer?                 initializer { get; init; }
         }
     }
 }

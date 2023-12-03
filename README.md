@@ -96,6 +96,7 @@ TODO
 - [x] add `<SyntaxElement>.MapWith(Visitor v)` which uses dynamic dispatch to update fields recursively
   - [ ] test it
 - [ ] add common language syntaxes like "InjectedLanguage", `Expression`, `Statement`, `Literal`
+- [ ] remove abstract MapWith from syntax and move the logic solely to abstract visitors, utilize double dispatch
 
 # Important to remember while documenting
 
@@ -103,6 +104,12 @@ TODO
   - Cull Off, Origin Face -- camera inside domain won't render the object "in the center of domain", as the origin would lie on a back face.
   - No ZWrite, Depth read, Cull Off, Origin Face - backface marched objects would layer on top of front marched objects
 - use `RoslynAnalyzer` and `SourceGenerator` tags for dlls and do not not referenced directly. They will apply in the assembly
+- mapping may be problematic if strongly typed nodes are used, for example when a certain `Type.Struct` will be replaced with `Type.Primitive`, a parent syntax may expect `Type.Struct`, not a `Type`, but incompatible type is returned resulting in runtime error (but regular roslyn also throws runtime errors for syntax trees if kinds don't meet expectations etc.). The method definition would also have to look like `Type.Primitive Map(Type.Struct type)` where param and return types are different. This would be non-achievable in a statically generated Visitor pattern, because all syntax would have to return `Syntax<>` or itself so this is a potential advantage of dynamic dispatch pattern. But a question may be asked if:
+  1. it is worth it to implement dynamic dispatch pattern for this reason
+  2. does it make sense to have strongly typed nodes in the first place, if they are not used for type checking, but only for code generation
+  3. are strongly typed nodes useful at all with how limiting type system is in C# (unlike TS for example)
+  4. should rewriting of such nodes be possible, or should user be expected to rewrite them in their parent, where the context is actually relevant
+- some syntax nodes have nullable children, but their nullability actually represents validity of the node instead of the tru nullability. If record primary constructors were possible, it would be more correct (currently nullable syntax parts are marked as warnings). This is a C# syntax trying to emulate representing valid and invalid syntax trees on a type system level, albeit quite poorly. 
 
 # Design notes, decisions and insights
 
@@ -129,7 +136,7 @@ TODO
 - syntax sugar is added using implicit conversion operators, for example assigning `string` to `InitializerName` creates new initializer token
 - Unfortunately C# doesn't have support for both sum and product types, so creating closed, compile-time, safe syntax is not possible without compromises. Typescript could do that (for example narrow the types of accepted syntax to produce valid syntax tree). The compile-type safety would be nice for constructing syntactically correct trees, however it could lead to problems with representing incorrect trees. This work doesn't focus on parsing nor handling incorrect syntax trees though, so it's good enough.  
 - I came up with another approach, by noticing that tokens and (lists of) trivia form an alternating stream, so maybe it would be useful to represent trivia between two tokens by a single list and just point tokens to left and right trivia, while pointing (red) trivia to left and right tokens. This way, I can essentially create not a tree, but a top-down DAG (it connects on the last trivia layer, where each leaf token points to a previous and next trivia list. The red nodes (dynamic, on demand with parent references) then create special type for trivia list that references previous and next token (or null if it's the first/last token in the tree). With this I don't have to include special EOF token, and what's more, I gain an easy way of iterating token and trivia stream and going back and forward. But it is a bit of a pain to implement, especially when the current syntax tree is not the intended final implementation, so we will see later.
-
+- possibly a better design would be a loosely typed syntax tree that only has Syntax, Token and Trivia nodes (and similar) with only creational methods that enforce correct syntax types and structure, as well as a facade for a tree that provide typed access. Nodes in such a facade would be bound by Syntax<> and similar as well as marker interfaces for type matching.  
 
 
 # Threads and forum posts on problems with raymarching:

@@ -52,6 +52,7 @@ namespace me.tooster.sdf.Editor.Controllers {
             var v2f = new BasicVertToFragNode(v_in.position, null, null, null);
             var f_out = new UnlitFragOutNode(v2f.color);
             Graph = new Graph(name, new Node[] { targetNode, v_in, v2f, f_out });
+            Debug.Log(Graph.BuildActiveTarget());
         }
 
         // fixme: move to SO
@@ -77,10 +78,7 @@ namespace me.tooster.sdf.Editor.Controllers {
             var controller = (SdfSceneController)target;
 
             if (GUILayout.Button("Rebuild shader")) controller.RebuildShader();
-            if (GUILayout.Button("Init graph")) controller.InitGraph();
-            if (GUILayout.Button("Test AST")) {
-                var x = new VariableDeclarator { type = new Type.Predefined { typeToken = new MatrixToken() } };
-            }
+            if (GUILayout.Button("Test Init graph")) controller.InitGraph();
             GUILayout.Space(16);
 
             base.OnInspectorGUI();

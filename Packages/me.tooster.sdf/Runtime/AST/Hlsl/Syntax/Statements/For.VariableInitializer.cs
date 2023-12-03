@@ -1,6 +1,4 @@
 #nullable enable
-using System.Collections.Generic;
-using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Syntax;
 

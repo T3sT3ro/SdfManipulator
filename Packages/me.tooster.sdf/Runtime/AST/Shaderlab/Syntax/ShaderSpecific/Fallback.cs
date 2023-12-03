@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
     // Fallback "shader"
     [SyntaxNode] public partial record Fallback : ShaderStatement {

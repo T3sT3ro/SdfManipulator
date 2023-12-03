@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators {
     [SyntaxNode] public partial record Ternary : Expression {
         public Expression    condition     { get; init; }

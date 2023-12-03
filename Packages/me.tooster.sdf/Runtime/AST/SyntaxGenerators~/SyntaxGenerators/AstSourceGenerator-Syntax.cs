@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,19 +10,19 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace me.tooster.sdf.AST.Generators {
     public partial class AstSourceGenerator {
-        private void GenerateSyntaxPartials(ITypeSymbol recordSymbol) {
-            var langName = Utils.getLangName(recordSymbol);
+        private void GenerateSyntaxPartials(ITypeSymbol recordSymbol, SymbolSet ss) {
+            var langName = ss.LangName;
             var ownProperties = Utils.getOwnProperties(recordSymbol).ToList();
             var inheritedProperties = Utils.getInheritedProperties(recordSymbol).ToList();
-
+            ss.Includes.TryGetValue(recordSymbol, out var usings);
             var compilationUnit = CompilationUnit()
                 .AddMembers(GenerateSyntaxNamespace(recordSymbol)
                     .AddMembers(PublicSyntax(recordSymbol, langName.ToLower(), ownProperties, inheritedProperties))
-                ).AddUsings(
+                ).WithUsings(new SyntaxList<UsingDirectiveSyntax>(usings)).AddUsings(
                     UsingDirective(IdentifierName("System.Collections.Generic")),
                     UsingDirective(IdentifierName($"{ROOT_NAMESPACE}.Syntax")),
                     UsingDirective(IdentifierName("System.Linq"))
-                );
+                ).WithLeadingTrivia(Trivia(NullableDirectiveTrivia(Token(SyntaxKind.EnableKeyword), true)));
 
             context.AddSource(
                 $"{string.Join(".", Utils.getQualifiedNameParts(recordSymbol).Reverse())}.g.cs",
@@ -53,13 +54,26 @@ namespace me.tooster.sdf.AST.Generators {
             // skip children accessor if it exists
             if (!(recordSymbol.GetMembers("ChildNodesAndTokens").Any() || recordSymbol.IsAbstract)) {
                 recordDeclaration = recordDeclaration
-                    .AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnProperties));
+                    .AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnProperties, langName));
             }
 
             // skip MapWith if it exists
             if (!recordSymbol.GetMembers("MapWith").Any() && !recordSymbol.IsAbstract) {
-                recordDeclaration = recordDeclaration.AddMembers(generateMapper(recordSymbol, inheritedAndOwnProperties));
+                recordDeclaration = recordDeclaration.AddMembers(
+                    generateMapper(recordSymbol, inheritedAndOwnProperties, langName));
             }
+
+            /*// skip Accept if it exists
+            if (!recordSymbol.GetMembers("Accept").Any() && !recordSymbol.IsAbstract) {
+                recordDeclaration =
+                    recordDeclaration.AddMembers(Utils.GenerateVisitorAcceptor(langName));
+            }
+
+            // skip Accept if it exists (returning version)
+            if (!recordSymbol.GetMembers("Accept").Any() && !recordSymbol.IsAbstract) {
+                recordDeclaration =
+                    recordDeclaration.AddMembers(Utils.GenerateReturningVisitorAcceptor(langName));
+            }*/
 
             // generate internal syntax
             // if (!recordSymbol.GetMembers("Internal").Any()) {
@@ -70,6 +84,7 @@ namespace me.tooster.sdf.AST.Generators {
             return Utils.wrapRecordInEnclosingClasses(recordDeclaration, recordSymbol, false);
         }
 
+        [Obsolete("red-green trees are not supported yet")]
         private static RecordDeclarationSyntax InternalSyntax(ITypeSymbol recordSymbol, string langName,
             List<IPropertySymbol> ownProperties, List<IPropertySymbol> inheritedProperties) {
             var recordDeclaration = RecordDeclaration(Token(SyntaxKind.RecordKeyword), Identifier("Internal"))
@@ -85,15 +100,18 @@ namespace me.tooster.sdf.AST.Generators {
             // skip children accessor if it exists
             if (!recordSymbol.GetMembers("ChildNodesAndTokens").Any() && !recordSymbol.IsAbstract)
                 recordDeclaration =
-                    recordDeclaration.AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnProperties));
+                    recordDeclaration.AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnProperties,
+                        langName));
 
             // skip MapWith if it exists
             if (!recordSymbol.GetMembers("MapWith").Any() && !recordSymbol.IsAbstract)
-                recordDeclaration = recordDeclaration.AddMembers(generateMapper(recordSymbol, inheritedAndOwnProperties));
+                recordDeclaration =
+                    recordDeclaration.AddMembers(generateMapper(recordSymbol, inheritedAndOwnProperties, langName));
 
             return recordDeclaration;
         }
 
+        [Obsolete("syntax records require explicit FullText instead of ToString")]
         private static IEnumerable<MemberDeclarationSyntax> generateToStringOverride() {
             yield return MethodDeclaration(
                     PredefinedType(Token(SyntaxKind.StringKeyword)),
@@ -110,10 +128,9 @@ namespace me.tooster.sdf.AST.Generators {
         /// generate ChildNodesAndTokens accessor, handle correct nullability
         private static PropertyDeclarationSyntax generateChildrenGetter(
             ITypeSymbol recordSymbol,
-            IEnumerable<IPropertySymbol> inheritedAndOwnProperties
+            IEnumerable<IPropertySymbol> inheritedAndOwnProperties,
+            string langName
         ) {
-            var langName = Utils.getQualifiedNameParts(recordSymbol).Last();
-
             TypeSyntax itemType = IdentifierName(Identifier($"SyntaxOrToken<{langName.ToLower()}>"));
 
             var anyFieldNullable =
@@ -173,25 +190,47 @@ namespace me.tooster.sdf.AST.Generators {
             IEnumerable<IPropertySymbol> inheritedAndOwnFields
         ) {
             foreach (var prop in inheritedAndOwnFields) {
+                var memberProperty = MemberAccessExpression(
+                    SyntaxKind.SimpleMemberAccessExpression,
+                    ThisExpression(),
+                    IdentifierName(prop.Name));
+
+                ExpressionSyntax property = ParenthesizedExpression(
+                    ConditionalExpression(IsPatternExpression(
+                            IdentifierName("thisAnchor"),
+                            ConstantPattern(LiteralExpression(SyntaxKind.NullLiteralExpression))),
+                        memberProperty,
+                        ObjectCreationExpression(
+                                IdentifierName(
+                                    Identifier($"Anchor<{Utils.getTypeNameWithGenericArguments(prop.Type, true)}>")))
+                            .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(
+                                new SyntaxNodeOrToken[]
+                                {
+                                    Argument(memberProperty),
+                                    Token(SyntaxKind.CommaToken),
+                                    Argument(IdentifierName("thisAnchor"))
+                                })))));
+
+                var mapperCall = InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+                    IdentifierName("mapper"), IdentifierName("Map"))).WithArgumentList(ArgumentList(
+                    SingletonSeparatedList(Argument(CastExpression(IdentifierName("dynamic"), property)))));
+
+                ExpressionSyntax value = prop.NullableAnnotation == NullableAnnotation.Annotated
+                    ? ConditionalExpression(IsPatternExpression(memberProperty, ConstantPattern(
+                            LiteralExpression(SyntaxKind.NullLiteralExpression))),
+                        LiteralExpression(SyntaxKind.NullLiteralExpression),mapperCall)
+                    : mapperCall;
+
                 yield return LocalDeclarationStatement(
                     VariableDeclaration(IdentifierName(Identifier("var")))
                         .WithVariables(SingletonSeparatedList(
-                            VariableDeclarator(
-                                    Identifier(prop.Name)) // <-- this will fail for fields with `@` like `@default`
-                                .WithInitializer(EqualsValueClause(InvocationExpression(
-                                        MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-                                            IdentifierName("mapper"),
-                                            IdentifierName("Map")))
-                                    .WithArgumentList(ArgumentList(SingletonSeparatedList(
-                                        Argument(CastExpression(
-                                            IdentifierName("dynamic"),
-                                            MemberAccessExpression(
-                                                SyntaxKind.SimpleMemberAccessExpression,
-                                                ThisExpression(),
-                                                IdentifierName(prop.Name))))))))))));
+                            VariableDeclarator(Identifier(prop.Name)) // <-- this will fail for fields like `@default`
+                                .WithInitializer(EqualsValueClause(value)))));
             }
         }
 
+        [Obsolete("For now records are compared using their synthesized equality contract. "
+          + "If it doesn't check reference first, this has to be added back")]
         private static InvocationExpressionSyntax referencesEqualCheck(IPropertySymbol property) {
             return InvocationExpression(IdentifierName("ReferenceEquals"))
                 .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(
@@ -263,15 +302,19 @@ namespace me.tooster.sdf.AST.Generators {
 
         private static MethodDeclarationSyntax generateMapper(
             ITypeSymbol recordSymbol,
-            List<IPropertySymbol> inheritedAndOwnProperties
+            List<IPropertySymbol> inheritedAndOwnProperties,
+            string langName
         ) {
-            var langName = Utils.getQualifiedNameParts(recordSymbol).Last();
             return MethodDeclaration(
                     IdentifierName(Identifier($"Syntax<{langName.ToLower()}>")), Identifier("MapWith"))
                 .WithModifiers(
                     TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
-                .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("mapper"))
-                    .WithType(IdentifierName(Identifier($"Mapper<{langName.ToLower()}>"))))))
+                .AddParameterListParameters( // Anchor<Parenthesized>? thisAnchor = null
+                    Parameter(Identifier("mapper"))
+                        .WithType(IdentifierName(Identifier($"Mapper<{langName.ToLower()}>"))),
+                    Parameter(Identifier("thisAnchor")).WithType(NullableType(
+                            IdentifierName(Identifier($"Anchor"))))
+                        .WithDefault(EqualsValueClause(LiteralExpression(SyntaxKind.NullLiteralExpression))))
                 .WithBody(Block(mapperFunctionStatements(recordSymbol, inheritedAndOwnProperties)));
         }
     }

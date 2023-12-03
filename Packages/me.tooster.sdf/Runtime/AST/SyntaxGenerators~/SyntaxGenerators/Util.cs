@@ -10,18 +10,24 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace me.tooster.sdf.AST.Generators {
     public class Utils {
-        /// returns a sequence of enclosing names for fully qualified until terminator is found namespace (without generic type arguments)
+        /// returns a sequence of enclosing names for fully qualified until terminator is found (without generic type arguments)
         public static IEnumerable<string> getQualifiedNameParts(
             ITypeSymbol record,
-            string terminator = AstSourceGenerator.AST_NAMESPACE
+            Predicate<ISymbol> terminatorPredicate
         ) {
             ISymbol current = record;
-            while (current is not null && current.Name != terminator) {
+            while (current is not null && terminatorPredicate(current)) {
                 yield return current.Name;
 
                 current = current.ContainingSymbol;
             }
         }
+
+        public static IEnumerable<string> getQualifiedNameParts(
+            ITypeSymbol record,
+            string terminator = AstSourceGenerator.AST_NAMESPACE
+        ) =>
+            getQualifiedNameParts(record, current => current.Name != terminator);
 
         /// returns properties requiring generating property getters 
         public static IEnumerable<IPropertySymbol> getOwnProperties(ITypeSymbol recordSymbol) =>
@@ -88,26 +94,45 @@ namespace me.tooster.sdf.AST.Generators {
             }
         }
 
-        /*
-         * backlog:
-         * - refactor into checktypeChain
-         * - move from `isConstructedFrom` and `isAnnotated`
-         */
-
         /// returns type name with generic arguments and nullable annotation (generic args are fully qualified)
-        public static string getTypeNameWithGenericArguments(ITypeSymbol typeSymbol) {
+        public static string getTypeNameWithGenericArguments(ITypeSymbol typeSymbol, bool withEnclosingRecordParts = false) {
             var sb = new StringBuilder(typeSymbol.Name);
             if (typeSymbol is INamedTypeSymbol { IsGenericType: true } namedTypeSymbol) {
                 sb.Append("<");
                 sb.Append(string.Join(", ",
-                    namedTypeSymbol.TypeArguments.Select(getTypeNameWithGenericArguments)));
+                    namedTypeSymbol.TypeArguments.Select(t => getTypeNameWithGenericArguments(t))));
                 sb.Append(">");
             }
 
             if (typeSymbol.NullableAnnotation == NullableAnnotation.Annotated)
                 sb.Append("?");
+            
+            if (withEnclosingRecordParts && typeSymbol.IsRecord && typeSymbol.ContainingSymbol is ITypeSymbol parent && parent.IsRecord) {
+                sb.Insert(0, ".");
+                sb.Insert(0, getTypeNameWithGenericArguments(parent));
+            }
 
             return sb.ToString();
+        }
+
+        public static string getFullyQualifiedTypeNameWithGenerics(
+            ISymbol typeSymbol,
+            string terminator,
+            out List<string> genericParameters
+        ) {
+            var parts = new List<string>();
+            var current = typeSymbol;
+            genericParameters = new List<string>();
+            while (current != null && current.Name != terminator) {
+                parts.Add(current.Name);
+                if (current is INamedTypeSymbol { IsGenericType: true } namedTypeSymbol) {
+                    genericParameters.AddRange(namedTypeSymbol.TypeArguments.Select(p => getTypeNameWithGenericArguments(p)));
+                }
+
+                current = current.ContainingSymbol;
+            }
+
+            return string.Join(".", parts.Reverse<string>());
         }
 
         /// wraps (possibly inner) record in namespace and all containing types 
@@ -158,6 +183,35 @@ namespace me.tooster.sdf.AST.Generators {
         internal static bool isAnnotated(ITypeSymbol type, ISymbol attribute) {
             return type.GetAttributes().Any(ad =>
                 ad.AttributeClass?.Equals(attribute, SymbolEqualityComparer.Default) ?? false);
+        }
+
+        public static MethodDeclarationSyntax GenerateVisitorAcceptor(string langName) {
+            return MethodDeclaration(IdentifierName(Identifier($"void")), Identifier("Accept"))
+                .WithModifiers(
+                    TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
+                .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("visitor"))
+                    .WithType(IdentifierName(Identifier($"AST.Visitor<{langName.ToLower()}>"))))))
+                .WithBody(Block(SingletonList<StatementSyntax>(
+                    ExpressionStatement(InvocationExpression(MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            IdentifierName("visitor"),
+                            IdentifierName("Visit")))
+                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(ThisExpression()))))))));
+        }
+
+        public static MethodDeclarationSyntax GenerateReturningVisitorAcceptor(string langName) {
+            return MethodDeclaration(IdentifierName(Identifier($"T")), Identifier("Accept"))
+                .WithModifiers(
+                    TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
+                .WithTypeParameterList(TypeParameterList(SingletonSeparatedList(TypeParameter(Identifier("T")))))
+                .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("visitor"))
+                    .WithType(IdentifierName(Identifier($"AST.Visitor<{langName.ToLower()}, T>"))))))
+                .WithBody(Block(SingletonList<StatementSyntax>(
+                    ReturnStatement(InvocationExpression(MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            IdentifierName("visitor"),
+                            IdentifierName("Visit")))
+                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(ThisExpression()))))))));
         }
     }
 }

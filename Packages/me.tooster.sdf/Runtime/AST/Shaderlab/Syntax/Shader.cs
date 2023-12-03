@@ -1,7 +1,4 @@
 #nullable enable
-using System.Collections.Generic;
-using System.Linq;
-using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Syntax;
 

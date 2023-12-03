@@ -1,6 +1,4 @@
-using System;
 using System.Text.RegularExpressions;
-using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Trivias {

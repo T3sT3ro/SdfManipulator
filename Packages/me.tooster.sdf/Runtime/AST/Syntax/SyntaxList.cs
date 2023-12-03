@@ -14,12 +14,12 @@ namespace me.tooster.sdf.AST.Syntax {
 
         public SyntaxList() { }
 
-        public TSyntax this[int index] => (TSyntax)base[index];
+        public new TSyntax this[int index] => (TSyntax)base[index];
 
-        public SyntaxList<Lang, TSyntax> Slice(int start, int length) =>
+        public new SyntaxList<Lang, TSyntax> Slice(int start, int length) =>
             new(FullList.Skip(start).Take(length).Cast<TSyntax>());
 
-        public SyntaxList<Lang, TSyntax> Splice
+        public new SyntaxList<Lang, TSyntax> Splice
             (int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements) =>
             new(FullList.Splice(index, deleteCount, elements).Cast<TSyntax>());
 
@@ -27,6 +27,6 @@ namespace me.tooster.sdf.AST.Syntax {
         public static implicit operator SyntaxList<Lang, TSyntax>(List<TSyntax> list) => new(list.AsEnumerable());
 
         public override string               ToString()      => base.ToString();
-        public IEnumerator<TSyntax> GetEnumerator() => FullList.Cast<TSyntax>().GetEnumerator();
+        public new IEnumerator<TSyntax> GetEnumerator() => FullList.Cast<TSyntax>().GetEnumerator();
     }
 }

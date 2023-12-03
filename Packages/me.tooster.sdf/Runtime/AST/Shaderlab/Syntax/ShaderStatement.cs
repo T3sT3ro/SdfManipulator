@@ -1,4 +1,3 @@
-using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {

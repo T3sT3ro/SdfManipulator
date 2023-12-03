@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace me.tooster.sdf.AST.Syntax {
     public abstract record Token<Lang> : SyntaxOrToken<Lang> {
-        public TriviaList<Lang>? LeadingTriviaList { get; init; }
+        public TriviaList<Lang>? LeadingTriviaList  { get; init; }
         public TriviaList<Lang>? TrailingTriviaList { get; init; }
 
         public override StringBuilder WriteTo(StringBuilder sb) {

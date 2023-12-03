@@ -18,6 +18,6 @@ namespace me.tooster.sdf.AST.Syntax {
             return sb;
         }
 
-        public abstract Syntax<Lang> MapWith(Mapper<Lang> mapper);
+        public abstract Syntax<Lang>? MapWith(Mapper<Lang> mapper, Anchor? thisAnchor = null);
     }
 }

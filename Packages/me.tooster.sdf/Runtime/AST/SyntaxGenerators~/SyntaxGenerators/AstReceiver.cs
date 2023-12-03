@@ -12,11 +12,17 @@ using ITypeSymbol = Microsoft.CodeAnalysis.ITypeSymbol;
 // This is just a broad phase to sieve required types, it must be very minimal and performant.
 // Runs once for many nodes
 namespace me.tooster.sdf.AST.Generators {
+    public class SymbolSet {
+        public SymbolSet(string langName) => LangName = langName;
+        public string                                              LangName { get; }
+        public HashSet<ITypeSymbol>                                Syntaxes { get; } = new();
+        public HashSet<ITypeSymbol>                                Tokens   { get; } = new();
+        public HashSet<ITypeSymbol>                                Trivia   { get; } = new();
+        public Dictionary<ITypeSymbol, List<UsingDirectiveSyntax>> Includes { get; } = new();
+    }
+
     public class AstReceiver : ISyntaxContextReceiver {
-        public HashSet<string>      Langs   { get; } = new();
-        public HashSet<ITypeSymbol> Records { get; } = new();
-        public HashSet<ITypeSymbol> Tokens  { get; } = new();
-        public HashSet<ITypeSymbol> Trivia  { get; } = new();
+        public Dictionary<string, SymbolSet> LanguageSymbols { get; } = new();
 
         public List<Diagnostic> Diagnostics { get; } = new();
 
@@ -37,24 +43,37 @@ namespace me.tooster.sdf.AST.Generators {
 
             var symbol = (ModelExtensions.GetDeclaredSymbol(context.SemanticModel, recordSyntax) as ITypeSymbol)!;
 
-            if (Utils.isAnnotated(symbol, syntaxAttribute!)) {
+
+            var isSyntax = Utils.isAnnotated(symbol, syntaxAttribute!);
+            var isToken = Utils.isAnnotated(symbol, tokenAttribute!);
+            var isTrivia = Utils.isAnnotated(symbol, triviaAttribute!);
+            if (!isToken && !isSyntax && !isTrivia) return;
+
+            var lang = Utils.getLangName(symbol);
+            LanguageSymbols.TryGetValue(lang, out var ss);
+            ss ??= LanguageSymbols[lang] = new SymbolSet(lang);
+
+            if (isSyntax) {
                 if (!assertPartial(recordSyntax, symbol)) return;
                 if (!assertAccess(symbol, recordSyntax, Accessibility.Public)) return;
                 if (!assertSyntaxDerived(symbol, recordSyntax)) return;
 
-                Records.Add(symbol);
-            } else if (Utils.isAnnotated(symbol, tokenAttribute!)) {
+                ss.Syntaxes.Add(symbol);
+                // record all #include <something> rules declared in the syntax clas
+                ss.Includes[symbol] = recordSyntax.Ancestors().OfType<CompilationUnitSyntax>()
+                    .SelectMany(cu => cu.Usings).ToList();
+                
+            } else if (isToken) {
                 if (!assertPartial(recordSyntax, symbol)) return;
 
-                Tokens.Add(symbol);
-            } else if (Utils.isAnnotated(symbol, triviaAttribute!)) {
-                Trivia.Add(symbol);
-            } else return;
-
-            Langs.Add(Utils.getLangName(symbol));
+                ss.Tokens.Add(symbol);
+            } else if (isTrivia) {
+                ss.Trivia.Add(symbol);
+            }
         }
 
-        private bool assertAccess(ITypeSymbol symbol, RecordDeclarationSyntax recordSyntax, Accessibility accessibility) {
+        private bool assertAccess(ITypeSymbol symbol, RecordDeclarationSyntax recordSyntax,
+            Accessibility accessibility) {
             if (symbol.DeclaredAccessibility == accessibility) return true;
 
             Diagnostics.Add(Diagnostic.Create(

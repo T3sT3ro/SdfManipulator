@@ -60,13 +60,21 @@ namespace {ROOT_NAMESPACE} {{
 
             receiver.Diagnostics.ForEach(context.ReportDiagnostic);
 
-            foreach (var lang in receiver.Langs)
-                GenerateLanguageMarkerInterface(lang);
+            foreach (var kv in receiver.LanguageSymbols) {
+                var langName = kv.Key;
+                var ss = kv.Value;
+                
+                GenerateLanguageMarkerInterface(langName);
+                
+                GenerateTokenPartials(ss.Tokens, langName);
+                
+                foreach (var recordSymbol in ss.Syntaxes)
+                    GenerateSyntaxPartials(recordSymbol, ss);
+                
+                // GenerateVisitorPartials(ss);
+            }
+            
 
-            foreach (var recordSymbol in receiver.Records)
-                GenerateSyntaxPartials(recordSymbol);
-
-            GenerateTokenPartials(receiver.Tokens);
         }
         // ------------------- GENERATION -------------------
 

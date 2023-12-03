@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
     // CustomEditorForRenderPipeline "editor" "pipeline"
     // custom editor for render pipeline

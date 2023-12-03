@@ -44,7 +44,8 @@ namespace me.tooster.sdf.AST {
     // TODO: use source generators to add the red-green-like tree from Roslyn, auto-generated from annotations
     // Instantiating would be possible only with https://stackoverflow.com/questions/8718199/passing-a-type-to-a-generic-constructor
 
-    public abstract class RedNode {
+    /*
+     public abstract class RedNode {
         public RedNode? ParentSyntaxTriviaList { get; }
         protected RedNode(RedNode? parentSyntaxTriviaList) => ParentSyntaxTriviaList = parentSyntaxTriviaList;
     }
@@ -76,4 +77,5 @@ namespace me.tooster.sdf.AST {
         protected RedTrivia(Trivia<Lang> greenTrivia, RedTriviaList<Lang>? parentTriviaList) : base(parentTriviaList) =>
             GreenTrivia = greenTrivia;
     }
+    */
 }

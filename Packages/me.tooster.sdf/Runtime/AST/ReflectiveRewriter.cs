@@ -3,24 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Syntax;
-using static me.tooster.sdf.AST.Navigator;
 
 
 namespace me.tooster.sdf.AST {
     // TODO: this solution is suboptimal. It would be better to generate partial SyntaxRewriter methods for each Syntax type
     //       and Update methods inside syntax classes for updating partial fields of syntax tree parts, just like Roslyn
     [Obsolete]
-    public class Rewriter<Lang> : Visitor<Lang, Syntax<Lang>> {
+    public class ReflectiveRewriter<Lang> : Visitor<Lang, Syntax<Lang>> {
         public bool DescendIntoStructuredTrivia { get; }
 
-        public Rewriter(bool descendIntoStructuredTrivia = false) {
+        public ReflectiveRewriter(bool descendIntoStructuredTrivia = false) {
             DescendIntoStructuredTrivia = descendIntoStructuredTrivia;
         }
 
         // ------------- ENTRYPOINT DISPATCH
 
-        public override Syntax<Lang> Visit(Syntax<Lang> node) {
-            return Visit((dynamic)new Navigable<dynamic>(node, null));
+        public override Syntax<Lang> Visit(Syntax<Lang>? node) {
+            return Visit((dynamic)new Anchor<Syntax<Lang>>(node, null));
         }
 
         /* shouldn't be possible to visit tokens directly
@@ -35,14 +34,14 @@ namespace me.tooster.sdf.AST {
         // ------------- DYNAMIC RUNTIME DISPATCH
 
         /// rewrites a syntax node. If it (or children) changed, returns changed node. Otherwise returns original node.
-        protected virtual Syntax<Lang> Visit(Navigable<Syntax<Lang>> navigableNode) {
-            var syntax = navigableNode.Value;
+        protected virtual Syntax<Lang> Visit(Anchor<Syntax<Lang>> anchoredSyntax) {
+            var syntax = anchoredSyntax.Node;
             Syntax<Lang>? modified = null; // will create clone only if children changed
             foreach (var p in syntax.GetType().GetProperties()
                          .Where(p => p.PropertyType.IsSubclassOf(typeof(SyntaxOrToken<Lang>)))) {
                 var child = p.GetValue(syntax);
-                object parentedChild = Activator.CreateInstance(typeof(Navigable<>).MakeGenericType(p.PropertyType),
-                    child, navigableNode);
+                object parentedChild = Activator.CreateInstance(typeof(Anchor).MakeGenericType(p.PropertyType),
+                    child, anchoredSyntax);
 
                 var newChild = Visit((dynamic)parentedChild);
                 if (child == newChild)
@@ -56,14 +55,14 @@ namespace me.tooster.sdf.AST {
         }
 
         /// rewrites a token. If it (or children) changed, returns changed token. Otherwise returns original token.
-        protected virtual Token<Lang> Visit(Navigable<Token<Lang>> tokenNavigable) {
-            var token = tokenNavigable.Value;
+        protected virtual Token<Lang> Visit(Anchor<Token<Lang>> anchoredToken) {
+            var token = anchoredToken.Node;
 
             var leading = token.LeadingTriviaList;
             var trailing = token.TrailingTriviaList;
 
-            var newLeading = Visit((dynamic)new Navigable<IReadOnlyList<Trivia<Lang>>>(leading, tokenNavigable));
-            var newTrailing = Visit((dynamic)new Navigable<IReadOnlyList<Trivia<Lang>>>(trailing, tokenNavigable));
+            var newLeading = Visit((dynamic)new Anchor<IReadOnlyList<Trivia<Lang>>>(leading, anchoredToken));
+            var newTrailing = Visit((dynamic)new Anchor<IReadOnlyList<Trivia<Lang>>>(trailing, anchoredToken));
 
             if (newLeading != leading || newTrailing != trailing)
                 return token with { LeadingTriviaList = newLeading, TrailingTriviaList = newTrailing };
@@ -72,13 +71,14 @@ namespace me.tooster.sdf.AST {
         }
 
         /// rewrite regular trivia, but there is nothing to do so return it
-        protected virtual SimpleTrivia<Lang> Visit(Navigable<SimpleTrivia<Lang>> triviaNavigable) {
-            return triviaNavigable.Value;
+        protected virtual SimpleTrivia<Lang> Visit(Anchor<SimpleTrivia<Lang>> anchoredTrivia) {
+            return anchoredTrivia.Node;
         }
 
+        /*
         /// rewrites a trivia. If it (or children) changed, returns changed trivia. Otherwise returns original trivia.
-        protected virtual Trivia<Lang> Visit(Navigable<StructuredTrivia<Lang>> triviaWithParent) {
-            var trivia = triviaWithParent.Value;
+        protected virtual Trivia<Lang> Visit(Anchor<StructuredTrivia<Lang>> triviaWithParent) {
+            var trivia = triviaWithParent.Node;
             if (!DescendIntoStructuredTrivia) 
                 return trivia;
             var result = Visit((dynamic)trivia.Structure);
@@ -87,17 +87,18 @@ namespace me.tooster.sdf.AST {
             
             return trivia with { Structure = result };
         }
+        */
 
         /// rewrites list's elements, if it (or children) changed, returns changed list. Othwerwise returns original list.
-        protected virtual IReadOnlyList<T> Visit<T>(Navigable<IReadOnlyList<T>> listNavigable) where T : class {
-            var list = listNavigable.Value;
+        protected virtual IReadOnlyList<T> Visit<T>(Anchor<IReadOnlyList<T>> anchoredList) where T : class {
+            var list = anchoredList.Node;
 
             var newList =
-                (IList<T>)Activator.CreateInstance(typeof(Navigable<>).MakeGenericType(list.GetType()), list);
+                (IList<T>)Activator.CreateInstance(typeof(Anchor<>).MakeGenericType(list.GetType()), list);
             bool anyChanged = false;
             foreach (T x in list) {
-                var parented = Activator.CreateInstance(typeof(Navigable<>).MakeGenericType(x.GetType()), x,
-                    listNavigable);
+                var parented = Activator.CreateInstance(typeof(Anchor).MakeGenericType(x.GetType()), x,
+                    anchoredList);
                 T mapped = (T)Visit((dynamic)parented);
                 newList.Add(mapped);
                 anyChanged |= mapped != x;

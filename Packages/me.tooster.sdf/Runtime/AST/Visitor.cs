@@ -13,7 +13,9 @@ namespace me.tooster.sdf.AST {
 
         public virtual TResult? Visit(TriviaList<Lang>? triviaList) { return default; }
 
-        public virtual TResult? Visit(Trivia<Lang>? trivia) { return default; }
+        public virtual TResult? Visit(SimpleTrivia<Lang>? trivia) { return default; }
+        
+        public virtual TResult? Visit<T>(StructuredTrivia<Lang, T>? trivia) where T : SyntaxOrToken<Lang> { return default; }
     }
 
     // Visitor without return values
@@ -26,6 +28,8 @@ namespace me.tooster.sdf.AST {
 
         public virtual void Visit(TriviaList<Lang>? triviaList) { }
 
-        public virtual void Visit(Trivia<Lang>? trivia) { }
+        public virtual void Visit(SimpleTrivia<Lang>? trivia) { }
+        
+        public virtual void Visit<T>(StructuredTrivia<Lang, T>? trivia) where T : SyntaxOrToken<Lang> { }
     }
 }

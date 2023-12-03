@@ -36,10 +36,12 @@ namespace me.tooster.sdf.AST {
             foreach (var trivia in triviaList)
                 Visit((dynamic)trivia);
         }
-
-        public override void Visit(Trivia<Lang>? trivia) {
-            if (trivia is StructuredTrivia<Lang> st && DescentIntoStructuredTrivia)
-                Visit((dynamic)st.Structure);
+        
+        public override void Visit<T>(StructuredTrivia<Lang, T>? trivia) {
+            if (trivia == null) return;
+            
+            if (DescentIntoStructuredTrivia && trivia.Structure is not null)
+                Visit((dynamic)trivia.Structure);
         }
     }
 }

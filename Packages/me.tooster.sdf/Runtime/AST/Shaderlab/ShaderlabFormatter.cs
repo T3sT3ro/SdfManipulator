@@ -1,43 +1,76 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Trivias;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab {
-    // TODO: first improve Rewriter so it returns new syntax nodes in the place of the old ones or use Mapper
+    public class ShaderlabFormatter : Formatter<shaderlab, FormatterOptions> {
+        public ShaderlabFormatter(bool descentIntoTrivia = true, FormatterOptions? options = null,
+            int startingIndent = 0) :
+            base(options, descentIntoTrivia, startingIndent) { }
+
+        public static T Format<T>(T node, FormatterOptions? options = null, int indentLevel = 0)
+            where T : Tree<shaderlab>.Node {
+            var formatter = new ShaderlabFormatter(options: options, startingIndent: indentLevel);
+            return formatter.Map((dynamic)new Anchor<T>(node));
+        }
+
+        public override Token<shaderlab>? Map(Token<shaderlab> token) {
+            switch (token) { // FIXME: this is temporary, because existing trivia (like comments) are lost
+                case OpenBraceToken: {
+                    var newToken = token with { TrailingTriviaList = new(new NewLine()) };
+                    Indent();
+                    return newToken;
+                }
+                case CloseBraceToken:
+                    Deindent();
+                    return token with { TrailingTriviaList = new(new NewLine()) };
+                default:
+                    return base.Map(token) with { TrailingTriviaList = new(new Whitespace()) };
+            }
+        }
+
+        public override SimpleTrivia<shaderlab>? Map(SimpleTrivia<shaderlab> trivia) {
+            if (trivia is Whitespace)
+                return trivia with { Text = " " }; // normalize whitespace lengths
+
+            return base.Map(trivia);
+        }
+
+        public override TriviaList<shaderlab> Map(TriviaList<shaderlab> triviaList) {
+            var newTriviaList = new List<Trivia<shaderlab>>();
+            foreach (var trivia in triviaList) {
+                if (trivia is NewLine
+                 && newTriviaList[^1] is NewLine) // TODO: use the obsolete ReflectiveShaderlabFormatter logic here
+                    continue;
+
+                if (trivia is Whitespace current
+                 && newTriviaList[^1] is Whitespace last) // merge consecutive whitespaces
+                    newTriviaList[^1] = new Whitespace { Text = last.Text + current.Text };
+                else
+                    newTriviaList.Add(trivia);
+            }
+
+            return newTriviaList;
+        }
+    }
+
+    /// TODO: first improve Rewriter so it returns new syntax nodes in the place of the old ones or use Mapper
     [Obsolete]
-    public class ShaderlabFormatter : Rewriter<shaderlab> {
-        public record Options(
-            int indentWidth = 4,
-            char indentCharacter = ' ',
-            int maxConsecutiveNewlineCount = 2
-        );
-
-        private Options options;
-        private int     indentLevel;
-        private string  indentString; // full indent string
-
-        private ShaderlabFormatter(Options? options = null, int indentLevel = 0) {
-            this.options = options ?? new();
-            this.indentLevel = indentLevel;
-            indentString = new string(' ', this.options.indentWidth);
+    public class ReflectiveShaderlabFormatter : Formatter<shaderlab, ReflectiveShaderlabFormatter.Options> {
+        public record Options : FormatterOptions {
+            public int maxConsecutiveNewlineCount = 2;
         }
 
-        private void Indent() {
-            indentLevel++;
-            indentString = new string(options.indentCharacter, indentLevel * options.indentWidth);
-        }
+        protected ReflectiveShaderlabFormatter(Options? options = null, bool descentIntoTrivia = true,
+            int startingIndent = 0) : base(options, descentIntoTrivia, startingIndent) { }
 
-        private void Unindent() {
-            indentLevel--;
-            indentString = new string(options.indentCharacter, indentLevel * options.indentWidth);
-        }
-
-        public static Syntax<shaderlab> Format(Syntax<shaderlab> node, Options? options = null, int indentLevel = 0) {
-            var formatter = new ShaderlabFormatter(options, indentLevel);
-            return formatter.Visit((dynamic)node);
+        public static Syntax<shaderlab> Format(Syntax<shaderlab> node, Options? options = null,
+            int startingIndent = 0) {
+            var formatter = new ReflectiveShaderlabFormatter(options, startingIndent: startingIndent);
+            return node/*formatter.Visit((dynamic)node)*/;
         }
 
         /*

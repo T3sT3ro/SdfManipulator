@@ -21,6 +21,11 @@ namespace me.tooster.sdf.AST {
             /// </summary>
             /// <returns></returns>
             public virtual string FullText => WriteTo(new StringBuilder()).ToString();
+            
+            /*
+            public abstract void Accept(Visitor<Lang> visitor);
+            
+            public abstract T Accept<T>(Visitor<Lang, T> visitor);*/
         }
     }
 }

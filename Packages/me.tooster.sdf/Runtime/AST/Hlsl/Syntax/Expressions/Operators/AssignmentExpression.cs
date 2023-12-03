@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators {
     // x = y
     // y <<= 2

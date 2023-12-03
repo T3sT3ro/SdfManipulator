@@ -1,4 +1,3 @@
-using System;
 using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Syntax;
 
@@ -7,6 +6,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     // TODO: use interned strings or static strings for token getters
     // Tokens
     [TokenNode("\n")] public partial record LineFeedToken;
+    [TokenNode("\\")] public partial record BackslashToken;
     [TokenNode("(")] public partial record OpenParenToken;
     [TokenNode(")")] public partial record CloseParenToken;
     [TokenNode("{")] public partial record OpenBraceToken;

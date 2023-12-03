@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations {
     // float x;
     // float x[1][2];
