@@ -1,35 +1,69 @@
 #nullable enable
-using System;
 using me.tooster.sdf.AST.Syntax;
 
+/*
+ * There is no need for handling InjectedLanguage, because other language visitors may override
+ * this themselves with specific language params
+ */
 namespace me.tooster.sdf.AST {
-    // Visitor returning result for visited nodes
-    public abstract class Visitor<Lang, TResult> {
-        public virtual TResult? Visit(Object? @default) { return default; }
+    /// Visitor returning result for visited nodes
+    public interface Visitor<Lang, out R> {
 
-        public virtual TResult? Visit(Syntax<Lang>? syntax) { return default; }
+        public R? Visit(Anchor<Tree<Lang>.Node> a) => default;
 
-        public virtual TResult? Visit(Token<Lang>? token) { return default; }
+        public R? Visit(Anchor<SyntaxOrToken<Lang>> a) => default;
 
-        public virtual TResult? Visit(TriviaList<Lang>? triviaList) { return default; }
+        public R? Visit(Anchor<Syntax<Lang>> a) => default;
 
-        public virtual TResult? Visit(SimpleTrivia<Lang>? trivia) { return default; }
+        public R? Visit(Anchor<SyntaxOrTokenList<Lang>> a) => default;
         
-        public virtual TResult? Visit<T>(StructuredTrivia<Lang, T>? trivia) where T : SyntaxOrToken<Lang> { return default; }
+        public R? Visit<T>(Anchor<SyntaxList<Lang, T>> a) where T : Syntax<Lang> => default;
+
+        public R? Visit<T>(Anchor<SeparatedList<Lang, T>> a) where T : Syntax<Lang> => default;
+
+        public R? Visit(Anchor<Token<Lang>> a) => default;
+
+        public R? Visit(Anchor<Trivia<Lang>> a) => default;
+
+        public R? Visit(Anchor<TriviaList<Lang>> a) => default;
+
+        public R? Visit(Anchor<SimpleTrivia<Lang>> a) => default;
+
+        public R? Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : SyntaxOrToken<Lang> => default;
+        
+        public R? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => default;
     }
 
-    // Visitor without return values
-    public abstract class Visitor<Lang> {
-        public virtual void Visit(Object? @default) { }
-
-        public virtual void Visit(Syntax<Lang>? syntax) { }
-
-        public virtual void Visit(Token<Lang>? token) { }
-
-        public virtual void Visit(TriviaList<Lang>? triviaList) { }
-
-        public virtual void Visit(SimpleTrivia<Lang>? trivia) { }
+    /// Visitor without return values
+    public interface Visitor<Lang> {
         
-        public virtual void Visit<T>(StructuredTrivia<Lang, T>? trivia) where T : SyntaxOrToken<Lang> { }
+        // catch all
+        public void Visit(Anchor<Tree<Lang>.Node> a) { }
+
+        public void Visit(Anchor<SyntaxOrToken<Lang>> a) { }
+        
+        // syntax
+        public void Visit(Anchor<Syntax<Lang>> a) { }
+
+        // syntax lists
+        public void Visit(Anchor<SyntaxOrTokenList<Lang>> a) { }
+        
+        public void Visit<T>(Anchor<SyntaxList<Lang, T>> a) where T : Syntax<Lang> { }
+
+        public void Visit<T>(Anchor<SeparatedList<Lang, T>> a) where T : Syntax<Lang> { }
+
+        // token
+        public void Visit(Anchor<Token<Lang>> a) { }
+
+        // trivia and trivia list
+        public void Visit(Anchor<TriviaList<Lang>> a) { }
+
+        public void Visit(Anchor<Trivia<Lang>> a) { }
+
+        public void Visit(Anchor<SimpleTrivia<Lang>> a) { }
+
+        public void Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : SyntaxOrToken<Lang> { }
+        
+        public void Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) { }
     }
 }

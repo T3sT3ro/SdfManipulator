@@ -216,10 +216,8 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
         public static implicit operator IdentifierToken(string name) =>
             new() { ValidatedText = name };
     }
-
-    public abstract record Literal : ValidatedToken<shaderlab>;
-
-    public record QuotedStringLiteral : Literal {
+    
+    public record QuotedStringLiteral : Literal<shaderlab> {
         private static readonly Regex pattern = new(@"^""[^""\n\r]*""$");
         protected override      Regex Pattern => pattern;
 
@@ -227,7 +225,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
             new() { ValidatedText = $"\"{content}\"" };
     }
 
-    public record AttributeStringLiteral : Literal {
+    public record AttributeStringLiteral : Literal<shaderlab> {
         private static readonly Regex pattern = new(@"^[a-zA-Z0-9_#. \t]+$");
         protected override      Regex Pattern => pattern;
 
@@ -235,7 +233,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
             new() { ValidatedText = str };
     }
 
-    public record BooleanLiteral : Literal {
+    public record BooleanLiteral : Literal<shaderlab> {
         private static readonly Regex pattern = new(@"^(true|false)$");
         protected override      Regex Pattern => pattern;
 
@@ -243,7 +241,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
             new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
     }
 
-    public abstract record NumberLiteral : Literal;
+    public abstract record NumberLiteral : Literal<shaderlab>;
 
     public record FloatLiteral : NumberLiteral {
         private static readonly Regex pattern = new(@"^(\d+\.\d*|\d*\.\d+)$");

@@ -18,6 +18,10 @@ TODO
   - [proper clip space to world space](https://feepingcreature.github.io/math.html)
   - [use this working perspective+ortho projection as reference](https://www.shadertoy.com/view/WtfGW2)
 
+# Troubleshoot
+
+- when trying to debug the roslyn source generators, in the solution configuration (edit build configuration next to hammer icon in rider), unmark the linked unity project and leave only SourceGenerator project
+
 # TODO
 
 - basic raymarch domain
@@ -137,7 +141,11 @@ TODO
 - Unfortunately C# doesn't have support for both sum and product types, so creating closed, compile-time, safe syntax is not possible without compromises. Typescript could do that (for example narrow the types of accepted syntax to produce valid syntax tree). The compile-type safety would be nice for constructing syntactically correct trees, however it could lead to problems with representing incorrect trees. This work doesn't focus on parsing nor handling incorrect syntax trees though, so it's good enough.  
 - I came up with another approach, by noticing that tokens and (lists of) trivia form an alternating stream, so maybe it would be useful to represent trivia between two tokens by a single list and just point tokens to left and right trivia, while pointing (red) trivia to left and right tokens. This way, I can essentially create not a tree, but a top-down DAG (it connects on the last trivia layer, where each leaf token points to a previous and next trivia list. The red nodes (dynamic, on demand with parent references) then create special type for trivia list that references previous and next token (or null if it's the first/last token in the tree). With this I don't have to include special EOF token, and what's more, I gain an easy way of iterating token and trivia stream and going back and forward. But it is a bit of a pain to implement, especially when the current syntax tree is not the intended final implementation, so we will see later.
 - possibly a better design would be a loosely typed syntax tree that only has Syntax, Token and Trivia nodes (and similar) with only creational methods that enforce correct syntax types and structure, as well as a facade for a tree that provide typed access. Nodes in such a facade would be bound by Syntax<> and similar as well as marker interfaces for type matching.  
-
+- Visitors/walkers and similar:
+  - visitor pattern - problematic with simple pattern matching because matching StructuredTrivia<T> is hard without specifying type in Accept<..>(Trivia<Lang>), which is not possible without reflection. Adding types makes them recurse and there is no simple way to descend structured trivia without knowing the type.
+  - A Visitor interface hierarchy and accept methods sound to be the simplest. base IVisitor and language extensions possibly.
+    - There is a problem with this approach - anchors. They have to be somehow passed to Accept. There is also no clear way to do an accept in anchor
+    - also how to override accept methods with visitor subtypes e.g. accept hlsl visitor???
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)

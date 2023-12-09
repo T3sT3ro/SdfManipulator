@@ -217,9 +217,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     /// <a href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-appendix-grammar">grammar</a>
-    public abstract record Literal : ValidatedToken<hlsl>;
-
-    public partial record FloatLiteral : Literal {
+    public partial record FloatLiteral : Literal<hlsl> {
         private static readonly Regex pattern =
             new(@"^((\d*\.\d+|\d+\.\d*)([eE][+-]?\d+)?|\d+([eE][+-]?\d+))[hHfFlL]?$");
 
@@ -228,14 +226,14 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public static implicit operator FloatLiteral(float value) => new() { TextUnsafe = value.ToString("F") };
     }
 
-    public partial record IntLiteral : Literal {
+    public partial record IntLiteral : Literal<hlsl> {
         private static readonly Regex pattern = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
         protected override      Regex Pattern => pattern;
 
         public static implicit operator IntLiteral(int value) => new() { TextUnsafe = value.ToString("D") };
     }
 
-    public partial record BooleanLiteral : Literal {
+    public partial record BooleanLiteral : Literal<hlsl> {
         private static readonly Regex pattern = new(@"^(true|false)$");
         protected override      Regex Pattern => pattern;
 
@@ -243,7 +241,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
             new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
     }
 
-    public partial record QuotedStringLiteral : Literal {
+    public partial record QuotedStringLiteral : Literal<hlsl> {
         private static readonly Regex pattern = new(@"^""[^""\n\r]*""$");
         protected override      Regex Pattern => pattern;
 

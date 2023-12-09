@@ -6,40 +6,42 @@ using me.tooster.sdf.AST.Shaderlab.Syntax.Trivias;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab {
-    public class ShaderlabFormatter : Formatter<shaderlab, FormatterOptions> {
-        public ShaderlabFormatter(bool descentIntoTrivia = true, FormatterOptions? options = null,
-            int startingIndent = 0) :
-            base(options, descentIntoTrivia, startingIndent) { }
+    public partial class  ShaderlabFormatter: Mapper<shaderlab, Formatter>, Visitor<Tree<shaderlab>.Node>, Visitor<shaderlab> {
+        private ShaderlabFormatter(Formatter state) : base(state) { }
 
-        public static T Format<T>(T node, FormatterOptions? options = null, int indentLevel = 0)
+        public static T? Format<T>(T node, Formatter? s)
             where T : Tree<shaderlab>.Node {
-            var formatter = new ShaderlabFormatter(options: options, startingIndent: indentLevel);
-            return formatter.Map((dynamic)new Anchor<T>(node));
+            var formatter = new ShaderlabFormatter(s ?? new());
+            return node.Accept(formatter, Anchor.New(node)) as T;
         }
 
-        public override Token<shaderlab>? Map(Token<shaderlab> token) {
+        public Token<shaderlab>? Map(Token<shaderlab> token) {
             switch (token) { // FIXME: this is temporary, because existing trivia (like comments) are lost
                 case OpenBraceToken: {
                     var newToken = token with { TrailingTriviaList = new(new NewLine()) };
-                    Indent();
+                    state.Indent();
                     return newToken;
                 }
                 case CloseBraceToken:
-                    Deindent();
+                    state.Deindent();
                     return token with { TrailingTriviaList = new(new NewLine()) };
-                default:
-                    return base.Map(token) with { TrailingTriviaList = new(new Whitespace()) };
+                default: {
+                    var newToken = Visit(Anchor.New(token)) as Token<shaderlab>;
+                    return newToken with { TrailingTriviaList = new(new Whitespace()) };
+                }
             }
         }
 
-        public override SimpleTrivia<shaderlab>? Map(SimpleTrivia<shaderlab> trivia) {
+        public void Visit(Anchor<SimpleTrivia<Tree<shaderlab>.Node>> a) { throw new NotImplementedException(); }
+
+        public  SimpleTrivia<shaderlab>? Map(SimpleTrivia<shaderlab> trivia) {
             if (trivia is Whitespace)
                 return trivia with { Text = " " }; // normalize whitespace lengths
 
-            return base.Map(trivia);
+            return Visit(Anchor.New(trivia)) as SimpleTrivia<shaderlab>;
         }
 
-        public override TriviaList<shaderlab> Map(TriviaList<shaderlab> triviaList) {
+        public  TriviaList<shaderlab> Map(TriviaList<shaderlab> triviaList) {
             var newTriviaList = new List<Trivia<shaderlab>>();
             foreach (var trivia in triviaList) {
                 if (trivia is NewLine
@@ -59,18 +61,16 @@ namespace me.tooster.sdf.AST.Shaderlab {
 
     /// TODO: first improve Rewriter so it returns new syntax nodes in the place of the old ones or use Mapper
     [Obsolete]
-    public class ReflectiveShaderlabFormatter : Formatter<shaderlab, ReflectiveShaderlabFormatter.Options> {
-        public record Options : FormatterOptions {
+    public class ReflectiveShaderlabFormatter : Mapper<shaderlab, ReflectiveShaderlabFormatter.Options> {
+        public record Options : Formatter {
             public int maxConsecutiveNewlineCount = 2;
         }
 
-        protected ReflectiveShaderlabFormatter(Options? options = null, bool descentIntoTrivia = true,
-            int startingIndent = 0) : base(options, descentIntoTrivia, startingIndent) { }
+        protected ReflectiveShaderlabFormatter(Options? options = null) : base(options) { }
 
-        public static Syntax<shaderlab> Format(Syntax<shaderlab> node, Options? options = null,
-            int startingIndent = 0) {
-            var formatter = new ReflectiveShaderlabFormatter(options, startingIndent: startingIndent);
-            return node/*formatter.Visit((dynamic)node)*/;
+        public static Syntax<shaderlab> Format(Syntax<shaderlab> node, Options? options = null) {
+            var formatter = new ReflectiveShaderlabFormatter(options);
+            return node /*formatter.Visit((dynamic)node)*/;
         }
 
         /*

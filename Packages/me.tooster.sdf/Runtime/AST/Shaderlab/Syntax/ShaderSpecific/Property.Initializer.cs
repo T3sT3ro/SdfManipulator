@@ -7,7 +7,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
 
         // = (1, 2, 3, 4)
         [SyntaxNode] public partial record Vector : Initializer {
-            public ArgumentList<LiteralExpression<NumberLiteral>> arguments { get; init; } = new();
+            public ArgumentList<LiteralExpression> arguments { get; init; } = new();
         }
 
         // = "red" {}

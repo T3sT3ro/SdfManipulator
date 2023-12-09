@@ -17,7 +17,5 @@ namespace me.tooster.sdf.AST.Syntax {
                 child.WriteTo(sb);
             return sb;
         }
-
-        public abstract Syntax<Lang>? MapWith(Mapper<Lang> mapper, Anchor? thisAnchor = null);
     }
 }

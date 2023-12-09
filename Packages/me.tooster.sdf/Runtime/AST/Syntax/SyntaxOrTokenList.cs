@@ -31,7 +31,7 @@ namespace me.tooster.sdf.AST.Syntax {
             IEnumerable<SyntaxOrToken<Lang>> elements)
             => new(FullList.Splice(index, deleteCount, elements));
 
-        public override Syntax<Lang> MapWith(Mapper<Lang> mapper, Anchor? thisAnchor = null) =>
-            mapper.Map((dynamic)(thisAnchor is null ? this : new Anchor<SyntaxOrTokenList<Lang>>(this, thisAnchor)));
+        internal override void Accept(Visitor<Lang> visitor, Anchor a)                       => visitor.Visit((Anchor<SyntaxOrTokenList<Lang>>)a);
+        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor a) where TR : default => visitor.Visit((Anchor<SyntaxOrTokenList<Lang>>)a);
     }
 }

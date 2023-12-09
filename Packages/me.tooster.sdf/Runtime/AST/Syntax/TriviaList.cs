@@ -29,5 +29,8 @@ namespace me.tooster.sdf.AST.Syntax {
                 trivia.WriteTo(sb);
             return sb;
         }
+
+        internal override void Accept(Visitor<Lang> visitor, Anchor a) => visitor.Visit((Anchor<TriviaList<Lang>>)a);
+        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor a) where TR : default => visitor.Visit((Anchor<TriviaList<Lang>>)a);
     }
 }

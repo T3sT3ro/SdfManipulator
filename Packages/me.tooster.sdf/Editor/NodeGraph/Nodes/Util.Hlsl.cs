@@ -12,14 +12,14 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
     public static class HlslUtil {
         // convert typed enumerables to literal enumerables
-        private static IEnumerable<LiteralExpression<Literal>> ToLiteralList(this IEnumerable<float> vals) =>
-            vals.Select(v => new LiteralExpression<Literal> { literal = (FloatLiteral)v }).AsEnumerable();
+        private static IEnumerable<LiteralExpression> ToLiteralList(this IEnumerable<float> vals) =>
+            vals.Select(v => new LiteralExpression { literal = (FloatLiteral)v }).AsEnumerable();
 
-        private static IEnumerable<LiteralExpression<Literal>> ToLiteralList(this IEnumerable<int> vals) =>
-            vals.Select(v => new LiteralExpression<Literal> { literal = (IntLiteral)v }).AsEnumerable();
+        private static IEnumerable<LiteralExpression> ToLiteralList(this IEnumerable<int> vals) =>
+            vals.Select(v => new LiteralExpression { literal = (IntLiteral)v }).AsEnumerable();
 
-        private static IEnumerable<LiteralExpression<Literal>> ToLiteralList(this IEnumerable<bool> vals) =>
-            vals.Select(v => new LiteralExpression<Literal> { literal = (BooleanLiteral)v }).AsEnumerable();
+        private static IEnumerable<LiteralExpression> ToLiteralList(this IEnumerable<bool> vals) =>
+            vals.Select(v => new LiteralExpression { literal = (BooleanLiteral)v }).AsEnumerable();
         
         // (x, y, z, w)
         public static AST.Hlsl.Syntax.ArgumentList<Syntax<hlsl>> VectorArgumentList(Vector4 vec) =>

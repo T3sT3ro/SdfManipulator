@@ -3,45 +3,46 @@
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST {
+    // instead of doing double dispatch using visit-accept pairs, pattern match can be used
     public abstract class Walker<Lang> : Visitor<Lang> {
-        private bool DescentIntoStructuredTrivia { get; set; }
+        private bool DescentIntoStructuredTrivia { get; }
 
-        protected Walker(bool descendIntoStructuredTrivia = false) {
+        protected Walker(bool descendIntoStructuredTrivia = false) =>
             DescentIntoStructuredTrivia = descendIntoStructuredTrivia;
-        }
 
-
-        public override void Visit(Syntax<Lang>? node) {
-            if (node == null) return;
-
-            foreach (var n in node.ChildNodesAndTokens)
-                Visit((dynamic)n);
-        }
-
-        public override void Visit(Token<Lang>? token) {
-            if (token == null) return;
-
-            if (token.LeadingTriviaList != null)
-                foreach (var leadingTrivia in token.LeadingTriviaList)
-                    Visit((dynamic)leadingTrivia);
-
-            if (token.TrailingTriviaList != null)
-                foreach (var trailingTrivia in token.TrailingTriviaList)
-                    Visit((dynamic)trailingTrivia);
-        }
-
-        public override void Visit(TriviaList<Lang>? triviaList) {
-            if (triviaList == null) return;
-
-            foreach (var trivia in triviaList)
-                Visit((dynamic)trivia);
-        }
         
-        public override void Visit<T>(StructuredTrivia<Lang, T>? trivia) {
-            if (trivia == null) return;
-            
-            if (DescentIntoStructuredTrivia && trivia.Structure is not null)
-                Visit((dynamic)trivia.Structure);
+        public void Visit(Anchor<Syntax<Lang>> a) {
+            foreach (var n in a.Node.ChildNodesAndTokens)
+                n.Accept(this, Anchor.New(n, a));
+        }
+
+        public void Visit(Anchor<SyntaxOrTokenList<Lang>> a) {
+            foreach (var n in a.Node)
+                n.Accept(this, Anchor.New(n, a));
+        }
+
+        public void Visit<T>(Anchor<SyntaxList<Lang, T>> a) where T : Syntax<Lang> {
+            foreach (var n in a.Node) 
+                n.Accept(this, Anchor.New(n, a));
+        }
+
+        public void Visit(Anchor<Token<Lang>> a) {
+            if (a.Node.LeadingTriviaList != null)
+                a.Node.Accept(this, Anchor.New(a.Node.LeadingTriviaList, a));
+
+            if (a.Node.TrailingTriviaList != null)
+                a.Node.Accept(this, Anchor.New(a.Node.TrailingTriviaList, a));
+        }
+
+
+        public void Visit(Anchor<TriviaList<Lang>> a) {
+            foreach (var trivia in a.Node)
+                trivia.Accept(this, Anchor.New(trivia, a));
+        }
+
+        public void Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : SyntaxOrToken<Lang> {
+            if (DescentIntoStructuredTrivia && a.Node.Structure is not null)
+                a.Node.Accept(this, Anchor.New(a.Node, a));
         }
     }
 }

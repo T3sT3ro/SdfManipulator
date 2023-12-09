@@ -60,20 +60,16 @@ namespace me.tooster.sdf.AST.Generators {
             // skip MapWith if it exists
             if (!recordSymbol.GetMembers("MapWith").Any() && !recordSymbol.IsAbstract) {
                 recordDeclaration = recordDeclaration.AddMembers(
-                    generateMapper(recordSymbol, inheritedAndOwnProperties, langName));
+                    generateMapperMethod(recordSymbol, inheritedAndOwnProperties, langName));
             }
 
-            /*// skip Accept if it exists
+            // skip Accept and Accept<> if any of them exists
+            // skip Accept<> if it exists (returning version)
             if (!recordSymbol.GetMembers("Accept").Any() && !recordSymbol.IsAbstract) {
                 recordDeclaration =
-                    recordDeclaration.AddMembers(Utils.GenerateVisitorAcceptor(langName));
+                    recordDeclaration.AddMembers(GenerateVisitorAcceptor(recordSymbol, langName, false));
+                recordDeclaration = recordDeclaration.AddMembers(GenerateVisitorAcceptor(recordSymbol, langName, true));
             }
-
-            // skip Accept if it exists (returning version)
-            if (!recordSymbol.GetMembers("Accept").Any() && !recordSymbol.IsAbstract) {
-                recordDeclaration =
-                    recordDeclaration.AddMembers(Utils.GenerateReturningVisitorAcceptor(langName));
-            }*/
 
             // generate internal syntax
             // if (!recordSymbol.GetMembers("Internal").Any()) {
@@ -106,7 +102,8 @@ namespace me.tooster.sdf.AST.Generators {
             // skip MapWith if it exists
             if (!recordSymbol.GetMembers("MapWith").Any() && !recordSymbol.IsAbstract)
                 recordDeclaration =
-                    recordDeclaration.AddMembers(generateMapper(recordSymbol, inheritedAndOwnProperties, langName));
+                    recordDeclaration.AddMembers(
+                        generateMapperMethod(recordSymbol, inheritedAndOwnProperties, langName));
 
             return recordDeclaration;
         }
@@ -186,47 +183,36 @@ namespace me.tooster.sdf.AST.Generators {
             }
         }
 
-        private static IEnumerable<LocalDeclarationStatementSyntax> mapperFieldDeclarations(
-            IEnumerable<IPropertySymbol> inheritedAndOwnFields
-        ) {
-            foreach (var prop in inheritedAndOwnFields) {
-                var memberProperty = MemberAccessExpression(
-                    SyntaxKind.SimpleMemberAccessExpression,
-                    ThisExpression(),
-                    IdentifierName(prop.Name));
+        // internal override void Accept(AST.Visitor<langName> visitor, Anchor a) => ((Visitor)visitor).Visit((Anchor<Type>)a);
+        public MethodDeclarationSyntax
+            GenerateVisitorAcceptor(ITypeSymbol recordSymbol, string langName, bool returning) {
+            var methodDeclaration = MethodDeclaration(IdentifierName(Identifier(returning ? "R?" : "void")),
+                    Identifier("Accept" + (returning ? "<R>" : "")))
+                .WithModifiers(TokenList(Token(SyntaxKind.InternalKeyword), Token(SyntaxKind.OverrideKeyword)))
+                .AddParameterListParameters(
+                    Parameter(Identifier("visitor"))
+                        .WithType(IdentifierName($"AST.Visitor<{(returning ? langName + ", R" : langName)}>")),
+                    Parameter(Identifier("parent")).WithType(IdentifierName("Anchor")))
+                .WithExpressionBody(ArrowExpressionClause(InvocationExpression(MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        ParenthesizedExpression(
+                            CastExpression(IdentifierName(returning ? "Visitor<R>" : "Visitor"),
+                                IdentifierName("visitor"))),
+                        IdentifierName("Visit")))
+                    .AddArgumentListArguments(
+                        // Argument(CastExpression(IdentifierName($"Anchor<{Utils.getTypeNameWithGenericArguments(recordSymbol)}>"),
+                        //     IdentifierName("parent"))))))
+                        Argument(InvocationExpression(IdentifierName("Anchor.New")).AddArgumentListArguments(
+                            Argument(ThisExpression()),
+                            Argument(IdentifierName("parent")))))))
+                .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
 
-                ExpressionSyntax property = ParenthesizedExpression(
-                    ConditionalExpression(IsPatternExpression(
-                            IdentifierName("thisAnchor"),
-                            ConstantPattern(LiteralExpression(SyntaxKind.NullLiteralExpression))),
-                        memberProperty,
-                        ObjectCreationExpression(
-                                IdentifierName(
-                                    Identifier($"Anchor<{Utils.getTypeNameWithGenericArguments(prop.Type, true)}>")))
-                            .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(
-                                new SyntaxNodeOrToken[]
-                                {
-                                    Argument(memberProperty),
-                                    Token(SyntaxKind.CommaToken),
-                                    Argument(IdentifierName("thisAnchor"))
-                                })))));
+            if (returning)
+                methodDeclaration = methodDeclaration.WithConstraintClauses(SingletonList(
+                    TypeParameterConstraintClause(IdentifierName("R"))
+                        .WithConstraints(SingletonSeparatedList<TypeParameterConstraintSyntax>(DefaultConstraint()))));
 
-                var mapperCall = InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-                    IdentifierName("mapper"), IdentifierName("Map"))).WithArgumentList(ArgumentList(
-                    SingletonSeparatedList(Argument(CastExpression(IdentifierName("dynamic"), property)))));
-
-                ExpressionSyntax value = prop.NullableAnnotation == NullableAnnotation.Annotated
-                    ? ConditionalExpression(IsPatternExpression(memberProperty, ConstantPattern(
-                            LiteralExpression(SyntaxKind.NullLiteralExpression))),
-                        LiteralExpression(SyntaxKind.NullLiteralExpression),mapperCall)
-                    : mapperCall;
-
-                yield return LocalDeclarationStatement(
-                    VariableDeclaration(IdentifierName(Identifier("var")))
-                        .WithVariables(SingletonSeparatedList(
-                            VariableDeclarator(Identifier(prop.Name)) // <-- this will fail for fields like `@default`
-                                .WithInitializer(EqualsValueClause(value)))));
-            }
+            return methodDeclaration;
         }
 
         [Obsolete("For now records are compared using their synthesized equality contract. "
@@ -288,19 +274,49 @@ namespace me.tooster.sdf.AST.Generators {
                                     IdentifierName(field.Name)))))));
         }
 
-        private static IEnumerable<StatementSyntax> mapperFunctionStatements(
-            ITypeSymbol recordSymbol,
-            IEnumerable<IPropertySymbol> inheritedAndOwnProperties
+        private static IEnumerable<LocalDeclarationStatementSyntax> mapperNewMembersDeclarations(
+            IEnumerable<IPropertySymbol> inheritedAndOwnFields
         ) {
-            foreach (var st in mapperFieldDeclarations(inheritedAndOwnProperties))
-                yield return st;
+            foreach (var prop in inheritedAndOwnFields) {
+                var memberProperty = MemberAccessExpression(
+                    SyntaxKind.SimpleMemberAccessExpression,
+                    ThisExpression(),
+                    IdentifierName(prop.Name));
 
-            yield return mapperReturnUnchanged(inheritedAndOwnProperties);
+                ExpressionSyntax property = ParenthesizedExpression(
+                    ConditionalExpression(IsPatternExpression(
+                            IdentifierName("a"),
+                            ConstantPattern(LiteralExpression(SyntaxKind.NullLiteralExpression))),
+                        memberProperty,
+                        InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+                                IdentifierName("Anchor"), IdentifierName("New")))
+                            .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(
+                                new SyntaxNodeOrToken[]
+                                {
+                                    Argument(memberProperty),
+                                    Token(SyntaxKind.CommaToken),
+                                    Argument(IdentifierName("a"))
+                                })))));
 
-            yield return mapperObjectCreationExpression(recordSymbol, inheritedAndOwnProperties);
+                var mapperCall = InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+                    IdentifierName("mapper"), IdentifierName("Map"))).WithArgumentList(ArgumentList(
+                    SingletonSeparatedList(Argument(CastExpression(IdentifierName("dynamic"), property)))));
+
+                ExpressionSyntax value = prop.NullableAnnotation == NullableAnnotation.Annotated
+                    ? ConditionalExpression(IsPatternExpression(memberProperty, ConstantPattern(
+                            LiteralExpression(SyntaxKind.NullLiteralExpression))),
+                        LiteralExpression(SyntaxKind.NullLiteralExpression), mapperCall)
+                    : mapperCall;
+
+                yield return LocalDeclarationStatement(
+                    VariableDeclaration(IdentifierName(Identifier("var")))
+                        .WithVariables(SingletonSeparatedList(
+                            VariableDeclarator(Identifier(prop.Name)) // <-- this will fail for fields like `@default`
+                                .WithInitializer(EqualsValueClause(value)))));
+            }
         }
 
-        private static MethodDeclarationSyntax generateMapper(
+        private static MethodDeclarationSyntax generateMapperMethod(
             ITypeSymbol recordSymbol,
             List<IPropertySymbol> inheritedAndOwnProperties,
             string langName
@@ -313,9 +329,21 @@ namespace me.tooster.sdf.AST.Generators {
                     Parameter(Identifier("mapper"))
                         .WithType(IdentifierName(Identifier($"Mapper<{langName.ToLower()}>"))),
                     Parameter(Identifier("thisAnchor")).WithType(NullableType(
-                            IdentifierName(Identifier($"Anchor"))))
+                            IdentifierName(Identifier("Anchor"))))
                         .WithDefault(EqualsValueClause(LiteralExpression(SyntaxKind.NullLiteralExpression))))
                 .WithBody(Block(mapperFunctionStatements(recordSymbol, inheritedAndOwnProperties)));
+        }
+
+        private static IEnumerable<StatementSyntax> mapperFunctionStatements(
+            ITypeSymbol recordSymbol,
+            IEnumerable<IPropertySymbol> inheritedAndOwnProperties
+        ) {
+            foreach (var st in mapperNewMembersDeclarations(inheritedAndOwnProperties))
+                yield return st;
+
+            yield return mapperReturnUnchanged(inheritedAndOwnProperties);
+
+            yield return mapperObjectCreationExpression(recordSymbol, inheritedAndOwnProperties);
         }
     }
 }

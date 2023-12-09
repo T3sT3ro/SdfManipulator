@@ -42,7 +42,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
     // TODO: refactor to bake constant syntax while building shader but while editing use uniforms
     public record IntConstantNode : ValueNode<HlslScalar> {
         public IntConstantNode(int value)
-            : base("int_const", "Int Constant", () => new(new LiteralExpression<IntLiteral> { literal = value })) { }
+            : base("int_const", "Int Constant", () => new(new LiteralExpression { literal = (IntLiteral)value })) { }
     }
 
 
@@ -54,7 +54,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
     public record FloatConstantNode : ValueNode<HlslScalar> {
         public FloatConstantNode(float value)
             : base("float_const", "Float Constant",
-                () => new(new LiteralExpression<FloatLiteral> { literal = value })) { }
+                () => new(new LiteralExpression { literal = (FloatLiteral)value })) { }
     }
 
 

@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace me.tooster.sdf.AST.Syntax {
+    // TODO: think of moving all tokens inside Tokens namespace and adjust names accordingly (PlusToken -> Tokens.Plus)
     public abstract record Token<Lang> : SyntaxOrToken<Lang> {
         public TriviaList<Lang>? LeadingTriviaList  { get; init; }
         public TriviaList<Lang>? TrailingTriviaList { get; init; }
@@ -14,6 +15,9 @@ namespace me.tooster.sdf.AST.Syntax {
             TrailingTriviaList?.WriteTo(sb);
             return sb;
         }
+
+        internal override void Accept(Visitor<Lang> visitor, Anchor a) => visitor.Visit((Anchor<Token<Lang>>)a);
+        internal override R? Accept<R>(Visitor<Lang, R> visitor, Anchor a) where R : default => visitor.Visit((Anchor<Token<Lang>>)a);
     }
 
     public abstract record ValidatedToken<Lang> : Token<Lang> {
@@ -38,4 +42,6 @@ namespace me.tooster.sdf.AST.Syntax {
             init => validatedText = value;
         }
     }
+
+    public abstract record Literal<Lang> : ValidatedToken<Lang>;
 }

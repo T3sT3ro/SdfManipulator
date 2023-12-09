@@ -5,6 +5,7 @@ using System.Linq;
 using me.tooster.sdf.AST.Syntax;
 
 
+/*
 namespace me.tooster.sdf.AST {
     // TODO: this solution is suboptimal. It would be better to generate partial SyntaxRewriter methods for each Syntax type
     //       and Update methods inside syntax classes for updating partial fields of syntax tree parts, just like Roslyn
@@ -29,7 +30,7 @@ namespace me.tooster.sdf.AST {
 
         protected virtual Trivia<Lang> Visit(Trivia<Lang> trivia) {
             return Visit((dynamic)new WithParent<Trivia<Lang>>(trivia, null));
-        }*/
+        }#1#
 
         // ------------- DYNAMIC RUNTIME DISPATCH
 
@@ -87,7 +88,7 @@ namespace me.tooster.sdf.AST {
             
             return trivia with { Structure = result };
         }
-        */
+        #1#
 
         /// rewrites list's elements, if it (or children) changed, returns changed list. Othwerwise returns original list.
         protected virtual IReadOnlyList<T> Visit<T>(Anchor<IReadOnlyList<T>> anchoredList) where T : class {
@@ -108,3 +109,4 @@ namespace me.tooster.sdf.AST {
         }
     }
 }
+*/

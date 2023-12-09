@@ -95,7 +95,8 @@ namespace me.tooster.sdf.AST.Generators {
         }
 
         /// returns type name with generic arguments and nullable annotation (generic args are fully qualified)
-        public static string getTypeNameWithGenericArguments(ITypeSymbol typeSymbol, bool withEnclosingRecordParts = false) {
+        public static string getTypeNameWithGenericArguments(ITypeSymbol typeSymbol,
+            bool withEnclosingRecordParts = false) {
             var sb = new StringBuilder(typeSymbol.Name);
             if (typeSymbol is INamedTypeSymbol { IsGenericType: true } namedTypeSymbol) {
                 sb.Append("<");
@@ -106,8 +107,9 @@ namespace me.tooster.sdf.AST.Generators {
 
             if (typeSymbol.NullableAnnotation == NullableAnnotation.Annotated)
                 sb.Append("?");
-            
-            if (withEnclosingRecordParts && typeSymbol.IsRecord && typeSymbol.ContainingSymbol is ITypeSymbol parent && parent.IsRecord) {
+
+            if (withEnclosingRecordParts && typeSymbol.IsRecord && typeSymbol.ContainingSymbol is ITypeSymbol parent
+             && parent.IsRecord) {
                 sb.Insert(0, ".");
                 sb.Insert(0, getTypeNameWithGenericArguments(parent));
             }
@@ -124,7 +126,10 @@ namespace me.tooster.sdf.AST.Generators {
             var current = typeSymbol;
             genericParameters = new List<string>();
             while (current != null && current.Name != terminator) {
-                parts.Add(current.Name);
+                if(current is ITypeSymbol ts)
+                    parts.Add(getTypeNameWithGenericArguments(ts));
+                else
+                    parts.Add(current.Name);
                 if (current is INamedTypeSymbol { IsGenericType: true } namedTypeSymbol) {
                     genericParameters.AddRange(namedTypeSymbol.TypeArguments.Select(p => getTypeNameWithGenericArguments(p)));
                 }
@@ -183,35 +188,6 @@ namespace me.tooster.sdf.AST.Generators {
         internal static bool isAnnotated(ITypeSymbol type, ISymbol attribute) {
             return type.GetAttributes().Any(ad =>
                 ad.AttributeClass?.Equals(attribute, SymbolEqualityComparer.Default) ?? false);
-        }
-
-        public static MethodDeclarationSyntax GenerateVisitorAcceptor(string langName) {
-            return MethodDeclaration(IdentifierName(Identifier($"void")), Identifier("Accept"))
-                .WithModifiers(
-                    TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
-                .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("visitor"))
-                    .WithType(IdentifierName(Identifier($"AST.Visitor<{langName.ToLower()}>"))))))
-                .WithBody(Block(SingletonList<StatementSyntax>(
-                    ExpressionStatement(InvocationExpression(MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("visitor"),
-                            IdentifierName("Visit")))
-                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(ThisExpression()))))))));
-        }
-
-        public static MethodDeclarationSyntax GenerateReturningVisitorAcceptor(string langName) {
-            return MethodDeclaration(IdentifierName(Identifier($"T")), Identifier("Accept"))
-                .WithModifiers(
-                    TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
-                .WithTypeParameterList(TypeParameterList(SingletonSeparatedList(TypeParameter(Identifier("T")))))
-                .WithParameterList(ParameterList(SingletonSeparatedList(Parameter(Identifier("visitor"))
-                    .WithType(IdentifierName(Identifier($"AST.Visitor<{langName.ToLower()}, T>"))))))
-                .WithBody(Block(SingletonList<StatementSyntax>(
-                    ReturnStatement(InvocationExpression(MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("visitor"),
-                            IdentifierName("Visit")))
-                        .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(ThisExpression()))))))));
         }
     }
 }

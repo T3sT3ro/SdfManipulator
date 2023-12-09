@@ -71,7 +71,8 @@ namespace {ROOT_NAMESPACE} {{
                 foreach (var recordSymbol in ss.Syntaxes)
                     GenerateSyntaxPartials(recordSymbol, ss);
                 
-                // GenerateVisitorPartials(ss);
+                GenerateVisitor(ss);
+                GenerateMapper(ss);
             }
             
 

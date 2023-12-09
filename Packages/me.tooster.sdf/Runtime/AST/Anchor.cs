@@ -8,15 +8,19 @@ namespace me.tooster.sdf.AST {
     /// </summary>
     public abstract record Anchor {
         public Anchor? Parent { get; }
-        protected Anchor(Anchor? parent = null) { Parent = parent; }
+        protected Anchor(Anchor? parent = null) => Parent = parent;
+
+        public static Anchor<T> New<T>(T value, Anchor? other = null) => new(value, other);
     }
 
     /// <summary>
     /// An <see cref="Anchor"/> holding a value of type <typeparamref name="T"/> 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public sealed record Anchor<T> : Anchor {
+    public sealed record Anchor<T> : Anchor{
         public T Node { get; }
-        public Anchor(T node, Anchor? parent = null) : base(parent) { Node = node; }
+        internal Anchor(T node, Anchor? parent = null) : base(parent) => Node = node;
+        
+        public static implicit operator T(Anchor<T> anchor) => anchor.Node;
     }
 }
