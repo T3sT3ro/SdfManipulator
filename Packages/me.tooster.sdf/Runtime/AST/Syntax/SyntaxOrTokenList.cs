@@ -31,7 +31,9 @@ namespace me.tooster.sdf.AST.Syntax {
             IEnumerable<SyntaxOrToken<Lang>> elements)
             => new(FullList.Splice(index, deleteCount, elements));
 
-        internal override void Accept(Visitor<Lang> visitor, Anchor a)                       => visitor.Visit((Anchor<SyntaxOrTokenList<Lang>>)a);
-        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor a) where TR : default => visitor.Visit((Anchor<SyntaxOrTokenList<Lang>>)a);
+        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
+
+        internal override TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent) where TR : default =>
+            visitor.Visit(Anchor.New(this, parent));
     }
 }

@@ -15,11 +15,12 @@ namespace me.tooster.sdf.AST {
         protected Mapper(TOpts? state) => this.state = state ?? new();
 
         // default visit -> return itself
-        public virtual Tree<Lang>.Node? Visit(Anchor<Tree<Lang>.Node> a) => a.Node.Accept(this, Anchor.New(a.Node, a));
-        public Tree<Lang>.Node? Visit(Anchor<SyntaxOrToken<Lang>> a) => a.Node.Accept(this, Anchor.New(a.Node, a.Parent));
-        public Tree<Lang>.Node? Visit(Anchor<Syntax<Lang>> a) => a.Node.Accept(this, Anchor.New(a.Node, a.Parent));
+        public virtual Tree<Lang>.Node? Visit(Anchor<Tree<Lang>.Node> a) => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<SyntaxOrToken<Lang>> a) => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Syntax<Lang>> a) => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Trivia<Lang>> a) => a.Node.Accept(this, a.Parent);
 
-        public Tree<Lang>.Node? Visit(Anchor<Token<Lang>> a) {
+        public virtual Tree<Lang>.Node? Visit(Anchor<Token<Lang>> a) {
             var token = a.Node;
             var leading = token.LeadingTriviaList;
             if (leading is not null && state.descendIntoTrivia)
@@ -39,29 +40,29 @@ namespace me.tooster.sdf.AST {
             };
         }
 
-        public Tree<Lang>.Node? Visit(Anchor<SyntaxOrTokenList<Lang>> a) {
+        public virtual Tree<Lang>.Node? Visit(Anchor<SyntaxOrTokenList<Lang>> a) {
             var newList = MapList<SyntaxOrTokenList<Lang>, SyntaxOrToken<Lang>>(a);
             return newList == a.Node ? a.Node : new SyntaxOrTokenList<Lang>(newList);
         }
 
-        public Tree<Lang>.Node? Visit<T>(Anchor<SyntaxList<Lang, T>> a) where T : Syntax<Lang> {
+        public virtual Tree<Lang>.Node? Visit<T>(Anchor<SyntaxList<Lang, T>> a) where T : Syntax<Lang> {
             var newList = MapList<SyntaxList<Lang, T>, T>(a);
             return newList == a.Node ? a.Node : new SyntaxOrTokenList<Lang>(newList);
         }
 
-        public Tree<Lang>.Node? Visit(Anchor<TriviaList<Lang>> a) {
+        public virtual Tree<Lang>.Node? Visit(Anchor<TriviaList<Lang>> a) {
             var newTriviaList = MapList<TriviaList<Lang>, Trivia<Lang>>(a);
             return newTriviaList == a.Node ? a.Node : new TriviaList<Lang>(newTriviaList);
         }
 
-        public Tree<Lang>.Node? Visit<T>(Anchor<SeparatedList<Lang, T>> a) where T : Syntax<Lang> {
+        public virtual Tree<Lang>.Node? Visit<T>(Anchor<SeparatedList<Lang, T>> a) where T : Syntax<Lang> {
             var newList = MapList<SeparatedList<Lang, T>, SyntaxOrToken<Lang>>(a);
             return newList == a.Node ? a.Node : new SeparatedList<Lang, T>(newList);
         }
+        
+        public virtual Tree<Lang>.Node? Visit(Anchor<SimpleTrivia<Lang>> a) => a.Node;
 
-        public Tree<Lang>.Node? Visit(Anchor<SimpleTrivia<Lang>> a) => a.Node;
-
-        public Tree<Lang>.Node? Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : SyntaxOrToken<Lang> {
+        public virtual Tree<Lang>.Node? Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : SyntaxOrToken<Lang> {
             var trivia = a.Node;
             if (trivia.Structure is null) return trivia;
 
@@ -70,7 +71,7 @@ namespace me.tooster.sdf.AST {
         }
 
         // injected language is not processed by default
-        public Tree<Lang>.Node? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => a.Node;
+        public virtual Tree<Lang>.Node? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => a.Node;
 
         #region util
 

@@ -5,7 +5,7 @@ using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl {
     public static class Extensions {
-        // todo: parethesize by default, simplify with rules under associativity and precedence
+        // todo: parenthesize by default, simplify with rules under associativity and precedence
         public static Expression ParenthesizeFor(this Expression child, Expression parent) =>
             child.Precedence() > parent.Precedence() ? new Parenthesized { expression = child } : child;
 

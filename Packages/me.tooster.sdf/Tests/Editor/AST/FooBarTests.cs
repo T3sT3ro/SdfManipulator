@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Syntax;
@@ -23,6 +24,10 @@ namespace me.tooster.sdf.AST.FooLang {
         public Expr           left  { get; init; }
         public Token<foolang> op    { get; init; }
         public Expr           right { get; init; }
+        
+        internal override void Accept(AST.Visitor<foolang> visitor, Anchor a) => ((Visitor)visitor).Visit(Anchor.New(this, a));
+        internal override R? Accept<R>(AST.Visitor<foolang, R> visitor, Anchor a)
+            where R : default => ((Visitor<R>)visitor).Visit(Anchor.New(this, a));
     }
 
     [SyntaxNode] public partial record Literal : Expr {
@@ -78,3 +83,4 @@ namespace me.tooster.sdf.Tests.Editor.AST {
         }
     }
 }
+*/

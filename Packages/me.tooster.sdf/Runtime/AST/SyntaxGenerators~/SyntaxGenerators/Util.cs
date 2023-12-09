@@ -63,6 +63,7 @@ namespace me.tooster.sdf.AST.Generators {
         }
 
         /// returns if type (possibly generic), any of it's type bounds or any of it's base types match predicate
+        [Obsolete("this is not used yet, but I can migrate to it later")]
         public static bool checkTypeChain(ITypeSymbol? type, Predicate<ITypeSymbol> predicate) {
             if (type is ITypeParameterSymbol tps && tps.ConstraintTypes.Any(t => checkTypeChain(t, predicate)))
                 return true;
@@ -188,6 +189,14 @@ namespace me.tooster.sdf.AST.Generators {
         internal static bool isAnnotated(ITypeSymbol type, ISymbol attribute) {
             return type.GetAttributes().Any(ad =>
                 ad.AttributeClass?.Equals(attribute, SymbolEqualityComparer.Default) ?? false);
+        }
+
+        public static bool isToken(ITypeSymbol pType) {
+            return baseTypes(pType).Any(type =>
+                (type as INamedTypeSymbol)?.ConstructedFrom.ToDisplayString()
+             == $"{AstSourceGenerator.ROOT_NAMESPACE}.Syntax.Token<Lang>"
+             || type.GetAttributes().Any(ad => ad.AttributeClass?.Name is AstSourceGenerator.TOKEN_ATTRIBUTE_NAME)
+            );
         }
     }
 }

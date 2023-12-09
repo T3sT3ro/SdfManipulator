@@ -14,15 +14,21 @@ namespace me.tooster.sdf.AST.Generators {
             var langName = ss.LangName;
             var ownProperties = Utils.getOwnProperties(recordSymbol).ToList();
             var inheritedProperties = Utils.getInheritedProperties(recordSymbol).ToList();
+            var allUsings = new List<UsingDirectiveSyntax>() {
+                UsingDirective(IdentifierName("System.Collections.Generic")),
+                UsingDirective(IdentifierName($"{ROOT_NAMESPACE}.Syntax")),
+                UsingDirective(IdentifierName("System.Linq")),
+            };
+                
+            // TODO: deduplicate entries
             ss.Includes.TryGetValue(recordSymbol, out var usings);
+            allUsings.AddRange(usings);
+                        
             var compilationUnit = CompilationUnit()
                 .AddMembers(GenerateSyntaxNamespace(recordSymbol)
                     .AddMembers(PublicSyntax(recordSymbol, langName.ToLower(), ownProperties, inheritedProperties))
-                ).WithUsings(new SyntaxList<UsingDirectiveSyntax>(usings)).AddUsings(
-                    UsingDirective(IdentifierName("System.Collections.Generic")),
-                    UsingDirective(IdentifierName($"{ROOT_NAMESPACE}.Syntax")),
-                    UsingDirective(IdentifierName("System.Linq"))
-                ).WithLeadingTrivia(Trivia(NullableDirectiveTrivia(Token(SyntaxKind.EnableKeyword), true)));
+                ).AddUsings(allUsings.ToArray())
+                .WithLeadingTrivia(Trivia(NullableDirectiveTrivia(Token(SyntaxKind.EnableKeyword), true)));
 
             context.AddSource(
                 $"{string.Join(".", Utils.getQualifiedNameParts(recordSymbol).Reverse())}.g.cs",
@@ -58,10 +64,10 @@ namespace me.tooster.sdf.AST.Generators {
             }
 
             // skip MapWith if it exists
-            if (!recordSymbol.GetMembers("MapWith").Any() && !recordSymbol.IsAbstract) {
-                recordDeclaration = recordDeclaration.AddMembers(
-                    generateMapperMethod(recordSymbol, inheritedAndOwnProperties, langName));
-            }
+            // if (!recordSymbol.GetMembers("MapWith").Any() && !recordSymbol.IsAbstract) {
+            //     recordDeclaration = recordDeclaration.AddMembers(
+            //         generateMapperMethod(recordSymbol, inheritedAndOwnProperties, langName));
+            // }
 
             // skip Accept and Accept<> if any of them exists
             // skip Accept<> if it exists (returning version)
@@ -78,48 +84,6 @@ namespace me.tooster.sdf.AST.Generators {
             // }
 
             return Utils.wrapRecordInEnclosingClasses(recordDeclaration, recordSymbol, false);
-        }
-
-        [Obsolete("red-green trees are not supported yet")]
-        private static RecordDeclarationSyntax InternalSyntax(ITypeSymbol recordSymbol, string langName,
-            List<IPropertySymbol> ownProperties, List<IPropertySymbol> inheritedProperties) {
-            var recordDeclaration = RecordDeclaration(Token(SyntaxKind.RecordKeyword), Identifier("Internal"))
-                .AddBaseListTypes(SimpleBaseType(IdentifierName($"Syntax<{langName.ToLower()}>")))
-                .AddModifiers(Token(SyntaxKind.InternalKeyword), Token(SyntaxKind.PartialKeyword))
-                .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
-                // .AddMembers(generateToStringOverride().ToArray())
-                .WithCloseBraceToken(Token(SyntaxKind.CloseBraceToken));
-
-            // if it doesn't have the override and is not abstract, generate childrenAccessor
-            var inheritedAndOwnProperties = inheritedProperties.Concat(ownProperties).ToList();
-
-            // skip children accessor if it exists
-            if (!recordSymbol.GetMembers("ChildNodesAndTokens").Any() && !recordSymbol.IsAbstract)
-                recordDeclaration =
-                    recordDeclaration.AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnProperties,
-                        langName));
-
-            // skip MapWith if it exists
-            if (!recordSymbol.GetMembers("MapWith").Any() && !recordSymbol.IsAbstract)
-                recordDeclaration =
-                    recordDeclaration.AddMembers(
-                        generateMapperMethod(recordSymbol, inheritedAndOwnProperties, langName));
-
-            return recordDeclaration;
-        }
-
-        [Obsolete("syntax records require explicit FullText instead of ToString")]
-        private static IEnumerable<MemberDeclarationSyntax> generateToStringOverride() {
-            yield return MethodDeclaration(
-                    PredefinedType(Token(SyntaxKind.StringKeyword)),
-                    Identifier("ToString"))
-                .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
-                .WithExpressionBody(ArrowExpressionClause(InvocationExpression(MemberAccessExpression(
-                    SyntaxKind.SimpleMemberAccessExpression,
-                    BaseExpression(),
-                    IdentifierName("ToString")))))
-                .WithSemicolonToken(
-                    Token(SyntaxKind.SemicolonToken));
         }
 
         /// generate ChildNodesAndTokens accessor, handle correct nullability
@@ -183,167 +147,14 @@ namespace me.tooster.sdf.AST.Generators {
             }
         }
 
-        // internal override void Accept(AST.Visitor<langName> visitor, Anchor a) => ((Visitor)visitor).Visit((Anchor<Type>)a);
-        public MethodDeclarationSyntax
-            GenerateVisitorAcceptor(ITypeSymbol recordSymbol, string langName, bool returning) {
-            var methodDeclaration = MethodDeclaration(IdentifierName(Identifier(returning ? "R?" : "void")),
-                    Identifier("Accept" + (returning ? "<R>" : "")))
-                .WithModifiers(TokenList(Token(SyntaxKind.InternalKeyword), Token(SyntaxKind.OverrideKeyword)))
-                .AddParameterListParameters(
-                    Parameter(Identifier("visitor"))
-                        .WithType(IdentifierName($"AST.Visitor<{(returning ? langName + ", R" : langName)}>")),
-                    Parameter(Identifier("parent")).WithType(IdentifierName("Anchor")))
-                .WithExpressionBody(ArrowExpressionClause(InvocationExpression(MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        ParenthesizedExpression(
-                            CastExpression(IdentifierName(returning ? "Visitor<R>" : "Visitor"),
-                                IdentifierName("visitor"))),
-                        IdentifierName("Visit")))
-                    .AddArgumentListArguments(
-                        // Argument(CastExpression(IdentifierName($"Anchor<{Utils.getTypeNameWithGenericArguments(recordSymbol)}>"),
-                        //     IdentifierName("parent"))))))
-                        Argument(InvocationExpression(IdentifierName("Anchor.New")).AddArgumentListArguments(
-                            Argument(ThisExpression()),
-                            Argument(IdentifierName("parent")))))))
-                .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
-
-            if (returning)
-                methodDeclaration = methodDeclaration.WithConstraintClauses(SingletonList(
-                    TypeParameterConstraintClause(IdentifierName("R"))
-                        .WithConstraints(SingletonSeparatedList<TypeParameterConstraintSyntax>(DefaultConstraint()))));
-
-            return methodDeclaration;
-        }
-
-        [Obsolete("For now records are compared using their synthesized equality contract. "
-          + "If it doesn't check reference first, this has to be added back")]
-        private static InvocationExpressionSyntax referencesEqualCheck(IPropertySymbol property) {
-            return InvocationExpression(IdentifierName("ReferenceEquals"))
-                .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(
-                    new SyntaxNodeOrToken[]
-                    {
-                        Argument(IdentifierName(property.Name)),
-                        Token(SyntaxKind.CommaToken),
-                        Argument(MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            ThisExpression(),
-                            IdentifierName(property.Name)))
-                    })));
-        }
-
-        private static ExpressionSyntax simpleEqualityCheck(IPropertySymbol property) {
-            return BinaryExpression(SyntaxKind.EqualsExpression,
-                IdentifierName(property.Name),
-                MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, ThisExpression(),
-                    IdentifierName(property.Name)));
-        }
-
-        private static StatementSyntax mapperReturnUnchanged(
-            IEnumerable<IPropertySymbol> inheritedAndOwnFields
-        ) {
-            var checks = inheritedAndOwnFields.Select(simpleEqualityCheck).ToList();
-
-            ExpressionSyntax testExpression = null;
-            foreach (var check in checks) {
-                if (testExpression is null)
-                    testExpression = check;
-                else
-                    testExpression = BinaryExpression(SyntaxKind.LogicalAndExpression,
-                        testExpression,
-                        Token(SyntaxKind.AmpersandAmpersandToken).WithLeadingTrivia(ElasticLineFeed),
-                        check);
-            }
-
-            if (testExpression is null)
-                return ReturnStatement(ThisExpression());
-
-            return IfStatement(testExpression, ReturnStatement(ThisExpression()));
-        }
-
-        private static ReturnStatementSyntax mapperObjectCreationExpression(
-            ITypeSymbol recordSymbol,
-            IEnumerable<IPropertySymbol> inheritedAndOwnProperties
-        ) {
-            return ReturnStatement(
-                ObjectCreationExpression(IdentifierName(Utils.getTypeNameWithGenericArguments(recordSymbol)))
-                    .WithInitializer(InitializerExpression(SyntaxKind.ObjectInitializerExpression,
-                        SeparatedList<ExpressionSyntax>(
-                            inheritedAndOwnProperties.Select(field =>
-                                AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-                                    IdentifierName(field.Name),
-                                    IdentifierName(field.Name)))))));
-        }
-
-        private static IEnumerable<LocalDeclarationStatementSyntax> mapperNewMembersDeclarations(
-            IEnumerable<IPropertySymbol> inheritedAndOwnFields
-        ) {
-            foreach (var prop in inheritedAndOwnFields) {
-                var memberProperty = MemberAccessExpression(
-                    SyntaxKind.SimpleMemberAccessExpression,
-                    ThisExpression(),
-                    IdentifierName(prop.Name));
-
-                ExpressionSyntax property = ParenthesizedExpression(
-                    ConditionalExpression(IsPatternExpression(
-                            IdentifierName("a"),
-                            ConstantPattern(LiteralExpression(SyntaxKind.NullLiteralExpression))),
-                        memberProperty,
-                        InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-                                IdentifierName("Anchor"), IdentifierName("New")))
-                            .WithArgumentList(ArgumentList(SeparatedList<ArgumentSyntax>(
-                                new SyntaxNodeOrToken[]
-                                {
-                                    Argument(memberProperty),
-                                    Token(SyntaxKind.CommaToken),
-                                    Argument(IdentifierName("a"))
-                                })))));
-
-                var mapperCall = InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-                    IdentifierName("mapper"), IdentifierName("Map"))).WithArgumentList(ArgumentList(
-                    SingletonSeparatedList(Argument(CastExpression(IdentifierName("dynamic"), property)))));
-
-                ExpressionSyntax value = prop.NullableAnnotation == NullableAnnotation.Annotated
-                    ? ConditionalExpression(IsPatternExpression(memberProperty, ConstantPattern(
-                            LiteralExpression(SyntaxKind.NullLiteralExpression))),
-                        LiteralExpression(SyntaxKind.NullLiteralExpression), mapperCall)
-                    : mapperCall;
-
-                yield return LocalDeclarationStatement(
-                    VariableDeclaration(IdentifierName(Identifier("var")))
-                        .WithVariables(SingletonSeparatedList(
-                            VariableDeclarator(Identifier(prop.Name)) // <-- this will fail for fields like `@default`
-                                .WithInitializer(EqualsValueClause(value)))));
-            }
-        }
-
-        private static MethodDeclarationSyntax generateMapperMethod(
-            ITypeSymbol recordSymbol,
-            List<IPropertySymbol> inheritedAndOwnProperties,
-            string langName
-        ) {
-            return MethodDeclaration(
-                    IdentifierName(Identifier($"Syntax<{langName.ToLower()}>")), Identifier("MapWith"))
-                .WithModifiers(
-                    TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
-                .AddParameterListParameters( // Anchor<Parenthesized>? thisAnchor = null
-                    Parameter(Identifier("mapper"))
-                        .WithType(IdentifierName(Identifier($"Mapper<{langName.ToLower()}>"))),
-                    Parameter(Identifier("thisAnchor")).WithType(NullableType(
-                            IdentifierName(Identifier("Anchor"))))
-                        .WithDefault(EqualsValueClause(LiteralExpression(SyntaxKind.NullLiteralExpression))))
-                .WithBody(Block(mapperFunctionStatements(recordSymbol, inheritedAndOwnProperties)));
-        }
-
-        private static IEnumerable<StatementSyntax> mapperFunctionStatements(
-            ITypeSymbol recordSymbol,
-            IEnumerable<IPropertySymbol> inheritedAndOwnProperties
-        ) {
-            foreach (var st in mapperNewMembersDeclarations(inheritedAndOwnProperties))
-                yield return st;
-
-            yield return mapperReturnUnchanged(inheritedAndOwnProperties);
-
-            yield return mapperObjectCreationExpression(recordSymbol, inheritedAndOwnProperties);
+        // internal override void Accept(AST.Visitor<langName> visitor, Anchor a) => ((Visitor)visitor).Visit(Anchor.New(this, a));
+        public MethodDeclarationSyntax GenerateVisitorAcceptor(ITypeSymbol recordSymbol, string langName,
+            bool returning) {
+            return (MethodDeclarationSyntax)(returning
+                ? ParseMemberDeclaration(
+                    $"internal override R? Accept<R>(AST.Visitor<{langName}, R> visitor, Anchor a) where R : default => ((Visitor<R>)visitor).Visit(Anchor.New(this, a));")
+                : ParseMemberDeclaration(
+                    $"internal override void Accept(AST.Visitor<{langName}> visitor, Anchor a) => ((Visitor)visitor).Visit(Anchor.New(this, a));"))!;
         }
     }
 }

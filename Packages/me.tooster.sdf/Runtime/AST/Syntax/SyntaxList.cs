@@ -29,5 +29,10 @@ namespace me.tooster.sdf.AST.Syntax {
 
         public override string               ToString()      => base.ToString();
         public new      IEnumerator<TSyntax> GetEnumerator() => FullList.Cast<TSyntax>().GetEnumerator();
+
+        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
+
+        internal override TR Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent) where TR : default =>
+            visitor.Visit(Anchor.New(this, parent));
     }
 }

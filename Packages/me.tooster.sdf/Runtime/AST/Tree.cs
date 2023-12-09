@@ -22,8 +22,8 @@ namespace me.tooster.sdf.AST {
             /// <returns></returns>
             public virtual string FullText => WriteTo(new StringBuilder()).ToString();
             
-            internal abstract void Accept(Visitor<Lang> visitor, Anchor a);
-            internal abstract TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor a);
+            internal abstract void Accept(Visitor<Lang> visitor, Anchor parent);
+            internal abstract TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent);
         }
     }
 }

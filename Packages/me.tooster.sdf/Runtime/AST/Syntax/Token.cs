@@ -16,8 +16,10 @@ namespace me.tooster.sdf.AST.Syntax {
             return sb;
         }
 
-        internal override void Accept(Visitor<Lang> visitor, Anchor a) => visitor.Visit((Anchor<Token<Lang>>)a);
-        internal override R? Accept<R>(Visitor<Lang, R> visitor, Anchor a) where R : default => visitor.Visit((Anchor<Token<Lang>>)a);
+        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
+
+        internal override R? Accept<R>(Visitor<Lang, R> visitor, Anchor parent) where R : default =>
+            visitor.Visit(Anchor.New(this, parent));
     }
 
     public abstract record ValidatedToken<Lang> : Token<Lang> {

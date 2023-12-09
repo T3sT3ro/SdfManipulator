@@ -3,7 +3,7 @@ using System;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST {
-    public record Formatter : MapperState {
+    public record FormatterState : MapperState {
         public char indentCharacter = ' ';
         public int  indentWidth     = 4;
         public int  currentIndent   = 0;

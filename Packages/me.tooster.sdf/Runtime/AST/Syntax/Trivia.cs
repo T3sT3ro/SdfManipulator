@@ -18,10 +18,16 @@ namespace me.tooster.sdf.AST.Syntax {
         public virtual string Text { get; init; }
 
         public override StringBuilder WriteTo(StringBuilder sb) => sb.Append(Text);
+        
+        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
+        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
     }
 
     public abstract record StructuredTrivia<Lang, T> : Trivia<Lang> where T : SyntaxOrToken<Lang> {
         public          T?            Structure                 { get; init; }
         public override StringBuilder WriteTo(StringBuilder sb) => Structure?.WriteTo(sb) ?? sb;
+        
+        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
+        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
     }
 }

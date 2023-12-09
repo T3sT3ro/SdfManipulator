@@ -7,7 +7,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     // uniform row_major float4x4 M : WORLDVIEWPROJECTION, N : WORLDVIEWPROJECTION
     // float x[2][2] : VPOS = { { 1, 2 }, { 3, 4 } }
     // struct Result {float d; float3 pos;} result = {1.0f, {0.0f, 0.0f, 0.0f}};
-    [SyntaxNode] public partial record VariableDeclarator : Syntax<hlsl> {
+    [SyntaxNode] public partial record VariableDeclarator : For.Initializer {
         public Token<hlsl>?                            storageKeyword { get; init; }
         public Token<hlsl>?                            typeModifier   { get; init; }
         public Type                                    type           { get; init; }
