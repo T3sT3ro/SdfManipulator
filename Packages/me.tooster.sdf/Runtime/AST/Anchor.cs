@@ -1,10 +1,11 @@
 #nullable enable
 namespace me.tooster.sdf.AST {
-    // TODO: try to use a red-green tree like in Roslyn auto-generated from annotations
+    // TODO: add Node type to Anchor? or pattern match on Anchor<T>? when needed?
     // Instantiating would be possible only with https://stackoverflow.com/questions/8718199/passing-a-type-to-a-generic-constructor
 
     /// <summary>
-    /// A node with a parent, used for navigation
+    /// A node with a parent, used for navigation. To pattern match on a node, use <see cref="Anchor{T}"/> like this:
+    /// <code>someAnchor.Parent is Anchor&lt;SomeNode&gt; anchor</code>
     /// </summary>
     public abstract record Anchor {
         public Anchor? Parent { get; }

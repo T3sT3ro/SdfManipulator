@@ -1,6 +1,5 @@
 using System;
 using me.tooster.sdf.AST.Hlsl.Syntax;
-using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.Editor.API;

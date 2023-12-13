@@ -77,14 +77,14 @@ namespace me.tooster.sdf.AST.Generators {
             foreach (var p in props) {
                 var isToken = Utils.isToken(p.Type);
                 yield return (LocalDeclarationStatementSyntax)ParseStatement(
-                    $"var {p.Name} = Visit(Anchor.New{(isToken ? $"<Token<{langName.ToLower()}>>" : "")}(a.Node.{p.Name}, a)) as {p.Type.WithNullableAnnotation(NullableAnnotation.NotAnnotated)};");
+                    $"var {p.Name} = a.Node.{p.Name} is null ? null : Visit(Anchor.New{(isToken ? $"<Token<{langName.ToLower()}>>" : "")}(a.Node.{p.Name}, a)) as {p.Type.WithNullableAnnotation(NullableAnnotation.NotAnnotated)};");
             }
 
             yield return ParseStatement(
                 $"if({string.Join(" && ", props.Select(p => $"ReferenceEquals({p.Name}, a.Node.{p.Name})"))}) return a.Node;");
 
             yield return ParseStatement(
-                $"return a.Node with {{ {string.Join(", ", props.Select(p => $"{p.Name} = {p.Name}"))} }};");
+                $"return a.Node with {{ {string.Join(", ", props.Select(p => $"{p.Name} = {p.Name}!"))} }};");
         }
     }
 }

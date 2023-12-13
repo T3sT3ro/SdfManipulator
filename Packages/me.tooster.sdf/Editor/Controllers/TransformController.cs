@@ -7,10 +7,10 @@ namespace me.tooster.sdf.Editor.Controllers {
     [ExecuteInEditMode]
     [RequireComponent(typeof(Transform))]
     public partial class TransformController : Controller {
-        protected             Property<Matrix4x4> transformProperty;
-        protected             MatrixPropertyNode  primitiveTransform;
-        
-        private void Start() {
+        protected             Property<Matrix4x4> transformProperty = null!;
+        protected             MatrixPropertyNode  primitiveTransform = null!;
+
+        protected override void Start() {
             transformProperty = sdfDomain.Graph.CreateProperty("transform", Matrix4x4.identity);
             primitiveTransform = new MatrixPropertyNode(transformProperty);
         }

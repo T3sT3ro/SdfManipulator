@@ -9,8 +9,8 @@ namespace me.tooster.sdf.Editor.Controllers {
     public abstract class Controller : MonoBehaviour {
         protected                                                         SdfSceneController sdfDomain = null!;
 
-        protected void Start()    { sdfDomain = GetComponentInParent<SdfSceneController>(); }
-        protected         void Update()   { UpdateUniforms(); }
+        protected virtual void Start()    { sdfDomain = GetComponentInParent<SdfSceneController>(); }
+        protected virtual void Update()   { UpdateUniforms(); }
 
         protected virtual void UpdateUniforms() { }
 

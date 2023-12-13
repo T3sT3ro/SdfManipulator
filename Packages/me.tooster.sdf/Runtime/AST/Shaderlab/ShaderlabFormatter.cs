@@ -2,23 +2,42 @@
 using System;
 using System.Collections.Generic;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
+using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
+using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Trivias;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Shaderlab {
     public class ShaderlabFormatter : Mapper<FormatterState> {
         private ShaderlabFormatter(FormatterState state) : base(state) { }
+        private Stack<Tree<shaderlab>.Node> indentStack = new();
 
         public static T? Format<T>(T node, FormatterState? s = null)
             where T : Tree<shaderlab>.Node {
             var formatter = new ShaderlabFormatter(s ?? new());
-            return node.Accept((Visitor<shaderlab, T?>)formatter, Anchor.New(node)) as T;
+            return node.Accept(formatter, Anchor.New(node)) as T;
         }
+
+        private static int getIndentChange<T>(Anchor<T> a) where T : Token<shaderlab> => a switch
+        {
+            Anchor<OpenBraceToken> and
+                { Parent: Anchor<MaterialProperties> or Anchor<SubShader> or Anchor<Pass> or Anchor<TagsBlock> } => +1,
+            Anchor<CloseBraceToken> and
+                { Parent: Anchor<MaterialProperties> or Anchor<SubShader> or Anchor<Pass> or Anchor<TagsBlock> } => -1,
+            _ => 0
+        };
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
             var token = a.Node;
+            
+            /*
+            var indentChange = getIndentChange(a);
+            if (indentChange < 0) state.Deindent();
+            if (indentChange > 0) state.Indent();
+            */
+
+            // FIXME: this is temporary, because existing trivia (like comments) are lost. Make something that retains comments etc.
             switch (token) {
-                // FIXME: this is temporary, because existing trivia (like comments) are lost. Make something that retains comments etc.
                 case OpenBraceToken: {
                     var newToken = token with { TrailingTriviaList = new(new NewLine()) };
                     state.Indent();
@@ -26,12 +45,16 @@ namespace me.tooster.sdf.AST.Shaderlab {
                 }
                 case CloseBraceToken:
                     state.Deindent();
-                    return token with { TrailingTriviaList = new(new NewLine()) };
+                    return token with { LeadingTriviaList = new(new NewLine()) };
                 default: {
-                    // TODO keep trivia
-                    return token with { TrailingTriviaList = new(new Whitespace()) };
+                    return token with
+                    {
+                        TrailingTriviaList =
+                        new(new Whitespace()), // tokens owns any trivia until next token or end of line
+                    };
                 }
             }
+
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<SimpleTrivia<shaderlab>> a) {
@@ -41,7 +64,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
 
             return base.Visit(Anchor.New(trivia));
         }
-        
+
         public override Tree<shaderlab>.Node? Visit(Anchor<TriviaList<shaderlab>> a) {
             var newTriviaList = new List<Trivia<shaderlab>>();
             var changed = false;
@@ -60,6 +83,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
                             newTriviaList.Add(newTrivia);
                             changed = true;
                         }
+
                         break;
                 }
             }

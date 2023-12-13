@@ -17,5 +17,7 @@ namespace me.tooster.sdf.AST.Syntax {
                 child.WriteTo(sb);
             return sb;
         }
+        
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }
 }

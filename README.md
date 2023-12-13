@@ -114,6 +114,12 @@ TODO
   3. are strongly typed nodes useful at all with how limiting type system is in C# (unlike TS for example)
   4. should rewriting of such nodes be possible, or should user be expected to rewrite them in their parent, where the context is actually relevant
 - some syntax nodes have nullable children, but their nullability actually represents validity of the node instead of the tru nullability. If record primary constructors were possible, it would be more correct (currently nullable syntax parts are marked as warnings). This is a C# syntax trying to emulate representing valid and invalid syntax trees on a type system level, albeit quite poorly. 
+- syntax generators generate:
+  - syntax partials with ChildrenOrToken getters for each child
+  - acceptors of visitors in syntax
+  - visitors for each language
+  - mapper for a language which is like a rewriter
+- anchors are used instead of red-green tree for simplicity and because they are easier to implement. Also for explicitness of the traversal and to avoid public+internal syntax nodes.
 
 # Design notes, decisions and insights
 
@@ -146,6 +152,9 @@ TODO
   - A Visitor interface hierarchy and accept methods sound to be the simplest. base IVisitor and language extensions possibly.
     - There is a problem with this approach - anchors. They have to be somehow passed to Accept. There is also no clear way to do an accept in anchor
     - also how to override accept methods with visitor subtypes e.g. accept hlsl visitor???
+    - I don't remember why, but I have made visitor methods accept nullable parameters
+      - They might have been for `a.Node.Accept(this, a.Parent)` calls when `a.Parent` is null
+  - Tokens and Trivia don't 
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)

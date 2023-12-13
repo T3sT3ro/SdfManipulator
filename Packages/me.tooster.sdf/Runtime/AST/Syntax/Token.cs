@@ -16,14 +16,16 @@ namespace me.tooster.sdf.AST.Syntax {
             return sb;
         }
 
-        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
+        internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
 
-        internal override R? Accept<R>(Visitor<Lang, R> visitor, Anchor parent) where R : default =>
+        internal override R? Accept<R>(Visitor<Lang, R> visitor, Anchor? parent) where R : default =>
             visitor.Visit(Anchor.New(this, parent));
+        
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }
 
     public abstract record ValidatedToken<Lang> : Token<Lang> {
-        private readonly string validatedText;
+        private readonly string validatedText = "";
 
         public override string FullText => validatedText;
 
@@ -43,7 +45,11 @@ namespace me.tooster.sdf.AST.Syntax {
         protected string TextUnsafe {
             init => validatedText = value;
         }
+        
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }
 
-    public abstract record Literal<Lang> : ValidatedToken<Lang>;
+    public abstract record Literal<Lang> : ValidatedToken<Lang> {
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
+    }
 }

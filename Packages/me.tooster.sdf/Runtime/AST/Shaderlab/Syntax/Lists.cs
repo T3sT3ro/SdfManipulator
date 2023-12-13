@@ -8,6 +8,6 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
         public CloseParenToken                   closeParenToken { get; init; } = new();
 
         public static implicit operator ArgumentList<TSyntax>(TSyntax[] arguments) => new()
-            { arguments = SeparatedList<shaderlab, TSyntax>.With<CommaToken>(arguments) };
+            { arguments = SeparatedList<shaderlab, TSyntax>.WithSeparator<CommaToken>(arguments) };
     }
 }

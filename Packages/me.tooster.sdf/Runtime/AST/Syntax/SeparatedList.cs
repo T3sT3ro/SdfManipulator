@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace me.tooster.sdf.AST.Syntax {
     public record SeparatedList<Lang, TSyntax> : SyntaxOrTokenList<Lang> where TSyntax : Syntax<Lang> {
@@ -10,12 +11,14 @@ namespace me.tooster.sdf.AST.Syntax {
         public SeparatedList(params SyntaxOrToken<Lang>[] listWithSeparators) :
             this(listWithSeparators.AsEnumerable()) { }
 
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
+
         #region specializations
 
         /// Returns number of syntax nodes in this separated list 
         public override int Count => FullList.Count >> 1;
 
-        public TSyntax this[int index] => (TSyntax)base[index << 1];
+        public new TSyntax this[int index] => (TSyntax)base[index << 1];
 
         public static SeparatedList<Lang, TSyntax> Empty { get; } = new(Array.Empty<SyntaxOrToken<Lang>>());
 
@@ -24,7 +27,7 @@ namespace me.tooster.sdf.AST.Syntax {
         /// start and length relate to syntax nodes, not tokens
         public SeparatedList<Lang, TSyntax> Slice<TTok>(int start, int length) where TTok : Token<Lang> =>
             new(FullList.OfType<TSyntax>().Skip(start << 1).Take((length << 1) - 1));
-
+        
         #endregion
 
         #region utilities
@@ -45,17 +48,17 @@ namespace me.tooster.sdf.AST.Syntax {
         /// <returns></returns>
         public Token<Lang> GetSeparator(int index) => (Token<Lang>)FullList[(index << 1) + 1];
 
-        /// Builds list with separators from A B C -> A tok B tok C 
-        public static SeparatedList<Lang, TSyntax> With<TTok>(IEnumerable<TSyntax> list)
+        /// Builds list with separators from A B C -> A [tok] B [tok] C 
+        public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(IEnumerable<TSyntax> list)
             where TTok : Token<Lang>, new() =>
             new(list.SelectMany((x, i) => i == 0
                 ? new SyntaxOrToken<Lang>[] { x }
                 : new SyntaxOrToken<Lang>[] { new TTok(), x })
             );
 
-        /// <summary>see <see cref="With{TTok}(System.Collections.Generic.IEnumerable{TSyntax})"/></summary>
-        public static SeparatedList<Lang, TSyntax> With<TTok>(params TSyntax[] list) where TTok : Token<Lang>, new() =>
-            With<TTok>(list.AsEnumerable());
+        /// <summary>see <see cref="WithSeparator{TTok}(System.Collections.Generic.IEnumerable{TSyntax})"/></summary>
+        public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(params TSyntax[] list) where TTok : Token<Lang>, new() =>
+            WithSeparator<TTok>(list.AsEnumerable());
 
         #endregion
     }

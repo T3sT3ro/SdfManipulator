@@ -21,9 +21,9 @@ namespace me.tooster.sdf.AST.Hlsl {
 
 
         public static SeparatedList<hlsl, T> CommaSeparated<T>(this IEnumerable<T> nodes)
-            where T : Syntax<hlsl> => SeparatedList<hlsl, T>.With<CommaToken>(nodes);
+            where T : Syntax<hlsl> => SeparatedList<hlsl, T>.WithSeparator<CommaToken>(nodes);
 
         public static SeparatedList<hlsl, T> CommaSeparated<T>(this T singleton)
-            where T : Syntax<hlsl> => SeparatedList<hlsl, T>.With<CommaToken>(singleton);
+            where T : Syntax<hlsl> => SeparatedList<hlsl, T>.WithSeparator<CommaToken>(singleton);
     }
 }

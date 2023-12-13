@@ -17,7 +17,7 @@ namespace me.tooster.sdf.Editor {
 
         static SceneViewFilter()
         {
-            SceneView.onSceneGUIDelegate += CheckMe;
+            SceneView.duringSceneGui += CheckMe;
         }
 
         static void CheckMe(SceneView sv)

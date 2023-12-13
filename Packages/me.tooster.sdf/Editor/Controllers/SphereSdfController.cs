@@ -7,7 +7,7 @@ namespace me.tooster.sdf.Editor.Controllers {
     public class SphereSdfController : TransformController {
         private SdfSphereNode sphereNode;
 
-        protected void Start() {
+        protected override void Start() {
             sphereNode ??= new SdfSphereNode(null, null);
         }
 

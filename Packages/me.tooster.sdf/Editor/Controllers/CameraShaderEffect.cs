@@ -12,10 +12,14 @@ namespace me.tooster.sdf.Editor.Controllers {
         }
 
         // logs editor camera coordinates
-        [MenuItem("GameObject/Print Camera Position")]
         private void Update() {
-            var camTransformt = SceneView.GetAllSceneCameras()[0].transform;
-            Debug.Log($"CAMERA pos:{camTransformt.position} rot:{camTransformt.rotation}");
+            PrintPos();
+        }
+
+        [MenuItem("GameObject/Print Camera Position")]
+        private static void PrintPos() {
+            var camTransform = SceneView.GetAllSceneCameras()[0].transform;
+            Debug.Log($"CAMERA pos:{camTransform.position} rot:{camTransform.rotation}");
         }
     }
 }

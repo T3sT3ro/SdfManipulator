@@ -37,17 +37,14 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
                 AddProperties(node.CollectProperties().Where(v => v.Exposed));
             }
 
-            return new Tree<shaderlab>(Root: ShaderlabFormatter.Format(shaderTree.Root));
+            return new Tree<shaderlab>(Root: shaderTree.Root is null ? null : ShaderlabFormatter.Format(shaderTree.Root));
         }
 
         private Tree<shaderlab> shaderTree => new Tree<shaderlab>(new Shader
             {
                 name = targetName,
-                shaderStatements = new ShaderStatement[]
-                {
-                    MaterialProperties,
-                    SubShader,
-                }
+                materialProperties = MaterialProperties,
+                shaderStatements = new SyntaxList<shaderlab, ShaderStatement>(SubShader)
             }
         );
 

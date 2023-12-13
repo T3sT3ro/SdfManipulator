@@ -19,15 +19,20 @@ namespace me.tooster.sdf.AST.Syntax {
 
         public override StringBuilder WriteTo(StringBuilder sb) => sb.Append(Text);
         
-        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
-        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
+        internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
+        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
+        
+        public override string ToString() => Text;
     }
 
+    // TODO: consider if structured trivia should be abstract and derived or should there be only one class but defined by the structure type parameter
     public abstract record StructuredTrivia<Lang, T> : Trivia<Lang> where T : SyntaxOrToken<Lang> {
         public          T?            Structure                 { get; init; }
         public override StringBuilder WriteTo(StringBuilder sb) => Structure?.WriteTo(sb) ?? sb;
         
-        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
-        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
+        internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
+        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
+        
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }
 }

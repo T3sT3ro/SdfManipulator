@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Syntax {
     /// trivia list is a middleman between single trivia and token
@@ -30,7 +29,10 @@ namespace me.tooster.sdf.AST.Syntax {
             return sb;
         }
 
-        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
-        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
+        internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
+        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
+        
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
+
     }
 }

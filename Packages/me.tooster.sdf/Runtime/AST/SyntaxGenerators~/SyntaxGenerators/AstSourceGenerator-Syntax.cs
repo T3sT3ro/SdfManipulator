@@ -10,24 +10,33 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace me.tooster.sdf.AST.Generators {
     public partial class AstSourceGenerator {
+        private class UsingDirectiveComparer : IEqualityComparer<UsingDirectiveSyntax> {
+            public bool Equals(UsingDirectiveSyntax x, UsingDirectiveSyntax y) =>
+                x.Name.ToString() == y.Name.ToString();
+
+            public int GetHashCode(UsingDirectiveSyntax obj) => obj.Name.ToString().GetHashCode();
+        }
+
         private void GenerateSyntaxPartials(ITypeSymbol recordSymbol, SymbolSet ss) {
             var langName = ss.LangName;
             var ownProperties = Utils.getOwnProperties(recordSymbol).ToList();
             var inheritedProperties = Utils.getInheritedProperties(recordSymbol).ToList();
-            var allUsings = new List<UsingDirectiveSyntax>() {
+            var allUsings = new List<UsingDirectiveSyntax>()
+            {
                 UsingDirective(IdentifierName("System.Collections.Generic")),
                 UsingDirective(IdentifierName($"{ROOT_NAMESPACE}.Syntax")),
                 UsingDirective(IdentifierName("System.Linq")),
+                UsingDirective(IdentifierName("System.Text")),
             };
-                
+
             // TODO: deduplicate entries
             ss.Includes.TryGetValue(recordSymbol, out var usings);
             allUsings.AddRange(usings);
-                        
+
             var compilationUnit = CompilationUnit()
                 .AddMembers(GenerateSyntaxNamespace(recordSymbol)
                     .AddMembers(PublicSyntax(recordSymbol, langName.ToLower(), ownProperties, inheritedProperties))
-                ).AddUsings(allUsings.ToArray())
+                ).AddUsings(allUsings.Distinct(new UsingDirectiveComparer()).ToArray())
                 .WithLeadingTrivia(Trivia(NullableDirectiveTrivia(Token(SyntaxKind.EnableKeyword), true)));
 
             context.AddSource(
@@ -63,18 +72,17 @@ namespace me.tooster.sdf.AST.Generators {
                     .AddMembers(generateChildrenGetter(recordSymbol, inheritedAndOwnProperties, langName));
             }
 
-            // skip MapWith if it exists
-            // if (!recordSymbol.GetMembers("MapWith").Any() && !recordSymbol.IsAbstract) {
-            //     recordDeclaration = recordDeclaration.AddMembers(
-            //         generateMapperMethod(recordSymbol, inheritedAndOwnProperties, langName));
-            // }
-
             // skip Accept and Accept<> if any of them exists
-            // skip Accept<> if it exists (returning version)
             if (!recordSymbol.GetMembers("Accept").Any() && !recordSymbol.IsAbstract) {
                 recordDeclaration =
                     recordDeclaration.AddMembers(GenerateVisitorAcceptor(recordSymbol, langName, false));
                 recordDeclaration = recordDeclaration.AddMembers(GenerateVisitorAcceptor(recordSymbol, langName, true));
+            }
+
+            // skip toString if it exists
+            if (!recordSymbol.GetMembers("ToString").Any(m => !m.IsImplicitlyDeclared) && !recordSymbol.IsAbstract) {
+                recordDeclaration = recordDeclaration.AddMembers(ParseMemberDeclaration(
+                    "public override string ToString() => WriteTo(new StringBuilder()).ToString();")!);
             }
 
             // generate internal syntax
@@ -151,10 +159,11 @@ namespace me.tooster.sdf.AST.Generators {
         public MethodDeclarationSyntax GenerateVisitorAcceptor(ITypeSymbol recordSymbol, string langName,
             bool returning) {
             return (MethodDeclarationSyntax)(returning
-                ? ParseMemberDeclaration(
-                    $"internal override R? Accept<R>(AST.Visitor<{langName}, R> visitor, Anchor a) where R : default => ((Visitor<R>)visitor).Visit(Anchor.New(this, a));")
-                : ParseMemberDeclaration(
-                    $"internal override void Accept(AST.Visitor<{langName}> visitor, Anchor a) => ((Visitor)visitor).Visit(Anchor.New(this, a));"))!;
+                    ? ParseMemberDeclaration(
+                        $"internal override R? Accept<R>(AST.Visitor<{langName}, R> visitor, Anchor? a) where R : default => ((Visitor<R>)visitor).Visit(Anchor.New(this, a));")
+                    : ParseMemberDeclaration(
+                        $"internal override void Accept(AST.Visitor<{langName}> visitor, Anchor? a) => ((Visitor)visitor).Visit(Anchor.New(this, a));"))
+                !;
         }
     }
 }

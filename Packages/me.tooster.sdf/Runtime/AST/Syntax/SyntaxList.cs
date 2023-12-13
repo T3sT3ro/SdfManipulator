@@ -1,5 +1,7 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace me.tooster.sdf.AST.Syntax {
     /// <summary>
@@ -27,12 +29,13 @@ namespace me.tooster.sdf.AST.Syntax {
         public static implicit operator SyntaxList<Lang, TSyntax>(TSyntax[] list)     => new(list);
         public static implicit operator SyntaxList<Lang, TSyntax>(List<TSyntax> list) => new(list.AsEnumerable());
 
-        public override string               ToString()      => base.ToString();
         public new      IEnumerator<TSyntax> GetEnumerator() => FullList.Cast<TSyntax>().GetEnumerator();
 
-        internal override void Accept(Visitor<Lang> visitor, Anchor parent) => visitor.Visit(Anchor.New(this, parent));
+        internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
 
-        internal override TR Accept<TR>(Visitor<Lang, TR> visitor, Anchor parent) where TR : default =>
+        internal override TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default =>
             visitor.Visit(Anchor.New(this, parent));
+        
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }
 }

@@ -23,7 +23,7 @@ namespace me.tooster.sdf.Editor.Controllers {
         public Material Material => Renderer.sharedMaterial;
 
         // FIXME: implement asset importer and support material, shader and graph through scripted object 
-        public Graph Graph { get; private set; }
+        public Graph? Graph { get; private set; }
 
         // public SdfScene? sdfScene;
         [SerializeField] private Shader   shaderAsset   = null!;
