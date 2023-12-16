@@ -18,21 +18,35 @@ namespace me.tooster.sdf.AST.Syntax {
         public virtual string Text { get; init; }
 
         public override StringBuilder WriteTo(StringBuilder sb) => sb.Append(Text);
-        
+
         internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
-        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
-        
+
+        internal override TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default =>
+            visitor.Visit(Anchor.New(this, parent));
+
         public override string ToString() => Text;
     }
 
-    // TODO: consider if structured trivia should be abstract and derived or should there be only one class but defined by the structure type parameter
-    public abstract record StructuredTrivia<Lang, T> : Trivia<Lang> where T : SyntaxOrToken<Lang> {
-        public          T?            Structure                 { get; init; }
+    // needed because C# doesn't support call-site variance in patternn amatching and couldn't match over unknown parameter
+    public abstract record StructuredTrivia<Lang> : Trivia<Lang> {
+        public          Syntax<Lang>? Structure                 { get; init; }
         public override StringBuilder WriteTo(StringBuilder sb) => Structure?.WriteTo(sb) ?? sb;
-        
+
         internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
-        internal override TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default => visitor.Visit(Anchor.New(this, parent));
-        
+
+        internal override TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default =>
+            visitor.Visit(Anchor.New(this, parent));
+
+        public override string ToString() => WriteTo(new StringBuilder()).ToString();
+    }
+
+    // TODO: consider if structured trivia should be abstract and derived or should there be only one class but defined by the structure type parameter
+    public abstract record StructuredTrivia<Lang, T> : StructuredTrivia<Lang> where T : Syntax<Lang> {
+        public new T? Structure {
+            get => (T?)base.Structure;
+            init => base.Structure = value;
+        }
+
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }
 }

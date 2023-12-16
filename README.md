@@ -154,7 +154,9 @@ TODO
     - also how to override accept methods with visitor subtypes e.g. accept hlsl visitor???
     - I don't remember why, but I have made visitor methods accept nullable parameters
       - They might have been for `a.Node.Accept(this, a.Parent)` calls when `a.Parent` is null
-  - Tokens and Trivia don't 
+- maybe research a Rope or Zipper data structure for navigating syntax trees?
+  - [some intro and images for zipper](https://m00nlight.github.io/functional%20programming/2017/12/17/the-functional-zipper-structure)
+  - [some zipper implementation and description](https://blog.mattbierner.com/neith-zippers-for-javascript/) 
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)

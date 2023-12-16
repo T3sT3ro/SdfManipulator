@@ -40,9 +40,14 @@ namespace me.tooster.sdf.AST {
                 trivia.Accept(this, Anchor.New(trivia, a));
         }
 
-        public void Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : SyntaxOrToken<Lang> {
+        public void Visit<T>(Anchor<StructuredTrivia<Lang>> a) {
             if (DescentIntoStructuredTrivia && a.Node.Structure is not null)
                 a.Node.Accept(this, Anchor.New(a.Node, a));
-        }
+        } 
+        
+        /*public void Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : Syntax<Lang> {
+            if (DescentIntoStructuredTrivia && a.Node.Structure is not null)
+                a.Node.Accept(this, Anchor.New(a.Node, a));
+        }*/
     }
 }

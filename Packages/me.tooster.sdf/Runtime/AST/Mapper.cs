@@ -60,7 +60,7 @@ namespace me.tooster.sdf.AST {
 
         public virtual Tree<Lang>.Node? Visit(Anchor<SimpleTrivia<Lang>> a) => a.Node;
 
-        public virtual Tree<Lang>.Node? Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : SyntaxOrToken<Lang> {
+        public virtual Tree<Lang>.Node? Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : Syntax<Lang> {
             var trivia = a.Node;
             if (trivia.Structure is null) return trivia;
 

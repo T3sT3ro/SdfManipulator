@@ -1,16 +1,18 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Trivias;
 using me.tooster.sdf.AST.Syntax;
+using CloseBraceToken = me.tooster.sdf.AST.Shaderlab.Syntax.CloseBraceToken;
+using OpenBraceToken = me.tooster.sdf.AST.Shaderlab.Syntax.OpenBraceToken;
 
 namespace me.tooster.sdf.AST.Shaderlab {
     public class ShaderlabFormatter : Mapper<FormatterState> {
-        private ShaderlabFormatter(FormatterState state) : base(state) { }
-        private Stack<Tree<shaderlab>.Node> indentStack = new();
+        private ShaderlabFormatter(FormatterState state) : base(state with { }) { }
 
         public static T? Format<T>(T node, FormatterState? s = null)
             where T : Tree<shaderlab>.Node {
@@ -20,41 +22,52 @@ namespace me.tooster.sdf.AST.Shaderlab {
 
         private static int getIndentChange<T>(Anchor<T> a) where T : Token<shaderlab> => a switch
         {
-            Anchor<OpenBraceToken> and
-                { Parent: Anchor<MaterialProperties> or Anchor<SubShader> or Anchor<Pass> or Anchor<TagsBlock> } => +1,
-            Anchor<CloseBraceToken> and
-                { Parent: Anchor<MaterialProperties> or Anchor<SubShader> or Anchor<Pass> or Anchor<TagsBlock> } => -1,
-            _ => 0
+            { Node: OpenBraceToken, Parent : { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader } } => +1,
+            { Node: CloseBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader} } => -1,
+            _                                                                                                 => 0
         };
+
+        private static bool breakLineAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
+            switch (a) {
+                case {
+                        Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or EndHlslKeyword
+                        or HlslIncludeKeyword
+                    }
+                    or { Node: QuotedStringLiteral, Parent: Anchor<CommandArgument> }:
+                    return true;
+                default:
+                    var nextToken = Navigation.getNextToken<shaderlab, Token<shaderlab>>(a);
+                    if (nextToken is CloseBraceToken)
+                        return true;
+
+                    return Navigation.Ancestors(a).Any(parent =>
+                        parent is { Node: Command } or { Node: Property } or { Node: Tag }
+                     && Navigation.getLastToken<shaderlab, Syntax<shaderlab>>((IAnchor<Syntax<shaderlab>>)parent)
+                     == a.Node);
+            }
+        }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
             var token = a.Node;
-            
-            /*
+
             var indentChange = getIndentChange(a);
             if (indentChange < 0) state.Deindent();
             if (indentChange > 0) state.Indent();
-            */
 
-            // FIXME: this is temporary, because existing trivia (like comments) are lost. Make something that retains comments etc.
-            switch (token) {
-                case OpenBraceToken: {
-                    var newToken = token with { TrailingTriviaList = new(new NewLine()) };
-                    state.Indent();
-                    return newToken;
-                }
-                case CloseBraceToken:
-                    state.Deindent();
-                    return token with { LeadingTriviaList = new(new NewLine()) };
-                default: {
-                    return token with
-                    {
-                        TrailingTriviaList =
-                        new(new Whitespace()), // tokens owns any trivia until next token or end of line
-                    };
-                }
+            bool isFirstInLine = state.PollLineStart(out var startingIndent);
+            TriviaList<shaderlab>? leading = token.LeadingTriviaList;
+
+            if (startingIndent is not null) {
+                leading = new TriviaList<shaderlab>(new Whitespace { Text = startingIndent });
             }
 
+            // FIXME: this is a bandaid, because existing trivia (like comments) are lost. Move to something that retains important trivia
+            if (breakLineAfter(a)) {
+                state.MarkLineEnd();
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine()) };
+            }
+
+            return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace()) };
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<SimpleTrivia<shaderlab>> a) {
