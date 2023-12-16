@@ -33,7 +33,14 @@ namespace me.tooster.sdf.AST.Syntax {
             }
         }
 
-        // Returns elements of collection but starting at index deletes deleteCount elements and inserts other elements
+        /**
+         * <summary>Returns elements of collection but starting at index deletes deleteCount elements and inserts other elements</summary>
+         * <param name="self">base enumerable to act upon</param>
+         * <param name="index">index where splicing should occur</param>
+         * <param name="deleteCount">number of elements that will be deleted starting from index</param>
+         * <param name="other">elements which will get inserted starting at index (previous elements starting at index are pushed back)</param>
+         * <returns>new enumerable with elements changed accordingly</returns>
+         */
         public static IEnumerable<T> Splice<T>(this IEnumerable<T> self, int index, int deleteCount,
             IEnumerable<T> other) {
             var i = -1;

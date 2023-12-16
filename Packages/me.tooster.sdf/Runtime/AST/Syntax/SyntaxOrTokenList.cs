@@ -29,8 +29,8 @@ namespace me.tooster.sdf.AST.Syntax {
 
         public virtual SyntaxOrTokenList<Lang> Slice(int start, int length) => new(FullList.Skip(start).Take(length));
 
-        public virtual SyntaxOrTokenList<Lang> Splice(int index, int deleteCount,
-            IEnumerable<SyntaxOrToken<Lang>> elements)
+        /// <see cref="Extensions.Splice{T}"/>
+        public virtual SyntaxOrTokenList<Lang> Splice(int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements)
             => new(FullList.Splice(index, deleteCount, elements));
 
         internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));

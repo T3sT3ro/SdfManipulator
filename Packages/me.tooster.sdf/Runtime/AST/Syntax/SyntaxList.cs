@@ -22,6 +22,7 @@ namespace me.tooster.sdf.AST.Syntax {
         public new SyntaxList<Lang, TSyntax> Slice(int start, int length) =>
             new(FullList.Skip(start).Take(length).Cast<TSyntax>());
 
+        /// <see cref="Extensions.Splice{T}"/>
         public new SyntaxList<Lang, TSyntax> Splice
             (int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements) =>
             new(FullList.Splice(index, deleteCount, elements).Cast<TSyntax>());

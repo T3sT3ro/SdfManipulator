@@ -95,11 +95,8 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
 
         private SubShader SubShader => new SubShader
         {
-            statements = new SubShaderOrPassStatement[]
-            {
-                TagsBlock,
-                Pass,
-            }.AppendAll(Commands).ToList()
+            statements = new SyntaxList<shaderlab, SubShaderOrPassStatement>(TagsBlock)
+                .Splice(1, 0, Commands).Append<SubShaderOrPassStatement>(Pass).ToList()
         };
 
         private Pass Pass => new Pass
