@@ -101,6 +101,9 @@ TODO
   - [ ] test it
 - [ ] add common language syntaxes like "InjectedLanguage", `Expression`, `Statement`, `Literal`
 - [ ] remove abstract MapWith from syntax and move the logic solely to abstract visitors, utilize double dispatch
+- [ ] unit and vector tagging in shaders - so that a world-space vector isn't confused with model-space vector
+- [ ] use a simple tree model instead of a graph model to generate a scene. This way there is no need for any graph editor and whatnot, only a game object hierarchy
+- [ ] display focused SDF (even if it's in subtract mode)
 
 # Important to remember while documenting
 
@@ -123,7 +126,7 @@ TODO
 
 # Design notes, decisions and insights
 
-- separating node logic from node builders was an idea that in theory should allow for creating a graph model without relying on a specific target of code generation
+- separating node logic from node builders was an idea that in theory should allow for creating a graph model without relying on a specific target of code generation (i.e. a Node as a "Shape" holder defining input/output contracts and Builders as processors of such nodes that collect the code for a specific target language)
   - it had the advantage of writing a single model for nodes shared across, for example, build targets, output languages (GLSL/HLSL), or even different parts of shader (for example a multiply node that is common for both HLSL shader code and for Shaderlab code)
   - this, however, seems like a needles repetition of an abstraction and distributing one idea over multiple files. For example changing a model of some SdfNode would also require all the the builders to be changed accordingly (if they somehow succeed in generation without errors, then those are shadow, possibly logically wrong but syntactically correct cases)
   - It is unlikely that anyone will want to write for other target than Shaderlab+HLSL so this abstraction may not be needed in the first place
@@ -157,6 +160,8 @@ TODO
 - maybe research a Rope or Zipper data structure for navigating syntax trees?
   - [some intro and images for zipper](https://m00nlight.github.io/functional%20programming/2017/12/17/the-functional-zipper-structure)
   - [some zipper implementation and description](https://blog.mattbierner.com/neith-zippers-for-javascript/) 
+  - I've made a concept idea of a "weave tree" in other notes, that is basically a tree holding a token stream and trivia stream, where there is a trivia list between each pair of tokens. This tree would avoid the complexity of leading/trailing trivia and their attachments, would provide easy way of navigating the token and trivia stream and could give easy access to navigate between tokens and neighboring trivia. It could solve some problems with existing red/green tree and the need for attaching trivia to tokens (e.g. currently some trivia are attached sensibly, like whitespace or comments, but other, like preprocessor trivia, are attached arbitrarily and have nothing to do with an attached token). It could possibly allow for easier syntax rewrites by operating on a set of tokens and syntax nodes as "brackets" over them (or spans).  
+- Maybe preprocessor syntax as a trivia is not a good solution. Maybe a layered architecture would be better, where first stage tree represents syntax visible by preprocessor, second stage by shaderlab, third stage by hlsl etc.
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)
@@ -274,6 +279,7 @@ TODO
 - [GeoGebra model of direction vectors interpolated correctly and incorrectly](https://www.geogebra.org/calculator/fppufpcf)
   - The conclusion is that I should use plain hitpos-camera direction, interpolate linearly, normalize only in the fragment AFTER the interpolation
 - [Dude answered me and explained many tings about calculating ray directions and ray origins in vertex shader](https://computergraphics.stackexchange.com/questions/13666/how-to-calculate-ray-origin-and-ray-direction-in-vertex-shader-working-universal/13667#13667)
+  - [This is a better way (with sketches) of generating camera ray from the uv coordinates](https://9bitscience.blogspot.com/2013/07/raymarching-distance-fields_14.html)
 - [Shaderbits - a blog about writing HLSL and UE4 shaders, samples with raymarching volumes](https://shaderbits.com/blog/distance-field-ray-tracing-part1)
 - [A blog about rendering and many things from some Nvidia developer](https://www.reedbeta.com/)
 - [Roslyn source generators in unity](https://medium.com/@EnescanBektas/using-source-generators-in-the-unity-game-engine-140ff0cd0dc)

@@ -16,27 +16,31 @@ namespace me.tooster.sdf.Editor.API {
     /// </summary>
     [Serializable]
     public class Graph : Representable {
+        public record Edge<T>(IOutputPort<T> Source, IInputPort<T> Target) where T : Port.Data;
+
         [field: SerializeField] public GUID        Guid         { get; init; } = GUID.Generate();
         [field: SerializeField] public string      InternalName { get; }
         [field: SerializeField] public string      DisplayName  { get; }
         [field: SerializeField] public TargetNode? ActiveTarget { get; set; }
 
-        [field: SerializeField] private ISet<Node>     _allNodes   = new HashSet<Node>();
-        [field: SerializeField] private ISet<Property> _properties = new HashSet<Property>();
+        [field: SerializeField] private ISet<Node>            allNodes   = new HashSet<Node>();
+        [field: SerializeField] private ISet<Property>        properties = new HashSet<Property>();
+        [field: SerializeField] private ISet<Edge<Port.Data>> edges      = new HashSet<Edge<Port.Data>>();
+
         // fixme: should properties be unique per string? should they be used by reference or by key?
 
         // fixme: Maybe instead of the three nodes it should just contain some way of obtaining final syntax tree? 
         public Graph(string name) { InternalName = DisplayName = name; }
 
         public Graph(string name, IEnumerable<Node> nodes) : this(name) {
-            _allNodes.UnionWith(nodes);
-            var target = _allNodes.OfType<TargetNode>().DefaultIfEmpty(null).First();
+            allNodes.UnionWith(nodes);
+            var target = allNodes.OfType<TargetNode>().DefaultIfEmpty(null).First();
             if (target != null)
                 ActiveTarget = target;
         }
 
-        public IReadOnlyList<Node>             AllNodes    => _allNodes.ToList();
-        public IReadOnlyList<Property>         Properties  => _properties.ToList();
+        public IReadOnlyList<Node>             AllNodes    => allNodes.ToList();
+        public IReadOnlyList<Property>         Properties  => properties.ToList();
         public IReadOnlyCollection<TargetNode> TargetNodes => AllNodes.OfType<TargetNode>().ToHashSet();
 
         private enum TraversalStatus : byte { Enqueued, Visited }
@@ -75,7 +79,7 @@ namespace me.tooster.sdf.Editor.API {
         }
 
         /// DFS search over input ports to check if edge would create a cycle 
-        public static bool EdgeFormsCycle<T>(IOutputPort<T> source, IInputPort<T> target) where T : Port.Data {
+        private static bool EdgeFormsCycle<T>(IOutputPort<T> source, IInputPort<T> target) where T : Port.Data {
             foreach (var node in NodeTopologicalIterator(source.Node)) {
                 if (node == target.Node)
                     return true;
@@ -92,7 +96,7 @@ namespace me.tooster.sdf.Editor.API {
             if (AllNodes.Contains(node))
                 return false;
 
-            _allNodes.Add(node);
+            allNodes.Add(node);
             OnNodeAdded(node);
             return true;
         }
@@ -101,7 +105,7 @@ namespace me.tooster.sdf.Editor.API {
             if (!AllNodes.Contains(node))
                 return false;
 
-            _allNodes.Remove(node);
+            allNodes.Remove(node);
             OnNodeRemoved(node);
             return true;
         }
@@ -145,6 +149,13 @@ namespace me.tooster.sdf.Editor.API {
             return new Property<T>(displayName, displayName, defaultValue);
         }
 
+        /*
+        /// <summary>
+        /// If any node depends on this property, it is not removed and a collection of dependent nodes is returned.
+        /// Otherwise an empty collection is returned and the property is removed from the graph.
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
         public IReadOnlyCollection<Node> TryRemoveProperty(Property property) {
             var dependentNodes = AllNodes
                 .Where(n => n.CollectProperties().Contains(property))
@@ -153,9 +164,10 @@ namespace me.tooster.sdf.Editor.API {
             if (dependentNodes.Count > 0)
                 return dependentNodes;
 
-            _properties.Remove(property);
+            properties.Remove(property);
             return Array.Empty<Node>();
         }
+        */
 
 
         #region events and delegates

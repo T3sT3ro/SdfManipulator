@@ -1,7 +1,11 @@
 #nullable enable
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Shaderlab;
 using me.tooster.sdf.Editor.API;
+using me.tooster.sdf.Editor.Controllers.ShaderPartials;
 using me.tooster.sdf.Editor.NodeGraph.Nodes;
 using me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes;
 using UnityEditor;
@@ -22,18 +26,16 @@ namespace me.tooster.sdf.Editor.Controllers {
         public Renderer Renderer = null!;
         public Material Material => Renderer.sharedMaterial;
 
-        // FIXME: implement asset importer and support material, shader and graph through scripted object 
-        public Graph? Graph { get; private set; }
-
         // public SdfScene? sdfScene;
-        [SerializeField] private Shader   shaderAsset   = null!;
-        [SerializeField] private Material materialAsset = null!;
+        [SerializeField] private Shader            shaderAsset       = null!;
+        [SerializeField] private Material          materialAsset     = null!;
+        [SerializeField] private RaymarchingShader raymarchingShader = null!;
 
         // TODO: a target selector
 
         private void Awake() {
-            InitGraph();
-            shaderAsset ??= ShaderUtil.CreateShaderAsset(Graph.BuildActiveTarget());
+            // InitGraph();
+            shaderAsset ??= ShaderUtil.CreateShaderAsset("// empty shader");
             materialAsset ??= new Material(shaderAsset);
         }
 
@@ -43,25 +45,27 @@ namespace me.tooster.sdf.Editor.Controllers {
             Renderer.sharedMaterial = materialAsset;
 
             var controllers = GetComponentsInChildren<Controller>();
-            var nodes = controllers.SelectMany(c => c.CollectNodes()).ToHashSet();
         }
 
         public void InitGraph() {
-            var targetNode = new BuiltInTargetNode("built-in");
             var v_in = new VertexInNode();
-            var v2f = new BasicVertToFragNode(v_in.position, null, null, null);
+            var v2f = new BasicVertToFragNode(v_in.position, v_in.normal, v_in.uv, null);
             var f_out = new UnlitFragOutNode(v2f.color);
-            Graph = new Graph(name, new Node[] { targetNode, v_in, v2f, f_out });
-            Debug.Log(Graph.BuildActiveTarget());
+            var targetNode = new BuiltInTargetNode("built-in", v_in, v2f, f_out);
         }
 
-        // fixme: move to SO
+        // fixme: move to ScriptableObject
         public void RebuildShader() {
-            var shaderText = Graph.BuildActiveTarget();
+            var shaderText = raymarchingShader.MainShader();
             Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderText);
             shaderAsset = ShaderUtil.CreateShaderAsset(shaderText);
             materialAsset.shader = shaderAsset;
         }
+
+        // collect all "Properties" in all children components
+        // TODO: make it return cached properties, update them when children are changed
+        public IEnumerable<Property> Properties => GetComponentsInChildren<Controller>()
+            .SelectMany(c => c.CollectProperties());
 
         // TODO: add shortcut accelerators to this and nodes (when sdf editing is enabled)
         [MenuItem("GameObject/SDF/Scene")]

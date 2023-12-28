@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace me.tooster.sdf.Editor.API {
     #region interfaces
 
+    // TODO: Ports shouldn't have any means of connecting to other ports, it should be done by Graph
     /// <summary>
     /// Abstraction over connections and their state changes. Typed ports are 
     /// </summary>

@@ -23,7 +23,7 @@ namespace me.tooster.sdf.Tests.Editor.SDF {
             var fragmentNode = new UnlitFragOutNode(null);
 
 
-            var targetNode = new BuiltInTargetNode("built_in_target");
+            var targetNode = new BuiltInTargetNode("built_in_target", vertNode, v2fNode, fragmentNode);
 
             var graph = new Graph("test_graph", new HashSet<Node>()
             {

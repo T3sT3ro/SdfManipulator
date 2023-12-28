@@ -4,5 +4,8 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
         public static implicit operator Identifier(string name) =>
             new() { id = new IdentifierToken { ValidatedText = name } };
+        
+        public static implicit operator Identifier(IdentifierToken token) =>
+            new() { id = token };
     }
 }

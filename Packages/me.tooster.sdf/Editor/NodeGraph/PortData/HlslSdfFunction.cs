@@ -20,7 +20,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.PortData {
 
         public Call withPosArgument(Expression pointArgument) => callsyntax with
         {
-            argList = new AST.Hlsl.Syntax.ArgumentList<Syntax<hlsl>>
+            argList = new ArgumentList<Syntax<hlsl>>
             {
                 arguments = new SeparatedList<hlsl, Syntax<hlsl>>(
                     new SyntaxOrToken<hlsl>[] { pointArgument, new CommaToken() }.Concat(callsyntax.argList.arguments)

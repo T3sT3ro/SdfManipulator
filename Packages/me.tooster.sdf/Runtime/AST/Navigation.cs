@@ -15,9 +15,9 @@ namespace me.tooster.sdf.AST {
             }
         }
         
-        public static Token<TLang>? getFirstToken<TLang, T>(IAnchor<T> syntax) where T : Syntax<TLang>{
+        public static Token<TLang>? getFirstToken<TLang>(IAnchor<SyntaxOrToken<TLang>> a) {
             var stack = new Stack<SyntaxOrToken<TLang>>();
-            stack.Push(syntax.Node);
+            stack.Push(a.Node);
             while (stack.Count > 0) {
                 var current = stack.Pop();
                 
@@ -51,7 +51,7 @@ namespace me.tooster.sdf.AST {
                 foreach (var child in syntax.ChildNodesAndTokens) {
                     if (returnNext) {
                         if (child is Token<Lang> tok) return tok;
-                        return getFirstToken<Lang, Syntax<Lang>>(Anchor.New((Syntax<Lang>)child, parent));
+                        return getFirstToken(Anchor.New((Syntax<Lang>)child, parent));
                     }
 
                     if (ReferenceEquals(child, lookingFor.Node)) {

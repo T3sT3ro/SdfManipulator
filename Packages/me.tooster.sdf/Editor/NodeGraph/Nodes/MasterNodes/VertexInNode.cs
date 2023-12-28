@@ -9,35 +9,52 @@ using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
 
 namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
-    public record VertexInNode : Node {
+    public record VertexInNode : Node, IVertexInputNode {
         public IOutputPort<HlslVector> position { get; }
+        public IOutputPort<HlslVector> normal   { get; }
+        public IOutputPort<HlslVector> uv       { get; }
 
         public VertexInNode() : base("v_in", "Vertex Input") {
             position = CreateOutput("Vertex position", () => new HlslVector(PositionMemberAccess));
+            normal   = CreateOutput("Vertex normal",   () => new HlslVector(NormalMemberAccess));
+            uv       = CreateOutput("Vertex uv",       () => new HlslVector(UVMemberAccess));
         }
 
-        private const string v2fStructName      = "v_in";
+        public record VertexInputData(string name, StructMember syntax);
+        
         private const string positionMemberName = "pos";
-
+        private const string normalMemberName   = "normal";
+        private const string uvMemberName       = "uv";
+        
+        private static MemberAccess      PositionMemberAccess         => new MemberAccess { member = positionMemberName };
+        private static MemberAccess      NormalMemberAccess           => new MemberAccess { member = normalMemberName };
+        private static MemberAccess      UVMemberAccess               => new MemberAccess { member = uvMemberName };
+        
         // struct v_in { float4 pos : SV_POSITION; };
-        public static StructDeclaration VInStructDeclaration => new Type.Struct
+        public Type.Struct VertexInputStruct => new Type.Struct
         {
-            name = v2fStructName,
+            name = "vertex",
             members = new[]
             {
                 new StructMember
                 {
                     type = new VectorToken { arity = 4, type = new FloatKeyword() },
                     id = positionMemberName,
-                    semantic =  new PositionSemantic()
+                    semantic = new PositionSemantic()
                 },
+                new StructMember
+                {
+                    type = new VectorToken { arity = 3, type = new FloatKeyword() },
+                    id = normalMemberName,
+                    semantic = new NormalSemantic()
+                },
+                new StructMember
+                {
+                    type = new VectorToken { arity = 2, type = new FloatKeyword() },
+                    id = uvMemberName,
+                    semantic = new TexcoordSemantic { n = 0 }
+                }
             }
-        };
-
-        public static MemberAccess PositionMemberAccess => new MemberAccess
-        {
-            expression = new Identifier { id = v2fStructName },
-            member = positionMemberName
         };
     }
 }

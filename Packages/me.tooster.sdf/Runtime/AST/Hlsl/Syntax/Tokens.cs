@@ -255,5 +255,6 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         protected override      Regex Pattern => pattern;
 
         public TokenString() => TextUnsafe = "";
+        public static implicit operator TokenString(string content) => new() { ValidatedText = content };
     }
 }

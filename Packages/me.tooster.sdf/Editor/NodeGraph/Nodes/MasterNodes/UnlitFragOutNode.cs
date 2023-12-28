@@ -3,11 +3,13 @@ using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations;
 using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.NodeGraph.PortData;
+using Identifier = me.tooster.sdf.AST.Hlsl.Syntax.Identifier;
 using StructMember = me.tooster.sdf.AST.Hlsl.Syntax.Type.Struct.Member;
+using MemberAccess = me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators.Member;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
 namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
-    public record UnlitFragOutNode : Node {
+    public record UnlitFragOutNode : Node, IFragmentOutNode {
         public IInputPort<HlslVector> color { get; }
 
         public UnlitFragOutNode(IOutputPort<HlslVector>? color)
@@ -21,7 +23,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
         private const string normalMemberName = "normal";
         private const string idMemberName     = "id";
 
-        public static StructDeclaration FOutStructDeclaration => new Type.Struct
+        public Type.Struct FragmentOutStruct => new Type.Struct
         {
             name = FragOutStructName,
             members = new[]
@@ -46,5 +48,9 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
                 }
             }
         };
+        
+        public static MemberAccess ColorMemberAccess  => new MemberAccess { member = colorMemberName };
+        
+
     }
 }

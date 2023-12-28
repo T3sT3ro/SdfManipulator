@@ -6,7 +6,7 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers {
     [ExecuteInEditMode]
     [RequireComponent(typeof(Transform))]
-    public partial class TransformController : Controller {
+    public class TransformController : Controller {
         protected             Property<Matrix4x4> transformProperty = null!;
         protected             MatrixPropertyNode  primitiveTransform = null!;
 

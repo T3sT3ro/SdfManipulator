@@ -2,6 +2,7 @@
 // Upgrade NOTE: excluded shader from DX11; has structs without semantics (struct v2f members distance)
 #pragma exclude_renderers d3d11
 
+// this kind of ID helps when doing domain repetition
 typedef fixed4 ID;
 #define NO_ID int4(-1, -1, -1, -1)
 

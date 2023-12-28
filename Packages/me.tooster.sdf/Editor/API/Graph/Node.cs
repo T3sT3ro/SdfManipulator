@@ -48,34 +48,6 @@ namespace me.tooster.sdf.Editor.API {
                 .Select(f => (T)f.GetValue(this));
         }
 
-        /// <summary>
-        /// Collects all variables present on the node that should be exposed on the material as properties
-        /// </summary>
-        /// TODO: should variables be present on nodes other than VariableNode, considering that input ports should control node properties?
-        public virtual List<Property> CollectProperties() {
-            return this.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
-                .Where(f => f.FieldType.IsSubclassOf(typeof(Property)))
-                .Select(f => (Property)f.GetValue(this))
-                .ToList();
-        }
-
-        // TODO: remove or replace with getter instead of attribute?
-        public virtual ISet<string> CollectIncludes() {
-            return this.GetType().GetCustomAttributes(typeof(ShaderIncludeAttribute), true)
-                .Cast<ShaderIncludeAttribute>()
-                .SelectMany(attr => attr.ShaderIncludes)
-                .ToHashSet();
-        }
-
-        // TODO: remove or replace with getter instead of attribute?
-        public virtual ISet<string> CollectDefines() {
-            // return values of static fields annotated with ShaderDefineAttribute
-            return this.GetType().GetFields(BindingFlags.Static)
-                .Where(info => info.GetCustomAttributes<ShaderGlobalAttribute>().Any())
-                .Select(field => (string)field.GetValue(this))
-                .ToHashSet();
-        }
-
         #endregion
     }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
@@ -12,19 +13,22 @@ using OpenBraceToken = me.tooster.sdf.AST.Shaderlab.Syntax.OpenBraceToken;
 
 namespace me.tooster.sdf.AST.Shaderlab {
     public class ShaderlabFormatter : Mapper<FormatterState> {
-        private ShaderlabFormatter(FormatterState state) : base(state with { }) { }
+        private ShaderlabFormatter(FormatterState state) : base(state) { }
 
-        public static T? Format<T>(T node, FormatterState? s = null)
-            where T : Tree<shaderlab>.Node {
+        public static T? Format<T>(T node, FormatterState? s = null) where T : Tree<shaderlab>.Node {
             var formatter = new ShaderlabFormatter(s ?? new());
             return node.Accept(formatter, Anchor.New(node)) as T;
         }
 
         private static int getIndentChange<T>(Anchor<T> a) where T : Token<shaderlab> => a switch
         {
-            { Node: OpenBraceToken, Parent : { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader } } => +1,
-            { Node: CloseBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader} } => -1,
-            _                                                                                                 => 0
+            {
+                Node: OpenBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader }
+            } => +1,
+            {
+                Node: CloseBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader }
+            } => -1,
+            _ => 0
         };
 
         private static bool breakLineAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
@@ -48,7 +52,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
-            var token = a.Node;
+            var token = base.Visit(a) as Token<shaderlab>; // FIXME: call base mapper to update trivia
 
             var indentChange = getIndentChange(a);
             if (indentChange < 0) state.Deindent();
@@ -61,7 +65,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
                 leading = new TriviaList<shaderlab>(new Whitespace { Text = startingIndent });
             }
 
-            // FIXME: this is a bandaid, because existing trivia (like comments) are lost. Move to something that retains important trivia
+            // FIXME: this is a bandaid, existing trivia (like comments and prepocessor) are lost. Move to something that retains important trivia
             if (breakLineAfter(a)) {
                 state.MarkLineEnd();
                 return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine()) };
@@ -103,5 +107,12 @@ namespace me.tooster.sdf.AST.Shaderlab {
 
             return changed ? new TriviaList<shaderlab>(newTriviaList) : a;
         }
+
+        public override Tree<shaderlab>.Node? Visit<T>(Anchor<InjectedLanguage<shaderlab, T>> a) => a switch
+        {
+            {Node: InjectedLanguage<shaderlab, hlsl> injected } => 
+                new InjectedLanguage<shaderlab, hlsl>(new Tree<hlsl>(HlslFormatter.Format(injected.tree?.Root))),
+            _ => a.Node
+        };
     }
 }
