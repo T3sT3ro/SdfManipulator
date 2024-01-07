@@ -1,5 +1,5 @@
 #pragma once
-#include "util.cginc"
+#include "util.hlsl"
 
 /**
  * Collection of core primitive 3D SDFs centered at origin.

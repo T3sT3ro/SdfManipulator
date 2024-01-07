@@ -46,32 +46,34 @@ namespace me.tooster.sdf.AST.Shaderlab {
 
                     return Navigation.Ancestors(a).Any(parent =>
                         parent is { Node: Command } or { Node: Property } or { Node: Tag }
-                     && Navigation.getLastToken<shaderlab, Syntax<shaderlab>>((IAnchor<Syntax<shaderlab>>)parent)
+                     && Navigation.getLastToken((IAnchor<Syntax<shaderlab>>)parent)
                      == a.Node);
             }
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
-            var token = base.Visit(a) as Token<shaderlab>; // FIXME: call base mapper to update trivia
+            if (base.Visit(a) is not Token<shaderlab> token) return null;
 
             var indentChange = getIndentChange(a);
-            if (indentChange < 0) state.Deindent();
-            if (indentChange > 0) state.Indent();
+            if (indentChange < 0) state.CurrentIndentLevel--;
+            if (indentChange > 0) state.CurrentIndentLevel++;
 
             bool isFirstInLine = state.PollLineStart(out var startingIndent);
-            TriviaList<shaderlab>? leading = token.LeadingTriviaList;
-
-            if (startingIndent is not null) {
-                leading = new TriviaList<shaderlab>(new Whitespace { Text = startingIndent });
-            }
+            TriviaList<shaderlab> leading = token.LeadingTriviaList;
 
             // FIXME: this is a bandaid, existing trivia (like comments and prepocessor) are lost. Move to something that retains important trivia
-            if (breakLineAfter(a)) {
-                state.MarkLineEnd();
-                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine()) };
+            if (startingIndent is not null) {
+                // FIXME: support descending down the structured trivia such as preprocessor macros
+                var insertIndentAt = leading.FindLastIndex(trivia => trivia is NewLine);
+                leading = new TriviaList<shaderlab>(leading.Splice(insertIndentAt + 1, 0,
+                    new Whitespace { Text = startingIndent }));
             }
 
-            return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace()) };
+            if (!breakLineAfter(a))
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace()) };
+
+            state.MarkLineEnd();
+            return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine()) };
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<SimpleTrivia<shaderlab>> a) {
@@ -110,8 +112,10 @@ namespace me.tooster.sdf.AST.Shaderlab {
 
         public override Tree<shaderlab>.Node? Visit<T>(Anchor<InjectedLanguage<shaderlab, T>> a) => a switch
         {
-            {Node: InjectedLanguage<shaderlab, hlsl> injected } => 
-                new InjectedLanguage<shaderlab, hlsl>(new Tree<hlsl>(HlslFormatter.Format(injected.tree?.Root))),
+            { Node: InjectedLanguage<shaderlab, hlsl> injected } => new InjectedLanguage<shaderlab, hlsl>(
+                new Tree<hlsl>(HlslFormatter.Format(
+                    injected.tree?.Root,
+                    new FormatterState { CurrentIndentLevel = state.CurrentIndentLevel }))),
             _ => a.Node
         };
     }

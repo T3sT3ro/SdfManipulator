@@ -15,7 +15,7 @@ namespace me.tooster.sdf.Editor.API {
     /// </summary>
     [Serializable]
     public abstract record Node(string InternalName, string DisplayName) : Representable {
-        public GUID   Guid           { get; } = GUID.Generate();
+        public Guid   Guid           { get; } = Guid.NewGuid();
 
         // FIXME: node names should be MOSTLY static (property node names though?)
         // TODO support #pragma shader_feature for node toggles

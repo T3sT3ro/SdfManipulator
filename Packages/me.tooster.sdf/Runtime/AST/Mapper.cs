@@ -9,7 +9,8 @@ namespace me.tooster.sdf.AST {
 
     public class Mapper<Lang, TOpts> : Visitor<Lang, Tree<Lang>.Node> where TOpts : MapperState, new() {
         protected readonly TOpts state;
-        protected Mapper(TOpts? state) => this.state = state ?? new();
+        // TODO: possibly optimize to avoid creating mapper state instances 
+        protected Mapper(TOpts? state = default) => this.state = state ?? new();
 
         // default visit -> return itself
         public virtual Tree<Lang>.Node? Visit(Anchor<Tree<Lang>.Node> a)     => a.Node.Accept(this, a.Parent);

@@ -12,17 +12,14 @@ namespace me.tooster.sdf.Editor.API {
     [Serializable]
     public abstract record Property(string InternalName, string DisplayName) : Representable {
         [field:SerializeField] public bool   Exposed        { get; set; } // determines if property is exported to material properties
-        [field:SerializeField] public GUID   Guid           { get; } = GUID.Generate();
+        [field:SerializeField] public Guid   Guid           { get; } = Guid.NewGuid();
     }
 
     /// <summary>Typed property with possibility to export to external world</summary>
     /// <typeparam name="T">type that this property holds</typeparam>
     [Serializable]
-    public record Property<T>: Property {
-        [field:SerializeField] public T DefaultValue { get; internal set; }
-
-        internal Property(string internalName, string displayName, T defaultValue) : base(internalName, displayName) {
-            this.DefaultValue = defaultValue;
-        }
+    public record Property<T>(string InternalName, string DisplayName, T DefaultValue)
+        : Property(InternalName, DisplayName) {
+        [field:SerializeField] public T DefaultValue { get; internal set; } = DefaultValue;
     }
 }

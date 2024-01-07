@@ -25,13 +25,14 @@ TODO
 # TODO
 
 - basic raymarch domain
-  - global option
+  - ~~global option~~ instead of a domain, simply use a parent transform as a scene root. Should a root be positioned inside the "portal" (current mesh domain) or should the portal be positioned inside the SDF controller? If so, then a "Portal" component could be added to narrow shader display to a mesh only.
 - gizmos/handles can be drawn using SDFs:
   - Elongate using semi-transparent box with draggable sides. Render face using color of unit vector for corresponding axis `(1,0,0)`. Get pixel color of selected object 
   - Round using 2D circle
   - twist using a shifted twisting infinite cylinder
   - bend using torus
   - <kbd>CTRL</kbd> for discrete steps, <kbd>SHIFT</kbd> for finer control
+  - [Handles reference](https://docs.unity3d.com/ScriptReference/Handles.html)
 - passes:  
   [gradients reference](https://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients)
   - iteration count
@@ -104,6 +105,16 @@ TODO
 - [ ] unit and vector tagging in shaders - so that a world-space vector isn't confused with model-space vector
 - [ ] use a simple tree model instead of a graph model to generate a scene. This way there is no need for any graph editor and whatnot, only a game object hierarchy
 - [ ] display focused SDF (even if it's in subtract mode)
+- [ ] calculate estimated cost of a shader as a heuristic of basic operations * their occurrences. Parser could be needed for that
+- [ ] thread group debug view (for debugging number of steps per thread group)
+- [ ] fullscreen scene view rendering instead of a domain. Use domain if the SdfScene has a mesh renderer only. Learn from:
+  - [This video](https://www.youtube.com/watch?v=2T2FqvtXqLw)
+  - [and his code repo where he uses blit shader for camera here](https://github.com/TheAllenChou/unity-ray-marching/blob/master/unity-ray-marching/Assets/Script/PostProcessingBase.cs)
+- [ ] implement conemarching:
+  - [video with demonstration of fractals rendered with it](https://www.youtube.com/watch?v=qUBA8Xotc4o)
+  - [an article mentioning conemarching and how it's made](https://medium.com/@bananaft/my-journey-into-fractals-d25ebc6c4dc2)
+  - [a presentation of cone marching](http://www.fulcrum-demo.org/wp-content/uploads/2012/04/Cone_Marching_Mandelbox_by_Seven_Fulcrum_LongVersion.pdf)
+- [ ] fix an unsafe visitor cast inside generated Accept methods of concrete syntax nodes
 
 # Important to remember while documenting
 
@@ -162,6 +173,7 @@ TODO
   - [some zipper implementation and description](https://blog.mattbierner.com/neith-zippers-for-javascript/) 
   - I've made a concept idea of a "weave tree" in other notes, that is basically a tree holding a token stream and trivia stream, where there is a trivia list between each pair of tokens. This tree would avoid the complexity of leading/trailing trivia and their attachments, would provide easy way of navigating the token and trivia stream and could give easy access to navigate between tokens and neighboring trivia. It could solve some problems with existing red/green tree and the need for attaching trivia to tokens (e.g. currently some trivia are attached sensibly, like whitespace or comments, but other, like preprocessor trivia, are attached arbitrarily and have nothing to do with an attached token). It could possibly allow for easier syntax rewrites by operating on a set of tokens and syntax nodes as "brackets" over them (or spans).  
 - Maybe preprocessor syntax as a trivia is not a good solution. Maybe a layered architecture would be better, where first stage tree represents syntax visible by preprocessor, second stage by shaderlab, third stage by hlsl etc.
+- Generally while developing this I noticed, that the Roslyn's model of typed tree nodes with static properties is hard to work with on a DX level. For example representing things like "Replace certain tree patterns such as leftmost token of a statement with a new token" is hard to do without advanced code-fu. Properties being static also doesn't really help with tree rewrites and updates. Traversal is problematic — having to explicitly keep track of the path and parent references is doing double work that is implicitly done by program under the hood with descending down the call stack.
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)

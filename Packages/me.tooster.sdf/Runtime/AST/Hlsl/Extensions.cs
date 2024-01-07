@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
+using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
+using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST.Hlsl {
@@ -25,5 +28,16 @@ namespace me.tooster.sdf.AST.Hlsl {
 
         public static SeparatedList<hlsl, T> CommaSeparated<T>(this T singleton)
             where T : Syntax<hlsl> => SeparatedList<hlsl, T>.WithSeparator<CommaToken>(singleton);
+        
+        /// from a left string like 'a.b.c' generates assignment expression 
+        public static Statement Assignment(string left, Expression right) => new ExpressionStatement
+        {
+            expression = new AssignmentExpression
+            {
+                left = left.Split('.').Aggregate((Expression)new Identifier { id = left.Split('.')[0] },
+                    (acc, member) => new Member { expression = acc, member = member }),
+                right = right
+            }
+        };
     }
 }

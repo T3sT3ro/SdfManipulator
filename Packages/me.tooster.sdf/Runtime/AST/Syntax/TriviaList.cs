@@ -7,12 +7,13 @@ using System.Text;
 namespace me.tooster.sdf.AST.Syntax {
     /// trivia list is a middleman between single trivia and token
     public record TriviaList<Lang> : Tree<Lang>.Node, IReadOnlyList<Trivia<Lang>> {
-        private readonly IReadOnlyList<Trivia<Lang>> Trivias;
+        private readonly IReadOnlyList<Trivia<Lang>> Trivias = Array.Empty<Trivia<Lang>>();
         
-        public TriviaList() => Trivias = Array.Empty<Trivia<Lang>>();
+        public TriviaList() {}
         public TriviaList(IEnumerable<Trivia<Lang>> trivias) => Trivias = trivias.ToList();
         public TriviaList(params Trivia<Lang>[] trivias) => Trivias = trivias.ToList();
 
+        public static readonly TriviaList<Lang> Empty = new TriviaList<Lang>();
 
         public IEnumerator<Trivia<Lang>>                              GetEnumerator() => Trivias.GetEnumerator();
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();

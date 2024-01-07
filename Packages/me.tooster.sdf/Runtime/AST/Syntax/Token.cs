@@ -6,13 +6,13 @@ using System.Text.RegularExpressions;
 namespace me.tooster.sdf.AST.Syntax {
     // TODO: think of moving all tokens inside Tokens namespace and adjust names accordingly (PlusToken -> Tokens.Plus)
     public abstract record Token<Lang> : SyntaxOrToken<Lang> {
-        public TriviaList<Lang>? LeadingTriviaList  { get; init; }
-        public TriviaList<Lang>? TrailingTriviaList { get; init; }
+        public TriviaList<Lang> LeadingTriviaList  { get; init; } = TriviaList<Lang>.Empty;
+        public TriviaList<Lang> TrailingTriviaList { get; init; } = TriviaList<Lang>.Empty;
 
         public override StringBuilder WriteTo(StringBuilder sb) {
-            LeadingTriviaList?.WriteTo(sb);
+            LeadingTriviaList.WriteTo(sb);
             sb.Append(FullText);
-            TrailingTriviaList?.WriteTo(sb);
+            TrailingTriviaList.WriteTo(sb);
             return sb;
         }
 

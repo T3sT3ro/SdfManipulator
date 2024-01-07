@@ -1,5 +1,6 @@
 #pragma once
 // Upgrade NOTE: excluded shader from DX11; has structs without semantics (struct v2f members distance)
+// fixme: why was this added again??? I don't remember
 #pragma exclude_renderers d3d11
 
 // this kind of ID helps when doing domain repetition

@@ -19,7 +19,7 @@ Shader "SDF/Domain"
         _EPSILON_NORMAL ("epsilon for calculating normal", Float) = 0.001
 
         [Space]
-        [KeywordEnum(Material, Albedo, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Facing, Debug)] _DrawMode("Draw mode", Int) = 0
+        [KeywordEnum(Material, Albedo, Dyed, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Facing, Debug)] _DrawMode("Draw mode", Int) = 0
         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
         [Tooltip(Only works for origin type local)]
@@ -29,6 +29,7 @@ Shader "SDF/Domain"
 
         [Header(SDF Scene)][Space]
         _Control ("size1, size2, rot1, rot2", Vector) = (.5, .1, 0, 0)
+        _Dye ("R, k", Vector) = (1, 2, 0, 0)
         _BoxmapTex_X ("Texture for Triplanar mapping", 2D) = "white" {}
         _BoxmapTex_Y ("Texture for Triplanar mapping", 2D) = "white" {}
         _BoxmapTex_Z ("Texture for Triplanar mapping", 2D) = "white" {}
@@ -39,7 +40,7 @@ Shader "SDF/Domain"
 
     SubShader
     {
-        
+
         Tags
         {
             "RenderType"="Geometry"
@@ -57,7 +58,7 @@ Shader "SDF/Domain"
         #pragma target 5.0
         #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
         #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
-        #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
+        #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_DYED _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
             _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_FACING _DRAWMODE_DEBUG
         #pragma shader_feature_local _SCALE_INVARIANT
         #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
@@ -65,12 +66,12 @@ Shader "SDF/Domain"
         // #pragma shader_feature_local _SCENEVIEW
 
         #include "UnityCG.cginc"
-        #include "Packages/me.tooster.sdf/Editor/NodeGraph/Includes/types.cginc"
-        #include "Packages/me.tooster.sdf/Editor/NodeGraph/Includes/util.cginc"
-        #include "Packages/me.tooster.sdf/Editor/NodeGraph/Includes/matrix.cginc"
-        #include "Packages/me.tooster.sdf/Editor/NodeGraph/Includes/primitives.cginc"
-        #include "Packages/me.tooster.sdf/Editor/NodeGraph/Includes/operators.cginc"
-        #include "Packages/me.tooster.sdf/Editor/NodeGraph/Includes/noise.cginc"
+        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
+        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"
+        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl"
+        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"
+        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"
+        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl"
 
         sampler2D _BoxmapTex_X;
         sampler2D _BoxmapTex_Y;
@@ -82,6 +83,7 @@ Shader "SDF/Domain"
         UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
         float4 _Control;
+        float4 _Dye;
         float _EPSILON_RAY;
         float _EPSILON_NORMAL;
         float _MAX_DISTANCE;
@@ -117,13 +119,13 @@ Shader "SDF/Domain"
         // inverse projection matrix either to world or to model, depending on the origin type
         // instead of performing matrix inversion in the shader, use already supplied matrices
         static const float4x4 inv = mul(SCALE_MATRIX,
-            #ifdef _ORIGIN_WORLD
-            mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
-            // inverse(UNITY_MATRIX_VP)
-            #else
+                                #ifdef _ORIGIN_WORLD
+                                mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
+                                // inverse(UNITY_MATRIX_VP)
+                                #else
                                         mul(unity_WorldToObject, mul(UNITY_MATRIX_I_V, unity_CameraInvProjection))
                                         // inverse(UNITY_MATRIX_MVP)
-            #endif
+                                #endif
         );
 
         //const float near = _ProjectionParams.y; // those go into frag
@@ -143,7 +145,7 @@ Shader "SDF/Domain"
         {
             HLSLPROGRAM
             #pragma vertex vert
-            #pragma fragment frag            
+            #pragma fragment frag
             v2f vert(appdata_base v)
             {
                 v2f o;
@@ -151,7 +153,8 @@ Shader "SDF/Domain"
                 o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
                 // o.uv = v.texcoord; // TRANSFORM_TEX(v.texcoord, _BoxmapTex);
                 o.hitpos = v.vertex;
-                COMPUTE_EYEDEPTH(o.screenPos.z); // this uses implicitly defined v.vertex.z... possibly migrate to proper function...
+                // this uses implicitly defined v.vertex.z... possibly migrate to proper function...
+                COMPUTE_EYEDEPTH(o.screenPos.z);
                 o.rd_cam = UnityObjectToViewPos(v.vertex);
                 return o;
             }
@@ -266,7 +269,7 @@ Shader "SDF/Domain"
                 p = mul(_BoxFrame1_Transform, float4(p, 1)).xyz;
                 p = sdf::operators::repeatLim(p, 1.5, float3(1, 0, 1), ix);
                 SdfResult ret;
-                ret.distance = sdf::primitives3D::box_frame(p, _Control.x, _Control.y);
+                ret.distance = sdf::primitives3D::torus(p, _Control.x, _Control.y);
                 ret.id.xyz = ix + 1;
                 ret.id.w = 0;
                 return ret;
@@ -286,6 +289,20 @@ Shader "SDF/Domain"
                 );
             }
 
+            Material __SDF_DYE(const SdfResult hit)
+            {
+                // more elaborate color lerping functions can be used:
+                // https://www.reddit.com/r/opengl/comments/kvibeg/fragment_shader_for_adding_a_color_tint/
+                if (hit.distance > _EPSILON_RAY) return hit.material; // not hit, don't dye
+
+                Material mat = (Material)0;
+                mat.albedo = hit.material.albedo;
+                float dyeDistance = sdf::primitives3D::sphere(hit.p, _Dye.x);
+
+                if (dyeDistance < _EPSILON_RAY)
+                    mat.albedo = fixed4(0, 1, 0, 1);
+                return mat;
+            }
 
             // TODO: lighting
             fixed4 __MATERIAL(fixed4 id)
@@ -326,7 +343,7 @@ Shader "SDF/Domain"
                 // is it good or bad, well, depends on the use case 
                 for (ray.steps = 0; ray.steps < _MAX_STEPS; ray.steps++)
                 {
-                    if (d >= _MAX_DISTANCE || d >= ray.maxDistance) 
+                    if (d >= _MAX_DISTANCE || d >= ray.maxDistance)
                         return;
 
                     sdf.p = ray.ro + d * ray.rd;
@@ -391,6 +408,8 @@ Shader "SDF/Domain"
                 return ray;
             }
 
+            fixed4 shade(SdfResult hit);
+            
             f2p frag(v2f i, bool facing : SV_IsFrontFace)
             {
                 const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
@@ -410,6 +429,11 @@ Shader "SDF/Domain"
                 };
                 fixed4 color_trimap = __BOXMAP(boxmapParams, sdf.p, sdf.normal, 10.);
 
+                fixed4 color_dyed = color_material; // basic albedo
+                float dyeDistance = sdf::primitives3D::box(sdf.p, _Dye.xxx);
+                float2 blend = sdf::operators::smin(0, dyeDistance, _Dye.y);
+                color_dyed = lerp(color_dyed, fixed4(.2, .2, 1, 1), blend.y);
+
                 fixed4 color_normal_domain = fixed4(sdf.normal * .5 + .5, 1); // domain normal color
                 fixed4 color_normal_world = fixed4(UnityObjectToWorldNormal(sdf.normal) * .5 + .5, 1);
                 // world normal color
@@ -424,12 +448,18 @@ Shader "SDF/Domain"
                     UnityObjectToViewPos
                     #endif
                     (mul(SCALE_MATRIX_I, sdf.p)).z;
+
+
                 f2p o = {
                     {
                         #ifdef _DRAWMODE_MATERIAL
                          color_material*color_trimap
                         #elif _DRAWMODE_ALBEDO
                          color_material
+                        #elif _DRAWMODE_DYED
+                         color_dyed*color_trimap
+                        #elif _DRAWMODE_SKYBOX
+                         shade(sdf)
                         #elif _DRAWMODE_TEXTURE
                          color_trimap
                         #elif _DRAWMODE_NORMALLOCAL
@@ -456,6 +486,15 @@ Shader "SDF/Domain"
                 };
                 return o;
             } // End Pass
+
+            fixed4 shade(SdfResult hit)
+            {
+                // sample the default reflection cubemap, using the reflection vector
+                half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, hit.normal);
+                // decode cubemap data into actual color
+                half3 skyColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
+                return fixed4(skyColor, 1.0);
+            }
 
             // =======================================================================
             ENDHLSL

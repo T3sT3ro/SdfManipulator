@@ -27,16 +27,15 @@ namespace me.tooster.sdf.Editor.Controllers {
         public Material Material => Renderer.sharedMaterial;
 
         // public SdfScene? sdfScene;
-        [SerializeField] private Shader            shaderAsset       = null!;
-        [SerializeField] private Material          materialAsset     = null!;
-        [SerializeField] private RaymarchingShader raymarchingShader = null!;
+        [SerializeField] private Shader?   shaderAsset;
+        [SerializeField] private Material? materialAsset;
 
         // TODO: a target selector
 
-        private void Awake() {
-            // InitGraph();
-            shaderAsset ??= ShaderUtil.CreateShaderAsset("// empty shader");
-            materialAsset ??= new Material(shaderAsset);
+        private void OnValidate() {
+            if (shaderAsset == null) shaderAsset = ShaderUtil.CreateShaderAsset("// empty shader");
+            if (materialAsset == null) materialAsset = new Material(shaderAsset);
+            materialAsset.name = shaderAsset.name;
         }
 
         protected void OnEnable() {
@@ -47,25 +46,17 @@ namespace me.tooster.sdf.Editor.Controllers {
             var controllers = GetComponentsInChildren<Controller>();
         }
 
-        public void InitGraph() {
-            var v_in = new VertexInNode();
-            var v2f = new BasicVertToFragNode(v_in.position, v_in.normal, v_in.uv, null);
-            var f_out = new UnlitFragOutNode(v2f.color);
-            var targetNode = new BuiltInTargetNode("built-in", v_in, v2f, f_out);
-        }
-
         // fixme: move to ScriptableObject
         public void RebuildShader() {
-            var shaderText = raymarchingShader.MainShader();
+            var shaderText = AssembleShaderSource();
             Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderText);
-            shaderAsset = ShaderUtil.CreateShaderAsset(shaderText);
-            materialAsset.shader = shaderAsset;
+            ShaderUtil.UpdateShaderAsset(shaderAsset, shaderText);
         }
 
         // collect all "Properties" in all children components
         // TODO: make it return cached properties, update them when children are changed
         public IEnumerable<Property> Properties => GetComponentsInChildren<Controller>()
-            .SelectMany(c => c.CollectProperties());
+            .SelectMany(CollectProperties);
 
         // TODO: add shortcut accelerators to this and nodes (when sdf editing is enabled)
         [MenuItem("GameObject/SDF/Scene")]
@@ -74,6 +65,8 @@ namespace me.tooster.sdf.Editor.Controllers {
             scene.name = "SDF Scene";
             scene.AddComponent<SdfSceneController>();
         }
+
+        protected virtual string AssembleShaderSource() { return RaymarchingShader.MainShader(this); }
     }
 
     [CustomEditor(typeof(SdfSceneController))]
@@ -82,7 +75,7 @@ namespace me.tooster.sdf.Editor.Controllers {
             var controller = (SdfSceneController)target;
 
             if (GUILayout.Button("Rebuild shader")) controller.RebuildShader();
-            if (GUILayout.Button("Test Init graph")) controller.InitGraph();
+            // if (GUILayout.Button("Test Init graph")) controller.InitGraph();
             GUILayout.Space(16);
 
             base.OnInspectorGUI();

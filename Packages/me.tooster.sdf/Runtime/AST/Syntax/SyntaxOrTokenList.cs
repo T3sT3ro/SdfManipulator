@@ -11,13 +11,15 @@ namespace me.tooster.sdf.AST.Syntax {
     /// </summary>
     public record SyntaxOrTokenList<Lang> : Syntax<Lang>, IReadOnlyList<SyntaxOrToken<Lang>> {
         /// full list with syntax and tokens
-        public IReadOnlyList<SyntaxOrToken<Lang>> FullList { get; }
+        public IReadOnlyList<SyntaxOrToken<Lang>> FullList { get; } = Array.Empty<SyntaxOrToken<Lang>>();
 
         public SyntaxOrTokenList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) => FullList = fullList.ToList();
 
+        public static readonly SyntaxOrTokenList<Lang> Empty = new SyntaxOrTokenList<Lang>();
+
         public SyntaxOrTokenList(IEnumerable<SyntaxOrToken<Lang>> list) : this(list.ToList()) { }
         public SyntaxOrTokenList(params SyntaxOrToken<Lang>[] list) : this(list.AsEnumerable()) { }
-        public SyntaxOrTokenList() : this(Array.Empty<SyntaxOrToken<Lang>>()) { }
+        public SyntaxOrTokenList() { }
 
         public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens => FullList;
         public virtual  IEnumerator<SyntaxOrToken<Lang>>   GetEnumerator()     => FullList.GetEnumerator();
@@ -29,7 +31,7 @@ namespace me.tooster.sdf.AST.Syntax {
 
         public virtual SyntaxOrTokenList<Lang> Slice(int start, int length) => new(FullList.Skip(start).Take(length));
 
-        /// <see cref="Extensions.Splice{T}"/>
+        /// <inheritdoc cref="Extensions.Splice{T}(IEnumerable{T}, int, int, IEnumerable{T})"/>
         public virtual SyntaxOrTokenList<Lang> Splice(int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements)
             => new(FullList.Splice(index, deleteCount, elements));
 

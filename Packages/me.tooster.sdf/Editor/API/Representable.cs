@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting.YamlDotNet.Serialization.NamingConventions;
 using UnityEditor;
 
@@ -13,7 +14,7 @@ namespace me.tooster.sdf.Editor.API {
         // used for user-friendly display in GUI
         public string DisplayName { get; }
 
-        public GUID   Guid           { get; }
+        public Guid   Guid   { get; }
         public string IdName => formatter.Apply($"{InternalName}_{Guid.ToString()}");
 
         public static readonly UnderscoredNamingConvention formatter = new UnderscoredNamingConvention();

@@ -16,43 +16,59 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
 
         public VertexInNode() : base("v_in", "Vertex Input") {
             position = CreateOutput("Vertex position", () => new HlslVector(PositionMemberAccess));
-            normal   = CreateOutput("Vertex normal",   () => new HlslVector(NormalMemberAccess));
-            uv       = CreateOutput("Vertex uv",       () => new HlslVector(UVMemberAccess));
+            normal = CreateOutput("Vertex normal", () => new HlslVector(NormalMemberAccess));
+            uv = CreateOutput("Vertex uv", () => new HlslVector(UVMemberAccess));
         }
 
         public record VertexInputData(string name, StructMember syntax);
-        
+
         private const string positionMemberName = "pos";
         private const string normalMemberName   = "normal";
         private const string uvMemberName       = "uv";
-        
-        private static MemberAccess      PositionMemberAccess         => new MemberAccess { member = positionMemberName };
-        private static MemberAccess      NormalMemberAccess           => new MemberAccess { member = normalMemberName };
-        private static MemberAccess      UVMemberAccess               => new MemberAccess { member = uvMemberName };
-        
-        // struct v_in { float4 pos : SV_POSITION; };
+        private const string hitposMemberName   = "hitpos";
+        private const string rdCamMemberName    = "rd_cam";
+
+        private static MemberAccess PositionMemberAccess => new MemberAccess { member = positionMemberName };
+        private static MemberAccess NormalMemberAccess   => new MemberAccess { member = normalMemberName };
+        private static MemberAccess UVMemberAccess       => new MemberAccess { member = uvMemberName };
+        private static MemberAccess HitposMemberAccess   => new MemberAccess { member = hitposMemberName };
+        private static MemberAccess RDCamMemberAccess    => new MemberAccess { member = rdCamMemberName };
+
+        // struct v_in { float4 pos : SV_POSITION; ... };
         public Type.Struct VertexInputStruct => new Type.Struct
         {
             name = "vertex",
             members = new[]
             {
-                new StructMember
+                new Type.Struct.Member
                 {
                     type = new VectorToken { arity = 4, type = new FloatKeyword() },
                     id = positionMemberName,
                     semantic = new PositionSemantic()
                 },
-                new StructMember
+                new Type.Struct.Member
                 {
                     type = new VectorToken { arity = 3, type = new FloatKeyword() },
                     id = normalMemberName,
                     semantic = new NormalSemantic()
                 },
-                new StructMember
+                new Type.Struct.Member
                 {
                     type = new VectorToken { arity = 2, type = new FloatKeyword() },
                     id = uvMemberName,
                     semantic = new TexcoordSemantic { n = 0 }
+                },
+                new Type.Struct.Member
+                {
+                    type = new VectorToken { arity = 3, type = new FloatKeyword() },
+                    id = hitposMemberName,
+                    semantic = new TexcoordSemantic { n = 1 }
+                },
+                new Type.Struct.Member
+                {
+                    type = new VectorToken { arity = 3, type = new FloatKeyword() },
+                    id = rdCamMemberName,
+                    semantic = new TexcoordSemantic { n = 2 }
                 }
             }
         };

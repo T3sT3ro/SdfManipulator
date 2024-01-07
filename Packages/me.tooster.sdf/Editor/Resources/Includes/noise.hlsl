@@ -1,3 +1,4 @@
+#pragma once
 // from https://www.shadertoy.com/view/XlGcRh
 
 // commonly used constants

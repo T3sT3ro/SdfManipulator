@@ -37,8 +37,8 @@ namespace me.tooster.sdf.AST.Hlsl {
             var token = base.Visit(a) as Token<hlsl>;
 
             var indentChange = getIndentChange(a);
-            if (indentChange < 0) state.Deindent();
-            if (indentChange > 0) state.Indent();
+            if (indentChange < 0) state.CurrentIndentLevel--;
+            if (indentChange > 0) state.CurrentIndentLevel++;
 
             bool isFirstInLine = state.PollLineStart(out var startingIndent);
             TriviaList<hlsl>? leading = token.LeadingTriviaList;

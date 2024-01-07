@@ -5,7 +5,7 @@
  */
 
 #include "UnityCG.cginc"
-#include "matrix.cginc"
+#include "matrix.hlsl"
 
 #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
 #pragma shader_feature_local _PRESERVE_SPACE_SCALE_ON

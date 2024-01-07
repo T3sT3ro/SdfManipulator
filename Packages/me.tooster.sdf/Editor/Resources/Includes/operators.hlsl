@@ -1,5 +1,4 @@
 #pragma once
-#include "util.cginc"
 
 /**
  * Collection of operators for 3D SDFs centered at origin.
@@ -21,6 +20,17 @@ namespace sdf
 {
     namespace operators
     {
+        // smooth minimum with blending factor k
+        // result is returned in x and blending factor in y 
+        // from inigo quilez: https://iquilezles.org/articles/smin/
+        float2 smin(float a, float b, float k)
+        {
+            float h = max(k - abs(a - b), 0.0) / k;
+            float m = h * h * 0.5;
+            float s = m * k * (1.0 / 2.0);
+            return a < b ? float2(a - s, m) : float2(b - s, 1.0 - m);
+        }
+
         float3 transform(float3 p, float4x4 invTransform)
         {
             return mul(invTransform, float4(p, 1));
@@ -36,15 +46,15 @@ namespace sdf
          */
         float3 repeat(in float3 p, in float3 c)
         {
-            return fmod(abs(p)+0.5*c,c)-0.5*c;
+            return fmod(abs(p) + 0.5 * c, c) - 0.5 * c;
         }
 
         float3 repeatLim(in float3 p, in float3 c, in float3 l, out int3 index)
         {
-            index = clamp(round(p/c),-l,l);
-            return p-c*index;
+            index = clamp(round(p / c), -l, l);
+            return p - c * index;
         }
-        
+
         /**
          * Elongate the primitive. This is a prefix operation that transforms point passed to primitive.
          * This method produces exact 1D elongations but produces kernel of 0 distances inside 2D/3D elongations.

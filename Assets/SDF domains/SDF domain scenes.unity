@@ -439,7 +439,6 @@ GameObject:
   - component: {fileID: 881973654}
   - component: {fileID: 881973653}
   - component: {fileID: 881973652}
-  - component: {fileID: 881973651}
   m_Layer: 0
   m_Name: impostor sphere
   m_TagString: Untagged
@@ -447,29 +446,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!136 &881973651
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 881973650}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!23 &881973652
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -519,7 +495,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881973650}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &881973654
 Transform:
   m_ObjectHideFlags: 0
@@ -529,7 +505,7 @@ Transform:
   m_GameObject: {fileID: 881973650}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.245, y: 0.406, z: 1.831}
+  m_LocalPosition: {x: 0.898, y: 0.406, z: 1.831}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -641,6 +617,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sdfSharedMaterial: {fileID: 2100000, guid: 41beb6b7bed0e7eb29270d55edef8e9b, type: 2}
+--- !u!21 &995999015
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Box SDF Scene_g
+  m_Shader: {fileID: 1657018043}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats: []
+    m_Colors: []
+  m_BuildTextureStacks: []
 --- !u!21 &1003955644
 Material:
   serializedVersion: 8
@@ -807,10 +810,12 @@ Material:
     - _DEBUG_NORMAL: {r: 0, g: 0, b: 0, a: 0}
     - _DomainOrigin: {r: 0, g: 0, b: 0, a: 0}
     - _DomainRotation: {r: 0, g: 0, b: 0, a: 0}
+    - _Dye: {r: 1, g: 2, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SDF_DOMAIN_ORIGIN_POS: {r: 0.37, g: 0, b: 0, a: 1}
     - _SDF_DOMAIN_ORIGIN_ROT: {r: 0, g: 0, b: 0, a: 1}
     - _SDF_DOMAIN_ORIGIN_SCALE: {r: 1, g: 1, b: 1, a: 1}
+    - _TorusDye: {r: 0.5, g: 0.1, b: 0, a: 0}
     - _TorusSizes: {r: 0.29, g: 0.05, b: -0.48, a: -0.3}
   m_BuildTextureStacks: []
 --- !u!1001 &1235270545
@@ -821,6 +826,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1860815512654444862, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 995999015}
     - target: {fileID: 2548759004693369080, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
       propertyPath: m_Name
       value: Box SDF Scene
@@ -864,6 +873,22 @@ PrefabInstance:
     - target: {fileID: 3200118988640811303, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4641390255921765386, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4641390255921765386, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
+      propertyPath: shaderAsset
+      value: 
+      objectReference: {fileID: 1657018043}
+    - target: {fileID: 4641390255921765386, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
+      propertyPath: materialAsset
+      value: 
+      objectReference: {fileID: 995999015}
+    - target: {fileID: 8160248786854215967, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.411
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1141,6 +1166,646 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!48 &1635005494
+Shader:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 3
+  m_ParsedForm:
+    m_PropInfo:
+      m_Props: []
+    m_SubShaders:
+    - m_Passes:
+      - serializedVersion: 2
+        m_EditorDataHash: []
+        m_Platforms: 
+        m_NameIndices: {}
+        m_Type: 0
+        m_State:
+          serializedVersion: 2
+          m_Name: 
+          rtBlend0:
+            srcBlend:
+              val: 1
+              name: <noninit>
+            destBlend:
+              val: 0
+              name: <noninit>
+            srcBlendAlpha:
+              val: 1
+              name: <noninit>
+            destBlendAlpha:
+              val: 0
+              name: <noninit>
+            blendOp:
+              val: 0
+              name: <noninit>
+            blendOpAlpha:
+              val: 0
+              name: <noninit>
+            colMask:
+              val: 15
+              name: <noninit>
+          rtBlend1:
+            srcBlend:
+              val: 1
+              name: <noninit>
+            destBlend:
+              val: 0
+              name: <noninit>
+            srcBlendAlpha:
+              val: 1
+              name: <noninit>
+            destBlendAlpha:
+              val: 0
+              name: <noninit>
+            blendOp:
+              val: 0
+              name: <noninit>
+            blendOpAlpha:
+              val: 0
+              name: <noninit>
+            colMask:
+              val: 15
+              name: <noninit>
+          rtBlend2:
+            srcBlend:
+              val: 1
+              name: <noninit>
+            destBlend:
+              val: 0
+              name: <noninit>
+            srcBlendAlpha:
+              val: 1
+              name: <noninit>
+            destBlendAlpha:
+              val: 0
+              name: <noninit>
+            blendOp:
+              val: 0
+              name: <noninit>
+            blendOpAlpha:
+              val: 0
+              name: <noninit>
+            colMask:
+              val: 15
+              name: <noninit>
+          rtBlend3:
+            srcBlend:
+              val: 1
+              name: <noninit>
+            destBlend:
+              val: 0
+              name: <noninit>
+            srcBlendAlpha:
+              val: 1
+              name: <noninit>
+            destBlendAlpha:
+              val: 0
+              name: <noninit>
+            blendOp:
+              val: 0
+              name: <noninit>
+            blendOpAlpha:
+              val: 0
+              name: <noninit>
+            colMask:
+              val: 15
+              name: <noninit>
+          rtBlend4:
+            srcBlend:
+              val: 1
+              name: <noninit>
+            destBlend:
+              val: 0
+              name: <noninit>
+            srcBlendAlpha:
+              val: 1
+              name: <noninit>
+            destBlendAlpha:
+              val: 0
+              name: <noninit>
+            blendOp:
+              val: 0
+              name: <noninit>
+            blendOpAlpha:
+              val: 0
+              name: <noninit>
+            colMask:
+              val: 15
+              name: <noninit>
+          rtBlend5:
+            srcBlend:
+              val: 1
+              name: <noninit>
+            destBlend:
+              val: 0
+              name: <noninit>
+            srcBlendAlpha:
+              val: 1
+              name: <noninit>
+            destBlendAlpha:
+              val: 0
+              name: <noninit>
+            blendOp:
+              val: 0
+              name: <noninit>
+            blendOpAlpha:
+              val: 0
+              name: <noninit>
+            colMask:
+              val: 15
+              name: <noninit>
+          rtBlend6:
+            srcBlend:
+              val: 1
+              name: <noninit>
+            destBlend:
+              val: 0
+              name: <noninit>
+            srcBlendAlpha:
+              val: 1
+              name: <noninit>
+            destBlendAlpha:
+              val: 0
+              name: <noninit>
+            blendOp:
+              val: 0
+              name: <noninit>
+            blendOpAlpha:
+              val: 0
+              name: <noninit>
+            colMask:
+              val: 15
+              name: <noninit>
+          rtBlend7:
+            srcBlend:
+              val: 1
+              name: <noninit>
+            destBlend:
+              val: 0
+              name: <noninit>
+            srcBlendAlpha:
+              val: 1
+              name: <noninit>
+            destBlendAlpha:
+              val: 0
+              name: <noninit>
+            blendOp:
+              val: 0
+              name: <noninit>
+            blendOpAlpha:
+              val: 0
+              name: <noninit>
+            colMask:
+              val: 15
+              name: <noninit>
+          rtSeparateBlend: 0
+          zClip:
+            val: 1
+            name: <noninit>
+          zTest:
+            val: 4
+            name: <noninit>
+          zWrite:
+            val: 1
+            name: <noninit>
+          culling:
+            val: 2
+            name: <noninit>
+          conservative:
+            val: 0
+            name: <noninit>
+          offsetFactor:
+            val: 0
+            name: <noninit>
+          offsetUnits:
+            val: 0
+            name: <noninit>
+          alphaToMask:
+            val: 0
+            name: <noninit>
+          stencilOp:
+            pass:
+              val: 0
+              name: <noninit>
+            fail:
+              val: 0
+              name: <noninit>
+            zFail:
+              val: 0
+              name: <noninit>
+            comp:
+              val: 8
+              name: <noninit>
+          stencilOpFront:
+            pass:
+              val: 0
+              name: <noninit>
+            fail:
+              val: 0
+              name: <noninit>
+            zFail:
+              val: 0
+              name: <noninit>
+            comp:
+              val: 8
+              name: <noninit>
+          stencilOpBack:
+            pass:
+              val: 0
+              name: <noninit>
+            fail:
+              val: 0
+              name: <noninit>
+            zFail:
+              val: 0
+              name: <noninit>
+            comp:
+              val: 8
+              name: <noninit>
+          stencilReadMask:
+            val: 255
+            name: <noninit>
+          stencilWriteMask:
+            val: 255
+            name: <noninit>
+          stencilRef:
+            val: 0
+            name: <noninit>
+          fogStart:
+            val: 0
+            name: unity_FogStart
+          fogEnd:
+            val: 0
+            name: unity_FogEnd
+          fogDensity:
+            val: 0
+            name: unity_FogDensity
+          fogColor:
+            x:
+              val: 0
+              name: <noninit>
+            y:
+              val: 0
+              name: <noninit>
+            z:
+              val: 0
+              name: <noninit>
+            w:
+              val: 0
+              name: <noninit>
+            name: unity_FogColor
+          fogMode: -1
+          gpuProgramID: 16469
+          m_Tags:
+            tags:
+              IGNOREPROJECTOR: true
+              QUEUE: Geometry+1
+              RenderType: Opaque
+          m_LOD: 0
+          lighting: 0
+        m_ProgramMask: 0
+        progVertex:
+          m_SubPrograms: []
+          m_PlayerSubPrograms: []
+          m_ParameterBlobIndices: []
+          m_CommonParameters:
+            m_VectorParams: []
+            m_MatrixParams: []
+            m_TextureParams: []
+            m_BufferParams: []
+            m_ConstantBuffers: []
+            m_ConstantBufferBindings: []
+            m_UAVParams: []
+            m_Samplers: []
+          m_SerializedKeywordStateMask: 
+        progFragment:
+          m_SubPrograms: []
+          m_PlayerSubPrograms: []
+          m_ParameterBlobIndices: []
+          m_CommonParameters:
+            m_VectorParams: []
+            m_MatrixParams: []
+            m_TextureParams: []
+            m_BufferParams: []
+            m_ConstantBuffers: []
+            m_ConstantBufferBindings: []
+            m_UAVParams: []
+            m_Samplers: []
+          m_SerializedKeywordStateMask: 
+        progGeometry:
+          m_SubPrograms: []
+          m_PlayerSubPrograms: []
+          m_ParameterBlobIndices: []
+          m_CommonParameters:
+            m_VectorParams: []
+            m_MatrixParams: []
+            m_TextureParams: []
+            m_BufferParams: []
+            m_ConstantBuffers: []
+            m_ConstantBufferBindings: []
+            m_UAVParams: []
+            m_Samplers: []
+          m_SerializedKeywordStateMask: 
+        progHull:
+          m_SubPrograms: []
+          m_PlayerSubPrograms: []
+          m_ParameterBlobIndices: []
+          m_CommonParameters:
+            m_VectorParams: []
+            m_MatrixParams: []
+            m_TextureParams: []
+            m_BufferParams: []
+            m_ConstantBuffers: []
+            m_ConstantBufferBindings: []
+            m_UAVParams: []
+            m_Samplers: []
+          m_SerializedKeywordStateMask: 
+        progDomain:
+          m_SubPrograms: []
+          m_PlayerSubPrograms: []
+          m_ParameterBlobIndices: []
+          m_CommonParameters:
+            m_VectorParams: []
+            m_MatrixParams: []
+            m_TextureParams: []
+            m_BufferParams: []
+            m_ConstantBuffers: []
+            m_ConstantBufferBindings: []
+            m_UAVParams: []
+            m_Samplers: []
+          m_SerializedKeywordStateMask: 
+        progRayTracing:
+          m_SubPrograms: []
+          m_PlayerSubPrograms: []
+          m_ParameterBlobIndices: []
+          m_CommonParameters:
+            m_VectorParams: []
+            m_MatrixParams: []
+            m_TextureParams: []
+            m_BufferParams: []
+            m_ConstantBuffers: []
+            m_ConstantBufferBindings: []
+            m_UAVParams: []
+            m_Samplers: []
+          m_SerializedKeywordStateMask: 
+        m_HasInstancingVariant: 0
+        m_HasProceduralInstancingVariant: 0
+        m_UseName: 
+        m_Name: 
+        m_TextureName: 
+        m_Tags:
+          tags: {}
+        m_PackageRequirements:
+          m_Requirements: []
+          m_StatusMessage: 
+          m_CombinedStatus: 1
+      m_Tags:
+        tags:
+          IGNOREPROJECTOR: true
+          QUEUE: Geometry+1
+          RenderType: Opaque
+      m_LOD: 0
+      m_PackageRequirements:
+        m_Requirements: []
+        m_StatusMessage: 
+        m_CombinedStatus: 1
+    m_KeywordNames:
+    - STEREO_INSTANCING_ON
+    - UNITY_SINGLE_PASS_STEREO
+    - STEREO_MULTIVIEW_ON
+    - STEREO_CUBEMAP_RENDER_ON
+    m_KeywordFlags: 00000000
+    m_Name: Sphere SDF Scene_g
+    m_CustomEditorName: 
+    m_FallbackName: 
+    m_Dependencies: []
+    m_CustomEditorForRenderPipelines: []
+    m_DisableNoSubshadersMessage: 0
+  platforms: 
+  offsets: []
+  compressedLengths: []
+  decompressedLengths: []
+  compressedBlob: 
+  stageCounts: 
+  m_Dependencies: []
+  m_NonModifiableTextures: {}
+  m_ShaderIsBaked: 0
+  m_DefaultTextures: {}
+  errors:
+  - message: 'Sphere SDF Scene_g shader is not supported on this GPU (none of subshaders/fallbacks
+      are suitable)
+
+'
+    messageDetails: 
+    file: 
+    compilerPlatform: -1
+    line: 0
+    warning: 1
+    runtimeError: 1
+  - message: Both vertex and fragment programs must be present in a shader snippet.
+      Excluding it from compilation.
+    messageDetails: 
+    file: 
+    compilerPlatform: 26
+    line: 11
+    warning: 1
+    runtimeError: 0
+  m_CompileInfo:
+    m_Snippets:
+      16469:
+        serializedVersion: 3
+        m_Code: "#line 9 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 9 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            "
+        m_AssetPath: 
+        m_PlatformMask: 4261552591
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 11
+        m_TypesMask: 0
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: 1909f56bfc062723c751e8b465ee728b
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: 00000000000000000000000000000000
+        m_FromOther: 0
+        m_ForceSyncCompilation: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0: []
+        m_VariantsUserLocal1: []
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 33
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
+    m_MeshComponentsFromSnippets: 0
+    m_HasSurfaceShaders: 0
+    m_HasFixedFunctionShaders: 0
+  m_CompileSmokeTestAfterImport: 0
+--- !u!48 &1657018043
+Shader:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 3
+  m_ParsedForm:
+    m_PropInfo:
+      m_Props: []
+    m_SubShaders: []
+    m_KeywordNames:
+    - STEREO_INSTANCING_ON
+    - UNITY_SINGLE_PASS_STEREO
+    - STEREO_MULTIVIEW_ON
+    - STEREO_CUBEMAP_RENDER_ON
+    m_KeywordFlags: 00000000
+    m_Name: 
+    m_CustomEditorName: 
+    m_FallbackName: 
+    m_Dependencies: []
+    m_CustomEditorForRenderPipelines: []
+    m_DisableNoSubshadersMessage: 0
+  platforms: 
+  offsets: []
+  compressedLengths: []
+  decompressedLengths: []
+  compressedBlob: 
+  stageCounts: 
+  m_Dependencies: []
+  m_NonModifiableTextures: {}
+  m_ShaderIsBaked: 0
+  m_DefaultTextures: {}
+  errors:
+  - message: 'Parse error: syntax error, unexpected $undefined, expecting TOK_TRUE
+      or TOK_FALSE or TVAL_VARREF or TVAL_ALPHAMODE'
+    messageDetails: 
+    file: 
+    compilerPlatform: -1
+    line: 10
+    warning: 0
+    runtimeError: 0
+  - message: Both vertex and fragment programs must be present in a shader snippet.
+      Excluding it from compilation.
+    messageDetails: 
+    file: 
+    compilerPlatform: 26
+    line: 14
+    warning: 1
+    runtimeError: 0
+  m_CompileInfo:
+    m_Snippets:
+      11717:
+        serializedVersion: 3
+        m_Code: "#line 12 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 12 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\nfloat4x4_BoxPos;\n            "
+        m_AssetPath: 
+        m_PlatformMask: 4261552591
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 14
+        m_TypesMask: 0
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: 1909f56bfc062723c751e8b465ee728b
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: 00000000000000000000000000000000
+        m_FromOther: 0
+        m_ForceSyncCompilation: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0: []
+        m_VariantsUserLocal1: []
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 33
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
+    m_MeshComponentsFromSnippets: 0
+    m_HasSurfaceShaders: 0
+    m_HasFixedFunctionShaders: 0
+  m_CompileSmokeTestAfterImport: 0
 --- !u!1 &1761081396
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,7 +1967,7 @@ Transform:
   m_GameObject: {fileID: 2093935247}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5.89}
+  m_LocalPosition: {x: 0, y: 0, z: 6.093}
   m_LocalScale: {x: 2.0661, y: 2.0661, z: 2.0661}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1321,7 +1986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Renderer: {fileID: 2093935251}
-  shaderAsset: {fileID: 4800000, guid: f2a07fb8783fedaae967986d5219fc93, type: 3}
+  shaderAsset: {fileID: 1635005494}
   materialAsset: {fileID: 2100000, guid: 41beb6b7bed0e7eb29270d55edef8e9b, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Object = System.Object;
 
 namespace me.tooster.sdf.Editor.API {
     /// <summary>
@@ -18,7 +20,7 @@ namespace me.tooster.sdf.Editor.API {
     public class Graph : Representable {
         public record Edge<T>(IOutputPort<T> Source, IInputPort<T> Target) where T : Port.Data;
 
-        [field: SerializeField] public GUID        Guid         { get; init; } = GUID.Generate();
+        [field: SerializeField] public Guid        Guid         { get; init; } = Guid.NewGuid();
         [field: SerializeField] public string      InternalName { get; }
         [field: SerializeField] public string      DisplayName  { get; }
         [field: SerializeField] public TargetNode? ActiveTarget { get; set; }
@@ -110,6 +112,12 @@ namespace me.tooster.sdf.Editor.API {
             return true;
         }
 
+        
+        // using reflection
+        public static IEnumerable<Node> CollectNodes(Object o) =>
+            o.GetType().GetFields(BindingFlags.Instance)
+                .Select(field => field.GetValue(o)).OfType<Node>();
+        
         /// <summary>
         /// Attempts to connect ports. Disconnects previous connection. Invokes OnConnect event after connection.
         /// Doesn't invoke OnDisconnect on the disconnected node.
@@ -142,11 +150,6 @@ namespace me.tooster.sdf.Editor.API {
 
             OnConnected(target, source);
             return true;
-        }
-
-        // TODO: properties should be unique in terms of their names
-        public Property<T> CreateProperty<T>(string displayName, T defaultValue) {
-            return new Property<T>(displayName, displayName, defaultValue);
         }
 
         /*

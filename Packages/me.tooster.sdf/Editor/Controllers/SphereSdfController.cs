@@ -1,16 +1,14 @@
 using System;
+using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.NodeGraph.Nodes.SdfNodes;
+using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
 
 namespace me.tooster.sdf.Editor.Controllers {
     public class SphereSdfController : TransformController {
-        private SdfSphereNode sphereNode;
-
-        protected override void Start() {
-            sphereNode ??= new SdfSphereNode(null, null);
-        }
-
+        Property<float> radius = new Property<float>("R", "Radius", 1f);
+        
         // TODO: add accelerator
         [MenuItem("GameObject/SDF/Sphere", priority=-20)]
         public static void CreateSDFSphere() {
