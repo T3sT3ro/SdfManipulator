@@ -4,8 +4,9 @@ using System.Linq;
 using me.tooster.sdf.AST.Syntax;
 
 namespace me.tooster.sdf.AST {
+    // TODO: move to Zipper data structure with necessary extensions
     public static class Navigation {
-        public static IEnumerable<IAnchor> Ancestors(IAnchor node) {
+        public static IEnumerable<IAnchor> Ancestors(this IAnchor node) {
             var current = node;
             while (current.Parent is not null) {
                 yield return current.Parent;
@@ -16,13 +17,13 @@ namespace me.tooster.sdf.AST {
 
         public enum EdgeChild { FIRST, LAST }
         
-        public static Token<TLang>? getFirstToken<TLang>(IAnchor<SyntaxOrToken<TLang>> a) =>
-            getEdgeTokenToken(a, EdgeChild.FIRST);
+        public static Token<TLang>? FirstToken<TLang>(this IAnchor<SyntaxOrToken<TLang>> a) =>
+            a.EdgeToken(EdgeChild.FIRST);
 
-        public static Token<TLang>? getLastToken<TLang>(IAnchor<SyntaxOrToken<TLang>> a) =>
-            getEdgeTokenToken(a, EdgeChild.LAST);
+        public static Token<TLang>? LastToken<TLang>(this IAnchor<SyntaxOrToken<TLang>> a) =>
+            a.EdgeToken(EdgeChild.LAST);
 
-        private static Token<TLang>? getEdgeTokenToken<TLang>(IAnchor<SyntaxOrToken<TLang>> a, EdgeChild edgeChild) {
+        private static Token<TLang>? EdgeToken<TLang>(this IAnchor<SyntaxOrToken<TLang>> a, EdgeChild edgeChild) {
             var stack = new Stack<SyntaxOrToken<TLang>>();
             stack.Push(a.Node);
             while (stack.Count > 0) {
@@ -39,7 +40,7 @@ namespace me.tooster.sdf.AST {
         }
 
         // from https://github.com/dotnet/roslyn/blob/462e180642875c0540ae1379e60425f635ec4f78/src/Compilers/Core/Portable/Syntax/SyntaxNavigator.cs#L435
-        public static Token<Lang>? getNextToken<Lang, T>(IAnchor<T> aToken) where T : Token<Lang> {
+        public static Token<Lang>? NextToken<Lang>(this IAnchor<Token<Lang>> aToken) {
             // onlly internal nodes are derivations of Syntax and StructuredTrivia
             IAnchor<SyntaxOrToken<Lang>>? lookingFor = aToken;
             var parent = aToken.Parent;
@@ -49,7 +50,7 @@ namespace me.tooster.sdf.AST {
                     if (returnNext) {
                         if (child is Token<Lang> tok) return tok;
 
-                        return getFirstToken(Anchor.New((Syntax<Lang>)child, parent));
+                        return Anchor.New((Syntax<Lang>)child, parent).FirstToken();
                     }
 
                     if (ReferenceEquals(child, lookingFor?.Node)) {

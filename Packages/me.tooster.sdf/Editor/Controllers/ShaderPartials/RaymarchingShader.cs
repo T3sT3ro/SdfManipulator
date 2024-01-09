@@ -34,7 +34,8 @@ using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public static class RaymarchingShader {
         public static string MainShader(SdfSceneController controller) {
-            return ShaderlabFormatter.Format(shader(controller))?.ToString() ?? "// generation failed";
+            var formattedSyntax = ShaderlabFormatter.Format(shader(controller));
+            return formattedSyntax?.ToString() ?? "// empty shader";
         }
 
         #region shaderlab

@@ -159,10 +159,10 @@ namespace me.tooster.sdf.AST.Syntax {
         }
 
         public static TriviaList<Lang>? LeadingTriviaList<TSyntax, Lang>(this TSyntax syntax)
-            where TSyntax : Syntax<Lang> => Navigation.getFirstToken(Anchor.New(syntax))?.LeadingTriviaList;
+            where TSyntax : Syntax<Lang> => Anchor.New(syntax).FirstToken()?.LeadingTriviaList;
 
         public static TriviaList<Lang>? TrailingTriviaList<TSyntax, Lang>(this TSyntax syntax)
-            where TSyntax : Syntax<Lang> => Navigation.getLastToken(Anchor.New(syntax))?.TrailingTriviaList;
+            where TSyntax : Syntax<Lang> => Anchor.New(syntax).LastToken()?.TrailingTriviaList;
 
         public static TSyntax WithLeadingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
             where TSyntax : Syntax<Lang> =>
@@ -186,8 +186,8 @@ namespace me.tooster.sdf.AST.Syntax {
             Navigation.EdgeChild edgeChild
         ) where TSyntax : Syntax<Lang> {
             var oldToken = edgeChild is Navigation.EdgeChild.FIRST
-                ? Navigation.getFirstToken(Anchor.New(syntax))
-                : Navigation.getLastToken(Anchor.New(syntax));
+                ? Anchor.New(syntax).FirstToken()
+                : Anchor.New(syntax).LastToken();
 
             if (oldToken is null) return syntax;
 

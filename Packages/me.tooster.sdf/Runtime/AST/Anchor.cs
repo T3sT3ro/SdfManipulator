@@ -19,7 +19,7 @@ namespace me.tooster.sdf.AST {
 
         public static Anchor<T> New<T>(T value, Anchor? other = null) => new(value, other);
         
-        public override string ToString() => "[^]: " + Node + "";
+        public override string ToString() => "↑: " + Node + "";
     }
 
     public interface IAnchor<out T> : IAnchor {
@@ -45,6 +45,6 @@ namespace me.tooster.sdf.AST {
 
         public static implicit operator T(Anchor<T> anchor) => anchor.Node;
 
-        public override string ToString() => "[^]: " + Node + "";
+        public override string ToString() => "↑: " + Node + "";
     }
 }

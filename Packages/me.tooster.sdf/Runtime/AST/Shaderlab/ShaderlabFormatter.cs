@@ -10,8 +10,6 @@ using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using Whitespace = me.tooster.sdf.AST.Syntax.CommonTrivia.Whitespace<me.tooster.sdf.AST.shaderlab>;
 using NewLine = me.tooster.sdf.AST.Syntax.CommonTrivia.NewLine<me.tooster.sdf.AST.shaderlab>;
-using CloseBraceToken = me.tooster.sdf.AST.Hlsl.Syntax.CloseBraceToken;
-using OpenBraceToken = me.tooster.sdf.AST.Hlsl.Syntax.OpenBraceToken;
 
 namespace me.tooster.sdf.AST.Shaderlab {
     public class ShaderlabFormatter : Mapper<FormatterState> {
@@ -34,23 +32,28 @@ namespace me.tooster.sdf.AST.Shaderlab {
         };
 
         private static bool breakLineAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
-            switch (a) {
-                case {
-                        Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or EndHlslKeyword
-                        or HlslIncludeKeyword
-                    }
-                    or { Node: QuotedStringLiteral, Parent: Anchor<CommandArgument> }:
-                    return true;
-                default:
-                    var nextToken = Navigation.getNextToken<shaderlab, Token<shaderlab>>(a);
-                    if (nextToken is CloseBraceToken)
-                        return true;
+            if (a is {
+                    Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or EndHlslKeyword
+                    or HlslIncludeKeyword
+                }
+                or { Node: QuotedStringLiteral, Parent: Anchor<CommandArgument> })
+                return true;
 
-                    return Navigation.Ancestors(a).Any(parent =>
-                        parent is { Node: Command } or { Node: Property } or { Node: Tag }
-                     && Navigation.getLastToken((IAnchor<Syntax<shaderlab>>)parent)
-                     == a.Node);
-            }
+            var nextToken = a.NextToken();
+            if (nextToken is CloseBraceToken)
+                return true;
+
+            return a.Ancestors().Any(parent =>
+                parent is { Node: Command } or { Node: Property } or { Node: Tag }
+             && ((IAnchor<Syntax<shaderlab>>)parent).LastToken()
+             == a.Node);
+        }
+
+        private static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
+            if (a is { Node: OpenBracketToken or OpenParenToken or DotToken }) return false;
+            if (a.NextToken() is CloseBracketToken && a.Parent?.Node is CommandArgument ) return false;
+
+            return true;
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
@@ -71,11 +74,16 @@ namespace me.tooster.sdf.AST.Shaderlab {
                     new Whitespace { Text = startingIndent }));
             }
 
-            if (!breakLineAfter(a))
-                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace()) };
+            if (breakLineAfter(a)) {
+                state.MarkLineEnd();
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine()) };
+            }
 
-            state.MarkLineEnd();
-            return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine()) };
+            if (whitespaceAfter(a)) {
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace()) };
+            }
+            
+            return token with { LeadingTriviaList = leading};
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<SimpleTrivia<shaderlab>> a) {
