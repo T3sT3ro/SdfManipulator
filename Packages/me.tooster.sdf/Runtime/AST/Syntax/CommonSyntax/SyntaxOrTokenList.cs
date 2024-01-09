@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace me.tooster.sdf.AST.Syntax {
+namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
     /// <summary>
     /// List containing both syntax and tokens of specific language
     /// </summary>

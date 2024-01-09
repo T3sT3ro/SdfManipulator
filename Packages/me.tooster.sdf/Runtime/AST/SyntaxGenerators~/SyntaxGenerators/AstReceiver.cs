@@ -44,12 +44,12 @@ namespace me.tooster.sdf.AST.Generators {
             var symbol = (ModelExtensions.GetDeclaredSymbol(context.SemanticModel, recordSyntax) as ITypeSymbol)!;
 
 
-            var isSyntax = Utils.isAnnotated(symbol, syntaxAttribute!);
-            var isToken = Utils.isAnnotated(symbol, tokenAttribute!);
-            var isTrivia = Utils.isAnnotated(symbol, triviaAttribute!);
+            var isSyntax = symbol.isAnnotated(syntaxAttribute!);
+            var isToken = symbol.isAnnotated(tokenAttribute!);
+            var isTrivia = symbol.isAnnotated(triviaAttribute!);
             if (!isToken && !isSyntax && !isTrivia) return;
 
-            var lang = Utils.getLangName(symbol);
+            var lang = symbol.getLangName();
             LanguageSymbols.TryGetValue(lang, out var ss);
             ss ??= LanguageSymbols[lang] = new SymbolSet(lang);
 
@@ -90,8 +90,8 @@ namespace me.tooster.sdf.AST.Generators {
 
         /// asserts, with diagnostic when needed, that a type is derived from Syntax or is annotated with [Syntax] for generation 
         private bool assertSyntaxDerived(ITypeSymbol symbol, RecordDeclarationSyntax recordSyntax) {
-            if (Utils.baseTypes(symbol).Any(type => type is INamedTypeSymbol { ConstructedFrom: { Name: "Syntax" } }
-                 || Utils.isAnnotated(type, syntaxAttribute!))) {
+            if (symbol.baseTypes().Any(type => type is INamedTypeSymbol { ConstructedFrom: { Name: "Syntax" } }
+                 || type.isAnnotated(syntaxAttribute!))) {
                 return true;
             }
 

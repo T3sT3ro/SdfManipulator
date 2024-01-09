@@ -19,12 +19,13 @@ namespace me.tooster.sdf.AST.Generators {
 
         private void GenerateSyntaxPartials(ITypeSymbol recordSymbol, SymbolSet ss) {
             var langName = ss.LangName;
-            var ownProperties = Utils.getOwnProperties(recordSymbol).ToList();
-            var inheritedProperties = Utils.getInheritedProperties(recordSymbol).ToList();
+            var ownProperties = recordSymbol.OwnProperties().Where(Utils.isPropertyCompatible).ToList();
+            var inheritedProperties = recordSymbol.InheritedProperties().Where(Utils.isPropertyCompatible).ToList();
             var allUsings = new List<UsingDirectiveSyntax>()
             {
                 UsingDirective(IdentifierName("System.Collections.Generic")),
                 UsingDirective(IdentifierName($"{ROOT_NAMESPACE}.Syntax")),
+                // UsingDirective(IdentifierName($"{ROOT_NAMESPACE}.{langName}.Tokens")),
                 UsingDirective(IdentifierName("System.Linq")),
                 UsingDirective(IdentifierName("System.Text")),
             };
@@ -40,7 +41,7 @@ namespace me.tooster.sdf.AST.Generators {
                 .WithLeadingTrivia(Trivia(NullableDirectiveTrivia(Token(SyntaxKind.EnableKeyword), true)));
 
             context.AddSource(
-                $"{string.Join(".", Utils.getQualifiedNameParts(recordSymbol).Reverse())}.g.cs",
+                $"{string.Join(".", recordSymbol.qualifiedNameParts().Reverse())}.g.cs",
                 SourceText.From(compilationUnit.NormalizeWhitespace().SyntaxTree.ToString(), Encoding.UTF8)
             );
         }
@@ -52,7 +53,7 @@ namespace me.tooster.sdf.AST.Generators {
             List<IPropertySymbol> inheritedProperties
         ) {
             var recordDeclaration = RecordDeclaration(Token(SyntaxKind.RecordKeyword),
-                    Identifier(Utils.getTypeNameWithGenericArguments(recordSymbol)))
+                    Identifier(recordSymbol.getTypeNameWithGenericArguments()))
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.PartialKeyword)))
                 .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
                 .WithCloseBraceToken(Token(SyntaxKind.CloseBraceToken));
@@ -80,9 +81,8 @@ namespace me.tooster.sdf.AST.Generators {
             }
 
             // skip toString if it exists
-            if (!recordSymbol.GetMembers("ToString").Any(m => !m.IsImplicitlyDeclared) && !recordSymbol.IsAbstract) {
-                recordDeclaration = recordDeclaration.AddMembers(ParseMemberDeclaration(
-                    "public override string ToString() => WriteTo(new StringBuilder()).ToString();")!);
+            if (Utils.generateToStringOverride(recordSymbol) is { } member) {
+                recordDeclaration = recordDeclaration.AddMembers(member);
             }
 
             // generate internal syntax
@@ -91,7 +91,7 @@ namespace me.tooster.sdf.AST.Generators {
             //         inheritedProperties));
             // }
 
-            return Utils.wrapRecordInEnclosingClasses(recordDeclaration, recordSymbol, false);
+            return recordDeclaration.wrapRecordInEnclosingClasses(recordSymbol, false);
         }
 
         /// generate ChildNodesAndTokens accessor, handle correct nullability

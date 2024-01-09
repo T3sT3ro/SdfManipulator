@@ -1,6 +1,8 @@
 #nullable enable
 using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using UnityEngine.Rendering;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     // Shader "MyShader" { ... }

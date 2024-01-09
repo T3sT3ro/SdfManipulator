@@ -1,15 +1,17 @@
 #nullable enable
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
-using me.tooster.sdf.AST.Shaderlab.Syntax.Trivias;
 using me.tooster.sdf.AST.Syntax;
-using CloseBraceToken = me.tooster.sdf.AST.Shaderlab.Syntax.CloseBraceToken;
-using OpenBraceToken = me.tooster.sdf.AST.Shaderlab.Syntax.OpenBraceToken;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using me.tooster.sdf.AST.Syntax.CommonTrivia;
+using Whitespace = me.tooster.sdf.AST.Syntax.CommonTrivia.Whitespace<me.tooster.sdf.AST.shaderlab>;
+using NewLine = me.tooster.sdf.AST.Syntax.CommonTrivia.NewLine<me.tooster.sdf.AST.shaderlab>;
+using CloseBraceToken = me.tooster.sdf.AST.Hlsl.Syntax.CloseBraceToken;
+using OpenBraceToken = me.tooster.sdf.AST.Hlsl.Syntax.OpenBraceToken;
 
 namespace me.tooster.sdf.AST.Shaderlab {
     public class ShaderlabFormatter : Mapper<FormatterState> {

@@ -1,11 +1,13 @@
 #nullable enable
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 /*
  * There is no need for handling InjectedLanguage, because other language visitors may override
  * this themselves with specific language params
  */
 namespace me.tooster.sdf.AST {
+    // TODO: split into geenric AST node visitor and CommonSyntax visitor ?
     /// Visitor returning result for visited nodes
     public interface Visitor<Lang, out R> {
         public R? Visit(Anchor<Tree<Lang>.Node> a) => default;
@@ -32,6 +34,12 @@ namespace me.tooster.sdf.AST {
         // public R? Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : Syntax<Lang> => default;
 
         public R? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => default;
+
+        public R? Visit(Anchor<Statement<Lang>> node) => default;
+
+        public R? Visit(Anchor<Expression<Lang>> node) => default;
+
+        public R? Visit(Anchor<Identifier<Lang>> node) => default;
     }
 
     /// Visitor without return values
@@ -66,5 +74,11 @@ namespace me.tooster.sdf.AST {
         // public void Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : Syntax<Lang> { }
 
         public void Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) { }
+        
+        public void Visit(Anchor<Statement<Lang>> node) { }
+
+        public void Visit(Anchor<Expression<Lang>> node) { }
+
+        public void Visit(Anchor<Identifier<Lang>> node) { }
     }
 }

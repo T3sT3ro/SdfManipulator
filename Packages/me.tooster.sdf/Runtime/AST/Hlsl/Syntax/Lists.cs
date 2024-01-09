@@ -1,4 +1,5 @@
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
     // ( T , ... , T ) 

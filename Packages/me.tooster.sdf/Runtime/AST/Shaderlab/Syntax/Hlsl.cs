@@ -1,5 +1,5 @@
 #nullable enable
-using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     [SyntaxNode] public partial record HlslInclude : SubShaderOrPassStatement {

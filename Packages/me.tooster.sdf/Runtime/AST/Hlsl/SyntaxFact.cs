@@ -1,8 +1,14 @@
 using System;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
+using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
+using Comma = me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators.Comma;
 
 namespace me.tooster.sdf.AST.Hlsl {
+    // Taken from cppreference table
+    [Obsolete("this was written a long time before the final AST packages took form, nevertheless it contains many useful values for precedence that may be useful in the future")]
     public static class SyntaxFact {
         /// Operators whose children have higher precedence require parentheses around children
         public static float Precedence(this Expression expr) => expr switch

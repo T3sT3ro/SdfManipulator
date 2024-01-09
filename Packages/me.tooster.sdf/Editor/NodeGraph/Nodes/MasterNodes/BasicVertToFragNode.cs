@@ -1,6 +1,4 @@
 #nullable enable
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
@@ -14,11 +12,12 @@ using StructMember = me.tooster.sdf.AST.Hlsl.Syntax.Type.Struct.Member;
 using MemberAccess = me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators.Member;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 using VariableDeclarator = me.tooster.sdf.AST.Hlsl.Syntax.VariableDeclarator;
+using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
+using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
 
 namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
     // TODO dynamic interpolators using InOutPorts and their lists
     public record BasicVertToFragNode : Node, IVertexToFragmentNode {
-        
         public InOutPort<HlslVector> position { get; }
         public InOutPort<HlslVector> normal   { get; }
         public InOutPort<HlslVector> uv       { get; }
@@ -57,25 +56,25 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
             {
                 new StructMember
                 {
-                    type = new VectorToken { arity = 4, type = new FloatKeyword() },
+                    type = new VectorToken(),
                     id = positionMemberName,
                     semantic = new SvPositionSemantic()
                 },
                 new StructMember
                 {
-                    type = new VectorToken { arity = 4, type = new FloatKeyword() },
+                    type = new VectorToken(),
                     id = normalMemberName,
                     semantic = new NormalSemantic()
                 },
                 new StructMember
                 {
-                    type = new VectorToken { arity = 2, type = new FloatKeyword() },
+                    type = new VectorToken { arity = 2 },
                     id = texCoordMemberName,
                     semantic = new TexcoordSemantic { n = 0 }
                 },
                 new StructMember
                 {
-                    type = new VectorToken { arity = 4, type = new FloatKeyword() },
+                    type = new VectorToken(),
                     id = colorMemberName,
                     semantic = new ColorSemantic { n = 0 }
                 },
@@ -109,7 +108,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
             VertToFragVariableDeclaration,                                          // v2f vertOut;
             MemberAssignment(positionMemberName, position.Eval().vectorExpression), // vertOut.pos = {input};
             MemberAssignment(normalMemberName, normal.Eval().vectorExpression),     // vertOut.normal = {input};
-            MemberAssignment(texCoordMemberName, uv.Eval().vectorExpression), // vertOut.texCoord = {input};
+            MemberAssignment(texCoordMemberName, uv.Eval().vectorExpression),       // vertOut.texCoord = {input};
             MemberAssignment(colorMemberName, color.Eval().vectorExpression),       // vertOut.color = {input};
             new Return { expression = new Identifier { id = vertOutVarName } }      // return vertOut;
         };

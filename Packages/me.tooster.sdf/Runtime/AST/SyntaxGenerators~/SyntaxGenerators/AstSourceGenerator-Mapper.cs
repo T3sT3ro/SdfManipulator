@@ -40,15 +40,15 @@ namespace me.tooster.sdf.AST.Generators {
 
             var syntaxVisitMethods = ss.Syntaxes.Select(record => {
                 var parameterName = "a";
-                var paramTypeName = Utils.getFullyQualifiedTypeNameWithGenerics(record, ss.LangName, out var tp);
+                var paramTypeName = record.getFullyQualifiedTypeNameWithGenerics(ss.LangName, out var tp);
                 var parameterType = IdentifierName($"Anchor<{paramTypeName}>");
                 TypeSyntax returnType = IdentifierName(Identifier($"Tree<{ss.LangName.ToLower()}>.Node?"));
 
-                var ownProperties = Utils.getOwnProperties(record).ToList();
-                var inheritedProperties = Utils.getInheritedProperties(record).ToList();
+                var ownProperties = Utils.OwnProperties(record).Where(Utils.isPropertyCompatible).ToList();
+                var inheritedProperties = Utils.InheritedProperties(record).Where(Utils.isPropertyCompatible);
                 var inheritedAndOwnProperties = ownProperties.Concat(inheritedProperties).ToList();
 
-                MethodDeclarationSyntax methodDeclaration = (MethodDeclarationSyntax)ParseMemberDeclaration(
+                var methodDeclaration = (MethodDeclarationSyntax)ParseMemberDeclaration(
                     $"public virtual Tree<{ss.LangName.ToLower()}>.Node? Visit(Anchor<{record}> a) {{}}"
                 )!;
 
@@ -75,7 +75,7 @@ namespace me.tooster.sdf.AST.Generators {
 
         private static IEnumerable<StatementSyntax> mapperVisitOverride(List<IPropertySymbol> props, string langName) {
             foreach (var p in props) {
-                var isToken = Utils.isToken(p.Type);
+                var isToken = p.Type.isAstToken();
                 yield return (LocalDeclarationStatementSyntax)ParseStatement(
                     $"var {p.Name} = a.Node.{p.Name} is null ? null : Visit(Anchor.New{(isToken ? $"<Token<{langName.ToLower()}>>" : "")}(a.Node.{p.Name}, a)) as {p.Type.WithNullableAnnotation(NullableAnnotation.NotAnnotated)};");
             }

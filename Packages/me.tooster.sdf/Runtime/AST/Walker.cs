@@ -1,6 +1,7 @@
 #nullable enable
 
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 namespace me.tooster.sdf.AST {
     // instead of doing double dispatch using visit-accept pairs, pattern match can be used

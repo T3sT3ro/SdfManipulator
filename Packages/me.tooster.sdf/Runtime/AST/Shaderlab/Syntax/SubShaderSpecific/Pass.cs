@@ -1,4 +1,5 @@
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific {
     /// <a href="https://docs.unity3d.com/Manual/SL-Pass.html">Pass</a> 

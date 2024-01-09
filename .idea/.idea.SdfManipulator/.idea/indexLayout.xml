@@ -3,6 +3,8 @@
   <component name="UserContentModel">
     <attachedFolders />
     <explicitIncludes />
-    <explicitExcludes />
+    <explicitExcludes>
+      <Path>Packages/me.tooster.sdf/Runtime/AST/Shaderlab/Syntax/Tokens.cs</Path>
+    </explicitExcludes>
   </component>
 </project>

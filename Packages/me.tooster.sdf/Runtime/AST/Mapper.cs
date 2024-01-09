@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 namespace me.tooster.sdf.AST {
     public record MapperState {
@@ -87,5 +88,9 @@ namespace me.tooster.sdf.AST {
 
             return changed ? newList : a.Node;
         }
+
+        public Tree<Lang>.Node? Visit(Anchor<Statement<Lang>> a)  => a.Node.Accept(this, a.Parent);
+        public Tree<Lang>.Node? Visit(Anchor<Expression<Lang>> a) => a.Node.Accept(this, a.Parent);
+        public Tree<Lang>.Node? Visit(Anchor<Identifier<Lang>> a) => a.Node.Accept(this, a.Parent);
     }
 }

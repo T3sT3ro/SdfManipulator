@@ -1,5 +1,7 @@
 #nullable enable
 using me.tooster.sdf.AST.Syntax;
+using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
+using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations {
     // int foo(float x, row_major float y : VPOS = 7.0f) { return x + y; }

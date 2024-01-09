@@ -1,3 +1,5 @@
+using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
+
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
     [SyntaxNode] public partial record Identifier : Expression {
         public IdentifierToken id { get; init; }

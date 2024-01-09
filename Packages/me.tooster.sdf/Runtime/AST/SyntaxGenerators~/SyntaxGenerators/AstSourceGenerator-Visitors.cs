@@ -46,7 +46,7 @@ namespace me.tooster.sdf.AST.Generators {
                 // var recordName = Utils.getTypeNameWithGenericArguments(record);
                 var isTypeGeneric = record is INamedTypeSymbol { IsGenericType: true } namedTypeSymbol;
                 var parameterName = "node";
-                var paramTypeName = Utils.getFullyQualifiedTypeNameWithGenerics(record, ss.LangName, out var tp);
+                var paramTypeName = record.getFullyQualifiedTypeNameWithGenerics(ss.LangName, out var tp);
                 var parameterType = IdentifierName($"Anchor<{paramTypeName}>");
                 TypeSyntax returnType = withReturnTypes
                     ? NullableType(IdentifierName("R"))

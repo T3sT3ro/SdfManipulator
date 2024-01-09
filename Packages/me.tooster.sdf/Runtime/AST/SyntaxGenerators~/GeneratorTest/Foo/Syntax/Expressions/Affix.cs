@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 namespace me.tooster.sdf.AST.Foo.Syntax.Expressions {
-    public abstract partial record Affix : Expression {
+    public abstract partial record Affix : Expression<foo> {
         public ZeroLiteral zero { get; init; }
 
         [SyntaxNode] public partial record Succ : Affix {

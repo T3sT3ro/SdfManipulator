@@ -42,31 +42,31 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
             {
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { arity = 4, type = new FloatKeyword() },
+                    type = new VectorToken(),
                     id = positionMemberName,
                     semantic = new PositionSemantic()
                 },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { arity = 3, type = new FloatKeyword() },
+                    type = new VectorToken { arity = 3 },
                     id = normalMemberName,
                     semantic = new NormalSemantic()
                 },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { arity = 2, type = new FloatKeyword() },
+                    type = new VectorToken { arity = 2 },
                     id = uvMemberName,
                     semantic = new TexcoordSemantic { n = 0 }
                 },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { arity = 3, type = new FloatKeyword() },
+                    type = new VectorToken { arity = 3 },
                     id = hitposMemberName,
                     semantic = new TexcoordSemantic { n = 1 }
                 },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { arity = 3, type = new FloatKeyword() },
+                    type = new VectorToken { arity = 3 },
                     id = rdCamMemberName,
                     semantic = new TexcoordSemantic { n = 2 }
                 }

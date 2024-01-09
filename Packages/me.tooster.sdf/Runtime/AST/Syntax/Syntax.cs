@@ -18,6 +18,6 @@ namespace me.tooster.sdf.AST.Syntax {
             return sb;
         }
         
-        public override string ToString() => WriteTo(new StringBuilder()).ToString();
+        public override string ToString() => base.ToString();
     }
 }

@@ -8,24 +8,23 @@ using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
-using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations;
-using me.tooster.sdf.AST.Hlsl.Syntax.Trivias;
 using me.tooster.sdf.AST.Shaderlab;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Commands;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using static me.tooster.sdf.AST.Hlsl.Syntax.VariableDeclarator;
 using FloatKeyword = me.tooster.sdf.AST.Shaderlab.Syntax.FloatKeyword;
 using FloatLiteral = me.tooster.sdf.AST.Shaderlab.Syntax.FloatLiteral;
+using Identifier = me.tooster.sdf.AST.Hlsl.Syntax.Identifier;
 using Shader = me.tooster.sdf.AST.Shaderlab.Syntax.Shader;
 using MaterialProperties = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.MaterialProperties;
 using SubShader = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.SubShader;
 using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
-using HlslStatement = me.tooster.sdf.AST.Hlsl.Syntax.Statement;
 using IdentifierToken = me.tooster.sdf.AST.Hlsl.Syntax.IdentifierToken;
 using IntLiteral = me.tooster.sdf.AST.Shaderlab.Syntax.IntLiteral;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
@@ -153,7 +152,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
         };
 
         private static Tree<hlsl> HlslTree => new Tree<hlsl>(
-            new HlslStatement[]
+            new Statement<hlsl>[]
             {
                 new FunctionDeclaration { }
             }.ToSyntaxList()
@@ -174,16 +173,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
 
         private FunctionDeclaration vertFunctionDeclaration => new FunctionDeclaration
         {
-            id = new IdentifierToken
-            {
-                ValidatedText = vertexMethodName,
-                LeadingTriviaList = new Trivia<hlsl>[]
-                {
-                    new PreprocessorDirective { Structure = new Pragma { tokenString = $"vertex {vertexMethodName}" } },
-                    new PreprocessorDirective
-                        { Structure = new Pragma { tokenString = $"fragment {fragmentMethodName}" } },
-                }
-            },
+            id = new IdentifierToken { ValidatedText = vertexMethodName, },
             paramList = new FunctionDeclaration.Parameter[]
             {
                 new()
@@ -193,19 +183,22 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
                 }
             },
             body = new Block { statements = vertFunctionBody }
-        };
+        }.WithLeadingTrivia(
+                new Pragma { tokenString = $"vertex {vertexMethodName}" }.ToStructuredTrivia<hlsl, Pragma>(),
+                new Pragma { tokenString = $"fragment {fragmentMethodName}" }.ToStructuredTrivia<hlsl, Pragma>()
+            );
 
-        private Statement assign(string left, Expression right) => new ExpressionStatement
+        private Statement<hlsl> assign(string left, Expression<hlsl> right) => new ExpressionStatement
         {
             expression = new AssignmentExpression
             {
-                left = left.Split('.').Aggregate((Expression)new Identifier { id = left.Split('.')[0] },
+                left = left.Split('.').Aggregate((Expression<hlsl>)new Identifier { id = left.Split('.')[0] },
                     (acc, member) => new Member { expression = acc, member = member }),
                 right = right
             }
         };
 
-        private SyntaxList<hlsl, HlslStatement> vertFunctionBody => new HlslStatement[]
+        private SyntaxList<hlsl, Statement<hlsl>> vertFunctionBody => new Statement<hlsl>[]
         {
             new VariableDeclaration
             {

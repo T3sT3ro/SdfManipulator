@@ -1,3 +1,4 @@
+using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.Editor.API;
@@ -24,14 +25,14 @@ namespace me.tooster.sdf.Editor.NodeGraph.PortData {
             {
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { type = new FixedKeyword(), arity = 4 },
+                    type = new VectorToken { type = Constants.ScalarKind.@fixed },
                     id = MaterialAlbedoMemberName
                 },
                 new Type.Struct.Member { type = new HalfKeyword(), id = MaterialMetallicMemberName },
                 new Type.Struct.Member { type = new HalfKeyword(), id = MaterialSmoothnessMemberName },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { type = new HalfKeyword(), arity = 3 },
+                    type = new VectorToken { type = Constants.ScalarKind.half, arity = 3 },
                     id = MaterialEmissionMemberName
                 },
                 new Type.Struct.Member { type = new HalfKeyword(), id = MaterialOcclusionMemberName },

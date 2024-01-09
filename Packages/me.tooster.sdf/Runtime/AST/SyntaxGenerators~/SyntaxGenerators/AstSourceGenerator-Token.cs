@@ -17,8 +17,11 @@ namespace me.tooster.sdf.AST.Generators {
                     UsingDirective(IdentifierName($"{ROOT_NAMESPACE}.{langName}"))
                 )
                 .AddMembers(
-                    NamespaceDeclaration(IdentifierName($"{ROOT_NAMESPACE}.{langName}.Syntax"))
-                        .AddMembers(tokens.Select(record => generateTokenPartial(record, langName)).ToArray())
+                    /*NamespaceDeclaration(IdentifierName($"{ROOT_NAMESPACE}.{langName}.Syntax"))
+                        .AddMembers(tokens.Select(record => generateTokenPartial(record, langName)).ToArray())*/
+                    tokens.GroupBy(token => token.ContainingNamespace.ToString())
+                        .Select(tokenGroup => NamespaceDeclaration(IdentifierName(tokenGroup.Key))
+                            .AddMembers(tokenGroup.Select(record => generateTokenPartial(record, langName)).ToArray())).ToArray()
                 );
 
             context.AddSource($"{langName}.Tokens.g.cs",
@@ -26,32 +29,45 @@ namespace me.tooster.sdf.AST.Generators {
             );
         }
 
-        private MemberDeclarationSyntax generateTokenPartial(ITypeSymbol token, string langName) {
+        private MemberDeclarationSyntax generateTokenPartial(ITypeSymbol tokenSymbol, string langName) {
             // if it has base list already, don't add it
 
             var tokenRecordDeclaration = RecordDeclaration(Token(SyntaxKind.RecordKeyword),
-                    Identifier(Utils.getTypeNameWithGenericArguments(token)))
+                    Identifier(tokenSymbol.getTypeNameWithGenericArguments()))
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.PartialKeyword)))
-                .AddMembers(PropertyDeclaration(
-                        PredefinedType(Token(SyntaxKind.StringKeyword)),
-                        Identifier("FullText"))
-                    .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
-                    .WithExpressionBody(ArrowExpressionClause(LiteralExpression(SyntaxKind.StringLiteralExpression,
-                        Literal(token.GetAttributes()
-                            .Single(attr => attr.AttributeClass!.Name == TOKEN_ATTRIBUTE_NAME)
-                            .ConstructorArguments[0].Value as string ?? string.Empty))))
-                    .WithSemicolonToken(
-                        Token(SyntaxKind.SemicolonToken))/*,
-                    Utils.GenerateVisitorAcceptor(langName),
-                    Utils.GenerateReturningVisitorAcceptor(langName)*/
-                )
                 .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
                 .WithCloseBraceToken(Token(SyntaxKind.CloseBraceToken));
 
-            return token.BaseType?.IsAbstract == true
-                ? tokenRecordDeclaration
-                : tokenRecordDeclaration.AddBaseListTypes(
-                    SimpleBaseType(IdentifierName($"Token<{langName.ToLower()}>")));
+            if (tokenSymbol.BaseType?.IsAbstract == false)
+                tokenRecordDeclaration =
+                    tokenRecordDeclaration.AddBaseListTypes(
+                        SimpleBaseType(IdentifierName($"Token<{langName.ToLower()}>")));
+
+            if (!tokenSymbol.IsAbstract && tokenSymbol.OwnProperties("Text").Concat(tokenSymbol.InheritedProperties("Text"))
+                    .All(m => m.IsAbstract))
+                tokenRecordDeclaration = tokenRecordDeclaration.AddMembers(PropertyDeclaration(
+                            PredefinedType(Token(SyntaxKind.StringKeyword)),
+                            Identifier("Text"))
+                        .WithModifiers(
+                            TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
+                        .WithExpressionBody(ArrowExpressionClause(LiteralExpression(
+                            SyntaxKind.StringLiteralExpression,
+                            Literal(tokenSymbol.GetAttributes()
+                                .Single(attr => attr.AttributeClass!.Name == TOKEN_ATTRIBUTE_NAME)
+                                .ConstructorArguments[0].Value as string ?? string.Empty))))
+                        .WithSemicolonToken(
+                            Token(SyntaxKind.SemicolonToken)) /*,
+                        Utils.GenerateVisitorAcceptor(langName),
+                        Utils.GenerateReturningVisitorAcceptor(langName)*/
+                );
+
+            if (!tokenSymbol.GetMembers("ToString").Any(m => !m.IsImplicitlyDeclared) /* && !recordSymbol.IsAbstract*/
+               ) {
+                tokenRecordDeclaration = tokenRecordDeclaration.AddMembers(ParseMemberDeclaration(
+                    "public override string ToString() => base.ToString();")!);
+            }
+
+            return tokenRecordDeclaration;
         }
     }
 }

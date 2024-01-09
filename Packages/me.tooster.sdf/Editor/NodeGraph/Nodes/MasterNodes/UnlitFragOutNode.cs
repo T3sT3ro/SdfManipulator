@@ -30,19 +30,19 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
             {
                 new StructMember
                 {
-                    type = new VectorToken { arity = 4, type = new FloatKeyword() },
+                    type = new VectorToken(),
                     id = colorMemberName,
                     semantic = new ColorSemantic()
                 },
                 new StructMember
                 {
-                    type = new VectorToken { arity = 4, type = new FloatKeyword() },
+                    type = new VectorToken(),
                     id = normalMemberName,
                     semantic = new NormalSemantic()
                 },
                 new StructMember
                 {
-                    type = new VectorToken { arity = 4, type = new FloatKeyword() },
+                    type = new VectorToken(),
                     id = idMemberName,
                     semantic = new SvTargetSemantic { n = 0 }
                 }

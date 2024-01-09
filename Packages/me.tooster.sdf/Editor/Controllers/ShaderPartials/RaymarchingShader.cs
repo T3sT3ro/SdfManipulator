@@ -13,20 +13,20 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations;
-using me.tooster.sdf.AST.Hlsl.Syntax.Trivias;
 using me.tooster.sdf.AST.Shaderlab;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Commands;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.NodeGraph.Nodes;
 using static me.tooster.sdf.AST.Hlsl.Syntax.VariableDeclarator;
 using FloatKeyword = me.tooster.sdf.AST.Shaderlab.Syntax.FloatKeyword;
 using FloatLiteral = me.tooster.sdf.AST.Shaderlab.Syntax.FloatLiteral;
+using Identifier = me.tooster.sdf.AST.Hlsl.Syntax.Identifier;
 using Shader = me.tooster.sdf.AST.Shaderlab.Syntax.Shader;
 using MaterialProperties = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.MaterialProperties;
 using SubShader = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.SubShader;
 using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
-using HlslStatement = me.tooster.sdf.AST.Hlsl.Syntax.Statement;
 using IdentifierToken = me.tooster.sdf.AST.Hlsl.Syntax.IdentifierToken;
 using IntLiteral = me.tooster.sdf.AST.Shaderlab.Syntax.IntLiteral;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
@@ -127,7 +127,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
         #endregion
 
         private static Tree<hlsl> HlslTree => new Tree<hlsl>(
-            new HlslStatement[]
+            new Statement<hlsl>[]
                 {
                     new VariableDeclaration {declarator = new VariableDeclarator
                     {
@@ -136,7 +136,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                     }}
                     // new FunctionDeclaration 
                 }.ToSyntaxList()
-                .WithLeadingTrivia(new PreprocessorDirective { Structure = new Include { filepath = "UnityCG.cginc" } })
+                .WithLeadingTrivia((StructuredTrivia<hlsl, Include>)new Include { filepath = "UnityCG.cginc" })
         );
 
         #endregion

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace me.tooster.sdf.AST.Syntax {
+namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
     public record InjectedLanguage<Lang, InjectedLang>(Tree<InjectedLang>? tree) : Syntax<Lang> {
         public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens => Array.Empty<SyntaxOrToken<Lang>>();
 

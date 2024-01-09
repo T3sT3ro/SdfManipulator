@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Text;
 using me.tooster.sdf.AST.Syntax;
 
@@ -27,7 +28,7 @@ namespace me.tooster.sdf.AST.Syntax {
         public override string ToString() => Text;
     }
 
-    // needed because C# doesn't support call-site variance in patternn amatching and couldn't match over unknown parameter
+    // needed because C# doesn't support call-site variance in patternn matching and couldn't match over unknown parameter
     public abstract record StructuredTrivia<Lang> : Trivia<Lang> {
         public          Syntax<Lang>? Structure                 { get; init; }
         public override StringBuilder WriteTo(StringBuilder sb) => Structure?.WriteTo(sb) ?? sb;
@@ -40,13 +41,16 @@ namespace me.tooster.sdf.AST.Syntax {
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }
 
-    // TODO: consider if structured trivia should be abstract and derived or should there be only one class but defined by the structure type parameter
-    public abstract record StructuredTrivia<Lang, T> : StructuredTrivia<Lang> where T : Syntax<Lang> {
+    [Obsolete("This class shouldn't be needed anymore if pattern matching were to be properly used and types were properly typed")]
+    public sealed record StructuredTrivia<Lang, T> : StructuredTrivia<Lang> where T : Syntax<Lang> {
         public new T? Structure {
             get => (T?)base.Structure;
             init => base.Structure = value;
         }
 
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
+
+        public static implicit operator StructuredTrivia<Lang, T>(T syntax) =>
+            new StructuredTrivia<Lang, T> { Structure = syntax };
     }
 }

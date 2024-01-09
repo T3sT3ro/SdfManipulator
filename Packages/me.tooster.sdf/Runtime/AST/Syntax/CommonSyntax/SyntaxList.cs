@@ -1,10 +1,9 @@
 #nullable enable
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace me.tooster.sdf.AST.Syntax {
+namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
     /// <summary>
     /// List containing only syntax of specific type
     /// </summary>

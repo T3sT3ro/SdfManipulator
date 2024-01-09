@@ -1,13 +1,16 @@
 #nullable enable
 using System.Linq;
 using me.tooster.sdf.AST;
+using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.NodeGraph.Nodes;
 using me.tooster.sdf.Editor.NodeGraph.Nodes.SdfNodes;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
+using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
 
 namespace me.tooster.sdf.Editor.NodeGraph.PortData {
     public record HlslSdfFunction(Call callsyntax) : Port.Data {
@@ -36,13 +39,13 @@ namespace me.tooster.sdf.Editor.NodeGraph.PortData {
                 new Type.Struct.Member { type = new IntKeyword(), id = SdfIdMemberName },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { type = new FloatKeyword(), arity = 3 },
+                    type = new VectorToken { type = Constants.ScalarKind.@float, arity = 3 },
                     id = SdfPointMemberName
                 },
                 new Type.Struct.Member { type = new FloatKeyword(), id = SdfDistanceMemberName },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { type = new FixedKeyword(), arity = 3 },
+                    type = new VectorToken { type = Constants.ScalarKind.@float, arity = 3 },
                     id = SdfNormalMemberName
                 },
                 new Type.Struct.Member

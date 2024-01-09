@@ -37,7 +37,15 @@ namespace me.tooster.sdf.AST {
         }
     }
 
-    public interface Formatter {
+    public interface Formatter<Lang> : Visitor<Lang, Tree<Lang>.Node> {
         
+        FormatterState State { get; }
+        
+        internal int  getIndentChange<T>(Anchor<T> a) where T : Token<Lang>;
+        internal bool breakLineAfter<T>(Anchor<T> a) where T : Token<Lang>;
+        
+        Tree<Lang>.Node? Visitor<Lang, Tree<Lang>.Node>.Visit(Anchor<Token<Lang>> a) {
+            return a.Node;
+        }
     }
 }

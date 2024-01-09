@@ -1,8 +1,9 @@
 #nullable enable
 using me.tooster.sdf.AST.Hlsl.Syntax;
-using me.tooster.sdf.AST.Hlsl.Syntax.Trivias;
 using me.tooster.sdf.AST.Syntax;
-using Whitespace = me.tooster.sdf.AST.Hlsl.Syntax.Trivias.Whitespace;
+using me.tooster.sdf.AST.Syntax.CommonTrivia;
+using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
+using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
 
 namespace me.tooster.sdf.AST.Hlsl {
     public class HlslFormatter : Mapper<FormatterState> {
@@ -44,15 +45,15 @@ namespace me.tooster.sdf.AST.Hlsl {
             TriviaList<hlsl>? leading = token.LeadingTriviaList;
 
             if (startingIndent is not null) {
-                leading = new TriviaList<hlsl>(new Whitespace { Text = startingIndent });
+                leading = new TriviaList<hlsl>(new Whitespace<hlsl> { Text = startingIndent });
             }
 
             if (breakLineAfter(a)) {
                 state.MarkLineEnd();
-                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine()) };
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine<hlsl>()) };
             }
 
-            return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace()) };
+            return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace<hlsl>()) };
         }
     }
 }

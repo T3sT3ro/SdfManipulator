@@ -10,8 +10,8 @@ namespace me.tooster.sdf.Tests.Editor.AST {
             var preInc = new Affix.Pre { id = identifier, prefixOperator = new PlusPlusToken() };
             var postInc = new Affix.Post { id = identifier, postfixOperator = new PlusPlusToken() };
 
-            Assert.AreEqual("++foo", preInc.FullText);
-            Assert.AreEqual("foo++", postInc.FullText);
+            Assert.AreEqual("++foo", preInc.ToString());
+            Assert.AreEqual("foo++", postInc.ToString());
             yield break;
         }
         

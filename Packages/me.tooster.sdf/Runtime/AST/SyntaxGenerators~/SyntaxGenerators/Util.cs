@@ -9,10 +9,9 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 
 namespace me.tooster.sdf.AST.Generators {
-    public class Utils {
+    public static class Utils {
         /// returns a sequence of enclosing names for fully qualified until terminator is found (without generic type arguments)
-        public static IEnumerable<string> getQualifiedNameParts(
-            ITypeSymbol record,
+        public static IEnumerable<string> qualifiedNameParts(this ITypeSymbol record,
             Predicate<ISymbol> terminatorPredicate
         ) {
             ISymbol current = record;
@@ -23,35 +22,34 @@ namespace me.tooster.sdf.AST.Generators {
             }
         }
 
-        public static IEnumerable<string> getQualifiedNameParts(
-            ITypeSymbol record,
+        public static IEnumerable<string> qualifiedNameParts(this ITypeSymbol record,
             string terminator = AstSourceGenerator.AST_NAMESPACE
         ) =>
-            getQualifiedNameParts(record, current => current.Name != terminator);
+            record.qualifiedNameParts(current => current.Name != terminator);
 
         /// returns properties requiring generating property getters 
-        public static IEnumerable<IPropertySymbol> getOwnProperties(ITypeSymbol recordSymbol) =>
-            recordSymbol.GetMembers().OfType<IPropertySymbol>().Where(isPropertyCompatible);
+        public static IEnumerable<IPropertySymbol> OwnProperties(this ITypeSymbol recordSymbol, string? name = null) =>
+            (name is null ? recordSymbol.GetMembers() : recordSymbol.GetMembers(name)).OfType<IPropertySymbol>();
 
-        public static IEnumerable<IPropertySymbol> getInheritedProperties(ITypeSymbol recordSymbol) {
-            var recordType = recordSymbol.BaseType;
-            while (recordType != null) {
-                foreach (var property in recordType.GetMembers().OfType<IPropertySymbol>().Where(isPropertyCompatible))
+        public static IEnumerable<IPropertySymbol> InheritedProperties(this ITypeSymbol recordSymbol, string? name = null) {
+            var parent = recordSymbol.BaseType;
+            while (parent != null) {
+                foreach (var property in (name is null ? parent.GetMembers() : parent.GetMembers(name)).OfType<IPropertySymbol>())
                     yield return property;
 
-                recordType = recordType.BaseType;
+                parent = parent.BaseType;
             }
         }
 
-        /// Returns compatible record fields for generation. Field is compatible if it's a private readonly field of
-        /// base Syntax or Token type and it's name starts with underscore. 
-        public static bool isPropertyCompatible(IPropertySymbol property) {
+        /// Returns true if record property is a AST-generator compatible.
+        /// Property is compatible if it's public, explicit and either derived from SyntaxOrToken type or annotated 
+        public static bool isPropertyCompatible(this IPropertySymbol property) {
             // must be public and explicit
             if (property.DeclaredAccessibility != Accessibility.Public || property.IsImplicitlyDeclared)
                 return false;
 
             // must be of subtype annotated with [Syntax] or [Token]
-            return baseTypes(property.Type).Any(type =>
+            return property.Type.baseTypes().Any(type =>
                 (type as INamedTypeSymbol)?.ConstructedFrom.ToDisplayString() // TODO: migrate to Name comparison?
              == $"{AstSourceGenerator.ROOT_NAMESPACE}.Syntax.SyntaxOrToken<Lang>"
              || type.GetAttributes().Any(ad =>
@@ -78,17 +76,15 @@ namespace me.tooster.sdf.AST.Generators {
             return false;
         }
 
-        public static IEnumerable<ITypeSymbol> baseTypes(
-            ITypeSymbol type,
+        public static IEnumerable<ITypeSymbol> baseTypes(this ITypeSymbol type,
             bool includeSelf = true,
             bool descendTypeConstraints = true
         ) {
             if (includeSelf) yield return type;
 
             if (descendTypeConstraints && type is ITypeParameterSymbol tps)
-                foreach (var constraint in tps.ConstraintTypes)
-                    foreach (var baseType in baseTypes(constraint, true, true))
-                        yield return baseType;
+                foreach (var baseType in tps.ConstraintTypes.SelectMany(constraint => constraint.baseTypes(true, true)))
+                    yield return baseType;
             else {
                 while (type.BaseType != null)
                     yield return type = type.BaseType;
@@ -96,13 +92,13 @@ namespace me.tooster.sdf.AST.Generators {
         }
 
         /// returns type name with generic arguments and nullable annotation (generic args are fully qualified)
-        public static string getTypeNameWithGenericArguments(ITypeSymbol typeSymbol,
+        public static string getTypeNameWithGenericArguments(this ITypeSymbol typeSymbol,
             bool withEnclosingRecordParts = false) {
             var sb = new StringBuilder(typeSymbol.Name);
             if (typeSymbol is INamedTypeSymbol { IsGenericType: true } namedTypeSymbol) {
                 sb.Append("<");
                 sb.Append(string.Join(", ",
-                    namedTypeSymbol.TypeArguments.Select(t => getTypeNameWithGenericArguments(t))));
+                    namedTypeSymbol.TypeArguments.Select(t => t.getTypeNameWithGenericArguments())));
                 sb.Append(">");
             }
 
@@ -112,14 +108,13 @@ namespace me.tooster.sdf.AST.Generators {
             if (withEnclosingRecordParts && typeSymbol.IsRecord && typeSymbol.ContainingSymbol is ITypeSymbol parent
              && parent.IsRecord) {
                 sb.Insert(0, ".");
-                sb.Insert(0, getTypeNameWithGenericArguments(parent));
+                sb.Insert(0, parent.getTypeNameWithGenericArguments());
             }
 
             return sb.ToString();
         }
 
-        public static string getFullyQualifiedTypeNameWithGenerics(
-            ISymbol typeSymbol,
+        public static string getFullyQualifiedTypeNameWithGenerics(this ISymbol typeSymbol,
             string terminator,
             out List<string> genericParameters
         ) {
@@ -127,12 +122,13 @@ namespace me.tooster.sdf.AST.Generators {
             var current = typeSymbol;
             genericParameters = new List<string>();
             while (current != null && current.Name != terminator) {
-                if(current is ITypeSymbol ts)
-                    parts.Add(getTypeNameWithGenericArguments(ts));
+                if (current is ITypeSymbol ts)
+                    parts.Add(ts.getTypeNameWithGenericArguments());
                 else
                     parts.Add(current.Name);
                 if (current is INamedTypeSymbol { IsGenericType: true } namedTypeSymbol) {
-                    genericParameters.AddRange(namedTypeSymbol.TypeArguments.Select(p => getTypeNameWithGenericArguments(p)));
+                    genericParameters.AddRange(
+                        namedTypeSymbol.TypeArguments.Select(p => p.getTypeNameWithGenericArguments()));
                 }
 
                 current = current.ContainingSymbol;
@@ -142,8 +138,7 @@ namespace me.tooster.sdf.AST.Generators {
         }
 
         /// wraps (possibly inner) record in namespace and all containing types 
-        public static RecordDeclarationSyntax wrapRecordInEnclosingClasses(
-            RecordDeclarationSyntax recordSyntax,
+        public static RecordDeclarationSyntax wrapRecordInEnclosingClasses(this RecordDeclarationSyntax recordSyntax,
             ITypeSymbol recordSymbol,
             bool isInternal
         ) {
@@ -170,7 +165,7 @@ namespace me.tooster.sdf.AST.Generators {
                 modifiers = modifiers.Add(Token(SyntaxKind.PartialKeyword));
 
                 recordSyntax = RecordDeclaration(Token(SyntaxKind.RecordKeyword),
-                        Identifier(getTypeNameWithGenericArguments(wrapperSymbol)))
+                        Identifier(wrapperSymbol.getTypeNameWithGenericArguments()))
                     .WithModifiers(modifiers)
                     .WithOpenBraceToken(Token(SyntaxKind.OpenBraceToken))
                     .AddMembers(recordSyntax)
@@ -184,19 +179,25 @@ namespace me.tooster.sdf.AST.Generators {
         }
 
         // returns the lang name - namespace after "AST" namespace
-        public static string getLangName(ITypeSymbol recordSymbol) => getQualifiedNameParts(recordSymbol).Last();
+        public static string getLangName(this ITypeSymbol recordSymbol) => recordSymbol.qualifiedNameParts().Last();
 
-        internal static bool isAnnotated(ITypeSymbol type, ISymbol attribute) {
+        internal static bool isAnnotated(this ITypeSymbol type, ISymbol attribute) {
             return type.GetAttributes().Any(ad =>
                 ad.AttributeClass?.Equals(attribute, SymbolEqualityComparer.Default) ?? false);
         }
 
-        public static bool isToken(ITypeSymbol pType) {
-            return baseTypes(pType).Any(type =>
+        public static bool isAstToken(this ITypeSymbol pType) {
+            return pType.baseTypes().Any(type =>
                 (type as INamedTypeSymbol)?.ConstructedFrom.ToDisplayString()
              == $"{AstSourceGenerator.ROOT_NAMESPACE}.Syntax.Token<Lang>"
              || type.GetAttributes().Any(ad => ad.AttributeClass?.Name is AstSourceGenerator.TOKEN_ATTRIBUTE_NAME)
             );
+        }
+
+        public static MemberDeclarationSyntax? generateToStringOverride(ITypeSymbol recordSymbol) {
+            return recordSymbol.GetMembers("ToString").Any(m => !m.IsImplicitlyDeclared)
+                ? null
+                : ParseMemberDeclaration("public override string ToString() => base.ToString();");
         }
     }
 }

@@ -4,30 +4,32 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace me.tooster.sdf.AST.Syntax {
-    // TODO: think of moving all tokens inside Tokens namespace and adjust names accordingly (PlusToken -> Tokens.Plus)
+    
     public abstract record Token<Lang> : SyntaxOrToken<Lang> {
         public TriviaList<Lang> LeadingTriviaList  { get; init; } = TriviaList<Lang>.Empty;
         public TriviaList<Lang> TrailingTriviaList { get; init; } = TriviaList<Lang>.Empty;
 
-        public override StringBuilder WriteTo(StringBuilder sb) {
-            LeadingTriviaList.WriteTo(sb);
-            sb.Append(FullText);
-            TrailingTriviaList.WriteTo(sb);
-            return sb;
-        }
+        public abstract string Text { get; }
 
         internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
 
         internal override R? Accept<R>(Visitor<Lang, R> visitor, Anchor? parent) where R : default =>
             visitor.Visit(Anchor.New(this, parent));
-        
-        public override string ToString() => WriteTo(new StringBuilder()).ToString();
+
+        public override StringBuilder WriteTo(StringBuilder sb) {
+            LeadingTriviaList.WriteTo(sb);
+            sb.Append(Text);
+            TrailingTriviaList.WriteTo(sb);
+            return sb;
+        }
+
+        public override string ToString() => base.ToString();
     }
 
     public abstract record ValidatedToken<Lang> : Token<Lang> {
-        private readonly string validatedText = "";
+        private readonly string rawText = "";
 
-        public override string FullText => validatedText;
+        public override string Text => rawText;
 
         protected abstract Regex Pattern { get; }
 
@@ -38,18 +40,19 @@ namespace me.tooster.sdf.AST.Syntax {
                 if (!Pattern.IsMatch(value))
                     throw new ArgumentException($"Token text: {value} doesn't match pattern: {Pattern}");
 
-                validatedText = value;
+                rawText = value;
             }
         }
 
+        // for internal usage to bypass regex match with direct value assignment
         protected string TextUnsafe {
-            init => validatedText = value;
+            init => rawText = value;
         }
         
-        public override string ToString() => WriteTo(new StringBuilder()).ToString();
+        public override string ToString() => base.ToString();
     }
 
     public abstract record Literal<Lang> : ValidatedToken<Lang> {
-        public override string ToString() => WriteTo(new StringBuilder()).ToString();
+        public override string ToString() => base.ToString();
     }
 }

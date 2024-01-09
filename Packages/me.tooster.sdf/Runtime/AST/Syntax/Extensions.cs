@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Shaderlab;
 
 
@@ -128,7 +129,8 @@ namespace me.tooster.sdf.AST.Syntax {
 
         // similar to https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxLastTokenReplacer.cs
         // and https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxFirstTokenReplacer.cs
-        internal class EdgeTokenReplacer<Lang> : Mapper<Lang, MapperState>, Hlsl.Visitor<Tree<Lang>.Node>, Shaderlab.Visitor<Tree<Lang>.Node> {
+        internal class EdgeTokenReplacer<Lang> : Mapper<Lang, MapperState>, Hlsl.Visitor<Tree<Lang>.Node>,
+                                                 Shaderlab.Visitor<Tree<Lang>.Node> {
             private readonly Token<Lang> oldToken;
             private readonly Token<Lang> newToken;
             private          bool        found;
@@ -195,5 +197,11 @@ namespace me.tooster.sdf.AST.Syntax {
 
             return EdgeTokenReplacer<Lang>.Replace(syntax, oldToken, newToken);
         }
+
+        public static StructuredTrivia<Lang, T> ToStructuredTrivia<Lang, T>(this T syntax) where T : Syntax<Lang> =>
+            new StructuredTrivia<Lang, T> { Structure = syntax };
+        
+        public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
+
     }
 }

@@ -174,6 +174,9 @@ TODO
   - I've made a concept idea of a "weave tree" in other notes, that is basically a tree holding a token stream and trivia stream, where there is a trivia list between each pair of tokens. This tree would avoid the complexity of leading/trailing trivia and their attachments, would provide easy way of navigating the token and trivia stream and could give easy access to navigate between tokens and neighboring trivia. It could solve some problems with existing red/green tree and the need for attaching trivia to tokens (e.g. currently some trivia are attached sensibly, like whitespace or comments, but other, like preprocessor trivia, are attached arbitrarily and have nothing to do with an attached token). It could possibly allow for easier syntax rewrites by operating on a set of tokens and syntax nodes as "brackets" over them (or spans).  
 - Maybe preprocessor syntax as a trivia is not a good solution. Maybe a layered architecture would be better, where first stage tree represents syntax visible by preprocessor, second stage by shaderlab, third stage by hlsl etc.
 - Generally while developing this I noticed, that the Roslyn's model of typed tree nodes with static properties is hard to work with on a DX level. For example representing things like "Replace certain tree patterns such as leftmost token of a statement with a new token" is hard to do without advanced code-fu. Properties being static also doesn't really help with tree rewrites and updates. Traversal is problematic — having to explicitly keep track of the path and parent references is doing double work that is implicitly done by program under the hood with descending down the call stack.
+- We could use generic syntax node with dynamic runtime Kind property. If the Kind were an enum, we could also create pseudo-algebraic type bounds by creating overlapping enum ranges for syntax nodes. Then we could have for example `enum SyntaxKind { UNARY, BINARY, PRINT }`, `enum ExprKind { UNARY, BINARY }`, `enum UnaryKind {}` and `Syntax<Lang, ExprKind>`
+  - on the other hand there would also be problems with type casts e.g. `Syntax<Lang, ExprKind>` is not a valid tree for `Syntax<Lang, UnaryKind>`.
+  - and problems with making sure that, say, `Syntax<Lang, AddExpr>` is a binary expression AND it's token is plus.
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)
@@ -219,6 +222,7 @@ TODO
 - [perspective correct interpolation](https://paroj.github.io/gltut/Texturing/Tut14%20Interpolation%20Redux.html)
 - [japanese blog uRaymarching](https://tips.hecomi.com/entry/2019/01/27/233137)
   - [about deferred and depth reads+writes](https://tips.hecomi.com/entry/2018/12/31/211448)
+  - [Output-merger stage in HLSL](https://learn.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-output-merger-stage)
 - [Order Independent Transparency](http://casual-effects.blogspot.com/2014/03/weighted-blended-order-independent.html)
 - [Some raymarching effects in unity5](https://github.com/i-saint/Unity5Effects)
 - [Some SDF tool in WebGL](https://www.gsn-lib.org/docs/gallery.php?projectName=RaymarchingSDF&graphName=SignedDistanceField3D)
@@ -298,6 +302,7 @@ TODO
 - [Math utilities, also includes raymarching SDF textures somehow](https://github.com/zalo/MathUtilities)
 - [Cables.gl, visual graph programming tool blending logic, visualization and shaders, cool looking](https://cables.gl/)
 - [Setting up syntax generators in unity and referencing unity project, writing some tests, example with Entitas](https://github.com/sschmid/Entitas/issues/957)
+- [How rowan (rust analyzer's project for syntax trees and parsing) represents syntax](https://github.com/rust-lang/rust-analyzer/blob/master/docs/dev/syntax.md)
 
 ## Unity internals:
 

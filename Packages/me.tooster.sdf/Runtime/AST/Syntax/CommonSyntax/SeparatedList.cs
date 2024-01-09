@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace me.tooster.sdf.AST.Syntax {
+namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
     public record SeparatedList<Lang, TSyntax> : SyntaxOrTokenList<Lang> where TSyntax : Syntax<Lang> {
         public SeparatedList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) : base(fullList) { }
         public SeparatedList(IEnumerable<SyntaxOrToken<Lang>> listWithSeparators) : base(listWithSeparators) { }
