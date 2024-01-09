@@ -31,7 +31,6 @@ namespace me.tooster.sdf.AST {
         public R? Visit(Anchor<SimpleTrivia<Lang>> a) => default;
 
         public R? Visit(Anchor<StructuredTrivia<Lang>> a) => default;
-        // public R? Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : Syntax<Lang> => default;
 
         public R? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => default;
 
@@ -70,8 +69,6 @@ namespace me.tooster.sdf.AST {
         public void Visit(Anchor<SimpleTrivia<Lang>> a) { }
 
         public void Visit(Anchor<StructuredTrivia<Lang>> a) { }
-
-        // public void Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : Syntax<Lang> { }
 
         public void Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) { }
         

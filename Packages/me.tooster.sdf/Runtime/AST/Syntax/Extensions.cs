@@ -198,8 +198,8 @@ namespace me.tooster.sdf.AST.Syntax {
             return EdgeTokenReplacer<Lang>.Replace(syntax, oldToken, newToken);
         }
 
-        public static StructuredTrivia<Lang, T> ToStructuredTrivia<Lang, T>(this T syntax) where T : Syntax<Lang> =>
-            new StructuredTrivia<Lang, T> { Structure = syntax };
+        public static StructuredTrivia<Lang> ToStructuredTrivia<Lang>(this Syntax<Lang> syntax) =>
+            new StructuredTrivia<Lang> { Structure = syntax };
         
         public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
 

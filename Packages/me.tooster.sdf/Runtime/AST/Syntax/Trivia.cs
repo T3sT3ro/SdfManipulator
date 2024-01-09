@@ -29,7 +29,7 @@ namespace me.tooster.sdf.AST.Syntax {
     }
 
     // needed because C# doesn't support call-site variance in patternn matching and couldn't match over unknown parameter
-    public abstract record StructuredTrivia<Lang> : Trivia<Lang> {
+    public sealed record StructuredTrivia<Lang> : Trivia<Lang> {
         public          Syntax<Lang>? Structure                 { get; init; }
         public override StringBuilder WriteTo(StringBuilder sb) => Structure?.WriteTo(sb) ?? sb;
 
@@ -39,18 +39,5 @@ namespace me.tooster.sdf.AST.Syntax {
             visitor.Visit(Anchor.New(this, parent));
 
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
-    }
-
-    [Obsolete("This class shouldn't be needed anymore if pattern matching were to be properly used and types were properly typed")]
-    public sealed record StructuredTrivia<Lang, T> : StructuredTrivia<Lang> where T : Syntax<Lang> {
-        public new T? Structure {
-            get => (T?)base.Structure;
-            init => base.Structure = value;
-        }
-
-        public override string ToString() => WriteTo(new StringBuilder()).ToString();
-
-        public static implicit operator StructuredTrivia<Lang, T>(T syntax) =>
-            new StructuredTrivia<Lang, T> { Structure = syntax };
     }
 }

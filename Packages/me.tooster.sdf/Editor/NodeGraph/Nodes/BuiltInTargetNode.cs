@@ -184,8 +184,8 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
             },
             body = new Block { statements = vertFunctionBody }
         }.WithLeadingTrivia(
-                new Pragma { tokenString = $"vertex {vertexMethodName}" }.ToStructuredTrivia<hlsl, Pragma>(),
-                new Pragma { tokenString = $"fragment {fragmentMethodName}" }.ToStructuredTrivia<hlsl, Pragma>()
+                new Pragma { tokenString = $"vertex {vertexMethodName}" }.ToStructuredTrivia(),
+                new Pragma { tokenString = $"fragment {fragmentMethodName}" }.ToStructuredTrivia()
             );
 
         private Statement<hlsl> assign(string left, Expression<hlsl> right) => new ExpressionStatement

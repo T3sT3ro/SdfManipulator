@@ -62,12 +62,12 @@ namespace me.tooster.sdf.AST {
 
         public virtual Tree<Lang>.Node? Visit(Anchor<SimpleTrivia<Lang>> a) => a.Node;
 
-        public virtual Tree<Lang>.Node? Visit<T>(Anchor<StructuredTrivia<Lang, T>> a) where T : Syntax<Lang> {
+        public virtual Tree<Lang>.Node? Visit<T>(Anchor<StructuredTrivia<Lang>> a) where T : Syntax<Lang> {
             var trivia = a.Node;
             if (trivia.Structure is null) return trivia;
 
             var newStructure = a.Node.Accept(this, Anchor.New(trivia.Structure, a)) as T;
-            return ReferenceEquals(trivia.Structure, newStructure) ? trivia : trivia with { Structure = newStructure };
+            return ReferenceEquals(trivia.Structure, newStructure) ? trivia : new StructuredTrivia<Lang> { Structure = newStructure };
         }
 
         // injected language is not processed by default

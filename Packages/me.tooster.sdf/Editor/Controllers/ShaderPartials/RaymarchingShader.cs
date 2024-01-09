@@ -137,7 +137,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                     }}
                     // new FunctionDeclaration 
                 }.ToSyntaxList()
-                .WithLeadingTrivia((StructuredTrivia<hlsl, Include>)new Include { filepath = "UnityCG.cginc" })
+                .WithLeadingTrivia(new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia())
         );
 
         #endregion
