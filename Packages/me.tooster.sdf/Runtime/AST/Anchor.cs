@@ -7,27 +7,28 @@ namespace me.tooster.sdf.AST {
 
     public interface IAnchor {
         public Anchor? Parent { get; }
-        public Object  Node   { get; }
+        public object  Node   { get; }
     }
-    
+
     /// <summary>
     /// A node with a parent, used for navigation. To pattern match on a node, use <see cref="Anchor{T}"/> like this:
     /// <code>someAnchor.Parent is Anchor&lt;SomeNode&gt; anchor</code>
     /// </summary>
-    public abstract record Anchor(Object Node, Anchor? Parent = null) : IAnchor{
-        public Object Node { get; protected init; } = Node;
+    public abstract record Anchor(object Node, Anchor? Parent = null) : IAnchor {
+        public object Node { get; protected init; } = Node;
 
-        public static Anchor<T> New<T>(T value, Anchor? other = null) => new(value, other);
-        
-        public override string ToString() => "↑: " + Node + "";
+        public static Anchor<T> New<T>(T value, Anchor? parent = null) => new(value, parent);
+
+        public override string ToString() => "↑" + Node;
     }
-
+    
     public interface IAnchor<out T> : IAnchor {
         Anchor? IAnchor.Parent => Parent;
-        object IAnchor.Node => Node;
+        object IAnchor. Node   => Node;
 
-        public Anchor?  Parent { get; }
-        public T        Node   { get; }
+
+        public new Anchor? Parent { get; }
+        public new T       Node   { get; }
     }
 
     /// <summary>
@@ -45,6 +46,6 @@ namespace me.tooster.sdf.AST {
 
         public static implicit operator T(Anchor<T> anchor) => anchor.Node;
 
-        public override string ToString() => "↑: " + Node + "";
+        public override string ToString() => base.ToString();
     }
 }
