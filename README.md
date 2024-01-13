@@ -115,6 +115,11 @@ TODO
   - [an article mentioning conemarching and how it's made](https://medium.com/@bananaft/my-journey-into-fractals-d25ebc6c4dc2)
   - [a presentation of cone marching](http://www.fulcrum-demo.org/wp-content/uploads/2012/04/Cone_Marching_Mandelbox_by_Seven_Fulcrum_LongVersion.pdf)
 - [ ] fix an unsafe visitor cast inside generated Accept methods of concrete syntax nodes
+- [ ] use zipper instead of anchors and traversing logic
+  - If zipper were to be used, some kind of child labels would be needed to avoid linear children traversal 
+- [ ] use edge labels/indices for children
+  - It would allow for easier checking which branch is a syntax node in instead of linearly searching children
+  - traversing forward and backward logic would be easier even without a zipper
 
 # Important to remember while documenting
 
@@ -172,11 +177,21 @@ TODO
   - [some intro and images for zipper](https://m00nlight.github.io/functional%20programming/2017/12/17/the-functional-zipper-structure)
   - [some zipper implementation and description](https://blog.mattbierner.com/neith-zippers-for-javascript/) 
   - I've made a concept idea of a "weave tree" in other notes, that is basically a tree holding a token stream and trivia stream, where there is a trivia list between each pair of tokens. This tree would avoid the complexity of leading/trailing trivia and their attachments, would provide easy way of navigating the token and trivia stream and could give easy access to navigate between tokens and neighboring trivia. It could solve some problems with existing red/green tree and the need for attaching trivia to tokens (e.g. currently some trivia are attached sensibly, like whitespace or comments, but other, like preprocessor trivia, are attached arbitrarily and have nothing to do with an attached token). It could possibly allow for easier syntax rewrites by operating on a set of tokens and syntax nodes as "brackets" over them (or spans).  
+  - There is one poor thing associated with zippers, namely that we would still need either a type variable, a differently named methods or a set of interfaces extending zipper that override/reintroduce property with their specified data type to make overwriting logic in other interfaces/mappers/rewriters easier. For example how to do something like `... Visit(Anchor<BinaryExpression> aBin)` without it?
 - Maybe preprocessor syntax as a trivia is not a good solution. Maybe a layered architecture would be better, where first stage tree represents syntax visible by preprocessor, second stage by shaderlab, third stage by hlsl etc.
 - Generally while developing this I noticed, that the Roslyn's model of typed tree nodes with static properties is hard to work with on a DX level. For example representing things like "Replace certain tree patterns such as leftmost token of a statement with a new token" is hard to do without advanced code-fu. Properties being static also doesn't really help with tree rewrites and updates. Traversal is problematic — having to explicitly keep track of the path and parent references is doing double work that is implicitly done by program under the hood with descending down the call stack.
 - We could use generic syntax node with dynamic runtime Kind property. If the Kind were an enum, we could also create pseudo-algebraic type bounds by creating overlapping enum ranges for syntax nodes. Then we could have for example `enum SyntaxKind { UNARY, BINARY, PRINT }`, `enum ExprKind { UNARY, BINARY }`, `enum UnaryKind {}` and `Syntax<Lang, ExprKind>`
   - on the other hand there would also be problems with type casts e.g. `Syntax<Lang, ExprKind>` is not a valid tree for `Syntax<Lang, UnaryKind>`.
   - and problems with making sure that, say, `Syntax<Lang, AddExpr>` is a binary expression AND it's token is plus.
+- Rewrite tree node to support generic get operation for indexed child and replacement for index with new child
+  - use type casting and depend on cast exceptions when children are incompatible
+  - rewrite visitor and acceptor pattern with a simple pattern matching over node kind in a hierarchy of more and more specialized methods
+  - don't use typed anchor, use differently named methods and untyped zipper
+  - zipper should be just a wrapper around a child with the path to parent and knowledge of the child index in the parent
+  - alternatively a zipper could be just a parent + child label, and the `Node` property would be a derived value of the parent with child
+    - this could make multiple calls to get child at index though, possibly 1 for each pattern match.
+  - by making Node inherit from `IReadOnlyList` we gain access making reverse iterator fast, but at the same time we have to think what exactly should it enumerate? Branches? if so, is `null` valid? Imo yes. Any post-processing should be done manually by appending index and filtering nulls
+
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)
@@ -378,6 +393,13 @@ but using grep the names of classes can be extracted later
 - program usage guide
 - comparisons to other technologies
 - future work
+- HLSL and Shaderlab syntax API
+- graph API
+- controller API
+- limitations
+  - transparency
+  - non-trivial blending with other geometry
+  - edit-view marching is problematic
 - HLSL and Shaderlab syntax API
 - graph API
 - controller API
