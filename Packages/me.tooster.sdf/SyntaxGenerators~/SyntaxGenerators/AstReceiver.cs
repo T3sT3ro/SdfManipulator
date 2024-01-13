@@ -90,7 +90,7 @@ namespace me.tooster.sdf.AST.Generators {
 
         /// asserts, with diagnostic when needed, that a type is derived from Syntax or is annotated with [Syntax] for generation 
         private bool assertSyntaxDerived(ITypeSymbol symbol, RecordDeclarationSyntax recordSyntax) {
-            if (symbol.baseTypes().Any(type => type is INamedTypeSymbol { ConstructedFrom: { Name: "Syntax" } }
+            if (symbol.BaseTypes().Any(type => type is INamedTypeSymbol { ConstructedFrom: { Name: "Syntax" } }
                  || type.isAnnotated(syntaxAttribute!))) {
                 return true;
             }

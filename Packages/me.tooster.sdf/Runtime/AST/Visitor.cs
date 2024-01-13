@@ -10,35 +10,35 @@ namespace me.tooster.sdf.AST {
     // TODO: split into geenric AST node visitor and CommonSyntax visitor ?
     /// Visitor returning result for visited nodes
     public interface Visitor<Lang, out R> {
-        public R? Visit(Anchor<Tree<Lang>.Node> a) => default;
+        public R? Visit(Anchor<Tree<Lang>.Node> a);
 
-        public R? Visit(Anchor<SyntaxOrToken<Lang>> a) => default;
+        public R? Visit(Anchor<SyntaxOrToken<Lang>> a);
 
-        public R? Visit(Anchor<Syntax<Lang>> a) => default;
+        public R? Visit(Anchor<Syntax<Lang>> a);
 
-        public R? Visit(Anchor<SyntaxOrTokenList<Lang>> a) => default;
+        public R? Visit(Anchor<SyntaxOrTokenList<Lang>> a);
 
-        public R? Visit<T>(Anchor<SyntaxList<Lang, T>> a) where T : Syntax<Lang> => default;
+        public R? Visit<T>(Anchor<SyntaxList<Lang, T>> a) where T : Syntax<Lang>;
 
-        public R? Visit<T>(Anchor<SeparatedList<Lang, T>> a) where T : Syntax<Lang> => default;
+        public R? Visit<T>(Anchor<SeparatedList<Lang, T>> a) where T : Syntax<Lang>;
 
-        public R? Visit(Anchor<Token<Lang>> a) => default;
+        public R? Visit(Anchor<Token<Lang>> a);
 
-        public R? Visit(Anchor<Trivia<Lang>> a) => default;
+        public R? Visit(Anchor<Trivia<Lang>> a);
 
-        public R? Visit(Anchor<TriviaList<Lang>> a) => default;
+        public R? Visit(Anchor<TriviaList<Lang>> a);
 
-        public R? Visit(Anchor<SimpleTrivia<Lang>> a) => default;
+        public R? Visit(Anchor<SimpleTrivia<Lang>> a);
 
-        public R? Visit(Anchor<StructuredTrivia<Lang>> a) => default;
+        public R? Visit(Anchor<StructuredTrivia<Lang>> a);
 
-        public R? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => default;
+        public R? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a);
 
-        public R? Visit(Anchor<Statement<Lang>> node) => default;
+        public R? Visit(Anchor<Statement<Lang>> node);
 
-        public R? Visit(Anchor<Expression<Lang>> node) => default;
+        public R? Visit(Anchor<Expression<Lang>> node);
 
-        public R? Visit(Anchor<Identifier<Lang>> node) => default;
+        public R? Visit(Anchor<Identifier<Lang>> node);
     }
 
     /// Visitor without return values

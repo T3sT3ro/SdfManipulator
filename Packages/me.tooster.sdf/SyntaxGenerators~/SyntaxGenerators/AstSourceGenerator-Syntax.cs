@@ -160,9 +160,16 @@ namespace me.tooster.sdf.AST.Generators {
             bool returning) {
             return (MethodDeclarationSyntax)(returning
                     ? ParseMemberDeclaration(
-                        $"internal override R? Accept<R>(AST.Visitor<{langName}, R> visitor, Anchor? a) where R : default => ((Visitor<R>)visitor).Visit(Anchor.New(this, a));")
+                        $@"
+                        internal override R? Accept<R>(AST.Visitor<{langName}, R> visitor, Anchor? parent) where R : default {{
+                            if (visitor is Visitor<R> v) return v.Visit(Anchor.New(this, parent));
+                            else return visitor.Visit(Anchor.New<{recordSymbol.languageAgnosticType()?.ToString() ?? $"Syntax<{langName}>"}>(this, parent));
+                        }}")
                     : ParseMemberDeclaration(
-                        $"internal override void Accept(AST.Visitor<{langName}> visitor, Anchor? a) => ((Visitor)visitor).Visit(Anchor.New(this, a));"))
+                        $@"internal override void Accept(AST.Visitor<{langName}> visitor, Anchor? parent) {{
+                            if (visitor is Visitor v) v.Visit(Anchor.New(this, parent));
+                            else visitor.Visit(Anchor.New<{recordSymbol.languageAgnosticType()?.ToString() ?? $"Syntax<{langName}>"}>(this, parent));
+                        }}"))
                 !;
         }
     }

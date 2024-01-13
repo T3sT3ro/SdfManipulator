@@ -49,7 +49,7 @@ namespace me.tooster.sdf.AST.Generators {
                 return false;
 
             // must be of subtype annotated with [Syntax] or [Token]
-            return property.Type.baseTypes().Any(type =>
+            return property.Type.BaseTypes().Any(type =>
                 (type as INamedTypeSymbol)?.ConstructedFrom.ToDisplayString() // TODO: migrate to Name comparison?
              == $"{AstSourceGenerator.ROOT_NAMESPACE}.Syntax.SyntaxOrToken<Lang>"
              || type.GetAttributes().Any(ad =>
@@ -76,14 +76,14 @@ namespace me.tooster.sdf.AST.Generators {
             return false;
         }
 
-        public static IEnumerable<ITypeSymbol> baseTypes(this ITypeSymbol type,
+        public static IEnumerable<ITypeSymbol> BaseTypes(this ITypeSymbol type,
             bool includeSelf = true,
             bool descendTypeConstraints = true
         ) {
             if (includeSelf) yield return type;
 
             if (descendTypeConstraints && type is ITypeParameterSymbol tps)
-                foreach (var baseType in tps.ConstraintTypes.SelectMany(constraint => constraint.baseTypes(true, true)))
+                foreach (var baseType in tps.ConstraintTypes.SelectMany(constraint => constraint.BaseTypes(true, true)))
                     yield return baseType;
             else {
                 while (type.BaseType != null)
@@ -187,7 +187,7 @@ namespace me.tooster.sdf.AST.Generators {
         }
 
         public static bool isAstToken(this ITypeSymbol pType) {
-            return pType.baseTypes().Any(type =>
+            return pType.BaseTypes().Any(type =>
                 (type as INamedTypeSymbol)?.ConstructedFrom.ToDisplayString()
              == $"{AstSourceGenerator.ROOT_NAMESPACE}.Syntax.Token<Lang>"
              || type.GetAttributes().Any(ad => ad.AttributeClass?.Name is AstSourceGenerator.TOKEN_ATTRIBUTE_NAME)
@@ -199,5 +199,8 @@ namespace me.tooster.sdf.AST.Generators {
                 ? null
                 : ParseMemberDeclaration("public override string ToString() => base.ToString();");
         }
+        
+        public static ITypeSymbol? languageAgnosticType(this ITypeSymbol typeSymbol) =>
+            typeSymbol.BaseTypes().FirstOrDefault(t => t.ContainingNamespace.ToString().Contains("AST.Syntax"));
     }
 }

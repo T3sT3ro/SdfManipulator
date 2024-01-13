@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Shaderlab;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 
 namespace me.tooster.sdf.AST.Syntax {
@@ -129,8 +130,7 @@ namespace me.tooster.sdf.AST.Syntax {
 
         // similar to https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxLastTokenReplacer.cs
         // and https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxFirstTokenReplacer.cs
-        internal class EdgeTokenReplacer<Lang> : Mapper<Lang, MapperState>, Hlsl.Visitor<Tree<Lang>.Node>,
-                                                 Shaderlab.Visitor<Tree<Lang>.Node> {
+        internal class EdgeTokenReplacer<Lang> : Mapper<Lang, MapperState> {
             private readonly Token<Lang> oldToken;
             private readonly Token<Lang> newToken;
             private          bool        found;
@@ -159,41 +159,41 @@ namespace me.tooster.sdf.AST.Syntax {
         }
 
         public static TriviaList<Lang>? LeadingTriviaList<TSyntax, Lang>(this TSyntax syntax)
-            where TSyntax : Syntax<Lang> => Anchor.New(syntax).FirstToken()?.LeadingTriviaList;
+            where TSyntax : Syntax<Lang> => Anchor.New(syntax).FirstToken()?.Node.LeadingTriviaList;
 
         public static TriviaList<Lang>? TrailingTriviaList<TSyntax, Lang>(this TSyntax syntax)
-            where TSyntax : Syntax<Lang> => Anchor.New(syntax).LastToken()?.TrailingTriviaList;
+            where TSyntax : Syntax<Lang> => Anchor.New(syntax).LastToken()?.Node.TrailingTriviaList;
 
         public static TSyntax WithLeadingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
             where TSyntax : Syntax<Lang> =>
-            WithTriviaList(syntax, triviaList, Navigation.EdgeChild.FIRST);
+            WithTriviaList(syntax, triviaList, Navigation.Direction.FORWARD);
         
         public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
             where TSyntax : Syntax<Lang> =>
-            WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.EdgeChild.FIRST);
+            WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.FORWARD);
         
         public static TSyntax WithTrailingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
             where TSyntax : Syntax<Lang> =>
-            WithTriviaList(syntax, triviaList, Navigation.EdgeChild.LAST);
+            WithTriviaList(syntax, triviaList, Navigation.Direction.BACKWARD);
         
         public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
             where TSyntax : Syntax<Lang> =>
-            WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.EdgeChild.LAST);
+            WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
 
         private static TSyntax WithTriviaList<TSyntax, Lang>(
             this TSyntax syntax,
             TriviaList<Lang> triviaList,
-            Navigation.EdgeChild edgeChild
+            Navigation.Direction direction
         ) where TSyntax : Syntax<Lang> {
-            var oldToken = edgeChild is Navigation.EdgeChild.FIRST
+            var oldToken = direction is Navigation.Direction.FORWARD
                 ? Anchor.New(syntax).FirstToken()
                 : Anchor.New(syntax).LastToken();
 
             if (oldToken is null) return syntax;
 
-            var newToken = edgeChild is Navigation.EdgeChild.FIRST
-                ? oldToken with { LeadingTriviaList = triviaList }
-                : oldToken with { TrailingTriviaList = triviaList };
+            var newToken = direction is Navigation.Direction.FORWARD
+                ? oldToken.Node with { LeadingTriviaList = triviaList }
+                : oldToken.Node with { TrailingTriviaList = triviaList };
 
             return EdgeTokenReplacer<Lang>.Replace(syntax, oldToken, newToken);
         }
@@ -203,5 +203,6 @@ namespace me.tooster.sdf.AST.Syntax {
         
         public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
 
+        public static string Repeat(this string s, uint n) => string.Concat(Enumerable.Repeat(s, (int)n));
     }
 }

@@ -7,20 +7,25 @@ using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using Whitespace = me.tooster.sdf.AST.Syntax.CommonTrivia.Whitespace<me.tooster.sdf.AST.shaderlab>;
 using NewLine = me.tooster.sdf.AST.Syntax.CommonTrivia.NewLine<me.tooster.sdf.AST.shaderlab>;
 
 namespace me.tooster.sdf.AST.Shaderlab {
-    public class ShaderlabFormatter : Mapper<FormatterState> {
+    public class ShaderlabFormatter : Mapper<FormatterState>, IFormatter<shaderlab, FormatterState> {
         private ShaderlabFormatter(FormatterState state) : base(state) { }
 
+        public FormatterState                      State                           => state;
+        int IFormatter<shaderlab, FormatterState>. getIndentChange<T>(Anchor<T> a) => getIndentChange(a);
+        bool IFormatter<shaderlab, FormatterState>.breakLineAfter<T>(Anchor<T> a)  => breakLineAfter(a);
+        bool IFormatter<shaderlab, FormatterState>.whitespaceAfter<T>(Anchor<T> a) => whitespaceAfter(a);
+
+        // Normalizes the syntax, e.g. whitespaces, newlines etc.
         public static T? Format<T>(T node, FormatterState? s = null) where T : Tree<shaderlab>.Node {
             var formatter = new ShaderlabFormatter(s ?? new());
             return node.Accept(formatter, Anchor.New(node)) as T;
         }
 
-        private static int getIndentChange<T>(Anchor<T> a) where T : Token<shaderlab> => a switch
+        protected int getIndentChange<T>(Anchor<T> a) where T : Token<shaderlab> => a switch
         {
             {
                 Node: OpenBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader }
@@ -40,50 +45,24 @@ namespace me.tooster.sdf.AST.Shaderlab {
                 return true;
 
             var nextToken = a.NextToken();
-            if (nextToken is CloseBraceToken)
+            if (nextToken is { Node: CloseBraceToken })
                 return true;
 
             return a.Ancestors().Any(parent =>
-                parent is { Node: Command } or { Node: Property } or { Node: Tag }
-             && ((IAnchor<Syntax<shaderlab>>)parent).LastToken()
-             == a.Node);
+                    parent is IAnchor<SyntaxOrToken<shaderlab>> { Node: Command or Property or Tag } aSyntax
+                 && aSyntax.LastToken() == a.Node);
         }
 
         private static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
             if (a is { Node: OpenBracketToken or OpenParenToken or DotToken }) return false;
-            if (a.NextToken() is CloseBracketToken && a.Parent?.Node is CommandArgument ) return false;
 
-            return true;
+            return a.NextToken() is not { Node: CloseBracketToken or CloseBraceToken };
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
             if (base.Visit(a) is not Token<shaderlab> token) return null;
 
-            var indentChange = getIndentChange(a);
-            if (indentChange < 0) state.CurrentIndentLevel--;
-            if (indentChange > 0) state.CurrentIndentLevel++;
-
-            bool isFirstInLine = state.PollLineStart(out var startingIndent);
-            TriviaList<shaderlab> leading = token.LeadingTriviaList;
-
-            // FIXME: this is a bandaid, existing trivia (like comments and prepocessor) are lost. Move to something that retains important trivia
-            if (startingIndent is not null) {
-                // FIXME: support descending down the structured trivia such as preprocessor macros
-                var insertIndentAt = leading.FindLastIndex(trivia => trivia is NewLine);
-                leading = new TriviaList<shaderlab>(leading.Splice(insertIndentAt + 1, 0,
-                    new Whitespace { Text = startingIndent }));
-            }
-
-            if (breakLineAfter(a)) {
-                state.MarkLineEnd();
-                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine()) };
-            }
-
-            if (whitespaceAfter(a)) {
-                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace()) };
-            }
-            
-            return token with { LeadingTriviaList = leading};
+            return ((IFormatter<shaderlab, FormatterState>)this).NormalizeWhitespace(Anchor.New(token, a.Parent));
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<SimpleTrivia<shaderlab>> a) {
@@ -125,7 +104,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
             { Node: InjectedLanguage<shaderlab, hlsl> injected } => new InjectedLanguage<shaderlab, hlsl>(
                 new Tree<hlsl>(HlslFormatter.Format(
                     injected.tree?.Root,
-                    new FormatterState { CurrentIndentLevel = state.CurrentIndentLevel }))),
+                    new FormatterState { IndentLevel = state.IndentLevel }))),
             _ => a.Node
         };
     }

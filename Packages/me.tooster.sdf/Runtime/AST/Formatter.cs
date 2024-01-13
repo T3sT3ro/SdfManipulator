@@ -1,51 +1,63 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonTrivia;
 
 namespace me.tooster.sdf.AST {
     /// <summary>
     /// Mutable state of the formatter to support line breaks and indents
     /// </summary>
     public record FormatterState : MapperState {
-        private string SingleIndent { get; init; } = "    ";
-        private int    currentIndentLevel = 0;
+        private string SingleIndent { get; init; }        = "    ";
+        public  string IndentString { get; private set; } = "";
+        private int    indentLevel = 0;
 
-        public int CurrentIndentLevel {
-            get => currentIndentLevel;
+
+        /// <summary>
+        /// Gets or sets current indent level
+        /// </summary>
+        public int IndentLevel {
+            get => indentLevel;
             set {
-                currentIndentLevel = Math.Max(0, value);
-                CurrentIndent = new Lazy<string>(() => RepeatString(SingleIndent, (uint)CurrentIndentLevel));
+                indentLevel = Math.Max(0, value);
+                IndentString = SingleIndent.Repeat((uint)IndentLevel);
             }
-        }
-
-        public  Lazy<string> CurrentIndent { get; private set; }
-        private bool         NewLineStarts { get; set; } = false;
-
-        private static string RepeatString(string s, uint n) => string.Concat(Enumerable.Repeat(s, (int)n));
-
-        public FormatterState() {
-            CurrentIndent = new Lazy<string>(() => RepeatString(SingleIndent, (uint)CurrentIndentLevel));
-        }
-
-        public void MarkLineEnd() { NewLineStarts = true; }
-
-        public bool PollLineStart(out string? indent) {
-            indent = NewLineStarts ? CurrentIndent.Value : null;
-            NewLineStarts = false;
-            return indent is not null;
         }
     }
 
-    public interface Formatter<Lang> : Visitor<Lang, Tree<Lang>.Node> {
-        
-        FormatterState State { get; }
-        
-        internal int  getIndentChange<T>(Anchor<T> a) where T : Token<Lang>;
-        internal bool breakLineAfter<T>(Anchor<T> a) where T : Token<Lang>;
-        
-        Tree<Lang>.Node? Visitor<Lang, Tree<Lang>.Node>.Visit(Anchor<Token<Lang>> a) {
-            return a.Node;
+    public interface IFormatter<Lang, out TState> where TState : FormatterState {
+        public    TState State { get; }
+        protected int    getIndentChange<T>(Anchor<T> a) where T : Token<Lang>;
+        protected bool   breakLineAfter<T>(Anchor<T> a) where T : Token<Lang>;
+        protected bool   whitespaceAfter<T>(Anchor<T> a) where T : Token<Lang>;
+
+        public Token<Lang> NormalizeWhitespace<T>(Anchor<T> a) where T : Token<Lang> {
+            var token = a.Node;
+            var indentChange = getIndentChange(a);
+            State.IndentLevel += indentChange;
+
+            var previousToken = a.PreviousToken();
+            TriviaList<Lang> leading = token.LeadingTriviaList;
+
+            // FIXME: this is a bandaid, existing trivia (like comments and prepocessor) are lost. Move to something that retains important trivia
+            if (previousToken is null || breakLineAfter(previousToken)) {
+                // FIXME: support descending down the structured trivia such as preprocessor macros
+                var insertIndentAt = leading.FindLastIndex(trivia => trivia is NewLine<Lang>);
+                leading = new TriviaList<Lang>(leading.Splice(insertIndentAt + 1, 0,
+                    new Whitespace<Lang> { Text = State.IndentString }));
+            }
+
+            if (breakLineAfter(a)) {
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine<Lang>()) };
+            }
+
+            if (whitespaceAfter(a)) {
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace<Lang>()) };
+            }
+
+            return token with { LeadingTriviaList = leading };
         }
     }
 }
