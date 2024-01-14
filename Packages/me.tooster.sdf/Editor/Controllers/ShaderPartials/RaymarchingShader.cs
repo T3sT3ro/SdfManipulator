@@ -34,8 +34,9 @@ using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public static class RaymarchingShader {
         public static string MainShader(SdfSceneController controller) {
-            var formattedSyntax = ShaderlabFormatter.Format(shader(controller));
-            return formattedSyntax?.ToString() ?? "// empty shader";
+            var unformatedSource = shader(controller); 
+            var formattedSource = ShaderlabFormatter.Format(unformatedSource);
+            return formattedSource?.ToString() ?? "// empty shader";
         }
 
         #region shaderlab
@@ -137,7 +138,10 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                     }}
                     // new FunctionDeclaration 
                 }.ToSyntaxList()
-                .WithLeadingTrivia(new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia())
+                .WithLeadingTrivia(new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia(),
+                    new Pragma { tokenString = $"vertex \"vert\"" }.ToStructuredTrivia(),
+                    new Pragma { tokenString = $"fragment \"frag\"" }.ToStructuredTrivia()
+                )
         );
 
         #endregion

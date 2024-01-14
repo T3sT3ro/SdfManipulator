@@ -1,8 +1,7 @@
 #nullable enable
 using System.Text;
-using me.tooster.sdf.AST.Syntax;
 
-namespace me.tooster.sdf.AST {
+namespace me.tooster.sdf.AST.Syntax {
     public record Tree<Lang>(Syntax<Lang>? Root = null) {
         public string Text => Root?.ToString() ?? "";
 

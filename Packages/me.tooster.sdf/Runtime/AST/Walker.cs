@@ -28,11 +28,8 @@ namespace me.tooster.sdf.AST {
         }
 
         public void Visit(Anchor<Token<Lang>> a) {
-            if (a.Node.LeadingTriviaList != null)
-                a.Node.Accept(this, Anchor.New(a.Node.LeadingTriviaList, a));
-
-            if (a.Node.TrailingTriviaList != null)
-                a.Node.Accept(this, Anchor.New(a.Node.TrailingTriviaList, a));
+            a.Node.Accept(this, Anchor.New(a.Node.LeadingTriviaList, a));
+            a.Node.Accept(this, Anchor.New(a.Node.TrailingTriviaList, a));
         }
 
 

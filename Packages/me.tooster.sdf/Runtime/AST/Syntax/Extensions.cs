@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using me.tooster.sdf.AST.Shaderlab;
-using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using Visitor = me.tooster.sdf.AST.Hlsl.Visitor;
 
 
 namespace me.tooster.sdf.AST.Syntax {
@@ -128,33 +127,48 @@ namespace me.tooster.sdf.AST.Syntax {
             }
         }
 
-        // similar to https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxLastTokenReplacer.cs
-        // and https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxFirstTokenReplacer.cs
-        internal class EdgeTokenReplacer<Lang> : Mapper<Lang, MapperState> {
-            private readonly Token<Lang> oldToken;
-            private readonly Token<Lang> newToken;
-            private          bool        found;
+        /// similar to https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxLastTokenReplacer.cs
+        /// and https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxFirstTokenReplacer.cs
+        /// TODO: decouple from Hlsl and Shaderlab after syntax-tree refactor
+        private class EdgeTokenReplacerState<Lang> {
+            internal readonly Token<Lang> oldToken;
+            internal readonly Token<Lang> newToken;
+            private           bool        found;
 
-            internal static TSyntax Replace<TSyntax>(
-                TSyntax root,
-                Token<Lang> oldToken,
-                Token<Lang> newToken
-            ) where TSyntax : Syntax<Lang> {
-                var replacer = new EdgeTokenReplacer<Lang>(oldToken, newToken);
-                var replaced = replacer.Visit(Anchor.New<Syntax<Lang>>(root));
-                return (TSyntax)(replaced ?? root);
-            }
-
-            private EdgeTokenReplacer(Token<Lang> oldToken, Token<Lang> newToken) {
+            internal EdgeTokenReplacerState(Token<Lang> oldToken, Token<Lang> newToken) {
                 this.oldToken = oldToken;
                 this.newToken = newToken;
             }
 
-            public override Tree<Lang>.Node? Visit(Anchor<Trivia<Lang>> a) {
-                if (found || a.Node != oldToken) return a.Node;
+            internal Token<Lang> TryReplace(Token<Lang> node) {
+                if (found || node != oldToken) return node;
 
                 found = true;
                 return newToken;
+            }
+        }
+
+        private class ShaderlabEdgeTokenReplacer : Shaderlab.Mapper {
+            private readonly EdgeTokenReplacerState<shaderlab> state;
+
+            public ShaderlabEdgeTokenReplacer(Token<shaderlab> oldToken, Token<shaderlab> newToken) =>
+                state = new EdgeTokenReplacerState<shaderlab>(oldToken, newToken);
+
+            public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
+                var replaced = state.TryReplace(a.Node);
+                return ReferenceEquals(replaced, state.newToken) ? replaced : base.Visit(a);
+            }
+        }
+
+        private class HlslEdgeTokenReplacer : Hlsl.Mapper {
+            private readonly EdgeTokenReplacerState<hlsl> state;
+
+            public HlslEdgeTokenReplacer(Token<hlsl> oldToken, Token<hlsl> newToken) =>
+                state = new EdgeTokenReplacerState<hlsl>(oldToken, newToken);
+
+            public override Tree<hlsl>.Node? Visit(Anchor<Token<hlsl>> a) {
+                var replaced = state.TryReplace(a.Node);
+                return ReferenceEquals(replaced, state.newToken) ? replaced : base.Visit(a);
             }
         }
 
@@ -167,15 +181,15 @@ namespace me.tooster.sdf.AST.Syntax {
         public static TSyntax WithLeadingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, triviaList, Navigation.Direction.FORWARD);
-        
+
         public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.FORWARD);
-        
+
         public static TSyntax WithTrailingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, triviaList, Navigation.Direction.BACKWARD);
-        
+
         public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
@@ -195,12 +209,19 @@ namespace me.tooster.sdf.AST.Syntax {
                 ? oldToken.Node with { LeadingTriviaList = triviaList }
                 : oldToken.Node with { TrailingTriviaList = triviaList };
 
-            return EdgeTokenReplacer<Lang>.Replace(syntax, oldToken, newToken);
+            return (syntax, oldToken.Node, newToken) switch
+            {
+                (Syntax<shaderlab> s, Token<shaderlab> tOld, Token<shaderlab> tNew) => 
+                    new ShaderlabEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
+                (Syntax<hlsl> s, Token<hlsl> tOld, Token<hlsl> tNew) =>
+                    new HlslEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
+                _ => throw new ArgumentException("Unhandled node type"),
+            };
         }
 
         public static StructuredTrivia<Lang> ToStructuredTrivia<Lang>(this Syntax<Lang> syntax) =>
             new StructuredTrivia<Lang> { Structure = syntax };
-        
+
         public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
 
         public static string Repeat(this string s, uint n) => string.Concat(Enumerable.Repeat(s, (int)n));

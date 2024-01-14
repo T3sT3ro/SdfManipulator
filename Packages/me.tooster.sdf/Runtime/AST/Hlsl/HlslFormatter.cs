@@ -6,11 +6,12 @@ using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.
 using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
 
 namespace me.tooster.sdf.AST.Hlsl {
-    public class HlslFormatter : Mapper<FormatterState>, IFormatter<hlsl, FormatterState> {
-        public HlslFormatter(FormatterState state) : base(state) { }
+    public class HlslFormatter : Mapper, IFormatter<hlsl> {
+        public FormatterState State { get; }
 
-        public static T? Format<T>(T node, FormatterState? s = null) where T : Tree<hlsl>.Node {
-            var formatter = new HlslFormatter(s ?? new());
+        public HlslFormatter(FormatterState? state = null) => State = state?? new FormatterState();
+        public static T? Format<T>(T node, FormatterState? state = null) where T : Tree<hlsl>.Node {
+            var formatter = new HlslFormatter(state);
             return node.Accept(formatter, Anchor.New(node)) as T;
         }
 
@@ -32,12 +33,11 @@ namespace me.tooster.sdf.AST.Hlsl {
         public override Tree<hlsl>.Node? Visit(Anchor<Token<hlsl>> a) {
             if (base.Visit(a) is not Token<hlsl> token) return null;
 
-            return ((IFormatter<hlsl, FormatterState>)this).NormalizeWhitespace(Anchor.New(token, a.Parent));
+            return ((IFormatter<hlsl>)this).NormalizeWhitespace(Anchor.New(token, a.Parent));
         }
 
-        public FormatterState                 State                           => state;
-        int IFormatter<hlsl, FormatterState>. getIndentChange<T>(Anchor<T> a) => getIndentChange(a);
-        bool IFormatter<hlsl, FormatterState>.breakLineAfter<T>(Anchor<T> a)  => breakLineAfter(a);
-        bool IFormatter<hlsl, FormatterState>.whitespaceAfter<T>(Anchor<T> a) => whitespaceAfter(a);
+        int IFormatter<hlsl>. getIndentChange<T>(Anchor<T> a) => getIndentChange(a);
+        bool IFormatter<hlsl>.breakLineAfter<T>(Anchor<T> a)  => breakLineAfter(a);
+        bool IFormatter<hlsl>.whitespaceAfter<T>(Anchor<T> a) => whitespaceAfter(a);
     }
 }

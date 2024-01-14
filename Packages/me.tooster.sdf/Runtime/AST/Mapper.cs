@@ -1,51 +1,30 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 
 namespace me.tooster.sdf.AST {
-    public record MapperState {
+    // any calls are dispatched via the 
+    public abstract class Mapper<Lang> : Visitor<Lang, Tree<Lang>.Node> {
         public readonly bool descendIntoTrivia = false;
-    }
-
-    public class Mapper<Lang, TOpts> : Visitor<Lang, Tree<Lang>.Node> where TOpts : MapperState, new() {
-        protected readonly TOpts state;
 
         // TODO: possibly optimize to avoid creating mapper state instances 
-        protected Mapper(TOpts? state = default) => this.state = state ?? new();
+        protected Mapper(bool descendIntoTrivia = default) => this.descendIntoTrivia = descendIntoTrivia;
 
-        // default visit -> return itself
-        Tree<Lang>.Node? Visitor<Lang, Tree<Lang>.Node>.Visit(Anchor<Tree<Lang>.Node> a) => a.Node;
+        // default visit
+        public virtual Tree<Lang>.Node? Visit(Anchor<Tree<Lang>.Node> a) => a.Node;
 
-        public virtual Tree<Lang>.Node? Visit(Anchor<Tree<Lang>.Node> a) => a switch
-        {
-            { Node: SyntaxOrToken<Lang> x } => Visit(Anchor.New(x, a.Parent)),
-            { Node: Trivia<Lang> x } => Visit(Anchor.New(x, a.Parent)),
-            { Node: TriviaList<Lang> x } => Visit(Anchor.New(x, a.Parent)),
-            _ => throw new ArgumentOutOfRangeException(nameof(a), a, "Unhandled node type")
-        };
-
-        public virtual Tree<Lang>.Node? Visit(Anchor<SyntaxOrToken<Lang>> a) => a switch
-        {
-            { Node: Syntax<Lang> x } => Visit(Anchor.New(x, a.Parent)),
-            { Node: Token<Lang> x }  => Visit(Anchor.New(x, a.Parent)),
-            _                        => throw new ArgumentOutOfRangeException(nameof(a), a, "Unhandled node type")
-        };
-
-        public virtual Tree<Lang>.Node? Visit(Anchor<Syntax<Lang>> a) => a.Node;
-
-        public virtual Tree<Lang>.Node? Visit(Anchor<Trivia<Lang>> a) => a.Node;
+        public virtual Tree<Lang>.Node? Visit(Anchor<SyntaxOrToken<Lang>> a) => a.Node.Accept(this, a.Parent);
 
         public virtual Tree<Lang>.Node? Visit(Anchor<Token<Lang>> a) {
             var token = a.Node;
             var leading = token.LeadingTriviaList;
-            if (state.descendIntoTrivia)
+            if (descendIntoTrivia)
                 leading = Visit(Anchor.New(leading, a)) as TriviaList<Lang>;
 
             var trailing = token.TrailingTriviaList;
-            if (state.descendIntoTrivia)
+            if (descendIntoTrivia)
                 trailing = Visit(Anchor.New(trailing, a)) as TriviaList<Lang>;
 
             if (ReferenceEquals(token.LeadingTriviaList, leading)
@@ -79,7 +58,10 @@ namespace me.tooster.sdf.AST {
             return ReferenceEquals(newList, a.Node) ? a.Node : new SeparatedList<Lang, T>(newList);
         }
 
-        public virtual Tree<Lang>.Node? Visit(Anchor<SimpleTrivia<Lang>> a) => a.Node;
+        public virtual Tree<Lang>.Node? Visit(Anchor<Trivia<Lang>> a) => a.Node.Accept(this, a.Parent);
+
+        // leaf - identity 
+        public virtual Tree<Lang>.Node? Visit(Anchor<SimpleTrivia<Lang>> a) => a;
 
         public virtual Tree<Lang>.Node? Visit(Anchor<StructuredTrivia<Lang>> a) {
             var trivia = a.Node;
@@ -91,12 +73,18 @@ namespace me.tooster.sdf.AST {
                 : new StructuredTrivia<Lang> { Structure = newStructure };
         }
 
-        // injected language is not processed by default
-        public virtual Tree<Lang>.Node? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => a.Node;
+        // identity for unknowns
+        public virtual Tree<Lang>.Node? Visit(Anchor<Syntax<Lang>> a) => a.Node.Accept(this, a.Parent);
+
+        public virtual Tree<Lang>.Node? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => a;
+        public virtual Tree<Lang>.Node? Visit(Anchor<Statement<Lang>> a)              => a;
+        public virtual Tree<Lang>.Node? Visit(Anchor<Expression<Lang>> a)             => a;
+        public virtual Tree<Lang>.Node? Visit(Anchor<Identifier<Lang>> a)             => a;
 
 
         /// Returns new mapped list or old list if no element changed. Removes nulls from the mapped list
-        protected IEnumerable<TElement> MapList<TList, TElement>(Anchor<TList> a) where TList : IEnumerable<TElement> where TElement : Tree<Lang>.Node {
+        protected IEnumerable<TElement> MapList<TList, TElement>(Anchor<TList> a)
+            where TList : IEnumerable<TElement> where TElement : Tree<Lang>.Node {
             var changed = false;
             var newList = new List<TElement>();
             foreach (var element in a.Node) {
@@ -111,9 +99,5 @@ namespace me.tooster.sdf.AST {
 
             return changed ? newList : a.Node;
         }
-
-        public Tree<Lang>.Node? Visit(Anchor<Statement<Lang>> a)  => Visit(Anchor.New<Syntax<Lang>>(a.Node, a.Parent));
-        public Tree<Lang>.Node? Visit(Anchor<Expression<Lang>> a) => Visit(Anchor.New<Syntax<Lang>>(a.Node, a.Parent));
-        public Tree<Lang>.Node? Visit(Anchor<Identifier<Lang>> a) => Visit(Anchor.New<Syntax<Lang>>(a.Node, a.Parent));
     }
 }

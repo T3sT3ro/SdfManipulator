@@ -21,7 +21,7 @@ namespace me.tooster.sdf.AST {
 
         public override string ToString() => "↑" + Node;
     }
-    
+
     public interface IAnchor<out T> : IAnchor {
         Anchor? IAnchor.Parent => Parent;
         object IAnchor. Node   => Node;
@@ -47,5 +47,12 @@ namespace me.tooster.sdf.AST {
         public static implicit operator T(Anchor<T> anchor) => anchor.Node;
 
         public override string ToString() => base.ToString();
+    }
+
+    public static class Extensions {
+        public static Anchor<TBase> Cast<TBase>(this Anchor anchor) =>
+            new Anchor<TBase>((TBase)anchor.Node, anchor.Parent);
+        
+        public static Anchor<T> CastTo<T>(this Anchor anchor, T _) => new Anchor<T>((T)anchor.Node, anchor.Parent);
     }
 }

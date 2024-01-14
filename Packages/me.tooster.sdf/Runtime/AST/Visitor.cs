@@ -72,10 +72,10 @@ namespace me.tooster.sdf.AST {
 
         public void Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) { }
         
-        public void Visit(Anchor<Statement<Lang>> node) { }
+        public void Visit(Anchor<Statement<Lang>> a) { }
 
-        public void Visit(Anchor<Expression<Lang>> node) { }
+        public void Visit(Anchor<Expression<Lang>> a) { }
 
-        public void Visit(Anchor<Identifier<Lang>> node) { }
+        public void Visit(Anchor<Identifier<Lang>> a) { }
     }
 }

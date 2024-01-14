@@ -1,3 +1,4 @@
+/*
 #nullable enable
 using System;
 using System.Collections.Generic;
@@ -7,19 +8,19 @@ using me.tooster.sdf.AST.Syntax;
 namespace me.tooster.sdf.AST.Shaderlab {
     /// TODO: first improve Rewriter so it returns new syntax nodes in the place of the old ones or use Mapper
     [Obsolete]
-    public class ReflectiveShaderlabFormatter : Mapper<shaderlab, ReflectiveShaderlabFormatter.Options> {
+    public class ReflectiveShaderlabFormatter : Mapper<shaderlab> {
         public record Options : FormatterState {
             public int maxConsecutiveNewlineCount = 2;
         }
 
-        protected ReflectiveShaderlabFormatter(Options? options = null) : base(options) { }
+        private Options options { get; }
+        protected ReflectiveShaderlabFormatter(Options? options = null) { this.options = options?? new(); }
 
         public static Syntax<shaderlab> Format(Syntax<shaderlab> node, Options? options = null) {
             var formatter = new ReflectiveShaderlabFormatter(options);
-            return node /*formatter.Visit((dynamic)node)*/;
+            return node; //formatter.Visit((dynamic)node)
         }
 
-        /*
         protected TriviaList<shaderlab> Visit(Navigator.Navigable<TriviaList<shaderlab>> triviaListNavigable) {
             var children = base.Visit(triviaListNavigable);
             var normalized = NormalizeWhitespace(children);
@@ -140,6 +141,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
                 previous.TrailingTrivia = newTrailing;
                 current.LeadingTrivia = newLeading;
             }
-        }*/
+        }
     }
 }
+*/

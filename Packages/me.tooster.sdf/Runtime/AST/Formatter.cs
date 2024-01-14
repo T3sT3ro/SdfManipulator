@@ -9,7 +9,7 @@ namespace me.tooster.sdf.AST {
     /// <summary>
     /// Mutable state of the formatter to support line breaks and indents
     /// </summary>
-    public record FormatterState : MapperState {
+    public record FormatterState {
         private string SingleIndent { get; init; }        = "    ";
         public  string IndentString { get; private set; } = "";
         private int    indentLevel = 0;
@@ -27,11 +27,11 @@ namespace me.tooster.sdf.AST {
         }
     }
 
-    public interface IFormatter<Lang, out TState> where TState : FormatterState {
-        public    TState State { get; }
-        protected int    getIndentChange<T>(Anchor<T> a) where T : Token<Lang>;
-        protected bool   breakLineAfter<T>(Anchor<T> a) where T : Token<Lang>;
-        protected bool   whitespaceAfter<T>(Anchor<T> a) where T : Token<Lang>;
+    public interface IFormatter<Lang> {
+        public    FormatterState State { get; }
+        protected int            getIndentChange<T>(Anchor<T> a) where T : Token<Lang>;
+        protected bool           breakLineAfter<T>(Anchor<T> a) where T : Token<Lang>;
+        protected bool           whitespaceAfter<T>(Anchor<T> a) where T : Token<Lang>;
 
         public Token<Lang> NormalizeWhitespace<T>(Anchor<T> a) where T : Token<Lang> {
             var token = a.Node;

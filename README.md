@@ -85,6 +85,7 @@ TODO
 - [ ] graph -> dependency tree (with topological sort) -> AST -> code generation 
 - [ ] think about `required` keyword for records, the `init` properties, primary constructors `record class` vs `record struct` (C#10) and `readonly record`
   - `required`, albeit interesting for constructing syntactically correct trees, prevent from a wide range of lazy-initialized nodes constructed iteratively.
+  - and C#11 only...
 - [ ] add `SyntaxList` record that implements `IReadOnlyList` and is used instead of IReadOnlyList anywhere in syntax, to allow simpler construction of children (without `Concat`, `Append` etc.)
 - [ ] support `with` syntax for node creation and creating other nodes from already existing nodes
 - [ ] add replace method to graph that handles replacing nodes and reconnecting links (traverses to parents and rebuilds them)

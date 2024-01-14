@@ -11,17 +11,17 @@ using Whitespace = me.tooster.sdf.AST.Syntax.CommonTrivia.Whitespace<me.tooster.
 using NewLine = me.tooster.sdf.AST.Syntax.CommonTrivia.NewLine<me.tooster.sdf.AST.shaderlab>;
 
 namespace me.tooster.sdf.AST.Shaderlab {
-    public class ShaderlabFormatter : Mapper<FormatterState>, IFormatter<shaderlab, FormatterState> {
-        private ShaderlabFormatter(FormatterState state) : base(state) { }
+    public class ShaderlabFormatter : Mapper, IFormatter<shaderlab> {
+        public FormatterState State { get; }
+        private ShaderlabFormatter(FormatterState? state = null) { State = state ?? new FormatterState(); }
 
-        public FormatterState                      State                           => state;
-        int IFormatter<shaderlab, FormatterState>. getIndentChange<T>(Anchor<T> a) => getIndentChange(a);
-        bool IFormatter<shaderlab, FormatterState>.breakLineAfter<T>(Anchor<T> a)  => breakLineAfter(a);
-        bool IFormatter<shaderlab, FormatterState>.whitespaceAfter<T>(Anchor<T> a) => whitespaceAfter(a);
+        int IFormatter<shaderlab>. getIndentChange<T>(Anchor<T> a) => getIndentChange(a);
+        bool IFormatter<shaderlab>.breakLineAfter<T>(Anchor<T> a)  => breakLineAfter(a);
+        bool IFormatter<shaderlab>.whitespaceAfter<T>(Anchor<T> a) => whitespaceAfter(a);
 
         // Normalizes the syntax, e.g. whitespaces, newlines etc.
-        public static T? Format<T>(T node, FormatterState? s = null) where T : Tree<shaderlab>.Node {
-            var formatter = new ShaderlabFormatter(s ?? new());
+        public static T? Format<T>(T node, FormatterState? state = null) where T : Tree<shaderlab>.Node {
+            var formatter = new ShaderlabFormatter(state);
             return node.Accept(formatter, Anchor.New(node)) as T;
         }
 
@@ -62,7 +62,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
             if (base.Visit(a) is not Token<shaderlab> token) return null;
 
-            return ((IFormatter<shaderlab, FormatterState>)this).NormalizeWhitespace(Anchor.New(token, a.Parent));
+            return ((IFormatter<shaderlab>)this).NormalizeWhitespace(Anchor.New(token, a.Parent));
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<SimpleTrivia<shaderlab>> a) {
@@ -104,7 +104,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
             { Node: InjectedLanguage<shaderlab, hlsl> injected } => new InjectedLanguage<shaderlab, hlsl>(
                 new Tree<hlsl>(HlslFormatter.Format(
                     injected.tree?.Root,
-                    new FormatterState { IndentLevel = state.IndentLevel }))),
+                    new FormatterState { IndentLevel = State.IndentLevel }))),
             _ => a.Node
         };
     }

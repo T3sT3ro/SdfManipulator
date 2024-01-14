@@ -32,8 +32,8 @@ namespace me.tooster.sdf.AST.Generators {
         // generates methods like Visit(ForSyntax<hlsl> node)
         private ClassDeclarationSyntax generateMapperClass(SymbolSet ss) {
             var visitor = (ClassDeclarationSyntax)ParseMemberDeclaration(
-                $"public partial class Mapper<TState> : AST.Mapper<{ss.LangName.ToLower()}, TState>, Visitor<Tree<{ss.LangName.ToLower()}>.Node> where TState : MapperState, new() {{"
-              + $"public Mapper(TState state) : base(state) {{}}"
+                $"public partial class Mapper : AST.Mapper<{ss.LangName.ToLower()}>, Visitor<Tree<{ss.LangName.ToLower()}>.Node> {{"
+              + $"public Mapper() : base() {{}}"
               + $"}}"
             )!;
 
