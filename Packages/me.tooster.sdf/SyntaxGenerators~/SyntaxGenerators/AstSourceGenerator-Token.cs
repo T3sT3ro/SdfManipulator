@@ -21,7 +21,8 @@ namespace me.tooster.sdf.AST.Generators {
                         .AddMembers(tokens.Select(record => generateTokenPartial(record, langName)).ToArray())*/
                     tokens.GroupBy(token => token.ContainingNamespace.ToString())
                         .Select(tokenGroup => NamespaceDeclaration(IdentifierName(tokenGroup.Key))
-                            .AddMembers(tokenGroup.Select(record => generateTokenPartial(record, langName)).ToArray())).ToArray()
+                            .AddMembers(tokenGroup.Select(record => generateTokenPartial(record, langName)).ToArray()))
+                        .ToArray()
                 );
 
             context.AddSource($"{langName}.Tokens.g.cs",
@@ -43,7 +44,8 @@ namespace me.tooster.sdf.AST.Generators {
                     tokenRecordDeclaration.AddBaseListTypes(
                         SimpleBaseType(IdentifierName($"Token<{langName.ToLower()}>")));
 
-            if (!tokenSymbol.IsAbstract && tokenSymbol.OwnProperties("Text").Concat(tokenSymbol.InheritedProperties("Text"))
+            if (!tokenSymbol.IsAbstract && tokenSymbol.OwnProperties("Text")
+                    .Concat(tokenSymbol.InheritedProperties("Text"))
                     .All(m => m.IsAbstract))
                 tokenRecordDeclaration = tokenRecordDeclaration.AddMembers(PropertyDeclaration(
                             PredefinedType(Token(SyntaxKind.StringKeyword)),

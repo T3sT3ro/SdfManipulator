@@ -100,49 +100,16 @@ namespace me.tooster.sdf.AST.Generators {
             IEnumerable<IPropertySymbol> inheritedAndOwnProperties,
             string langName
         ) {
-            TypeSyntax itemType = IdentifierName(Identifier($"SyntaxOrToken<{langName.ToLower()}>"));
+            var itemType = $"SyntaxOrToken<{langName.ToLower()}>";
 
             var anyFieldNullable =
                 inheritedAndOwnProperties.Any(f => f.Type.NullableAnnotation == NullableAnnotation.Annotated);
 
+            var method = $"public override IReadOnlyList<{itemType}> ChildNodesAndTokens => new {itemType}[] {{"
+              + string.Join(", ", inheritedAndOwnProperties.Select(p => p.Name))
+              + $"}}" + (anyFieldNullable ? ".Where(c => c is not null).Select(c => c!).ToList();" : ";");
 
-            var arrayCreationExpressionSyntax = ArrayCreationExpression(
-                    ArrayType(anyFieldNullable ? NullableType(itemType) : itemType)
-                        .WithRankSpecifiers(SingletonList(ArrayRankSpecifier(
-                            SingletonSeparatedList<ExpressionSyntax>(OmittedArraySizeExpression())))))
-                .WithInitializer(InitializerExpression(
-                    SyntaxKind.ArrayInitializerExpression,
-                    SeparatedList<ExpressionSyntax>(
-                        generateChildrenGetterMembers(inheritedAndOwnProperties))));
-
-            return PropertyDeclaration(GenericName(Identifier("IReadOnlyList"))
-                        .WithTypeArgumentList(TypeArgumentList(SingletonSeparatedList(itemType))),
-                    Identifier("ChildNodesAndTokens"))
-                .WithModifiers(
-                    TokenList(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword)))
-                .WithExpressionBody(
-                    ArrowExpressionClause(
-                        !anyFieldNullable
-                            ? arrayCreationExpressionSyntax
-                            : InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-                                InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-                                        InvocationExpression(MemberAccessExpression(
-                                                SyntaxKind.SimpleMemberAccessExpression,
-                                                arrayCreationExpressionSyntax,
-                                                IdentifierName("Where")))
-                                            .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(
-                                                SimpleLambdaExpression(Parameter(Identifier("n")))
-                                                    .WithExpressionBody(IsPatternExpression(IdentifierName("n"),
-                                                        UnaryPattern(ConstantPattern(LiteralExpression(
-                                                            SyntaxKind.NullLiteralExpression))))))))),
-                                        IdentifierName("Select")))
-                                    .WithArgumentList(ArgumentList(SingletonSeparatedList(Argument(
-                                        SimpleLambdaExpression(Parameter(Identifier("n")))
-                                            .WithExpressionBody(PostfixUnaryExpression(
-                                                SyntaxKind.SuppressNullableWarningExpression,
-                                                IdentifierName("n"))))))),
-                                IdentifierName("ToList")))))
-                .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
+            return (PropertyDeclarationSyntax)ParseMemberDeclaration(method)!;
         }
 
         /// generates contents of the ChildNodesAndTokens { a, b, c }; 
