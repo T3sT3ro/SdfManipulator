@@ -7,15 +7,10 @@ using me.tooster.sdf.AST.Syntax.CommonSyntax;
 namespace me.tooster.sdf.AST {
     // any calls are dispatched via the 
     public abstract class Mapper<Lang> : Visitor<Lang, Tree<Lang>.Node> {
-        public readonly bool descendIntoTrivia = false;
+        protected bool descendIntoTrivia { get; init; } = false;
 
         // TODO: possibly optimize to avoid creating mapper state instances 
         protected Mapper(bool descendIntoTrivia = default) => this.descendIntoTrivia = descendIntoTrivia;
-
-        // default visit
-        public virtual Tree<Lang>.Node? Visit(Anchor<Tree<Lang>.Node> a) => a.Node;
-
-        public virtual Tree<Lang>.Node? Visit(Anchor<SyntaxOrToken<Lang>> a) => a.Node.Accept(this, a.Parent);
 
         public virtual Tree<Lang>.Node? Visit(Anchor<Token<Lang>> a) {
             var token = a.Node;
@@ -58,8 +53,6 @@ namespace me.tooster.sdf.AST {
             return ReferenceEquals(newList, a.Node) ? a.Node : new SeparatedList<Lang, T>(newList);
         }
 
-        public virtual Tree<Lang>.Node? Visit(Anchor<Trivia<Lang>> a) => a.Node.Accept(this, a.Parent);
-
         // leaf - identity 
         public virtual Tree<Lang>.Node? Visit(Anchor<SimpleTrivia<Lang>> a) => a;
 
@@ -67,19 +60,23 @@ namespace me.tooster.sdf.AST {
             var trivia = a.Node;
             if (trivia.Structure is null) return trivia;
 
-            Syntax<Lang>? newStructure = a.Node.Accept(this, Anchor.New(trivia.Structure, a)) as Syntax<Lang>;
+            Syntax<Lang>? newStructure = Visit(Anchor.New(trivia.Structure, a)) as Syntax<Lang>;
             return ReferenceEquals(trivia.Structure, newStructure)
                 ? trivia
                 : new StructuredTrivia<Lang> { Structure = newStructure };
         }
 
-        // identity for unknowns
-        public virtual Tree<Lang>.Node? Visit(Anchor<Syntax<Lang>> a) => a.Node.Accept(this, a.Parent);
+        // dispatch by concrete type - all of these are abstract so it's safe to do this if type hierarchy is properly set up
+        public virtual Tree<Lang>.Node? Visit(Anchor<Tree<Lang>.Node> a) => a.Node.Accept(this, a.Parent);
 
+        public virtual Tree<Lang>.Node? Visit(Anchor<SyntaxOrToken<Lang>> a) => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Syntax<Lang>> a)        => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Trivia<Lang>> a)        => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Statement<Lang>> a)     => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Expression<Lang>> a)    => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Identifier<Lang>> a)    => a.Node.Accept(this, a.Parent);
+        // identity for injected language - requires custom processing
         public virtual Tree<Lang>.Node? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => a;
-        public virtual Tree<Lang>.Node? Visit(Anchor<Statement<Lang>> a)              => a;
-        public virtual Tree<Lang>.Node? Visit(Anchor<Expression<Lang>> a)             => a;
-        public virtual Tree<Lang>.Node? Visit(Anchor<Identifier<Lang>> a)             => a;
 
 
         /// Returns new mapped list or old list if no element changed. Removes nulls from the mapped list

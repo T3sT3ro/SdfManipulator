@@ -192,7 +192,7 @@ TODO
   - alternatively a zipper could be just a parent + child label, and the `Node` property would be a derived value of the parent with child
     - this could make multiple calls to get child at index though, possibly 1 for each pattern match.
   - by making Node inherit from `IReadOnlyList` we gain access making reverse iterator fast, but at the same time we have to think what exactly should it enumerate? Branches? if so, is `null` valid? Imo yes. Any post-processing should be done manually by appending index and filtering nulls
-
+- Sometimes ReferenceEquals checks could be improper when we would want to share common syntax nodes. For example an indentation whitespace node could be shared to save space, but at the same time some other mechanism (maybe tagging?) should be used to determine which child is the node (and is it really the same node or not)  
 
 # Threads and forum posts on problems with raymarching:
 - [Automatic perspective divide?](https://forum.unity.com/threads/automatic-perspective-divide.530236/)

@@ -48,9 +48,12 @@ namespace me.tooster.sdf.AST.Shaderlab {
             if (nextToken is { Node: CloseBraceToken })
                 return true;
 
-            return a.Ancestors().Any(parent =>
-                    parent is IAnchor<SyntaxOrToken<shaderlab>> { Node: Command or Property or Tag } aSyntax
-                 && aSyntax.LastToken() == a.Node);
+            foreach (var parent in a.Ancestors()) {
+                if (parent is IAnchor<SyntaxOrToken<shaderlab>> { Node: Command or Property or Tag } aSyntax) 
+                    return ReferenceEquals(aSyntax.LastToken()?.Node, a.Node);
+            }
+
+            return false;
         }
 
         private static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<shaderlab> {

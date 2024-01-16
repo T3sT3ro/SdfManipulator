@@ -80,8 +80,8 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     [TokenNode("static")]               public partial record StaticKeyword;
     [TokenNode("uniform")]              public partial record UniformKeyword;
     
-    public abstract record PredefinedTypeToken : Token<hlsl>;
-    public abstract record ScalarTypeToken : PredefinedTypeToken;
+    [TokenNode] public abstract partial record PredefinedTypeToken;
+    [TokenNode] public abstract partial record ScalarTypeToken : PredefinedTypeToken;
     [TokenNode("void")]                 public partial record VoidKeyword : PredefinedTypeToken;
     [TokenNode("bool")]                 public partial record BoolKeyword : ScalarTypeToken;
     [TokenNode("half")]                 public partial record HalfKeyword : ScalarTypeToken;

@@ -222,6 +222,7 @@ namespace me.tooster.sdf.AST.Syntax {
         public static StructuredTrivia<Lang> ToStructuredTrivia<Lang>(this Syntax<Lang> syntax) =>
             new StructuredTrivia<Lang> { Structure = syntax };
 
+        // empty whitespace is redundant
         public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
 
         public static string Repeat(this string s, uint n) => string.Concat(Enumerable.Repeat(s, (int)n));

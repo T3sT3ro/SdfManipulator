@@ -1,15 +1,23 @@
 #nullable enable
+using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
 using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
 
 namespace me.tooster.sdf.AST.Hlsl {
+    // For reference of formatting HLSL check out:
+    //  https://github.com/tgjones/HlslTools/blob/master/src/ShaderTools.CodeAnalysis.Hlsl/Formatting/FormattingVisitor.cs
     public class HlslFormatter : Mapper, IFormatter<hlsl> {
         public FormatterState State { get; }
 
-        public HlslFormatter(FormatterState? state = null) => State = state?? new FormatterState();
+        public HlslFormatter(FormatterState? state = null) {
+            descendIntoTrivia = true;
+            State = state ?? new FormatterState();
+        }
+
         public static T? Format<T>(T node, FormatterState? state = null) where T : Tree<hlsl>.Node {
             var formatter = new HlslFormatter(state);
             return node.Accept(formatter, Anchor.New(node)) as T;
@@ -25,9 +33,14 @@ namespace me.tooster.sdf.AST.Hlsl {
         private static bool breakLineAfter<T>(Anchor<T> a) where T : Token<hlsl> {
             return a is { Node: OpenBraceToken or CloseBraceToken or SemicolonToken };
         }
-
+        
         private static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<hlsl> {
-            return a.NextToken() is not {Node: OpenParenToken or CloseParenToken or SemicolonToken };
+            if (a is { Node: HashToken, Parent: { Node: PreprocessorSyntax } }) return false;
+
+            var nextToken = a.NextToken();
+            if(nextToken is {Node: OpenParenToken or CloseParenToken or SemicolonToken }) return false;
+
+            return true;
         }
 
         public override Tree<hlsl>.Node? Visit(Anchor<Token<hlsl>> a) {
