@@ -18,7 +18,7 @@ namespace me.tooster.sdf.Tests.Editor.AST {
         [Test]
         public static IEnumerator HlslSyntaxSmokeTest() {
             var varDeclaration = new VariableDeclarator
-                { type = new Type.Predefined { typeToken = new MatrixToken() } };
+                { type = new Type.Predefined { typeToken = new MatrixTypeToken() } };
             // Assert.AreEqual(varDeclaration, (varDeclaration.type as Type.Predefined)!.typeToken.Parent!.Parent);
             yield return true;
         }

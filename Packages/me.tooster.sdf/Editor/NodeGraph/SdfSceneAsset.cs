@@ -8,7 +8,7 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.NodeGraph {
     // https://medium.com/miijiis-unified-works/have-unity-support-your-custom-file-part-4-6-fc2ae4ec09c0
 // see ShaderGraphImporter
-    [ScriptedImporter(1, "sdfscene")]
+    [ScriptedImporter(1, "sdfgraph")]
     public class SdfSceneImporter : ScriptedImporter {
         public override void OnImportAsset(AssetImportContext ctx) {
             string path = ctx.assetPath;
@@ -42,11 +42,11 @@ namespace me.tooster.sdf.Editor.NodeGraph {
         }
 
         // siilar to CreateShaderGraph
-        [MenuItem("Assets/Create/SDF/Sdf Scene Asset")]
+        [MenuItem("Assets/Create/SDF/Sdf Scene Graph Asset")]
         private static void CreateAsset() {
             var graphItem = ScriptableObject.CreateInstance<CreateGraphAction>();
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                graphItem, "SDF Graph.sdf", null, null);
+                graphItem, "SDF Graph.sdfgraph", null, null);
         }
 
         private class CreateGraphAction : EndNameEditAction {

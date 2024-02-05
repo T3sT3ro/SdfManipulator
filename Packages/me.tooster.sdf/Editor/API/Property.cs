@@ -1,25 +1,43 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace me.tooster.sdf.Editor.API {
-    // TODO make it impossible to create propeties directly, only using graph creational methods
-
     /// <summary>
+    /// A wrapper around a 
     /// A constant literal or a uniform, which can be exposed to outside world.
     /// They are like uniforms and blackboard properties in shader graph
     /// </summary>
     [Serializable]
-    public abstract record Property(string InternalName, string DisplayName) : Representable {
-        [field:SerializeField] public bool   Exposed        { get; set; } // determines if property is exported to material properties
-        [field:SerializeField] public Guid   Guid           { get; } = Guid.NewGuid();
+    public abstract class Property {
+        [field: SerializeField] public bool Exposed { get; set; } // is property a uniform or a constant?
+
+        protected Property(string InternalName, string DisplayName) {
+            this.InternalName = InternalName;
+            this.DisplayName = DisplayName;
+        }
+
+        public string InternalName { private get; init; }
+        public string DisplayName  { get;         init; }
     }
 
     /// <summary>Typed property with possibility to export to external world</summary>
     /// <typeparam name="T">type that this property holds</typeparam>
     [Serializable]
-    public record Property<T>(string InternalName, string DisplayName, T DefaultValue)
-        : Property(InternalName, DisplayName) {
-        [field:SerializeField] public T DefaultValue { get; internal set; } = DefaultValue;
+    public class Property<T> : Property {
+        public Property(string InternalName, string DisplayName, T DefaultValue) : base(InternalName, DisplayName) {
+            this.DefaultValue = DefaultValue;
+        }
+
+        [field: SerializeField] public T DefaultValue { get; internal set; }
+
+        public delegate void ValueChangedEvent(object context, T newValue);
+
+        public event ValueChangedEvent onValueChanged = delegate { };
+
+        public void UpdateValue(object context, T newValue) => onValueChanged(context, newValue);
+    }
+
+    public interface IPropertyIdentifierProvider {
+        public string GetIdentifier(Property property);
     }
 }

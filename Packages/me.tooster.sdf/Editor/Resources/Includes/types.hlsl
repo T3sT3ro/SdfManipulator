@@ -36,7 +36,7 @@ struct Ray3D
 
 struct v2f
 {
-    float4 vertex : SV_POSITION; // clip space vertex pos
+    float4 vertex : SV_POSITION; // clip space vertex pos. Space in vertex shader: (-w, -w, 0), (w,w,w). In fragment (after hardware perspective divide) is (-1, -1, 0*) to (1,1,1*). Z value depends on platform.
     float4 screenPos: TEXCOORD1;
     float3 hitpos : TEXCOORD2; // hit position in model space
     float3 rd_cam : TEXCOORD3; // ray direction in camera space

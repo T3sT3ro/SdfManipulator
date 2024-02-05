@@ -5,10 +5,10 @@
 
 // TODO: use https://computergraphics.stackexchange.com/questions/13666/how-to-calculate-ray-origin-and-ray-direction-in-vertex-shader-working-universal
 // to avoid using inverse projection matrix
-v2f vert(appdata_base v)
+v2f vertexShader(appdata_base v)
 {
     v2f o;
-    o.vertex = UnityObjectToClipPos(v.vertex); // clip space
+    o.vertex = UnityObjectToClipPos(v.vertex); // clip space, from (-w,-w,0) to (w, w, w)
     o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
     // o.uv = v.texcoord; // TRANSFORM_TEX(v.texcoord, _BoxmapTex);
     o.hitpos = v.vertex;
@@ -16,6 +16,19 @@ v2f vert(appdata_base v)
     COMPUTE_EYEDEPTH(o.screenPos.z);
     o.rd_cam = UnityObjectToViewPos(v.vertex);
     return o;
+}
+
+f2p fragmentShader(v2f frag_in)
+{
+    UNITY_VPOS_TYPE screenPos;
+    screenPos.xy = floor(frag_in.screenPos.xy * 0.25) * 0.5;
+    float checker = -frac(screenPos.r + screenPos.g);
+
+    // clip(checker);
+
+    f2p frag_out = (f2p)0;
+    frag_out.color = float4((frag_in.screenPos.xy/frag_in.screenPos.w), 0, 1.0);
+    return frag_out;
 }
 
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);

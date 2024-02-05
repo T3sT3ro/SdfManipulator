@@ -39,13 +39,13 @@ namespace me.tooster.sdf.Editor.NodeGraph.PortData {
                 new Type.Struct.Member { type = new IntKeyword(), id = SdfIdMemberName },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { type = Constants.ScalarKind.@float, arity = 3 },
+                    type = new VectorTypeToken { type = Constants.ScalarKind.@float, arity = 3 },
                     id = SdfPointMemberName
                 },
                 new Type.Struct.Member { type = new FloatKeyword(), id = SdfDistanceMemberName },
                 new Type.Struct.Member
                 {
-                    type = new VectorToken { type = Constants.ScalarKind.@float, arity = 3 },
+                    type = new VectorTypeToken { type = Constants.ScalarKind.@float, arity = 3 },
                     id = SdfNormalMemberName
                 },
                 new Type.Struct.Member

@@ -17,7 +17,7 @@ namespace me.tooster.sdf.Editor.API {
     /// using "bottom-up" (i.e. left to right) approach where consumer nodes take producer nodes as constructor params.
     /// </summary>
     [Serializable]
-    public class Graph : Representable {
+    public class Graph {
         public record Edge<T>(IOutputPort<T> Source, IInputPort<T> Target) where T : Port.Data;
 
         [field: SerializeField] public Guid        Guid         { get; init; } = Guid.NewGuid();
@@ -47,6 +47,9 @@ namespace me.tooster.sdf.Editor.API {
 
         private enum TraversalStatus : byte { Enqueued, Visited }
 
+        // this should be a method on Graph acting as semantic model
+        public static string GetUniqueNameForProperty(Property p) => throw new NotImplementedException();
+
         /// <summary>
         /// Iterates over nodes topologically "right to left" (reverse data direction) over collected input ports
         /// When cycle is detected, it invokes a handler for that node and skips descending into the cycle.
@@ -73,7 +76,7 @@ namespace me.tooster.sdf.Editor.API {
                         // here would be a cycleHandler
                         throw new GraphException(string.Format(
                             "Cycle detected in graph between node {0} and {1}",
-                            ((Representable)node).IdName, ((Representable)connectedNode).IdName)
+                            node, connectedNode)
                         );
                     } // else skip adding an already enqueued node
                 }

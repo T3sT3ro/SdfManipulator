@@ -17,7 +17,9 @@ using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Commands;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using Unity.VisualScripting.YamlDotNet.Serialization.NamingConventions;
 using static me.tooster.sdf.AST.Hlsl.Syntax.VariableDeclarator;
+using Extensions = me.tooster.sdf.Editor.API.Extensions;
 using FloatKeyword = me.tooster.sdf.AST.Shaderlab.Syntax.FloatKeyword;
 using FloatLiteral = me.tooster.sdf.AST.Shaderlab.Syntax.FloatLiteral;
 using Identifier = me.tooster.sdf.AST.Hlsl.Syntax.Identifier;
@@ -55,7 +57,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
         IVertexInputNode vertexInputNode,
         IVertexToFragmentNode vertexToFragmentNode,
         IFragmentOutNode fragmentOutNode)
-        : TargetNode($"{Representable.formatter.Apply(targetName)}_target", $"{targetName} Target") {
+        : TargetNode($"{Extensions.sanitizeNameToIdentifier(targetName)}_target", $"{targetName} Target") {
         private List<Property>  properties = new();
         private HashSet<string> includes   = new();
         private HashSet<string> defines    = new();
@@ -114,7 +116,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
                             "Material property block can't support this property type")
                     } with
                     {
-                        id = property.InternalName, displayName = property.DisplayName
+                        id = Graph.GetUniqueNameForProperty(property), displayName = property.DisplayName
                     }).ToList()
         };
 

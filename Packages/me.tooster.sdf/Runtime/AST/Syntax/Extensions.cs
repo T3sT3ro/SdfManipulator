@@ -185,12 +185,20 @@ namespace me.tooster.sdf.AST.Syntax {
         public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.FORWARD);
+        
+        public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, IEnumerable<Trivia<Lang>> trivia)
+            where TSyntax : Syntax<Lang> =>
+            WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.FORWARD);
 
         public static TSyntax WithTrailingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, triviaList, Navigation.Direction.BACKWARD);
 
         public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
+            where TSyntax : Syntax<Lang> =>
+            WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
+        
+        public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, IEnumerable<Trivia<Lang>> trivia)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
 

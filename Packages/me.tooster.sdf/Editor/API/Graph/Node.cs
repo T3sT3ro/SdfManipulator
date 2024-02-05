@@ -14,7 +14,7 @@ namespace me.tooster.sdf.Editor.API {
     /// suppliers of bodies (local generation) and properties (global generation)
     /// </summary>
     [Serializable]
-    public abstract record Node(string InternalName, string DisplayName) : Representable {
+    public abstract record Node(string InternalName, string DisplayName) {
         public Guid   Guid           { get; } = Guid.NewGuid();
 
         // FIXME: node names should be MOSTLY static (property node names though?)

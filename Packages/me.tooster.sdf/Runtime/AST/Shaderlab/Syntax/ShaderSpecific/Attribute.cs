@@ -6,13 +6,15 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
     // [PowerSlider(3.0)]
     // [AnyNameForCustomDrawer]
     [SyntaxNode] public partial record Attribute {
-        public OpenBracketToken              openBracketToken  { get; init; } = new();
-        public IdentifierToken               id                { get; init; }
-        public ArgumentList<AttributeValue>? arguments         { get; init; }
-        public CloseBracketToken             closeBracketToken { get; init; } = new();
+        public OpenBracketToken     openBracketToken  { get; init; } = new();
+        public IdentifierToken      id                { get; init; }
+        public ArgumentList<Value>? arguments         { get; init; }
+        public CloseBracketToken    closeBracketToken { get; init; } = new();
 
-        [SyntaxNode] public partial record AttributeValue {
+        [SyntaxNode] public partial record Value {
             public AttributeStringLiteral value { get; init; }
+
+            public static implicit operator Value(string literal) => new Value { value = literal };
         }
     }
 }

@@ -46,6 +46,7 @@ Shader "SDF/Domain"
             "RenderType"="Geometry"
             "Queue"="Geometry+1" // +1 to resolve artifacts when using Cull Off
             "IgnoreProjector"="True"
+            "LightMode"="ForwardBase"
         }
         //        Blend SrcAlpha OneMinusSrcAlpha
         ZTest [_ZTest] // Can be customized manually, but when meshes intersect SDFs, this helps to draw both properly  

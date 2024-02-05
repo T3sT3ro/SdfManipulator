@@ -1,6 +1,9 @@
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
     public partial record Property {
-        [SyntaxNode] public abstract partial record Type;
+        [SyntaxNode] public abstract partial record Type {
+
+            public static implicit operator Type(TypeKeyword keyword) => new PredefinedType { type = keyword };
+        }
 
         [SyntaxNode] public partial record PredefinedType : Type {
             // Integer, Float, Texture2D, Texture2DArray, Texture3D, Cubemap, CubemapArray, Color, Vector

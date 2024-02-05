@@ -56,25 +56,25 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes.MasterNodes {
             {
                 new StructMember
                 {
-                    type = new VectorToken(),
+                    type = new VectorTypeToken(),
                     id = positionMemberName,
                     semantic = new SvPositionSemantic()
                 },
                 new StructMember
                 {
-                    type = new VectorToken(),
+                    type = new VectorTypeToken(),
                     id = normalMemberName,
                     semantic = new NormalSemantic()
                 },
                 new StructMember
                 {
-                    type = new VectorToken { arity = 2 },
+                    type = new VectorTypeToken { arity = 2 },
                     id = texCoordMemberName,
                     semantic = new TexcoordSemantic { n = 0 }
                 },
                 new StructMember
                 {
-                    type = new VectorToken(),
+                    type = new VectorTypeToken(),
                     id = colorMemberName,
                     semantic = new ColorSemantic { n = 0 }
                 },

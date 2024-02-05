@@ -38,14 +38,17 @@ namespace me.tooster.sdf.AST.Shaderlab {
 
         private static bool breakLineAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
             if (a is {
-                    Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or EndHlslKeyword
-                    or HlslIncludeKeyword
+                    Node: OpenBraceToken or CloseBraceToken 
+                    or HlslProgramKeyword or HlslIncludeKeyword or EndHlslKeyword
                 }
                 or { Node: QuotedStringLiteral, Parent: Anchor<CommandArgument> })
                 return true;
 
             var nextToken = a.NextToken();
             if (nextToken is { Node: CloseBraceToken })
+                return true;
+            
+            if (a is { Node: CloseBracketToken, Parent: { Node: Attribute } })
                 return true;
 
             foreach (var parent in a.Ancestors()) {
@@ -57,9 +60,14 @@ namespace me.tooster.sdf.AST.Shaderlab {
         }
 
         private static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
-            if (a is { Node: OpenBracketToken or OpenParenToken or DotToken }) return false;
+            if (a is { Node: OpenBracketToken or OpenParenToken or DotToken }) 
+                return false;
 
-            return a.NextToken() is not { Node: CloseBracketToken or CloseBraceToken };
+            var nextToken = a.NextToken();
+            if (nextToken is not { Node: CloseBracketToken or CloseBraceToken or CloseParenToken or CommaToken or OpenParenToken })
+                return true;
+
+            return false;
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {

@@ -10,5 +10,8 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
 
         public static implicit operator ArgumentList<TSyntax>(TSyntax[] arguments) => new()
             { arguments = SeparatedList<shaderlab, TSyntax>.WithSeparator<CommaToken>(arguments) };
+
+        public static implicit operator ArgumentList<TSyntax>(TSyntax singletonElement) => new()
+            { arguments = SeparatedList<shaderlab, TSyntax>.WithSeparator<CommaToken>(singletonElement) };
     }
 }

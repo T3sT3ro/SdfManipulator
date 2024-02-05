@@ -319,6 +319,8 @@ TODO
 - [Cables.gl, visual graph programming tool blending logic, visualization and shaders, cool looking](https://cables.gl/)
 - [Setting up syntax generators in unity and referencing unity project, writing some tests, example with Entitas](https://github.com/sschmid/Entitas/issues/957)
 - [How rowan (rust analyzer's project for syntax trees and parsing) represents syntax](https://github.com/rust-lang/rust-analyzer/blob/master/docs/dev/syntax.md)
+- [Adding nuget packages and dlls to (new) unity](https://www.ankursheel.com/blog/installing-nuget-packages-unity-2021)
+- [Non linear sphere tracing](https://par.nsf.gov/servlets/purl/10172295)
 
 ## Unity internals:
 

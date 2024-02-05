@@ -27,7 +27,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
 
         /// Creates a node from some existing property. Several nodes can reference the same property
         public PropertyNode(Property<TProperty> property, Func<TData> evaluator)
-            : base(property.InternalName, property.DisplayName, evaluator) {
+            : base(Graph.GetUniqueNameForProperty(property), property.DisplayName, evaluator) {
             Property = property;
         }
     }
@@ -35,7 +35,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
     // TODO: refactor nodes to handle both constant and property at the same time, with option to switch between the two? 
     public record IntPropertyNode : PropertyNode<int, HlslScalar> {
         public IntPropertyNode(Property<int> property)
-            : base(property, () => new(new Identifier { id = property.InternalName })) { }
+            : base(property, () => new(new Identifier { id = Graph.GetUniqueNameForProperty(property) })) { }
     }
 
     // TODO: refactor to bake constant syntax while building shader but while editing use uniforms
@@ -47,7 +47,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
 
     public record FloatPropertyNode : PropertyNode<float, HlslScalar> {
         public FloatPropertyNode(Property<float> property)
-            : base(property, () => new(new Identifier { id = property.InternalName })) { }
+            : base(property, () => new(new Identifier { id = Graph.GetUniqueNameForProperty(property) })) { }
     }
 
     public record FloatConstantNode : ValueNode<HlslScalar> {
@@ -59,7 +59,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
 
     public record VectorPropertyNode : PropertyNode<Vector4, HlslVector> {
         public VectorPropertyNode(Property<Vector4> property)
-            : base(property, () => new(new Identifier { id = property.InternalName })) { }
+            : base(property, () => new(new Identifier { id = Graph.GetUniqueNameForProperty(property) })) { }
     }
 
     public record VectorConstantNode : ValueNode<HlslVector> {
@@ -71,7 +71,7 @@ namespace me.tooster.sdf.Editor.NodeGraph.Nodes {
 
     public record MatrixPropertyNode : PropertyNode<Matrix4x4, HlslMatrix> {
         public MatrixPropertyNode(Property<Matrix4x4> property)
-            : base(property, () => new(new Identifier { id = property.InternalName })) { }
+            : base(property, () => new(new Identifier { id = Graph.GetUniqueNameForProperty(property) })) { }
     }
 
     public record MatrixConstantNode : ValueNode<HlslMatrix> {

@@ -35,8 +35,6 @@ namespace me.tooster.sdf.Tests.Editor.SDF {
 
             var shaderContent = graph.BuildShaderForTarget(targetNode);
             // var shader = ShaderUtil.CreateShaderAsset(shaderContent);
-            var graphName = ((Representable)graph).IdName;
-            var targetName = ((Representable)targetNode).IdName;
             Debug.Log(shaderContent);
             
             // AssetDatabase.CreateAsset(shader, $"Test/GeneratedShaders/{graphName}-{targetName}.hlsl");

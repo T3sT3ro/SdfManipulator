@@ -81,6 +81,15 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     [TokenNode("uniform")]              public partial record UniformKeyword;
     
     [TokenNode] public abstract partial record PredefinedTypeToken;
+    [TokenNode] public abstract partial record SamplerTypeToken : PredefinedTypeToken;
+    [TokenNode("sampler")]              public partial record SamplerKeyword : SamplerTypeToken;
+    [TokenNode("sampler1D")]            public partial record Sampler1DKeyword : SamplerTypeToken;
+    [TokenNode("sampler2D")]            public partial record Sampler2DKeyword : SamplerTypeToken;
+    [TokenNode("sampler3D")]            public partial record Sampler3DKeyword : SamplerTypeToken;
+    [TokenNode("samplerCUBE")]          public partial record SamplerCUBEKeyword : SamplerTypeToken;
+    [TokenNode("sampler_state")]        public partial record Sampler_stateKeyword : SamplerTypeToken;
+    [TokenNode("SamplerState")]         public partial record SamplerStateKeyword : SamplerTypeToken;
+    
     [TokenNode] public abstract partial record ScalarTypeToken : PredefinedTypeToken;
     [TokenNode("void")]                 public partial record VoidKeyword : PredefinedTypeToken;
     [TokenNode("bool")]                 public partial record BoolKeyword : ScalarTypeToken;
@@ -197,14 +206,14 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public override    string Text => string.Intern($"{Name}{n?.ToString() ?? string.Empty}");
     }
 
-    [TokenNode] public partial record MatrixToken : PredefinedTypeToken {
+    [TokenNode] public partial record MatrixTypeToken : PredefinedTypeToken {
         public          Constants.ScalarKind type { get; init; } = Constants.ScalarKind.@float;
         public          uint                 rows { get; init; } = 4;
         public          uint                 cols { get; init; } = 4;
         public override string               Text => string.Intern($"{type}{rows}x{cols}");
     }
 
-    [TokenNode]  public partial record VectorToken : PredefinedTypeToken {
+    [TokenNode]  public partial record VectorTypeToken : PredefinedTypeToken {
         public          Constants.ScalarKind type  { get; init; } = Constants.ScalarKind.@float;
         public          uint                 arity { get; init; } = 4;
         public override string               Text  => string.Intern($"{type}{arity}");
