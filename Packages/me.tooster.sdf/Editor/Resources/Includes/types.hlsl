@@ -52,14 +52,3 @@ struct f2p
     #endif
 };
 
-/// data structure for 3d boxmap textures and sizing, separate for each axis
-struct BoxMapParams3D
-{
-    sampler2D X;
-    sampler2D Y;
-    sampler2D Z;
-
-    float4 X_ST;
-    float4 Y_ST;
-    float4 Z_ST;
-};

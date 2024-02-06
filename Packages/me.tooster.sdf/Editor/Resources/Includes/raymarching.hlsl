@@ -3,6 +3,11 @@
 #include "util.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
 
+v2f vertexShader(in appdata_base v);
+f2p fragmentShader(in appdata_base v);
+SdfResult sdfScene(in Ray3D rayInfo);
+SdfResult raymarch(in Ray3D rayInfo);
+
 // TODO: use https://computergraphics.stackexchange.com/questions/13666/how-to-calculate-ray-origin-and-ray-direction-in-vertex-shader-working-universal
 // to avoid using inverse projection matrix
 v2f vertexShader(in appdata_base v)
@@ -18,7 +23,6 @@ v2f vertexShader(in appdata_base v)
     return o;
 }
 
-SdfResult sdfScene(in Ray3D rayInfo);
 
 f2p fragmentShader(in v2f frag_in)
 {

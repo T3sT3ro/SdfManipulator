@@ -30,9 +30,9 @@ Shader "SDF/Domain"
         [Header(SDF Scene)][Space]
         _Control ("size1, size2, rot1, rot2", Vector) = (.5, .1, 0, 0)
         _Dye ("R, k", Vector) = (1, 2, 0, 0)
-        _BoxmapTex_X ("Texture for Triplanar mapping", 2D) = "white" {}
-        _BoxmapTex_Y ("Texture for Triplanar mapping", 2D) = "white" {}
-        _BoxmapTex_Z ("Texture for Triplanar mapping", 2D) = "white" {}
+        _BoxmapTex ("Texture for Triplanar mapping", 2D) = "white" {}
+        //        _BoxmapTex ("Texture for Triplanar mapping", 2D) = "white" {}
+        //        _BoxmapTex ("Texture for Triplanar mapping", 2D) = "white" {}
         _DBG ("DBG", Vector) = (0,0,0,0)
     }
 
@@ -73,13 +73,11 @@ Shader "SDF/Domain"
         #include "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"
         #include "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"
         #include "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl"
+        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/textureMapping.hlsl"
 
-        sampler2D _BoxmapTex_X;
-        sampler2D _BoxmapTex_Y;
-        sampler2D _BoxmapTex_Z;
-        float4 _BoxmapTex_X_ST;
-        float4 _BoxmapTex_Y_ST;
-        float4 _BoxmapTex_Z_ST;
+        Texture2D _BoxmapTex;
+        SamplerState sampler_BoxmapTex;
+        float4 _BoxmapTex_ST;
 
         UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 
@@ -120,13 +118,13 @@ Shader "SDF/Domain"
         // inverse projection matrix either to world or to model, depending on the origin type
         // instead of performing matrix inversion in the shader, use already supplied matrices
         static const float4x4 inv = mul(SCALE_MATRIX,
-                                #ifdef _ORIGIN_WORLD
+                                        #ifdef _ORIGIN_WORLD
                                 mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
                                 // inverse(UNITY_MATRIX_VP)
-                                #else
+                                        #else
                                         mul(unity_WorldToObject, mul(UNITY_MATRIX_I_V, unity_CameraInvProjection))
                                         // inverse(UNITY_MATRIX_MVP)
-                                #endif
+                                        #endif
         );
 
         //const float near = _ProjectionParams.y; // those go into frag
@@ -156,7 +154,7 @@ Shader "SDF/Domain"
                 o.hitpos = v.vertex;
                 // this uses implicitly defined v.vertex.z... possibly migrate to proper function...
                 COMPUTE_EYEDEPTH(o.screenPos.z);
-                o.rd_cam = UnityObjectToViewPos(v.vertex);
+                o.rd_cam = unity_OrthoParams.w ? UNITY_MATRIX_V[2].xyz : UnityObjectToViewPos(v.vertex);
                 return o;
             }
 
@@ -318,17 +316,6 @@ Shader "SDF/Domain"
                 return _COLORS[id.x + 1];
             }
 
-            // triplanar mapping texture, point, normal, smoothing
-            fixed4 __BOXMAP(BoxMapParams3D params, in float3 p, in float3 n, in float k)
-            {
-                fixed4 x = tex2D(params.X, p.zy * params.X_ST.xy + params.X_ST.zw);
-                fixed4 y = tex2D(params.Y, p.zx * params.Y_ST.xy + params.Y_ST.zw);
-                fixed4 z = tex2D(params.Z, p.xy * params.Z_ST.xy + params.Z_ST.zw);
-
-                float3 w = pow(abs(n), k);
-                return (x * w.x + y * w.y + z * w.z) / (w.x + w.y + w.z);
-            }
-
             // -----------------------------------------------------------------------
 
             // returns sdf and ray point
@@ -410,7 +397,7 @@ Shader "SDF/Domain"
             }
 
             fixed4 shade(SdfResult hit);
-            
+
             f2p frag(v2f i, bool facing : SV_IsFrontFace)
             {
                 const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
@@ -425,10 +412,8 @@ Shader "SDF/Domain"
                 sdf.normal = __SDF_NORMAL(sdf.p);
 
                 fixed4 color_material = __MATERIAL(sdf.id.x); // color
-                BoxMapParams3D boxmapParams = {
-                    _BoxmapTex_X, _BoxmapTex_Y, _BoxmapTex_Z, {_BoxmapTex_X_ST}, {_BoxmapTex_Y_ST}, {_BoxmapTex_Z_ST}
-                };
-                fixed4 color_trimap = __BOXMAP(boxmapParams, sdf.p, sdf.normal, 10.);
+                BoxMapParams boxmapParams = {sampler_BoxmapTex, _BoxmapTex, {_BoxmapTex_ST}};
+                fixed4 color_trimap = trimap(boxmapParams, sdf.p, sdf.normal, 10.);
 
                 fixed4 color_dyed = color_material; // basic albedo
                 float dyeDistance = sdf::primitives3D::box(sdf.p, _Dye.xxx);
