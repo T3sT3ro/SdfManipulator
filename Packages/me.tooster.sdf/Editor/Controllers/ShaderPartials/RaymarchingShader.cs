@@ -13,6 +13,7 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Declarations;
 using me.tooster.sdf.AST.Shaderlab;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Commands;
+using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.NodeGraph.Nodes;
@@ -31,6 +32,7 @@ using SubShader = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.SubShader;
 using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
 using IntLiteral = me.tooster.sdf.AST.Shaderlab.Syntax.IntLiteral;
 using LiteralExpression = me.tooster.sdf.AST.Hlsl.Syntax.Expressions.LiteralExpression;
+using Property = me.tooster.sdf.Editor.API.Property;
 using Type = System.Type;
 
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
@@ -65,7 +67,11 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
         {
             name = scene.name + "_g",
             materialProperties = MaterialProperties(scene),
-            shaderStatements = new SyntaxList<shaderlab, ShaderStatement>(SubShader(scene))
+            shaderStatements = new ShaderStatement[]
+            {
+                new Fallback { name = "Sdf/Fallback"},
+                SubShader(scene),
+            }
         };
 
         /// <summary>
@@ -75,14 +81,24 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
         private MaterialProperties MaterialProperties(SdfScene scene) {
             return new MaterialProperties
             {
-                properties =
-                    GlobalShaderProperties.Concat(scene.Properties
-                            .SelectMany(properties => properties.Select(p => generatePropertySyntax(scene, p))))
-                        .ToList()
+                properties = GlobalShaderProperties
+                    .Concat(scene.Properties.SelectMany(properties =>
+                            properties.Select(p => generatePropertySyntax(scene, p)))
+                        .Select((p, i) => i > 0
+                            ? p
+                            : p with
+                            {
+                                attributes = new[]
+                                {
+                                    SyntaxExtensions.headerAttribute("raymarching properties"),
+                                    SyntaxExtensions.spaceAttribute(),
+                                }
+                            }))
+                    .ToList()
             };
         }
 
-        private static PropertySyntax[] GlobalShaderProperties {
+        private static IEnumerable<PropertySyntax> GlobalShaderProperties {
             get {
                 return new[]
                 {
@@ -91,9 +107,10 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                     {
                         id = "_Cull", displayName = "Cull", propertyType = new IntegerKeyword(),
                         initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 0 },
-                        attributes = new Attribute[]
+                        attributes = new[]
                         {
-                            SyntaxExtensions.headerAtribute("global raymarching properties"),
+                            SyntaxExtensions.headerAttribute("global raymarching properties"),
+                            SyntaxExtensions.spaceAttribute(),
                             new Attribute
                             {
                                 id = "Enum",

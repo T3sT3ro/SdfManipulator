@@ -331,6 +331,8 @@ TODO
 - `UnityEngine.Rendering.CullMode` : cull mode enum
 - `UnityEngine.Rendering.ColorWriteMask` : color write mask enum
 
+`ComputeScreenPos` takes vector in clip space and produces vector that has to be perspective-divided by it's(?) `w` to properly represent screen position (0->1)
+
 ## Discord:
 
 > Cyan — 12.08.2022 15:47

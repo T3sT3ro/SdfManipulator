@@ -2,6 +2,7 @@
 Shader "Box SDF Scene_g" {
     Properties {
         [Header(global raymarching properties)]
+        [Space]
         [Enum(UnityEngine.Rendering.CullMode)]
         _Cull("Cull", Integer) = 0
         [Tooltip(Enable to assure correct blending of multiple domains and backface rendering)]
@@ -10,9 +11,12 @@ Shader "Box SDF Scene_g" {
         _ZWrite("ZWrite", Float) = 0
         [Enum(UnityEngine.Rendering.CompareFunction)]
         _ZTest("ZTest", Integer) = 1
+        [Header(raymarching properties)]
+        [Space]
         sphere_1("Sphere radius", Float) = 1.00
         sphere_2("Sphere radius", Float) = 1.00
     }
+    Fallback "Sdf/Fallback"
     SubShader {
         Tags {
             "RenderType" = "Opaque"

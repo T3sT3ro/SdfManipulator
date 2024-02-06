@@ -37,22 +37,20 @@ namespace me.tooster.sdf.AST.Shaderlab {
         };
 
         private static bool breakLineAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
-            if (a is {
-                    Node: OpenBraceToken or CloseBraceToken 
-                    or HlslProgramKeyword or HlslIncludeKeyword or EndHlslKeyword
-                }
-                or { Node: QuotedStringLiteral, Parent: Anchor<CommandArgument> })
-                return true;
+            switch (a) {
+                case { Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or HlslIncludeKeyword or EndHlslKeyword }
+                    or { Node: QuotedStringLiteral, Parent: { Node: CommandArgument } }
+                    or { Node: CloseBracketToken, Parent: { Node: Attribute } }:
+                    return true;
+            }
 
             var nextToken = a.NextToken();
             if (nextToken is { Node: CloseBraceToken })
                 return true;
             
-            if (a is { Node: CloseBracketToken, Parent: { Node: Attribute } })
-                return true;
-
+            // check if it's a last token of some syntax
             foreach (var parent in a.Ancestors()) {
-                if (parent is IAnchor<SyntaxOrToken<shaderlab>> { Node: Command or Property or Tag } aSyntax) 
+                if (parent is IAnchor<SyntaxOrToken<shaderlab>> { Node: SubShaderOrPassStatement or ShaderStatement or Property or Tag } aSyntax) 
                     return ReferenceEquals(aSyntax.LastToken()?.Node, a.Node);
             }
 

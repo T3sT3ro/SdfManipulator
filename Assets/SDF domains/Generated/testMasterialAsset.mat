@@ -62,7 +62,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints:
     - _Cull: 0
-    - _ZTest: 1
+    - _ZTest: 4
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -80,7 +80,7 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - sphere_1: 0
+    - sphere_1: 1
     - sphere_2: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

@@ -19,7 +19,7 @@ Shader "SDF/Domain"
         _EPSILON_NORMAL ("epsilon for calculating normal", Float) = 0.001
 
         [Space]
-        [KeywordEnum(Material, Albedo, Dyed, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Facing, Debug)] _DrawMode("Draw mode", Int) = 0
+        [KeywordEnum(Material, Albedo, Dyed, Skybox, Texture, NormalLocal, NormalWorld, ID, Steps, Depth, Facing, Debug)] _DrawMode("Draw mode", Int) = 0
         [KeywordEnum(Near, Face)] _RayOrigin("Ray origin", Int) = 0
         [KeywordEnum(World, Local)] _Origin("Scene origin", Int) = 0
         [Tooltip(Only works for origin type local)]
@@ -59,7 +59,7 @@ Shader "SDF/Domain"
         #pragma target 5.0
         #pragma shader_feature_local _ORIGIN_WORLD _ORIGIN_LOCAL
         #pragma shader_feature_local _RAYORIGIN_NEAR _RAYORIGIN_FACE
-        #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_DYED _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
+        #pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_DYED _DRAWMODE_SKYBOX _DRAWMODE_TEXTURE _DRAWMODE_NORMALLOCAL \
             _DRAWMODE_NORMALWORLD _DRAWMODE_ID _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_FACING _DRAWMODE_DEBUG
         #pragma shader_feature_local _SCALE_INVARIANT
         #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF

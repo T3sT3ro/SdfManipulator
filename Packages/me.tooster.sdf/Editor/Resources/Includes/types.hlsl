@@ -7,7 +7,7 @@
 typedef fixed4 ID;
 #define NO_ID int4(-1, -1, -1, -1)
 
-struct Material
+struct Material // TODO: migrate to official shading material properties for unity
 {
     fixed4 albedo;      // base (diffuse or specular) color + alpha
     half metallic;      // 0=non-metal, 1=metal

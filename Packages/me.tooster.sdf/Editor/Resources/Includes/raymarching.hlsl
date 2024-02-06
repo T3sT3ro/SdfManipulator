@@ -5,7 +5,7 @@
 
 // TODO: use https://computergraphics.stackexchange.com/questions/13666/how-to-calculate-ray-origin-and-ray-direction-in-vertex-shader-working-universal
 // to avoid using inverse projection matrix
-v2f vertexShader(appdata_base v)
+v2f vertexShader(in appdata_base v)
 {
     v2f o;
     o.vertex = UnityObjectToClipPos(v.vertex); // clip space, from (-w,-w,0) to (w, w, w)
@@ -18,16 +18,12 @@ v2f vertexShader(appdata_base v)
     return o;
 }
 
-f2p fragmentShader(v2f frag_in)
+SdfResult sdfScene(in Ray3D rayInfo);
+
+f2p fragmentShader(in v2f frag_in)
 {
-    UNITY_VPOS_TYPE screenPos;
-    screenPos.xy = floor(frag_in.screenPos.xy * 0.25) * 0.5;
-    float checker = -frac(screenPos.r + screenPos.g);
-
-    // clip(checker);
-
     f2p frag_out = (f2p)0;
-    frag_out.color = float4((frag_in.screenPos.xy/frag_in.screenPos.w), 0, 1.0);
+    frag_out.color = float4(1.0, 1.0, 0, 1.0); // yellow
     return frag_out;
 }
 
@@ -61,8 +57,8 @@ Ray3D getRaysForCamera(float3 screenPos, float3 objectHitpos, float4x4 scale_mat
         float4 rs =
             #ifdef _ORIGIN_WORLD
                 mul(UNITY_MATRIX_M, float4(objectHitpos, 1));
-        #else
-                    fixed4(objectHitpos, 1);
+            #else
+            fixed4(objectHitpos, 1);
         #endif
         ray.startDistance = distance(mul(rs, scale_matrix), ro); // start on ray
     }

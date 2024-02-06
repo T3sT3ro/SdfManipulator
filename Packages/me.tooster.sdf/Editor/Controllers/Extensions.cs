@@ -21,7 +21,7 @@ namespace me.tooster.sdf.Editor.Controllers {
             _          => throw new ArgumentOutOfRangeException(nameof(p), p, "No type token for this unity type")
         };
 
-        public static Attribute headerAtribute(string headerName) => new Attribute
+        public static Attribute headerAttribute(string headerName) => new Attribute
         {
             id = "Header",
             arguments = (Attribute.Value)headerName
