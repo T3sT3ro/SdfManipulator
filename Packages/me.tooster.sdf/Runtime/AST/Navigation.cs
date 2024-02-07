@@ -32,7 +32,7 @@ namespace me.tooster.sdf.AST {
 
                 if (current is {Node: Token<TLang> tok}) return Anchor.New(tok, current.Parent);
 
-                var childrenOrdered = ((Syntax<TLang>)current.Node).ChildNodesAndTokens;
+                var childrenOrdered = ((Syntax<TLang>)current.Node).ChildNodesAndTokens();
                 foreach (var child in direction != Direction.FORWARD
                              ? childrenOrdered
                              : childrenOrdered.AsReverseEnumerator())
@@ -52,8 +52,8 @@ namespace me.tooster.sdf.AST {
             while (parent is { Node: Syntax<Lang> syntax }) {
                 var returnNext = false;
                 foreach (var child in direction is Direction.FORWARD
-                             ? syntax.ChildNodesAndTokens
-                             : syntax.ChildNodesAndTokens.AsReverseEnumerator()) {
+                             ? syntax.ChildNodesAndTokens()
+                             : syntax.ChildNodesAndTokens().AsReverseEnumerator()) {
                     if (returnNext) {
                         if (child is Token<Lang> tok) return Anchor.New(tok, parent);
 

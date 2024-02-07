@@ -10,7 +10,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
         public Identifier                id            { get; init; }
         public TokenString               tokenString   { get; init; } = new();
         
-        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens => new SyntaxOrToken<hlsl>[]
+        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens() => new SyntaxOrToken<hlsl>[]
         {
             hashToken,
             defineKeyword,

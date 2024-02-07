@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
@@ -42,6 +41,12 @@ namespace me.tooster.sdf.AST.Hlsl {
                     (acc, member) => new Member { expression = acc, member = member }),
                 right = right
             }
+        };
+
+        public static Call FunctionCall(string function, params Expression[] args) => new Call
+        {
+            id = function,
+            argList = args.ToArgumentList()
         };
     }
 }

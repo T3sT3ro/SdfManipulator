@@ -7,7 +7,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
         public UndefKeyword undefKeyword { get; init; } = new();
         public Identifier   id           { get; init; }
         
-        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens => new SyntaxOrToken<hlsl>[]
+        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens() => new SyntaxOrToken<hlsl>[]
         {
             hashToken,
             undefKeyword,

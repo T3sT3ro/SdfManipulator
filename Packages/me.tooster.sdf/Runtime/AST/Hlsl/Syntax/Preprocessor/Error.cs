@@ -6,7 +6,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
         public ErrorKeyword errorKeyword { get; init; } = new();
         public TokenString  tokenstring  { get; init; } = new();
 
-        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens => new SyntaxOrToken<hlsl>[]
+        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens() => new SyntaxOrToken<hlsl>[]
         {
             hashToken,
             errorKeyword,

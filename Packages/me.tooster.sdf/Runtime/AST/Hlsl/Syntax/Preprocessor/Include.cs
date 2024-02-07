@@ -6,7 +6,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
         public IncludePreprocessorKeyword includeKeyword { get; init; } = new IncludeKeyword();
         public QuotedStringLiteral        filepath       { get; init; }
 
-        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens => new SyntaxOrToken<hlsl>[]
+        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens() => new SyntaxOrToken<hlsl>[]
         {
             hashToken,
             includeKeyword,

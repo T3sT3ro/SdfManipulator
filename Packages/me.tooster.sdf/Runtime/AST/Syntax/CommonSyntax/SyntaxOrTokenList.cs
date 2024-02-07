@@ -21,7 +21,7 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
         public SyntaxOrTokenList(params SyntaxOrToken<Lang>[] list) : this(list.AsEnumerable()) { }
         public SyntaxOrTokenList() { }
 
-        public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens => FullList;
+        public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens() => FullList;
         public virtual  IEnumerator<SyntaxOrToken<Lang>>   GetEnumerator()     => FullList.GetEnumerator();
         IEnumerator IEnumerable.                           GetEnumerator()     => GetEnumerator();
         public virtual int                                 Count               => FullList.Count;

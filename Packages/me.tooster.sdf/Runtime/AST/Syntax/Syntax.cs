@@ -9,11 +9,11 @@ namespace me.tooster.sdf.AST.Syntax {
     /// </summary>
     /// <typeparam name="Lang">marker interface of the language, makes language nodes distinct</typeparam>
     public abstract record Syntax<Lang> : SyntaxOrToken<Lang> {
-        public abstract IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens { get; }
-        public          IReadOnlyList<Syntax<Lang>> ChildNodes => ChildNodesAndTokens.OfType<Syntax<Lang>>().ToList();
+        public abstract IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens();
+        public          IReadOnlyList<Syntax<Lang>> ChildNodes() => ChildNodesAndTokens().OfType<Syntax<Lang>>().ToList();
 
         public override StringBuilder WriteTo(StringBuilder sb) {
-            foreach (var child in ChildNodesAndTokens)
+            foreach (var child in ChildNodesAndTokens())
                 child.WriteTo(sb);
             return sb;
         }

@@ -13,7 +13,7 @@ namespace me.tooster.sdf.AST {
 
         
         public void Visit(Anchor<Syntax<Lang>> a) {
-            foreach (var n in a.Node.ChildNodesAndTokens)
+            foreach (var n in a.Node.ChildNodesAndTokens())
                 n.Accept(this, Anchor.New(n, a));
         }
 

@@ -9,7 +9,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
         public IntLiteral           lineNumber  { get; init; }
         public QuotedStringLiteral? file        { get; init; }
         
-        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens => new SyntaxOrToken<hlsl>[]
+        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens() => new SyntaxOrToken<hlsl>[]
         {
             hashToken,
             lineKeyword,

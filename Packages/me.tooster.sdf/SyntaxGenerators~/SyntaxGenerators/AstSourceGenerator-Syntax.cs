@@ -95,7 +95,7 @@ namespace me.tooster.sdf.AST.Generators {
         }
 
         /// generate ChildNodesAndTokens accessor, handle correct nullability
-        private static PropertyDeclarationSyntax generateChildrenGetter(
+        private static MethodDeclarationSyntax generateChildrenGetter(
             ITypeSymbol recordSymbol,
             IEnumerable<IPropertySymbol> inheritedAndOwnProperties,
             string langName
@@ -105,11 +105,11 @@ namespace me.tooster.sdf.AST.Generators {
             var anyFieldNullable =
                 inheritedAndOwnProperties.Any(f => f.Type.NullableAnnotation == NullableAnnotation.Annotated);
 
-            var method = $"public override IReadOnlyList<{itemType}> ChildNodesAndTokens => new {itemType}[] {{"
+            var method = $"public override IReadOnlyList<{itemType}> ChildNodesAndTokens() => new {itemType}[] {{"
               + string.Join(", ", inheritedAndOwnProperties.Select(p => p.Name))
               + $"}}" + (anyFieldNullable ? ".Where(c => c is not null).Select(c => c!).ToList();" : ";");
 
-            return (PropertyDeclarationSyntax)ParseMemberDeclaration(method)!;
+            return (MethodDeclarationSyntax)ParseMemberDeclaration(method)!;
         }
 
         /// generates contents of the ChildNodesAndTokens { a, b, c }; 

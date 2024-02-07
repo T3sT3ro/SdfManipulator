@@ -107,7 +107,7 @@ namespace me.tooster.sdf.AST.Syntax {
                 var current = stack.Pop();
                 yield return current;
 
-                foreach (var child in current.ChildNodes.Reverse())
+                foreach (var child in current.ChildNodes().Reverse())
                     stack.Push(child);
             }
         }
@@ -122,7 +122,7 @@ namespace me.tooster.sdf.AST.Syntax {
 
                 if (current is not Syntax<Lang> node) continue;
 
-                foreach (var child in node.ChildNodesAndTokens.Reverse())
+                foreach (var child in node.ChildNodesAndTokens().Reverse())
                     stack.Push(child);
             }
         }

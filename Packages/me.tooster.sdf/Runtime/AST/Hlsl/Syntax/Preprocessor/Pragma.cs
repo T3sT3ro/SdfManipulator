@@ -8,7 +8,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor {
         public PragmaKeyword pragmaKeyword { get; init; } = new();
         public TokenString?  tokenString   { get; init; } = new();
         
-        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens => new SyntaxOrToken<hlsl>[]
+        public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens() => new SyntaxOrToken<hlsl>[]
         {
             hashToken,
             pragmaKeyword,
