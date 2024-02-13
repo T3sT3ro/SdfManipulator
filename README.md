@@ -121,24 +121,31 @@ TODO
 - [ ] use edge labels/indices for children
   - It would allow for easier checking which branch is a syntax node in instead of linearly searching children
   - traversing forward and backward logic would be easier even without a zipper
+- [ ] Create sub-shader assets with definitions of shader scene, required properties, includes etc. It would allow for including the generated scene definition in other shaders, because it would define functions like `SdfResult SdfScene(float3 p)`. It could be even used in shadergraph if used properly
+- [ ] think about using TreeSitter as a parsing + AST library
 
-# Important to remember while documenting
+# Important to remember while documenting and while refactoring
 
 - be wary of combination of ZTest, Cull, ZWrite, Origin on face vs near plane, as that can render confusing geometry when combined in weird ways. E.g.: 
   - Cull Off, Origin Face -- camera inside domain won't render the object "in the center of domain", as the origin would lie on a back face.
   - No ZWrite, Depth read, Cull Off, Origin Face - backface marched objects would layer on top of front marched objects
-- use `RoslynAnalyzer` and `SourceGenerator` tags for dlls and do not not referenced directly. They will apply in the assembly
+- globals not declared in the material property block require `static`, e.g. `static float _MAX_RAY_DISTANCE = 10000`
+- Source generators:
+  - use `RoslynAnalyzer` and `SourceGenerator` tags for dlls and do not not referenced directly. They will apply in the assembly
+  - annotations will be generated per-assembly
+  - updating source generator binary is best done in native system file manager. Otherwise, the dll metadata with unity tags is lost, which results in "generators seemingly not appearing"
+  - generator project has symbolic links that are defined in `.csproj` of the `TestGenerators` assembly
+  - syntax generators generate:
+    - syntax partials with ChildrenOrToken getters for each child
+    - acceptors of visitors in syntax
+    - visitors for each language
+    - mapper for a language which is like a rewriter
 - mapping may be problematic if strongly typed nodes are used, for example when a certain `Type.Struct` will be replaced with `Type.Primitive`, a parent syntax may expect `Type.Struct`, not a `Type`, but incompatible type is returned resulting in runtime error (but regular roslyn also throws runtime errors for syntax trees if kinds don't meet expectations etc.). The method definition would also have to look like `Type.Primitive Map(Type.Struct type)` where param and return types are different. This would be non-achievable in a statically generated Visitor pattern, because all syntax would have to return `Syntax<>` or itself so this is a potential advantage of dynamic dispatch pattern. But a question may be asked if:
   1. it is worth it to implement dynamic dispatch pattern for this reason
   2. does it make sense to have strongly typed nodes in the first place, if they are not used for type checking, but only for code generation
   3. are strongly typed nodes useful at all with how limiting type system is in C# (unlike TS for example)
   4. should rewriting of such nodes be possible, or should user be expected to rewrite them in their parent, where the context is actually relevant
-- some syntax nodes have nullable children, but their nullability actually represents validity of the node instead of the tru nullability. If record primary constructors were possible, it would be more correct (currently nullable syntax parts are marked as warnings). This is a C# syntax trying to emulate representing valid and invalid syntax trees on a type system level, albeit quite poorly. 
-- syntax generators generate:
-  - syntax partials with ChildrenOrToken getters for each child
-  - acceptors of visitors in syntax
-  - visitors for each language
-  - mapper for a language which is like a rewriter
+- some syntax nodes have nullable children, but their nullability actually represents validity of the node instead of the tru nullability. If record primary constructors OR required properties OR _TRUE_ `init` properties were possible, it would be far more correct (currently nullable syntax parts are marked as warnings). This is a C# syntax trying to emulate representing valid and invalid syntax trees on a type system level, albeit quite poorly. Possibly constructors could be generated and calling with keyed arguments with default like `new Call(id: ..., body: ...)`, but defaults in constructors have restrictions to simple types. Also there are considerations of how it works with `with` immutable initializer syntax. 
 - anchors are used instead of red-green tree for simplicity and because they are easier to implement. Also for explicitness of the traversal and to avoid public+internal syntax nodes.
 
 # Design notes, decisions and insights
@@ -321,6 +328,10 @@ TODO
 - [How rowan (rust analyzer's project for syntax trees and parsing) represents syntax](https://github.com/rust-lang/rust-analyzer/blob/master/docs/dev/syntax.md)
 - [Adding nuget packages and dlls to (new) unity](https://www.ankursheel.com/blog/installing-nuget-packages-unity-2021)
 - [Non linear sphere tracing](https://par.nsf.gov/servlets/purl/10172295)
+- [Custom editors using UI toolkit](https://www.youtube.com/watch?v=J2KNj3bw0Bw)
+- [World normal from depth texture](https://gist.github.com/bgolus/a07ed65602c009d5e2f753826e8078a0)
+- [world space position from depth texture](https://forum.unity.com/threads/reconstructing-world-space-position-from-depth-texture.1139599/)
+- [Some resources like operators, effects, sdfs, patterns etc](https://forum.unity.com/threads/big-collection-of-free-shader-graph-nodes.539208/)
 
 ## Unity internals:
 

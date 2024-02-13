@@ -1,12 +1,12 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using me.tooster.sdf.Editor.API;
+using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Controllers.ShaderPartials;
 using UnityEditor;
-using UnityEditor.AssetImporters;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace me.tooster.sdf.Editor.Controllers {
@@ -20,9 +20,11 @@ namespace me.tooster.sdf.Editor.Controllers {
     [SelectionBase]
     [ExecuteAlways] /* using ExecuteInEditMode has documented problems in prefab edit scene */
     public class SdfScene : MonoBehaviour, IPropertyIdentifierProvider {
-        [SerializeField] private RaymarchingShader raymarchingShader;
+        [SerializeField] private bool              ensureReadOnly = true;
+        public                   RaymarchingShader raymarchingShader;
 
-        public Shader   controlledShader;
+        public Shader controlledShader;
+        // owned material pattern from https://docs.unity3d.com/ScriptReference/HideFlags.html
         public Material controlledMaterial;
 
         private HashSet<Controller> controllers = new();
@@ -30,13 +32,20 @@ namespace me.tooster.sdf.Editor.Controllers {
         // TODO: property data cache for storing their id, owner and what not. Would be revised on hierarchy change
         private readonly Dictionary<Property, Controller> propertyDeclarations = new();
 
-        public string GetIdentifier(Property property) {
-            return Extensions.sanitizeNameToIdentifier(propertyDeclarations[property].name);
+        public string GetIdentifier(Property property) => API.Extensions.sanitizeNameToIdentifier(propertyDeclarations[property].name);
+
+        private void OnEnable() {
+            controlledMaterial = new Material(controlledShader)
+            {
+                name = controlledShader.name,
+                hideFlags = HideFlags.HideAndDontSave,
+            };
         }
 
+        private void OnDisable() { DestroyImmediate(controlledMaterial); }
 
         private void OnValidate() {
-            if (!raymarchingShader) raymarchingShader = RaymarchingShader.instance;
+            raymarchingShader = RaymarchingShader.instance;
             RegenerateAssetsSafely();
             controllers = GetComponentsInChildren<Controller>().ToHashSet();
             propertyDeclarations.Clear();
@@ -61,18 +70,22 @@ namespace me.tooster.sdf.Editor.Controllers {
             Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderText);
 
             ShaderUtil.ClearCachedData(controlledShader);
-            File.WriteAllText(AssetDatabase.GetAssetPath(controlledShader), shaderText);
+            var shaderPath = AssetDatabase.GetAssetPath(controlledShader);
+            var fileInfo = new FileInfo(shaderPath) { IsReadOnly = false };
+            File.WriteAllText(shaderPath, shaderText);
+            fileInfo.IsReadOnly = ensureReadOnly;
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-
-            controlledMaterial = new Material(controlledShader) { name = controlledShader.name };
         }
 
         // collect all "Properties" in all children components
         // TODO: make it return cached properties, update them when children are changed
-        public ILookup<Controller, Property> Properties => GetComponentsInChildren<Controller>()
+        public ILookup<Controller, Property> Properties => controllers
             .SelectMany(c => c.Properties.Select(p => new { controller = c, property = p }))
             .ToLookup(cp => cp.controller, cp => cp.property);
+
+        public IEnumerable<string> Includes => controllers
+            .SelectMany(c => Extensions.CollectIncludes(c.GetType()).AsEnumerable());
 
         // TODO: add shortcut accelerators to this and nodes (when sdf editing is enabled)
         [MenuItem("GameObject/SDF/Scene")]
@@ -91,24 +104,10 @@ namespace me.tooster.sdf.Editor.Controllers {
             controller.SdfScene = this;
             RegenerateAssetsSafely();
         }
-    }
 
-    [CustomEditor(typeof(SdfScene))]
-    public class SDfSceneControllerEditor : UnityEditor.Editor {
-        public override void OnInspectorGUI() {
-            var sdfScene = (SdfScene)target;
-
-            if (!sdfScene.controlledShader) {
-                EditorGUILayout.HelpBox("missing controlled shader asset", MessageType.Error);
-                base.OnInspectorGUI();
-                return;
-            }
-
-            if (GUILayout.Button("Rebuild shader"))
-                sdfScene.RegenerateAssetsSafely();
-            GUILayout.Space(16);
-
-            base.OnInspectorGUI();
-        }
+        /// <summary>
+        /// Returns SdfData representing the scene.
+        /// </summary>
+        public SdfData SceneSdf { get; }
     }
 }

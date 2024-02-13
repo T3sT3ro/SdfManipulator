@@ -44,3 +44,10 @@ namespace AST.<Lang>.<Dirs*> {
 } 
 ```
 
+
+# TODO:
+
+- [ ] Correct the file links to the AST package using solutions from [this answer](https://stackoverflow.com/questions/1292351/including-content-files-in-csproj-that-are-outside-the-project-cone). 
+  - To do that, RMB on the assembly -> edit (or edit `.csproj` by hand) and edit link in there
+- [ ] correct the logic of generating syntax by using formatters with official format (like fully qualified type) from [this answer](https://stackoverflow.com/questions/23305594/getting-the-fully-qualified-name-of-a-type-from-a-typeinfo-object/23314956#23314956)
+- [ ] add csproj to git, exclude it from .gitignore

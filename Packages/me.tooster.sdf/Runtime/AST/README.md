@@ -15,18 +15,26 @@ To see an explanation of nodes, go to [Roslyn Docs](https://learn.microsoft.com/
 
 [Here is a doc that includes more thorough but still concise explanation of roslyn concepts](https://github.com/xamarin/Workbooks/blob/master/csharp/roslyn/roslyn-syntax-trees.workbook/index.workbook)
 
-# Tokens — enums or not?
+# TODO
+
+- [ ] separate file scope statements from block scope statements
+- [ ] move away from generic syntax
+- [ ] share node types, differentiate by Kind, assign default syntax nodes based on kind as well
+
+# Notes
+
+## Tokens — enums or not?
 
 In Roslyn they have a `SyntaxKind` enum which is a union of all possible tokens, expressions and generally language structures. This is good and more performant than this implementation, but this one doesn't that much boilerplate.
 
 It's a tradeoff between hardcoded `floatNxM` for every combination and flexibility in creating tokens matching regexes. It is also less memory efficient (each token has it's class metadata, is an instance of a class, etc.)
 
-# Trivia - changes
+## Trivia - changes
 
 I Noticed they have Leading and Trailing trivia in Roslyn, which adds a bunch o edge cases (but helps in heuristics, for example about which trivia belongs to which token). Typescript has only leading trivia but they add special EOF token in every program to attach last trivia in in file. 
 
 I added an indirection layer - tokens point to trivia lists instead of simple trivia. either list is empty, is a singleton list or contains many (possibly structured) trivia. This seems to simplify a conceptual model a bit.
 
-# Syntax package
+## Syntax package
 
 These classes seem convoluted at first glance, but they provide type-safe base classes and abstractions of key syntax defining structures. Instead of operating on an abstract base classes like `SyntaxNode`, each overload returns language-specific type of the token, trivia, syntax node and syntax tree. 

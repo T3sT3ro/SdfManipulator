@@ -1,0 +1,17 @@
+{
+    "name": "me.tooster.sdf.Editor.Util",
+    "rootNamespace": "",
+    "references": [
+        "GUID:02ab15579b13e2b7c9ac136bbf96633c",
+        "GUID:1d773a5b1f524c7f89714bef6e9aea3e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

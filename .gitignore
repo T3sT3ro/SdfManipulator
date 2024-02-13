@@ -110,6 +110,7 @@ fabric.properties
 ExportedObj/
 .consulo/
 *.csproj
+!*/SyntaxGenerators~/**/*.csproj
 *.unityproj
 *.sln
 *.suo

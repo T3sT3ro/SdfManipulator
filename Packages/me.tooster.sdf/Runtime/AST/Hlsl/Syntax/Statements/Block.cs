@@ -7,5 +7,8 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
         public OpenBraceToken              openBraceToken  { get; init; } = new();
         public SyntaxList<hlsl, Statement> statements      { get; init; } = new();
         public CloseBraceToken             closeBraceToken { get; init; } = new();
+        
+        public static implicit operator Block(SyntaxList<hlsl, Statement> statements) => new() { statements = statements };
+        public static implicit operator Block(Statement[] statements) => new() { statements = statements };
     }
 }

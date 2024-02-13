@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using me.tooster.sdf.AST;
-using UnityEditor;
 
-namespace me.tooster.sdf.Editor.API {
+namespace me.tooster.sdf.Editor.API.Graph {
     // TODO: add script templates for new nodes: https://medium.com/miijiis-unified-works/have-unity-support-your-custom-file-part-3-6-a9820933dc84
     
     /// <summary>
@@ -26,15 +24,15 @@ namespace me.tooster.sdf.Editor.API {
         /// Creates new input port bound to output port and this node.
         protected IInputPort<T> CreateInput<T>(
             string        displayName,
-            IOutputPort<T> valueSource) where T : Port.Data =>
+            IOutputPort<T> valueSource) where T : Data =>
             new InputPort<T>(this, displayName, valueSource);
 
         /// Creates output bound to this node.
         protected IOutputPort<T> CreateOutput<T>(string displayName, Func<T> evaluator)
-            where T : Port.Data =>
+            where T : Data =>
             new OutputPort<T>(this, displayName, evaluator);
 
-        protected InOutPort<T> CreateInOut<T>(string displayName, IOutputPort<T> source, Func<T, T>? transform = null) where T : Port.Data =>
+        protected InOutPort<T> CreateInOut<T>(string displayName, IOutputPort<T> source, Func<T, T>? transform = null) where T : Data =>
             new InOutPort<T>(this, displayName, source, transform ?? (x => x));
 
         #endregion

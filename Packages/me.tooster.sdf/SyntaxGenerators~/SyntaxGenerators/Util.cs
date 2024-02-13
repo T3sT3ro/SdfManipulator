@@ -118,6 +118,8 @@ namespace me.tooster.sdf.AST.Generators {
             string terminator,
             out List<string> genericParameters
         ) {
+            // TODO: use this instead:
+            // typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted))
             var parts = new List<string>();
             var current = typeSymbol;
             genericParameters = new List<string>();

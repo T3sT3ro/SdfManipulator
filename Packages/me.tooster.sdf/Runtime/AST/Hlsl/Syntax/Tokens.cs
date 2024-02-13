@@ -213,13 +213,13 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public override string               Text => string.Intern($"{type}{rows}x{cols}");
     }
 
-    [TokenNode]  public partial record VectorTypeToken : PredefinedTypeToken {
+    [TokenNode] public partial record VectorTypeToken : PredefinedTypeToken {
         public          Constants.ScalarKind type  { get; init; } = Constants.ScalarKind.@float;
         public          uint                 arity { get; init; } = 4;
         public override string               Text  => string.Intern($"{type}{arity}");
     }
 
-    [TokenNode]  public partial record IdentifierToken : ValidatedToken<hlsl> {
+    [TokenNode] public partial record IdentifierToken : ValidatedToken<hlsl> {
         private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
         protected override      Regex Pattern => pattern;
 
@@ -227,7 +227,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     /// <a href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-appendix-grammar">grammar</a>
-    [TokenNode]  public partial record FloatLiteral : Literal<hlsl> {
+    [TokenNode] public partial record FloatLiteral : Literal<hlsl> {
         private static readonly Regex pattern =
             new(@"^((\d*\.\d+|\d+\.\d*)([eE][+-]?\d+)?|\d+([eE][+-]?\d+))[hHfFlL]?$");
 
@@ -236,22 +236,21 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public static implicit operator FloatLiteral(float value) => new() { TextUnsafe = value.ToString("F") };
     }
 
-    [TokenNode]  public partial record IntLiteral : Literal<hlsl> {
+    [TokenNode] public partial record IntLiteral : Literal<hlsl> {
         private static readonly Regex pattern = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
         protected override      Regex Pattern => pattern;
 
         public static implicit operator IntLiteral(int value) => new() { TextUnsafe = value.ToString("D") };
     }
 
-    [TokenNode]  public partial record BooleanLiteral : Literal<hlsl> {
+    [TokenNode] public partial record BooleanLiteral : Literal<hlsl> {
         private static readonly Regex pattern = new(@"^(true|false)$");
         protected override      Regex Pattern => pattern;
 
-        public static implicit operator BooleanLiteral(bool value) =>
-            new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
+        public static implicit operator BooleanLiteral(bool value) => new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
     }
 
-    [TokenNode]  public partial record QuotedStringLiteral : Literal<hlsl> {
+    [TokenNode] public partial record QuotedStringLiteral : Literal<hlsl> {
         private static readonly Regex pattern = new(@"^""[^""\n\r]*""$");
         protected override      Regex Pattern => pattern;
 
@@ -260,7 +259,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     }
 
     // used in preprocessor, can be multiline if there is a "\\n" sequence
-    [TokenNode]  public partial record TokenString : ValidatedToken<hlsl> {
+    [TokenNode] public partial record TokenString : ValidatedToken<hlsl> {
         private static readonly Regex pattern = new(@"^(?:.|\\\n)*$");
         protected override      Regex Pattern => pattern;
 

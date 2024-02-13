@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace me.tooster.sdf.AST.Syntax {
-    
     public abstract record Token<Lang> : SyntaxOrToken<Lang> {
         public TriviaList<Lang> LeadingTriviaList  { get; init; } = TriviaList<Lang>.Empty;
         public TriviaList<Lang> TrailingTriviaList { get; init; } = TriviaList<Lang>.Empty;
@@ -38,7 +37,9 @@ namespace me.tooster.sdf.AST.Syntax {
         public virtual string ValidatedText {
             init {
                 if (!Pattern.IsMatch(value))
-                    throw new ArgumentException($"Token text: {value} doesn't match pattern: {Pattern}");
+                    throw new ArgumentException(
+                        $"The provided text doen't match token's required pattern.\npattern: {Pattern}\n text: '{value}'"
+                    );
 
                 rawText = value;
             }
@@ -48,7 +49,7 @@ namespace me.tooster.sdf.AST.Syntax {
         protected string TextUnsafe {
             init => rawText = value;
         }
-        
+
         public override string ToString() => base.ToString();
     }
 

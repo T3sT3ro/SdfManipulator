@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
@@ -16,14 +17,13 @@ namespace me.tooster.sdf.AST.Hlsl {
             child.Precedence() > parent.Precedence() ? new Parenthesized { expression = child } : child;
 
         // convert enumerables to appropriate lists
-        public static SyntaxList<hlsl, T> ToSyntaxList<T>(this IEnumerable<T> args)
-            where T : Syntax<hlsl> => new SyntaxList<hlsl, T>(args);
+        public static SyntaxList<hlsl, T> ToSyntaxList<T>(this IEnumerable<T> args) where T : Syntax<hlsl> => new(args);
 
-        public static ArgumentList<T> ToArgumentList<T>(this IEnumerable<T> args)
-            where T : Syntax<hlsl> => new ArgumentList<T> { arguments = args.CommaSeparated() };
+        public static ArgumentList<T> ToArgumentList<T>(this IEnumerable<T> args) where T : Syntax<hlsl> =>
+            new() { arguments = args.CommaSeparated() };
 
-        public static BracedList<T> ToBracedList<T>(this IEnumerable<T> args)
-            where T : Syntax<hlsl> => new BracedList<T> { arguments = args.CommaSeparated() };
+        public static BracedList<T> ToBracedList<T>(this IEnumerable<T> args) where T : Syntax<hlsl> =>
+            new() { arguments = args.CommaSeparated() };
 
 
         public static SeparatedList<hlsl, T> CommaSeparated<T>(this IEnumerable<T> nodes)
@@ -31,22 +31,48 @@ namespace me.tooster.sdf.AST.Hlsl {
 
         public static SeparatedList<hlsl, T> CommaSeparated<T>(this T singleton)
             where T : Syntax<hlsl> => SeparatedList<hlsl, T>.WithSeparator<CommaToken>(singleton);
-        
+
         /// from a left string like 'a.b.c' generates assignment expression 
         public static Statement Assignment(string left, Expression right) => new ExpressionStatement
         {
             expression = new AssignmentExpression
             {
-                left = left.Split('.').Aggregate((Expression)new Identifier { id = left.Split('.')[0] },
-                    (acc, member) => new Member { expression = acc, member = member }),
-                right = right
-            }
+                left = LValue(left),
+                right = right,
+            },
         };
 
-        public static Call FunctionCall(string function, params Expression[] args) => new Call
+        public static Call FunctionCall(string function, params Expression[] args) => new()
         {
-            id = function,
-            argList = args.ToArgumentList()
+            calee = NameFrom(function),
+            argList = args.ToArgumentList(),
         };
+
+        /// takes string like 'x' or 'a.b.c' and generates an lvalue expression, like <see cref="Identifier"/> or <see cref="Member"/>
+        public static Expression LValue(string path) {
+            var names = path.Split('.');
+            if (names.Length == 1) return (Identifier)names[0];
+            return names.Skip(1).Aggregate(
+                (Identifier)names.First() as Expression,
+                (left, name) => new Member { expression = left, member = name }
+            );
+        }
+
+        public static NameSyntax NameFrom(params string[] names) {
+            switch (names.Length) {
+                case 0: throw new ArgumentException("can't create empty name");
+                case 1: {
+                    names = names[0].Split("::");
+                    if (names.Length == 1) return new Identifier { id = names[0] };
+                    break;
+                }
+            }
+            var identifiers = names.Select(name => new Identifier { id = name }).ToArray();
+            // creates left-associative tree like (((a::b)::c)::d)
+            return identifiers.Skip(1).Aggregate(
+                identifiers.First() as NameSyntax,
+                (current, id) => new QualifiedNameSyntax { Left = current, Right = id }
+            );
+        }
     }
 }

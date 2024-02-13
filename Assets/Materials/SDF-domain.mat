@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SDF-domain
+  m_Shader: {fileID: 4800000, guid: f2a07fb8783fedaae967986d5219fc93, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _DRAWMODE_DYED
+  - _ORIGIN_LOCAL
+  - _PRESERVE_SPACE_SCALE_ON
+  - _RAYORIGIN_NEAR
+  - _ZWRITE_OFF
+  - _ZWRITE_ON
+  m_InvalidKeywords:
+  - SCENE
+  - SCENE_VIEW
+  - Scene_view
+  - _CULL_UNITYENGINE.RENDERING.CULLMODE
+  - _DRAWMODE_BASE
+  - _DRAWMODE_DYE
+  - _FIXED_SCALE_ON
+  - _LOCALSCALE
+  - _PRESERVE_SCALE_OFF
+  - _PRESERVE_SCALE_ON
+  - _RAY_ORIGIN_NEAR
+  - _SCENEVIEW
+  - _WORLDSPACE_ON
+  - _ZTEST_LEQUAL
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BoxmapTex:
+        m_Texture: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _BoxmapTex_X:
+        m_Texture: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _BoxmapTex_Y:
+        m_Texture: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _BoxmapTex_Z:
+        m_Texture: {fileID: 10309, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 10, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints:
+    - _DrawMode: 0
+    - _MAX_STEPS: 200
+    - _Origin: 1
+    - _RayOrigin: 1
+    m_Floats:
+    - RO_OFF: 0
+    - _Blue: 0
+    - _BumpScale: 1
+    - _CULL: 0
+    - _Cull: 0
+    - _Cutoff: 0.5
+    - _DBG_A: 0
+    - _DEBUG_NORMAL: 1
+    - _DetailNormalMapScale: 1
+    - _DrawMode: 2
+    - _DstBlend: 0
+    - _Dye: 0.5
+    - _EPSILON_NORMAL: 0.0001
+    - _EPSILON_RAY: 0.0001
+    - _FIXED_SCALE: 1
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _LOCALSCALE: 1
+    - _LOCAL_SCALE: 0
+    - _MAX_DISTANCE: 200
+    - _MAX_STEPS: 300
+    - _Metallic: 0
+    - _Mode: 0
+    - _NORMAL_EPSILON: 0.001
+    - _OVERLAY: 0
+    - _OcclusionStrength: 1
+    - _Origin: 1
+    - _PRESERVE_SCALE: 1
+    - _PRESERVE_SPACE_SCALE: 1
+    - _Parallax: 0.02
+    - _RAND_INSTANCE_COL: 0
+    - _RAY_EPSILON: 0.001
+    - _RAY_ORIGIN_BIAS: 0
+    - _RayOrigin: 0
+    - _Ray_Origin: 0
+    - _SCENEVIEW: 1
+    - _SCENE_VIEW: 1
+    - _START_AT_FACE: 0
+    - _START_BIAS: 0.0001
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _WORLDSPACE: 1
+    - _WORLD_SPACE: 0
+    - _WRITE_DEPTH: 0
+    - _ZTest: 4
+    - _ZWRITE: 0
+    - _ZWrite: 1
+    - _Z_WRITE: 0
+    - _Zwrite: 0
+    m_Colors:
+    - D1: {r: 0, g: 0, b: 1, a: 3}
+    - D2: {r: 0, g: 0, b: 0, a: 0}
+    - D3: {r: -0.1, g: 0.1, b: 0, a: 0}
+    - RD_ADJ: {r: 0, g: 0, b: 0, a: 0}
+    - RD_OFF: {r: 0, g: 0, b: 0, a: 0}
+    - RO_OFF: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Control: {r: 0.5, g: 0.1, b: 0, a: 0}
+    - _DBG: {r: 0.14, g: 0.29, b: -2.91, a: 1.79}
+    - _DBG2: {r: 0, g: 0, b: 0, a: 0}
+    - _DBG_V: {r: 0, g: 0, b: 4, a: 4}
+    - _DEBUG_NORMAL: {r: 0, g: 0, b: 0, a: 0}
+    - _DomainOrigin: {r: 0, g: 0, b: 0, a: 0}
+    - _DomainRotation: {r: 0, g: 0, b: 0, a: 0}
+    - _Dye: {r: 0.45, g: 0.15, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SDF_DOMAIN_ORIGIN_POS: {r: 0.37, g: 0, b: 0, a: 1}
+    - _SDF_DOMAIN_ORIGIN_ROT: {r: 0, g: 0, b: 0, a: 1}
+    - _SDF_DOMAIN_ORIGIN_SCALE: {r: 1, g: 1, b: 1, a: 1}
+    - _TorusDye: {r: -0.08, g: -0.17, b: 0, a: 0}
+    - _TorusSizes: {r: 0.29, g: 0.05, b: -0.48, a: -0.3}
+  m_BuildTextureStacks: []

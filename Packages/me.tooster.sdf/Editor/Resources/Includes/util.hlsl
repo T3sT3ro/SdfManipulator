@@ -1,8 +1,31 @@
 #pragma once
+#include "types.hlsl"
 
 /**
  * This file includes common utility functions for writing more conscience code
  */
+
+Material lerpMaterials(Material m1, Material m2, float t)
+{
+    Material mixed;
+    mixed.albedo = lerp(m1.albedo, m2.albedo, t);
+    mixed.emission = lerp(m1.emission, m2.emission, t);
+    mixed.metallic = lerp(m1.metallic, m2.metallic, t);
+    mixed.smoothness = lerp(m1.smoothness, m2.smoothness, t);
+    mixed.occlusion = lerp(m1.occlusion, m2.occlusion, t);
+    return mixed;
+}
+
+#define MODULO(TV, n, TM) TV##n modulo(in TV##n v, in TM mod) { return v - mod * floor(v / mod); }
+/** returns mathematically correct modulo */
+MODULO(float, 1, float)
+/** returns mathematically correct modulo */
+MODULO(float, 2, float)
+/** returns mathematically correct modulo */
+MODULO(float, 3, float)
+/** returns mathematically correct modulo */
+MODULO(float, 4, float)
+#undef MODULO
 
 /// for an array of values returns lerp between two adjacent values 
 #define LEVELS(levels, t) lerp(levels[floor(t)], levels[ceil(t)], frac(t))

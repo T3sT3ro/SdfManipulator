@@ -3,7 +3,7 @@ using me.tooster.sdf.AST.Syntax;
 // using Unity.VisualScripting.YamlDotNet.Serialization.NamingConventions;
 
 namespace me.tooster.sdf.Editor.API {
-    public class Extensions {
+    public static class Extensions {
         // TODO: remove dependency on VisualScripting package, implement own naming convention
         // public static readonly UnderscoredNamingConvention
         //     underscoreNamingFormatter = new UnderscoredNamingConvention();

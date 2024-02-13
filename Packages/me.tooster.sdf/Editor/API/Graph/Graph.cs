@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityEditor;
 using UnityEngine;
 using Object = System.Object;
 
-namespace me.tooster.sdf.Editor.API {
+namespace me.tooster.sdf.Editor.API.Graph {
     /// <summary>
     /// A class representing a Directed Acyclic Graph of node connections. It holds a collection of properties and
     /// serves as a main interface for managing node connections and creating properties. It has several events for
@@ -18,7 +17,7 @@ namespace me.tooster.sdf.Editor.API {
     /// </summary>
     [Serializable]
     public class Graph {
-        public record Edge<T>(IOutputPort<T> Source, IInputPort<T> Target) where T : Port.Data;
+        public record Edge<T>(IOutputPort<T> Source, IInputPort<T> Target) where T : Data;
 
         [field: SerializeField] public Guid        Guid         { get; init; } = Guid.NewGuid();
         [field: SerializeField] public string      InternalName { get; }
@@ -27,7 +26,7 @@ namespace me.tooster.sdf.Editor.API {
 
         [field: SerializeField] private ISet<Node>            allNodes   = new HashSet<Node>();
         [field: SerializeField] private ISet<Property>        properties = new HashSet<Property>();
-        [field: SerializeField] private ISet<Edge<Port.Data>> edges      = new HashSet<Edge<Port.Data>>();
+        [field: SerializeField] private ISet<Edge<Data>> edges      = new HashSet<Edge<Data>>();
 
         // fixme: should properties be unique per string? should they be used by reference or by key?
 
@@ -84,7 +83,7 @@ namespace me.tooster.sdf.Editor.API {
         }
 
         /// DFS search over input ports to check if edge would create a cycle 
-        private static bool EdgeFormsCycle<T>(IOutputPort<T> source, IInputPort<T> target) where T : Port.Data {
+        private static bool EdgeFormsCycle<T>(IOutputPort<T> source, IInputPort<T> target) where T : Data {
             foreach (var node in NodeTopologicalIterator(source.Node)) {
                 if (node == target.Node)
                     return true;
@@ -126,7 +125,7 @@ namespace me.tooster.sdf.Editor.API {
         /// Doesn't invoke OnDisconnect on the disconnected node.
         /// </summary>
         /// <returns>true if connection was successful, false otherwise</returns>
-        public bool TryConnect<T>(IOutputPort<T> source, IInputPort<T> target) where T : Port.Data {
+        public bool TryConnect<T>(IOutputPort<T> source, IInputPort<T> target) where T : Data {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (target == null) throw new ArgumentNullException(nameof(target));
 

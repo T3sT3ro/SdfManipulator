@@ -1,6 +1,7 @@
 #nullable enable
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
@@ -27,18 +28,40 @@ namespace me.tooster.sdf.AST.Hlsl {
         {
             { Node: OpenBraceToken }  => +1,
             { Node: CloseBraceToken } => -1,
-            _                         => 0
+            _                         => 0,
         };
 
         private static bool breakLineAfter<T>(Anchor<T> a) where T : Token<hlsl> {
-            return a is { Node: OpenBraceToken or CloseBraceToken or SemicolonToken };
-        }
-        
-        private static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<hlsl> {
-            if (a is { Node: HashToken, Parent: { Node: PreprocessorSyntax } }) return false;
+            if (a is { Node: OpenBraceToken or CloseBraceToken or SemicolonToken })
+                return true;
 
             var nextToken = a.NextToken();
-            if(nextToken is {Node: OpenParenToken or CloseParenToken or SemicolonToken }) return false;
+            if (nextToken is { Node: CloseBraceToken })
+                return true;
+
+            return false;
+        }
+
+        private static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<hlsl> {
+            switch (a) {
+                case { Node  : OpenParenToken or OpenBracketToken or ColonColonToken }
+                    or { Node: HashToken, Parent: { Node: PreprocessorSyntax } }:
+                case { Node: DotToken, Parent: { Node: Member } }:
+                    return false;
+            }
+
+            var nextToken = a.NextToken();
+            switch (nextToken) {
+                case { Node: CloseParenToken or SemicolonToken or ColonColonToken or CommaToken }:
+                case { Node: DotToken, Parent: { Node: Member } }:
+                    return false;
+            }
+
+            foreach (var parent in a.Ancestors()) {
+                if (nextToken is { Node: OpenParenToken op, Parent: { Node: IArgumentList argList } }
+                 && ReferenceEquals(argList.openParenToken, op))
+                    return false;
+            }
 
             return true;
         }

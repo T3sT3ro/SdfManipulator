@@ -8,5 +8,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     [SyntaxNode] public partial record ExpressionStatement : Statement {
         public Expression?    expression     { get; init; }
         public SemicolonToken semicolonToken { get; init; } = new();
+
+        public static implicit operator ExpressionStatement(Expression e) => new() { expression = e };
     }
 }

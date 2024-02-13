@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace me.tooster.sdf.Editor.API {
+namespace me.tooster.sdf.Editor.API.Graph {
     #region interfaces
 
     // TODO: Ports shouldn't have any means of connecting to other ports, it should be done by Graph
@@ -15,13 +15,6 @@ namespace me.tooster.sdf.Editor.API {
 
         // public bool Enabled        { get; set; }
         // public bool Visible        { get; set; }
-
-        /// <summary>
-        /// It's a convenient wrapper for data passed between ports.
-        /// A port data type represents a single logical concept (for example "something that gives a scalar value")
-        /// and provides all necessarry info to use that data at input site.
-        /// </summary>
-        public abstract record Data;
     }
 
     // base class used in enumerations and alike
@@ -36,7 +29,7 @@ namespace me.tooster.sdf.Editor.API {
 
 
     // TODO: consider adding optional inputs? ShaderGRaph has it for example in NormalFromTexture and SamplerState input
-    public interface IInputPort<T> : IInputPort where T : Port.Data {
+    public interface IInputPort<T> : IInputPort where T : Data {
         new IOutputPort<T>     Source { get; }
         IOutputPort IInputPort.Source => Source;
 
@@ -46,7 +39,7 @@ namespace me.tooster.sdf.Editor.API {
         public T Eval();
     }
 
-    public interface IOutputPort<T> : IOutputPort where T : Port.Data {
+    public interface IOutputPort<T> : IOutputPort where T : Data {
         public new IReadOnlyCollection<IInputPort<T>> Targets { get; }
         IReadOnlyCollection<IInputPort> IOutputPort.  Targets => Targets;
 
@@ -72,7 +65,7 @@ namespace me.tooster.sdf.Editor.API {
     }
 
     [Serializable]
-    internal class InputPort<T> : AbstractPort, IInputPort<T> where T : Port.Data {
+    internal class InputPort<T> : AbstractPort, IInputPort<T> where T : Data {
         internal IOutputPort<T> _connectedOutput; // raw internal value accessible by Graph
 
         public IOutputPort<T>  Source => _connectedOutput;
@@ -88,7 +81,7 @@ namespace me.tooster.sdf.Editor.API {
     }
 
     [Serializable]
-    internal class OutputPort<T> : AbstractPort, IOutputPort<T> where T : Port.Data {
+    internal class OutputPort<T> : AbstractPort, IOutputPort<T> where T : Data {
         // for raw access in this package
         internal readonly HashSet<IInputPort<T>> _targets = new HashSet<IInputPort<T>>();
 
@@ -108,7 +101,7 @@ namespace me.tooster.sdf.Editor.API {
     }
 
     // FIXME: isn't it messy, complicated? Use a virtual (invisible) node instead of this?
-    public class InOutPort<T> : AbstractPort, IInputPort<T>, IOutputPort<T> where T : Port.Data {
+    public class InOutPort<T> : AbstractPort, IInputPort<T>, IOutputPort<T> where T : Data {
         // transform translates output from input port to output port
         public InOutPort(Node node, string displayName, IOutputPort<T> source, Func<T, T>? transform = null) : base(
             node,

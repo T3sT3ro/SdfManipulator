@@ -1,0 +1,864 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+
+        <LangVersion>9</LangVersion>
+
+        <AssemblyName>SyntaxGeneratorsTests</AssemblyName>
+
+        <RootNamespace>me.tooster.sdf</RootNamespace>
+
+        <OutputType>Library</OutputType>
+
+        <PackageId></PackageId>
+
+        <Authors></Authors>
+
+        <Company>me.tooster</Company>
+
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+
+        <Version />
+
+        <Product>AST.SyntaxGeneratorsTests</Product>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0"/>
+        <PackageReference Include="NUnit" Version="3.13.2"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="4.0.0"/>
+        <PackageReference Include="coverlet.collector" Version="3.1.0"/>
+
+        <ProjectReference Include="..\SyntaxGenerators\SyntaxGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\Runtime\AST\Anchor.cs.meta">
+        <Link>AST\Anchor.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Formatter.cs.meta">
+        <Link>AST\Formatter.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Generators.dll">
+        <Link>AST\Generators.dll</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Generators.dll.meta">
+        <Link>AST\Generators.dll.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl.meta">
+        <Link>AST\Hlsl.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Constants.cs.meta">
+        <Link>AST\Hlsl\Constants.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Extensions.cs.meta">
+        <Link>AST\Hlsl\Extensions.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\HlslFormatter.cs.meta">
+        <Link>AST\Hlsl\HlslFormatter.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax.meta">
+        <Link>AST\Hlsl\Syntax.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\SyntaxFact.cs.meta">
+        <Link>AST\Hlsl\SyntaxFact.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\ArrayRank.cs.meta">
+        <Link>AST\Hlsl\Syntax\ArrayRank.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions.meta">
+        <Link>AST\Hlsl\Syntax\Expressions.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\BracedInitializerExpression.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\BracedInitializerExpression.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\LiteralExpression.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\LiteralExpression.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Affix.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Affix.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\AssignmentExpression.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\AssignmentExpression.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Binary.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Binary.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Call.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Call.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Cast.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Cast.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Comma.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Comma.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Indexer.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Indexer.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Member.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Member.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Ternary.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Ternary.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Unary.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Unary.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Parenthesized.cs.meta">
+        <Link>AST\Hlsl\Syntax\Expressions\Parenthesized.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Identifier.cs.meta">
+        <Link>AST\Hlsl\Syntax\Identifier.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Initializer.cs.meta">
+        <Link>AST\Hlsl\Syntax\Initializer.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Lists.cs.meta">
+        <Link>AST\Hlsl\Syntax\Lists.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\NameSyntax.cs.meta">
+        <Link>AST\Hlsl\Syntax\NameSyntax.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Define.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Define.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Elif.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Elif.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Else.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Else.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Endif.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Endif.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Error.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Error.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\If.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\If.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Ifdef.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Ifdef.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Ifndef.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Ifndef.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Include.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Include.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Line.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Line.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Pragma.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Pragma.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\PreprocessorSyntax.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\PreprocessorSyntax.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Undef.cs.meta">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Undef.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Semantic.cs.meta">
+        <Link>AST\Hlsl\Syntax\Semantic.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements.meta">
+        <Link>AST\Hlsl\Syntax\Statements.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Block.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Block.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Break.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Break.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Continue.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Continue.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Declarations.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Declarations.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Declarations\FunctionDefinition.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Declarations\FunctionDefinition.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Definitions.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Definitions.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Definitions\FunctionDefinition.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Definitions\FunctionDefinition.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Definitions\StructDefinition.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Definitions\StructDefinition.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Definitions\VariableDefinition.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Definitions\VariableDefinition.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Discard.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Discard.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\DoWhile.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\DoWhile.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\ExpressionStatement.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\ExpressionStatement.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\For.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\For.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\For.VariableInitializer.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\For.VariableInitializer.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\If.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\If.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\If.ElseClause.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\If.ElseClause.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Return.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Return.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Switch.Case.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Switch.Case.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Switch.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Switch.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Switch.DefaultCase.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Switch.DefaultCase.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Typedef.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\Typedef.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\While.cs.meta">
+        <Link>AST\Hlsl\Syntax\Statements\While.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Tokens.cs.meta">
+        <Link>AST\Hlsl\Syntax\Tokens.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Trivias.meta">
+        <Link>AST\Hlsl\Syntax\Trivias.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Type.cs.meta">
+        <Link>AST\Hlsl\Syntax\Type.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Type.Predefined.cs.meta">
+        <Link>AST\Hlsl\Syntax\Type.Predefined.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Type.Struct.cs.meta">
+        <Link>AST\Hlsl\Syntax\Type.Struct.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\Type.UserDefined.cs.meta">
+        <Link>AST\Hlsl\Syntax\Type.UserDefined.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Hlsl\Syntax\VariableDeclarator.cs.meta">
+        <Link>AST\Hlsl\Syntax\VariableDeclarator.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Mapper.cs.meta">
+        <Link>AST\Mapper.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\me.tooster.sdf.AST.asmdef">
+        <Link>AST\me.tooster.sdf.AST.asmdef</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\me.tooster.sdf.AST.asmdef.meta">
+        <Link>AST\me.tooster.sdf.AST.asmdef.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Navigation.cs.meta">
+        <Link>AST\Navigation.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\README.md">
+        <Link>AST\README.md</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\README.md.meta">
+        <Link>AST\README.md.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\ReflectiveRewriter.cs.meta">
+        <Link>AST\ReflectiveRewriter.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab.meta">
+        <Link>AST\Shaderlab.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Constants.cs.meta">
+        <Link>AST\Shaderlab\Constants.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Extensions.cs.meta">
+        <Link>AST\Shaderlab\Extensions.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\ReflectiveShaderlabFormatter.cs.meta">
+        <Link>AST\Shaderlab\ReflectiveShaderlabFormatter.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\ShaderlabFormatter.cs.meta">
+        <Link>AST\Shaderlab\ShaderlabFormatter.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax.meta">
+        <Link>AST\Shaderlab\Syntax.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Command.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Command.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\CommandArguments.cs.meta">
+        <Link>AST\Shaderlab\Syntax\CommandArguments.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands.meta">
+        <Link>AST\Shaderlab\Syntax\Commands.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\Blend.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Commands\Blend.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\BlendOp.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Commands\BlendOp.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\Cull.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Commands\Cull.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\ZClip.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Commands\ZClip.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\ZTest.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Commands\ZTest.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\ZWrite.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Commands\ZWrite.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Hlsl.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Hlsl.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Identifier.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Identifier.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Lists.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Lists.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\LiteralExpression.cs.meta">
+        <Link>AST\Shaderlab\Syntax\LiteralExpression.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\PassStatement.cs.meta">
+        <Link>AST\Shaderlab\Syntax\PassStatement.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Shader.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Shader.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Attribute.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Attribute.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\CustomEditor.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\CustomEditor.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\CustomEditorForRP.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\CustomEditorForRP.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Fallback.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Fallback.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\MaterialProperties.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\MaterialProperties.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Property.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Property.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Property.Initializer.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Property.Initializer.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Property.Type.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Property.Type.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\SubShader.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\SubShader.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderStatement.cs.meta">
+        <Link>AST\Shaderlab\Syntax\ShaderStatement.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderOrPassStatement.cs.meta">
+        <Link>AST\Shaderlab\Syntax\SubShaderOrPassStatement.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderSpecific.meta">
+        <Link>AST\Shaderlab\Syntax\SubShaderSpecific.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderSpecific\Lod.cs.meta">
+        <Link>AST\Shaderlab\Syntax\SubShaderSpecific\Lod.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderSpecific\Pass.cs.meta">
+        <Link>AST\Shaderlab\Syntax\SubShaderSpecific\Pass.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderSpecific\Pass.Name.cs.meta">
+        <Link>AST\Shaderlab\Syntax\SubShaderSpecific\Pass.Name.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderStatement.cs.meta">
+        <Link>AST\Shaderlab\Syntax\SubShaderStatement.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Tag.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Tag.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\TagsBlock.cs.meta">
+        <Link>AST\Shaderlab\Syntax\TagsBlock.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Tokens.cs.meta">
+        <Link>AST\Shaderlab\Syntax\Tokens.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Shaderlab\Syntax\Trivias.meta">
+        <Link>AST\Shaderlab\Syntax\Trivias.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax.meta">
+        <Link>AST\Syntax.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonSyntax.meta">
+        <Link>AST\Syntax\CommonSyntax.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonSyntax\Expression.cs.meta">
+        <Link>AST\Syntax\CommonSyntax\Expression.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonSyntax\Identifier.cs.meta">
+        <Link>AST\Syntax\CommonSyntax\Identifier.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonSyntax\InjectedLanguage.cs.meta">
+        <Link>AST\Syntax\CommonSyntax\InjectedLanguage.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonSyntax\SeparatedList.cs.meta">
+        <Link>AST\Syntax\CommonSyntax\SeparatedList.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonSyntax\Statement.cs.meta">
+        <Link>AST\Syntax\CommonSyntax\Statement.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonSyntax\SyntaxList.cs.meta">
+        <Link>AST\Syntax\CommonSyntax\SyntaxList.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonSyntax\SyntaxOrTokenList.cs.meta">
+        <Link>AST\Syntax\CommonSyntax\SyntaxOrTokenList.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonTrivia.meta">
+        <Link>AST\Syntax\CommonTrivia.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonTrivia\Comment.cs.meta">
+        <Link>AST\Syntax\CommonTrivia\Comment.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonTrivia\NewLine.cs.meta">
+        <Link>AST\Syntax\CommonTrivia\NewLine.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\CommonTrivia\Whitespace.cs.meta">
+        <Link>AST\Syntax\CommonTrivia\Whitespace.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\Extensions.cs.meta">
+        <Link>AST\Syntax\Extensions.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\Syntax.cs.meta">
+        <Link>AST\Syntax\Syntax.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\SyntaxOrToken.cs.meta">
+        <Link>AST\Syntax\SyntaxOrToken.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\Token.cs.meta">
+        <Link>AST\Syntax\Token.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\Tree.cs.meta">
+        <Link>AST\Syntax\Tree.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\Trivia.cs.meta">
+        <Link>AST\Syntax\Trivia.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Syntax\TriviaList.cs.meta">
+        <Link>AST\Syntax\TriviaList.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Visitor.cs.meta">
+        <Link>AST\Visitor.cs.meta</Link>
+      </Content>
+      <Content Include="..\..\Runtime\AST\Walker.cs.meta">
+        <Link>AST\Walker.cs.meta</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\..\Runtime\AST\Anchor.cs">
+        <Link>AST\Anchor.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Formatter.cs">
+        <Link>AST\Formatter.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Constants.cs">
+        <Link>AST\Hlsl\Constants.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Extensions.cs">
+        <Link>AST\Hlsl\Extensions.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\HlslFormatter.cs">
+        <Link>AST\Hlsl\HlslFormatter.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\SyntaxFact.cs">
+        <Link>AST\Hlsl\SyntaxFact.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\ArrayRank.cs">
+        <Link>AST\Hlsl\Syntax\ArrayRank.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\BracedInitializerExpression.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\BracedInitializerExpression.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\LiteralExpression.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\LiteralExpression.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Affix.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Affix.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\AssignmentExpression.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\AssignmentExpression.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Binary.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Binary.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Call.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Call.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Cast.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Cast.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Comma.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Comma.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Indexer.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Indexer.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Member.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Member.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Ternary.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Ternary.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Operators\Unary.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Operators\Unary.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Expressions\Parenthesized.cs">
+        <Link>AST\Hlsl\Syntax\Expressions\Parenthesized.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Identifier.cs">
+        <Link>AST\Hlsl\Syntax\Identifier.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Initializer.cs">
+        <Link>AST\Hlsl\Syntax\Initializer.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Lists.cs">
+        <Link>AST\Hlsl\Syntax\Lists.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\NameSyntax.cs">
+        <Link>AST\Hlsl\Syntax\NameSyntax.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Define.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Define.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Elif.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Elif.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Else.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Else.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Endif.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Endif.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Error.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Error.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\If.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\If.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Ifdef.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Ifdef.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Ifndef.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Ifndef.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Include.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Include.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Line.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Line.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Pragma.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Pragma.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\PreprocessorSyntax.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\PreprocessorSyntax.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Preprocessor\Undef.cs">
+        <Link>AST\Hlsl\Syntax\Preprocessor\Undef.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Semantic.cs">
+        <Link>AST\Hlsl\Syntax\Semantic.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Block.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Block.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Break.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Break.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Continue.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Continue.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Declarations\FunctionDefinition.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Declarations\FunctionDefinition.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Definitions\FunctionDefinition.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Definitions\FunctionDefinition.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Definitions\StructDefinition.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Definitions\StructDefinition.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Definitions\VariableDefinition.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Definitions\VariableDefinition.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Discard.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Discard.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\DoWhile.cs">
+        <Link>AST\Hlsl\Syntax\Statements\DoWhile.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\ExpressionStatement.cs">
+        <Link>AST\Hlsl\Syntax\Statements\ExpressionStatement.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\For.cs">
+        <Link>AST\Hlsl\Syntax\Statements\For.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\For.VariableInitializer.cs">
+        <Link>AST\Hlsl\Syntax\Statements\For.VariableInitializer.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\If.cs">
+        <Link>AST\Hlsl\Syntax\Statements\If.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\If.ElseClause.cs">
+        <Link>AST\Hlsl\Syntax\Statements\If.ElseClause.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Return.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Return.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Switch.Case.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Switch.Case.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Switch.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Switch.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Switch.DefaultCase.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Switch.DefaultCase.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\Typedef.cs">
+        <Link>AST\Hlsl\Syntax\Statements\Typedef.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Statements\While.cs">
+        <Link>AST\Hlsl\Syntax\Statements\While.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Tokens.cs">
+        <Link>AST\Hlsl\Syntax\Tokens.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Type.cs">
+        <Link>AST\Hlsl\Syntax\Type.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Type.Predefined.cs">
+        <Link>AST\Hlsl\Syntax\Type.Predefined.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Type.Struct.cs">
+        <Link>AST\Hlsl\Syntax\Type.Struct.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\Type.UserDefined.cs">
+        <Link>AST\Hlsl\Syntax\Type.UserDefined.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Hlsl\Syntax\VariableDeclarator.cs">
+        <Link>AST\Hlsl\Syntax\VariableDeclarator.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Mapper.cs">
+        <Link>AST\Mapper.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Navigation.cs">
+        <Link>AST\Navigation.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\ReflectiveRewriter.cs">
+        <Link>AST\ReflectiveRewriter.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Constants.cs">
+        <Link>AST\Shaderlab\Constants.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Extensions.cs">
+        <Link>AST\Shaderlab\Extensions.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\ReflectiveShaderlabFormatter.cs">
+        <Link>AST\Shaderlab\ReflectiveShaderlabFormatter.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\ShaderlabFormatter.cs">
+        <Link>AST\Shaderlab\ShaderlabFormatter.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Command.cs">
+        <Link>AST\Shaderlab\Syntax\Command.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\CommandArguments.cs">
+        <Link>AST\Shaderlab\Syntax\CommandArguments.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\Blend.cs">
+        <Link>AST\Shaderlab\Syntax\Commands\Blend.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\BlendOp.cs">
+        <Link>AST\Shaderlab\Syntax\Commands\BlendOp.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\Cull.cs">
+        <Link>AST\Shaderlab\Syntax\Commands\Cull.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\ZClip.cs">
+        <Link>AST\Shaderlab\Syntax\Commands\ZClip.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\ZTest.cs">
+        <Link>AST\Shaderlab\Syntax\Commands\ZTest.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Commands\ZWrite.cs">
+        <Link>AST\Shaderlab\Syntax\Commands\ZWrite.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Hlsl.cs">
+        <Link>AST\Shaderlab\Syntax\Hlsl.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Identifier.cs">
+        <Link>AST\Shaderlab\Syntax\Identifier.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Lists.cs">
+        <Link>AST\Shaderlab\Syntax\Lists.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\LiteralExpression.cs">
+        <Link>AST\Shaderlab\Syntax\LiteralExpression.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\PassStatement.cs">
+        <Link>AST\Shaderlab\Syntax\PassStatement.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Shader.cs">
+        <Link>AST\Shaderlab\Syntax\Shader.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Attribute.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Attribute.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\CustomEditor.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\CustomEditor.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\CustomEditorForRP.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\CustomEditorForRP.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Fallback.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Fallback.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\MaterialProperties.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\MaterialProperties.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Property.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Property.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Property.Initializer.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Property.Initializer.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\Property.Type.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\Property.Type.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderSpecific\SubShader.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderSpecific\SubShader.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\ShaderStatement.cs">
+        <Link>AST\Shaderlab\Syntax\ShaderStatement.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderOrPassStatement.cs">
+        <Link>AST\Shaderlab\Syntax\SubShaderOrPassStatement.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderSpecific\Lod.cs">
+        <Link>AST\Shaderlab\Syntax\SubShaderSpecific\Lod.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderSpecific\Pass.cs">
+        <Link>AST\Shaderlab\Syntax\SubShaderSpecific\Pass.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderSpecific\Pass.Name.cs">
+        <Link>AST\Shaderlab\Syntax\SubShaderSpecific\Pass.Name.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\SubShaderStatement.cs">
+        <Link>AST\Shaderlab\Syntax\SubShaderStatement.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Tag.cs">
+        <Link>AST\Shaderlab\Syntax\Tag.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\TagsBlock.cs">
+        <Link>AST\Shaderlab\Syntax\TagsBlock.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Shaderlab\Syntax\Tokens.cs">
+        <Link>AST\Shaderlab\Syntax\Tokens.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonSyntax\Expression.cs">
+        <Link>AST\Syntax\CommonSyntax\Expression.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonSyntax\Identifier.cs">
+        <Link>AST\Syntax\CommonSyntax\Identifier.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonSyntax\InjectedLanguage.cs">
+        <Link>AST\Syntax\CommonSyntax\InjectedLanguage.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonSyntax\SeparatedList.cs">
+        <Link>AST\Syntax\CommonSyntax\SeparatedList.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonSyntax\Statement.cs">
+        <Link>AST\Syntax\CommonSyntax\Statement.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonSyntax\SyntaxList.cs">
+        <Link>AST\Syntax\CommonSyntax\SyntaxList.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonSyntax\SyntaxOrTokenList.cs">
+        <Link>AST\Syntax\CommonSyntax\SyntaxOrTokenList.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonTrivia\Comment.cs">
+        <Link>AST\Syntax\CommonTrivia\Comment.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonTrivia\NewLine.cs">
+        <Link>AST\Syntax\CommonTrivia\NewLine.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\CommonTrivia\Whitespace.cs">
+        <Link>AST\Syntax\CommonTrivia\Whitespace.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\Extensions.cs">
+        <Link>AST\Syntax\Extensions.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\Syntax.cs">
+        <Link>AST\Syntax\Syntax.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\SyntaxOrToken.cs">
+        <Link>AST\Syntax\SyntaxOrToken.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\Token.cs">
+        <Link>AST\Syntax\Token.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\Tree.cs">
+        <Link>AST\Syntax\Tree.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\Trivia.cs">
+        <Link>AST\Syntax\Trivia.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Syntax\TriviaList.cs">
+        <Link>AST\Syntax\TriviaList.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Visitor.cs">
+        <Link>AST\Visitor.cs</Link>
+      </Compile>
+      <Compile Include="..\..\Runtime\AST\Walker.cs">
+        <Link>AST\Walker.cs</Link>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="..\..\Runtime\AST\Hlsl\Syntax\Trivias\">
+        <Link>AST\Hlsl\Syntax\Trivias</Link>
+      </Folder>
+      <Folder Include="..\..\Runtime\AST\Shaderlab\Syntax\Trivias\">
+        <Link>AST\Shaderlab\Syntax\Trivias</Link>
+      </Folder>
+    </ItemGroup>
+
+<!--    <ItemGroup>
+        <Content Include="..\..\Runtime\AST\**\*.cs">
+            <Link>AST/%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>-->
+</Project>

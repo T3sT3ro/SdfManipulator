@@ -13,6 +13,8 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
 
+        public static implicit operator SeparatedList<Lang, TSyntax>(TSyntax singleton) => new(new SyntaxOrToken<Lang>[] {singleton});
+        
         #region specializations
 
         /// Returns number of syntax nodes in this separated list 

@@ -40,6 +40,7 @@ namespace me.tooster.sdf.AST.Generators {
                 ).AddUsings(allUsings.Distinct(new UsingDirectiveComparer()).ToArray())
                 .WithLeadingTrivia(Trivia(NullableDirectiveTrivia(Token(SyntaxKind.EnableKeyword), true)));
 
+            // var name = recordSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted))
             context.AddSource(
                 $"{string.Join(".", recordSymbol.qualifiedNameParts().Reverse())}.g.cs",
                 SourceText.From(compilationUnit.NormalizeWhitespace().SyntaxTree.ToString(), Encoding.UTF8)
