@@ -39,15 +39,34 @@ float3 cameraRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
     clipPos.x *= AspectRatio(); // clipPos becomes x: [-aspectRatio, aspectRatio] and y: [-1, 1]
     // The ray is constructed from a flat ray on the clip near plane and the forward vector. TODO: account for orthographic camera
 
+    float focalLength = CameraFocalLength();
     if (CameraIsOrtho()) {
-        float  focalLength = CameraFocalLength();
-        float3 toNearPlane = (CameraWsForward() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) / focalLength;
+        // without focal length divide zoom won't work;
+        float3 toNearPlane = (CameraWsForward() * CameraNearClipPlane() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) / focalLength;
         rayOrigin = CameraWsPosition() + toNearPlane;
         return CameraWsForward();
     } else {
-        float  focalLength = CameraFocalLength();
         float3 toNearPlane = CameraWsForward() * focalLength + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y;
         rayOrigin = CameraWsPosition() + toNearPlane * CameraNearClipPlane();
         return normalize(toNearPlane);
+    }
+}
+
+float3 cameraVsRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
+    clipPos.xy /= clipPos.w; // perspective divide
+    clipPos.xy = (clipPos.xy - 0.5) * 2; // transform to origin 0,0 at center and extents of ±1
+    clipPos.x *= AspectRatio(); // clipPos becomes x: [-aspectRatio, aspectRatio] and y: [-1, 1]
+    // The ray is constructed from a flat ray on the clip near plane and the forward vector. TODO: account for orthographic camera
+
+    float focalLength = CameraFocalLength();
+    if (CameraIsOrtho()) {
+        // without focal length divide zoom won't work;
+        float3 toNearPlane = (CameraWsForward() * CameraNearClipPlane() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) / focalLength;
+        rayOrigin = CameraWsPosition() + toNearPlane;
+        return CameraWsForward();
+    } else {
+        float3 toNearPlane = CameraWsForward() * focalLength + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y;
+        rayOrigin = CameraWsPosition() + toNearPlane * CameraNearClipPlane();
+        return toNearPlane;
     }
 }

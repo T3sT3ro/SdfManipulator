@@ -59,7 +59,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                         },
                     },
                 },
-                Assignment("result.distance", FunctionCall("sdf::primitives3D::sphere", (Identifier)"p", (LiteralExpression).5)),
+                Assignment("result.distance", FunctionCall("sdf::primitives3D::sphere", (Identifier)"p", (Identifier)"sphere_1")),
                 Assignment("result.id", (LiteralExpression)1),
                 (Return)new Identifier { id = "result" },
             },

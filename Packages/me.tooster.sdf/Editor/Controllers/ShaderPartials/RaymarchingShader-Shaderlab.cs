@@ -124,8 +124,9 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             }
         }
 
-        private PropertySyntax generatePropertySyntax(IPropertyIdentifierProvider scene, Property property) =>
-            property switch
+        private PropertySyntax generatePropertySyntax(IPropertyIdentifierProvider scene, Property property) {
+            var propertyId = scene.GetIdentifier(property);
+            return property switch
                 {
                     Property<int> p => new PropertySyntax
                     {
@@ -147,9 +148,10 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                         $"Material property block can't expose property of type {property.GetType()}"),
                 } with
                 {
-                    id = scene.GetIdentifier(property),
-                    displayName = property.DisplayName,
+                    id = propertyId,
+                    displayName = $"{propertyId}: {property.DisplayName}",
                 };
+        }
 
         private TagsBlock TagsBlock => new()
         {

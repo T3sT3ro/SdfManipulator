@@ -42,7 +42,15 @@ struct v2f {
     float4 vertex : SV_POSITION;
     float4 screenPos: TEXCOORD1; ///< clip-pos vertex position. This is not perspective divided, so that `w` is not lost beetween stages
     float3 hitpos : TEXCOORD2; ///< hit position in model space TODO: remove
-    float3 rd_cam : TEXCOORD3; ///< ray direction in camera space TODO: use to offload ray calculation to vertex shader
+
+    #ifdef V2F_RAYS
+    /** \brief unnormalized ray direction in world space. \code noperspective \endcode is needed to prevent warping of direction vectors
+     * \remarks <a href="https://www.geogebra.org/calculator/fppufpcf">needed for proper interpolation</a>
+     */
+    noperspective float3 unnormalized_rdWs : TEXCOORD3;
+    /// ray origin in world space. \code noperspective \endcode is needed to prevent warping and bad artifacts inside domain
+    noperspective float3 roWs : TEXCOORD4; ///< ray origin in world space
+    #endif
 };
 
 /// result of a fragment shader 

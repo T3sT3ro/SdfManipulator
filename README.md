@@ -228,7 +228,7 @@ TODO
 # Notes
 
 - [noises](https://lodev.org/cgtutor/randomnoise.html)
-- [volumetric light](https://fvcaputo.github.io/2017/05/02/ray-marching.html)
+- [volumetric light and cone marching](https://fvcaputo.github.io/2017/05/02/ray-marching.html)
 - [depth vs distance and how to convert](https://forum.unity.com/threads/direction-from-camera-to-pixel-is-slightly-shifted-around-the-edges-of-the-screen.1151969/)
 - [rendering sphere on a quad (earth ray-marched, with shadows in raymarching)](https://bgolus.medium.com/rendering-a-sphere-on-a-quad-13c92025570c#c582)
 - [screen space reflection](https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html)
@@ -332,6 +332,10 @@ TODO
 - [World normal from depth texture](https://gist.github.com/bgolus/a07ed65602c009d5e2f753826e8078a0)
 - [world space position from depth texture](https://forum.unity.com/threads/reconstructing-world-space-position-from-depth-texture.1139599/)
 - [Some resources like operators, effects, sdfs, patterns etc](https://forum.unity.com/threads/big-collection-of-free-shader-graph-nodes.539208/)
+- [Ambient Occlusion methods for SDF](https://www.aduprat.com/portfolio/?page=articles/hemisphericalSDFAO)
+- [sdf material blending](https://iquilezles.org/articles/smin/)
+- [sdf ambient occlusion](https://www.alanzucconi.com/2016/07/01/ambient-occlusion/)
+- [iq ambient occlusion with dithering to break artifacts](https://iquilezles.org/articles/ssao/)
 
 ## Unity internals:
 
