@@ -40,15 +40,15 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
         private void OnSceneGUI() {
             var controller = (Controller)target;
             var tr = controller.transform;
-            var pos = tr.localPosition;
+            var pos = tr.position;
             var size = HandleUtility.GetHandleSize(pos) * 0.5f;
             var snap = Vector3.one * 0.5f;
 
             EditorGUI.BeginChangeCheck();
-            var newTargetPosition = Handles.FreeMoveHandle(pos, size, snap, Handles.RectangleHandleCap);
+            var newTargetPosition = Handles.FreeMoveHandle(pos, size, snap, Handles.CircleHandleCap);
             if (EditorGUI.EndChangeCheck()) {
                 Undo.RecordObject(controller, "Change Look At Target Position");
-                tr.localPosition = newTargetPosition;
+                tr.position = newTargetPosition;
             }
         }
     }
