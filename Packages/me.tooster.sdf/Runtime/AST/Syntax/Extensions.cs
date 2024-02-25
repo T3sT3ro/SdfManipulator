@@ -13,10 +13,6 @@ namespace me.tooster.sdf.AST.Syntax {
             where T : class =>
             item is null ? enumerable : enumerable.Append(item);
 
-        public static IEnumerable<T> AppendAll<T>(this IEnumerable<T> enumerable, IEnumerable<T> items)
-            where T : class? =>
-            enumerable.Concat(items);
-
         /// Concats an enumerable to another if it is not null.
         public static IEnumerable<T> ConcatNotNull<T>(this IEnumerable<T> enumerable, IEnumerable<T>? items)
             where T : class =>
@@ -28,7 +24,7 @@ namespace me.tooster.sdf.AST.Syntax {
 
         public static IEnumerable<(T, T)> ConsecutivePairs<T>(this IEnumerable<T> stream) {
             using var enumerator = stream.GetEnumerator();
-            T last = enumerator.Current;
+            var last = enumerator.Current;
             while (enumerator.MoveNext()) {
                 yield return (last, enumerator.Current);
 
@@ -37,21 +33,23 @@ namespace me.tooster.sdf.AST.Syntax {
         }
 
         public static IEnumerable<T> AsReverseEnumerator<T>(this IReadOnlyList<T> list) {
-            for (int i = list.Count; --i >= 0;) yield return list[i];
+            for (var i = list.Count; --i >= 0;) yield return list[i];
         }
 
         public static int FindLastIndex<T>(this IReadOnlyList<T> list, Func<T, bool> predicate) {
-            for (var i = list.Count; --i >= 0;)
+            for (var i = list.Count; --i >= 0;) {
                 if (predicate(list[i]))
                     return i;
+            }
 
             return -1;
         }
 
         public static int LastIndexOf<T>(this IReadOnlyList<T> list, T element) where T : IEquatable<T> {
-            for (var i = list.Count; --i >= 0;)
+            for (var i = list.Count; --i >= 0;) {
                 if (EqualityComparer<T>.Default.Equals(list[i], element))
                     return i;
+            }
 
             return -1;
         }
@@ -172,11 +170,11 @@ namespace me.tooster.sdf.AST.Syntax {
             }
         }
 
-        public static TriviaList<Lang>? LeadingTriviaList<TSyntax, Lang>(this TSyntax syntax)
-            where TSyntax : Syntax<Lang> => Anchor.New(syntax).FirstToken()?.Node.LeadingTriviaList;
+        public static TriviaList<Lang>? LeadingTriviaList<Lang>(this Syntax<Lang> syntax) =>
+            Anchor.New(syntax).FirstToken()?.Node.LeadingTriviaList;
 
-        public static TriviaList<Lang>? TrailingTriviaList<TSyntax, Lang>(this TSyntax syntax)
-            where TSyntax : Syntax<Lang> => Anchor.New(syntax).LastToken()?.Node.TrailingTriviaList;
+        public static TriviaList<Lang>? TrailingTriviaList<Lang>(this Syntax<Lang> syntax) =>
+            Anchor.New(syntax).LastToken()?.Node.TrailingTriviaList;
 
         public static TSyntax WithLeadingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
             where TSyntax : Syntax<Lang> =>
@@ -185,7 +183,7 @@ namespace me.tooster.sdf.AST.Syntax {
         public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.FORWARD);
-        
+
         public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, IEnumerable<Trivia<Lang>> trivia)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.FORWARD);
@@ -197,7 +195,7 @@ namespace me.tooster.sdf.AST.Syntax {
         public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
-        
+
         public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, IEnumerable<Trivia<Lang>> trivia)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
@@ -219,7 +217,7 @@ namespace me.tooster.sdf.AST.Syntax {
 
             return (syntax, oldToken.Node, newToken) switch
             {
-                (Syntax<shaderlab> s, Token<shaderlab> tOld, Token<shaderlab> tNew) => 
+                (Syntax<shaderlab> s, Token<shaderlab> tOld, Token<shaderlab> tNew) =>
                     new ShaderlabEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
                 (Syntax<hlsl> s, Token<hlsl> tOld, Token<hlsl> tNew) =>
                     new HlslEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
@@ -227,8 +225,7 @@ namespace me.tooster.sdf.AST.Syntax {
             };
         }
 
-        public static StructuredTrivia<Lang> ToStructuredTrivia<Lang>(this Syntax<Lang> syntax) =>
-            new StructuredTrivia<Lang> { Structure = syntax };
+        public static StructuredTrivia<Lang> ToStructuredTrivia<Lang>(this Syntax<Lang> syntax) => new() { Structure = syntax };
 
         // empty whitespace is redundant
         public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);

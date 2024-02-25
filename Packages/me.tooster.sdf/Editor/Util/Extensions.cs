@@ -5,5 +5,8 @@ namespace me.tooster.sdf.Editor.Util {
         public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> source) {
             return source.Select((item, index) => (item, index));
         }
+
+        public static string JoinToString<TItem>(this IEnumerable<TItem> items, string separator) =>
+            string.Join(separator, items);
     }
 }

@@ -12,7 +12,7 @@ namespace me.tooster.sdf.AST {
     public record FormatterState {
         private string SingleIndent { get; init; }        = "    ";
         public  string IndentString { get; private set; } = "";
-        private int    indentLevel = 0;
+        private int    indentLevel            = 0;
 
 
         /// <summary>
@@ -36,18 +36,16 @@ namespace me.tooster.sdf.AST {
 
         private bool isFirstTokenOfStructuredTrivia<T>(Anchor<T> a) where T : Token<Lang> {
             var structuredTrivia = a.Ancestors().FirstOrDefault(p => p is { Node: StructuredTrivia<Lang> });
-            if (structuredTrivia is Anchor<StructuredTrivia<Lang>> { Node: { Structure: { } } } aTrivia) {
+            if (structuredTrivia is Anchor<StructuredTrivia<Lang>> { Node: { Structure: not null } } aTrivia)
                 return ReferenceEquals(a.Node, Anchor.New(aTrivia.Node.Structure, aTrivia).FirstToken()?.Node);
-            }
 
             return false;
         }
 
         private bool isLastTokenOfStructuredTrivia<T>(Anchor<T> a) where T : Token<Lang> {
             var structuredTrivia = a.Ancestors().FirstOrDefault(p => p is { Node: StructuredTrivia<Lang> });
-            if (structuredTrivia is Anchor<StructuredTrivia<Lang>> { Node: { Structure: { } } } aTrivia) {
+            if (structuredTrivia is Anchor<StructuredTrivia<Lang>> { Node: { Structure: not null } } aTrivia)
                 return ReferenceEquals(a.Node, Anchor.New(aTrivia.Node.Structure, aTrivia).LastToken()?.Node);
-            }
 
             return false;
         }
@@ -59,7 +57,7 @@ namespace me.tooster.sdf.AST {
             State.IndentLevel += indentChange;
 
             var previousToken = a.PreviousToken();
-            TriviaList<Lang> leading = token.LeadingTriviaList;
+            var leading = token.LeadingTriviaList;
 
             if (previousToken is null || breakLineAfter(previousToken)) {
                 if (previousToken == null && isFirstTokenOfStructuredTrivia(a)) {
@@ -86,12 +84,11 @@ namespace me.tooster.sdf.AST {
             // FIXME: existing trailing trivia (like comments and prepocessor) are lost. Refactor into something retaining important trivia.
             if (breakLineAfter(a)) {
                 var trailing = token.TrailingTriviaList;
-                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new NewLine<Lang>()) };
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new TriviaList<Lang>(new NewLine<Lang>()) };
             }
 
-            if (whitespaceAfter(a) && !isLastTokenOfStructuredTrivia(a)) {
-                return token with { LeadingTriviaList = leading, TrailingTriviaList = new(new Whitespace<Lang>()) };
-            }
+            if (whitespaceAfter(a) && !isLastTokenOfStructuredTrivia(a))
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new TriviaList<Lang>(new Whitespace<Lang>()) };
 
             return token with { LeadingTriviaList = leading };
         }

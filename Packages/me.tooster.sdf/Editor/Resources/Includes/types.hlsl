@@ -45,9 +45,11 @@ struct v2f {
 
     #ifdef V2F_RAYS
     /** \brief unnormalized ray direction in world space. \code noperspective \endcode is needed to prevent warping of direction vectors
-     * \remarks <a href="https://www.geogebra.org/calculator/fppufpcf">needed for proper interpolation</a>
+     * \remark <a href="https://www.geogebra.org/calculator/fppufpcf">needed for proper interpolation</a>
+     * \remark <a href="https://mathweb.ucsd.edu/~sbuss/MathCG2/OpenGLsoft/NoPerspective/docNoPerspective.html">how perpective divition works: opengl</a>
+     * \remark <a href="https://docs.vulkan.org/spec/latest/chapters/primsrast.html#primsrast-polygons-basic:~:text=c%2C%20respectively.-,Perspective%20interpolation,-for%20a%20triangle">how perpective divition works: vulkan</a>
      */
-    noperspective float3 unnormalized_rdWs : TEXCOORD3;
+    noperspective float3 rdWsUnnormalized : TEXCOORD3;
     /// ray origin in world space. \code noperspective \endcode is needed to prevent warping and bad artifacts inside domain
     noperspective float3 roWs : TEXCOORD4; ///< ray origin in world space
     #endif

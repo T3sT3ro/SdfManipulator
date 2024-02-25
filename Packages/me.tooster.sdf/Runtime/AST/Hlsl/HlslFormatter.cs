@@ -50,6 +50,9 @@ namespace me.tooster.sdf.AST.Hlsl {
                     return false;
             }
 
+            if (a.Parent is { Node: Unary u } && ReferenceEquals(a.Node, u.operatorToken))
+                return false;
+
             var nextToken = a.NextToken();
             switch (nextToken) {
                 case { Node: CloseParenToken or SemicolonToken or ColonColonToken or CommaToken }:

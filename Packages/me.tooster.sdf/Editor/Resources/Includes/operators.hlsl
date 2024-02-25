@@ -38,12 +38,23 @@ namespace sdf { namespace operators {
         return mul(invTransform, float4(p, 1));
     }
 
+    float distanceUnion(in float3 a, in float3 b) {
+        return min(a, b);
+    }
+
+    float distanceIntersect(in float3 a, in float3 b) {
+        return max(a, b);
+    }
+
+    float distanceSubtract(in float3 a, in float3 b) {
+        return distanceIntersect(a, -b);
+    }
+
     SdfResult unionSimple(in SdfResult a, in SdfResult b) {
         if (a.distance < b.distance)
             return a;
         return b;
     }
-
 
     SdfResult unionSmooth(SdfResult a, SdfResult b, float k) {
         SdfResult result;

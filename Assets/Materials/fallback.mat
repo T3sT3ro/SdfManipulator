@@ -7,12 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: testMasterialAsset
-  m_Shader: {fileID: 4800000, guid: 2afc1c42f0a227c258a35d51c85143e5, type: 3}
+  m_Name: fallback
+  m_Shader: {fileID: 4800000, guid: 4c3b07febf6c459a8f055f70f6ee7cb8, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _ZWRITE_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -45,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: cc55b6d3cd5bb3000b01594599750f2f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -60,12 +59,13 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints:
-    - _Cull: 0
-    - _ZTest: 4
+    - _SecondaryTex:
+        m_Texture: {fileID: 2800000, guid: cc55b6d3cd5bb3000b01594599750f2f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BumpScale: 1
-    - _Cull: 0
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -80,30 +80,8 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _ZTest: 4
     - _ZWrite: 1
-    - radius__sphere_1: 1
-    - radius__sphere_2: 1
-    - sdfScene__sphere_1_0_radius: -0.8
-    - sdfScene__sphere_1_radius: 1
-    - sdfScene__sphere_2_1_radius: 0.44
-    - sdfScene__sphere_2_radius: 1
-    - sdfScene_box_radius: 0.86
-    - sdfScene_sphere_1_radius: 0.25
-    - sdfScene_sphere_2_radius: 0.35
-    - sphere_1: 0.5
-    - sphere_1__radius: 0.5
-    - sphere_1_radius: 1
-    - sphere_1_sdf__radius: 1
-    - sphere_2: 1
-    - sphere_2__radius: 1
-    - sphere_2_radius: 1
-    - sphere_2_sdf__radius: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - sdfScene__box_0_boxsize: {r: 0.2, g: 0.88, b: 1.88, a: 0}
-    - sdfScene__box_1_boxsize: {r: 8.26, g: 0.25, b: 0.25, a: 0}
-    - sdfScene__box_2_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - sdfScene_box_boxsize: {r: 1.22, g: 0.25, b: 0.25, a: 0}
   m_BuildTextureStacks: []

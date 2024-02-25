@@ -15,19 +15,25 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         public SyntaxOrTokenList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) => FullList = fullList.ToList();
 
-        public static readonly SyntaxOrTokenList<Lang> Empty = new SyntaxOrTokenList<Lang>();
+        public static readonly SyntaxOrTokenList<Lang> Empty = new();
 
         public SyntaxOrTokenList(IEnumerable<SyntaxOrToken<Lang>> list) : this(list.ToList()) { }
-        public SyntaxOrTokenList(params SyntaxOrToken<Lang>[] list) : this(list.AsEnumerable()) { }
+        public SyntaxOrTokenList(params SyntaxOrToken<Lang>[] list) : this(list.ToList()) { }
         public SyntaxOrTokenList() { }
 
         public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens() => FullList;
-        public virtual  IEnumerator<SyntaxOrToken<Lang>>   GetEnumerator()     => FullList.GetEnumerator();
-        IEnumerator IEnumerable.                           GetEnumerator()     => GetEnumerator();
-        public virtual int                                 Count               => FullList.Count;
+        public virtual  IEnumerator<SyntaxOrToken<Lang>>   GetEnumerator()       => FullList.GetEnumerator();
+        IEnumerator IEnumerable.                           GetEnumerator()       => GetEnumerator();
+        public virtual int                                 Count                 => FullList.Count;
 
         // indexers
         public virtual SyntaxOrToken<Lang> this[int index] => FullList[index];
+
+        // IMPORTANT: UNCOMMENTING BELOW OPERATORS CRASHES UNITY WITH NATIVE CODE EXCEPTION AND CRASHES IT WHEN TRYING TO COMPILE CODE
+        // utility casts for trivias. Possibly could be migrated to typed Token list?
+        // public static implicit operator SyntaxOrTokenList<Lang>(Token<Lang> singleToken)        => new((SyntaxOrToken<Lang>)singleToken);
+        // public static implicit operator SyntaxOrTokenList<Lang>(Token<Lang>[] tokens)           => new(tokens.ToList());
+        // public static implicit operator SyntaxOrTokenList<Lang>(List<SyntaxOrToken<Lang>> list) => new(list.AsEnumerable());
 
         public virtual SyntaxOrTokenList<Lang> Slice(int start, int length) => new(FullList.Skip(start).Take(length));
 
@@ -39,7 +45,7 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         internal override TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default =>
             visitor.Visit(Anchor.New(this, parent));
-        
+
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }
 }

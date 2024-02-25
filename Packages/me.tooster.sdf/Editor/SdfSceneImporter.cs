@@ -1,5 +1,6 @@
 using System;
 using me.tooster.sdf.Editor.Controllers;
+using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
 using UnityEditor.AssetImporters;
 using UnityEditor.ProjectWindowCallback;
@@ -20,7 +21,7 @@ namespace me.tooster.sdf.Editor {
             var shaderText = getShaderText(ctx.assetPath);
             var shader = ShaderUtil.CreateShaderAsset(ctx, shaderText, false);
 
-            GameObject sdfScene = PrefabUtility.LoadPrefabContents(ctx.assetPath);
+            var sdfScene = PrefabUtility.LoadPrefabContents(ctx.assetPath);
             if (sdfScene is not null) return;
 
             sdfScene = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -35,7 +36,7 @@ namespace me.tooster.sdf.Editor {
 
         private static string getShaderText(string path) {
             var scene = AssetDatabase.LoadAssetAtPath<SdfScene>(path);
-            scene.RegenerateAssetsSafely();
+            scene.RegisterForRegeneration();
             throw new NotImplementedException("Empty sdf scene");
         }
 
@@ -62,7 +63,7 @@ namespace me.tooster.sdf.Editor {
             public override void Action(int instanceId, string pathName, string resourceFile) {
                 CreateSdfSceneAsset(pathName);
                 AssetDatabase.Refresh();
-                SdfScene obj = AssetDatabase.LoadAssetAtPath<SdfScene>(pathName);
+                var obj = AssetDatabase.LoadAssetAtPath<SdfScene>(pathName);
                 Selection.activeObject = obj;
             }
         }

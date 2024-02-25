@@ -66,7 +66,7 @@ Shader "SDF/Uber shader"
         #pragma shader_feature_local _PRESERVE_SPACE_SCALE_ON
         // #pragma shader_feature_local _SCENEVIEW
 
-        
+
         #include "UnityCG.cginc"
 
         #define EXPLICIT_RAYMARCHING_PARAMETERS
@@ -76,7 +76,7 @@ Shader "SDF/Uber shader"
         float _MAX_DISTANCE;
         float _RAY_ORIGIN_BIAS;
         float _MAX_STEPS;
-        
+
         #include "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl"
         #include "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"
         #include "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl"
@@ -87,16 +87,16 @@ Shader "SDF/Uber shader"
         #include "Packages/me.tooster.sdf/Editor/Resources/Includes/debug.hlsl"
 
         // NON-PROPERTY UNIFORMS
-        uniform float4x4 _BoxFrame1_Transform = MATRIX_ID;
+        uniform float4x4 _main_object_transform = MATRIX_ID;
         uniform float4x4 _Sphere1_Transform = MATRIX_ID;
-        uniform float4 _DBG_C_color = float4(1, 0, 1, 1);
+        uniform float4   _DBG_C_color = float4(1, 0, 1, 1);
 
-        float4 _DBG;
-        float4 _DomainOrigin;
-        float4 _DomainRotation;
-        Texture2D _BoxmapTex;
+        float4       _DBG;
+        float4       _DomainOrigin;
+        float4       _DomainRotation;
+        Texture2D    _BoxmapTex;
         SamplerState sampler_BoxmapTex;
-        float4 _BoxmapTex_ST;
+        float4       _BoxmapTex_ST;
 
         float4 _Control;
         float4 _Dye;
@@ -120,14 +120,15 @@ Shader "SDF/Uber shader"
 
         // inverse projection matrix either to world or to model, depending on the origin type
         // instead of performing matrix inversion in the shader, use already supplied matrices
-        static const float4x4 inv = mul(SCALE_MATRIX,
-                                        #ifdef _ORIGIN_WORLD
+        static const float4x4 inv = mul(
+            SCALE_MATRIX,
+            #ifdef _ORIGIN_WORLD
                                         mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
                                         // inverse(UNITY_MATRIX_VP)
-                                        #else
-                                        mul(unity_WorldToObject, mul(UNITY_MATRIX_I_V, unity_CameraInvProjection))
-                                        // inverse(UNITY_MATRIX_MVP)
-                                        #endif
+            #else
+            mul(unity_WorldToObject, mul(UNITY_MATRIX_I_V, unity_CameraInvProjection))
+            // inverse(UNITY_MATRIX_MVP)
+            #endif
         );
 
         //const float near = _ProjectionParams.y; // those go into frag
@@ -148,8 +149,7 @@ Shader "SDF/Uber shader"
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            v2f vert(appdata_base v)
-            {
+            v2f vert(appdata_base v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex); // clip space
                 o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
@@ -157,7 +157,7 @@ Shader "SDF/Uber shader"
                 o.hitpos = v.vertex;
                 // this uses implicitly defined v.vertex.z... possibly migrate to proper function...
                 COMPUTE_EYEDEPTH(o.screenPos.z);
-                o.unnormalized_rdWs = unity_OrthoParams.w ? UNITY_MATRIX_V[2].xyz : UnityObjectToViewPos(v.vertex);
+                o.rdWsUnnormalized = unity_OrthoParams.w ? UNITY_MATRIX_V[2].xyz : UnityObjectToViewPos(v.vertex);
                 return o;
             }
 
@@ -208,15 +208,28 @@ Shader "SDF/Uber shader"
             */
             // =======================================================================
 
-            SdfResult sdfScene(in float3 p)
-            {
+            // depends on: _main_object_transform, _Control
+            SdfResult scene_sdf__torus(in float3 p) {
+                p = mul(_main_object_transform, float4(p, 1)).xyz;
+                SdfResult result = (SdfResult)0;
+                result.distance = sdf::primitives3D::torus(p, _Control.x, _Control.y);
+                result.id.w = 1;
+
+                return result;
+            }
+
+            void scene_apply_material__torus(inout SdfResult result) {
+                result.material.albedo = colors::GREEN;
+            }
+
+            SdfResult sdfScene(in float3 p) {
                 // float4x4 rot = m_rotate(_Time.y, float3(0, 0, 1));
                 // p = mul(rot, p);
                 rotX(p, _Control.z); //_Time.y / 3);
                 rotY(p, _Control.w);
                 // Hit ret = {sdf::primitives3D::torus(p, _TorusSizes.x, _TorusSizes.y), 0};
                 int3 ix;
-                p = mul(_BoxFrame1_Transform, float4(p, 1)).xyz;
+                p = mul(_main_object_transform, float4(p, 1)).xyz;
                 p = sdf::operators::repeatLim(p, 1.5, float3(1, 0, 1), ix);
                 SdfResult ret;
                 ret.distance = sdf::primitives3D::torus(p, _Control.x, _Control.y);
@@ -224,12 +237,12 @@ Shader "SDF/Uber shader"
                 ret.id.w = 0;
                 return ret;
             }
-            
-            Material __SDF_DYE(const SdfResult hit)
-            {
+
+            Material __SDF_DYE(const SdfResult hit) {
                 // more elaborate color lerping functions can be used:
                 // https://www.reddit.com/r/opengl/comments/kvibeg/fragment_shader_for_adding_a_color_tint/
-                if (hit.distance > _EPSILON_RAY) return hit.material; // not hit, don't dye
+                if (hit.distance > _EPSILON_RAY)
+                    return hit.material; // not hit, don't dye
 
                 Material mat = (Material)0;
                 mat.albedo = hit.material.albedo;
@@ -241,22 +254,20 @@ Shader "SDF/Uber shader"
             }
 
             // TODO: lighting
-            fixed4 __MATERIAL(fixed4 id)
-            {
+            fixed4 __MATERIAL(fixed4 id) {
                 static fixed4 _COLORS[] = {
-                    fixed4(.5, 0, .5, 1), // NO_ID (magenta)
+                    colors::DARK_MAGENTA, // NO_ID (magenta)
                     // ------------------- VALID MATERIALS BELOW
-                    fixed4(0, .7, .2, .5), // grass :)
-                    fixed4(1, .7, .2, .5), // orange :)
-                    fixed4(1, 0, .2, .5), // tomato :)
+                    colors::palettes::GRASS,
+                    colors::palettes::GOLD,
+                    colors::palettes::TOMATO,
                 };
                 return _COLORS[id.x + 1];
             }
 
             // =======================================================================
 
-            float depthToMaxRayDepth(in float2 screenUV, in float3 rd)
-            {
+            float depthToMaxRayDepth(in float2 screenUV, in float3 rd) {
                 // read camera depth texture to correctly blend with scene geometry
                 // beware, that _CameraDepthTexture IS NOT the depth buffer!
                 // it is populated in the prepass and doesn't change in subsequent passes
@@ -269,8 +280,7 @@ Shader "SDF/Uber shader"
                 return camDepth / dot(forward, rd);
             }
 
-            Ray3D getRaysForCamera(float3 screenPos, float3 objectHitpos)
-            {
+            Ray3D getRaysForCamera(float3 screenPos, float3 objectHitpos) {
                 Ray3D ray = (Ray3D)0;
 
                 // NDC from (-1, -1, -1) to (1, 1, 1) 
@@ -303,8 +313,7 @@ Shader "SDF/Uber shader"
 
             fixed4 shade(SdfResult hit);
 
-            f2p frag(v2f i, bool facing : SV_IsFrontFace)
-            {
+            f2p frag(v2f i, bool facing : SV_IsFrontFace) {
                 const float3 screenPos = i.screenPos.xyz / i.screenPos.w; // 0,0 to 1,1 on screen
 
                 Ray3D ray = getRaysForCamera(screenPos, i.hitpos);
@@ -315,13 +324,13 @@ Shader "SDF/Uber shader"
 
                 sdf.normal = calculateSdfNormal(sdf.p, _EPSILON_NORMAL);
 
-                fixed4 color_material = __MATERIAL(sdf.id.x); // color
+                fixed4       color_material = __MATERIAL(sdf.id.x); // color
                 BoxMapParams boxmapParams = {sampler_BoxmapTex, _BoxmapTex, {_BoxmapTex_ST}};
-                fixed4 color_trimap = trimap(boxmapParams, sdf.p, sdf.normal, 10.);
+                fixed4       color_trimap = trimap(boxmapParams, sdf.p, sdf.normal, 10.);
 
                 fixed4 color_dyed = color_material; // basic albedo
-                float dyeDistance = sdf::primitives3D::box(sdf.p, _Dye.xxx);
-                float blendFactor;
+                float  dyeDistance = sdf::primitives3D::box(sdf.p, _Dye.xxx);
+                float  blendFactor;
                 float2 blend = sdf::operators::smin(0, dyeDistance, _Dye.y, blendFactor);
                 color_dyed = lerp(color_dyed, fixed4(.2, .2, 1, 1), blendFactor);
 
@@ -378,8 +387,7 @@ Shader "SDF/Uber shader"
                 return o;
             } // End Pass
 
-            fixed4 shade(SdfResult hit)
-            {
+            fixed4 shade(SdfResult hit) {
                 // sample the default reflection cubemap, using the reflection vector
                 half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, hit.normal);
                 // decode cubemap data into actual color

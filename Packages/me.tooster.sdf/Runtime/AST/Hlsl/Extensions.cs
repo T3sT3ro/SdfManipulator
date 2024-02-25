@@ -5,10 +5,12 @@ using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
+using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
 using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
+using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
 namespace me.tooster.sdf.AST.Hlsl {
     public static class Extensions {
@@ -56,6 +58,15 @@ namespace me.tooster.sdf.AST.Hlsl {
                 (Identifier)names.First() as Expression,
                 (left, name) => new Member { expression = left, member = name }
             );
+        }
+
+        public static VariableDefinition Var(Type type, string name, Expression? initializer = null) {
+            var definition = new VariableDeclarator.Definition { id = name };
+            return new VariableDeclarator
+            {
+                type = type,
+                variables = initializer == null ? definition : definition with { initializer = initializer },
+            };
         }
 
         public static NameSyntax NameFrom(params string[] names) {

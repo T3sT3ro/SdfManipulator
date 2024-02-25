@@ -10,6 +10,7 @@ using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.API;
+using me.tooster.sdf.Editor.Controllers.SDF;
 using me.tooster.sdf.Editor.Util;
 using UnityEngine;
 using Attribute = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Attribute;
@@ -19,7 +20,7 @@ using Shader = me.tooster.sdf.AST.Shaderlab.Syntax.Shader;
 
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public partial class RaymarchingShader {
-        [SerializeField] private bool transparent = true;
+        [SerializeField] private bool transparent = false;
 
         public string MainShader(SdfScene scene) {
             var unformatedSource = shader(scene);
@@ -36,6 +37,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             shaderStatements = new ShaderStatement[]
             {
                 new Fallback { name = "Sdf/Fallback" },
+                new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfSceneShaderEditor" },
                 SubShader(scene),
             },
         };
@@ -48,18 +50,14 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             return new MaterialProperties
             {
                 properties = GlobalShaderProperties
-                    .Concat(scene.Properties.SelectMany(properties =>
-                            properties.Select(p => generatePropertySyntax(scene, p)))
-                        .Select((p, i) => i > 0
-                            ? p
-                            : p with
+                    .Concat(scene.Properties
+                        .SelectMany(properties => properties
+                            .Where(p => p.IsPropertyShaderlabCompatible())
+                            .Select(p => generatePropertySyntax(scene, p) with
                             {
-                                attributes = new[]
-                                {
-                                    SyntaxExtensions.headerAttribute("raymarching properties"),
-                                    SyntaxExtensions.spaceAttribute(),
-                                },
-                            }))
+                                attributes = SyntaxExtensions.headerAttribute(
+                                    scene.GetControllerPath(properties.Key).Select(c => c.name).JoinToString("/")),
+                            })))
                     .ToList(),
             };
         }
@@ -71,87 +69,83 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                     // [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Int) = 0
                     new PropertySyntax
                     {
-                        id = "_Cull", displayName = "Cull", propertyType = new IntegerKeyword(),
-                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 0 },
+                        id = "_Cull", displayName = "Cull", propertyType = new IntKeyword(),
+                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = (int)UnityEngine.Rendering.CullMode.Back },
                         attributes = new[]
                         {
                             SyntaxExtensions.headerAttribute("global raymarching properties"),
                             SyntaxExtensions.spaceAttribute(),
-                            new Attribute
-                            {
-                                id = "Enum",
-                                arguments = new Attribute.Value { value = "UnityEngine.Rendering.CullMode" },
-                            },
+                            SyntaxExtensions.enumAttribute<UnityEngine.Rendering.CullMode>(),
                         },
                     },
-                    // [Tooltip(Enable to assure correct blending of multiple domains and backface rendering)]
                     // [Toggle][KeyEnum(Off, On)] _ZWrite ("ZWrite", Float) = 0
                     new PropertySyntax
                     {
                         id = "_ZWrite", displayName = "ZWrite", propertyType = new FloatKeyword(),
-                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 0 },
+                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 1 },
                         attributes = new[]
                         {
-                            new Attribute
-                            {
-                                id = "Tooltip",
-                                arguments = new Attribute.Value
-                                {
-                                    value =
-                                        "Enable to assure correct blending of multiple domains and backface rendering",
-                                },
-                            },
-                            new Attribute { id = "Toggle" },
-                            new Attribute
-                            {
-                                id = "KeyEnum",
-                                arguments = new Attribute.Value[] { "Off", "On" },
-                            },
+                            SyntaxExtensions.tooltipAttribute("Enable for correct blending with other geometry and backface rendering"),
+                            SyntaxExtensions.toggleAttribute(),
+                            SyntaxExtensions.keyEnumAttribute("Off", "On"),
                         },
                     },
                     // [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Int) = 1
                     new PropertySyntax
                     {
-                        id = "_ZTest", displayName = "ZTest", propertyType = new IntegerKeyword(),
-                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 1 },
-                        attributes = new Attribute
-                        {
-                            id = "Enum",
-                            arguments = new Attribute.Value { value = "UnityEngine.Rendering.CompareFunction" },
-                        },
+                        id = "_ZTest", displayName = "ZTest", propertyType = new IntKeyword(),
+                        initializer = new PropertySyntax.Number<IntLiteral>
+                            { numberLiteral = (int)UnityEngine.Rendering.CompareFunction.LessEqual },
+                        attributes = SyntaxExtensions.enumAttribute<UnityEngine.Rendering.CompareFunction>(),
                     },
                 };
             }
         }
 
-        private PropertySyntax generatePropertySyntax(IPropertyIdentifierProvider scene, Property property) {
-            var propertyId = scene.GetIdentifier(property);
-            return property switch
+        private PropertySyntax generatePropertySyntax(SdfScene scene, Property property) => property switch
+            {
+                Property<int> p => new PropertySyntax
                 {
-                    Property<int> p => new PropertySyntax
-                    {
-                        propertyType = new PropertySyntax.PredefinedType { type = new IntegerKeyword() },
-                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = p.DefaultValue },
-                    },
-                    Property<float> p => new PropertySyntax
-                    {
-                        propertyType = new PropertySyntax.PredefinedType { type = new FloatKeyword() },
-                        initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = p.DefaultValue },
-                    },
-                    Property<Vector4> p => new PropertySyntax
-                    {
-                        propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
-                        initializer = new PropertySyntax.Vector
-                            { arguments = p.DefaultValue.VectorArgumentList() },
-                    },
-                    _ => throw new ArgumentOutOfRangeException(nameof(property),
-                        $"Material property block can't expose property of type {property.GetType()}"),
-                } with
+                    propertyType = new PropertySyntax.PredefinedType { type = new IntKeyword() },
+                    initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = p.DefaultValue },
+                },
+                Property<float> p => new PropertySyntax
                 {
-                    id = propertyId,
-                    displayName = $"{propertyId}: {property.DisplayName}",
-                };
-        }
+                    propertyType = new PropertySyntax.PredefinedType { type = new FloatKeyword() },
+                    initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = p.DefaultValue },
+                },
+                Property<Vector4> p => new PropertySyntax
+                {
+                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
+                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
+                },
+                Property<Vector3> p => new PropertySyntax
+                {
+                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
+                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
+                },
+                Property<Vector2> p => new PropertySyntax
+                {
+                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
+                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
+                },
+                Property<Vector3Int> p => new PropertySyntax
+                {
+                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
+                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
+                },
+                Property<Vector2Int> p => new PropertySyntax
+                {
+                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
+                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
+                },
+                _ => throw new ArgumentOutOfRangeException(nameof(property),
+                    $"Material property block can't expose property of type {property.GetType()}"),
+            } with
+            {
+                id = scene.GetPropertyIdentifier(property),
+                displayName = property.DisplayName,
+            };
 
         private TagsBlock TagsBlock => new()
         {

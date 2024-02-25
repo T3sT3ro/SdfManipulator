@@ -1,4 +1,6 @@
 #pragma once
+#include <UnityCG.cginc>
+
 #include "types.hlsl"
 
 /**

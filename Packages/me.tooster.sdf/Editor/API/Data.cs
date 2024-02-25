@@ -7,6 +7,7 @@ namespace me.tooster.sdf.Editor.API {
     /// - a contract for generating certain type of shader syntax for defining and using SDF functions
     /// - a contextual data needed to create the SDF function, such as required material properties, slots for them and siimilar.
     /// TODO: add validation method
+    /// TODO: add "requirements" as object array storing requrired context like required function definition, an include file etc
     /// </summary>
     public abstract record Data;
 }

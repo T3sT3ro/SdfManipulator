@@ -15,7 +15,7 @@ Material:
   - _DRAWMODE_DYED
   - _ORIGIN_LOCAL
   - _PRESERVE_SPACE_SCALE_ON
-  - _RAYORIGIN_NEAR
+  - _RAYORIGIN_FACE
   - _ZWRITE_OFF
   - _ZWRITE_ON
   m_InvalidKeywords:
@@ -135,7 +135,7 @@ Material:
     - _RAND_INSTANCE_COL: 0
     - _RAY_EPSILON: 0.001
     - _RAY_ORIGIN_BIAS: 0
-    - _RayOrigin: 0
+    - _RayOrigin: 1
     - _Ray_Origin: 0
     - _SCENEVIEW: 1
     - _SCENE_VIEW: 1

@@ -27,8 +27,7 @@ static float _MAX_STEPS = 500;
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #endif
 
-// TODO: use https://computergraphics.stackexchange.com/questions/13666/how-to-calculate-ray-origin-and-ray-direction-in-vertex-shader-working-universal
-// to avoid using inverse projection matrix
+/// standard vertex shader with additional parameters for raymarching
 v2f vertexShader(in appdata_base v_in) {
     v2f o = (v2f)0;
     o.vertex = UnityObjectToClipPos(v_in.vertex); // clip space, from (-w,-w,0) to (w, w, w)
@@ -39,22 +38,23 @@ v2f vertexShader(in appdata_base v_in) {
     // COMPUTE_EYEDEPTH uses implicitly defined v.vertex.z... so to use `screenPos.z` instead of `o.vertex.z` name, we have to inline it ourselves:
     o.screenPos.z = -UnityObjectToViewPos(o.vertex).z;
     #ifdef V2F_RAYS
-    o.unnormalized_rdWs = cameraVsRayFromClipPos(o.screenPos, o.roWs);
+    o.rdWsUnnormalized = cameraVsRayFromClipPos(o.screenPos, o.roWs);
     #endif
     return o;
 }
 
-// TODO: remove, it's just temporary
+/// \TODO remove lighting definitions from this file, it's just temporary
 #include "Lighting.cginc"
 #include "colors.hlsl"
 #include "UnityPBSLighting.cginc"
+#pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
 
-f2p fragmentShader(in v2f frag_in) {
+f2p fragmentShader(in v2f frag_in, bool facing : SV_IsFrontFace) {
     // float3 clipPos = frag_in.screenPos.xyz / frag_in.screenPos.w; // 0,0 to 1,1 on screen
     Ray3D ray = (Ray3D)0;
 
     #ifdef V2F_RAYS
-    ray.rd = normalize(frag_in.unnormalized_rdWs);
+    ray.rd = normalize(frag_in.rdWsUnnormalized);
     ray.ro = frag_in.roWs;
     #else
     ray.rd = cameraRayFromClipPos(frag_in.screenPos, ray.ro);
@@ -68,18 +68,26 @@ f2p fragmentShader(in v2f frag_in) {
     sdf.normal = calculateSdfNormal(sdf.p, _EPSILON_NORMAL);
     f2p frag_out = (f2p)0;
     frag_out.color = sdfShade(sdf, ray);
+    // frag_out.color = facing ? YELLOW : RED;
+
+    #ifdef _ZWRITE_ON
+    float eyeDepth = -UnityWorldToViewPos(sdf.p).z;
+    frag_out.depth = EncodeCorrectDepth(eyeDepth);
+    #endif
 
     return frag_out;
 }
 
-/// temporary function for shading sdf result
+/** \brief temporary function for shading sdf result
+  * \remark TODO: return Material from combination of sdfs. Apply material lighting functions outside of sdfShade
+  */
 fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
     // frag_out.color = sdf.id == NO_ID ? float4(1.0, 1.0, 0, 1.0) : float4(1.0, 0.1, 0.1, 1.0); // yellow or tomato
     // float dist = modulo(ray.marchedDistance, 0.1) / 0.1;
     // fixed3 distColor = dot(CameraWsForward(), ray.rd) * dist; // color by distance
 
     SurfaceOutput s = (SurfaceOutput)0;
-    s.Albedo = RED;
+    s.Albedo = colors::RED;
     s.Alpha = 1.0;
     s.Normal = sdf.normal;
 
@@ -101,12 +109,12 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
 // ===================================================================================================================
 
 /**
- * TODO: simplify to avoid inverse projection and both rd and uv
  * \brief reads the _CameraDepthTexture (rendered BEFORE this shader!) and returns the distance along rd to reach for that depth
  * \param screenUV a (0,0)->(1,1) screen-space coordinate of the pixel to read depth from
  * \param rd a ray direction from the camera
  * \param inv an inverse projection+world+model* matrix. *depends on the local frame 
  * \return returns a distance along the ray rd to reach for the depth at screenUV
+ * \remark TODO: simplify to avoid inverse projection and both rd and uv
  */
 float depthToMaxRayDepth(in sampler2D depthTexture, in float2 screenUV, in float3 rd, in float4x4 inv) {
     // read camera depth texture to correctly blend with scene geometry
