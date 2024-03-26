@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace me.tooster.sdf.Editor.API {
@@ -10,34 +11,29 @@ namespace me.tooster.sdf.Editor.API {
     /// They are like uniforms and blackboard properties in shader graph
     /// </summary>
     public abstract class Property {
-        [field: SerializeField] public bool IsExposed { get; set; }
+        public bool   IsExposed    { get; set; }
+        public string InternalName { get; init; }
+        public string DisplayName  { get; init; }
 
         protected Property(string InternalName, string DisplayName) {
             this.InternalName = InternalName;
             this.DisplayName = DisplayName;
         }
 
-        public delegate void ValueChangedEvent(Property caller, object newValue);
+        public abstract object CurrentValue { get; }
 
-        public event ValueChangedEvent onValueChanged = delegate { };
-
-        public string InternalName { get; init; }
-        public string DisplayName  { get; init; }
+        public override string ToString() => $"{DisplayName} ({InternalName}<{CurrentValue.GetType().FullName}>: {CurrentValue})";
     }
 
     /// <summary>Typed property with possibility to export to external world</summary>
     /// <typeparam name="T">type that this property holds</typeparam>
     public class Property<T> : Property {
+        public          T      DefaultValue { get; private set; }
+        public          T      Value        { get; set; }
+        public override object CurrentValue => Value;
+
+
         public Property(string InternalName, string DisplayName, T DefaultValue) : base(InternalName, DisplayName) =>
-            this.DefaultValue = DefaultValue;
-
-        [field: SerializeField] public T DefaultValue { get; internal set; }
-
-        public new delegate void ValueChangedEvent(Property<T> caller, T newValue);
-
-        public new event ValueChangedEvent onValueChanged = delegate { };
-        //(caller, value) => Debug.Log($"value changed at {caller.DisplayName}:\n{value}");
-
-        public void UpdateValue(Property<T> caller, T newValue) => onValueChanged(caller, newValue);
+            this.DefaultValue = Value = DefaultValue;
     }
 }

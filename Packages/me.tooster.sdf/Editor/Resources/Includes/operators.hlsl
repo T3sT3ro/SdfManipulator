@@ -51,7 +51,13 @@ namespace sdf { namespace operators {
     }
 
     SdfResult unionSimple(in SdfResult a, in SdfResult b) {
-        if (a.distance < b.distance)
+        if (a.distance < b.distance) // this is dumb, but ternary produces GL error about type mismatch
+            return a;
+        return b;
+    }
+
+    SdfResult intersectSimple(in SdfResult a, in SdfResult b) {
+        if (a.distance > b.distance) // this is dumb, but ternary produces GL error about type mismatch
             return a;
         return b;
     }

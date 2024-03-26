@@ -1,3 +1,4 @@
+#nullable enable
 using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
@@ -7,6 +8,6 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public EqualsToken equalsToken { get; init; } = new();
         public Expression  value       { get; init; }
 
-        public static implicit operator Initializer(Expression e) => new Initializer { value = e };
+        public static implicit operator Initializer?(Expression? e) => e == null ? null : new Initializer { value = e };
     }
 }

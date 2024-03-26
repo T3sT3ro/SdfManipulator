@@ -12,7 +12,7 @@ namespace me.tooster.sdf.AST {
     public record FormatterState {
         private string SingleIndent { get; init; }        = "    ";
         public  string IndentString { get; private set; } = "";
-        private int    indentLevel            = 0;
+        private int    indentLevel = 0;
 
 
         /// <summary>
@@ -20,11 +20,10 @@ namespace me.tooster.sdf.AST {
         /// </summary>
         public int IndentLevel {
             get => indentLevel;
-            set {
-                indentLevel = Math.Max(0, value);
-                IndentString = SingleIndent.Repeat((uint)IndentLevel);
-            }
+            set => IndentString = SingleIndent.Repeat((uint)(indentLevel = Math.Max(0, value)));
         }
+
+        public int MaxConsecutiveNewlines { get; init; } = 2;
     }
 
     public interface IFormatter<Lang> {
@@ -64,33 +63,87 @@ namespace me.tooster.sdf.AST {
                     // FIXME: this truncates leading trivia of a structured trivia syntax. Good for now, but generally should be fixed with a more general solution.
                     leading = leading.SkipWhile(t => t is Whitespace<Lang> or NewLine<Lang>).ToList();
                 } else {
-                    var newTriviaList = new List<Trivia<Lang>>();
+                    var newLeading = new List<Trivia<Lang>>();
                     if (State.IndentLevel > 0)
-                        newTriviaList.Add(new Whitespace<Lang> { Text = State.IndentString });
+                        newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
                     foreach (var trivia in leading) {
                         if (isTriviaLineBreaking(trivia)) {
-                            newTriviaList.Add(trivia);
+                            newLeading.Add(trivia);
                             if (State.IndentLevel > 0)
-                                newTriviaList.Add(new Whitespace<Lang> { Text = State.IndentString });
+                                newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
                         } else if (trivia is not Whitespace<Lang> or NewLine<Lang>) {
-                            newTriviaList.Add(trivia);
+                            newLeading.Add(trivia);
                         }
                     }
 
-                    leading = new TriviaList<Lang>(newTriviaList);
+                    leading = new TriviaList<Lang>(newLeading);
                 }
             }
 
             // FIXME: existing trailing trivia (like comments and prepocessor) are lost. Refactor into something retaining important trivia.
-            if (breakLineAfter(a)) {
-                var trailing = token.TrailingTriviaList;
+            if (breakLineAfter(a))
                 return token with { LeadingTriviaList = leading, TrailingTriviaList = new TriviaList<Lang>(new NewLine<Lang>()) };
-            }
 
             if (whitespaceAfter(a) && !isLastTokenOfStructuredTrivia(a))
                 return token with { LeadingTriviaList = leading, TrailingTriviaList = new TriviaList<Lang>(new Whitespace<Lang>()) };
 
             return token with { LeadingTriviaList = leading };
+        }
+
+        public Token<Lang> NormalizeWhitespaceNew<T>(Anchor<T> a) where T : Token<Lang> {
+            var token = a.Node;
+            var indentChange = getIndentChange(a);
+            State.IndentLevel += indentChange;
+
+            var previousToken = a.PreviousToken();
+            var leading = token.LeadingTriviaList;
+
+            if (previousToken is null || breakLineAfter(previousToken)) {
+                if (previousToken == null && isFirstTokenOfStructuredTrivia(a)) {
+                    leading = leading.SkipWhile(t => t is Whitespace<Lang> or NewLine<Lang>).ToList();
+                } else {
+                    var newLeading = new List<Trivia<Lang>>();
+                    if (State.IndentLevel > 0)
+                        newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
+
+                    var consecutiveNewlines = 0; // Track consecutive newlines
+                    foreach (var trivia in leading) {
+                        if (isTriviaLineBreaking(trivia)) {
+                            consecutiveNewlines++;
+                            if (consecutiveNewlines <= State.MaxConsecutiveNewlines) {
+                                newLeading.Add(trivia);
+                                if (State.IndentLevel > 0)
+                                    newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
+                            }
+                        } else if (trivia is NewLine<Lang>) {
+                            consecutiveNewlines = 0; // Reset consecutive newlines count
+                            newLeading.Add(trivia);
+                        } else {
+                            newLeading.Add(trivia);
+                            consecutiveNewlines = 0; // Reset consecutive newlines count
+                        }
+                    }
+
+                    leading = new TriviaList<Lang>(newLeading);
+                }
+            }
+
+            var trailing = token.TrailingTriviaList;
+
+            if (breakLineAfter(a))
+                return token with
+                {
+                    LeadingTriviaList = leading,
+                    TrailingTriviaList = new TriviaList<Lang>(new NewLine<Lang>()),
+                };
+            else if (whitespaceAfter(a) && !isLastTokenOfStructuredTrivia(a))
+                return token with
+                {
+                    LeadingTriviaList = leading,
+                    TrailingTriviaList = new TriviaList<Lang>(new Whitespace<Lang>()),
+                };
+
+            return token with { LeadingTriviaList = leading, TrailingTriviaList = trailing };
         }
     }
 }

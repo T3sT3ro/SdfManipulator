@@ -159,6 +159,9 @@ TODO
   or a single (two?) pass with
   an [A-buffer (not sure if this is the proper link)](https://interplayoflight.wordpress.com/2022/06/25/order-independent-transparency-part-1/)
   or [k+ buffer](http://www.cgrg.cs.uoi.gr/wp-content/uploads/bezier/publications/abasilak-ifudos-i3d2014/k-buffer.pdf)
+- [ ] consider using [Unity Properties](https://docs.unity3d.com/Manual/property-visitors-PropertyVisitor.html) with
+  property bags and property visitors for controllers/nodes
+- [ ] shared properties, so that one driver uniform can power multiple 
 
 # Important to remember while documenting and while refactoring
 
@@ -320,22 +323,26 @@ TODO
 - Sometimes ReferenceEquals checks could be improper when we would want to share common syntax nodes. For example an
   indentation whitespace node could be shared to save space, but at the same time some other mechanism (maybe tagging?)
   should be used to determine which child is the node (and is it really the same node or not)
-- If syntax tree validity cannot be **fully** enforced, then what is the point of partial validity? For example If the type of statement in top-level scope is restricted, but the types of tokens aren't, then what benefit does it bring? Well, for me, a bit of DX simplicity. Complex syntax structures are not that easy to understand, and it may be hard to know at times "what kind of syntax do I put at this child?". This makes compiler and IDE help when writing the trees. Ideally the whole tree would be checked, along with tokens etc. But without proper ADTs it's not yet possible.
+- If syntax tree validity cannot be **fully** enforced, then what is the point of partial validity? For example If the
+  type of statement in top-level scope is restricted, but the types of tokens aren't, then what benefit does it bring?
+  Well, for me, a bit of DX simplicity. Complex syntax structures are not that easy to understand, and it may be hard to
+  know at times "what kind of syntax do I put at this child?". This makes compiler and IDE help when writing the trees.
+  Ideally the whole tree would be checked, along with tokens etc. But without proper ADTs it's not yet possible.
 
 # Comparisons
 
 Comparison to other software. The list includes advantages and
 
-| Feature             | Mine                                    | Shadergraph                                            | Womp                                                         |
-|---------------------|-----------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|
-| source availability | open, MIT                               | semi-open (native bindings to closed-source libraries) | proprietary                                                  |
-| tech                | C#, Unity, but not that tightly coupled | Unity-only                                             | Web-only                                                     |
-| UX                  | experimental, poor                      | OK but still lacking                                   | Intuitive                                                    |
-| performance         | quite good actually                     | good                                                   | exponentially worse with increased scene complexity          |
-| price               | free                                    | free                                                   | paid, maybe freemium but pro plan required for any real uses |
-| extensibility       | high                                    | low                                                    | very low?                                                    |
-| preview | live, realtime                          | live, realtime                                         | live, depends on connection |
-
+| Feature             | Mine                                    | Shadergraph                                            | Womp                                                         | [Unbound](https://www.unbound.io/                        |
+|---------------------|-----------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------|
+| status              | new, experimental, maintained           | stable (in unity sense), active                        | active                                                       | not released as of yet                                   |
+| source availability | open, MIT                               | semi-open (native bindings to closed-source libraries) | proprietary                                                  | not clear, freemium?                                     |
+| tech                | C#, Unity, but not that tightly coupled | Unity-only                                             | Web-only                                                     | Web + addons for other programs, possibly NOT standalone |
+| UX                  | experimental, poor                      | OK but still lacking                                   | Intuitive                                                    | Intuitive, but a bit "kiddy"                             |
+| performance         | quite good actually                     | good                                                   | exponentially worse with increased scene complexity          | Unknown, seems to be ok?                                 |
+| price               | free                                    | free                                                   | paid, maybe freemium but pro plan required for any real uses | freemium, seems like most essential features are free    |
+| extensibility       | high                                    | low                                                    | very low?                                                    | possibly high                                            |
+| preview             | live, realtime                          | live, realtime                                         | live, depends on connection                                  | realtime, in web                                         |
 
 - Free
 - Open source
@@ -521,7 +528,10 @@ Comparison to other software. The list includes advantages and
 - [sdf material blending](https://iquilezles.org/articles/smin/)
 - [sdf ambient occlusion](https://www.alanzucconi.com/2016/07/01/ambient-occlusion/)
 - [iq ambient occlusion with dithering to break artifacts](https://iquilezles.org/articles/ssao/)
-- [in depth blog about lighting in unity, albeit quite old (2016)](https://catlikecoding.com/unity/tutorials/rendering/part-5/) - talks about passes, vertex lights, spherical harmonics
+- [in depth blog about lighting in unity, albeit quite old (2016)](https://catlikecoding.com/unity/tutorials/rendering/part-5/) -
+  talks about passes, vertex lights, spherical harmonics
+- [Comparison of shading languages, transpiling and IRs](https://alain.xyz/blog/a-review-of-shader-languages) - about GLSL, HLSL, MetalSL, OpenSL, WGSL, OpenCL 
+- [Unity UI building Figma doc](https://www.foundations.unity.com/patterns/authoring-flows)
 
 ## Unity internals:
 
@@ -550,8 +560,6 @@ properly represent screen position (0->1)
 > "Depth or Z Prepass" is also something different, where you render opaque geometry first to the depth buffer only.
 > Then render again normally. I'm not too familiar with it. I guess it saves time rendering pixels from overlapping
 > objects. In URP there's a "Depth Priming" mode on the Universal Renderer asset which does this.
->
->
 
 
 costs of shader operations:

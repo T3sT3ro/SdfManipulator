@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.Editor.API;
@@ -13,24 +14,18 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
      * Runtime would handle updating uniforms/keywords while editor handle updating the material and shader.
      */
     [Icon("Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-icon-256.png")]
+    [DisallowMultipleComponent]
     public abstract class Controller : MonoBehaviour, IShaderPartialProvider {
+        // TODO: cache it, register and unregister properly
         public          SdfScene?             SdfScene   => GetComponentInParent<SdfScene>(true);
         public abstract IEnumerable<Property> Properties { get; }
 
-        private void OnDrawGizmos() {
-            Gizmos.DrawIcon(transform.position, "Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-icon-256.png", true);
-        }
-
-        private void OnDrawGizmosSelected() {
-            if (Selection.activeGameObject != gameObject) return;
-
-            Gizmos.color = Color.magenta;
+        private void OnValidate() {
             var tr = transform;
-            Gizmos.matrix = tr.localToWorldMatrix;
-            Gizmos.DrawWireCube(Vector3.zero, tr.localScale);
+            tr.hideFlags |= HideFlags.HideInInspector;
         }
 
-        public static void TryCreateNode<TController>(string name) where TController : Controller, new() {
+        public static void TryCreateController<TController>(string name) where TController : Controller, new() {
             var target = Selection.activeGameObject;
 
             var sdf = new GameObject(name);
@@ -39,7 +34,59 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             if (!target) return;
 
             sdf.transform.SetParent(Selection.activeTransform);
-            target.GetComponentInParent<SdfScene>()?.RegisterController(controller);
+        }
+
+        private void OnTransformParentChanged() {
+            NotifyStructureChanged();
+            var parentController = transform.parent.GetComponent<Controller>();
+            if (parentController)
+                onStructureChanged = parentController.onStructureChanged;
+            if (SdfScene is { } scene) scene.Register(this);
+            SdfScene.QueuePropertyForUpdate(Properties);
+        }
+
+        public delegate void StructureChanged(Controller source);
+
+        public event StructureChanged onStructureChanged = delegate { };
+
+        public void NotifyStructureChanged() => onStructureChanged(this);
+    }
+
+
+    [CustomEditor(typeof(Controller), true)]
+    [CanEditMultipleObjects]
+    public class ControllerEditor : UnityEditor.Editor {
+        public override void OnInspectorGUI() {
+            var controller = (Controller)target;
+            if (controller.SdfScene == null) {
+                EditorGUILayout.HelpBox("This node doesn't belong to any scene", MessageType.Error);
+                return;
+            }
+
+            base.OnInspectorGUI();
+
+            foreach (var prop in controller.Properties) {
+                EditorGUILayout.LabelField(prop.DisplayName, EditorStyles.boldLabel);
+                if (GUILayout.Button("trigger update for this property"))
+                    controller.SdfScene.QueuePropertyForUpdate(prop);
+                EditorGUILayout.TextArea(prop.CurrentValue.ToString());
+            }
+        }
+
+        protected virtual void OnSceneGUI() {
+            var controller = (Controller)target;
+            var tr = controller.transform;
+            var pos = tr.position;
+            var size = HandleUtility.GetHandleSize(pos) * 0.5f;
+            var snap = Vector3.one * 0.5f;
+
+            using (var scope = new EditorGUI.ChangeCheckScope()) {
+                var targetPos = Handles.FreeMoveHandle(pos, size, snap, Handles.CircleHandleCap);
+                if (!scope.changed) return;
+
+                Undo.RecordObject(controller.transform, "Freemovee Controller");
+                tr.position = targetPos;
+            }
         }
     }
 }

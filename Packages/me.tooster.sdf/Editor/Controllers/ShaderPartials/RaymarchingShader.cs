@@ -12,9 +12,8 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
         {
             "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl",
             "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl",
             "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl",
+            "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl",
         };
 
         private RaymarchingShader() { }

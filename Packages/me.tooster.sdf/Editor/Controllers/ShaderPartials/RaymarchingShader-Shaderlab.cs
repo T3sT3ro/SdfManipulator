@@ -37,7 +37,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             shaderStatements = new ShaderStatement[]
             {
                 new Fallback { name = "Sdf/Fallback" },
-                new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfSceneShaderEditor" },
+                new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfShaderEditor" },
                 SubShader(scene),
             },
         };

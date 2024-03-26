@@ -36,10 +36,11 @@ namespace me.tooster.sdf.AST.Syntax {
         /// <exception cref="ArgumentException">if text doesn't match pattern</exception>
         public virtual string ValidatedText {
             init {
-                if (!Pattern.IsMatch(value))
+                if (!Pattern.IsMatch(value)) {
                     throw new ArgumentException(
-                        $"The provided text doen't match token's required pattern.\npattern: {Pattern}\n text: '{value}'"
+                        $"The provided text doen't match token's required pattern.\npattern: {Pattern}\ntext: '{value}'"
                     );
+                }
 
                 rawText = value;
             }

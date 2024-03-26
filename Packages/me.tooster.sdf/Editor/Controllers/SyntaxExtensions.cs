@@ -38,11 +38,11 @@ namespace me.tooster.sdf.Editor.Controllers {
         #region attribute helpers
 
         // some more info can be found here: https://docs.unity3d.com/ScriptReference/MaterialPropertyDrawer.html
-
+        // TODO: assure that strings fit pattern of AttributeStringLiteral
         public static Attribute headerAttribute(string headerName) => new()
         {
             id = "Header",
-            arguments = (Attribute.Value)headerName,
+            arguments = (Attribute.Value)headerName.sanitizeToIdentifierString(),
         };
 
         public static Attribute spaceAttribute()  => new() { id = "Space" };
@@ -51,13 +51,13 @@ namespace me.tooster.sdf.Editor.Controllers {
         public static Attribute tooltipAttribute(string tooltip) => new()
         {
             id = "Tooltip",
-            arguments = new Attribute.Value { value = tooltip },
+            arguments = (Attribute.Value)tooltip,
         };
 
         public static Attribute enumAttribute<T>() where T : Enum => new()
         {
             id = "Enum",
-            arguments = new Attribute.Value { value = typeof(T).FullName! },
+            arguments = (Attribute.Value)typeof(T).FullName!,
         };
 
         public static Attribute keyEnumAttribute(params string[] values) => new()

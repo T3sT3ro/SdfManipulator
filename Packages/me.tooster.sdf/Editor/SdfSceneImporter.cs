@@ -1,6 +1,7 @@
 using System;
 using me.tooster.sdf.Editor.Controllers;
 using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEditor.AssetImporters;
 using UnityEditor.ProjectWindowCallback;
@@ -36,7 +37,7 @@ namespace me.tooster.sdf.Editor {
 
         private static string getShaderText(string path) {
             var scene = AssetDatabase.LoadAssetAtPath<SdfScene>(path);
-            scene.RegisterForRegeneration();
+            scene.IsDirty = true;
             throw new NotImplementedException("Empty sdf scene");
         }
 
@@ -53,7 +54,7 @@ namespace me.tooster.sdf.Editor {
             scene.AddComponent<SdfScene>();
 
             var defaultCube = new GameObject("cube");
-            defaultCube.AddComponent<BoxSdfController>();
+            defaultCube.AddComponent<SdfBoxController>();
 
             var graphItem = ScriptableObject.CreateInstance<CreateGraphAction>();
             AssetDatabase.CreateAsset(scene, path);

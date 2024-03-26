@@ -11,9 +11,11 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
+using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public partial class RaymarchingShader {
@@ -56,7 +58,11 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                         declarator = new VariableDeclarator
                         {
                             type = p.hlslTypeToken(),
-                            variables = new VariableDeclarator.Definition { id = scene.GetPropertyIdentifier(p) },
+                            variables = new VariableDeclarator.Definition
+                            {
+                                id = scene.GetPropertyIdentifier(p),
+                                initializer = p is not Property<Matrix4x4> ? null : (Identifier)"MATRIX_ID",
+                            },
                         },
                     };
                 } catch (ArgumentOutOfRangeException e) {

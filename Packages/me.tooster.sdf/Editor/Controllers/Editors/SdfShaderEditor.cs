@@ -20,27 +20,33 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             var shader = material.shader;
 
             // DON'T DELETE BELOW - it calls internally FetchCachedMessages, without which the GetShadersMessages has no effect
-            var shaderHasMessages = ShaderUtil.ShaderHasError(shader) || ShaderUtil.ShaderHasWarnings(shader);
+            var shaderHasMessages =
+                ShaderUtil.ShaderHasError(shader) || ShaderUtil.ShaderHasWarnings(shader); // << uncomment to see error window populate
             var messages = ShaderUtil.GetShaderMessages(shader).ToLookup(m => m.severity);
 
-            ShowErrorsFold(messages[ShaderCompilerMessageSeverity.Error].ToArray(), MessageType.Error, ref showErrors, "Errors");
-            ShowErrorsFold(messages[ShaderCompilerMessageSeverity.Warning].ToArray(), MessageType.Warning, ref showWarnings, "Warnings");
+            ShowMessageFold(messages[ShaderCompilerMessageSeverity.Error].ToArray(), MessageType.Error, ref showErrors, "Errors",
+                ref scrollErrorsPosition);
+            ShowMessageFold(messages[ShaderCompilerMessageSeverity.Warning].ToArray(), MessageType.Warning, ref showWarnings, "Warnings",
+                ref scrollWarningsPosition);
 
             base.OnGUI(materialEditor, properties);
         }
 
-        private void ShowErrorsFold(
+        private void ShowMessageFold(
             IReadOnlyCollection<ShaderMessage> messages,
             MessageType severity,
-            ref bool foldDisabled,
-            string foldTitle
+            ref bool foldEnabled,
+            string foldTitle,
+            ref Vector2 scrollPos
         ) {
             using (new EditorGUI.DisabledScope(messages.Count == 0)) {
-                foldDisabled = EditorGUILayout.BeginFoldoutHeaderGroup(foldDisabled, $"{foldTitle} ({messages.Count})");
-                if (foldDisabled)
-                    using (new EditorGUILayout.ScrollViewScope(scrollWarningsPosition, GUILayout.Height(100))) {
-                        foreach (var msg in messages)
+                foldEnabled = EditorGUILayout.BeginFoldoutHeaderGroup(foldEnabled, $"{foldTitle} ({messages.Count})");
+                if (foldEnabled)
+                    using (new EditorGUILayout.ScrollViewScope(scrollPos)) {
+                        foreach (var msg in messages) {
+                            EditorGUILayout.PrefixLabel($"{msg.line}:");
                             EditorGUILayout.HelpBox(msg.message, severity);
+                        }
                     }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }

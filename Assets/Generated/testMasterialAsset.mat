@@ -100,10 +100,14 @@ Material:
     - sphere_2_radius: 1
     - sphere_2_sdf__radius: 1
     m_Colors:
+    - _0_box_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - _1_box_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - sdfScene__box_0_boxsize: {r: 0.2, g: 0.88, b: 1.88, a: 0}
     - sdfScene__box_1_boxsize: {r: 8.26, g: 0.25, b: 0.25, a: 0}
     - sdfScene__box_2_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - sdfScene_box_0_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - sdfScene_box_1_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - sdfScene_box_boxsize: {r: 1.22, g: 0.25, b: 0.25, a: 0}
   m_BuildTextureStacks: []
