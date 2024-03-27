@@ -43,7 +43,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
 
         private void UpdateBoxSizeProperty() {
             boxSize.Value = transform.localScale / 2;
-            SdfScene.QueuePropertyForUpdate(boxSize);
+            SdfScene.QueuePropertyUpdates(boxSize);
         }
 
         private void OnDrawGizmosSelected() {
@@ -74,7 +74,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
                 tr.localPosition += tr.rotation * boxHandle.center / 2;
                 // TODO: possibly handle size and transform scale produce weird values
                 tr.localScale = boxHandle.size;
-                Debug.Log($"size: {boxHandle.size} pos: {boxHandle.center}");
             }
         }
     }

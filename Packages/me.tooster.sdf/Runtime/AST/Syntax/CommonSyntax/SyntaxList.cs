@@ -23,8 +23,9 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
             new(FullList.Skip(start).Take(length).Cast<TSyntax>());
 
         /// See <see cref="Extensions.Splice{T}(IEnumerable{T}, int, int, IEnumerable{T})"/>
-        public new SyntaxList<Lang, TSyntax> Splice
-            (int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements) =>
+        public new SyntaxList<Lang, TSyntax> Splice(int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements) =>
+            new(FullList.Splice(index, deleteCount, elements).Cast<TSyntax>());
+        public new SyntaxList<Lang, TSyntax> Splice(int index, int deleteCount, params Syntax<Lang>[] elements) =>
             new(FullList.Splice(index, deleteCount, elements).Cast<TSyntax>());
 
         public static implicit operator SyntaxList<Lang, TSyntax>(TSyntax singleEleement) => new(singleEleement);

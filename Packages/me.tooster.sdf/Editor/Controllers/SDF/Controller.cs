@@ -42,7 +42,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             if (parentController)
                 onStructureChanged = parentController.onStructureChanged;
             if (SdfScene is { } scene) scene.Register(this);
-            SdfScene.QueuePropertyForUpdate(Properties);
+            SdfScene.QueuePropertyUpdates(Properties);
         }
 
         public delegate void StructureChanged(Controller source);
@@ -68,7 +68,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             foreach (var prop in controller.Properties) {
                 EditorGUILayout.LabelField(prop.DisplayName, EditorStyles.boldLabel);
                 if (GUILayout.Button("trigger update for this property"))
-                    controller.SdfScene.QueuePropertyForUpdate(prop);
+                    controller.SdfScene.QueuePropertyUpdates(prop);
                 EditorGUILayout.TextArea(prop.CurrentValue.ToString());
             }
         }

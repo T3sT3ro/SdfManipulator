@@ -50,53 +50,40 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public bool IsDirty { get; set; }
 
+        private void Awake() {
+            PrefabStage.prefabSaved += OnPrefabSaved;
+            // To present things 
+            GenerateSceneAssets();
+            RefreshSceneData();
+            UpdateShaderUniforms();
+        }
+
+        private static void OnPrefabSaved(GameObject go) {
+            var scene = go.GetComponent<SdfScene>();
+            scene.RefreshSceneData();
+            scene.UpdateShaderUniforms(true);
+        }
+
         // TODO: use more event-driven architecture where creation, move, rename and deletion of individual controllers is detected. 
         private void OnValidate() {
             raymarchingShader = RaymarchingShader.instance;
-            if (!PrefabUtility.IsOutermostPrefabInstanceRoot(gameObject)
-             && PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject) is { } prefabPath) {
-                // var allSubAssets = AssetDatabase.LoadAllAssetsAtPath(prefabPath);
-                // var uniqueShaders = new HashSet<string>();
-                // // ensures there is just one associated generated shader, 
-                // foreach (var asset in allSubAssets.OfType<Shader>()) {
-                //     if (asset is not Shader) continue;
-                //     if (!uniqueShaders.Add(asset.name)) {
-                //         AssetDatabase.RemoveObjectFromAsset(asset);
-                //     }
-                // }
-
-                var previousShader = controlledShader;
-                var previousMaterial = controlledMaterial;
-
-                // nothing is attached
-                if (controlledShader == null) controlledShader = AssetDatabase.LoadAssetAtPath<Shader>(prefabPath);
-                if (controlledMaterial == null) controlledMaterial = AssetDatabase.LoadAssetAtPath<Material>(prefabPath);
-
-                // asset doesn't exist
-                if (controlledShader == null) {
-                    controlledShader = ShaderUtil.CreateShaderAsset(AssembleShaderSource());
-                    AssetDatabase.AddObjectToAsset(controlledShader, prefabPath);
-                }
-
-                if (controlledMaterial == null) {
-                    controlledMaterial = new Material(controlledShader) { name = controlledShader.name };
-                    AssetDatabase.AddObjectToAsset(controlledMaterial, prefabPath);
-                }
-
-                if (previousShader != controlledShader || previousMaterial != controlledMaterial)
-                    EditorUtility.SetDirty(this);
-            }
-
-            if (PrefabUtility.IsOutermostPrefabInstanceRoot(gameObject))
-                IsDirty = true;
-
             RefreshSceneData();
-            QueuePropertyForUpdate(propertyData.Keys);
+            UpdateShaderUniforms();
         }
 
         private void UpdateProperty(Property property) { // TODO: store properties in typed containers t oavoid runtime checks
-            if (!controlledMaterial || !propertyData.TryGetValue(property, out var pd))
+            if (!controlledMaterial)
+                Debug.LogError("SdfScene is missing controlled material to update!");
+
+            if (!propertyData.TryGetValue(property, out var pd)) {
+                Debug.LogError($"Tried updating untracked property '{property}'");
                 return;
+            }
+
+#if UNITY_EDITOR
+            EditorGUIUtility.PingObject(pd.declaringController); // just for debug purposes
+#endif
+
             var shaderPropertyId = pd.uniqueIdentifier; //pd.shaderPropertyId;
             switch (property) {
                 case Property<int> p:
@@ -131,7 +118,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
         }
 
-        private void HandleStructuralChange(Controller source) => RefreshSceneData();
+        private void HandleStructuralChange(Controller source) {
+            RefreshSceneData();
+            GenerateSceneAssets();
+            UpdateShaderUniforms();
+        }
 
         internal void RefreshSceneData() {
             if (this == null) return;
@@ -147,38 +138,30 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             if (IsDirty) {
                 IsDirty = false;
                 RefreshSceneData();
-                RebuildShader();
+                GenerateSceneAssets();
             }
 
             UpdateShaderUniforms();
         }
 
-        internal void UpdateShaderUniforms() {
+        internal void UpdateShaderUniforms(bool forceUpdateAll = false) {
+            if (forceUpdateAll) QueuePropertyUpdates(propertyData.Keys);
             if (queuedPropertyUdates.Count <= 0)
                 return;
 
             // var updateTable = new StringBuilder("Updates:");
-            foreach (var p in queuedPropertyUdates) {
+            foreach (var p in queuedPropertyUdates)
                 UpdateProperty(p);
-                if (propertyData.TryGetValue(p, out var pData))
-                    EditorGUIUtility.PingObject(pData.declaringController);
-                else
-                    Debug.LogWarning($"Tried updating non-existent property: {p}");
-                // updateTable.Append(
-                //     $"\nController: '{controllerData[pData.declaringController].uniqueIdentifier}'\tProperty: {pData.uniqueIdentifier}\n{p.CurrentValue}"
-                // );
-            }
 
             // Debug.Log(updateTable);
             queuedPropertyUdates.Clear();
         }
 
-        public void QueuePropertyForUpdate(Property p)                       => queuedPropertyUdates.Add(p);
-        public void QueuePropertyForUpdate(IEnumerable<Property> properties) => queuedPropertyUdates.UnionWith(properties);
-
+        public void QueuePropertyUpdates(Property p)                       => queuedPropertyUdates.Add(p);
+        public void QueuePropertyUpdates(IEnumerable<Property> properties) => queuedPropertyUdates.UnionWith(properties);
 
         /// fixme: move to ScriptableObject
-        internal void RebuildShader() {
+        /*internal void RebuildShader() {
             // https://forum.unity.com/threads/onvalidate-alternative-to-allow-structural-changes.1521247/
             if (this == null) return; // yeah, wtf but this is needed, sometimes objects are destroyed...
             if (!controlledShader) return;
@@ -189,20 +172,61 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             ShaderUtil.ClearCachedData(controlledShader);
             var shaderPath = AssetDatabase.GetAssetPath(controlledShader);
-            if (PrefabUtility.IsPartOfPrefabAsset(controlledShader)) {
+            if (PrefabUtility.IsPartOfPrefabAsset(controlledShader))
                 ShaderUtil.UpdateShaderAsset(controlledShader, shaderText);
-            } else {
+            else {
                 var fileInfo = new FileInfo(shaderPath) { IsReadOnly = false };
                 File.WriteAllText(shaderPath, shaderText);
                 fileInfo.IsReadOnly = ensureReadOnly;
             }
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
             controlledMaterial = new Material(controlledShader);
-
             controlledMaterial.shader = controlledShader;
             QueuePropertyForUpdate(propertyData.Keys);
+        }*/
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// Generates the Shader and Material as sub-assets of the prefab, if inside the prefab stage.
+        /// Outside of prefab stage, this function doesn't trigger and print a warning instead.
+        /// The intent behind that is that shaders are compiled, so there is 1 to 1 mapping between prefab scene and generated shader.
+        /// Any instance with changed structure would require another shader asset, or otherwise would conflict with the prefab's shader.
+        /// </summary>
+        /// <exception cref="SdfException"></exception>
+        internal void GenerateSceneAssets() {
+            var prefabStage = PrefabStageUtility.GetPrefabStage(gameObject);
+            if (prefabStage == null) {
+                Debug.LogWarning("Assets can be only edited in the prefab stage");
+                return;
+            }
+
+            var sdfScenePrefabAssetPath = prefabStage.assetPath;
+            var shader = AssetDatabase.LoadAssetAtPath<Shader>(sdfScenePrefabAssetPath);
+            var material = AssetDatabase.LoadAssetAtPath<Material>(sdfScenePrefabAssetPath);
+
+            try {
+                var shaderSource = AssembleShaderSource();
+
+                Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderSource); // TODO: after debugging is done
+
+                if (shader == null) {
+                    shader = ShaderUtil.CreateShaderAsset(shaderSource);
+                    AssetDatabase.AddObjectToAsset(shader, sdfScenePrefabAssetPath);
+                } else
+                    ShaderUtil.UpdateShaderAsset(shader, shaderSource);
+
+                if (material == null) {
+                    material = new Material(shader);
+                    AssetDatabase.AddObjectToAsset(material, sdfScenePrefabAssetPath);
+                } else
+                    material.shader = shader;
+
+                // AssetDatabase.SaveAssets();
+            } catch (Exception e) {
+                throw new SdfException("Shader generation error", e);
+            }
         }
+#endif
 
         // collect all "Properties" in all children components
         // TODO: make it return cached properties, update them when children are changed
@@ -221,9 +245,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             scene.AddComponent<SdfScene>();
         }
 
-        internal string AssembleShaderSource() =>
-            "// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN\n" +
-            raymarchingShader.MainShader(this);
+        internal string AssembleShaderSource() => $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
+// Last modification: {DateTime.Now}
+
+{raymarchingShader.MainShader(this)}
+"; // ensure empty line at the bottom
 
         /* Used to register a controller under the scene */
         public void Register(Controller controller) {
@@ -237,7 +263,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             foreach (var property in controller.Properties) {
                 var pId = $"{uniqueIdentifier}_{property.InternalName.sanitizeToIdentifierString()}";
                 propertyData[property] = new PropertyData(controller, pId, Shader.PropertyToID(pId));
-                QueuePropertyForUpdate(property);
+                QueuePropertyUpdates(property);
             }
         }
 
@@ -297,11 +323,15 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             if (GUILayout.Button("Rebuild shader")) {
                 sdfScene.RefreshSceneData();
-                sdfScene.RebuildShader();
+                sdfScene.GenerateSceneAssets();
                 sdfScene.UpdateShaderUniforms();
             }
-            if (GUILayout.Button("Open generated shader")) // TODO: open temporary file with this text
-                AssetDatabase.OpenAsset(sdfScene.controlledShader);
+            // TODO: open temporary file with this text
+            if (GUILayout.Button("Open generated shader")) {
+                // AssetDatabase.OpenAsset(sdfScene.controlledShader);
+                OpenGeneratedShader();
+            }
+
             if (GUILayout.Button("Assign material to renderer")) {
                 var renderer = sdfScene.GetComponent<Renderer>();
                 if (renderer)
@@ -311,19 +341,21 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
             GUILayout.Space(16);
             base.OnInspectorGUI();
-            if (propertiesFold = EditorGUILayout.BeginFoldoutHeaderGroup(propertiesFold, "Managed properties"))
+            if (propertiesFold = EditorGUILayout.BeginFoldoutHeaderGroup(propertiesFold, "Managed properties")) {
                 foreach (var props in sdfScene.Properties) {
                     var ctr = props.Key;
                     if (!(individualFolds[ctr] = EditorGUILayout.Foldout(individualFolds[ctr], sdfScene.GetControllerIdentifier(ctr))))
                         continue;
 
+
                     foreach (var prop in ctr.Properties) {
                         EditorGUILayout.LabelField(prop.DisplayName, EditorStyles.boldLabel);
                         if (GUILayout.Button("trigger update for this property"))
-                            ctr.SdfScene.QueuePropertyForUpdate(prop);
+                            ctr.SdfScene.QueuePropertyUpdates(prop);
                         EditorGUILayout.TextArea(prop.CurrentValue.ToString());
                     }
                 }
+            }
             EditorGUILayout.EndFoldoutHeaderGroup();
         }
 
@@ -338,13 +370,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         // From ShaderGraph GraphUtil.cs
-        public static bool WriteToFile(string path, string content) {
+        public static void WriteToFile(string path, string content) {
             try {
                 File.WriteAllText(path, content);
-                return true;
             } catch (Exception e) {
                 Debug.LogError(e);
-                return false;
             }
         }
 
@@ -357,9 +387,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
 
             var externalScriptEditor = ScriptEditorUtility.GetExternalScriptEditor();
-            if (externalScriptEditor != "internal") {
+            if (externalScriptEditor != "internal")
                 InternalEditorUtility.OpenFileAtLineExternal(filePath, 0);
-            } else {
+            else {
                 var p = new Process();
                 p.StartInfo.FileName = filePath;
                 p.EnableRaisingEvents = true;

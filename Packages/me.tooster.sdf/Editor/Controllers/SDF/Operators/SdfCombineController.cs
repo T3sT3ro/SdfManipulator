@@ -20,7 +20,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
 
         private void UpdateBlendFactor() {
             blendFactor.Value = transform.localScale.x;
-            SdfScene.QueuePropertyForUpdate(blendFactor);
+            SdfScene.QueuePropertyUpdates(blendFactor);
         }
 
         public override SdfData sdfData => Combinators.binaryCombine(

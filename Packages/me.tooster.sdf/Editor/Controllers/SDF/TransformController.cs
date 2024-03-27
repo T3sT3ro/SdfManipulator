@@ -44,7 +44,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             spaceTransform *= Matrix4x4.Translate(-transform.position);
 
             transformProperty.Value = spaceTransform;
-            SdfScene.QueuePropertyForUpdate(transformProperty);
+            SdfScene.QueuePropertyUpdates(transformProperty);
         }
 
         protected VectorData ApplyTransform(VectorData vd) => new()

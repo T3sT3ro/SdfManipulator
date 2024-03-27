@@ -4,19 +4,18 @@ using System.Linq;
 using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
-using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
-using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
 using UnityEngine;
-using static me.tooster.sdf.AST.Hlsl.Extensions;
+
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public partial class RaymarchingShader {
         #region hlsl
@@ -35,6 +34,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
 
             yield return new Pragma { tokenString = "vertex vertexShader" }.ToStructuredTrivia();
             yield return new Pragma { tokenString = "fragment fragmentShader" }.ToStructuredTrivia();
+            yield return new NewLine<hlsl>();
         }
 
         private Tree<hlsl> HlslTree(SdfScene scene) {
@@ -49,26 +49,26 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             );
         }
 
-        private IEnumerable<VariableDefinition> generateHlslGlobals(
-            SdfScene scene) =>
-            scene.Properties.SelectMany(group => group.Select(p => {
-                try {
-                    return new VariableDefinition
-                    {
-                        declarator = new VariableDeclarator
+        private IEnumerable<VariableDefinition> generateHlslGlobals(SdfScene scene) =>
+            scene.Properties.SelectMany(group =>
+                group.Select(p => {
+                    try {
+                        return new VariableDefinition
                         {
-                            type = p.hlslTypeToken(),
-                            variables = new VariableDeclarator.Definition
+                            declarator = new VariableDeclarator
                             {
-                                id = scene.GetPropertyIdentifier(p),
-                                initializer = p is not Property<Matrix4x4> ? null : (Identifier)"MATRIX_ID",
+                                type = p.hlslTypeToken(),
+                                variables = new VariableDeclarator.Definition
+                                {
+                                    id = scene.GetPropertyIdentifier(p),
+                                    initializer = p is not Property<Matrix4x4> ? null : (Identifier)"MATRIX_ID",
+                                },
                             },
-                        },
-                    };
-                } catch (ArgumentOutOfRangeException e) {
-                    throw new ArgumentOutOfRangeException($"Unsupported property type '{p.GetType()}' for hlsl global.");
-                }
-            }));
+                        };
+                    } catch (ArgumentOutOfRangeException e) {
+                        throw new ArgumentOutOfRangeException($"Unsupported property type '{p.GetType()}' for hlsl global.");
+                    }
+                }));
 
         private FunctionDefinition sceneFunctionDefinition(SdfScene scene, SdfData sceneData) =>
             new()

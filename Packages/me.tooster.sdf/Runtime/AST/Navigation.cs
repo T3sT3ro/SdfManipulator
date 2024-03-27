@@ -30,7 +30,7 @@ namespace me.tooster.sdf.AST {
             while (stack.Count > 0) {
                 var current = stack.Pop();
 
-                if (current is {Node: Token<TLang> tok}) return Anchor.New(tok, current.Parent);
+                if (current is { Node: Token<TLang> tok }) return Anchor.New(tok, current.Parent);
 
                 var childrenOrdered = ((Syntax<TLang>)current.Node).ChildNodesAndTokens();
                 foreach (var child in direction != Direction.FORWARD
@@ -59,9 +59,8 @@ namespace me.tooster.sdf.AST {
 
                         if (Anchor.New((Syntax<Lang>)child, parent).FirstToken(direction) is { } firstToken)
                             return firstToken;
-                    } else if (ReferenceEquals(child, lookingFor?.Node)) {
+                    } else if (ReferenceEquals(child, lookingFor?.Node))
                         returnNext = true;
-                    }
                 }
 
                 // when we reach final token in list we have to search for this syntax in parent
@@ -75,5 +74,32 @@ namespace me.tooster.sdf.AST {
 
         public static Anchor<Token<Lang>>? PreviousToken<Lang>(this IAnchor<Token<Lang>> aToken) =>
             aToken.NextToken(Direction.BACKWARD);
+
+        
+        // IMPORTANT: check if it works, use it to add empty line formtting around functions
+        public static bool IsFirstTokenOf<Lang, S>(
+            this IAnchor<Token<Lang>> atoken,
+            out Anchor<S>? asyntax,
+            Direction direction = Direction.FORWARD
+        ) where S : Syntax<Lang> {
+            IAnchor<SyntaxOrToken<Lang>> lookingFor = atoken;
+            var edgeIndex = direction == Direction.FORWARD ? 0 : ^1;
+            asyntax = null;
+            foreach (var parent in lookingFor.Ancestors()) {
+                if (parent is Anchor<Syntax<Lang>> aParentSyntax) {
+                    // not en edge "thing" -> bail
+                    if (!ReferenceEquals(lookingFor.Node, aParentSyntax.Node.ChildNodesAndTokens()[edgeIndex]))
+                        return false;
+
+                    if (aParentSyntax is Anchor<S> found) {
+                        asyntax = found;
+                        return true;
+                    } else
+                        lookingFor = aParentSyntax;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
         // public static implicit operator SyntaxOrTokenList<Lang>(Token<Lang>[] tokens)           => new(tokens.ToList());
         // public static implicit operator SyntaxOrTokenList<Lang>(List<SyntaxOrToken<Lang>> list) => new(list.AsEnumerable());
 
-        public virtual SyntaxOrTokenList<Lang> Slice(int start, int length) => new(FullList.Skip(start).Take(length));
+        public SyntaxOrTokenList<Lang> Slice(int start, int length) => new(FullList.Skip(start).Take(length));
 
         /// <inheritdoc cref="Extensions.Splice{T}(IEnumerable{T}, int, int, IEnumerable{T})"/>
         public virtual SyntaxOrTokenList<Lang> Splice(int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements)

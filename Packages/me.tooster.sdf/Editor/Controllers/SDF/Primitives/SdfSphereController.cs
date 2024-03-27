@@ -43,7 +43,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
         internal void UpdateRadiusProperty() {
             // TODO: handle uniform scale, use elipsoid if non-uniform
             transform.localScale = Vector3.one * radius.Value;
-            SdfScene.QueuePropertyForUpdate(radius);
+            SdfScene.QueuePropertyUpdates(radius);
         }
 
         [MenuItem("GameObject/SDF/Primitives/Sphere", priority = -20)]

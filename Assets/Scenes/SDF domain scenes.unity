@@ -1041,86 +1041,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sdfSharedMaterial: {fileID: -7359810486466910638, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
---- !u!21 &1059384100
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Box SDF Scene (generated)
-  m_Shader: {fileID: 4800000, guid: 6eaeac29697c4e7f96d378b31842dc03, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _ZWRITE_ON
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Ints: []
-    m_Floats:
-    - _0_0_combine_sphere_1_radius: 0.6016862
-    - _0_1_combine_sphere_2_radius: 0.51516557
-    - _0_2_0_combine_intersect_sphere_radius: 1
-    - _0_2_combine_intersect_blendFactor: 0.17140275
-    - _0_3_0_combine_smooth_sphere_radius: 0.43824416
-    - _0_3_combine_smooth_blendFactor: 1
-    - _0_combine_blendFactor: 1
-    - _Cull: 0
-    - _ZTest: 4
-    - _ZWrite: 1
-    m_Colors:
-    - _0_2_1_combine_intersect_box_boxsize: {r: 1.1564479, g: 0.10776405, b: 1.2507732, a: 0}
-    - _0_3_1_combine_smooth_box_boxsize: {r: 0.5005647, g: 0.5, b: 0.15128869, a: 0}
-  m_BuildTextureStacks: []
---- !u!21 &1108599014
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Box SDF Scene (generated)
-  m_Shader: {fileID: 4800000, guid: 6eaeac29697c4e7f96d378b31842dc03, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _ZWRITE_ON
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs: []
-    m_Ints: []
-    m_Floats:
-    - _0_0_combine_sphere_1_radius: 1
-    - _0_1_combine_sphere_2_radius: 1
-    - _0_2_0_combine_intersect_sphere_radius: 1
-    - _0_2_combine_intersect_blendFactor: 0.17140275
-    - _0_3_0_combine_smooth_sphere_radius: 1
-    - _0_3_combine_smooth_blendFactor: 1
-    - _0_combine_blendFactor: 1
-    - _Cull: 2
-    - _ZTest: 4
-    - _ZWrite: 1
-    m_Colors:
-    - _0_2_1_combine_intersect_box_boxsize: {r: 1.1564479, g: 0.10776405, b: 1.2507732, a: 0}
-    - _0_3_1_combine_smooth_box_boxsize: {r: 0.5005647, g: 0.5, b: 0.15128869, a: 0}
-  m_BuildTextureStacks: []
 --- !u!1 &1142963220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1849,7 +1769,7 @@ Transform:
   m_GameObject: {fileID: 5307838366375823558}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.073, y: 0.457, z: -0.062}
+  m_LocalPosition: {x: 0.0052910335, y: 0.29224896, z: -0.07962938}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1889,7 +1809,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1059384100}
+  - {fileID: -7359810486466910638, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1956,7 +1876,7 @@ Transform:
   m_GameObject: {fileID: 2038947586725886964}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.024, y: -0.015, z: -0.04}
+  m_LocalPosition: {x: -0.029, y: -0.015, z: -0.047}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1975,7 +1895,7 @@ Transform:
   m_GameObject: {fileID: 6256103807757919066}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.11431476, y: 0.3810473, z: -0.2750301}
+  m_LocalPosition: {x: -0.001, y: 0.3810473, z: -0.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2032,8 +1952,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ensureReadOnly: 1
   raymarchingShader: {fileID: 0}
-  controlledShader: {fileID: 4800000, guid: 6eaeac29697c4e7f96d378b31842dc03, type: 3}
-  controlledMaterial: {fileID: 1108599014}
+  controlledShader: {fileID: 9049197093735229171, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
+  controlledMaterial: {fileID: -7359810486466910638, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
 --- !u!114 &4691071172718456459
 MonoBehaviour:
   m_ObjectHideFlags: 0

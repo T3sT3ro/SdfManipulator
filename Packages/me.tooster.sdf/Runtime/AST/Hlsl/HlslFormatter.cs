@@ -3,6 +3,7 @@ using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor;
+using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
@@ -57,12 +58,9 @@ namespace me.tooster.sdf.AST.Hlsl {
             switch (nextToken) {
                 case { Node: CloseParenToken or SemicolonToken or ColonColonToken or CommaToken }:
                 case { Node: DotToken, Parent: { Node: Member } }:
-                    return false;
-            }
+                case { Node: OpenParenToken op, Parent: { Node: IArgumentList argList } }
+                    when ReferenceEquals(argList.openParenToken, op):
 
-            foreach (var parent in a.Ancestors()) {
-                if (nextToken is { Node: OpenParenToken op, Parent: { Node: IArgumentList argList } }
-                 && ReferenceEquals(argList.openParenToken, op))
                     return false;
             }
 
@@ -72,7 +70,14 @@ namespace me.tooster.sdf.AST.Hlsl {
         public override Tree<hlsl>.Node? Visit(Anchor<Token<hlsl>> a) {
             if (base.Visit(a) is not Token<hlsl> token) return null;
 
-            return ((IFormatter<hlsl>)this).NormalizeWhitespace(Anchor.New(token, a.Parent));
+            var fmt = (IFormatter<hlsl>)this;
+
+            // empty line before function, unless it's the first statement of enclosing structure
+            if (a.Parent is Anchor<SyntaxOrToken<hlsl>> { Node: FunctionDefinition } sa && ReferenceEquals(token, sa.FirstToken()?.Node)
+             && a.PreviousToken() is not { Node: OpenBraceToken })
+                a = Anchor.New(token with { LeadingTriviaList = token.LeadingTriviaList.Splice(0, 0, new NewLine<hlsl>()) }, a.Parent);
+
+            return fmt.NormalizeWhitespace(Anchor.New(token, a.Parent));
         }
 
         int IFormatter<hlsl>. getIndentChange<T>(Anchor<T> a) => getIndentChange(a);

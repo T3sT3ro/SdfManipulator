@@ -31,7 +31,8 @@ namespace me.tooster.sdf.AST {
         protected int            getIndentChange<T>(Anchor<T> a) where T : Token<Lang>;
         protected bool           breakLineAfter<T>(Anchor<T> a) where T : Token<Lang>;
         protected bool           whitespaceAfter<T>(Anchor<T> a) where T : Token<Lang>;
-        protected bool           isTriviaLineBreaking<T>(Trivia<T> a) => a is not Whitespace<Lang>;
+        // for now any other trivia than whitespace breaks the line at the end
+        protected bool breakLineAfter<T>(Trivia<T> trivia) => trivia is not Whitespace<Lang>; // IMPORTANT: may require anchor one day
 
         private bool isFirstTokenOfStructuredTrivia<T>(Anchor<T> a) where T : Token<Lang> {
             var structuredTrivia = a.Ancestors().FirstOrDefault(p => p is { Node: StructuredTrivia<Lang> });
@@ -50,7 +51,7 @@ namespace me.tooster.sdf.AST {
         }
 
         // good tool for checking the resulting AST of C# and basing normalized syntax on that: https://sharplab.io/
-        public Token<Lang> NormalizeWhitespace<T>(Anchor<T> a) where T : Token<Lang> {
+        public Token<Lang> NormalizeWhitespaceOld<T>(Anchor<T> a) where T : Token<Lang> {
             var token = a.Node;
             var indentChange = getIndentChange(a);
             State.IndentLevel += indentChange;
@@ -67,13 +68,12 @@ namespace me.tooster.sdf.AST {
                     if (State.IndentLevel > 0)
                         newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
                     foreach (var trivia in leading) {
-                        if (isTriviaLineBreaking(trivia)) {
+                        if (breakLineAfter(trivia)) {
                             newLeading.Add(trivia);
                             if (State.IndentLevel > 0)
                                 newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
-                        } else if (trivia is not Whitespace<Lang> or NewLine<Lang>) {
+                        } else if (trivia is not Whitespace<Lang> or NewLine<Lang>)
                             newLeading.Add(trivia);
-                        }
                     }
 
                     leading = new TriviaList<Lang>(newLeading);
@@ -90,7 +90,7 @@ namespace me.tooster.sdf.AST {
             return token with { LeadingTriviaList = leading };
         }
 
-        public Token<Lang> NormalizeWhitespaceNew<T>(Anchor<T> a) where T : Token<Lang> {
+        public Token<Lang> NormalizeWhitespace<T>(Anchor<T> a) where T : Token<Lang> {
             var token = a.Node;
             var indentChange = getIndentChange(a);
             State.IndentLevel += indentChange;
@@ -99,25 +99,25 @@ namespace me.tooster.sdf.AST {
             var leading = token.LeadingTriviaList;
 
             if (previousToken is null || breakLineAfter(previousToken)) {
-                if (previousToken == null && isFirstTokenOfStructuredTrivia(a)) {
+                if (previousToken == null && isFirstTokenOfStructuredTrivia(a))
+                    // FIXME: this truncates leading trivia of a structured trivia syntax. Good for now, but generally should be fixed with a more general solution.
                     leading = leading.SkipWhile(t => t is Whitespace<Lang> or NewLine<Lang>).ToList();
-                } else {
+                else {
                     var newLeading = new List<Trivia<Lang>>();
                     if (State.IndentLevel > 0)
                         newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
 
                     var consecutiveNewlines = 0; // Track consecutive newlines
                     foreach (var trivia in leading) {
-                        if (isTriviaLineBreaking(trivia)) {
-                            consecutiveNewlines++;
-                            if (consecutiveNewlines <= State.MaxConsecutiveNewlines) {
+                        var isNewLine = trivia is NewLine<Lang>;
+
+                        consecutiveNewlines = isNewLine ? consecutiveNewlines + 1 : 0;
+
+                        if (breakLineAfter(trivia)) {
+                            if (!isNewLine || consecutiveNewlines <= State.MaxConsecutiveNewlines)
                                 newLeading.Add(trivia);
-                                if (State.IndentLevel > 0)
-                                    newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
-                            }
-                        } else if (trivia is NewLine<Lang>) {
-                            consecutiveNewlines = 0; // Reset consecutive newlines count
-                            newLeading.Add(trivia);
+                            if (State.IndentLevel > 0)
+                                newLeading.Add(new Whitespace<Lang> { Text = State.IndentString });
                         } else {
                             newLeading.Add(trivia);
                             consecutiveNewlines = 0; // Reset consecutive newlines count
@@ -130,18 +130,13 @@ namespace me.tooster.sdf.AST {
 
             var trailing = token.TrailingTriviaList;
 
+            // FIXME: existing trailing trivia (like comments and prepocessor) are lost. Refactor into something retaining important trivia.
+
             if (breakLineAfter(a))
-                return token with
-                {
-                    LeadingTriviaList = leading,
-                    TrailingTriviaList = new TriviaList<Lang>(new NewLine<Lang>()),
-                };
-            else if (whitespaceAfter(a) && !isLastTokenOfStructuredTrivia(a))
-                return token with
-                {
-                    LeadingTriviaList = leading,
-                    TrailingTriviaList = new TriviaList<Lang>(new Whitespace<Lang>()),
-                };
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new TriviaList<Lang>(new NewLine<Lang>()) };
+
+            if (whitespaceAfter(a) && !isLastTokenOfStructuredTrivia(a))
+                return token with { LeadingTriviaList = leading, TrailingTriviaList = new TriviaList<Lang>(new Whitespace<Lang>()) };
 
             return token with { LeadingTriviaList = leading, TrailingTriviaList = trailing };
         }

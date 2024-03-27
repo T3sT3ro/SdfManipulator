@@ -176,7 +176,7 @@ namespace me.tooster.sdf.AST.Syntax {
         public static TriviaList<Lang>? TrailingTriviaList<Lang>(this Syntax<Lang> syntax) =>
             Anchor.New(syntax).LastToken()?.Node.TrailingTriviaList;
 
-        public static TSyntax WithLeadingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
+        public static TSyntax WithLeadingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang>? triviaList)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, triviaList, Navigation.Direction.FORWARD);
 
@@ -188,7 +188,7 @@ namespace me.tooster.sdf.AST.Syntax {
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.FORWARD);
 
-        public static TSyntax WithTrailingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang> triviaList)
+        public static TSyntax WithTrailingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang>? triviaList)
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, triviaList, Navigation.Direction.BACKWARD);
 
@@ -200,29 +200,29 @@ namespace me.tooster.sdf.AST.Syntax {
             where TSyntax : Syntax<Lang> =>
             WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
 
-        private static TSyntax WithTriviaList<TSyntax, Lang>(
-            this TSyntax syntax,
-            TriviaList<Lang> triviaList,
-            Navigation.Direction direction
-        ) where TSyntax : Syntax<Lang> {
+        private static TSyntax WithTriviaList<TSyntax, Lang>(this TSyntax syntax,
+            TriviaList<Lang>? triviaList,
+            Navigation.Direction direction) where TSyntax : Syntax<Lang> {
             var oldToken = direction is Navigation.Direction.FORWARD
                 ? Anchor.New(syntax).FirstToken()
                 : Anchor.New(syntax).LastToken();
 
             if (oldToken is null) return syntax;
 
+            triviaList ??= TriviaList<Lang>.Empty;
+
             var newToken = direction is Navigation.Direction.FORWARD
                 ? oldToken.Node with { LeadingTriviaList = triviaList }
                 : oldToken.Node with { TrailingTriviaList = triviaList };
 
-            return (syntax, oldToken.Node, newToken) switch
+            return ((syntax, oldToken.Node, newToken) switch
             {
                 (Syntax<shaderlab> s, Token<shaderlab> tOld, Token<shaderlab> tNew) =>
                     new ShaderlabEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
                 (Syntax<hlsl> s, Token<hlsl> tOld, Token<hlsl> tNew) =>
                     new HlslEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
                 _ => throw new ArgumentException("Unhandled node type"),
-            };
+            })!;
         }
 
         public static StructuredTrivia<Lang> ToStructuredTrivia<Lang>(this Syntax<Lang> syntax) => new() { Structure = syntax };
