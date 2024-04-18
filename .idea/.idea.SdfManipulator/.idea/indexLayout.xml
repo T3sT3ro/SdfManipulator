@@ -2,7 +2,9 @@
 <project version="4">
   <component name="UserContentModel">
     <attachedFolders />
-    <explicitIncludes />
+    <explicitIncludes>
+      <Path>Temp/GeneratedSdfScene-BoxSDFScene.shader</Path>
+    </explicitIncludes>
     <explicitExcludes>
       <Path>Packages/me.tooster.sdf/Runtime/AST/Shaderlab/Syntax/Tokens.cs</Path>
     </explicitExcludes>

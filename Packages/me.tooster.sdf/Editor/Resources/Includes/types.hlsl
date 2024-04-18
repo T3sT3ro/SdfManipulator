@@ -19,12 +19,12 @@ struct Material {
 
 /// Result of a raymarching operation
 struct SdfResult {
-    ID id; ///< id of a hit object. (-1, -1, -1, -1) if not hit. XYZ can be used in domain repetition, and w do teremine unique primitives
+    ID id; ///< id of a hit object. <code>(-1, -1, -1, -1)</code> if not hit. <code>XYZ</code> can be used in domain repetition, and <code>W</code> holds unique primitive ID
     // TODO: maybe remove this and expose it as *out* parameter wherever it's needed?
     float3   p; ///< 3D point where SDF was evaluated
     float    distance; ///< result of the SDF at point \p p
     fixed3   normal; ///< optional; tangent space normal, if written
-    Material material; ///< optional; if defined, material of asurface at this point. Can be a blend of many materials.
+    Material material; ///< optional; if defined, material of a surface at this point. Can be a blend of many materials.
 };
 
 /// A ray metadata for a 3D space tightly coupled with a raymarcher. TODO: split into Ray (ro, rd) and RaymarchInfo (maxDistance, marchedDistance, steps)

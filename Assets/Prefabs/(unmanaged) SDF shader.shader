@@ -1,5 +1,5 @@
 // GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN
-Shader "Box SDF Scene (generated)" {
+Shader "(unmanaged) Box SDF Scene" {
     Properties {
         [Header(global_raymarching_properties)]
         [Space]

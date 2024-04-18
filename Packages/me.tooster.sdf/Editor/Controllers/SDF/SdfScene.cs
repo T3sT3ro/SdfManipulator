@@ -1,293 +1,226 @@
 #nullable enable
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using me.tooster.sdf.Editor.API;
-using me.tooster.sdf.Editor.Controllers.Data;
-using me.tooster.sdf.Editor.Controllers.SDF.Operators;
 using me.tooster.sdf.Editor.Controllers.ShaderPartials;
 using me.tooster.sdf.Editor.Util;
+using Unity.Properties;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Debug = UnityEngine.Debug;
-using Object = System.Object;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     /// <summary>
     /// SdfSceneController is a game object that handles displaying and controling SdfScene asset.
     /// TODO: split into asset (holding shader + scene description) and the controller "skeleton" (prefab?) + material (? default only?)
     /// </summary>
-    [RequireComponent(typeof(MeshRenderer))]
-    [RequireComponent(typeof(MeshFilter))]
     [DisallowMultipleComponent]
     [SelectionBase]
     [ExecuteAlways] /* using ExecuteInEditMode has documented problems in prefab edit scene */
     [Icon("Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-scene-914.png")]
     public class SdfScene : MonoBehaviour { // TODO: inherit from Component to disallow enabling/disabling
-        [SerializeField]
-        private bool ensureReadOnly = true;
+
         public RaymarchingShader raymarchingShader;
+        public Shader?           controlledShader;
+        public Material?         controlledMaterial; // similarity: https://docs.unity3d.com/ScriptReference/HideFlags.html
 
-        public Shader controlledShader;
-        // owned material pattern from https://docs.unity3d.com/ScriptReference/HideFlags.html
-        public Material controlledMaterial;
+        public SdfController? sdfSceneRoot;
 
-        private record ControllerData(int sceneUniqueId, string uniqueIdentifier);
-        private record PropertyData(Controller declaringController, string uniqueIdentifier, int shaderPropertyId);
+        readonly ShaderPropertyCollector       shaderPropertyCollector = new();
+        readonly ShaderPropertyUpdatingVisitor shaderPropertyUpdatingVisitor;
 
-        /// controllers mapping to their ID in sdfScene
-        private readonly Dictionary<Controller, ControllerData> controllerData = new();
-        private readonly Dictionary<Property, PropertyData> propertyData         = new();
-        private          HashSet<Property>                  queuedPropertyUdates = new();
+        public SdfScene() => shaderPropertyUpdatingVisitor = new ShaderPropertyUpdatingVisitor(this);
 
-        public string GetPropertyIdentifier(Property property)       => propertyData[property].uniqueIdentifier;
-        public string GetControllerIdentifier(Controller controller) => controllerData[controller].uniqueIdentifier;
+        public SceneData sceneData { get; private set; }
+        public bool      IsDirty   { get; set; }
 
-        public bool IsDirty { get; set; }
 
-        private void Awake() {
+        // collect all "Properties" in all children components
+
+        // TODO: make it return cached properties, update them when children are changed
+
+        public IEnumerable<string> Includes => sceneData.controllers.Keys
+            .SelectMany(c => Extensions.CollectIncludes(c.GetType()).AsEnumerable());
+
+        void Awake() {
             PrefabStage.prefabSaved += OnPrefabSaved;
-            // To present things 
-            GenerateSceneAssets();
-            RefreshSceneData();
-            UpdateShaderUniforms();
+            IsDirty = true;
         }
 
-        private static void OnPrefabSaved(GameObject go) {
-            var scene = go.GetComponent<SdfScene>();
-            scene.RefreshSceneData();
-            scene.UpdateShaderUniforms(true);
-        }
-
-        // TODO: use more event-driven architecture where creation, move, rename and deletion of individual controllers is detected. 
-        private void OnValidate() {
-            raymarchingShader = RaymarchingShader.instance;
-            RefreshSceneData();
-            UpdateShaderUniforms();
-        }
-
-        private void UpdateProperty(Property property) { // TODO: store properties in typed containers t oavoid runtime checks
-            if (!controlledMaterial)
-                Debug.LogError("SdfScene is missing controlled material to update!");
-
-            if (!propertyData.TryGetValue(property, out var pd)) {
-                Debug.LogError($"Tried updating untracked property '{property}'");
-                return;
-            }
-
-#if UNITY_EDITOR
-            EditorGUIUtility.PingObject(pd.declaringController); // just for debug purposes
-#endif
-
-            var shaderPropertyId = pd.uniqueIdentifier; //pd.shaderPropertyId;
-            switch (property) {
-                case Property<int> p:
-                    controlledMaterial.SetInteger(shaderPropertyId, p.Value);
-                    break;
-                case Property<float> p:
-                    controlledMaterial.SetFloat(shaderPropertyId, p.Value);
-                    break;
-                case Property<bool> p:
-                    controlledMaterial.SetFloat(shaderPropertyId, p.Value ? 1 : 0);
-                    break;
-                case Property<Vector2> p:
-                    controlledMaterial.SetVector(shaderPropertyId, p.Value);
-                    break;
-                case Property<Vector3> p:
-                    controlledMaterial.SetVector(shaderPropertyId, p.Value);
-                    break;
-                case Property<Vector4> p:
-                    controlledMaterial.SetVector(shaderPropertyId, p.Value);
-                    break;
-                case Property<Vector2Int> p:
-                    controlledMaterial.SetVector(shaderPropertyId, (Vector2)p.Value);
-                    break;
-                case Property<Vector3Int> p:
-                    controlledMaterial.SetVector(shaderPropertyId, (Vector3)p.Value);
-                    break;
-                case Property<Matrix4x4> p:
-                    controlledMaterial.SetMatrix(shaderPropertyId, p.Value);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(property), property, "Unhandled property update");
-            }
-        }
-
-        private void HandleStructuralChange(Controller source) {
-            RefreshSceneData();
-            GenerateSceneAssets();
-            UpdateShaderUniforms();
-        }
-
-        internal void RefreshSceneData() {
-            if (this == null) return;
-            raymarchingShader = RaymarchingShader.instance;
-            propertyData.Clear();
-            controllerData.Clear();
-
-            foreach (var controller in GetComponentsInChildren<Controller>())
-                Register(controller);
-        }
-
-        private void LateUpdate() {
+        void LateUpdate() {
+            var requiresForceUpdate = IsDirty;
             if (IsDirty) {
                 IsDirty = false;
-                RefreshSceneData();
+                RevalidateScene();
                 GenerateSceneAssets();
             }
+            UpdateShaderUniforms(forceUpdateAll: requiresForceUpdate);
+        }
 
-            UpdateShaderUniforms();
+
+        // TODO: use more event-driven architecture where creation, move, rename and deletion of individual controllers is detected. 
+        void OnValidate() {
+            raymarchingShader = RaymarchingShader.instance;
+            if (controlledMaterial == null || controlledShader == null)
+                IsDirty = true;
+            RevalidateScene(); // fixme: Revalidate triggered without regenerate will cause difference between shader content and scene data
+            UpdateShaderUniforms(forceUpdateAll: true);
+        }
+
+        static void OnPrefabSaved(GameObject go) {
+            var scene = go.GetComponent<SdfScene>();
+            scene.IsDirty = true;
+        }
+
+        internal void RevalidateScene() {
+            if (this == null) return; // needed for Unity reasons 
+            raymarchingShader = RaymarchingShader.instance;
+
+            if (sdfSceneRoot == null) sdfSceneRoot = GetComponentInChildren<SdfController>();
+
+            var controllerData = new Dictionary<Controller, ControllerData>();
+
+            foreach (var controller in GetComponentsInChildren<Controller>()) {
+                controller.StructureChanged -= HandleStructuralChange; // prevent same callback registering twice
+                controller.StructureChanged += HandleStructuralChange;
+
+                controller.PropertyChanged -= HandlePropertyChange;
+                controller.PropertyChanged += HandlePropertyChange;
+
+                var controllerId = GenerateControllerIdentifier(controller);
+
+                PropertyContainer.Accept(shaderPropertyCollector, controller);
+
+                var propertyData = shaderPropertyCollector.ShaderProperties.Select(
+                    p => {
+                        var propertyIdentifier = $"{controllerId}_{p.Property.Name.sanitizeToIdentifierString()}";
+                        var shaderId = Shader.PropertyToID(propertyIdentifier);
+                        return new PropertyData(controller, shaderId, propertyIdentifier, p.Path, p.Property);
+                    }
+                );
+
+                controllerData[controller] = new ControllerData(
+                    controllerId,
+                    controllerData.Count + 1, // controllers are assigned sequential IDs starting from 1
+                    new PropertyCache(propertyData)
+                );
+            }
+
+            sceneData = new SceneData(
+                controllerData,
+                new HashSet<PropertyData>(
+                    controllerData.Values.SelectMany(cd => cd.properties)
+                )
+            );
+        }
+
+        void UpdateProperty(PropertyData pd) {
+            if (!controlledMaterial)
+                throw new Exception("SdfScene is missing controlled material to update a property!");
+
+            var controller = pd.controller;
+            PropertyContainer.Accept(shaderPropertyUpdatingVisitor, ref controller, pd.path);
+        }
+
+        void HandleStructuralChange(Controller source) {
+            IsDirty = true;
+            // RefreshSceneData();
+            // GenerateSceneAssets();
+            // UpdateShaderUniforms();
+        }
+
+        void HandlePropertyChange(object sender, PropertyChangedEventArgs eventArgs) {
+            QueuePropertyUpdate(sceneData.controllers[(Controller)sender].properties[new PropertyPath(eventArgs.PropertyName)]);
         }
 
         internal void UpdateShaderUniforms(bool forceUpdateAll = false) {
-            if (forceUpdateAll) QueuePropertyUpdates(propertyData.Keys);
-            if (queuedPropertyUdates.Count <= 0)
+            if (forceUpdateAll) QueuePropertyUpdates(sceneData.Properties);
+            if (sceneData.queuedPropertyUdates.Count <= 0)
                 return;
 
-            // var updateTable = new StringBuilder("Updates:");
-            foreach (var p in queuedPropertyUdates)
+            foreach (var p in sceneData.queuedPropertyUdates)
                 UpdateProperty(p);
 
-            // Debug.Log(updateTable);
-            queuedPropertyUdates.Clear();
+            sceneData.queuedPropertyUdates.Clear();
         }
 
-        public void QueuePropertyUpdates(Property p)                       => queuedPropertyUdates.Add(p);
-        public void QueuePropertyUpdates(IEnumerable<Property> properties) => queuedPropertyUdates.UnionWith(properties);
+        void QueuePropertyUpdate(PropertyData propertyData) {
+            sceneData.queuedPropertyUdates.Add(propertyData);
+            EditorApplication.QueuePlayerLoopUpdate(); // needed for smooth experience in editor
+        }
 
-        /// fixme: move to ScriptableObject
-        /*internal void RebuildShader() {
-            // https://forum.unity.com/threads/onvalidate-alternative-to-allow-structural-changes.1521247/
-            if (this == null) return; // yeah, wtf but this is needed, sometimes objects are destroyed...
-            if (!controlledShader) return;
-            if (PrefabStageUtility.GetCurrentPrefabStage() is { } stage && stage.prefabContentsRoot != gameObject)
-                return;
-            var shaderText = AssembleShaderSource();
-            Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderText);
-
-            ShaderUtil.ClearCachedData(controlledShader);
-            var shaderPath = AssetDatabase.GetAssetPath(controlledShader);
-            if (PrefabUtility.IsPartOfPrefabAsset(controlledShader))
-                ShaderUtil.UpdateShaderAsset(controlledShader, shaderText);
-            else {
-                var fileInfo = new FileInfo(shaderPath) { IsReadOnly = false };
-                File.WriteAllText(shaderPath, shaderText);
-                fileInfo.IsReadOnly = ensureReadOnly;
-            }
-            AssetDatabase.SaveAssets();
-            controlledMaterial = new Material(controlledShader);
-            controlledMaterial.shader = controlledShader;
-            QueuePropertyForUpdate(propertyData.Keys);
-        }*/
+        void QueuePropertyUpdates(IEnumerable<PropertyData> properties) {
+            sceneData.queuedPropertyUdates.UnionWith(properties);
+            EditorApplication.QueuePlayerLoopUpdate(); // needed for smooth experience in editor
+        }
 
 #if UNITY_EDITOR
+
         /// <summary>
         /// Generates the Shader and Material as sub-assets of the prefab, if inside the prefab stage.
         /// Outside of prefab stage, this function doesn't trigger and print a warning instead.
         /// The intent behind that is that shaders are compiled, so there is 1 to 1 mapping between prefab scene and generated shader.
         /// Any instance with changed structure would require another shader asset, or otherwise would conflict with the prefab's shader.
         /// </summary>
-        /// <exception cref="SdfException"></exception>
+        /// <exception cref="ShaderGenerationException"></exception>
         internal void GenerateSceneAssets() {
-            var prefabStage = PrefabStageUtility.GetPrefabStage(gameObject);
-            if (prefabStage == null) {
-                Debug.LogWarning("Assets can be only edited in the prefab stage");
+            // We allow editing and regenerating shaders only in prefab stage
+            if (PrefabStageUtility.GetPrefabStage(gameObject) is not { } prefabStage)
                 return;
-            }
 
             var sdfScenePrefabAssetPath = prefabStage.assetPath;
-            var shader = AssetDatabase.LoadAssetAtPath<Shader>(sdfScenePrefabAssetPath);
-            var material = AssetDatabase.LoadAssetAtPath<Material>(sdfScenePrefabAssetPath);
-
+            string shaderSource;
             try {
-                var shaderSource = AssembleShaderSource();
-
-                Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderSource); // TODO: after debugging is done
-
-                if (shader == null) {
-                    shader = ShaderUtil.CreateShaderAsset(shaderSource);
-                    AssetDatabase.AddObjectToAsset(shader, sdfScenePrefabAssetPath);
-                } else
-                    ShaderUtil.UpdateShaderAsset(shader, shaderSource);
-
-                if (material == null) {
-                    material = new Material(shader);
-                    AssetDatabase.AddObjectToAsset(material, sdfScenePrefabAssetPath);
-                } else
-                    material.shader = shader;
-
-                // AssetDatabase.SaveAssets();
+                shaderSource = AssembleShaderSource();
+                Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderSource); // TODO: remove after debugging is done
             } catch (Exception e) {
-                throw new SdfException("Shader generation error", e);
+                throw new ShaderGenerationException("Shader generation error", e);
             }
+
+            if (controlledShader == null)
+                throw new ShaderGenerationException("Missing attached shader asset as a target for generation!");
+
+            controlledShader.name = "(generated) main shader";
+            ShaderUtil.UpdateShaderAsset(controlledShader, shaderSource);
+
+            // if (commonInclude == null) {
+            //     var txt = new TextAsset();
+            //     txt.name = "common.hlsl";
+            // }
+
+            // AssetDatabase.SaveAssetIfDirty(AssetDatabase.GUIDFromAssetPath(prefabStage.assetPath)); // this caused preventing adding objects to prefab in prefab stage 
+            // AssetDatabase.SaveAssets();
         }
 #endif
 
-        // collect all "Properties" in all children components
-        // TODO: make it return cached properties, update them when children are changed
-        public ILookup<Controller, Property> Properties => controllerData.Keys
-            .SelectMany(c => c.Properties.Select(p => new { controller = c, property = p }))
-            .ToLookup(cp => cp.controller, cp => cp.property);
-
-        public IEnumerable<string> Includes => controllerData.Keys
-            .SelectMany(c => Extensions.CollectIncludes(c.GetType()).AsEnumerable());
-
-        // TODO: add shortcut accelerators to this and nodes (when sdf editing is enabled)
-        [MenuItem("GameObject/SDF/Scene")]
-        private static void CreateSdfScene() {
-            var scene = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            scene.name = "SDF Scene";
-            scene.AddComponent<SdfScene>();
-        }
-
-        internal string AssembleShaderSource() => $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
+        internal string AssembleShaderSource()
+            => $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
 // Last modification: {DateTime.Now}
 
 {raymarchingShader.MainShader(this)}
 "; // ensure empty line at the bottom
 
         /* Used to register a controller under the scene */
-        public void Register(Controller controller) {
-            if (!controllerData.ContainsKey(controller)) {
-                controller.onStructureChanged -= HandleStructuralChange;
-                controller.onStructureChanged += HandleStructuralChange;
-            }
 
-            var uniqueIdentifier = GetControllerPathIdentifier(controller);
-            controllerData[controller] = new ControllerData(controllerData.Count, uniqueIdentifier);
-            foreach (var property in controller.Properties) {
-                var pId = $"{uniqueIdentifier}_{property.InternalName.sanitizeToIdentifierString()}";
-                propertyData[property] = new PropertyData(controller, pId, Shader.PropertyToID(pId));
-                QueuePropertyUpdates(property);
-            }
-        }
-
-        /// <summary>
-        /// Returns SdfData representing the scene. TODO: separate into required component of SdfCobineController with simple union type
-        /// </summary>
-        public SdfData SceneSdfData() {
-            var sdfDatas = gameObject.GetImmediateChildrenComponents<SdfController>().Select(c => c.sdfData).ToArray();
-            if (sdfDatas.Length == 0)
-                return SdfData.Empty;
-            var combined = Combinators.binaryCombine(Combinators.CombineWithSimpleUnion, sdfDatas);
-            return combined;
-        }
 
         /// <summary>
         /// Returns a sequence of transforms starting (and excluding) scene name down to the controller.
         /// </summary>
         /// <param name="controller"></param>
         /// <returns></returns>
-        public IEnumerable<Transform> GetControllerPath(Controller controller) =>
-            controller.transform.AncestorsAndSelf().TakeWhile(t => t != transform).Reverse();
+        public IEnumerable<Transform> GetControllerSceneAncestors(Controller controller)
+            => controller.transform.AncestorsAndSelf().TakeWhile(t => t != transform);
 
-        private string GetControllerPathIdentifier(Controller controller) {
-            var pathFromParent = GetControllerPath(controller).ToArray();
+        /* TODO: calculate appropriate controller paths on the RebuildSceneData step to assure identifiers are unique and shortest possible
+         For example let a hierarchy of Root.Character.{Leg(box),Arm(box)} instead of
+         - Root_Character_Leg__size -> Leg_size
+         - Root_Character_Arm__size -> Arm_size
+        */
+        string GenerateControllerIdentifier(Controller controller) {
+            var pathFromParent = GetControllerSceneAncestors(controller).Reverse().ToArray();
             var indexedPath = pathFromParent.Select(t => t.GetSiblingIndex().ToString("X")).JoinToString("_");
             return pathFromParent.Select(t => $"{t.name}")
                 .Prepend($"_{indexedPath}")
@@ -295,115 +228,135 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 .JoinToString("_");
         }
 
-        public int GetControllerId(SdfController sdfController) =>
-            controllerData[sdfController].sceneUniqueId;
-    }
 
 
-    [CustomEditor(typeof(SdfScene))]
-    public class SdfSceneEditor : UnityEditor.Editor {
-        private bool propertiesFold = false;
-        private Dictionary<Controller, bool> individualFolds = new();
-        private void OnValidate() { individualFolds = (target as SdfScene).Properties.ToDictionary(g => g.Key, g => false); }
+        // TODO: bind action callbacks with shaderId in the closure to update the material instead of dispatching with visitor
+        class ShaderPropertyUpdatingVisitor
+            : PropertyVisitor,
+              IVisitPropertyAdapter<int>,
+              IVisitPropertyAdapter<float>,
+              IVisitPropertyAdapter<bool>,
+              IVisitPropertyAdapter<Vector2>,
+              IVisitPropertyAdapter<Vector3>,
+              IVisitPropertyAdapter<Vector4>,
+              IVisitPropertyAdapter<Vector2Int>,
+              IVisitPropertyAdapter<Vector3Int>,
+              IVisitPropertyAdapter<Matrix4x4> {
+            readonly SdfScene scene;
 
-        public override void OnInspectorGUI() {
-            var sdfScene = (SdfScene)target;
-
-            if (!sdfScene.controlledShader) {
-                EditorGUILayout.HelpBox("missing controlled shader asset", MessageType.Error);
-                base.OnInspectorGUI();
-                return;
+            public ShaderPropertyUpdatingVisitor(SdfScene scene) {
+                AddAdapter(this);
+                this.scene = scene;
             }
 
-            if (!sdfScene.raymarchingShader) {
-                EditorGUILayout.HelpBox("Raymarching shader asset required", MessageType.Error);
-                base.OnInspectorGUI();
-                return;
-            }
+            public void Visit<TContainer>(in VisitContext<TContainer, bool> context, ref TContainer container, ref bool value)
+                => scene.controlledMaterial!.SetFloat(GetShaderId(container, context.Property), value ? 1 : 0);
 
-            if (GUILayout.Button("Rebuild shader")) {
-                sdfScene.RefreshSceneData();
-                sdfScene.GenerateSceneAssets();
-                sdfScene.UpdateShaderUniforms();
-            }
-            // TODO: open temporary file with this text
-            if (GUILayout.Button("Open generated shader")) {
-                // AssetDatabase.OpenAsset(sdfScene.controlledShader);
-                OpenGeneratedShader();
-            }
+            public void Visit<TContainer>(in VisitContext<TContainer, float> context, ref TContainer container, ref float value)
+                => scene.controlledMaterial!.SetFloat(GetShaderId(container, context.Property), value);
 
-            if (GUILayout.Button("Assign material to renderer")) {
-                var renderer = sdfScene.GetComponent<Renderer>();
-                if (renderer)
-                    renderer.material = sdfScene.controlledMaterial;
-                else
-                    EditorGUILayout.HelpBox("No renderer found", MessageType.Error);
-            }
-            GUILayout.Space(16);
-            base.OnInspectorGUI();
-            if (propertiesFold = EditorGUILayout.BeginFoldoutHeaderGroup(propertiesFold, "Managed properties")) {
-                foreach (var props in sdfScene.Properties) {
-                    var ctr = props.Key;
-                    if (!(individualFolds[ctr] = EditorGUILayout.Foldout(individualFolds[ctr], sdfScene.GetControllerIdentifier(ctr))))
-                        continue;
+            public void Visit<TContainer>(in VisitContext<TContainer, int> context, ref TContainer container, ref int value)
+                => scene.controlledMaterial!.SetInteger(GetShaderId(container, context.Property), value);
 
+            public void Visit<TContainer>(in VisitContext<TContainer, Matrix4x4> context, ref TContainer container, ref Matrix4x4 value)
+                => scene.controlledMaterial!.SetMatrix(GetShaderId(container, context.Property), value);
 
-                    foreach (var prop in ctr.Properties) {
-                        EditorGUILayout.LabelField(prop.DisplayName, EditorStyles.boldLabel);
-                        if (GUILayout.Button("trigger update for this property"))
-                            ctr.SdfScene.QueuePropertyUpdates(prop);
-                        EditorGUILayout.TextArea(prop.CurrentValue.ToString());
-                    }
-                }
-            }
-            EditorGUILayout.EndFoldoutHeaderGroup();
+            public void Visit<TContainer>(in VisitContext<TContainer, Vector2> context, ref TContainer container, ref Vector2 value)
+                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), value);
+
+            public void Visit<TContainer>(
+                in VisitContext<TContainer, Vector2Int> context,
+                ref TContainer container,
+                ref Vector2Int value
+            )
+                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), (Vector2)value);
+
+            public void Visit<TContainer>(in VisitContext<TContainer, Vector3> context, ref TContainer container, ref Vector3 value)
+                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), value);
+
+            public void Visit<TContainer>(
+                in VisitContext<TContainer, Vector3Int> context,
+                ref TContainer container,
+                ref Vector3Int value
+            )
+                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), (Vector3)value);
+
+            public void Visit<TContainer>(in VisitContext<TContainer, Vector4> context, ref TContainer container, ref Vector4 value)
+                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), value);
+
+            int GetShaderId<TContainer>(TContainer controller, IProperty property)
+                => scene.sceneData
+                    .controllers[
+                        controller as Controller
+                     ?? throw new InvalidOperationException($"Controller wasn't properly registered in the scene: {controller}")
+                    ].properties[property].shaderId;
+
+            protected override void VisitProperty<TContainer, TValue>(
+                Property<TContainer, TValue> property,
+                ref TContainer container,
+                ref TValue value
+            )
+                => throw new ArgumentOutOfRangeException(
+                    nameof(property),
+                    property,
+                    $"Unhandled update for property '{property.Name}' in '{container.ToString()}'"
+                );
         }
 
-        private void OpenGeneratedShader() {
-            var sdfScene = (SdfScene)target;
 
-            var shaderText = sdfScene.AssembleShaderSource();
-            var assetName = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(sdfScene.controlledShader));
-            var path = $"Temp/GeneratedSdfScene-{assetName.Replace(" ", "")}.shader";
-            WriteToFile(path, shaderText);
-            OpenFile(path);
+
+/*
+ * - TODO: adopt "prop drilling" for passing props to Data classess to decouple them from the Scene
+ */
+        [Serializable]
+        public record SceneData(
+            IReadOnlyDictionary<Controller, ControllerData> controllers,
+            HashSet<PropertyData> queuedPropertyUdates
+        ) {
+            public IEnumerable<PropertyData> Properties => controllers.Values.SelectMany(cd => cd.properties);
         }
 
-        // From ShaderGraph GraphUtil.cs
-        public static void WriteToFile(string path, string content) {
-            try {
-                File.WriteAllText(path, content);
-            } catch (Exception e) {
-                Debug.LogError(e);
-            }
-        }
 
-        // From ShaderGraph GraphUtil.cs
-        public static void OpenFile(string path) {
-            var filePath = Path.GetFullPath(path);
-            if (!File.Exists(filePath)) {
-                Debug.LogError(string.Format("Path {0} doesn't exists", path));
-                return;
+
+        [Serializable]
+        public record ControllerData(
+            string identifier,
+            int numericId,
+            PropertyCache properties
+        );
+
+
+
+        [Serializable]
+        public record PropertyData(
+            Controller controller,
+            int shaderId,
+            string identifier,
+            PropertyPath path,
+            IProperty property
+        );
+
+
+
+        public class PropertyCache : IEnumerable<PropertyData> {
+            public readonly IReadOnlyDictionary<string, PropertyData>       identifierLookup;
+            public readonly IReadOnlyDictionary<PropertyPath, PropertyData> pathLookup;
+            public readonly IReadOnlyDictionary<IProperty, PropertyData>    propertyLookup;
+
+            public PropertyCache(IEnumerable<PropertyData> propertiesData) {
+                identifierLookup = propertiesData.ToDictionary(pd => pd.identifier);
+                pathLookup = propertiesData.ToDictionary(pd => pd.path);
+                propertyLookup = propertiesData.ToDictionary(pd => pd.property);
             }
 
-            var externalScriptEditor = ScriptEditorUtility.GetExternalScriptEditor();
-            if (externalScriptEditor != "internal")
-                InternalEditorUtility.OpenFileAtLineExternal(filePath, 0);
-            else {
-                var p = new Process();
-                p.StartInfo.FileName = filePath;
-                p.EnableRaisingEvents = true;
-                p.Exited += (Object obj, EventArgs args) => {
-                    if (p.ExitCode != 0)
-                        Debug.LogWarningFormat("Unable to open {0}: Check external editor in preferences", filePath);
-                };
-                p.Start();
-            }
-        }
+            public PropertyData this[string propertyId] => identifierLookup[propertyId];
+            public PropertyData this[PropertyPath propertyPath] => pathLookup[propertyPath];
+            public PropertyData this[IProperty property] => propertyLookup[property];
 
-        private void OnSceneGUI() {
-            var scene = (SdfScene)target;
-            scene.UpdateShaderUniforms();
+            /// Returns all PropertyData in this cache
+            public IEnumerator<PropertyData> GetEnumerator() => pathLookup.Values.GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
     }
 }

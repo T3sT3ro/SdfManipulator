@@ -51,9 +51,12 @@ namespace sdf { namespace operators {
     }
 
     SdfResult unionSimple(in SdfResult a, in SdfResult b) {
-        if (a.distance < b.distance) // this is dumb, but ternary produces GL error about type mismatch
-            return a;
-        return b;
+        // this is dumb, but returning in ternary produces GL error about type mismatch
+        // Also returning in the middle of the body produces warning of "uninitialized variable"...
+        SdfResult result = b;
+        if (a.distance < b.distance)
+            result = a;
+        return result;
     }
 
     SdfResult intersectSimple(in SdfResult a, in SdfResult b) {
@@ -109,5 +112,10 @@ namespace sdf { namespace operators {
 
     float onion_skin(in float distance, in float thickness) {
         return abs(distance) - thickness;
+    }
+
+
+    float interpolate(in float d1, in float d2, in float t) {
+        return lerp(d1, d2, t);
     }
 }}

@@ -7,11 +7,10 @@ namespace me.tooster.sdf.Editor.Util {
             return source.Select((item, index) => (item, index));
         }
 
-        public static string JoinToString<TItem>(this IEnumerable<TItem> items, string separator) =>
-            string.Join(separator, items);
+        public static string JoinToString<TItem>(this IEnumerable<TItem> items, string separator) => string.Join(separator, items);
 
-        public static IEnumerable<T> GetImmediateChildrenComponents<T>(this GameObject parent) where T : Component =>
-            from Transform child in parent.transform select child.GetComponent<T>();
+        public static IEnumerable<T> GetImmediateChildrenComponents<T>(this GameObject parent) where T : Component
+            => from Transform child in parent.transform select child.GetComponent<T>();
 
         /// <summary>
         /// Inverts a scale vector by dividing 1 by each component

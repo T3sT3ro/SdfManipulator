@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST;
@@ -9,60 +8,72 @@ using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using me.tooster.sdf.Editor.Util;
+using Unity.Properties;
 using UnityEngine;
-using Attribute = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Attribute;
-using Property = me.tooster.sdf.Editor.API.Property;
 using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
 using Shader = me.tooster.sdf.AST.Shaderlab.Syntax.Shader;
 
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public partial class RaymarchingShader {
-        [SerializeField] private bool transparent = false;
+        [SerializeField] bool transparent = false;
 
         public string MainShader(SdfScene scene) {
+            if (scene.sdfSceneRoot == null) return "// empty shader";
             var unformatedSource = shader(scene);
             var formattedSource = ShaderlabFormatter.Format(unformatedSource);
             return formattedSource?.ToString() ?? "// empty shader";
         }
 
+
         #region shaderlab
 
-        private Shader shader(SdfScene scene) => new()
-        {
-            name = scene.name + " (generated)",
-            materialProperties = MaterialProperties(scene),
-            shaderStatements = new ShaderStatement[]
+        Shader shader(SdfScene scene)
+            => new()
             {
-                new Fallback { name = "Sdf/Fallback" },
-                new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfShaderEditor" },
-                SubShader(scene),
-            },
-        };
+                name = scene.name + " (generated)",
+                materialProperties = MaterialProperties(scene),
+                shaderStatements = new ShaderStatement[]
+                {
+                    new Fallback { name = "Sdf/Fallback" },
+                    new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfShaderEditor" },
+                    SubShader(scene),
+                },
+            };
 
         /// <summary>
         ///  generates a material properties block from collected properties
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">property type is not supported</exception>
-        private MaterialProperties MaterialProperties(SdfScene scene) {
+        MaterialProperties MaterialProperties(SdfScene scene) {
             return new MaterialProperties
             {
                 properties = GlobalShaderProperties
-                    .Concat(scene.Properties
-                        .SelectMany(properties => properties
-                            .Where(p => p.IsPropertyShaderlabCompatible())
-                            .Select(p => generatePropertySyntax(scene, p) with
-                            {
-                                attributes = SyntaxExtensions.headerAttribute(
-                                    scene.GetControllerPath(properties.Key).Select(c => c.name).JoinToString("/")),
-                            })))
+                    .Concat(
+                        scene.sceneData.Properties
+                            .Where(p => PropertyContainer.GetProperty(p.controller, p.path).IsPropertyShaderlabCompatible())
+                            .GroupBy(pd => pd.controller)
+                            .SelectMany(
+                                group => group.Select(pd => generatePropertySyntax(scene, pd))
+                                    .Select(
+                                        (ps, i) => i > 0
+                                            ? ps
+                                            : ps with
+                                            {
+                                                attributes = SyntaxUnityExtensions.headerAttribute(
+                                                    scene.GetControllerSceneAncestors(group.Key).Reverse().Select(c => c.name)
+                                                        .JoinToString("/")
+                                                ),
+                                            }
+                                    )
+                            )
+                    )
                     .ToList(),
             };
         }
 
-        private static IEnumerable<PropertySyntax> GlobalShaderProperties {
+        static IEnumerable<PropertySyntax> GlobalShaderProperties {
             get {
                 return new[]
                 {
@@ -73,9 +84,9 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                         initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = (int)UnityEngine.Rendering.CullMode.Back },
                         attributes = new[]
                         {
-                            SyntaxExtensions.headerAttribute("global raymarching properties"),
-                            SyntaxExtensions.spaceAttribute(),
-                            SyntaxExtensions.enumAttribute<UnityEngine.Rendering.CullMode>(),
+                            SyntaxUnityExtensions.headerAttribute("global raymarching properties"),
+                            SyntaxUnityExtensions.spaceAttribute(),
+                            SyntaxUnityExtensions.enumAttribute<UnityEngine.Rendering.CullMode>(),
                         },
                     },
                     // [Toggle][KeyEnum(Off, On)] _ZWrite ("ZWrite", Float) = 0
@@ -85,9 +96,11 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                         initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 1 },
                         attributes = new[]
                         {
-                            SyntaxExtensions.tooltipAttribute("Enable for correct blending with other geometry and backface rendering"),
-                            SyntaxExtensions.toggleAttribute(),
-                            SyntaxExtensions.keyEnumAttribute("Off", "On"),
+                            SyntaxUnityExtensions.tooltipAttribute(
+                                "Enable for correct blending with other geometry and backface rendering"
+                            ),
+                            SyntaxUnityExtensions.toggleAttribute(),
+                            SyntaxUnityExtensions.keyEnumAttribute("Off", "On"),
                         },
                     },
                     // [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Int) = 1
@@ -96,58 +109,41 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                         id = "_ZTest", displayName = "ZTest", propertyType = new IntKeyword(),
                         initializer = new PropertySyntax.Number<IntLiteral>
                             { numberLiteral = (int)UnityEngine.Rendering.CompareFunction.LessEqual },
-                        attributes = SyntaxExtensions.enumAttribute<UnityEngine.Rendering.CompareFunction>(),
+                        attributes = SyntaxUnityExtensions.enumAttribute<UnityEngine.Rendering.CompareFunction>(),
                     },
                 };
             }
         }
 
-        private PropertySyntax generatePropertySyntax(SdfScene scene, Property property) => property switch
+        PropertySyntax generatePropertySyntax(SdfScene scene, SdfScene.PropertyData pd) {
+            // FIXME: avoid repeated property reads in upper level
+            var t = PropertyContainer.GetProperty(pd.controller, pd.path).DeclaredValueType();
+
+            var shaderlabType = t.shaderlabTypeKeyword();
+            PropertySyntax.Initializer shaderlabInitializer = t switch
             {
-                Property<int> p => new PropertySyntax
-                {
-                    propertyType = new PropertySyntax.PredefinedType { type = new IntKeyword() },
-                    initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = p.DefaultValue },
-                },
-                Property<float> p => new PropertySyntax
-                {
-                    propertyType = new PropertySyntax.PredefinedType { type = new FloatKeyword() },
-                    initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = p.DefaultValue },
-                },
-                Property<Vector4> p => new PropertySyntax
-                {
-                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
-                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
-                },
-                Property<Vector3> p => new PropertySyntax
-                {
-                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
-                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
-                },
-                Property<Vector2> p => new PropertySyntax
-                {
-                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
-                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
-                },
-                Property<Vector3Int> p => new PropertySyntax
-                {
-                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
-                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
-                },
-                Property<Vector2Int> p => new PropertySyntax
-                {
-                    propertyType = new PropertySyntax.PredefinedType { type = new VectorKeyword() },
-                    initializer = new PropertySyntax.Vector { arguments = p.DefaultValue.VectorArgumentList() },
-                },
-                _ => throw new ArgumentOutOfRangeException(nameof(property),
-                    $"Material property block can't expose property of type {property.GetType()}"),
-            } with
-            {
-                id = scene.GetPropertyIdentifier(property),
-                displayName = property.DisplayName,
+                not null when t == typeof(int)   => new PropertySyntax.Number<IntLiteral> { numberLiteral = 0 },
+                not null when t == typeof(float) => new PropertySyntax.Number<FloatLiteral> { numberLiteral = 0 },
+                not null when t == typeof(Vector2) || t == typeof(Vector3) || t == typeof(Vector4)
+                 || t == typeof(Vector2Int) || t == typeof(Vector3Int) => new PropertySyntax.Vector
+                        { arguments = Vector4.zero.VectorArgumentList() },
+                _ => throw new ShaderGenerationException($"Can't generate initializer for shaderlab property {pd}"),
             };
 
-        private TagsBlock TagsBlock => new()
+
+            return new PropertySyntax
+                {
+                    propertyType = shaderlabType,
+                    initializer = shaderlabInitializer,
+                } with
+                {
+                    id = pd.identifier,
+                    displayName = PropertyContainer.GetProperty(pd.controller, pd.path)
+                        .GetAttribute<ShaderPropertyAttribute>().Description,
+                };
+        }
+
+        TagsBlock TagsBlock => new()
         {
             tags = new[]
             {
@@ -158,7 +154,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             },
         };
 
-        private IEnumerable<SubShaderOrPassStatement> Commands => new List<Command>
+        IEnumerable<SubShaderOrPassStatement> Commands => new List<Command>
         { // TODO: use properties on raymarcher node to set these possibly? 
             new ZTest { operation = new CalculatedArgument { id = "_ZTest" } },
             new Cull { state = new CalculatedArgument { id = "_Cull" } },
@@ -175,21 +171,23 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                 : null,
         }.FilterNotNull();
 
-        private SubShader SubShader(SdfScene scene) => new()
-        {
-            statements = new SyntaxList<shaderlab, SubShaderOrPassStatement>(TagsBlock)
-                .Splice(1, 0, Commands)
-                .Append<SubShaderOrPassStatement>(Pass(scene))
-                .ToList(),
-        };
-
-        private Pass Pass(SdfScene scene) => new()
-        {
-            statements = new PassStatement[]
+        SubShader SubShader(SdfScene scene)
+            => new()
             {
-                new HlslProgram { hlsl = new InjectedLanguage<shaderlab, hlsl>(HlslTree(scene)) },
-            },
-        };
+                statements = new SyntaxList<shaderlab, SubShaderOrPassStatement>(TagsBlock)
+                    .Splice(1, 0, Commands)
+                    .Append<SubShaderOrPassStatement>(Pass(scene))
+                    .ToList(),
+            };
+
+        Pass Pass(SdfScene scene)
+            => new()
+            {
+                statements = new PassStatement[]
+                {
+                    new HlslProgram { hlsl = new InjectedLanguage<shaderlab, hlsl>(HlslTree(scene)) },
+                },
+            };
 
         #endregion
     }

@@ -1,9 +1,9 @@
 using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
 // @formatter off
     // TODO: use interned strings or static strings for token getters
+    // TODO: use enums and avoid allocations
     // Tokens
     [TokenNode("\n")]                   public partial record LineFeedToken;
     [TokenNode("\\")]                   public partial record BackslashToken;
@@ -149,28 +149,28 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     
     [TokenNode] public abstract partial record SemanticToken;
     // legacy (pre DX10)
-    [TokenNode] public partial record PositiontSemantic         : SemanticToken { public override string Text => "POSITIONT";}
-    [TokenNode] public partial record FogSemantic               : SemanticToken { public override string Text => "FOG";}
-    [TokenNode] public partial record BinormalSemantic          : IndexedSemantic { protected override string Name => "BINORMAL";}
-    [TokenNode] public partial record BlendindicesSemantic      : IndexedSemantic { protected override string Name => "BLENDINDICES";}
-    [TokenNode] public partial record BlendweightSemantic       : IndexedSemantic { protected override string Name => "BLENDWEIGHT";}
-    [TokenNode] public partial record ColorSemantic             : IndexedSemantic { protected override string Name => "COLOR";}
-    [TokenNode] public partial record NormalSemantic            : IndexedSemantic { protected override string Name => "NORMAL";}
-    [TokenNode] public partial record PositionSemantic          : IndexedSemantic { protected override string Name => "POSITION";}
-    [TokenNode] public partial record PsizeSemantic             : IndexedSemantic { protected override string Name => "PSIZE";}
-    [TokenNode] public partial record TangentSemantic           : IndexedSemantic { protected override string Name => "TANGENT";}
-    [TokenNode] public partial record TexcoordSemantic          : IndexedSemantic { protected override string Name => "TEXCOORD";}
-    [TokenNode] public partial record TessfactorSemantic        : IndexedSemantic { protected override string Name => "TESSFACTOR";}
-    [TokenNode] public partial record VfaceSemantic             : IndexedSemantic { protected override string Name => "VFACE";}
-    [TokenNode] public partial record VposSemantic              : IndexedSemantic { protected override string Name => "VPOS";}
-    [TokenNode] public partial record DepthSemantic             : IndexedSemantic { protected override string Name => "DEPTH";}
+    [TokenNode] public partial record PositiontSemantic         : SemanticToken {public override string Text => "POSITIONT";}
+    [TokenNode] public partial record FogSemantic               : SemanticToken {public override string Text => "FOG";}
+    [TokenNode] public partial record BinormalSemantic          : IndexedSemantic {protected override string Name => "BINORMAL";}
+    [TokenNode] public partial record BlendindicesSemantic      : IndexedSemantic {protected override string Name => "BLENDINDICES";}
+    [TokenNode] public partial record BlendweightSemantic       : IndexedSemantic {protected override string Name => "BLENDWEIGHT";}
+    [TokenNode] public partial record ColorSemantic             : IndexedSemantic {protected override string Name => "COLOR";}
+    [TokenNode] public partial record NormalSemantic            : IndexedSemantic {protected override string Name => "NORMAL";}
+    [TokenNode] public partial record PositionSemantic          : IndexedSemantic {protected override string Name => "POSITION";}
+    [TokenNode] public partial record PsizeSemantic             : IndexedSemantic {protected override string Name => "PSIZE";}
+    [TokenNode] public partial record TangentSemantic           : IndexedSemantic {protected override string Name => "TANGENT";}
+    [TokenNode] public partial record TexcoordSemantic          : IndexedSemantic {protected override string Name => "TEXCOORD";}
+    [TokenNode] public partial record TessfactorSemantic        : IndexedSemantic {protected override string Name => "TESSFACTOR";}
+    [TokenNode] public partial record VfaceSemantic             : IndexedSemantic {protected override string Name => "VFACE";}
+    [TokenNode] public partial record VposSemantic              : IndexedSemantic {protected override string Name => "VPOS";}
+    [TokenNode] public partial record DepthSemantic             : IndexedSemantic {protected override string Name => "DEPTH";}
     
     // System Value Semantics — since DX10
     // for more info see: https://www.gamedev.net/forums/topic/579610-hlsl-semantics-position-vs-sv_position/4691624/
-    [TokenNode] public partial record SvClipDistanceSemantic    : IndexedSemantic { protected override string Name => "SV_ClipDistanceSemantic"; }
-    [TokenNode] public partial record SvCullDistanceSemantic    : IndexedSemantic { protected override string Name => "SV_CullDistanceSemantic"; }
+    [TokenNode] public partial record SvClipDistanceSemantic    : IndexedSemantic {protected override string Name => "SV_ClipDistanceSemantic";}
+    [TokenNode] public partial record SvCullDistanceSemantic    : IndexedSemantic {protected override string Name => "SV_CullDistanceSemantic";}
     // where 0 <= n <= 7
-    [TokenNode] public partial record SvTargetSemantic          : IndexedSemantic { protected override string Name => "SV_TargetSemantic"; } 
+    [TokenNode] public partial record SvTargetSemantic          : IndexedSemantic {protected override string Name => "SV_TargetSemantic";} 
     
     [TokenNode("SV_CoverageSemantic")]               public partial record SvCoverageSemantic : SemanticToken;
     [TokenNode("SV_DepthSemantic")]                  public partial record SvDepthSemantic : SemanticToken;
@@ -199,12 +199,16 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
     // @formatter on
 
+
+
     // {SEMANTIC_NAME}[{n}] e.g. : TEXCOORD1 or POSITION
     [TokenNode] public abstract partial record IndexedSemantic : SemanticToken {
         protected abstract string Name { get; }
         public             uint?  n    { get; init; } // optional for both variants, e.g. PSIZE and PSIZE0
         public override    string Text => string.Intern($"{Name}{n?.ToString() ?? string.Empty}");
     }
+
+
 
     [TokenNode] public partial record MatrixTypeToken : PredefinedTypeToken {
         public          Constants.ScalarKind type { get; init; } = Constants.ScalarKind.@float;
@@ -213,22 +217,28 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public override string               Text => string.Intern($"{type}{rows}x{cols}");
     }
 
+
+
     [TokenNode] public partial record VectorTypeToken : PredefinedTypeToken {
         public          Constants.ScalarKind type  { get; init; } = Constants.ScalarKind.@float;
         public          uint                 arity { get; init; } = 4;
         public override string               Text  => string.Intern($"{type}{arity}");
     }
 
+
+
     [TokenNode] public partial record IdentifierToken : ValidatedToken<hlsl> {
-        private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
-        protected override      Regex Pattern => pattern;
+        static readonly    Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
+        protected override Regex Pattern => pattern;
 
         public static implicit operator IdentifierToken(string name) => new() { ValidatedText = name };
     }
 
+
+
     /// <a href="https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-appendix-grammar">grammar</a>
     [TokenNode] public partial record FloatLiteral : Literal<hlsl> {
-        private static readonly Regex pattern =
+        static readonly Regex pattern =
             new(@"^((\d*\.\d+|\d+\.\d*)([eE][+-]?\d+)?|\d+([eE][+-]?\d+))[hHfFlL]?$");
 
         protected override Regex Pattern => pattern;
@@ -236,34 +246,41 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public static implicit operator FloatLiteral(float value) => new() { TextUnsafe = value.ToString("F") };
     }
 
+
+
     [TokenNode] public partial record IntLiteral : Literal<hlsl> {
-        private static readonly Regex pattern = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
-        protected override      Regex Pattern => pattern;
+        static readonly    Regex pattern = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
+        protected override Regex Pattern => pattern;
 
         public static implicit operator IntLiteral(int value) => new() { TextUnsafe = value.ToString("D") };
     }
 
+
+
     [TokenNode] public partial record BooleanLiteral : Literal<hlsl> {
-        private static readonly Regex pattern = new(@"^(true|false)$");
-        protected override      Regex Pattern => pattern;
+        static readonly    Regex pattern = new(@"^(true|false)$");
+        protected override Regex Pattern => pattern;
 
         public static implicit operator BooleanLiteral(bool value) => new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
     }
 
-    [TokenNode] public partial record QuotedStringLiteral : Literal<hlsl> {
-        private static readonly Regex pattern = new(@"^""[^""\n\r]*""$");
-        protected override      Regex Pattern => pattern;
 
-        public static implicit operator QuotedStringLiteral(string content) =>
-            new() { ValidatedText = $"\"{content}\"" };
+
+    [TokenNode] public partial record QuotedStringLiteral : Literal<hlsl> {
+        static readonly    Regex pattern = new(@"^""[^""\n\r]*""$");
+        protected override Regex Pattern => pattern;
+
+        public static implicit operator QuotedStringLiteral(string content) => new() { ValidatedText = $"\"{content}\"" };
     }
+
+
 
     // used in preprocessor, can be multiline if there is a "\\n" sequence
     [TokenNode] public partial record TokenString : ValidatedToken<hlsl> {
-        private static readonly Regex pattern = new(@"^(?:.|\\\n)*$");
-        protected override      Regex Pattern => pattern;
+        static readonly Regex pattern = new(@"^(?:.|\\\n)*$");
 
         public TokenString() => TextUnsafe = "";
+        protected override              Regex Pattern               => pattern;
         public static implicit operator TokenString(string content) => new() { ValidatedText = content };
     }
 }

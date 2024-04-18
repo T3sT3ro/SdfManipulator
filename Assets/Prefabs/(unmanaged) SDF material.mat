@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: unmanaged SDF manterial
-  m_Shader: {fileID: 9049197093735229171, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
+  m_Name: (unmanaged) SDF material
+  m_Shader: {fileID: 4800000, guid: 6eaeac29697c4e7f96d378b31842dc03, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -62,6 +62,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _0_0_combine_sphere_2_radius: 0.92
+    - _0_1_combine_sphere_1_radius: 0.4
+    - _0_combine_blendFactor: 0.81
+    - _1_0_root_sphere_1_Radius: 0.53
+    - _1_1_root_sphere_2_Radius: 0.26498055
+    - _1_3_root_cone_Angle: 0.67405295
+    - _1_3_root_cone_Height: 1.02
+    - _1_4_root_cone_2_Angle: 0.57145894
+    - _1_4_root_cone_2_Height: 1.02
+    - _1_root_BlendFactor: 0.4867219
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
@@ -83,6 +93,7 @@ Material:
     - sdfScene_combine_0_sphere_1_0_radius: 1
     - sdfScene_combine_0_sphere_2_1_radius: 1
     m_Colors:
+    - _1_2_root_box_BoxExtents: {r: 2.3409324, g: 0.16918316, b: 1.3971434, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - sdfScene_box_1_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}

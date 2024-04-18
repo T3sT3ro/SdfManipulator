@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using me.tooster.sdf.Editor.API;
+using Unity.Properties;
 using UnityEngine;
 using Type = System.Type;
 
@@ -28,30 +29,16 @@ namespace me.tooster.sdf.Editor.Controllers {
                 .ToHashSet();
         }
 
-        // TODO: remove or replace with getter instead of attribute?
-        public static ISet<string> CollectDefines(object o) {
-            // return values of static fields annotated with ShaderDefineAttribute
-            return o.GetType().GetFields(BindingFlags.Static)
-                .Where(info => info.GetCustomAttributes<ShaderGlobalAttribute>().Any())
-                .Select(field => (string)field.GetValue(o))
-                .Where(property => property is not null)
-                .ToHashSet();
+        public static bool IsPropertyShaderlabCompatible(this IProperty p) {
+            var t = p.DeclaredValueType();
+            return
+                t == typeof(int) || t == typeof(float)
+             || t == typeof(Vector2) || t == typeof(Vector3) || t == typeof(Vector4)
+             || t == typeof(Color)
+             || t == typeof(Vector2Int) || t == typeof(Vector3Int)
+             || t == typeof(Texture2D) || t == typeof(Texture2DArray) || t == typeof(Texture3D)
+             || t == typeof(Cubemap) || t == typeof(CubemapArray);
         }
-
-        public static bool IsPropertyShaderlabCompatible(this Property p) => p
-            is Property<int>
-            or Property<float>
-            or Property<Vector2>
-            or Property<Vector3>
-            or Property<Vector4>
-            or Property<Color>
-            or Property<Vector2Int>
-            or Property<Vector3Int>
-            or Property<Texture2D>
-            or Property<Texture2DArray>
-            or Property<Texture3D>
-            or Property<Cubemap>
-            or Property<CubemapArray>;
 
         public static IEnumerable<Transform> Ancestors(this Transform t) {
             while (t.parent != null) {

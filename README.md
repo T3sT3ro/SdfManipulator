@@ -446,7 +446,7 @@ Comparison to other software. The list includes advantages and
 - [Screen Space Reflections](https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html)
 - [Refraction and glass](https://www.shadertoy.com/view/flcSW2)
 - [WOMP online SDF editor in browser](https://alpha.womp3d.com)
-- [Touc hdesigner - shader writer, manual, node based, but windows and Mac only](https://www.youtube.com/watch?v=ZEQt6_mYplI)
+- [Touch designer - shader writer, manual, node based, but windows and Mac only](https://www.youtube.com/watch?v=ZEQt6_mYplI)
 - [RayTK graph editor for generating SDF shaders](https://derivative.ca/community-post/asset/raytk-raymarching-masses/63620)
 - [Ray-marcher - asset in asset store, meh](https://assetstore.unity.com/packages/vfx/shaders/fullscreen-camera-effects/raymarcher-168069)
 - [GDC - GPU based clay simulation and ray-tracing tech in Claybook](https://www.youtube.com/watch?v=Xpf7Ua3UqOA) -
@@ -532,6 +532,8 @@ Comparison to other software. The list includes advantages and
   talks about passes, vertex lights, spherical harmonics
 - [Comparison of shading languages, transpiling and IRs](https://alain.xyz/blog/a-review-of-shader-languages) - about GLSL, HLSL, MetalSL, OpenSL, WGSL, OpenCL 
 - [Unity UI building Figma doc](https://www.foundations.unity.com/patterns/authoring-flows)
+- [material maker](https://www.materialmaker.org/) - a free material editor based on graphs, capable of generating and exporting shaders to godot, unreal and unity. Supports raymarching materials as well.
+- [IQ - smooth min variants and properties](https://iquilezles.org/articles/smin/)
 
 ## Unity internals:
 

@@ -1,12 +1,9 @@
 using System;
-using me.tooster.sdf.Editor.Controllers;
 using me.tooster.sdf.Editor.Controllers.SDF;
-using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEditor.AssetImporters;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
-
 namespace me.tooster.sdf.Editor {
     // based on https://github.com/Unity-Technologies/ShaderGraph/blob/master/com.unity.shadergraph/Editor/Importers/ShaderGraphImporter.cs
     /**
@@ -35,21 +32,21 @@ namespace me.tooster.sdf.Editor {
             ctx.AddObjectToAsset("material", material);
         }
 
-        private static string getShaderText(string path) {
+        static string getShaderText(string path) {
             var scene = AssetDatabase.LoadAssetAtPath<SdfScene>(path);
             scene.IsDirty = true;
             throw new NotImplementedException("Empty sdf scene");
         }
 
-        // siilar to CreateShaderGraph
-        [MenuItem("Assets/Create/SDF/Sdf Scene Asset (new)")]
-        private static void CreateSdfSceneAsset() {
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<CreateGraphAction>(),
-                "Example SDF scene.sdf", null, null);
-        }
+        // similar to CreateShaderGraph
+        // [MenuItem("Assets/Create/SDF/Sdf Scene Asset (new)")]
+        // static void CreateSdfSceneAsset() {
+        //     ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
+        //         ScriptableObject.CreateInstance<CreateGraphAction>(),
+        //         "Example SDF scene.sdf", null, null);
+        // }
 
-        private static void CreateSdfSceneAsset(string path) {
+        static void CreateSdfSceneAsset(string path) {
             var scene = new GameObject("scene root");
             scene.AddComponent<SdfScene>();
 
@@ -60,7 +57,9 @@ namespace me.tooster.sdf.Editor {
             AssetDatabase.CreateAsset(scene, path);
         }
 
-        private class CreateGraphAction : EndNameEditAction {
+
+
+        class CreateGraphAction : EndNameEditAction {
             public override void Action(int instanceId, string pathName, string resourceFile) {
                 CreateSdfSceneAsset(pathName);
                 AssetDatabase.Refresh();

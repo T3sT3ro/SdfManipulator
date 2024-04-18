@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="propertyBox" focusable="true"
+                      style="flex-grow: 1; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(41, 117, 139); border-right-color: rgb(41, 117, 139); border-top-color: rgb(41, 117, 139); border-bottom-color: rgb(41, 117, 139); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-items: stretch; overflow: visible; visibility: visible; display: flex;">
+        <ui:Label tabindex="-1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="displayName"
+                  binding-path="DisplayName"/>
+        <uie:PropertyField name="ID" binding-path="InternalName" focusable="true" label="ID"
+                           tooltip="idiomatic identifier"/>
+        <ui:Toggle tooltip="Is property included in shader&apos;s material property block" view-data-key="exposed"
+                   binding-path="Exposed" name="Toggle" label="Exposed"/>
+        <uie:PropertyField name="Value" binding-path="propertyValue" focusable="true" label="Value"/>
+    </ui:VisualElement>
+</ui:UXML>

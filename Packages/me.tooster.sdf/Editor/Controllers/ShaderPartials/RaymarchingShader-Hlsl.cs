@@ -10,17 +10,15 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
-using me.tooster.sdf.Editor.API;
 using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Controllers.SDF;
+using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
-
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public partial class RaymarchingShader {
-        #region hlsl
-
-        private IEnumerable<Trivia<hlsl>> pragmasAndIncludes(IEnumerable<string> collectedIncludes) {
+        IEnumerable<Trivia<hlsl>> pragmasAndIncludes(IEnumerable<string> collectedIncludes) {
+            yield return new Pragma { tokenString = "once" }.ToStructuredTrivia();
             yield return new Pragma { tokenString = "target 5.0" }.ToStructuredTrivia();
             yield return new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia();
 
@@ -37,62 +35,54 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             yield return new NewLine<hlsl>();
         }
 
-        private Tree<hlsl> HlslTree(SdfScene scene) {
-            var sceneData = scene.SceneSdfData();
+        Tree<hlsl> HlslTree(SdfScene scene) {
+            var sceneData = scene.sdfSceneRoot!.sdfData;
 
             return new Tree<hlsl>(
                 generateHlslGlobals(scene).Cast<Statement<hlsl>>()
-                    .Concat(sceneData.requiredFunctionDefinitions)
-                    .Append(sceneFunctionDefinition(scene, sceneData))
+                    .Concat(
+                        sceneData.Requirements.OfType<HlslFunctionRequirement>()
+                            .Select(r => r.requiredFunction)
+                    )
+                    .Append(sceneFunctionDefinition(sceneData))
                     .ToSyntaxList()
                     .WithLeadingTrivia(pragmasAndIncludes(scene.Includes))
             );
         }
 
-        private IEnumerable<VariableDefinition> generateHlslGlobals(SdfScene scene) =>
-            scene.Properties.SelectMany(group =>
-                group.Select(p => {
+        IEnumerable<VariableDefinition> generateHlslGlobals(SdfScene scene)
+            => scene.sceneData.Properties.Select(
+                pd => {
                     try {
+                        var declaredPropertyType = PropertyContainer.GetProperty(pd.controller, pd.path).DeclaredValueType();
                         return new VariableDefinition
                         {
                             declarator = new VariableDeclarator
                             {
-                                type = p.hlslTypeToken(),
+                                type = declaredPropertyType.hlslTypeToken(),
                                 variables = new VariableDeclarator.Definition
                                 {
-                                    id = scene.GetPropertyIdentifier(p),
-                                    initializer = p is not Property<Matrix4x4> ? null : (Identifier)"MATRIX_ID",
+                                    id = pd.identifier,
+                                    initializer = declaredPropertyType != typeof(Matrix4x4) ? null : (Identifier)"MATRIX_ID",
                                 },
                             },
                         };
                     } catch (ArgumentOutOfRangeException e) {
-                        throw new ArgumentOutOfRangeException($"Unsupported property type '{p.GetType()}' for hlsl global.");
+                        throw new ArgumentOutOfRangeException($"Unsupported property type '{pd.GetType()}' for hlsl global.", e);
                     }
-                }));
+                }
+            );
 
-        private FunctionDefinition sceneFunctionDefinition(SdfScene scene, SdfData sceneData) =>
-            new()
+        FunctionDefinition sceneFunctionDefinition(SdfData sceneData)
+            => new()
             {
                 returnType = SdfData.sdfReturnType,
                 id = "sdfScene",
-                paramList = new FunctionDefinition.Parameter { type = SdfData.sdfArgumentType, id = SdfData.sdfArgumentId },
+                paramList = new FunctionDefinition.Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
                 body = new Block
                 {
-                    statements = new[]
-                    {
-                        new Return
-                        {
-                            expression = sceneData.evaluationExpression(new VectorData
-                            {
-                                arity = 3,
-                                evaluationExpression = SdfData.sdfArgumentId,
-                                vectorType = SdfData.sdfArgumentType.type,
-                            }),
-                        },
-                    },
+                    statements = new Return { expression = sceneData.evaluationExpression(SdfData.pData) },
                 },
             };
-
-        #endregion
     }
 }

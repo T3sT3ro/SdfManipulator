@@ -2,10 +2,10 @@
     "rdocCaptureSettings": 1,
     "settings": {
         "autoStart": false,
-        "commandLine": "-force-vulkan -projectPath \"/home/tooster/workspace/ttr/SdfManipulator\"",
+        "commandLine": "-force-vulkan -force-gfx-mt -projectPath \"/home/tooster/workspace/ttr/SdfManipulator\"",
         "environment": [
         ],
-        "executable": "/home/tooster/Applications/Unity/Editor/2022.3.13f1/Editor/Unity",
+        "executable": "/home/tooster/Applications/Unity/Editor/2022.3.21f1/Editor/Unity",
         "inject": false,
         "numQueuedFrames": 0,
         "options": {
@@ -17,7 +17,7 @@
             "captureCallstacksOnlyDraws": false,
             "debugOutputMute": true,
             "delayForDebugger": 0,
-            "hookIntoChildren": false,
+            "hookIntoChildren": true,
             "refAllResources": false,
             "verifyBufferAccess": false
         },

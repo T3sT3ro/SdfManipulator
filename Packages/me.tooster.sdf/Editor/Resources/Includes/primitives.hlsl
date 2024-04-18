@@ -63,8 +63,22 @@ namespace sdf { namespace primitives3D {
     }
 
     // plane equation as n.xyz := plane normal, n.w := distance along normal
-    float plane(float3 p, float4 n) {
+    float plane(in float3 p, in float4 n) {
         n = normalize(n);
         return dot(p, n.xyz) + n.w;
+    }
+
+    float cone(in float3 p, in float angle, in float height) {
+        float angle_sin, angle_cos;
+        sincos(angle, angle_sin, angle_cos);
+
+        float2 q = height * float2(angle_sin / angle_cos, -1.0);
+        float2 w = float2(length(p.xz), p.y);
+        float2 a = w - q * clamp(dot(w, q) / dot(q, q), 0.0, 1.0);
+        float2 b = w - q * float2(clamp(w.x / q.x, 0.0, 1.0), 1.0);
+        float  k = sign(q.y);
+        float  d = min(dot(a, a), dot(b, b));
+        float  s = max(k * (w.x * q.y - w.y * q.x), k * (w.y - q.y));
+        return sqrt(d) * sign(s);
     }
 }}

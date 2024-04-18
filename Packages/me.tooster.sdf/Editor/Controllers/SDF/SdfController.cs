@@ -6,75 +6,83 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
 using me.tooster.sdf.Editor.Controllers.Data;
+using Unity.Properties;
 using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
+    // TODO: use this interface instead of the concrete classes
+    public interface ISdfDataSource {
+        public SdfData sdfData { get; }
+    }
+
+
+
     [DisallowMultipleComponent]
-    public abstract class SdfController : TransformController {
-        // TODO: decoupel from TransformController, add dependency and RequiredComponent    
-        public enum SdfOrientation {
-            /// distance is positive outside the shape and negative inside. Affects unions.
-            NORMAL,
-            /// distance is negative inside the shape and positive on the outside. Affects unions.
-            INSIDE_OUT,
+    public abstract partial class SdfController : SdfTransformController, ISdfDataSource {
+        [SerializeField] [DontCreateProperty] bool inverted = false;
+
+        /// Should the sdf be inverted, i.e. "inside out"?
+        [CreateProperty] [ShaderStructural]
+        public bool Inverted {
+            get => inverted;
+            set => SetField(ref inverted, value, true);
         }
 
-        /// <summary>
-        /// The orientation of the sdf, repsective to it's surface, aka if it's "inside out"
-        /// </summary>
-        public SdfOrientation orientation = SdfOrientation.NORMAL;
+        // TODO: remove this, use IdentifierRequirement instead
+        protected string sdfFunctionIdentifier => SdfScene.sceneData.controllers[this].identifier;
 
-        protected override void OnValidate() {
-            NotifyStructureChanged(); // hopefully only triggers for "orientation", but it should be handled better later
+
+        protected override void Update() {
+            base.Update();
+            if (!transform.hasChanged) return;
+            var tr = transform;
+            tr.localScale = Vector3.one;
         }
 
         /// <summary>
         /// Returns the sdfData for evaluating this primitive. It can be inline or use the primitive function
-        /// TODO: handle null SdfData for things like empty unions etc.
         /// </summary>
         /// <seealso cref="generateSdfFunction"/>
         public abstract SdfData sdfData { get; }
 
-        protected Color GizmoColor => orientation == SdfOrientation.NORMAL ? Color.green : Color.red;
-
         /// <summary>
-        /// Generates a unique primitive function of signature <c>(float3) -> SdfResult</c>. 
+        /// Generates a unique primitive function of signature <c>(float3) -> SdfResult</c>.
         /// </summary>
-        /// <param name="primitiveDistanceSdfData"></param>
-        /// <returns>returns a function for evaluating this primitive's <c>SdfResult</c></returns>
-        protected FunctionDefinition generateSdfFunction(SdfData primitiveDistanceSdfData) => new()
-        {
-            returnType = SdfData.sdfReturnType,
-            id = sdfFunctionIdentifier,
-            paramList = new FunctionDefinition.Parameter { type = SdfData.sdfArgumentType, id = SdfData.sdfArgumentId },
-            body = new[]
+        /// <param name="sdfPrimitive">A transformation from vector data at point of the fild into the signed distance</param>
+        /// <returns>Create function definition <c>(float3) -> SdfResult</c></returns>
+        protected FunctionDefinition generateSdfFunction(Func<VectorData, ScalarData> sdfPrimitive) {
+            if (sdfPrimitive == null)
+                throw new ArgumentNullException(nameof(sdfPrimitive), "Required distance data for calculating distance is missing");
+
+            return new FunctionDefinition
             {
-                AST.Hlsl.Extensions.Var(SdfData.sdfReturnType, "result", new Cast
+                returnType = SdfData.sdfReturnType,
+                id = sdfFunctionIdentifier,
+                paramList = new FunctionDefinition.Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
+                body = new[]
                 {
-                    type = SdfData.sdfReturnType,
-                    expression = (LiteralExpression)(IntLiteral)0,
-                }),
-                AST.Hlsl.Extensions.Assignment(SdfData.sdfArgumentName, ApplyTransform(primitiveFunctionInput).evaluationExpression),
-                AST.Hlsl.Extensions.Assignment("result.distance",
-                    orientation == SdfOrientation.INSIDE_OUT
-                        ? new Unary
-                        {
-                            operatorToken = new MinusToken(),
-                            expression = primitiveDistanceSdfData.evaluationExpression(primitiveFunctionInput),
-                        }
-                        : primitiveDistanceSdfData.evaluationExpression(primitiveFunctionInput)),
-                AST.Hlsl.Extensions.Assignment("result.id", (LiteralExpression)SdfScene.GetControllerId(this)),
-                (Return)new Identifier { id = "result" },
-            },
-        };
-
-        protected string sdfFunctionIdentifier => SdfScene.GetControllerIdentifier(this);
-
-        /// Vector data representing the input of the primitive function, i.e. the <c>p</c> in <c>SdfResult someSdfPrimitive(float3 p) {...}</c>
-        private static readonly VectorData primitiveFunctionInput = new()
-        {
-            arity = SdfData.sdfArgumentType.arity,
-            vectorType = SdfData.sdfArgumentType.type,
-            evaluationExpression = SdfData.sdfArgumentId,
-        };
+                    AST.Hlsl.Extensions.Var(
+                        SdfData.sdfReturnType,
+                        "result",
+                        new Cast { type = SdfData.sdfReturnType, expression = (LiteralExpression)(IntLiteral)0 }
+                    ),
+                    AST.Hlsl.Extensions.Assignment(
+                        SdfData.pParamName,
+                        TransformVectorData(SdfData.pData).evaluationExpression
+                    ),
+                    AST.Hlsl.Extensions.Assignment(
+                        "result.distance",
+                        Inverted
+                            ? new Unary
+                            {
+                                operatorToken = new MinusToken(),
+                                expression = sdfPrimitive(SdfData.pData).evaluationExpression,
+                            }
+                            : sdfPrimitive(SdfData.pData).evaluationExpression
+                    ),
+                    AST.Hlsl.Extensions.Assignment("result.id", (LiteralExpression)SdfScene.sceneData.controllers[this].numericId),
+                    (Return)new Identifier { id = "result" },
+                },
+            };
+        }
     }
 }
