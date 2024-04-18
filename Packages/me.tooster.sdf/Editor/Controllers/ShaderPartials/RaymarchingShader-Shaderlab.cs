@@ -116,8 +116,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
         }
 
         PropertySyntax generatePropertySyntax(SdfScene scene, SdfScene.PropertyData pd) {
-            // FIXME: avoid repeated property reads in upper level
-            var t = PropertyContainer.GetProperty(pd.controller, pd.path).DeclaredValueType();
+            var t = pd.property.DeclaredValueType();
 
             var shaderlabType = t.shaderlabTypeKeyword();
             PropertySyntax.Initializer shaderlabInitializer = t switch
