@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Syntax;
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
@@ -243,7 +244,8 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
         protected override Regex Pattern => pattern;
 
-        public static implicit operator FloatLiteral(float value) => new() { TextUnsafe = value.ToString("F") };
+        public static implicit operator FloatLiteral(float value)
+            => new() { TextUnsafe = value.ToString("0.0#####", CultureInfo.InvariantCulture) };
     }
 
 
@@ -252,7 +254,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         static readonly    Regex pattern = new(@"^(\d+|0\d+|0x\d+)[uUlL]?$");
         protected override Regex Pattern => pattern;
 
-        public static implicit operator IntLiteral(int value) => new() { TextUnsafe = value.ToString("D") };
+        public static implicit operator IntLiteral(int value) => new() { TextUnsafe = value.ToString("D", CultureInfo.InvariantCulture) };
     }
 
 

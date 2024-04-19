@@ -1,4 +1,4 @@
-using me.tooster.sdf.AST.Syntax;
+using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
 
@@ -10,6 +10,6 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
 
         public static implicit operator Block(SyntaxList<hlsl, Statement> statements) => new() { statements = statements };
         public static implicit operator Block(Statement[] statements)                 => new() { statements = statements };
-        public static implicit operator Block(Expression<hlsl> expr)                  => new() { statements = (ExpressionStatement)expr };
+        public static implicit operator Block(List<Statement> statements)             => new() { statements = statements };
     }
 }

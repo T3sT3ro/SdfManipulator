@@ -6,6 +6,7 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
 using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Editor.Util;
 using Unity.Properties;
 using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
@@ -55,12 +56,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             return new HlslFunctionRequirement
             {
-                requiredFunction = new FunctionDefinition
-                {
-                    returnType = SdfData.sdfReturnType,
-                    id = sdfFunctionIdentifier,
-                    paramList = new FunctionDefinition.Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
-                    body = new[]
+                requiredFunction = createSdfFunction(
+                    sdfFunctionIdentifier,
+                    new[]
                     {
                         AST.Hlsl.Extensions.Var(
                             SdfData.sdfReturnType,
@@ -72,7 +70,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                             TransformVectorData(SdfData.pData).evaluationExpression
                         ),
                         AST.Hlsl.Extensions.Assignment(
-                            "result.distance",
+                            $"result.{SdfData.sdfResultDistanceMemberName}",
                             Inverted
                                 ? new Unary
                                 {
@@ -81,11 +79,23 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                                 }
                                 : sdfPrimitive(SdfData.pData).evaluationExpression
                         ),
-                        AST.Hlsl.Extensions.Assignment("result.id", (LiteralExpression)SdfScene.sceneData.controllers[this].numericId),
+                        AST.Hlsl.Extensions.Assignment(
+                            $"result.{SdfData.sdfResultIdMemberName}",
+                            HlslExtensions.VectorConstructor(0, 0, 0, SdfScene.sceneData.controllers[this].numericId)
+                        ),
                         (Return)new Identifier { id = "result" },
-                    },
-                },
+                    }
+                ),
             };
         }
+
+        protected FunctionDefinition createSdfFunction(Identifier identifier, Block functionBody)
+            => new()
+            {
+                returnType = SdfData.sdfReturnType,
+                id = identifier,
+                paramList = new FunctionDefinition.Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
+                body = functionBody,
+            };
     }
 }

@@ -1,7 +1,7 @@
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     // @formatter off
     // Keywords
@@ -173,53 +173,62 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     
     // @formatter on
 
-    [TokenNode] public partial record IdentifierToken : ValidatedToken<shaderlab> {
-        private static readonly Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
-        protected override      Regex Pattern => pattern;
 
-        public static implicit operator IdentifierToken(string name) =>
-            new() { ValidatedText = name };
+
+    [TokenNode] public partial record IdentifierToken : ValidatedToken<shaderlab> {
+        static readonly    Regex pattern = new(@"^[a-zA-Z_][a-zA-Z0-9_]*$");
+        protected override Regex Pattern => pattern;
+
+        public static implicit operator IdentifierToken(string name) => new() { ValidatedText = name };
     }
+
+
 
     [TokenNode] public partial record QuotedStringLiteral : Literal<shaderlab> {
-        private static readonly Regex pattern = new(@"^""[^""\n\r]*""$");
-        protected override      Regex Pattern => pattern;
+        static readonly    Regex pattern = new(@"^""[^""\n\r]*""$");
+        protected override Regex Pattern => pattern;
 
-        public static implicit operator QuotedStringLiteral(string content) =>
-            new() { ValidatedText = $"\"{content}\"" };
+        public static implicit operator QuotedStringLiteral(string content) => new() { ValidatedText = $"\"{content}\"" };
     }
+
+
 
     [TokenNode] public partial record AttributeStringLiteral : Literal<shaderlab> {
-        private static readonly Regex pattern = new(@"^[a-zA-Z0-9_#. \t]+$");
-        protected override      Regex Pattern => pattern;
+        static readonly    Regex pattern = new(@"^[a-zA-Z0-9_#. \t]+$");
+        protected override Regex Pattern => pattern;
 
-        public static implicit operator AttributeStringLiteral(string str) =>
-            new() { ValidatedText = str };
+        public static implicit operator AttributeStringLiteral(string str) => new() { ValidatedText = str };
     }
+
+
 
     [TokenNode] public partial record BooleanLiteral : Literal<shaderlab> {
-        private static readonly Regex pattern = new(@"^(true|false)$");
-        protected override      Regex Pattern => pattern;
+        static readonly    Regex pattern = new(@"^(true|false)$");
+        protected override Regex Pattern => pattern;
 
-        public static implicit operator BooleanLiteral(bool value) =>
-            new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
+        public static implicit operator BooleanLiteral(bool value) => new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
     }
+
+
 
     [TokenNode] public abstract partial record NumberLiteral : Literal<shaderlab>;
 
-    [TokenNode] public partial record FloatLiteral : NumberLiteral {
-        private static readonly Regex pattern = new(@"^(\d+\.\d*|\d*\.\d+)$");
-        protected override      Regex Pattern => pattern;
 
-        public static implicit operator FloatLiteral(float value) =>
-            new() { TextUnsafe = value.ToString("F") };
+
+    [TokenNode] public partial record FloatLiteral : NumberLiteral {
+        static readonly    Regex pattern = new(@"^(\d+\.\d*|\d*\.\d+)$");
+        protected override Regex Pattern => pattern;
+
+        public static implicit operator FloatLiteral(float value)
+            => new() { TextUnsafe = value.ToString("0.0#####", CultureInfo.InvariantCulture) };
     }
 
-    [TokenNode] public partial record IntLiteral : NumberLiteral {
-        private static readonly Regex pattern = new(@"^\d+$");
-        protected override      Regex Pattern => pattern;
 
-        public static implicit operator IntLiteral(int value) =>
-            new() { TextUnsafe = value.ToString("D") };
+
+    [TokenNode] public partial record IntLiteral : NumberLiteral {
+        static readonly    Regex pattern = new(@"^\d+$");
+        protected override Regex Pattern => pattern;
+
+        public static implicit operator IntLiteral(int value) => new() { TextUnsafe = value.ToString("D", CultureInfo.InvariantCulture) };
     }
 }

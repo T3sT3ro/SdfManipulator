@@ -8,7 +8,17 @@ using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
 namespace me.tooster.sdf.Editor.Controllers.Data {
-    /// Represents Signed Distance Field with relevant informations, such as required function declaration or a way of evaluating it.
+    /// <summary>
+    /// <para>Data for for conventional SDF implementation in a shader.</para>
+    /// <para>
+    /// Sdf data represents:
+    /// <list type="bullet">
+    ///  <item>requirements needed to satisfy the data evaluation, such as required SDF function definition or include files</item>
+    ///  <item>information to build sdf function in hlsl of signature <c>(float3 p) -> SdfResult</c></item>, for example it's return type and parameter type and name
+    ///  <item>a factory for evaluation expression of that SDF with respect to VectorData used to evaluate at point <c>p</c></item>
+    /// </list>
+    /// </para>
+    /// </summary>
     public record SdfData : Editor.API.Data {
         static readonly HlslIncludeFileRequirement typeDefinitionsIncludeRequirement =
             new("Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl");
@@ -20,7 +30,9 @@ namespace me.tooster.sdf.Editor.Controllers.Data {
 
         /// type returned by SdfFunction
         public static readonly Type.UserDefined sdfReturnType = new() { id = "SdfResult" };
-        public const string pParamName = "p";
+        public const string pParamName                  = "p";
+        public const string sdfResultIdMemberName       = "id";
+        public const string sdfResultDistanceMemberName = "distance";
 
         public static readonly VectorData pData = new()
         {

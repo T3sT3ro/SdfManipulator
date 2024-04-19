@@ -23,6 +23,7 @@ namespace me.tooster.sdf.Editor.Controllers.Data {
         }
 
         /// generates an sdf data that is a simple union of all sdf datas given using the supplied combinator function
+        /// TODO: use sequential combine instead
         public static SdfData binaryCombine(Func<SdfData, SdfData, SdfData> combinator, ArraySegment<SdfData> sdfDatas) {
             switch (sdfDatas.Count) {
                 case 0: throw new ArgumentException("At least one sdf data is required to combine");
