@@ -46,22 +46,20 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public override SdfData sdfData => new()
         {
             evaluationExpression = p => FunctionCall(sdfFunctionIdentifier, p.evaluationExpression),
-            Requirements = new[]
+            Requirements = new API.Data.Requirement[]
             {
-                new HlslFunctionRequirement
-                {
-                    requiredFunction = generateSdfFunction(
-                        p => new ScalarData
-                        {
-                            evaluationExpression = FunctionCall(
-                                "sdf::primitives3D::cone",
-                                p.evaluationExpression,
-                                new Identifier { id = SdfScene.sceneData.controllers[this].properties[coneAngle].identifier },
-                                new Identifier { id = SdfScene.sceneData.controllers[this].properties[coneHeight].identifier }
-                            ),
-                        }
-                    ),
-                },
+                new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"),
+                createSdfFunctionRequirement(
+                    p => new ScalarData
+                    {
+                        evaluationExpression = FunctionCall(
+                            "sdf::primitives3D::cone",
+                            p.evaluationExpression,
+                            new Identifier { id = SdfScene.sceneData.controllers[this].properties[coneAngle].identifier },
+                            new Identifier { id = SdfScene.sceneData.controllers[this].properties[coneHeight].identifier }
+                        ),
+                    }
+                ),
             },
         };
     }

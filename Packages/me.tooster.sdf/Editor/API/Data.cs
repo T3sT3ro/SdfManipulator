@@ -12,7 +12,7 @@ namespace me.tooster.sdf.Editor.API {
     /// TODO: add "requirements" as object array storing requrired context like required function definition, an include file etc
     /// </summary>
     public abstract record Data {
-        public IEnumerable<Requirement> Requirements { get; init; } = Array.Empty<Requirement>();
+        public virtual IEnumerable<Requirement> Requirements { get; init; } = Array.Empty<Requirement>();
 
         public abstract record Requirement;
     }

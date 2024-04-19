@@ -41,12 +41,22 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public IEnumerable<SdfController> SdfControllers => GetFirstNestedControllers(transform);
 
 
-        public override SdfData sdfData => Combinators.binaryCombine(
-            MergeData,
-            SdfControllers
-                .Where(c => c != this)
-                .Select(p => p.sdfData).ToArray()
-        );
+        public override SdfData sdfData {
+            get {
+                var merged = Combinators.binaryCombine(
+                    MergeData,
+                    SdfControllers
+                        .Where(c => c != this)
+                        .Select(p => p.sdfData).ToArray()
+                );
+                return merged with
+                {
+                    Requirements = merged.Requirements.Append(
+                        new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl")
+                    ),
+                };
+            }
+        }
 
         static IEnumerable<SdfController> GetFirstNestedControllers(Transform root) {
             foreach (Transform child in root) {

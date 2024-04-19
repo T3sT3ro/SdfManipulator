@@ -18,7 +18,6 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public partial class RaymarchingShader {
         IEnumerable<Trivia<hlsl>> pragmasAndIncludes(IEnumerable<string> collectedIncludes) {
-            yield return new Pragma { tokenString = "once" }.ToStructuredTrivia();
             yield return new Pragma { tokenString = "target 5.0" }.ToStructuredTrivia();
             yield return new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia();
 
@@ -37,16 +36,20 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
 
         Tree<hlsl> HlslTree(SdfScene scene) {
             var sceneData = scene.sdfSceneRoot!.sdfData;
+            var includes = sceneData.Requirements.OfType<HlslIncludeFileRequirement>()
+                .Select(r => r.includeFile);
+            var preprocessorHeader = pragmasAndIncludes(includes);
+            var globals = generateHlslGlobals(scene).Cast<Statement<hlsl>>();
+            var requiredFunctions = sceneData.Requirements.OfType<HlslFunctionRequirement>()
+                .Select(r => r.requiredFunction);
+
 
             return new Tree<hlsl>(
-                generateHlslGlobals(scene).Cast<Statement<hlsl>>()
-                    .Concat(
-                        sceneData.Requirements.OfType<HlslFunctionRequirement>()
-                            .Select(r => r.requiredFunction)
-                    )
+                globals
+                    .Concat(requiredFunctions)
                     .Append(sceneFunctionDefinition(sceneData))
                     .ToSyntaxList()
-                    .WithLeadingTrivia(pragmasAndIncludes(scene.Includes))
+                    .WithLeadingTrivia(preprocessorHeader)
             );
         }
 

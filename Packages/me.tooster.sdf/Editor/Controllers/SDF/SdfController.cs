@@ -41,7 +41,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         /// <summary>
         /// Returns the sdfData for evaluating this primitive. It can be inline or use the primitive function
         /// </summary>
-        /// <seealso cref="generateSdfFunction"/>
+        /// <seealso cref="createSdfFunctionRequirement"/>
         public abstract SdfData sdfData { get; }
 
         /// <summary>
@@ -49,38 +49,41 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         /// </summary>
         /// <param name="sdfPrimitive">A transformation from vector data at point of the fild into the signed distance</param>
         /// <returns>Create function definition <c>(float3) -> SdfResult</c></returns>
-        protected FunctionDefinition generateSdfFunction(Func<VectorData, ScalarData> sdfPrimitive) {
+        protected HlslFunctionRequirement createSdfFunctionRequirement(Func<VectorData, ScalarData> sdfPrimitive) {
             if (sdfPrimitive == null)
                 throw new ArgumentNullException(nameof(sdfPrimitive), "Required distance data for calculating distance is missing");
 
-            return new FunctionDefinition
+            return new HlslFunctionRequirement
             {
-                returnType = SdfData.sdfReturnType,
-                id = sdfFunctionIdentifier,
-                paramList = new FunctionDefinition.Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
-                body = new[]
+                requiredFunction = new FunctionDefinition
                 {
-                    AST.Hlsl.Extensions.Var(
-                        SdfData.sdfReturnType,
-                        "result",
-                        new Cast { type = SdfData.sdfReturnType, expression = (LiteralExpression)(IntLiteral)0 }
-                    ),
-                    AST.Hlsl.Extensions.Assignment(
-                        SdfData.pParamName,
-                        TransformVectorData(SdfData.pData).evaluationExpression
-                    ),
-                    AST.Hlsl.Extensions.Assignment(
-                        "result.distance",
-                        Inverted
-                            ? new Unary
-                            {
-                                operatorToken = new MinusToken(),
-                                expression = sdfPrimitive(SdfData.pData).evaluationExpression,
-                            }
-                            : sdfPrimitive(SdfData.pData).evaluationExpression
-                    ),
-                    AST.Hlsl.Extensions.Assignment("result.id", (LiteralExpression)SdfScene.sceneData.controllers[this].numericId),
-                    (Return)new Identifier { id = "result" },
+                    returnType = SdfData.sdfReturnType,
+                    id = sdfFunctionIdentifier,
+                    paramList = new FunctionDefinition.Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
+                    body = new[]
+                    {
+                        AST.Hlsl.Extensions.Var(
+                            SdfData.sdfReturnType,
+                            "result",
+                            new Cast { type = SdfData.sdfReturnType, expression = (LiteralExpression)0 }
+                        ),
+                        AST.Hlsl.Extensions.Assignment(
+                            SdfData.pParamName,
+                            TransformVectorData(SdfData.pData).evaluationExpression
+                        ),
+                        AST.Hlsl.Extensions.Assignment(
+                            "result.distance",
+                            Inverted
+                                ? new Unary
+                                {
+                                    operatorToken = new MinusToken(),
+                                    expression = sdfPrimitive(SdfData.pData).evaluationExpression,
+                                }
+                                : sdfPrimitive(SdfData.pData).evaluationExpression
+                        ),
+                        AST.Hlsl.Extensions.Assignment("result.id", (LiteralExpression)SdfScene.sceneData.controllers[this].numericId),
+                        (Return)new Identifier { id = "result" },
+                    },
                 },
             };
         }

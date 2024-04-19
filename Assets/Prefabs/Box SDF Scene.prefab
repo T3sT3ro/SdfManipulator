@@ -1285,7 +1285,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 5085
+          gpuProgramID: 29372
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1427,13 +1427,6 @@ Shader:
   m_ShaderIsBaked: 0
   m_DefaultTextures: {}
   errors:
-  - message: 'Unrecognized #pragma directive: once'
-    messageDetails: 
-    file: 
-    compilerPlatform: 26
-    line: 53
-    warning: 1
-    runtimeError: 0
   - message: use of potentially uninitialized variable (sdf::operators::intersectSimple)
     messageDetails: 'Compiling Subshader: 0, Pass: <Unnamed Pass 0>, Vertex program
       with _ZWRITE_ON
@@ -1457,15 +1450,14 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      5085:
+      29372:
         serializedVersion: 3
         m_Code: "#define _ZWRITE_ON_KEYWORD_DECLARED 1\n#define _ZWRITE_OFF_KEYWORD_DECLARED
           1\n#line 50 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
           UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
           UNITY_INSTANCED_RENDERER_BOUNDS\n#line 50 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            #pragma once \n           
-          #pragma target 5.0 \n            #include \"UnityCG.cginc\" \n           
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"
+          UNITY: Original start of shader */\n            #pragma target 5.0 \n           
+          #include \"UnityCG.cginc\" \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"
           \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"
           \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"
           \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"
@@ -1543,7 +1535,7 @@ Shader:
           Hash: 8d5f78650d215f56909a51e41f3d8bd4
         m_CodeHash:
           serializedVersion: 2
-          Hash: 92735af5b1975efbd428859f3ce59f74
+          Hash: 3095292e09ff948b816cbf8fae4df92e
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0

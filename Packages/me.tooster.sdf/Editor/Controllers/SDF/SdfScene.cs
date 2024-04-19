@@ -37,14 +37,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public SceneData sceneData { get; private set; }
         public bool      IsDirty   { get; set; }
 
-
-        // collect all "Properties" in all children components
-
-        // TODO: make it return cached properties, update them when children are changed
-
-        public IEnumerable<string> Includes => sceneData.controllers.Keys
-            .SelectMany(c => Extensions.CollectIncludes(c.GetType()).AsEnumerable());
-
         void Awake() {
             PrefabStage.prefabSaved += OnPrefabSaved;
             IsDirty = true;

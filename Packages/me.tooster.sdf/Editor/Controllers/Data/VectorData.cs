@@ -3,7 +3,7 @@ using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 namespace me.tooster.sdf.Editor.Controllers.Data {
-    public record VectorData {
+    public record VectorData : API.Data {
         /// underlying type of the vector
         public Constants.ScalarKind scalarType { get; init; }
         /// the dimension of the vector type

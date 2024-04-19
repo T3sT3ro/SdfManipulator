@@ -1,5 +1,5 @@
 #nullable enable
-using System;
+using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.Editor.Controllers.Data;
 using Unity.Properties;
@@ -25,7 +25,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         [CreateProperty]
-        public Quaternion Rotation {
+        public Quaternion LocalRotation {
             get => transform.localRotation;
             set {
                 if (value == transform.localRotation) return;
@@ -53,7 +53,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         protected VectorData TransformVectorData(VectorData vd)
-            => new()
+            => vd with
             {
                 evaluationExpression = AST.Hlsl.Extensions.FunctionCall(
                     "sdf::operators::transform",
@@ -63,14 +63,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                         id = SdfScene.sceneData.controllers[this].properties[spaceTransformPropertyPath].identifier,
                     }
                 ),
+                Requirements = vd.Requirements.Append(
+                    new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl")
+                ),
             };
-
-        [Obsolete("Shouldn't be needed if it's synced with the transform except the scale")]
-        protected void DrawTransformCube() {
-            var tr = transform;
-            var uniformScaleTransformMatrix = Matrix4x4.TRS(transform.position, transform.rotation, tr.localScale);
-            Gizmos.matrix = uniformScaleTransformMatrix;
-            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-        }
     }
 }
