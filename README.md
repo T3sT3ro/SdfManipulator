@@ -1,10 +1,50 @@
-# Usage
+# Overview
 
-TODO
+For now, this project contains:
+- a bunch of test assets in the main `Assets/` directory, of which `Prefabs/` holds main test scenes demonstrating usages 
+- the tool itself as an embedded package inside `Packages/me.tooster.sdf/`
+- *a lot* of WIP/prototype/uncleaned obsolete code scattered all over, for example `CameraEffect` or some Importers, some parts of prototype Graph API etc.
 
-# Packages
+## Installation:
+1. `git clone` the repo
+2. open in Unity (!) 2022.3.21f1 LTS (!) — this version is important. Earlier versions triggered some editor bugs. Later version (2023.2....) does some changes to rendering that makes rendering and lighting weird (temporal GI?)
+    - preferably start unity with vulkan, because it provides superior rendering performance. OpenGL has serious performance issues on linux. To start with vulkan use `-force-vulkan -force-gfx-mt` in extra command lines (can be set inside unity hub)
 
-- NaughtyAttributes
+## TOP-LEVEL concepts:
+
+- the paths below refer to paths inside `Packages/me.tooster.sdf/`
+- "Controllers" (in the package's `Editor/Controllers` directory) have 2 purposes:
+  - export parts of data required to build AST (the "editor" part for working with scenes)
+  - control the scene data via uniforms and whatnot (the "runtime" part, which will later be decoupled)
+- "Controller Editors" in `Editor/Controllers/Editors` handle inspector and scene gizmos for objects
+- "Sdf Scene" - a root component of a scene. It stores reference to a material and shader. Often referred simply as "scene" because I don't utilize regular scenes. It is attached to the prefab root. 
+  - for editor part, it handles regeneration of the shader asset and coordinates all controllers under itself
+  - for controller part, it listens to property change events emitted by controllers updates controlled materials
+- "Shader template" - for now just a `RaymarchingShader` instance (scriptable singleton for now) that takes in the detected scene data and creates the shader text. Think of it as a "recipe" for creating the shader. Different `RaymarchingShaders` could be used to create different kinds of shaders from the same scene.
+- hlsl include files in `Editor/Resources/Includes` (probably should be moved to Runtime?) store easy to edit hlsl parts that can be used by controllers
+  - `operators.hlsl` defines common SDF operators, for example `union` or `intersection`
+  - `primitives.hlsl` defines a bunch of SDF primitive functions like `torus` or `sphere`
+  - `raymarching.hlsl` defines structs used commonly by SDFs, like `SdfResult`, and a bunch of ready to use functions, like vertex and fragment function, for doing the actual raymarching.
+- "Über shader" — the shader that started it all and has a bunch of code (also legacy code) ready to be ported to individual controllers or shader templates/partials. For some reason it doesn't render on vulkan at the time of writing. It worked flawlessly on OpenGL on linux though.
+- "AST library" - the `Runtime/` and `SyntaxGenerators/` part. The `Runtime/AST` holds classes used to work with syntax trees for hlsl and shaderlab. 
+  - The `Syntax` holds common syntactic forms or data structures like AST nodes. The `Hlsl` and `Shaderlab` dirs hold C# classes for ASTs of those languages. 
+  - The `Generators.dll` is a compiled binary copied from `SyntaxGenerators/SyntaxGenerators/bin/Debug/netstandard2.0/Generators.dll`.
+  - The `SyntaxGenerators` defines a sub-project (separate and independent of unity) for a syntax generator used to generate required partial classes for AST classes. 
+- "IsExternalInitShim" - this is a separate asmdef that can be easily included to add support for records in the current C# version used by unity.
+
+## Usage:
+
+- Refer to existing controllers
+  - for now (waiting to be refactored) the properties of the controller must be defined with a field annotated with `[DontCreateProperty]` in lowerCase and a corresponding property annotated with `[CreateProperty]` and `[ShaderProperty]` or `[ShaderStructural]` returning and setting it (and invoking appropriate events). THE PROPERTY MUST BE NAMED THE SAME AS THE FIELD FOR NOW, ONLY STARTING WITH "PascalCase". Eg. field `someRadius` and property `SomeRadius`
+  - return a subclass of `Data` that is used to build the AST. `Data` forms a kind of contract: two separate components can expect an SdfData to be of some certain shape and hold some required data. For example `SdfData` may include `evaluationExpression` that can be assumed to hold an expression of type `(float3) -> SdfResult` and a bunch of `Requirements` including a path to the required `hlsl` file or an exported SdfFunction required to be present in the generated shader for the evaluation expression to evaluate.
+- Creating scenes:
+  - Use context menu in the Assets folder and select `SDF > Scene` option. Opening the prefab will open the stage for editing the scene.
+  - The scenes are not editable outside the prefab stage (e.g. adding new primitive). They are only controllable (e.g. updating a uniform/keyword) 
+
+# Used packages
+
+- `Unity.Properties` (built-in, auto included)
+- ~~`UI Toolkit Runtime bindings`~~ for now UI Toolkit editor bindings are used
 
 ---
 

@@ -7,16 +7,18 @@ using static me.tooster.sdf.AST.Hlsl.Extensions;
 
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     public class SdfConeController : SdfController {
-        public enum OriginPosition { BOTTOM, TIP }
-
-        static readonly PropertyPath coneAngle = new(nameof(Angle));
-
-        static readonly                       PropertyPath coneHeight = new(nameof(Height));
-        [SerializeField] [DontCreateProperty] float        angle      = (float)(Math.PI / 4);
+        public enum OriginPosition {
+            [InspectorName("Origin at base")]    BOTTOM,
+            [InspectorName("Origin at the tip")] TIP,
+        }
 
 
-        [SerializeField] [DontCreateProperty] float height = 1f;
 
+        static readonly PropertyPath coneAngle  = new(nameof(Angle));
+        static readonly PropertyPath coneHeight = new(nameof(Height));
+
+        [SerializeField] [DontCreateProperty] float          angle  = (float)(Math.PI / 4);
+        [SerializeField] [DontCreateProperty] float          height = 1f;
         [SerializeField] [DontCreateProperty] OriginPosition coneOrigin;
 
         [CreateProperty] [ShaderProperty(Description = "Cone angle")]
@@ -31,7 +33,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             set => SetField(ref height, value, false);
         }
 
-        [CreateProperty] public OriginPosition ConeOrigin {
+        [CreateProperty] [ShaderStructural] public OriginPosition ConeOrigin {
             get => coneOrigin;
             set => SetField(ref coneOrigin, value, false);
         }

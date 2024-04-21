@@ -6,8 +6,8 @@ using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfConeController), true)]
     class SdfConeControllerEditor : SdfControllerEditor {
-        SerializedProperty angleProperty;
-        SerializedProperty heightProperty;
+        SerializedProperty angle;
+        SerializedProperty height;
 
         SphereBoundsHandle radiusHandle = new();
 
@@ -45,16 +45,16 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
 
             if (!scope.changed) return;
 
-            controller.Angle = angleProperty.floatValue = Mathf.Atan2(radiusHandle.radius, tipPosition.y);
-            controller.Height = heightProperty.floatValue = tipPosition.y;
+            controller.Angle = angle.floatValue = Mathf.Atan2(radiusHandle.radius, tipPosition.y);
+            controller.Height = height.floatValue = tipPosition.y;
 
             serializedObject.ApplyModifiedProperties();
         }
 
         public override VisualElement CreateInspectorGUI() {
             // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
-            angleProperty = serializedObject.FindProperty("angle");
-            heightProperty = serializedObject.FindProperty("height");
+            angle = serializedObject.FindProperty(nameof(angle));
+            height = serializedObject.FindProperty(nameof(height));
             return base.CreateInspectorGUI();
         }
 

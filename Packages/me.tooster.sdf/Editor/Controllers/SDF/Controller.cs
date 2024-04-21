@@ -50,11 +50,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             var target = Selection.activeGameObject;
 
             var sdf = new GameObject(name);
+            if (target) sdf.transform.SetParent(Selection.activeTransform);
+            sdf.transform.localPosition = Vector3.zero;
+
             var controller = sdf.AddComponent<TController>();
-
-            if (!target) return;
-
-            sdf.transform.SetParent(Selection.activeTransform);
+            ObjectNames.SetNameSmart(sdf, name);
         }
     }
 }

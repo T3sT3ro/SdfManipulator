@@ -44,8 +44,8 @@ namespace sdf { namespace primitives3D {
         return length(q) - r;
     }
 
-
-    float torus_capped(in float2 p, in float2 sc, in float R, in float r) {
+    // FIXME: it "sc" the center or what??? weird rendering artifacts...
+    float torus_capped(in float2 p, in float R, in float r, in float2 sc) {
         p.x = abs(p.x);
         float k = (sc.y * p.x > sc.x * p.y) ? dot(p.xy, sc) : length(p.xy);
         return sqrt(dot(p, p) + R * R - 2.0 * R * k) - r;
@@ -58,14 +58,24 @@ namespace sdf { namespace primitives3D {
     }
 
 
-    float infinite_cylinder(float3 p, float3 r) {
-        return length(p.xz - r.xy) - r.z;
+    float cylinder_infinite(in float3 p, in float r) {
+        return length(p.xz) - r;
     }
 
-    // plane equation as n.xyz := plane normal, n.w := distance along normal
-    float plane(in float3 p, in float4 n) {
-        n = normalize(n);
-        return dot(p, n.xyz) + n.w;
+    float cylinder_capped(in float3 p, in float h, in float r) {
+        float2 d = abs(float2(length(p.xz), p.y)) - float2(r, h);
+        return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
+    }
+
+    // FIXME: is this needed? round operator should solve it...
+    float cylinder_rounded(float3 p, float ra, float rb, float h) {
+        float2 d = float2(length(p.xz) - ra + rb, abs(p.y) - h);
+        return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - rb;
+    }
+
+    // plane equation of a plane = xz
+    float plane(in float3 p) {
+        return p.y;
     }
 
     float cone(in float3 p, in float angle, in float height) {

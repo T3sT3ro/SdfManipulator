@@ -90,6 +90,8 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
     s.Albedo = colors::RED;
     s.Alpha = 1.0;
     s.Normal = sdf.normal;
+    s.Gloss = 0.5;
+    s.Specular = 0.9;
 
     UnityLight l = (UnityLight)0;
     l.color = _LightColor0;
