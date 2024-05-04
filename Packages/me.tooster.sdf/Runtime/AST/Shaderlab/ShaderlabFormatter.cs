@@ -1,6 +1,5 @@
 #nullable enable
 using System.Collections.Generic;
-using System.Linq;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
@@ -13,11 +12,11 @@ using NewLine = me.tooster.sdf.AST.Syntax.CommonTrivia.NewLine<me.tooster.sdf.AS
 namespace me.tooster.sdf.AST.Shaderlab {
     public class ShaderlabFormatter : Mapper, IFormatter<shaderlab> {
         public FormatterState State { get; }
-        private ShaderlabFormatter(FormatterState? state = null) { State = state ?? new FormatterState(); }
+        ShaderlabFormatter(FormatterState? state = null) => State = state ?? new FormatterState();
 
-        int IFormatter<shaderlab>. getIndentChange<T>(Anchor<T> a) => getIndentChange(a);
-        bool IFormatter<shaderlab>.breakLineAfter<T>(Anchor<T> a)  => breakLineAfter(a);
-        bool IFormatter<shaderlab>.whitespaceAfter<T>(Anchor<T> a) => whitespaceAfter(a);
+        int IFormatter<shaderlab>. getIndentChange<T>(Anchor<T> a)                      => getIndentChange(a);
+        bool IFormatter<shaderlab>.breakLineAfter<T>(Anchor<T> a, out int newLineCount) => breakLineAfter(a, out newLineCount);
+        bool IFormatter<shaderlab>.whitespaceAfter<T>(Anchor<T> a)                      => whitespaceAfter(a);
 
         // Normalizes the syntax, e.g. whitespaces, newlines etc.
         public static T? Format<T>(T node, FormatterState? state = null) where T : Tree<shaderlab>.Node {
@@ -25,47 +24,59 @@ namespace me.tooster.sdf.AST.Shaderlab {
             return node.Accept(formatter, Anchor.New(node)) as T;
         }
 
-        protected int getIndentChange<T>(Anchor<T> a) where T : Token<shaderlab> => a switch
-        {
+        protected int getIndentChange<T>(Anchor<T> a) where T : Token<shaderlab>
+            => a switch
             {
-                Node: OpenBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader }
-            } => +1,
-            {
-                Node: CloseBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader }
-            } => -1,
-            _ => 0
-        };
+                {
+                    Node: OpenBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader },
+                } => +1,
+                {
+                    Node: CloseBraceToken, Parent: { Node: MaterialProperties or SubShader or Pass or TagsBlock or Shader },
+                } => -1,
+                _ => 0,
+            };
 
-        private static bool breakLineAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
+        static bool breakLineAfter<T>(Anchor<T> a, out int newLineCount) where T : Token<shaderlab> {
+            newLineCount = 1;
             switch (a) {
-                case { Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or HlslIncludeKeyword or EndHlslKeyword }
-                    or { Node: QuotedStringLiteral, Parent: { Node: CommandArgument } }
-                    or { Node: CloseBracketToken, Parent: { Node: Attribute } }:
+                case { Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or HlslIncludeKeyword or EndHlslKeyword }:
+                case { Node: InjectedLanguageEndToken<shaderlab> }:
+                case { Node: QuotedStringLiteral, Parent: { Node: CommandArgument } }:
+                case { Node: CloseBracketToken, Parent  : { Node: Attribute } }:
                     return true;
             }
 
             var nextToken = a.NextToken();
             if (nextToken is { Node: CloseBraceToken })
                 return true;
-            
+
             // check if it's a last token of some syntax
             foreach (var parent in a.Ancestors()) {
-                if (parent is IAnchor<SyntaxOrToken<shaderlab>> { Node: SubShaderOrPassStatement or ShaderStatement or Property or Tag } aSyntax) 
-                    return ReferenceEquals(aSyntax.LastToken()?.Node, a.Node);
+                if (parent is IAnchor<SyntaxOrToken<shaderlab>>
+                    {
+                        Node: SubShaderOrPassStatement or ShaderStatement or Property or Tag,
+                    } aSyntax)
+                    return ReferenceEquals(aSyntax.FirstToken(Navigation.Side.RIGHT)?.Node, a.Node);
             }
 
             return false;
         }
 
-        private static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
-            if (a is { Node: OpenBracketToken or OpenParenToken or DotToken }) 
+        static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<shaderlab> {
+            if (a is { Node: OpenBracketToken or OpenParenToken or DotToken })
                 return false;
 
             var nextToken = a.NextToken();
-            if (nextToken is not { Node: CloseBracketToken or CloseBraceToken or CloseParenToken or CommaToken or OpenParenToken })
+
+            if (a is { Node: CloseParenToken } && nextToken is not { Node: CloseParenToken or CloseBracketToken })
                 return true;
 
-            return false;
+            switch (nextToken) {
+                case { Node: CloseParenToken or CloseBraceToken or CloseBracketToken or CommaToken }: return false;
+                case { Node: OpenParenToken, Parent: { Node: IArgumentList } }:                       return true;
+            }
+
+            return true;
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
@@ -108,13 +119,22 @@ namespace me.tooster.sdf.AST.Shaderlab {
             return changed ? new TriviaList<shaderlab>(newTriviaList) : a;
         }
 
-        public override Tree<shaderlab>.Node? Visit<T>(Anchor<InjectedLanguage<shaderlab, T>> a) => a switch
-        {
-            { Node: InjectedLanguage<shaderlab, hlsl> injected } => new InjectedLanguage<shaderlab, hlsl>(
-                new Tree<hlsl>(HlslFormatter.Format(
-                    injected.tree?.Root,
-                    new FormatterState { IndentLevel = State.IndentLevel }))),
-            _ => a.Node
-        };
+        public override Tree<shaderlab>.Node? Visit<T>(Anchor<InjectedLanguage<shaderlab, T>> a)
+            => a switch
+            {
+                { Node: InjectedLanguage<shaderlab, hlsl> injected } => new InjectedLanguage<shaderlab, hlsl>(
+                    new Tree<hlsl>(
+                        HlslFormatter.Format(
+                            injected.tree?.Root,
+                            new FormatterState { IndentLevel = State.IndentLevel }
+                        )
+                    )
+                )
+                {
+                    injectedLanguageStartToken = new InjectedLanguageStartToken<shaderlab> { LeadingTriviaList = new NewLine() },
+                    injectedLanguageEndToken = new InjectedLanguageEndToken<shaderlab>(),
+                },
+                _ => a.Node,
+            };
     }
 }

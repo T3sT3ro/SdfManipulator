@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     // @formatter off
     // Keywords

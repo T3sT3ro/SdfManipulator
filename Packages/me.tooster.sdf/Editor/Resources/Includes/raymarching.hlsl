@@ -8,6 +8,8 @@
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/camera.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/debug.hlsl"
 
+#pragma region forwardDeclarations
+
 v2f vertexShader(in appdata_base v_in);
 f2p fragmentShader(in v2f frag_in);
 /// A scene SignedDistanceField function, defined in the included shader
@@ -17,6 +19,8 @@ SdfResult raymarch(inout Ray3D ray, in int max_steps, in float epsilon_ray);
 float3    calculateSdfNormal(in float3 p, in float epsilon_normal);
 float     depthToMaxRayDepth(in Texture2D depthTexture, in float2 screenUV, in float3 rd, in float4x4 inv);
 float     normalSdfOcclusion(in float3 p, in float3 normal, in int i, in float step_size);
+
+#pragma endregion
 
 #ifndef EXPLICIT_RAYMARCHING_PARAMETERS
 static float _EPSILON_RAY = 0.0001;

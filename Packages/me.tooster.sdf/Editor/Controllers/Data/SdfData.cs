@@ -4,10 +4,21 @@ using System.Linq;
 using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using FunctionDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.FunctionDefinition;
+using Parameter = me.tooster.sdf.AST.Hlsl.Syntax.Parameter;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
 namespace me.tooster.sdf.Editor.Controllers.Data {
+#nullable disable
+    public interface ISdfDataSource {
+        public SdfData sdfData { get; }
+    }
+
+
+
+#nullable enable
     /// <summary>
     /// <para>Data for for conventional SDF implementation in a shader.</para>
     /// <para>
@@ -46,5 +57,14 @@ namespace me.tooster.sdf.Editor.Controllers.Data {
         /// <summary>Expression to evaluate this sdf at a given point</summary>
         /// <returns>Expresion for evaluation this sdf</returns>
         public EvaluationExpressionFactory? evaluationExpression { get; init; }
+
+        public static FunctionDefinition createSdfFunction(Identifier identifier, Block functionBody)
+            => new()
+            {
+                returnType = sdfReturnType,
+                id = identifier,
+                paramList = new Parameter { type = pData.typeSyntax, id = pParamName },
+                body = functionBody,
+            };
     }
 }

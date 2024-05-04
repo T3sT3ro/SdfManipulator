@@ -10,7 +10,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace me.tooster.sdf.AST.Generators {
     public partial class AstSourceGenerator {
-        private void GenerateMapper(SymbolSet ss) {
+        void GenerateMapper(SymbolSet ss) {
             var compilationUnit = CompilationUnit()
                 .AddUsings(
                     UsingDirective(IdentifierName("System")),
@@ -30,7 +30,7 @@ namespace me.tooster.sdf.AST.Generators {
         }
 
         // generates methods like Visit(ForSyntax<hlsl> node)
-        private ClassDeclarationSyntax generateMapperClass(SymbolSet ss) {
+        ClassDeclarationSyntax generateMapperClass(SymbolSet ss) {
             var visitor = (ClassDeclarationSyntax)ParseMemberDeclaration(
                 $"public partial class Mapper : AST.Mapper<{ss.LangName.ToLower()}>, Visitor<Tree<{ss.LangName.ToLower()}>.Node> {{"
               + $"public Mapper() : base() {{}}"
@@ -70,10 +70,10 @@ namespace me.tooster.sdf.AST.Generators {
                 return methodDeclaration;
             }).Where(x => x is not null);
 
-            return visitor.AddMembers(syntaxVisitMethods.ToArray());
+            return visitor.AddMembers(syntaxVisitMethods.ToArray()).WithAttributeLists(generatedAttributeSyntax);
         }
 
-        private static IEnumerable<StatementSyntax> mapperVisitOverride(List<IPropertySymbol> props, string langName) {
+        static IEnumerable<StatementSyntax> mapperVisitOverride(List<IPropertySymbol> props, string langName) {
             foreach (var p in props) {
                 var isToken = p.Type.isAstToken();
                 yield return (LocalDeclarationStatementSyntax)ParseStatement(

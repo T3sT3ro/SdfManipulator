@@ -1,24 +1,18 @@
 #nullable enable
 using System;
+using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
-using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.Controllers.Data;
-using me.tooster.sdf.Editor.Util;
+using me.tooster.sdf.Editor.Util.Controllers;
 using Unity.Properties;
 using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
-    // TODO: use this interface instead of the concrete classes
-    public interface ISdfDataSource {
-        public SdfData sdfData { get; }
-    }
-
-
-
-    [DisallowMultipleComponent]
-    public abstract partial class SdfController : SdfTransformController, ISdfDataSource {
+    // [DisallowMultipleComponent]
+    public abstract class SdfController : SdfTransformController, ISdfDataSource {
         [SerializeField] [DontCreateProperty] bool inverted = false;
 
         /// Should the sdf be inverted, i.e. "inside out"?
@@ -27,9 +21,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             get => inverted;
             set => SetField(ref inverted, value, true);
         }
-
-        // TODO: remove this, use IdentifierRequirement instead
-        protected string sdfFunctionIdentifier => SdfScene.sceneData.controllers[this].identifier;
 
 
         protected override void Update() {
@@ -46,7 +37,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public abstract SdfData sdfData { get; }
 
         /// <summary>
-        /// Generates a unique primitive function of signature <c>(float3) -> SdfResult</c>.
+        /// Generates a unique function of signature <c>(float3) -> SdfResult</c> for evaluating a primitive.
+        /// The generated function assigns unique primitive ID and uses <c>sdfPrimitive</c> to evaluate SDF at point given by vector data
+        /// and returning distance (scalar data). It applies the point transformation before calling the primitive function.
+        /// The primitive function should be centered at <c>(0, 0)</c>
         /// </summary>
         /// <param name="sdfPrimitive">A transformation from vector data at point of the fild into the signed distance</param>
         /// <returns>Create function definition <c>(float3) -> SdfResult</c></returns>
@@ -56,8 +50,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             return new HlslFunctionRequirement
             {
-                requiredFunction = createSdfFunction(
-                    sdfFunctionIdentifier,
+                functionDefinition = SdfData.createSdfFunction(
+                    controllerIdentifier,
                     new[]
                     {
                         AST.Hlsl.Extensions.Var(
@@ -79,23 +73,17 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                                 }
                                 : sdfPrimitive(SdfData.pData).evaluationExpression
                         ),
-                        AST.Hlsl.Extensions.Assignment(
-                            $"result.{SdfData.sdfResultIdMemberName}",
-                            HlslExtensions.VectorConstructor(0, 0, 0, SdfScene.sceneData.controllers[this].numericId)
-                        ),
+                        createIdAssignmentStatement(SdfScene.sceneData.controllers[this].numericId),
                         (Return)new Identifier { id = "result" },
                     }
                 ),
             };
         }
 
-        protected FunctionDefinition createSdfFunction(Identifier identifier, Block functionBody)
-            => new()
-            {
-                returnType = SdfData.sdfReturnType,
-                id = identifier,
-                paramList = new FunctionDefinition.Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
-                body = functionBody,
-            };
+        protected Statement<hlsl> createIdAssignmentStatement(int ID, int x = 0, int y = 0, int z = 0)
+            => AST.Hlsl.Extensions.Assignment(
+                $"result.{SdfData.sdfResultIdMemberName}",
+                HlslExtensions.VectorConstructor(0, 0, 0, ID)
+            );
     }
 }

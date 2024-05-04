@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inverted: 1
-  radius: 0.084241375
+  radius: 0.11
 --- !u!1 &4494757220865982365
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,7 +840,22 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _1_0_0_root_combine_sphere_Radius: 0.084241375
+    - SDF_1_0_0__root_combine_sphere__1_Radius: 0.11
+    - SDF_1_0_1__root_combine_sphere__2___1_Radius: 0.5619386
+    - SDF_1_0__root_combine__1_BlendFactor: 1
+    - SDF_1_1__root_sphere__1___1_Radius: 0.84767187
+    - SDF_1_2_0__root_GameObject_cylinder__1_Height: 1
+    - SDF_1_2_0__root_GameObject_cylinder__1_Radius: 0.25
+    - SDF_1_2_0__root_GameObject_cylinder__1_Rounding: 0.25
+    - SDF_1_2_1_0__root_GameObject_minus_torus__1_MainRadius: 1
+    - SDF_1_2_1_0__root_GameObject_minus_torus__1_RingRadius: 0.25
+    - SDF_1_2_1__root_GameObject_minus__1_BlendFactor: 1
+    - SDF_1_2_2_0__root_GameObject_minus__1__torus__1_MainRadius: 1
+    - SDF_1_2_2_0__root_GameObject_minus__1__torus__1_RingRadius: 0.25
+    - SDF_1_2_2__root_GameObject_minus__1___1_BlendFactor: 1
+    - SDF_1_3__root_sphere__1_Radius: 0.087049246
+    - SDF_1__root__1_BlendFactor: 0.3
+    - _1_0_0_root_combine_sphere_Radius: 0.11
     - _1_0_1_root_combine_sphere__2__Radius: 0.5619386
     - _1_0_root_combine_BlendFactor: 1
     - _1_0_root_cone_Angle: 0.7853982
@@ -874,6 +889,10 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
+    - SDF_1_2_1_0__root_GameObject_minus_torus__1_Cap: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - SDF_1_2_1_1__root_GameObject_minus_box__1_BoxExtents: {r: 1.8887337, g: 0.75102186, b: 0.5, a: 0}
+    - SDF_1_2_2_0__root_GameObject_minus__1__torus__1_Cap: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - SDF_1_2_2_1__root_GameObject_minus__1__box__1_BoxExtents: {r: 1.8887337, g: 0.75102186, b: 0.5, a: 0}
     - _1_2_1_0_root_GameObject_minus_torus_Cap: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _1_2_1_1_root_GameObject_minus_box_BoxExtents: {r: 1.8887337, g: 0.75102186, b: 0.5, a: 0}
     - _1_2_1_root_GameObject_torus_Cap: {r: 0.1, g: 0.1, b: 0, a: 0}
@@ -894,9 +913,9 @@ Shader:
       - m_Name: _Cull
         m_Description: Cull
         m_Attributes:
-        - Header(global_raymarching_properties)
+        - Header (global_raymarching_properties)
         - Space
-        - Enum(UnityEngine.Rendering.CullMode)
+        - Enum (UnityEngine.Rendering.CullMode)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 2
@@ -909,9 +928,9 @@ Shader:
       - m_Name: _ZWrite
         m_Description: ZWrite
         m_Attributes:
-        - Tooltip(Enable for correct blending with other geometry and backface rendering)
+        - Tooltip (Enable for correct blending with other geometry and backface rendering)
         - Toggle
-        - KeyEnum(Off, On)
+        - KeyEnum (Off, On)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1
@@ -924,7 +943,7 @@ Shader:
       - m_Name: _ZTest
         m_Description: ZTest
         m_Attributes:
-        - Enum(UnityEngine.Rendering.CompareFunction)
+        - Enum (UnityEngine.Rendering.CompareFunction)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 4
@@ -934,241 +953,241 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_root_BlendFactor
+      - m_Name: SDF_1__root__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header(root)
+        - Header (root)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.3
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_0_root_combine_BlendFactor
+      - m_Name: SDF_1_0__root_combine__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header(root_combine)
+        - Header (root_combine)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 1
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_0_0_root_combine_sphere_Radius
+      - m_Name: SDF_1_0_0__root_combine_sphere__1_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header(root_combine_sphere)
+        - Header (root_combine_sphere)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.11
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_0_1_root_combine_sphere__2__Radius
+      - m_Name: SDF_1_0_1__root_combine_sphere__2___1_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header(root_combine_sphere__2_)
+        - Header (root_combine_sphere__2_)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.561939
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_1_root_sphere__1__Radius
+      - m_Name: SDF_1_1__root_sphere__1___1_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header(root_sphere__1_)
+        - Header (root_sphere__1_)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.847672
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_0_root_GameObject_cylinder_Height
+      - m_Name: SDF_1_2_0__root_GameObject_cylinder__1_Height
         m_Description: Cylinder height
         m_Attributes:
-        - Header(root_GameObject_cylinder)
+        - Header (root_GameObject_cylinder)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 1
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_0_root_GameObject_cylinder_Radius
+      - m_Name: SDF_1_2_0__root_GameObject_cylinder__1_Radius
         m_Description: Cylinder radius
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.25
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_0_root_GameObject_cylinder_Rounding
+      - m_Name: SDF_1_2_0__root_GameObject_cylinder__1_Rounding
         m_Description: Rounding
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.25
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_1_root_GameObject_minus_BlendFactor
+      - m_Name: SDF_1_2_1__root_GameObject_minus__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header(root_GameObject_minus)
+        - Header (root_GameObject_minus)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 1
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_1_0_root_GameObject_minus_torus_MainRadius
+      - m_Name: SDF_1_2_1_0__root_GameObject_minus_torus__1_MainRadius
         m_Description: Torus main radius
         m_Attributes:
-        - Header(root_GameObject_minus_torus)
+        - Header (root_GameObject_minus_torus)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 1
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_1_0_root_GameObject_minus_torus_RingRadius
+      - m_Name: SDF_1_2_1_0__root_GameObject_minus_torus__1_RingRadius
         m_Description: Torus ring radius
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.25
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_1_0_root_GameObject_minus_torus_Cap
+      - m_Name: SDF_1_2_1_0__root_GameObject_minus_torus__1_Cap
         m_Description: Torus cap
         m_Attributes: []
         m_Type: 1
         m_Flags: 0
-        m_DefValue[0]: 0
-        m_DefValue[1]: 0
+        m_DefValue[0]: 0.1
+        m_DefValue[1]: 0.1
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_1_1_root_GameObject_minus_box_BoxExtents
+      - m_Name: SDF_1_2_1_1__root_GameObject_minus_box__1_BoxExtents
         m_Description: Box extents
         m_Attributes:
-        - Header(root_GameObject_minus_box)
+        - Header (root_GameObject_minus_box)
         m_Type: 1
         m_Flags: 0
-        m_DefValue[0]: 0
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
+        m_DefValue[0]: 1.888734
+        m_DefValue[1]: 0.751022
+        m_DefValue[2]: 0.5
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_2_root_GameObject_minus__1__BlendFactor
+      - m_Name: SDF_1_2_2__root_GameObject_minus__1___1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header(root_GameObject_minus__1_)
+        - Header (root_GameObject_minus__1_)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 1
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_2_0_root_GameObject_minus__1__torus_MainRadius
+      - m_Name: SDF_1_2_2_0__root_GameObject_minus__1__torus__1_MainRadius
         m_Description: Torus main radius
         m_Attributes:
-        - Header(root_GameObject_minus__1__torus)
+        - Header (root_GameObject_minus__1__torus)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 1
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_2_0_root_GameObject_minus__1__torus_RingRadius
+      - m_Name: SDF_1_2_2_0__root_GameObject_minus__1__torus__1_RingRadius
         m_Description: Torus ring radius
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.25
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_2_0_root_GameObject_minus__1__torus_Cap
+      - m_Name: SDF_1_2_2_0__root_GameObject_minus__1__torus__1_Cap
         m_Description: Torus cap
         m_Attributes: []
         m_Type: 1
         m_Flags: 0
-        m_DefValue[0]: 0
-        m_DefValue[1]: 0
+        m_DefValue[0]: 0.1
+        m_DefValue[1]: 0.1
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_2_2_1_root_GameObject_minus__1__box_BoxExtents
+      - m_Name: SDF_1_2_2_1__root_GameObject_minus__1__box__1_BoxExtents
         m_Description: Box extents
         m_Attributes:
-        - Header(root_GameObject_minus__1__box)
+        - Header (root_GameObject_minus__1__box)
         m_Type: 1
         m_Flags: 0
-        m_DefValue[0]: 0
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
+        m_DefValue[0]: 1.888734
+        m_DefValue[1]: 0.751022
+        m_DefValue[2]: 0.5
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: _1_3_root_sphere_Radius
+      - m_Name: SDF_1_3__root_sphere__1_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header(root_sphere)
+        - Header (root_sphere)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0
+        m_DefValue[0]: 0.087049
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -1458,7 +1477,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 14657
+          gpuProgramID: 138
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1600,7 +1619,21 @@ Shader:
   m_ShaderIsBaked: 0
   m_DefaultTextures: {}
   errors:
-  - message: '"_1_0_1_root_combine_sphere__2__Radius" contains consecutive underscores
+  - message: 'Unrecognized #pragma directive: endregion'
+    messageDetails: 
+    file: 
+    compilerPlatform: 26
+    line: 75
+    warning: 1
+    runtimeError: 0
+  - message: 'Unrecognized #pragma directive: region'
+    messageDetails: 
+    file: 
+    compilerPlatform: 26
+    line: 75
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0__root_combine_sphere__1_Radius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: New SDF scene (generated)
@@ -1608,7 +1641,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"_1_0_1_root_combine_sphere__2__SpaceTransform" contains consecutive
+  - message: '"SDF_1_0_0__root_combine_sphere__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: New SDF scene (generated)
@@ -1616,15 +1649,23 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"_1_1_root_sphere__1__Radius" contains consecutive underscores ("__"),
-      such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_0_1__root_combine_sphere__2___1_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: New SDF scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"_1_1_root_sphere__1__SpaceTransform" contains consecutive underscores
+  - message: '"SDF_1_0_1__root_combine_sphere__2___1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1__root_sphere__1___1_Radius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: New SDF scene (generated)
@@ -1632,7 +1673,15 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"_1_2_2_0_root_GameObject_minus__1__torus_MainRadius" contains consecutive
+  - message: '"SDF_1_1__root_sphere__1___1_SpaceTransform" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_GameObject_cylinder__1_Height" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: New SDF scene (generated)
@@ -1640,7 +1689,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"_1_2_2_0_root_GameObject_minus__1__torus_RingRadius" contains consecutive
+  - message: '"SDF_1_2_0__root_GameObject_cylinder__1_Radius" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: New SDF scene (generated)
@@ -1648,7 +1697,39 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"_1_2_2_0_root_GameObject_minus__1__torus_SpaceTransform" contains
+  - message: '"SDF_1_2_0__root_GameObject_cylinder__1_Rounding" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_GameObject_cylinder__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1_0__root_GameObject_minus_torus__1_MainRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1_0__root_GameObject_minus_torus__1_RingRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1_0__root_GameObject_minus_torus__1_SpaceTransform" contains
       consecutive underscores ("__"), such names are reserved and might result in
       undefined behaviour'
     messageDetails: 
@@ -1657,7 +1738,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"_1_2_2_1_root_GameObject_minus__1__box_BoxExtents" contains consecutive
+  - message: '"SDF_1_2_1_1__root_GameObject_minus_box__1_BoxExtents" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: New SDF scene (generated)
@@ -1665,151 +1746,239 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"_1_2_2_1_root_GameObject_minus__1__box_SpaceTransform" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_1_1__root_GameObject_minus_box__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
     messageDetails: 
     file: New SDF scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: use of potentially uninitialized variable (sdf::operators::intersectSimple)
-    messageDetails: 'Compiling Subshader: 0, Pass: <Unnamed Pass 0>, Vertex program
-      with _ZWRITE_ON
-
-      Platform defines: SHADER_API_DESKTOP UNITY_ENABLE_DETAIL_NORMALMAP
-      UNITY_ENABLE_REFLECTION_BUFFERS UNITY_LIGHTMAP_FULL_HDR UNITY_LIGHT_PROBE_PROXY_VOLUME
-      UNITY_PASS_FORWARDBASE UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BLENDING UNITY_SPECCUBE_BOX_PROJECTION
-      UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS
-
-      Disabled keywords: SHADER_API_GLES30
-      UNITY_ASTC_NORMALMAP_ENCODING UNITY_COLORSPACE_GAMMA UNITY_FRAMEBUFFER_FETCH_AVAILABLE
-      UNITY_HALF_PRECISION_FRAGMENT_SHADER_REGISTERS UNITY_HARDWARE_TIER1 UNITY_HARDWARE_TIER2
-      UNITY_HARDWARE_TIER3 UNITY_LIGHTMAP_DLDR_ENCODING UNITY_LIGHTMAP_RGBM_ENCODING
-      UNITY_METAL_SHADOWS_USE_POINT_FILTERING UNITY_NO_DXT5nm UNITY_NO_FULL_STANDARD_SHADER
-      UNITY_NO_SCREENSPACE_SHADOWS UNITY_PBS_USE_BRDF2 UNITY_PBS_USE_BRDF3 UNITY_PRETRANSFORM_TO_DISPLAY_ORIENTATION
-      UNITY_UNIFIED_SHADER_PRECISION_MODEL UNITY_VIRTUAL_TEXTURING _ZWRITE_OFF'
-    file: Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl
+  - message: '"SDF_1_2_2_0__root_GameObject_minus__1__torus__1_MainRadius" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
     compilerPlatform: 18
-    line: 64
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2_0__root_GameObject_minus__1__torus__1_RingRadius" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2_0__root_GameObject_minus__1__torus__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2_1__root_GameObject_minus__1__box__1_BoxExtents" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2_1__root_GameObject_minus__1__box__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3__root_sphere__1_Radius" contains consecutive underscores ("__"),
+      such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3__root_sphere__1_SpaceTransform" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: New SDF scene (generated)
+    compilerPlatform: 18
+    line: -1
     warning: 1
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      14657:
+      138:
         serializedVersion: 3
         m_Code: "#define _ZWRITE_ON_KEYWORD_DECLARED 1\n#define _ZWRITE_OFF_KEYWORD_DECLARED
-          1\n#line 60 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          1\n#line 73 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
           UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 60 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            #pragma target 5.0 \n           
-          #include \"UnityCG.cginc\" \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"
-          \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"
-          \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"
-          \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"
-          \n            #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"
-          \n            #pragma vertex vertexShader \n            #pragma fragment
-          fragmentShader \n            \n            float _1_root_BlendFactor;\n           
-          float4x4 _1_root_SpaceTransform = MATRIX_ID;\n            float _1_0_root_combine_BlendFactor;\n           
-          float4x4 _1_0_root_combine_SpaceTransform = MATRIX_ID;\n            float
-          _1_0_0_root_combine_sphere_Radius;\n            float4x4 _1_0_0_root_combine_sphere_SpaceTransform
-          = MATRIX_ID;\n            float _1_0_1_root_combine_sphere__2__Radius;\n           
-          float4x4 _1_0_1_root_combine_sphere__2__SpaceTransform = MATRIX_ID;\n           
-          float _1_1_root_sphere__1__Radius;\n            float4x4 _1_1_root_sphere__1__SpaceTransform
-          = MATRIX_ID;\n            float _1_2_0_root_GameObject_cylinder_Height;\n           
-          float _1_2_0_root_GameObject_cylinder_Radius;\n            float _1_2_0_root_GameObject_cylinder_Rounding;\n           
-          float4x4 _1_2_0_root_GameObject_cylinder_SpaceTransform = MATRIX_ID;\n           
-          float _1_2_1_root_GameObject_minus_BlendFactor;\n            float4x4 _1_2_1_root_GameObject_minus_SpaceTransform
-          = MATRIX_ID;\n            float _1_2_1_0_root_GameObject_minus_torus_MainRadius;\n           
-          float _1_2_1_0_root_GameObject_minus_torus_RingRadius;\n            float2
-          _1_2_1_0_root_GameObject_minus_torus_Cap;\n            float4x4 _1_2_1_0_root_GameObject_minus_torus_SpaceTransform
-          = MATRIX_ID;\n            float3 _1_2_1_1_root_GameObject_minus_box_BoxExtents;\n           
-          float4x4 _1_2_1_1_root_GameObject_minus_box_SpaceTransform = MATRIX_ID;\n           
-          float _1_2_2_root_GameObject_minus__1__BlendFactor;\n            float4x4
-          _1_2_2_root_GameObject_minus__1__SpaceTransform = MATRIX_ID;\n           
-          float _1_2_2_0_root_GameObject_minus__1__torus_MainRadius;\n           
-          float _1_2_2_0_root_GameObject_minus__1__torus_RingRadius;\n           
-          float2 _1_2_2_0_root_GameObject_minus__1__torus_Cap;\n            float4x4
-          _1_2_2_0_root_GameObject_minus__1__torus_SpaceTransform = MATRIX_ID;\n           
-          float3 _1_2_2_1_root_GameObject_minus__1__box_BoxExtents;\n           
-          float4x4 _1_2_2_1_root_GameObject_minus__1__box_SpaceTransform = MATRIX_ID;\n           
-          float _1_3_root_sphere_Radius;\n            float4x4 _1_3_root_sphere_SpaceTransform
-          = MATRIX_ID;\n            SdfResult _1_0_0_root_combine_sphere(float3 p)
-          {\n                SdfResult result = (SdfResult) 0;\n                p
-          = sdf::operators::transform(p, _1_0_0_root_combine_sphere_SpaceTransform);\n               
-          result.distance = -sdf::primitives3D::sphere(p, _1_0_0_root_combine_sphere_Radius);\n               
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 73 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            #pragma editor_sync_compilation\n           
+          #pragma target 5.0\n            #include \"UnityCG.cginc\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n           
+          #pragma vertex vertexShader\n            #pragma fragment fragmentShader\n           
+          \n            float SDF_1__root__1_BlendFactor;\n            float4x4 SDF_1__root__1_SpaceTransform
+          = {\n                    { 1.0, 0.0, 0.0, 0.0 },\n                    {
+          0.0, 1.0, 0.0, 1.5 },\n                    { 0.0, 0.0, 1.0, 0.0 },\n                   
+          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_0__root_combine__1_BlendFactor;\n           
+          float4x4 SDF_1_0__root_combine__1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, 0.0 },\n                    { 0.0, 1.0, 0.0, 1.5 },\n                   
+          { 0.0, 0.0, 1.0, 0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_0_0__root_combine_sphere__1_Radius;\n           
+          float4x4 SDF_1_0_0__root_combine_sphere__1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, -0.779 },\n                    { 0.0, 1.0, 0.0, -0.23
+          },\n                    { 0.0, 0.0, 1.0, 0.561 },\n                   
+          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_0_1__root_combine_sphere__2___1_Radius;\n           
+          float4x4 SDF_1_0_1__root_combine_sphere__2___1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, -0.539 },\n                    { 0.0, 1.0, 0.0, -0.226
+          },\n                    { 0.0, 0.0, 1.0, 0.0 },\n                    {
+          0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_1__root_sphere__1___1_Radius;\n           
+          float4x4 SDF_1_1__root_sphere__1___1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, 0.777 },\n                    { 0.0, 1.0, 0.0, 0.403 },\n                   
+          { 0.0, 0.0, 1.0, 0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_2_0__root_GameObject_cylinder__1_Height;\n           
+          float SDF_1_2_0__root_GameObject_cylinder__1_Radius;\n            float
+          SDF_1_2_0__root_GameObject_cylinder__1_Rounding;\n            float4x4
+          SDF_1_2_0__root_GameObject_cylinder__1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, -0.003 },\n                    { 0.0, 1.0, 0.0, -0.852
+          },\n                    { 0.0, 0.0, 1.0, 0.0 },\n                    {
+          0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_2_1__root_GameObject_minus__1_BlendFactor;\n           
+          float4x4 SDF_1_2_1__root_GameObject_minus__1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, 0.016 },\n                    { 0.0, 1.0, 0.0, 1.714 },\n                   
+          { 0.0, 0.0, 1.0, 0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_2_1_0__root_GameObject_minus_torus__1_MainRadius;\n           
+          float SDF_1_2_1_0__root_GameObject_minus_torus__1_RingRadius;\n           
+          float2 SDF_1_2_1_0__root_GameObject_minus_torus__1_Cap;\n            float4x4
+          SDF_1_2_1_0__root_GameObject_minus_torus__1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, -1.0 },\n                    { 0.0, 0.0, -1.0, 0.0 },\n                   
+          { 0.0, 1.0, 0.0, 0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float3 SDF_1_2_1_1__root_GameObject_minus_box__1_BoxExtents;\n           
+          float4x4 SDF_1_2_1_1__root_GameObject_minus_box__1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, -1.284 },\n                    { 0.0, 1.0, 0.0, -0.787
+          },\n                    { 0.0, 0.0, 1.0, 0.0 },\n                    {
+          0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_2_2__root_GameObject_minus__1___1_BlendFactor;\n           
+          float4x4 SDF_1_2_2__root_GameObject_minus__1___1_SpaceTransform = {\n                   
+          { -1.0, 0.000001, 0.0, 0.147 },\n                    { -0.000001, -1.0,
+          0.0, -0.602 },\n                    { 0.0, 0.0, 1.0, 0.0 },\n                   
+          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_2_2_0__root_GameObject_minus__1__torus__1_MainRadius;\n           
+          float SDF_1_2_2_0__root_GameObject_minus__1__torus__1_RingRadius;\n           
+          float2 SDF_1_2_2_0__root_GameObject_minus__1__torus__1_Cap;\n           
+          float4x4 SDF_1_2_2_0__root_GameObject_minus__1__torus__1_SpaceTransform
+          = {\n                    { -1.0, 0.000001, 0.0, -0.869 },\n                   
+          { 0.0, 0.0, -1.0, 0.0 },\n                    { -0.000001, -1.0, 0.0, -2.316
+          },\n                    { 0.0, 0.0, 0.0, 1.0 }\n            };\n           
+          float3 SDF_1_2_2_1__root_GameObject_minus__1__box__1_BoxExtents;\n           
+          float4x4 SDF_1_2_2_1__root_GameObject_minus__1__box__1_SpaceTransform =
+          {\n                    { -1.0, 0.000001, 0.0, -1.153 },\n                   
+          { -0.000001, -1.0, 0.0, -3.103 },\n                    { 0.0, 0.0, 1.0,
+          0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n            };\n           
+          float SDF_1_3__root_sphere__1_Radius;\n            float4x4 SDF_1_3__root_sphere__1_SpaceTransform
+          = {\n                    { 1.0, 0.0, 0.0, -1.093 },\n                   
+          { 0.0, 1.0, 0.0, -0.045 },\n                    { 0.0, 0.0, 1.0, 0.0 },\n                   
+          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            SdfResult SDF_1_0_0__root_combine_sphere__1
+          (float3 p);\n            SdfResult SDF_1_0_1__root_combine_sphere__2___1
+          (float3 p);\n            SdfResult SDF_1_0__root_combine__1 (float3 p);\n           
+          SdfResult SDF_1_1__root_sphere__1___1 (float3 p);\n            SdfResult
+          SDF_1_2_0__root_GameObject_cylinder__1 (float3 p);\n            SdfResult
+          SDF_1_2_1_0__root_GameObject_minus_torus__1 (float3 p);\n            SdfResult
+          SDF_1_2_1_1__root_GameObject_minus_box__1 (float3 p);\n            SdfResult
+          SDF_1_2_1__root_GameObject_minus__1 (float3 p);\n            SdfResult
+          SDF_1_2_2_0__root_GameObject_minus__1__torus__1 (float3 p);\n           
+          SdfResult SDF_1_2_2_1__root_GameObject_minus__1__box__1 (float3 p);\n           
+          SdfResult SDF_1_2_2__root_GameObject_minus__1___1 (float3 p);\n           
+          SdfResult SDF_1_3__root_sphere__1 (float3 p);\n            SdfResult SDF_1__root__1
+          (float3 p);\n            SdfResult SDF_1_0_0__root_combine_sphere__1(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          p = sdf::operators::transform(p, SDF_1_0_0__root_combine_sphere__1_SpaceTransform);\n               
+          result.distance = -sdf::primitives3D::sphere(p, SDF_1_0_0__root_combine_sphere__1_Radius);\n               
           result.id = int4(0, 0, 0, 3);\n                return result;\n           
-          }\n            SdfResult _1_0_1_root_combine_sphere__2_(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          _1_0_1_root_combine_sphere__2__SpaceTransform);\n                result.distance
-          = sdf::primitives3D::sphere(p, _1_0_1_root_combine_sphere__2__Radius);\n               
-          result.id = int4(0, 0, 0, 4);\n                return result;\n           
-          }\n            SdfResult _1_0_root_combine(float3 p) {\n               
-          SdfResult result = sdf::operators::intersectSimple(_1_0_0_root_combine_sphere(p),
-          _1_0_1_root_combine_sphere__2_(p));\n                return result;\n           
-          }\n            SdfResult _1_1_root_sphere__1_(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          _1_1_root_sphere__1__SpaceTransform);\n                result.distance
-          = sdf::primitives3D::sphere(p, _1_1_root_sphere__1__Radius);\n               
-          result.id = int4(0, 0, 0, 5);\n                return result;\n           
-          }\n            SdfResult _1_2_0_root_GameObject_cylinder(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          _1_2_0_root_GameObject_cylinder_SpaceTransform);\n                result.distance
-          = sdf::primitives3D::cylinder_rounded(p, _1_2_0_root_GameObject_cylinder_Radius,
-          _1_2_0_root_GameObject_cylinder_Rounding, _1_2_0_root_GameObject_cylinder_Height);\n               
-          result.id = int4(0, 0, 0, 6);\n                return result;\n           
-          }\n            SdfResult _1_2_1_0_root_GameObject_minus_torus(float3 p)
+          }\n            SdfResult SDF_1_0_1__root_combine_sphere__2___1(float3 p)
           {\n                SdfResult result = (SdfResult) 0;\n                p
-          = sdf::operators::transform(p, _1_2_1_0_root_GameObject_minus_torus_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::torus(p, _1_2_1_0_root_GameObject_minus_torus_MainRadius,
-          _1_2_1_0_root_GameObject_minus_torus_RingRadius);\n                result.id
-          = int4(0, 0, 0, 8);\n                return result;\n            }\n           
-          SdfResult _1_2_1_1_root_GameObject_minus_box(float3 p) {\n               
+          = sdf::operators::transform(p, SDF_1_0_1__root_combine_sphere__2___1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::sphere(p, SDF_1_0_1__root_combine_sphere__2___1_Radius);\n               
+          result.id = int4(0, 0, 0, 4);\n                return result;\n           
+          }\n            SdfResult SDF_1_0__root_combine__1(float3 p) {\n               
+          SdfResult result = sdf::operators::intersectSimple(SDF_1_0_0__root_combine_sphere__1(p),
+          SDF_1_0_1__root_combine_sphere__2___1(p));\n                return result;\n           
+          }\n            SdfResult SDF_1_1__root_sphere__1___1(float3 p) {\n               
           SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          _1_2_1_1_root_GameObject_minus_box_SpaceTransform);\n                result.distance
-          = -sdf::primitives3D::box(p, _1_2_1_1_root_GameObject_minus_box_BoxExtents);\n               
+          SDF_1_1__root_sphere__1___1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::sphere(p, SDF_1_1__root_sphere__1___1_Radius);\n               
+          result.id = int4(0, 0, 0, 5);\n                return result;\n           
+          }\n            SdfResult SDF_1_2_0__root_GameObject_cylinder__1(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          p = sdf::operators::transform(p, SDF_1_2_0__root_GameObject_cylinder__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::cylinder_rounded(p, SDF_1_2_0__root_GameObject_cylinder__1_Radius,
+          SDF_1_2_0__root_GameObject_cylinder__1_Rounding, SDF_1_2_0__root_GameObject_cylinder__1_Height);\n               
+          result.id = int4(0, 0, 0, 6);\n                return result;\n           
+          }\n            SdfResult SDF_1_2_1_0__root_GameObject_minus_torus__1(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          p = sdf::operators::transform(p, SDF_1_2_1_0__root_GameObject_minus_torus__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::torus(p, SDF_1_2_1_0__root_GameObject_minus_torus__1_MainRadius,
+          SDF_1_2_1_0__root_GameObject_minus_torus__1_RingRadius);\n               
+          result.id = int4(0, 0, 0, 8);\n                return result;\n           
+          }\n            SdfResult SDF_1_2_1_1__root_GameObject_minus_box__1(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          p = sdf::operators::transform(p, SDF_1_2_1_1__root_GameObject_minus_box__1_SpaceTransform);\n               
+          result.distance = -sdf::primitives3D::box(p, SDF_1_2_1_1__root_GameObject_minus_box__1_BoxExtents);\n               
           result.id = int4(0, 0, 0, 9);\n                return result;\n           
-          }\n            SdfResult _1_2_1_root_GameObject_minus(float3 p) {\n               
-          SdfResult result = sdf::operators::intersectSimple(_1_2_1_0_root_GameObject_minus_torus(p),
-          _1_2_1_1_root_GameObject_minus_box(p));\n                return result;\n           
-          }\n            SdfResult _1_2_2_0_root_GameObject_minus__1__torus(float3
+          }\n            SdfResult SDF_1_2_1__root_GameObject_minus__1(float3 p)
+          {\n                SdfResult result = sdf::operators::intersectSimple(SDF_1_2_1_0__root_GameObject_minus_torus__1(p),
+          SDF_1_2_1_1__root_GameObject_minus_box__1(p));\n                return
+          result;\n            }\n            SdfResult SDF_1_2_2_0__root_GameObject_minus__1__torus__1(float3
           p) {\n                SdfResult result = (SdfResult) 0;\n               
-          p = sdf::operators::transform(p, _1_2_2_0_root_GameObject_minus__1__torus_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::torus(p, _1_2_2_0_root_GameObject_minus__1__torus_MainRadius,
-          _1_2_2_0_root_GameObject_minus__1__torus_RingRadius);\n               
+          p = sdf::operators::transform(p, SDF_1_2_2_0__root_GameObject_minus__1__torus__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::torus(p, SDF_1_2_2_0__root_GameObject_minus__1__torus__1_MainRadius,
+          SDF_1_2_2_0__root_GameObject_minus__1__torus__1_RingRadius);\n               
           result.id = int4(0, 0, 0, 11);\n                return result;\n           
-          }\n            SdfResult _1_2_2_1_root_GameObject_minus__1__box(float3
+          }\n            SdfResult SDF_1_2_2_1__root_GameObject_minus__1__box__1(float3
           p) {\n                SdfResult result = (SdfResult) 0;\n               
-          p = sdf::operators::transform(p, _1_2_2_1_root_GameObject_minus__1__box_SpaceTransform);\n               
-          result.distance = -sdf::primitives3D::box(p, _1_2_2_1_root_GameObject_minus__1__box_BoxExtents);\n               
+          p = sdf::operators::transform(p, SDF_1_2_2_1__root_GameObject_minus__1__box__1_SpaceTransform);\n               
+          result.distance = -sdf::primitives3D::box(p, SDF_1_2_2_1__root_GameObject_minus__1__box__1_BoxExtents);\n               
           result.id = int4(0, 0, 0, 12);\n                return result;\n           
-          }\n            SdfResult _1_2_2_root_GameObject_minus__1_(float3 p) {\n               
-          SdfResult result = sdf::operators::intersectSimple(_1_2_2_0_root_GameObject_minus__1__torus(p),
-          _1_2_2_1_root_GameObject_minus__1__box(p));\n                return result;\n           
-          }\n            SdfResult _1_3_root_sphere(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          _1_3_root_sphere_SpaceTransform);\n                result.distance = sdf::primitives3D::sphere(p,
-          _1_3_root_sphere_Radius);\n                result.id = int4(0, 0, 0, 13);\n               
-          return result;\n            }\n            SdfResult _1_root(float3 p)
-          {\n                SdfResult result = sdf::operators::unionSimple(sdf::operators::unionSimple(_1_0_root_combine(p),
-          sdf::operators::unionSimple(_1_1_root_sphere__1_(p), _1_2_0_root_GameObject_cylinder(p))),
-          sdf::operators::unionSimple(_1_2_1_root_GameObject_minus(p), sdf::operators::unionSimple(_1_2_2_root_GameObject_minus__1_(p),
-          _1_3_root_sphere(p))));\n                return result;\n            }\n           
-          SdfResult sdfScene(float3 p) {\n                return _1_root(p);\n           
+          }\n            SdfResult SDF_1_2_2__root_GameObject_minus__1___1(float3
+          p) {\n                SdfResult result = sdf::operators::intersectSimple(SDF_1_2_2_0__root_GameObject_minus__1__torus__1(p),
+          SDF_1_2_2_1__root_GameObject_minus__1__box__1(p));\n                return
+          result;\n            }\n            SdfResult SDF_1_3__root_sphere__1(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          p = sdf::operators::transform(p, SDF_1_3__root_sphere__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::sphere(p, SDF_1_3__root_sphere__1_Radius);\n               
+          result.id = int4(0, 0, 0, 13);\n                return result;\n           
+          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
+          result = sdf::operators::unionSimple(sdf::operators::unionSimple(SDF_1_0__root_combine__1(p),
+          sdf::operators::unionSimple(SDF_1_1__root_sphere__1___1(p), SDF_1_2_0__root_GameObject_cylinder__1(p))),
+          sdf::operators::unionSimple(SDF_1_2_1__root_GameObject_minus__1(p), sdf::operators::unionSimple(SDF_1_2_2__root_GameObject_minus__1___1(p),
+          SDF_1_3__root_sphere__1(p))));\n                return result;\n           
+          }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n           
           }\n            "
         m_AssetPath: Assets/Prefabs
         m_PlatformMask: 4294967295
         m_HardwareTierVariantsMask: 0
-        m_StartLine: 62
+        m_StartLine: 75
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: f54619980c959de6bdee2aebd84c0ee6
+          Hash: 8f8d8c84546c4c8df122b8423b3c23de
         m_CodeHash:
           serializedVersion: 2
-          Hash: 70208e474c20a0d0e81d3aa8db30426e
+          Hash: 20d6a898195d7b2720f49de4a7c95458
         m_FromOther: 0
-        m_ForceSyncCompilation: 0
+        m_ForceSyncCompilation: 1
         m_UseDxcAPIs: 0
         m_NeverUseDxcAPIs: 0
         m_Language: 3

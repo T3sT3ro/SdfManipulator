@@ -60,9 +60,12 @@ namespace sdf { namespace operators {
     }
 
     SdfResult intersectSimple(in SdfResult a, in SdfResult b) {
+        SdfResult result;
         if (a.distance > b.distance) // this is dumb, but ternary produces GL error about type mismatch
-            return a;
-        return b;
+            result = a;
+        else
+            result = b;
+        return result;
     }
 
     SdfResult unionSmooth(SdfResult a, SdfResult b, float k) {

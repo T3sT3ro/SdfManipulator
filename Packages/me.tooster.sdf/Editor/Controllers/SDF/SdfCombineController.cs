@@ -7,13 +7,14 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.Controllers.Data;
-using me.tooster.sdf.Editor.Util;
+using me.tooster.sdf.Editor.Util.Controllers;
 using Unity.Properties;
 using UnityEngine;
 using static me.tooster.sdf.Editor.Controllers.SDF.SdfCombineController.CombinationOperation;
 
 
 namespace me.tooster.sdf.Editor.Controllers.SDF {
+    [GeneratePropertyBag]
     public partial class SdfCombineController : SdfController {
         public enum CombinationOperation {
             [InspectorName("Simple union")] SIMPLE_UNION = 0,
@@ -52,7 +53,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         [CreateProperty]
-        public IEnumerable<SdfController> SdfControllers => GetFirstNestedControllers(transform);
+        public IEnumerable<ISdfDataSource> SdfControllers => GetFirstNestedComponents<ISdfDataSource>(transform);
 
 
         public override SdfData sdfData {
@@ -89,26 +90,26 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 }
                 functionBody.Add((Return)new Identifier { id = "result" });
 
-                var sdfCombinationFunction = createSdfFunction(sdfFunctionIdentifier, functionBody);
+                var sdfCombinationFunction = SdfData.createSdfFunction(controllerIdentifier, functionBody);
 
                 return new SdfData
                 {
-                    evaluationExpression = vd => AST.Hlsl.Extensions.FunctionCall(sdfFunctionIdentifier, vd.evaluationExpression),
+                    evaluationExpression = vd => AST.Hlsl.Extensions.FunctionCall(controllerIdentifier, vd.evaluationExpression),
                     Requirements = merged.Requirements.Append(
                         new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl")
                     ).Append(
-                        new HlslFunctionRequirement { requiredFunction = sdfCombinationFunction }
+                        new HlslFunctionRequirement { functionDefinition = sdfCombinationFunction }
                     ),
                 };
             }
         }
 
-        static IEnumerable<SdfController> GetFirstNestedControllers(Transform root) {
+        static IEnumerable<T> GetFirstNestedComponents<T>(Transform root) {
             foreach (Transform child in root) {
-                if (child.GetComponent<SdfController>() is { } controller)
-                    yield return controller;
+                if (child.GetComponent<T>() is { } component)
+                    yield return component;
                 else {
-                    foreach (var c in GetFirstNestedControllers(child))
+                    foreach (var c in GetFirstNestedComponents<T>(child))
                         yield return c;
                 }
             }
@@ -123,7 +124,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                     "sdf::operators::unionSmooth",
                     d1,
                     d2,
-                    (Identifier)SdfScene.sceneData.controllers[this].properties[blendFactorPropertyPath].identifier
+                    (Identifier)this[blendFactorPropertyPath].identifier
                 ),
                 _ => throw new ArgumentOutOfRangeException(),
             };

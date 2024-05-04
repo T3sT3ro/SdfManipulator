@@ -5,6 +5,7 @@ using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
 
 namespace me.tooster.sdf.Editor.Controllers.SDF {
+    [GeneratePropertyBag]
     public partial class SdfBoxController : SdfController {
         static readonly                       PropertyPath boxExtentsPropertyPath = new(nameof(BoxExtents));
         [SerializeField] [DontCreateProperty] Vector3      boxExtents             = Vector3.one / 4;
@@ -17,7 +18,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public override SdfData sdfData => new()
         {
-            evaluationExpression = p => FunctionCall(sdfFunctionIdentifier, p.evaluationExpression),
+            evaluationExpression = p => FunctionCall(controllerIdentifier, p.evaluationExpression),
             Requirements = new API.Data.Requirement[]
             {
                 new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"),
@@ -27,7 +28,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                         evaluationExpression = FunctionCall(
                             "sdf::primitives3D::box",
                             pd.evaluationExpression,
-                            new Identifier { id = SdfScene.sceneData.controllers[this].properties[boxExtentsPropertyPath].identifier }
+                            new Identifier { id = this[boxExtentsPropertyPath].identifier }
                         ),
                     }
                 ),

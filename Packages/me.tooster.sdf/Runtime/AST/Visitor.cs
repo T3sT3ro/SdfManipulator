@@ -34,12 +34,16 @@ namespace me.tooster.sdf.AST {
 
         public R? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a);
 
-        public R? Visit(Anchor<Statement<Lang>> node);
+        public R? Visit(Anchor<Statement<Lang>> a);
 
-        public R? Visit(Anchor<Expression<Lang>> node);
+        public R? Visit(Anchor<Expression<Lang>> a);
 
-        public R? Visit(Anchor<Identifier<Lang>> node);
+        public R? Visit(Anchor<Identifier<Lang>> a);
+
+        public R? Visit(Anchor<CompilationUnit<Lang>> a);
     }
+
+
 
     /// Visitor without return values
     public interface Visitor<Lang> {
@@ -71,11 +75,13 @@ namespace me.tooster.sdf.AST {
         public void Visit(Anchor<StructuredTrivia<Lang>> a) { }
 
         public void Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) { }
-        
+
         public void Visit(Anchor<Statement<Lang>> a) { }
 
         public void Visit(Anchor<Expression<Lang>> a) { }
 
         public void Visit(Anchor<Identifier<Lang>> a) { }
+
+        public void Visit(Anchor<CompilationUnit<Lang>> a) { }
     }
 }

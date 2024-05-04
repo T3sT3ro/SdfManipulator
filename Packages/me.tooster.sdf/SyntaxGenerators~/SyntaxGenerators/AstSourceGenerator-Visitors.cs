@@ -35,6 +35,7 @@ namespace me.tooster.sdf.AST.Generators {
         // generates methods like Visit(ForSyntax<hlsl> node)
         private InterfaceDeclarationSyntax generateVisitorInterface(SymbolSet ss, bool withReturnTypes) {
             var visitor = InterfaceDeclaration(Identifier($"Visitor{(withReturnTypes ? "<R>" : "")}"))
+                .WithAttributeLists(generatedAttributeSyntax)
                 .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
                 .WithBaseList(BaseList(SingletonSeparatedList<BaseTypeSyntax>(
                     SimpleBaseType(

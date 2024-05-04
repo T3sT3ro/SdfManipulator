@@ -6,18 +6,22 @@ using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Preprocessor;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
-using me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Editor.Util.Controllers;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
+using FunctionDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.FunctionDefinition;
+using Parameter = me.tooster.sdf.AST.Hlsl.Syntax.Parameter;
+using VariableDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.VariableDefinition;
 namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
     public partial class RaymarchingShader {
         IEnumerable<Trivia<hlsl>> pragmasAndIncludes(IEnumerable<string> collectedIncludes) {
+            yield return new Pragma { tokenString = "editor_sync_compilation" }.ToStructuredTrivia();
             yield return new Pragma { tokenString = "target 5.0" }.ToStructuredTrivia();
             yield return new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia();
 
@@ -40,12 +44,16 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                 .Select(r => r.includeFile);
             var preprocessorHeader = pragmasAndIncludes(includes);
             var globals = generateHlslGlobals(scene).Cast<Statement<hlsl>>();
-            var requiredFunctions = sceneData.Requirements.OfType<HlslFunctionRequirement>()
-                .Select(r => r.requiredFunction);
+            var hlslFunctionRequirements = sceneData.Requirements.OfType<HlslFunctionRequirement>();
+            var functionRequirements = hlslFunctionRequirements as HlslFunctionRequirement[] ?? hlslFunctionRequirements.ToArray();
+            var requiredForwardDeclarations = functionRequirements.Select(r => r.functionDefinition.ForwardDeclaration());
+            var requiredFunctions = functionRequirements
+                .Select(r => r.functionDefinition);
 
 
             return new Tree<hlsl>(
                 globals
+                    .Concat(requiredForwardDeclarations)
                     .Concat(requiredFunctions)
                     .Append(sceneFunctionDefinition(sceneData))
                     .ToSyntaxList()
@@ -66,7 +74,12 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                                 variables = new VariableDeclarator.Definition
                                 {
                                     id = pd.identifier,
-                                    initializer = declaredPropertyType != typeof(Matrix4x4) ? null : (Identifier)"MATRIX_ID",
+                                    initializer = declaredPropertyType != typeof(Matrix4x4)
+                                        ? null
+                                        : PropertyContainer.GetValue<Controller, Matrix4x4>(
+                                            pd.controller,
+                                            pd.path
+                                        ).ToPrettyMatrixInitializerList(),
                                 },
                             },
                         };
@@ -81,7 +94,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             {
                 returnType = SdfData.sdfReturnType,
                 id = "sdfScene",
-                paramList = new FunctionDefinition.Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
+                paramList = new Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
                 body = new Block
                 {
                     statements = new Return { expression = sceneData.evaluationExpression(SdfData.pData) },

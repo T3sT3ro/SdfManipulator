@@ -1,15 +1,11 @@
 #nullable enable
-using System;
 using System.Collections.Generic;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-
 namespace me.tooster.sdf.AST {
-    // any calls are dispatched via the 
     public abstract class Mapper<Lang> : Visitor<Lang, Tree<Lang>.Node> {
         protected bool descendIntoTrivia { get; init; } = false;
 
-        // TODO: possibly optimize to avoid creating mapper state instances 
         protected Mapper(bool descendIntoTrivia = default) => this.descendIntoTrivia = descendIntoTrivia;
 
         public virtual Tree<Lang>.Node? Visit(Anchor<Token<Lang>> a) {
@@ -18,18 +14,19 @@ namespace me.tooster.sdf.AST {
             if (descendIntoTrivia)
                 leading = Visit(Anchor.New(leading, a)) as TriviaList<Lang>;
 
-            var trailing = token.TrailingTriviaList;
-            if (descendIntoTrivia)
-                trailing = Visit(Anchor.New(trailing, a)) as TriviaList<Lang>;
+            // var trailing = token.TrailingTriviaList;
+            // if (descendIntoTrivia)
+            //     trailing = Visit(Anchor.New(trailing, a)) as TriviaList<Lang>;
 
             if (ReferenceEquals(token.LeadingTriviaList, leading)
-             && ReferenceEquals(token.TrailingTriviaList, trailing))
+                // && ReferenceEquals(token.TrailingTriviaList, trailing)
+               )
                 return token;
 
             return token with
             {
                 LeadingTriviaList = leading ?? TriviaList<Lang>.Empty,
-                TrailingTriviaList = trailing ?? TriviaList<Lang>.Empty
+                // TrailingTriviaList = trailing ?? TriviaList<Lang>.Empty,
             };
         }
 
@@ -60,7 +57,7 @@ namespace me.tooster.sdf.AST {
             var trivia = a.Node;
             if (trivia.Structure is null) return trivia;
 
-            Syntax<Lang>? newStructure = Visit(Anchor.New(trivia.Structure, a)) as Syntax<Lang>;
+            var newStructure = Visit(Anchor.New(trivia.Structure, a)) as Syntax<Lang>;
             return ReferenceEquals(trivia.Structure, newStructure)
                 ? trivia
                 : new StructuredTrivia<Lang> { Structure = newStructure };
@@ -69,12 +66,14 @@ namespace me.tooster.sdf.AST {
         // dispatch by concrete type - all of these are abstract so it's safe to do this if type hierarchy is properly set up
         public virtual Tree<Lang>.Node? Visit(Anchor<Tree<Lang>.Node> a) => a.Node.Accept(this, a.Parent);
 
-        public virtual Tree<Lang>.Node? Visit(Anchor<SyntaxOrToken<Lang>> a) => a.Node.Accept(this, a.Parent);
-        public virtual Tree<Lang>.Node? Visit(Anchor<Syntax<Lang>> a)        => a.Node.Accept(this, a.Parent);
-        public virtual Tree<Lang>.Node? Visit(Anchor<Trivia<Lang>> a)        => a.Node.Accept(this, a.Parent);
-        public virtual Tree<Lang>.Node? Visit(Anchor<Statement<Lang>> a)     => a.Node.Accept(this, a.Parent);
-        public virtual Tree<Lang>.Node? Visit(Anchor<Expression<Lang>> a)    => a.Node.Accept(this, a.Parent);
-        public virtual Tree<Lang>.Node? Visit(Anchor<Identifier<Lang>> a)    => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<SyntaxOrToken<Lang>> a)   => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Syntax<Lang>> a)          => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Trivia<Lang>> a)          => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Statement<Lang>> a)       => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Expression<Lang>> a)      => a.Node.Accept(this, a.Parent);
+        public virtual Tree<Lang>.Node? Visit(Anchor<Identifier<Lang>> a)      => a.Node.Accept(this, a.Parent);
+        public         Tree<Lang>.Node? Visit(Anchor<CompilationUnit<Lang>> a) => a.Node.Accept(this, a.Parent);
+
         // identity for injected language - requires custom processing
         public virtual Tree<Lang>.Node? Visit<T>(Anchor<InjectedLanguage<Lang, T>> a) => a;
 

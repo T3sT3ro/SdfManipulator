@@ -1,19 +1,20 @@
 #nullable enable
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
+using Component = UnityEngine.Component;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     /**
      * TODO: refactor to a editor + runtime type with conditional compilation.
      * Runtime would handle updating uniforms/keywords while editor handle updating the material and shader.
      */
     [Icon("Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-icon-256.png")]
-    [DisallowMultipleComponent]
-    [GeneratePropertyBag]
-    public abstract partial class Controller : MonoBehaviour, INotifyPropertyChanged {
+    // [DisallowMultipleComponent]
+    public abstract class Controller : MonoBehaviour, INotifyPropertyChanged {
         public delegate void StructureChangedEventHandler(Controller sender);
         // TODO: cache it, register and unregister properly
         public SdfScene SdfScene => GetComponentInParent<SdfScene>(true);
@@ -21,14 +22,13 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public SdfScene.PropertyData this[PropertyPath p] => SdfScene.sceneData.controllers[this].properties[p];
 
         void OnTransformParentChanged() {
-            OnStructureChanged();
-            if (transform.parent.GetComponent<Controller>() is { } parentController)
-                StructureChanged = parentController.StructureChanged;
+            OnStructureChanged(); // notify currently subscribed parent
+            if (transform.GetComponentInParent<Controller>() is { } parentController)
+                StructureChanged = parentController.StructureChanged; // clear all previous listeners as well
             StructureChanged?.Invoke(this);
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
+        public event PropertyChangedEventHandler?  PropertyChanged;
         public event StructureChangedEventHandler? StructureChanged;
 
         public virtual void OnStructureChanged() => StructureChanged?.Invoke(this);
@@ -46,6 +46,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             return true;
         }
 
+        // TODO: remove this, use IdentifierRequirement instead
+        protected string controllerIdentifier => SdfScene.sceneData.controllers[this].identifier;
+
         public static void TryInstantiate<TController>(string name) where TController : Controller, new() {
             var target = Selection.activeGameObject;
 
@@ -55,6 +58,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             var controller = sdf.AddComponent<TController>();
             ObjectNames.SetNameSmart(sdf, name);
+        }
+
+        public T GetNextControllerInStack<T>() where T : Component {
+            var thisIndex = GetComponentIndex();
+            return GetComponents<T>().First(c => c.GetComponentIndex() > thisIndex);
         }
     }
 }

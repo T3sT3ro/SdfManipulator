@@ -1,10 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
-    public record SeparatedList<Lang, TSyntax> : SyntaxOrTokenList<Lang> where TSyntax : Syntax<Lang> {
+    public interface ISeparatedList : IEnumerable { }
+
+
+
+    public record SeparatedList<Lang, TSyntax> : SyntaxOrTokenList<Lang>, ISeparatedList where TSyntax : Syntax<Lang> {
         public SeparatedList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) : base(fullList) { }
         public SeparatedList(IEnumerable<SyntaxOrToken<Lang>> listWithSeparators) : base(listWithSeparators) { }
 
@@ -13,8 +17,9 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
 
-        public static implicit operator SeparatedList<Lang, TSyntax>(TSyntax singleton) => new(new SyntaxOrToken<Lang>[] {singleton});
-        
+        public static implicit operator SeparatedList<Lang, TSyntax>(TSyntax singleton) => new(new SyntaxOrToken<Lang>[] { singleton });
+
+
         #region specializations
 
         /// Returns number of syntax nodes in this separated list 
@@ -27,10 +32,11 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
         /// returns a valid, separated syntax-list with tokens
         /// A, B, C, D -> slice(1, 2) -> B, C
         /// start and length relate to syntax nodes, not tokens
-        public SeparatedList<Lang, TSyntax> Slice<TTok>(int start, int length) where TTok : Token<Lang> =>
-            new(FullList.OfType<TSyntax>().Skip(start << 1).Take((length << 1) - 1));
-        
+        public SeparatedList<Lang, TSyntax> Slice<TTok>(int start, int length) where TTok : Token<Lang>
+            => new(FullList.OfType<TSyntax>().Skip(start << 1).Take((length << 1) - 1));
+
         #endregion
+
 
         #region utilities
 
@@ -38,8 +44,7 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
         public IEnumerable<TSyntax> Nodes => FullList.Where((_, index) => (index & 1) == 0).Cast<TSyntax>();
 
         /// <summary>Returns only separators</summary>
-        public IEnumerable<Token<Lang>> Separators =>
-            FullList.Where((_, index) => (index & 1) != 0).Cast<Token<Lang>>();
+        public IEnumerable<Token<Lang>> Separators => FullList.Where((_, index) => (index & 1) != 0).Cast<Token<Lang>>();
 
         public int SeparatorCount => FullList.Count >> 1;
 
@@ -52,15 +57,18 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         /// Builds list with separators from A B C -> A [tok] B [tok] C 
         public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(IEnumerable<TSyntax> list)
-            where TTok : Token<Lang>, new() =>
-            new(list.SelectMany((x, i) => i == 0
-                ? new SyntaxOrToken<Lang>[] { x }
-                : new SyntaxOrToken<Lang>[] { new TTok(), x })
+            where TTok : Token<Lang>, new()
+            => new(
+                list.SelectMany(
+                    (x, i) => i == 0
+                        ? new SyntaxOrToken<Lang>[] { x }
+                        : new SyntaxOrToken<Lang>[] { new TTok(), x }
+                )
             );
 
         /// <summary>see <see cref="WithSeparator{TTok}(System.Collections.Generic.IEnumerable{TSyntax})"/></summary>
-        public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(params TSyntax[] list) where TTok : Token<Lang>, new() =>
-            WithSeparator<TTok>(list.AsEnumerable());
+        public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(params TSyntax[] list) where TTok : Token<Lang>, new()
+            => WithSeparator<TTok>(list.AsEnumerable());
 
         #endregion
     }

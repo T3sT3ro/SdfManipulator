@@ -6,7 +6,8 @@ using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
 
 namespace me.tooster.sdf.Editor.Controllers.SDF {
-    public class SdfTorusController : SdfController {
+    [GeneratePropertyBag]
+    public partial class SdfTorusController : SdfController {
         public enum TorusVariant {
             [InspectorName("Normal")] NORMAL,
             [InspectorName("Capped")] CAPPED,
@@ -49,7 +50,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public override SdfData sdfData => new()
         {
-            evaluationExpression = p => FunctionCall(sdfFunctionIdentifier, p.evaluationExpression),
+            evaluationExpression = p => FunctionCall(controllerIdentifier, p.evaluationExpression),
             Requirements = new API.Data.Requirement[]
             {
                 new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"),
@@ -62,8 +63,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                                 evaluationExpression = FunctionCall(
                                     "sdf::primitives3D::torus",
                                     p.evaluationExpression,
-                                    new Identifier { id = SdfScene.sceneData.controllers[this].properties[torusMainRadius].identifier },
-                                    new Identifier { id = SdfScene.sceneData.controllers[this].properties[torusRingRadius].identifier }
+                                    new Identifier { id = this[torusMainRadius].identifier },
+                                    new Identifier { id = this[torusRingRadius].identifier }
                                 ),
                             }
                         ),
@@ -74,9 +75,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                                 evaluationExpression = FunctionCall(
                                     "sdf::primitives3D::torus_capped",
                                     p.evaluationExpression,
-                                    new Identifier { id = SdfScene.sceneData.controllers[this].properties[torusMainRadius].identifier },
-                                    new Identifier { id = SdfScene.sceneData.controllers[this].properties[torusRingRadius].identifier },
-                                    new Identifier { id = SdfScene.sceneData.controllers[this].properties[torusCap].identifier }
+                                    new Identifier { id = this[torusMainRadius].identifier },
+                                    new Identifier { id = this[torusRingRadius].identifier },
+                                    new Identifier { id = this[torusCap].identifier }
                                 ),
                             }
                         ),

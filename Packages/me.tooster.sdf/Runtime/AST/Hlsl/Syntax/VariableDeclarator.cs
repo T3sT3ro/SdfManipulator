@@ -2,7 +2,6 @@
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
     // float x
     // uniform row_major float4x4 M : WORLDVIEWPROJECTION, N : WORLDVIEWPROJECTION
@@ -14,6 +13,8 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public SyntaxOrTokenList<hlsl>?        typeModifiers   { get; init; }
         public Type                            type            { get; init; }
         public SeparatedList<hlsl, Definition> variables       { get; init; } = new();
+
+
 
         // x
         // x[1][2]

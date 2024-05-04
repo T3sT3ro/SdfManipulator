@@ -28,10 +28,12 @@ using System;
 namespace {ROOT_NAMESPACE} {{
 
     /// Marks Syntax for generation
+    [global::System.Runtime.CompilerServices.CompilerGenerated]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     internal class {SYNTAX_ATTRIBUTE_NAME} : Attribute {{}}
 
     /// Marks Token for generation
+    [global::System.Runtime.CompilerServices.CompilerGenerated]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     internal class {TOKEN_ATTRIBUTE_NAME} : Attribute {{
         public string Text;
@@ -39,6 +41,7 @@ namespace {ROOT_NAMESPACE} {{
     }}
 
     /// Marks Trivia for generation
+    [global::System.Runtime.CompilerServices.CompilerGenerated]
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     internal class {TRIVIA_ATTRIBUTE_NAME} : Attribute {{}}
 }}
@@ -46,6 +49,14 @@ namespace {ROOT_NAMESPACE} {{
 
         // private Compilation               compilation;
         private GeneratorExecutionContext context;
+
+        SyntaxList<AttributeListSyntax> generatedAttributeSyntax = SingletonList(
+            AttributeList(
+                SingletonSeparatedList(
+                    Attribute(ParseName("global::System.Runtime.CompilerServices.CompilerGenerated"))
+                )
+            )
+        );
 
         public void Initialize(GeneratorInitializationContext initializationContext) {
             initializationContext.RegisterForPostInitialization(i => i.AddSource("SyntaxAttributes.g.cs", ATTRIBUTES));
@@ -55,7 +66,7 @@ namespace {ROOT_NAMESPACE} {{
         public void Execute(GeneratorExecutionContext executionContext) {
             if (!(executionContext.SyntaxContextReceiver is AstReceiver receiver))
                 return;
-        
+
             context = executionContext;
 
             receiver.Diagnostics.ForEach(context.ReportDiagnostic);
@@ -63,19 +74,17 @@ namespace {ROOT_NAMESPACE} {{
             foreach (var kv in receiver.LanguageSymbols) {
                 var langName = kv.Key;
                 var ss = kv.Value;
-                
+
                 GenerateLanguageMarkerInterface(langName);
-                
+
                 GenerateTokenPartials(ss.Tokens, langName);
-                
+
                 foreach (var recordSymbol in ss.Syntaxes)
                     GenerateSyntaxPartials(recordSymbol, ss);
-                
+
                 GenerateVisitor(ss);
                 GenerateMapper(ss);
             }
-            
-
         }
         // ------------------- GENERATION -------------------
 
@@ -87,7 +96,9 @@ namespace {ROOT_NAMESPACE} {{
 }}
 ";
 
-            context.AddSource($"Languages.{langName}.g.cs", SourceText.From(langMarker, Encoding.UTF8)
+            context.AddSource(
+                $"Languages.{langName}.g.cs",
+                SourceText.From(langMarker, Encoding.UTF8)
             );
         }
 

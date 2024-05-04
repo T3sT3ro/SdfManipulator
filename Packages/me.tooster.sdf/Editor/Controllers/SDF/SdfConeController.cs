@@ -6,7 +6,8 @@ using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
 
 namespace me.tooster.sdf.Editor.Controllers.SDF {
-    public class SdfConeController : SdfController {
+    [GeneratePropertyBag]
+    public partial class SdfConeController : SdfController {
         public enum OriginPosition {
             [InspectorName("Origin at base")]    BOTTOM,
             [InspectorName("Origin at the tip")] TIP,
@@ -38,6 +39,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             set => SetField(ref coneOrigin, value, false);
         }
 
+        [CreateProperty] [ShaderProperty]
         public override Matrix4x4 SpaceTransform => ConeOrigin switch
         {
             OriginPosition.BOTTOM => (Matrix4x4.Translate(transform.up * Height) * transform.localToWorldMatrix).inverse,
@@ -47,7 +49,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public override SdfData sdfData => new()
         {
-            evaluationExpression = p => FunctionCall(sdfFunctionIdentifier, p.evaluationExpression),
+            evaluationExpression = p => FunctionCall(controllerIdentifier, p.evaluationExpression),
             Requirements = new API.Data.Requirement[]
             {
                 new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"),
@@ -57,8 +59,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                         evaluationExpression = FunctionCall(
                             "sdf::primitives3D::cone",
                             p.evaluationExpression,
-                            new Identifier { id = SdfScene.sceneData.controllers[this].properties[coneAngle].identifier },
-                            new Identifier { id = SdfScene.sceneData.controllers[this].properties[coneHeight].identifier }
+                            new Identifier { id = this[coneAngle].identifier },
+                            new Identifier { id = this[coneHeight].identifier }
                         ),
                     }
                 ),

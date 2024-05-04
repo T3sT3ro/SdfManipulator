@@ -1,10 +1,6 @@
 #nullable enable
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using me.tooster.sdf.AST.Syntax;
-using me.tooster.sdf.AST.Syntax.CommonSyntax;
-
 namespace me.tooster.sdf.AST {
     // TODO: move to Zipper data structure with necessary extensions
     public static class Navigation {
@@ -17,14 +13,20 @@ namespace me.tooster.sdf.AST {
             }
         }
 
-        /// Represents syntax visiting direction, FORWARD for reading from the beginning to end, BACKWARD from end to beginning
-        public enum Direction { FORWARD, BACKWARD }
 
-        public static Anchor<Token<TLang>>? LastToken<TLang>(this IAnchor<SyntaxOrToken<TLang>> a) =>
-            a.FirstToken(Direction.BACKWARD);
 
-        public static Anchor<Token<TLang>>? FirstToken<TLang>(this IAnchor<SyntaxOrToken<TLang>> a,
-            Direction direction = Direction.FORWARD) {
+        /// subtree side 
+        public enum Side { LEFT = +1, RIGHT = -1 }
+
+
+
+        public static Side Opposite(this Side side) => (Side)(-(int)side);
+
+
+        public static Anchor<Token<TLang>>? FirstToken<TLang>(
+            this IAnchor<SyntaxOrToken<TLang>> a,
+            Side side = Side.LEFT
+        ) {
             var stack = new Stack<IAnchor<SyntaxOrToken<TLang>>>();
             stack.Push(a);
             while (stack.Count > 0) {
@@ -33,7 +35,7 @@ namespace me.tooster.sdf.AST {
                 if (current is { Node: Token<TLang> tok }) return Anchor.New(tok, current.Parent);
 
                 var childrenOrdered = ((Syntax<TLang>)current.Node).ChildNodesAndTokens();
-                foreach (var child in direction != Direction.FORWARD
+                foreach (var child in side != Side.LEFT
                              ? childrenOrdered
                              : childrenOrdered.AsReverseEnumerator())
                     stack.Push(Anchor.New(child, (Anchor?)current));
@@ -44,27 +46,29 @@ namespace me.tooster.sdf.AST {
 
         /// returns neighboring token
         /// <remarks>based on https://github.com/dotnet/roslyn/blob/462e180642875c0540ae1379e60425f635ec4f78/src/Compilers/Core/Portable/Syntax/SyntaxNavigator.cs#L435</remarks>
-        public static Anchor<Token<Lang>>? NextToken<Lang>(this IAnchor<Token<Lang>> aToken,
-            Direction direction = Direction.FORWARD) {
+        public static Anchor<Token<Lang>>? NextToken<Lang>(
+            this IAnchor<Token<Lang>> aToken,
+            Side to = Side.RIGHT
+        ) {
             // only internal nodes are derivations of Syntax and StructuredTrivia
             IAnchor<SyntaxOrToken<Lang>>? lookingFor = aToken;
             var parent = aToken.Parent;
             while (parent is { Node: Syntax<Lang> syntax }) {
                 var returnNext = false;
-                foreach (var child in direction is Direction.FORWARD
+                foreach (var child in to is Side.RIGHT
                              ? syntax.ChildNodesAndTokens()
                              : syntax.ChildNodesAndTokens().AsReverseEnumerator()) {
                     if (returnNext) {
                         if (child is Token<Lang> tok) return Anchor.New(tok, parent);
 
-                        if (Anchor.New((Syntax<Lang>)child, parent).FirstToken(direction) is { } firstToken)
+                        if (Anchor.New((Syntax<Lang>)child, parent).FirstToken(to.Opposite()) is { } firstToken)
                             return firstToken;
                     } else if (ReferenceEquals(child, lookingFor?.Node))
                         returnNext = true;
                 }
 
                 // when we reach final token in list we have to search for this syntax in parent
-                if (returnNext) lookingFor = parent as IAnchor<Syntax<Lang>>;
+                if (returnNext) lookingFor = parent as IAnchor<SyntaxOrToken<Lang>>;
                 parent = parent.Parent;
             }
 
@@ -72,34 +76,24 @@ namespace me.tooster.sdf.AST {
             return default; // TODO: implement this for structured trivia
         }
 
-        public static Anchor<Token<Lang>>? PreviousToken<Lang>(this IAnchor<Token<Lang>> aToken) =>
-            aToken.NextToken(Direction.BACKWARD);
-
-        
-        // IMPORTANT: check if it works, use it to add empty line formtting around functions
-        public static bool IsFirstTokenOf<Lang, S>(
-            this IAnchor<Token<Lang>> atoken,
-            out Anchor<S>? asyntax,
-            Direction direction = Direction.FORWARD
-        ) where S : Syntax<Lang> {
-            IAnchor<SyntaxOrToken<Lang>> lookingFor = atoken;
-            var edgeIndex = direction == Direction.FORWARD ? 0 : ^1;
-            asyntax = null;
-            foreach (var parent in lookingFor.Ancestors()) {
-                if (parent is Anchor<Syntax<Lang>> aParentSyntax) {
-                    // not en edge "thing" -> bail
-                    if (!ReferenceEquals(lookingFor.Node, aParentSyntax.Node.ChildNodesAndTokens()[edgeIndex]))
-                        return false;
-
-                    if (aParentSyntax is Anchor<S> found) {
-                        asyntax = found;
-                        return true;
-                    } else
-                        lookingFor = aParentSyntax;
+        public static IEnumerable<IAnchor> ParentsWithTokenOnEdge<Lang>(
+            IAnchor<Token<Lang>> aToken,
+            Side side = Side.LEFT
+        ) {
+            IAnchor lookingFor = aToken;
+            var edgeIndex = side == Side.LEFT ? 0 : ^1;
+            IAnchor? parent = aToken.Parent;
+            while (parent is not null) {
+                switch (parent) {
+                    case { Node: StructuredTrivia<Lang> }:
+                    case { Node: Syntax<Lang> s } when ReferenceEquals(lookingFor.Node, s.ChildNodesAndTokens()[edgeIndex]):
+                    case { Node: TriviaList<Lang> triviaList } when ReferenceEquals(lookingFor.Node, triviaList[edgeIndex]):
+                        yield return parent;
+                        break;
                 }
+                lookingFor = parent;
+                parent = lookingFor.Parent;
             }
-
-            return false;
         }
     }
 }

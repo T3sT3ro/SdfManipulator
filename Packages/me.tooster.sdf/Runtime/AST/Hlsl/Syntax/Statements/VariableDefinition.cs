@@ -1,7 +1,6 @@
-using Expression = me.tooster.sdf.AST.Syntax.CommonSyntax.Expression<me.tooster.sdf.AST.hlsl>;
 using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sdf.AST.hlsl>;
 
-namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions {
+namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     // float x;
     // float x[1][2];
     // float a, b, c;
@@ -11,7 +10,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements.Definitions {
     [SyntaxNode] public partial record VariableDefinition : Statement {
         public VariableDeclarator declarator     { get; init; }
         public SemicolonToken     semicolonToken { get; init; } = new();
-        
+
         public static implicit operator VariableDefinition(VariableDeclarator declarator) => new() { declarator = declarator };
     }
 }

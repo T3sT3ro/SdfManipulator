@@ -8,6 +8,7 @@ using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using me.tooster.sdf.Editor.Util;
 using Unity.Properties;
@@ -64,7 +65,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                                                 attributes = SyntaxUnityExtensions.headerAttribute(
                                                     scene.GetControllerSceneAncestors(group.Key).Reverse().Select(c => c.name)
                                                         .JoinToString("/")
-                                                ),
+                                                ).WithLeadingTrivia(new NewLine<shaderlab>(), new NewLine<shaderlab>()),
                                             }
                                     )
                             )
@@ -121,11 +122,20 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             var shaderlabType = t.shaderlabTypeKeyword();
             PropertySyntax.Initializer shaderlabInitializer = t switch
             {
-                not null when t == typeof(int)   => new PropertySyntax.Number<IntLiteral> { numberLiteral = 0 },
-                not null when t == typeof(float) => new PropertySyntax.Number<FloatLiteral> { numberLiteral = 0 },
-                not null when t == typeof(Vector2) || t == typeof(Vector3) || t == typeof(Vector4)
-                 || t == typeof(Vector2Int) || t == typeof(Vector3Int) => new PropertySyntax.Vector
-                        { arguments = Vector4.zero.VectorArgumentList() },
+                not null when t == typeof(int) => new PropertySyntax.Number<IntLiteral>
+                    { numberLiteral = PropertyContainer.GetValue<Controller, int>(pd.controller, pd.path) },
+                not null when t == typeof(float) => new PropertySyntax.Number<FloatLiteral>
+                    { numberLiteral = PropertyContainer.GetValue<Controller, float>(pd.controller, pd.path) },
+                not null when t == typeof(Vector2) => new PropertySyntax.Vector
+                    { arguments = PropertyContainer.GetValue<Controller, Vector2>(pd.controller, pd.path).VectorArgumentList() },
+                not null when t == typeof(Vector3) => new PropertySyntax.Vector
+                    { arguments = PropertyContainer.GetValue<Controller, Vector3>(pd.controller, pd.path).VectorArgumentList() },
+                not null when t == typeof(Vector4) => new PropertySyntax.Vector
+                    { arguments = PropertyContainer.GetValue<Controller, Vector4>(pd.controller, pd.path).VectorArgumentList() },
+                not null when t == typeof(Vector2Int) => new PropertySyntax.Vector
+                    { arguments = PropertyContainer.GetValue<Controller, Vector2Int>(pd.controller, pd.path).VectorArgumentList() },
+                not null when t == typeof(Vector3Int) => new PropertySyntax.Vector
+                    { arguments = PropertyContainer.GetValue<Controller, Vector3Int>(pd.controller, pd.path).VectorArgumentList() },
                 _ => throw new ShaderGenerationException($"Can't generate initializer for shaderlab property {pd}"),
             };
 

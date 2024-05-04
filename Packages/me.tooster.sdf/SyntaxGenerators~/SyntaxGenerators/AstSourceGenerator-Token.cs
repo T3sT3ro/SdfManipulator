@@ -9,6 +9,9 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace me.tooster.sdf.AST.Generators {
     public partial class AstSourceGenerator {
+        static readonly MemberDeclarationSyntax? toStringBaseOverrideSyntax = ParseMemberDeclaration(
+            "public override string ToString() => base.ToString();");
+
         public void GenerateTokenPartials(IEnumerable<ITypeSymbol> tokens, string langName) {
             var compilationUnit = CompilationUnit()
                 .AddUsings(
@@ -65,8 +68,7 @@ namespace me.tooster.sdf.AST.Generators {
 
             if (!tokenSymbol.GetMembers("ToString").Any(m => !m.IsImplicitlyDeclared) /* && !recordSymbol.IsAbstract*/
                ) {
-                tokenRecordDeclaration = tokenRecordDeclaration.AddMembers(ParseMemberDeclaration(
-                    "public override string ToString() => base.ToString();")!);
+                tokenRecordDeclaration = tokenRecordDeclaration.AddMembers(toStringBaseOverrideSyntax!);
             }
 
             return tokenRecordDeclaration;

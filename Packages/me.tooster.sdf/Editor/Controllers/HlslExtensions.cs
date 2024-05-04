@@ -5,9 +5,12 @@ using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
+using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
+using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using UnityEngine;
-namespace me.tooster.sdf.Editor.Util {
+namespace me.tooster.sdf.Editor.Util.Controllers {
     public static class HlslExtensions {
         // convert typed enumerables to literal enumerables
         static IEnumerable<LiteralExpression> ToLiterals(this IEnumerable<float> vals)
@@ -40,6 +43,34 @@ namespace me.tooster.sdf.Editor.Util {
 
         /// constructs braced innitializer syntax for this matrix looking like: <code>{{m11,m12,m13,m14}, {...}, {...}, {...}}</code>
         public static BracedInitializerExpression ToMatrixInitializerList(this Matrix4x4 value)
-            => Enumerable.Range(0, 4).Select(i => value.GetRow(i).ToBracedInitializerList() as Expression<hlsl>).ToBracedList();
+            => Enumerable.Range(0, 4).Select(
+                    i => value.GetRow(i).ToBracedInitializerList() as Expression<hlsl>
+                )
+                .ToBracedList();
+
+        public static BracedInitializerExpression ToPrettyMatrixInitializerList(this Matrix4x4 matrix)
+            => new()
+            {
+                components = new BracedList<Expression<hlsl>>
+                {
+                    arguments = new Expression<hlsl>[]
+                    {
+                        matrix.GetRow(0).ToBracedInitializerList().WithLeadingTrivia(new NewLine<hlsl>()),
+                        matrix.GetRow(1).ToBracedInitializerList().WithLeadingTrivia(new NewLine<hlsl>()),
+                        matrix.GetRow(2).ToBracedInitializerList().WithLeadingTrivia(new NewLine<hlsl>()),
+                        matrix.GetRow(3).ToBracedInitializerList().WithLeadingTrivia(new NewLine<hlsl>()),
+                    }.CommaSeparated(),
+                    closeBraceToken = new CloseBraceToken { LeadingTriviaList = new NewLine<hlsl>() },
+                },
+            };
+
+        public static FunctionDeclaration ForwardDeclaration(this FunctionDefinition functionDefinition)
+            => new()
+            {
+                id = functionDefinition.id,
+                paramList = functionDefinition.paramList,
+                returnSemantic = functionDefinition.returnSemantic,
+                returnType = functionDefinition.returnType,
+            };
     }
 }

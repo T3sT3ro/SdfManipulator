@@ -9,6 +9,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
      * A basic controller for sdf primitives and positionable elements.
      */
     [ExecuteAlways]
+    [GeneratePropertyBag]
     public partial class SdfTransformController : Controller {
         static readonly PropertyPath spaceTransformPropertyPath = new(nameof(SpaceTransform));
         [CreateProperty] [ShaderProperty(Description = "Space Transform")]
@@ -35,7 +36,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         protected virtual void Update() {
-            if (SdfScene == null) return;
             if (!transform.hasChanged) return;
             OnPropertyChanged(nameof(SpaceTransform));
         }
@@ -60,7 +60,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                     vd.evaluationExpression,
                     new Identifier
                     {
-                        id = SdfScene.sceneData.controllers[this].properties[spaceTransformPropertyPath].identifier,
+                        id = this[spaceTransformPropertyPath].identifier,
                     }
                 ),
                 Requirements = vd.Requirements.Append(

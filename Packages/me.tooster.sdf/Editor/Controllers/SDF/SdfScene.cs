@@ -165,12 +165,12 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             var sdfScenePrefabAssetPath = prefabStage.assetPath;
             string shaderSource;
-            try {
-                shaderSource = AssembleShaderSource();
-                Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderSource); // TODO: remove after debugging is done
-            } catch (Exception e) {
+            // try { // TURNED OF DUE TO DEBUGGER NOT STEPPING INTO THE STACK TRACE: https://youtrack.jetbrains.com/issue/RIDER-18382/Rethrown-exceptions-dont-point-to-the-correct-stack-location
+            shaderSource = AssembleShaderSource();
+            Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderSource); // TODO: remove after debugging is done
+            /*} catch (Exception e) {
                 throw new ShaderGenerationException("Shader generation error", e);
-            }
+            }*/
 
             if (controlledShader == null)
                 throw new ShaderGenerationException("Missing attached shader asset as a target for generation!");
@@ -214,10 +214,13 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         string GenerateControllerIdentifier(Controller controller) {
             var pathFromParent = GetControllerSceneAncestors(controller).Reverse().ToArray();
             var indexedPath = pathFromParent.Select(t => t.GetSiblingIndex().ToString("X")).JoinToString("_");
-            return pathFromParent.Select(t => $"{t.name}")
-                .Prepend($"_{indexedPath}")
-                .Select(API.Extensions.sanitizeToIdentifierString)
-                .JoinToString("_");
+            return
+                @$"SDF_{indexedPath}__{
+                    pathFromParent
+                        .Select(t => $"{t.name}")
+                        .Select(API.Extensions.sanitizeToIdentifierString)
+                        .JoinToString("_")
+                }__{controller.GetComponentIndex().ToString()}";
         }
 
 

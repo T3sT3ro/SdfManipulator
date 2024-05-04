@@ -6,7 +6,8 @@ using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
 
 namespace me.tooster.sdf.Editor.Controllers.SDF {
-    public class SdfCylinderController : SdfController {
+    [GeneratePropertyBag]
+    public partial class SdfCylinderController : SdfController {
         public enum CylinderVariant {
             [InspectorName("Infinite")] INFINITE,
             [InspectorName("Capped")]   CAPPED,
@@ -49,7 +50,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public override SdfData sdfData => new()
         {
-            evaluationExpression = p => FunctionCall(sdfFunctionIdentifier, p.evaluationExpression),
+            evaluationExpression = p => FunctionCall(controllerIdentifier, p.evaluationExpression),
             Requirements = new API.Data.Requirement[]
             {
                 new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"),
@@ -61,8 +62,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                             evaluationExpression = FunctionCall(
                                 "sdf::primitives3D::cylinder_capped",
                                 p.evaluationExpression,
-                                (Identifier)SdfScene.sceneData.controllers[this].properties[cylinderHeight].identifier,
-                                (Identifier)SdfScene.sceneData.controllers[this].properties[cylinderRadius].identifier
+                                (Identifier)this[cylinderHeight].identifier,
+                                (Identifier)this[cylinderRadius].identifier
                             ),
                         }
                     ),
@@ -72,7 +73,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                             evaluationExpression = FunctionCall(
                                 "sdf::primitives3D::cylinder_infinite",
                                 p.evaluationExpression,
-                                (Identifier)SdfScene.sceneData.controllers[this].properties[cylinderRadius].identifier
+                                (Identifier)this[cylinderRadius].identifier
                             ),
                         }
                     ),
@@ -82,9 +83,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                             evaluationExpression = FunctionCall(
                                 "sdf::primitives3D::cylinder_rounded",
                                 p.evaluationExpression,
-                                (Identifier)SdfScene.sceneData.controllers[this].properties[cylinderRadius].identifier,
-                                (Identifier)SdfScene.sceneData.controllers[this].properties[cylinderRounding].identifier,
-                                (Identifier)SdfScene.sceneData.controllers[this].properties[cylinderHeight].identifier
+                                (Identifier)this[cylinderRadius].identifier,
+                                (Identifier)this[cylinderRounding].identifier,
+                                (Identifier)this[cylinderHeight].identifier
                             ),
                         }
                     ),

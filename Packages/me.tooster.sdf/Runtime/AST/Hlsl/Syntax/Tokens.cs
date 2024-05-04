@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
-using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
 // @formatter off
     // TODO: use interned strings or static strings for token getters
@@ -125,6 +125,8 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     [TokenNode("while")]                public partial record WhileKeyword;
     [TokenNode("for")]                  public partial record ForKeyword;
 
+    [TokenNode]                             public partial record EndOfDirectiveToken;
+    
     [TokenNode("typedef")]              public partial record TypedefKeyword;
     [TokenNode("define")]               public partial record DefineKeyword;
     [TokenNode("undef")]                public partial record UndefKeyword;

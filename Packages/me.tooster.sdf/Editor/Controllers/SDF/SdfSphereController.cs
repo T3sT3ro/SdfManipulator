@@ -5,6 +5,7 @@ using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
 
 namespace me.tooster.sdf.Editor.Controllers.SDF {
+    [GeneratePropertyBag]
     public partial class SdfSphereController : SdfController {
         static readonly                       PropertyPath radiusPropertyPath = new(nameof(Radius));
         [SerializeField] [DontCreateProperty] float        radius             = 1f;
@@ -18,7 +19,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public override SdfData sdfData => new()
         {
-            evaluationExpression = p => FunctionCall(sdfFunctionIdentifier, p.evaluationExpression),
+            evaluationExpression = p => FunctionCall(controllerIdentifier, p.evaluationExpression),
             Requirements = new API.Data.Requirement[]
             {
                 new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"),
@@ -28,7 +29,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                         evaluationExpression = FunctionCall(
                             "sdf::primitives3D::sphere",
                             p.evaluationExpression,
-                            new Identifier { id = SdfScene.sceneData.controllers[this].properties[radiusPropertyPath].identifier }
+                            new Identifier { id = this[radiusPropertyPath].identifier }
                         ),
                     }
                 ),
