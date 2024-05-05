@@ -185,7 +185,13 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             {
                 statements = new SyntaxList<shaderlab, SubShaderOrPassStatement>(TagsBlock)
                     .Splice(1, 0, Commands)
-                    .Append<SubShaderOrPassStatement>(Pass(scene))
+                    .Append<SubShaderOrPassStatement>(
+                        new HlslInclude
+                        {
+                            hlsl = new InjectedLanguage<shaderlab, hlsl>(CommonHlslInclude(scene)),
+                        }
+                    )
+                    .Append(Pass(scene))
                     .ToList(),
             };
 

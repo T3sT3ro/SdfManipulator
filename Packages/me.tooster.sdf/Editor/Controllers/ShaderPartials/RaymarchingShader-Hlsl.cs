@@ -38,12 +38,18 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             yield return new NewLine<hlsl>();
         }
 
-        Tree<hlsl> HlslTree(SdfScene scene) {
+        Tree<hlsl> CommonHlslInclude(SdfScene scene) {
             var sceneData = scene.sdfSceneRoot!.sdfData;
             var includes = sceneData.Requirements.OfType<HlslIncludeFileRequirement>()
                 .Select(r => r.includeFile);
             var preprocessorHeader = pragmasAndIncludes(includes);
             var globals = generateHlslGlobals(scene).Cast<Statement<hlsl>>();
+
+            return new Tree<hlsl>(globals.ToSyntaxList().WithLeadingTrivia(preprocessorHeader));
+        }
+
+        Tree<hlsl> HlslTree(SdfScene scene) {
+            var sceneData = scene.sdfSceneRoot!.sdfData;
             var hlslFunctionRequirements = sceneData.Requirements.OfType<HlslFunctionRequirement>();
             var functionRequirements = hlslFunctionRequirements as HlslFunctionRequirement[] ?? hlslFunctionRequirements.ToArray();
             var requiredForwardDeclarations = functionRequirements.Select(r => r.functionDefinition.ForwardDeclaration());
@@ -52,12 +58,10 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
 
 
             return new Tree<hlsl>(
-                globals
-                    .Concat(requiredForwardDeclarations)
+                requiredForwardDeclarations.Cast<Statement<hlsl>>()
                     .Concat(requiredFunctions)
                     .Append(sceneFunctionDefinition(sceneData))
                     .ToSyntaxList()
-                    .WithLeadingTrivia(preprocessorHeader)
             );
         }
 

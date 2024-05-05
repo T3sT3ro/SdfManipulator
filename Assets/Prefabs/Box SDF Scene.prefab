@@ -1273,7 +1273,7 @@ Transform:
   m_GameObject: {fileID: 7383794931903252248}
   serializedVersion: 2
   m_LocalRotation: {x: 0.06294881, y: 0.106313154, z: 0.057875015, w: 0.990649}
-  m_LocalPosition: {x: 5.64, y: -0.14, z: 2.09}
+  m_LocalPosition: {x: 3.23, y: -0.32, z: 1.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1935,109 +1935,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_3_0_0__root_combine_screw_cylinder__1_Height
-        m_Description: Cylinder height
-        m_Attributes:
-        - Header (root_combine_screw_cylinder)
-        m_Type: 2
-        m_Flags: 0
-        m_DefValue[0]: 1.399991
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_3_0_0__root_combine_screw_cylinder__1_Radius
-        m_Description: Cylinder radius
-        m_Attributes: []
-        m_Type: 2
-        m_Flags: 0
-        m_DefValue[0]: 0.404426
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_3_0_0__root_combine_screw_cylinder__1_Rounding
-        m_Description: Rounding
-        m_Attributes: []
-        m_Type: 2
-        m_Flags: 0
-        m_DefValue[0]: 0.25
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_3_0_1__root_combine_screw_head__1_BlendFactor
-        m_Description: Blend factor
-        m_Attributes:
-        - Header (root_combine_screw_head)
-        m_Type: 2
-        m_Flags: 0
-        m_DefValue[0]: 1
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_3_0_1_0__root_combine_screw_head_head__1_Radius
-        m_Description: Sphere radius
-        m_Attributes:
-        - Header (root_combine_screw_head_head)
-        m_Type: 2
-        m_Flags: 0
-        m_DefValue[0]: 0.53
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_3_0_1_1__root_combine_screw_head_cuts__1_BlendFactor
-        m_Description: Blend factor
-        m_Attributes:
-        - Header (root_combine_screw_head_cuts)
-        m_Type: 2
-        m_Flags: 0
-        m_DefValue[0]: 1
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_BoxExtents
-        m_Description: Box extents
-        m_Attributes:
-        - Header (root_combine_screw_head_cuts_cut_1)
-        m_Type: 1
-        m_Flags: 0
-        m_DefValue[0]: 0.413049
-        m_DefValue[1]: 0.589912
-        m_DefValue[2]: 0.117837
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_BoxExtents
-        m_Description: Box extents
-        m_Attributes:
-        - Header (root_combine_screw_head_cuts_cut_2)
-        m_Type: 1
-        m_Flags: 0
-        m_DefValue[0]: 0.696923
-        m_DefValue[1]: 0.091037
-        m_DefValue[2]: 0.587924
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_3_1__root_combine_sphere__1_Radius
+      - m_Name: SDF_1_3_0__root_combine_sphere__1_Radius
         m_Description: Sphere radius
         m_Attributes:
         - Header (root_combine_sphere)
@@ -2050,7 +1948,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_3_2__root_combine_sphere__1_Radius
+      - m_Name: SDF_1_3_1__root_combine_sphere__1_Radius
         m_Description: Sphere radius
         m_Attributes:
         - Header (root_combine_sphere)
@@ -2063,7 +1961,109 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_4__root_q__1_Length
+      - m_Name: SDF_1_4_0__root_screw_cylinder__1_Height
+        m_Description: Cylinder height
+        m_Attributes:
+        - Header (root_screw_cylinder)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1.399991
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_4_0__root_screw_cylinder__1_Radius
+        m_Description: Cylinder radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.404426
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_4_0__root_screw_cylinder__1_Rounding
+        m_Description: Rounding
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.25
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_4_1__root_screw_head__1_BlendFactor
+        m_Description: Blend factor
+        m_Attributes:
+        - Header (root_screw_head)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_4_1_0__root_screw_head_head__1_Radius
+        m_Description: Sphere radius
+        m_Attributes:
+        - Header (root_screw_head_head)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.53
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_4_1_1__root_screw_head_cuts__1_BlendFactor
+        m_Description: Blend factor
+        m_Attributes:
+        - Header (root_screw_head_cuts)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_BoxExtents
+        m_Description: Box extents
+        m_Attributes:
+        - Header (root_screw_head_cuts_cut_1)
+        m_Type: 1
+        m_Flags: 0
+        m_DefValue[0]: 0.413049
+        m_DefValue[1]: 0.589912
+        m_DefValue[2]: 0.117837
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_BoxExtents
+        m_Description: Box extents
+        m_Attributes:
+        - Header (root_screw_head_cuts_cut_2)
+        m_Type: 1
+        m_Flags: 0
+        m_DefValue[0]: 0.696923
+        m_DefValue[1]: 0.091037
+        m_DefValue[2]: 0.587924
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_5__root_q__1_Length
         m_Description: Elongation
         m_Attributes:
         - Header (root_q)
@@ -2076,7 +2076,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_4__root_q__2_BlendFactor
+      - m_Name: SDF_1_5__root_q__2_BlendFactor
         m_Description: Blend factor
         m_Attributes:
         - Header (root_q)
@@ -2089,7 +2089,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_4_0__root_q_cylinder__1_Height
+      - m_Name: SDF_1_5_0__root_q_cylinder__1_Height
         m_Description: Cylinder height
         m_Attributes:
         - Header (root_q_cylinder)
@@ -2102,7 +2102,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_4_0__root_q_cylinder__1_Radius
+      - m_Name: SDF_1_5_0__root_q_cylinder__1_Radius
         m_Description: Cylinder radius
         m_Attributes: []
         m_Type: 2
@@ -2114,7 +2114,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_4_0__root_q_cylinder__1_Rounding
+      - m_Name: SDF_1_5_0__root_q_cylinder__1_Rounding
         m_Description: Rounding
         m_Attributes: []
         m_Type: 2
@@ -2126,7 +2126,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_4_1__root_q_torus__1_MainRadius
+      - m_Name: SDF_1_5_1__root_q_torus__1_MainRadius
         m_Description: Torus main radius
         m_Attributes:
         - Header (root_q_torus)
@@ -2139,7 +2139,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_4_1__root_q_torus__1_RingRadius
+      - m_Name: SDF_1_5_1__root_q_torus__1_RingRadius
         m_Description: Torus ring radius
         m_Attributes: []
         m_Type: 2
@@ -2151,7 +2151,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_4_1__root_q_torus__1_Cap
+      - m_Name: SDF_1_5_1__root_q_torus__1_Cap
         m_Description: Torus cap
         m_Attributes: []
         m_Type: 1
@@ -2163,7 +2163,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_5__root_flat__1___1_BlendFactor
+      - m_Name: SDF_1_6__root_flat__1___1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
         - Header (root_flat__1_)
@@ -2176,7 +2176,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_5_0__root_flat__1__cylinder__1_Height
+      - m_Name: SDF_1_6_0__root_flat__1__cylinder__1_Height
         m_Description: Cylinder height
         m_Attributes:
         - Header (root_flat__1__cylinder)
@@ -2189,7 +2189,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_5_0__root_flat__1__cylinder__1_Radius
+      - m_Name: SDF_1_6_0__root_flat__1__cylinder__1_Radius
         m_Description: Cylinder radius
         m_Attributes: []
         m_Type: 2
@@ -2201,7 +2201,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_5_0__root_flat__1__cylinder__1_Rounding
+      - m_Name: SDF_1_6_0__root_flat__1__cylinder__1_Rounding
         m_Description: Rounding
         m_Attributes: []
         m_Type: 2
@@ -2213,7 +2213,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_5_1__root_flat__1__torus__1_MainRadius
+      - m_Name: SDF_1_6_1__root_flat__1__torus__1_MainRadius
         m_Description: Torus main radius
         m_Attributes:
         - Header (root_flat__1__torus)
@@ -2226,7 +2226,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_5_1__root_flat__1__torus__1_RingRadius
+      - m_Name: SDF_1_6_1__root_flat__1__torus__1_RingRadius
         m_Description: Torus ring radius
         m_Attributes: []
         m_Type: 2
@@ -2238,7 +2238,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_5_1__root_flat__1__torus__1_Cap
+      - m_Name: SDF_1_6_1__root_flat__1__torus__1_Cap
         m_Description: Torus cap
         m_Attributes: []
         m_Type: 1
@@ -2250,7 +2250,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_6__root_combine__1_BlendFactor
+      - m_Name: SDF_1_7__root_combine__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
         - Header (root_combine)
@@ -2263,7 +2263,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_6_0__root_combine_cone__1_Angle
+      - m_Name: SDF_1_7_0__root_combine_cone__1_Angle
         m_Description: Cone angle
         m_Attributes:
         - Header (root_combine_cone)
@@ -2276,7 +2276,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_6_0__root_combine_cone__1_Height
+      - m_Name: SDF_1_7_0__root_combine_cone__1_Height
         m_Description: Cone height
         m_Attributes: []
         m_Type: 2
@@ -2288,7 +2288,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_6_1__root_combine_cone__1_Angle
+      - m_Name: SDF_1_7_1__root_combine_cone__1_Angle
         m_Description: Cone angle
         m_Attributes:
         - Header (root_combine_cone)
@@ -2301,7 +2301,7 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_6_1__root_combine_cone__1_Height
+      - m_Name: SDF_1_7_1__root_combine_cone__1_Height
         m_Description: Cone height
         m_Attributes: []
         m_Type: 2
@@ -2596,7 +2596,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 61760
+          gpuProgramID: 33144
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -2756,6 +2756,378 @@ Shader:
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0__root_ground__1_SpaceTransform" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_0__root_shroom_1_sphere_1__1_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_0__root_shroom_1_sphere_1__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_shroom_1_cone__1_Angle" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_shroom_1_cone__1_Height" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_shroom_1_cone__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_shroom2_sphere_2__1_Radius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_shroom2_sphere_2__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_shroom2_cone_2__1_Angle" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_shroom2_cone_2__1_Height" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_shroom2_cone_2__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2__root_shroom2_sphere__1_Radius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2__root_shroom2_sphere__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0__root_combine_sphere__1_Radius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0__root_combine_sphere__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_1__root_combine_sphere__1_Radius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_1__root_combine_sphere__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_0__root_screw_cylinder__1_Height" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_0__root_screw_cylinder__1_Radius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_0__root_screw_cylinder__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_0__root_screw_head_head__1_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_0__root_screw_head_head__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_BoxExtents" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_BoxExtents" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_0__root_q_cylinder__1_Height" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_0__root_q_cylinder__1_Radius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_0__root_q_cylinder__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_q_torus__1_MainRadius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_q_torus__1_RingRadius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_q_torus__1_SpaceTransform" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5__root_q__1_Length" contains consecutive underscores ("__"),
+      such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_0__root_flat__1__cylinder__1_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_0__root_flat__1__cylinder__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_1__root_flat__1__torus__1_MainRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_1__root_flat__1__torus__1_RingRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_1__root_flat__1__torus__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_0__root_combine_cone__1_Angle" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_0__root_combine_cone__1_Height" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_0__root_combine_cone__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_1__root_combine_cone__1_Angle" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_1__root_combine_cone__1_Height" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_1__root_combine_cone__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1__root__1_BlendFactor" contains consecutive underscores ("__"),
+      such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0__root_ground__1_BoxExtents" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
@@ -2864,78 +3236,16 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_3_0_0__root_combine_screw_cylinder__1_Height" contains consecutive
+  - message: '"SDF_1_3_0__root_combine_sphere__1_Radius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0__root_combine_sphere__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_3_0_0__root_combine_screw_cylinder__1_Radius" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_3_0_0__root_combine_screw_cylinder__1_SpaceTransform" contains
-      consecutive underscores ("__"), such names are reserved and might result in
-      undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_3_0_1_0__root_combine_screw_head_head__1_Radius" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_3_0_1_0__root_combine_screw_head_head__1_SpaceTransform" contains
-      consecutive underscores ("__"), such names are reserved and might result in
-      undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_BoxExtents"
-      contains consecutive underscores ("__"), such names are reserved and might
-      result in undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_SpaceTransform"
-      contains consecutive underscores ("__"), such names are reserved and might
-      result in undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_BoxExtents"
-      contains consecutive underscores ("__"), such names are reserved and might
-      result in undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_SpaceTransform"
-      contains consecutive underscores ("__"), such names are reserved and might
-      result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
     compilerPlatform: 18
@@ -2958,7 +3268,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_3_2__root_combine_sphere__1_Radius" contains consecutive underscores
+  - message: '"SDF_1_4_0__root_screw_cylinder__1_Height" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -2966,7 +3276,15 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_3_2__root_combine_sphere__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_4_0__root_screw_cylinder__1_Radius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_0__root_screw_cylinder__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -2974,23 +3292,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_4_0__root_q_cylinder__1_Height" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_4_0__root_q_cylinder__1_Radius" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: Box SDF Scene (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_4_0__root_q_cylinder__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_4_1_0__root_screw_head_head__1_Radius" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -2998,7 +3300,51 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_4_1__root_q_torus__1_MainRadius" contains consecutive underscores
+  - message: '"SDF_1_4_1_0__root_screw_head_head__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_BoxExtents" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_BoxExtents" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_0__root_q_cylinder__1_Height" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3006,7 +3352,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_4_1__root_q_torus__1_RingRadius" contains consecutive underscores
+  - message: '"SDF_1_5_0__root_q_cylinder__1_Radius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3014,7 +3360,15 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_4_1__root_q_torus__1_SpaceTransform" contains consecutive underscores
+  - message: '"SDF_1_5_0__root_q_cylinder__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_q_torus__1_MainRadius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3022,7 +3376,23 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_4__root_q__1_Length" contains consecutive underscores ("__"),
+  - message: '"SDF_1_5_1__root_q_torus__1_RingRadius" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_q_torus__1_SpaceTransform" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5__root_q__1_Length" contains consecutive underscores ("__"),
       such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3030,7 +3400,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_5_0__root_flat__1__cylinder__1_Radius" contains consecutive
+  - message: '"SDF_1_6_0__root_flat__1__cylinder__1_Radius" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3038,7 +3408,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_5_0__root_flat__1__cylinder__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_6_0__root_flat__1__cylinder__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3046,7 +3416,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_5_1__root_flat__1__torus__1_MainRadius" contains consecutive
+  - message: '"SDF_1_6_1__root_flat__1__torus__1_MainRadius" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3054,7 +3424,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_5_1__root_flat__1__torus__1_RingRadius" contains consecutive
+  - message: '"SDF_1_6_1__root_flat__1__torus__1_RingRadius" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3062,7 +3432,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_5_1__root_flat__1__torus__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_6_1__root_flat__1__torus__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3070,7 +3440,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_6_0__root_combine_cone__1_Angle" contains consecutive underscores
+  - message: '"SDF_1_7_0__root_combine_cone__1_Angle" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3078,7 +3448,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_6_0__root_combine_cone__1_Height" contains consecutive underscores
+  - message: '"SDF_1_7_0__root_combine_cone__1_Height" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3086,7 +3456,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_6_0__root_combine_cone__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_7_0__root_combine_cone__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3094,7 +3464,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_6_1__root_combine_cone__1_Angle" contains consecutive underscores
+  - message: '"SDF_1_7_1__root_combine_cone__1_Angle" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3102,7 +3472,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_6_1__root_combine_cone__1_Height" contains consecutive underscores
+  - message: '"SDF_1_7_1__root_combine_cone__1_Height" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3110,7 +3480,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_6_1__root_combine_cone__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_7_1__root_combine_cone__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
@@ -3128,6 +3498,361 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
+      33144:
+        serializedVersion: 3
+        m_Code: "#define _ZWRITE_ON_KEYWORD_DECLARED 1\n#define _ZWRITE_OFF_KEYWORD_DECLARED
+          1\n#line 120 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 120 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            #pragma editor_sync_compilation\n           
+          #pragma target 5.0\n            #include \"UnityCG.cginc\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n           
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n           
+          #pragma vertex vertexShader\n            #pragma fragment fragmentShader\n           
+          \n            float SDF_1__root__1_BlendFactor;\n            float4x4 SDF_1__root__1_SpaceTransform
+          = {\n                    { 0.970696, -0.101283, 0.217924, 0.0 },\n                   
+          { 0.128052, 0.985376, -0.112415, 0.0 },\n                    { -0.203352,
+          0.137026, 0.96947, 0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float3 SDF_1_0__root_ground__1_BoxExtents;\n           
+          float4x4 SDF_1_0__root_ground__1_SpaceTransform = {\n                   
+          { 0.985253, 0.039483, 0.166489, 0.324491 },\n                    { -0.049748,
+          0.99708, 0.057943, -0.128134 },\n                    { -0.163715, -0.065371,
+          0.98434, 0.235927 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_1_0__root_shroom_1_sphere_1__1_Radius;\n           
+          float4x4 SDF_1_1_0__root_shroom_1_sphere_1__1_SpaceTransform = {\n                   
+          { 0.970696, -0.101283, 0.217924, -1.052 },\n                    { 0.128052,
+          0.985376, -0.112415, -0.635 },\n                    { -0.203352, 0.137026,
+          0.96947, 0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_1_1__root_shroom_1_cone__1_Angle;\n           
+          float SDF_1_1_1__root_shroom_1_cone__1_Height;\n            float4x4 SDF_1_1_1__root_shroom_1_cone__1_SpaceTransform
+          = {\n                    { 0.939308, 0.069367, -0.335989, -0.983747 },\n                   
+          { -0.061828, 0.997538, 0.033097, -1.64916 },\n                    { 0.337457,
+          -0.010315, 0.941284, -0.503346 },\n                    { 0.0, 0.0, 0.0,
+          1.0 }\n            };\n            float SDF_1_2_0__root_shroom2_sphere_2__1_Radius;\n           
+          float4x4 SDF_1_2_0__root_shroom2_sphere_2__1_SpaceTransform = {\n                   
+          { -0.02342, 0.103423, -0.994362, -1.403706 },\n                    { 0.097179,
+          0.99016, 0.100697, -0.481317 },\n                    { 0.994991, -0.094273,
+          -0.03324, 1.095647 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_2_1__root_shroom2_cone_2__1_Angle;\n           
+          float SDF_1_2_1__root_shroom2_cone_2__1_Height;\n            float4x4 SDF_1_2_1__root_shroom2_cone_2__1_SpaceTransform
+          = {\n                    { -0.773348, 0.262247, -0.5772, -1.840792 },\n                   
+          { 0.241606, 0.963641, 0.114114, -1.722459 },\n                    { 0.586139,
+          -0.051205, -0.808591, -0.388022 },\n                    { 0.0, 0.0, 0.0,
+          1.0 }\n            };\n            float SDF_1_2_2__root_shroom2_sphere__1_Radius;\n           
+          float4x4 SDF_1_2_2__root_shroom2_sphere__1_SpaceTransform = {\n                   
+          { -0.212623, 0.246355, -0.945569, -1.814044 },\n                    { 0.23447,
+          0.952287, 0.195382, -1.342781 },\n                    { 0.948586, -0.180165,
+          -0.260241, 0.808436 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_3__root_combine__1_BlendFactor;\n           
+          float4x4 SDF_1_3__root_combine__1_SpaceTransform = {\n                   
+          { -0.034952, 0.834414, 0.550029, -0.580062 },\n                    { 0.810044,
+          0.345994, -0.47341, 1.560808 },\n                    { -0.585327, 0.429001,
+          -0.688005, -1.601026 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_3_0__root_combine_sphere__1_Radius;\n           
+          float4x4 SDF_1_3_0__root_combine_sphere__1_SpaceTransform = {\n                   
+          { -0.034952, 0.834414, 0.550029, -0.388063 },\n                    { 0.810044,
+          0.345994, -0.47341, 1.534808 },\n                    { -0.585327, 0.429001,
+          -0.688005, -1.601026 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_3_1__root_combine_sphere__1_Radius;\n           
+          float4x4 SDF_1_3_1__root_combine_sphere__1_SpaceTransform = {\n                   
+          { -0.034952, 0.834414, 0.550029, -0.966063 },\n                    { 0.810044,
+          0.345994, -0.47341, 1.403808 },\n                    { -0.585327, 0.429001,
+          -0.688005, -1.601026 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_4_0__root_screw_cylinder__1_Height;\n           
+          float SDF_1_4_0__root_screw_cylinder__1_Radius;\n            float SDF_1_4_0__root_screw_cylinder__1_Rounding;\n           
+          float4x4 SDF_1_4_0__root_screw_cylinder__1_SpaceTransform = {\n                   
+          { 0.347078, -0.299924, 0.888585, -0.469882 },\n                    { -0.301492,
+          0.861506, 0.408546, -2.520037 },\n                    { -0.888054, -0.409698,
+          0.208585, -2.888125 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_4_1__root_screw_head__1_BlendFactor;\n           
+          float4x4 SDF_1_4_1__root_screw_head__1_SpaceTransform = {\n                   
+          { 0.355245, -0.296137, 0.886625, -0.443254 },\n                    { -0.301492,
+          0.861506, 0.408546, -3.717037 },\n                    { -0.884818, -0.412444,
+          0.216763, -2.892332 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_4_1_0__root_screw_head_head__1_Radius;\n           
+          float4x4 SDF_1_4_1_0__root_screw_head_head__1_SpaceTransform = {\n                   
+          { 0.355245, -0.296137, 0.886625, -0.443254 },\n                    { -0.301492,
+          0.861506, 0.408546, -4.110037 },\n                    { -0.884818, -0.412444,
+          0.216763, -2.892332 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float SDF_1_4_1_1__root_screw_head_cuts__1_BlendFactor;\n           
+          float4x4 SDF_1_4_1_1__root_screw_head_cuts__1_SpaceTransform = {\n                   
+          { 0.301492, -0.861506, -0.408546, 4.140037 },\n                    { 0.355245,
+          -0.296137, 0.886625, -0.443254 },\n                    { -0.884818, -0.412444,
+          0.216763, -2.892332 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            float3 SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_BoxExtents;\n           
+          float4x4 SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_SpaceTransform =
+          {\n                    { 0.301492, -0.861506, -0.408546, 4.409037 },\n                   
+          { 0.355245, -0.296137, 0.886625, -0.443254 },\n                    { -0.884818,
+          -0.412444, 0.216763, -2.892332 },\n                    { 0.0, 0.0, 0.0,
+          1.0 }\n            };\n            float3 SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_BoxExtents;\n           
+          float4x4 SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_SpaceTransform =
+          {\n                    { 0.301492, -0.861506, -0.408546, 4.538037 },\n                   
+          { 0.355245, -0.296137, 0.886625, -0.443254 },\n                    { -0.884818,
+          -0.412444, 0.216763, -2.892333 },\n                    { 0.0, 0.0, 0.0,
+          1.0 }\n            };\n            float3 SDF_1_5__root_q__1_Length;\n           
+          float SDF_1_5__root_q__2_BlendFactor;\n            float4x4 SDF_1_5__root_q__2_SpaceTransform
+          = {\n                    { 1.0, 0.0, 0.0, -2.760875 },\n                   
+          { 0.0, 1.0, 0.0, 0.417742 },\n                    { 0.0, 0.0, 1.0, -2.329799
+          },\n                    { 0.0, 0.0, 0.0, 1.0 }\n            };\n           
+          float SDF_1_5_0__root_q_cylinder__1_Height;\n            float SDF_1_5_0__root_q_cylinder__1_Radius;\n           
+          float SDF_1_5_0__root_q_cylinder__1_Rounding;\n            float4x4 SDF_1_5_0__root_q_cylinder__1_SpaceTransform
+          = {\n                    { 1.0, 0.0, 0.0, -2.760875 },\n                   
+          { 0.0, 1.0, 0.0, 0.874742 },\n                    { 0.0, 0.0, 1.0, -2.329799
+          },\n                    { 0.0, 0.0, 0.0, 1.0 }\n            };\n           
+          float SDF_1_5_1__root_q_torus__1_MainRadius;\n            float SDF_1_5_1__root_q_torus__1_RingRadius;\n           
+          float2 SDF_1_5_1__root_q_torus__1_Cap;\n            float4x4 SDF_1_5_1__root_q_torus__1_SpaceTransform
+          = {\n                    { 1.0, 0.0, 0.0, -2.760875 },\n                   
+          { 0.0, 1.0, 0.0, 0.111742 },\n                    { 0.0, 0.0, 1.0, -2.329799
+          },\n                    { 0.0, 0.0, 0.0, 1.0 }\n            };\n           
+          float SDF_1_6__root_flat__1___1_BlendFactor;\n            float4x4 SDF_1_6__root_flat__1___1_SpaceTransform
+          = {\n                    { 1.0, 0.0, 0.0, -2.190593 },\n                   
+          { 0.0, 1.0, 0.0, -2.254268 },\n                    { 0.0, 0.0, 1.0, 1.780801
+          },\n                    { 0.0, 0.0, 0.0, 1.0 }\n            };\n           
+          float SDF_1_6_0__root_flat__1__cylinder__1_Height;\n            float SDF_1_6_0__root_flat__1__cylinder__1_Radius;\n           
+          float SDF_1_6_0__root_flat__1__cylinder__1_Rounding;\n            float4x4
+          SDF_1_6_0__root_flat__1__cylinder__1_SpaceTransform = {\n                   
+          { 1.0, 0.0, 0.0, -2.190593 },\n                    { 0.0, 1.0, 0.0, -1.797268
+          },\n                    { 0.0, 0.0, 1.0, 1.780801 },\n                   
+          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_6_1__root_flat__1__torus__1_MainRadius;\n           
+          float SDF_1_6_1__root_flat__1__torus__1_RingRadius;\n            float2
+          SDF_1_6_1__root_flat__1__torus__1_Cap;\n            float4x4 SDF_1_6_1__root_flat__1__torus__1_SpaceTransform
+          = {\n                    { 1.0, 0.0, 0.0, -2.190593 },\n                   
+          { 0.0, 1.0, 0.0, -2.560268 },\n                    { 0.0, 0.0, 1.0, 1.780801
+          },\n                    { 0.0, 0.0, 0.0, 1.0 }\n            };\n           
+          float SDF_1_7__root_combine__1_BlendFactor;\n            float4x4 SDF_1_7__root_combine__1_SpaceTransform
+          = {\n                    { 0.970696, -0.101283, 0.217924, -1.792 },\n                   
+          { 0.128052, 0.985376, -0.112415, -0.962 },\n                    { -0.203352,
+          0.137026, 0.96947, -4.369999 },\n                    { 0.0, 0.0, 0.0, 1.0
+          }\n            };\n            float SDF_1_7_0__root_combine_cone__1_Angle;\n           
+          float SDF_1_7_0__root_combine_cone__1_Height;\n            float4x4 SDF_1_7_0__root_combine_cone__1_SpaceTransform
+          = {\n                    { 0.970696, -0.101283, 0.217924, -1.792 },\n                   
+          { 0.128052, 0.985376, -0.112415, -2.064141 },\n                    { -0.203352,
+          0.137026, 0.96947, -4.207 },\n                    { 0.0, 0.0, 0.0, 1.0
+          }\n            };\n            float SDF_1_7_1__root_combine_cone__1_Angle;\n           
+          float SDF_1_7_1__root_combine_cone__1_Height;\n            float4x4 SDF_1_7_1__root_combine_cone__1_SpaceTransform
+          = {\n                    { -0.970696, 0.101283, -0.217924, 1.792 },\n                   
+          { -0.128052, -0.985376, 0.112415, -0.229412 },\n                    { -0.203352,
+          0.137026, 0.96947, -4.37 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
+          };\n            SdfResult SDF_1_0__root_ground__1 (float3 p);\n           
+          SdfResult SDF_1_1_0__root_shroom_1_sphere_1__1 (float3 p);\n           
+          SdfResult SDF_1_1_1__root_shroom_1_cone__1 (float3 p);\n            SdfResult
+          SDF_1_2_0__root_shroom2_sphere_2__1 (float3 p);\n            SdfResult
+          SDF_1_2_1__root_shroom2_cone_2__1 (float3 p);\n            SdfResult SDF_1_2_2__root_shroom2_sphere__1
+          (float3 p);\n            SdfResult SDF_1_3_0__root_combine_sphere__1 (float3
+          p);\n            SdfResult SDF_1_3_1__root_combine_sphere__1 (float3 p);\n           
+          SdfResult SDF_1_3__root_combine__1 (float3 p);\n            SdfResult SDF_1_4_0__root_screw_cylinder__1
+          (float3 p);\n            SdfResult SDF_1_4_1_0__root_screw_head_head__1
+          (float3 p);\n            SdfResult SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1
+          (float3 p);\n            SdfResult SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1
+          (float3 p);\n            SdfResult SDF_1_4_1_1__root_screw_head_cuts__1
+          (float3 p);\n            SdfResult SDF_1_4_1__root_screw_head__1 (float3
+          p);\n            SdfResult SDF_1_5_0__root_q_cylinder__1 (float3 p);\n           
+          SdfResult SDF_1_5_1__root_q_torus__1 (float3 p);\n            SdfResult
+          SDF_1_5__root_q__2 (float3 p);\n            SdfResult SDF_1_5__root_q__1
+          (float3 p);\n            SdfResult SDF_1_6_0__root_flat__1__cylinder__1
+          (float3 p);\n            SdfResult SDF_1_6_1__root_flat__1__torus__1 (float3
+          p);\n            SdfResult SDF_1_6__root_flat__1___1 (float3 p);\n           
+          SdfResult SDF_1_7_0__root_combine_cone__1 (float3 p);\n            SdfResult
+          SDF_1_7_1__root_combine_cone__1 (float3 p);\n            SdfResult SDF_1_7__root_combine__1
+          (float3 p);\n            SdfResult SDF_1__root__1 (float3 p);\n           
+          SdfResult SDF_1_0__root_ground__1(float3 p) {\n                SdfResult
+          result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_0__root_ground__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::box(p, SDF_1_0__root_ground__1_BoxExtents);\n               
+          result.id = int4(0, 0, 0, 2);\n                return result;\n           
+          }\n            SdfResult SDF_1_1_0__root_shroom_1_sphere_1__1(float3 p)
+          {\n                SdfResult result = (SdfResult) 0;\n                p
+          = sdf::operators::transform(p, SDF_1_1_0__root_shroom_1_sphere_1__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::sphere(p, SDF_1_1_0__root_shroom_1_sphere_1__1_Radius);\n               
+          result.id = int4(0, 0, 0, 3);\n                return result;\n           
+          }\n            SdfResult SDF_1_1_1__root_shroom_1_cone__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_1_1__root_shroom_1_cone__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::cone(p, SDF_1_1_1__root_shroom_1_cone__1_Angle, SDF_1_1_1__root_shroom_1_cone__1_Height);\n               
+          result.id = int4(0, 0, 0, 4);\n                return result;\n           
+          }\n            SdfResult SDF_1_2_0__root_shroom2_sphere_2__1(float3 p)
+          {\n                SdfResult result = (SdfResult) 0;\n                p
+          = sdf::operators::transform(p, SDF_1_2_0__root_shroom2_sphere_2__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::sphere(p, SDF_1_2_0__root_shroom2_sphere_2__1_Radius);\n               
+          result.id = int4(0, 0, 0, 5);\n                return result;\n           
+          }\n            SdfResult SDF_1_2_1__root_shroom2_cone_2__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_2_1__root_shroom2_cone_2__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::cone(p, SDF_1_2_1__root_shroom2_cone_2__1_Angle, SDF_1_2_1__root_shroom2_cone_2__1_Height);\n               
+          result.id = int4(0, 0, 0, 6);\n                return result;\n           
+          }\n            SdfResult SDF_1_2_2__root_shroom2_sphere__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_2_2__root_shroom2_sphere__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::sphere(p, SDF_1_2_2__root_shroom2_sphere__1_Radius);\n               
+          result.id = int4(0, 0, 0, 7);\n                return result;\n           
+          }\n            SdfResult SDF_1_3_0__root_combine_sphere__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_3_0__root_combine_sphere__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::sphere(p, SDF_1_3_0__root_combine_sphere__1_Radius);\n               
+          result.id = int4(0, 0, 0, 9);\n                return result;\n           
+          }\n            SdfResult SDF_1_3_1__root_combine_sphere__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_3_1__root_combine_sphere__1_SpaceTransform);\n                result.distance
+          = -sdf::primitives3D::sphere(p, SDF_1_3_1__root_combine_sphere__1_Radius);\n               
+          result.id = int4(0, 0, 0, 10);\n                return result;\n           
+          }\n            SdfResult SDF_1_3__root_combine__1(float3 p) {\n               
+          SdfResult result = sdf::operators::intersectSimple(SDF_1_3_0__root_combine_sphere__1(p),
+          SDF_1_3_1__root_combine_sphere__1(p));\n                result.id = int4(0,
+          0, 0, 8);\n                return result;\n            }\n            SdfResult
+          SDF_1_4_0__root_screw_cylinder__1(float3 p) {\n                SdfResult
+          result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_4_0__root_screw_cylinder__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::cylinder_capped(p, SDF_1_4_0__root_screw_cylinder__1_Height,
+          SDF_1_4_0__root_screw_cylinder__1_Radius);\n                result.id =
+          int4(0, 0, 0, 11);\n                return result;\n            }\n           
+          SdfResult SDF_1_4_1_0__root_screw_head_head__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_4_1_0__root_screw_head_head__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::sphere(p, SDF_1_4_1_0__root_screw_head_head__1_Radius);\n               
+          result.id = int4(0, 0, 0, 13);\n                return result;\n           
+          }\n            SdfResult SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          p = sdf::operators::transform(p, SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::box(p, SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1_BoxExtents);\n               
+          result.id = int4(0, 0, 0, 15);\n                return result;\n           
+          }\n            SdfResult SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          p = sdf::operators::transform(p, SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::box(p, SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1_BoxExtents);\n               
+          result.id = int4(0, 0, 0, 16);\n                return result;\n           
+          }\n            SdfResult SDF_1_4_1_1__root_screw_head_cuts__1(float3 p)
+          {\n                SdfResult result = sdf::operators::unionSimple(SDF_1_4_1_1_0__root_screw_head_cuts_cut_1__1(p),
+          SDF_1_4_1_1_1__root_screw_head_cuts_cut_2__1(p));\n                result.distance
+          = -result.distance;\n                return result;\n            }\n           
+          SdfResult SDF_1_4_1__root_screw_head__1(float3 p) {\n                SdfResult
+          result = sdf::operators::intersectSimple(SDF_1_4_1_0__root_screw_head_head__1(p),
+          SDF_1_4_1_1__root_screw_head_cuts__1(p));\n                return result;\n           
+          }\n            SdfResult SDF_1_5_0__root_q_cylinder__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_5_0__root_q_cylinder__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::cylinder_capped(p, SDF_1_5_0__root_q_cylinder__1_Height,
+          SDF_1_5_0__root_q_cylinder__1_Radius);\n                result.id = int4(0,
+          0, 0, 19);\n                return result;\n            }\n           
+          SdfResult SDF_1_5_1__root_q_torus__1(float3 p) {\n                SdfResult
+          result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_5_1__root_q_torus__1_SpaceTransform);\n                result.distance
+          = -sdf::primitives3D::torus(p, SDF_1_5_1__root_q_torus__1_MainRadius, SDF_1_5_1__root_q_torus__1_RingRadius);\n               
+          result.id = int4(0, 0, 0, 20);\n                return result;\n           
+          }\n            SdfResult SDF_1_5__root_q__2(float3 p) {\n               
+          SdfResult result = sdf::operators::intersectSimple(SDF_1_5_0__root_q_cylinder__1(p),
+          SDF_1_5_1__root_q_torus__1(p));\n                return result;\n           
+          }\n            SdfResult SDF_1_5__root_q__1(float3 p) {\n               
+          float3 q = abs(p) - SDF_1_5__root_q__1_Length;\n                SdfResult
+          result = SDF_1_5__root_q__2(max(q, 0));\n                result.p = p;\n               
+          result.distance += min(max(q), 0);\n                return result;\n           
+          }\n            SdfResult SDF_1_6_0__root_flat__1__cylinder__1(float3 p)
+          {\n                SdfResult result = (SdfResult) 0;\n                p
+          = sdf::operators::transform(p, SDF_1_6_0__root_flat__1__cylinder__1_SpaceTransform);\n               
+          result.distance = sdf::primitives3D::cylinder_infinite(p, SDF_1_6_0__root_flat__1__cylinder__1_Radius);\n               
+          result.id = int4(0, 0, 0, 22);\n                return result;\n           
+          }\n            SdfResult SDF_1_6_1__root_flat__1__torus__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_6_1__root_flat__1__torus__1_SpaceTransform);\n                result.distance
+          = -sdf::primitives3D::torus(p, SDF_1_6_1__root_flat__1__torus__1_MainRadius,
+          SDF_1_6_1__root_flat__1__torus__1_RingRadius);\n                result.id
+          = int4(0, 0, 0, 23);\n                return result;\n            }\n           
+          SdfResult SDF_1_6__root_flat__1___1(float3 p) {\n                SdfResult
+          result = sdf::operators::intersectSimple(SDF_1_6_0__root_flat__1__cylinder__1(p),
+          SDF_1_6_1__root_flat__1__torus__1(p));\n                return result;\n           
+          }\n            SdfResult SDF_1_7_0__root_combine_cone__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_7_0__root_combine_cone__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::cone(p, SDF_1_7_0__root_combine_cone__1_Angle, SDF_1_7_0__root_combine_cone__1_Height);\n               
+          result.id = int4(0, 0, 0, 25);\n                return result;\n           
+          }\n            SdfResult SDF_1_7_1__root_combine_cone__1(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
+          SDF_1_7_1__root_combine_cone__1_SpaceTransform);\n                result.distance
+          = sdf::primitives3D::cone(p, SDF_1_7_1__root_combine_cone__1_Angle, SDF_1_7_1__root_combine_cone__1_Height);\n               
+          result.id = int4(0, 0, 0, 26);\n                return result;\n           
+          }\n            SdfResult SDF_1_7__root_combine__1(float3 p) {\n               
+          SdfResult result = sdf::operators::intersectSimple(SDF_1_7_0__root_combine_cone__1(p),
+          SDF_1_7_1__root_combine_cone__1(p));\n                return result;\n           
+          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
+          result = sdf::operators::unionSmooth(sdf::operators::unionSmooth(sdf::operators::unionSmooth(SDF_1_0__root_ground__1(p),
+          sdf::operators::unionSmooth(SDF_1_1_0__root_shroom_1_sphere_1__1(p), SDF_1_1_1__root_shroom_1_cone__1(p),
+          SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor), sdf::operators::unionSmooth(SDF_1_2_0__root_shroom2_sphere_2__1(p),
+          sdf::operators::unionSmooth(SDF_1_2_1__root_shroom2_cone_2__1(p), SDF_1_2_2__root_shroom2_sphere__1(p),
+          SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor),
+          sdf::operators::unionSmooth(sdf::operators::unionSmooth(SDF_1_3__root_combine__1(p),
+          sdf::operators::unionSmooth(SDF_1_4_0__root_screw_cylinder__1(p), SDF_1_4_1__root_screw_head__1(p),
+          SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor), sdf::operators::unionSmooth(SDF_1_5__root_q__1(p),
+          sdf::operators::unionSmooth(SDF_1_6__root_flat__1___1(p), SDF_1_7__root_combine__1(p),
+          SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor),
+          SDF_1__root__1_BlendFactor);\n                return result;\n           
+          }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n           
+          }\n            "
+        m_AssetPath: Assets/Prefabs
+        m_PlatformMask: 4294967295
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 122
+        m_TypesMask: 3
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: 7fd31ee5db3991c4d2ef1a2ae4a71b46
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: 6069ad7732b43bf8b8be54e48b058402
+        m_FromOther: 0
+        m_ForceSyncCompilation: 1
+        m_UseDxcAPIs: 0
+        m_NeverUseDxcAPIs: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0:
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal1:
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 1101803
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
       38832:
         serializedVersion: 3
         m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
@@ -3182,359 +3907,6 @@ Shader:
         m_VariantsBuiltin6: []
         m_DynamicBranchKeywords: []
         m_BaseRequirements: 33
-        m_KeywordTargetInfo:
-        - keywordName: SHADOWS_SOFT
-          requirements: 227
-        - keywordName: DIRLIGHTMAP_COMBINED
-          requirements: 227
-        - keywordName: DYNAMICLIGHTMAP_ON
-          requirements: 227
-        - keywordName: SHADOWS_SCREEN
-          requirements: 227
-        - keywordName: INSTANCING_ON
-          requirements: 2048
-        - keywordName: PROCEDURAL_INSTANCING_ON
-          requirements: 16384
-        - keywordName: STEREO_MULTIVIEW_ON
-          requirements: 4075
-        - keywordName: STEREO_INSTANCING_ON
-          requirements: 4075
-        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
-          requirements: 536870912
-        m_NonStrippedUserKeywords: 
-        m_BuiltinKeywords: 
-      61760:
-        serializedVersion: 3
-        m_Code: "#define _ZWRITE_ON_KEYWORD_DECLARED 1\n#define _ZWRITE_OFF_KEYWORD_DECLARED
-          1\n#line 120 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 120 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            #pragma editor_sync_compilation\n           
-          #pragma target 5.0\n            #include \"UnityCG.cginc\"\n           
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n           
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n           
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n           
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n           
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n           
-          #pragma vertex vertexShader\n            #pragma fragment fragmentShader\n           
-          \n            float SDF_1__root__1_BlendFactor;\n            float4x4 SDF_1__root__1_SpaceTransform
-          = {\n                    { 0.970696, -0.101283, 0.217924, 0.0 },\n                   
-          { 0.128052, 0.985376, -0.112415, 0.0 },\n                    { -0.203352,
-          0.137026, 0.96947, 0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float3 SDF_1_0__root_ground__1_BoxExtents;\n           
-          float4x4 SDF_1_0__root_ground__1_SpaceTransform = {\n                   
-          { 0.985253, 0.039483, 0.166489, 0.324491 },\n                    { -0.049748,
-          0.99708, 0.057943, -0.128134 },\n                    { -0.163715, -0.065371,
-          0.98434, 0.235927 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float SDF_1_1_0__root_shroom_1_sphere_1__1_Radius;\n           
-          float4x4 SDF_1_1_0__root_shroom_1_sphere_1__1_SpaceTransform = {\n                   
-          { 0.970696, -0.101283, 0.217924, -1.052 },\n                    { 0.128052,
-          0.985376, -0.112415, -0.635 },\n                    { -0.203352, 0.137026,
-          0.96947, 0.0 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float SDF_1_1_1__root_shroom_1_cone__1_Angle;\n           
-          float SDF_1_1_1__root_shroom_1_cone__1_Height;\n            float4x4 SDF_1_1_1__root_shroom_1_cone__1_SpaceTransform
-          = {\n                    { 0.939308, 0.069367, -0.335989, -0.983747 },\n                   
-          { -0.061828, 0.997538, 0.033097, -1.64916 },\n                    { 0.337457,
-          -0.010315, 0.941284, -0.503346 },\n                    { 0.0, 0.0, 0.0,
-          1.0 }\n            };\n            float SDF_1_2_0__root_shroom2_sphere_2__1_Radius;\n           
-          float4x4 SDF_1_2_0__root_shroom2_sphere_2__1_SpaceTransform = {\n                   
-          { -0.02342, 0.103423, -0.994362, -1.403706 },\n                    { 0.097179,
-          0.99016, 0.100697, -0.481317 },\n                    { 0.994991, -0.094273,
-          -0.03324, 1.095647 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float SDF_1_2_1__root_shroom2_cone_2__1_Angle;\n           
-          float SDF_1_2_1__root_shroom2_cone_2__1_Height;\n            float4x4 SDF_1_2_1__root_shroom2_cone_2__1_SpaceTransform
-          = {\n                    { -0.773348, 0.262247, -0.5772, -1.840792 },\n                   
-          { 0.241606, 0.963641, 0.114114, -1.722459 },\n                    { 0.586139,
-          -0.051205, -0.808591, -0.388022 },\n                    { 0.0, 0.0, 0.0,
-          1.0 }\n            };\n            float SDF_1_2_2__root_shroom2_sphere__1_Radius;\n           
-          float4x4 SDF_1_2_2__root_shroom2_sphere__1_SpaceTransform = {\n                   
-          { -0.212623, 0.246355, -0.945569, -1.814044 },\n                    { 0.23447,
-          0.952287, 0.195382, -1.342781 },\n                    { 0.948586, -0.180165,
-          -0.260241, 0.808436 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float SDF_1_3__root_combine__1_BlendFactor;\n           
-          float4x4 SDF_1_3__root_combine__1_SpaceTransform = {\n                   
-          { -0.034952, 0.834414, 0.550029, -0.580062 },\n                    { 0.810044,
-          0.345994, -0.47341, 1.560808 },\n                    { -0.585327, 0.429001,
-          -0.688005, -1.601026 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float SDF_1_3_0_0__root_combine_screw_cylinder__1_Height;\n           
-          float SDF_1_3_0_0__root_combine_screw_cylinder__1_Radius;\n           
-          float SDF_1_3_0_0__root_combine_screw_cylinder__1_Rounding;\n           
-          float4x4 SDF_1_3_0_0__root_combine_screw_cylinder__1_SpaceTransform = {\n                   
-          { 0.347078, -0.299924, 0.888584, -0.469882 },\n                    { -0.301492,
-          0.861506, 0.408546, -2.520037 },\n                    { -0.888054, -0.409699,
-          0.208585, -2.888126 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float SDF_1_3_0_1__root_combine_screw_head__1_BlendFactor;\n           
-          float4x4 SDF_1_3_0_1__root_combine_screw_head__1_SpaceTransform = {\n                   
-          { 0.355245, -0.296137, 0.886625, -0.443254 },\n                    { -0.301492,
-          0.861506, 0.408546, -3.717036 },\n                    { -0.884818, -0.412444,
-          0.216763, -2.892333 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float SDF_1_3_0_1_0__root_combine_screw_head_head__1_Radius;\n           
-          float4x4 SDF_1_3_0_1_0__root_combine_screw_head_head__1_SpaceTransform
-          = {\n                    { 0.355245, -0.296137, 0.886625, -0.443254 },\n                   
-          { -0.301492, 0.861506, 0.408546, -4.110036 },\n                    { -0.884818,
-          -0.412444, 0.216763, -2.892332 },\n                    { 0.0, 0.0, 0.0,
-          1.0 }\n            };\n            float SDF_1_3_0_1_1__root_combine_screw_head_cuts__1_BlendFactor;\n           
-          float4x4 SDF_1_3_0_1_1__root_combine_screw_head_cuts__1_SpaceTransform
-          = {\n                    { 0.301492, -0.861506, -0.408546, 4.140036 },\n                   
-          { 0.355245, -0.296137, 0.886625, -0.443254 },\n                    { -0.884818,
-          -0.412444, 0.216763, -2.892333 },\n                    { 0.0, 0.0, 0.0,
-          1.0 }\n            };\n            float3 SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_BoxExtents;\n           
-          float4x4 SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_SpaceTransform
-          = {\n                    { 0.301492, -0.861506, -0.408546, 4.409036 },\n                   
-          { 0.355245, -0.296137, 0.886625, -0.443253 },\n                    { -0.884818,
-          -0.412444, 0.216763, -2.892333 },\n                    { 0.0, 0.0, 0.0,
-          1.0 }\n            };\n            float3 SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_BoxExtents;\n           
-          float4x4 SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_SpaceTransform
-          = {\n                    { 0.301492, -0.861506, -0.408546, 4.538036 },\n                   
-          { 0.355245, -0.296137, 0.886625, -0.443253 },\n                    { -0.884818,
-          -0.412444, 0.216763, -2.892333 },\n                    { 0.0, 0.0, 0.0,
-          1.0 }\n            };\n            float SDF_1_3_1__root_combine_sphere__1_Radius;\n           
-          float4x4 SDF_1_3_1__root_combine_sphere__1_SpaceTransform = {\n                   
-          { -0.034952, 0.834414, 0.550029, -0.388063 },\n                    { 0.810044,
-          0.345994, -0.47341, 1.534808 },\n                    { -0.585327, 0.429001,
-          -0.688005, -1.601026 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float SDF_1_3_2__root_combine_sphere__1_Radius;\n           
-          float4x4 SDF_1_3_2__root_combine_sphere__1_SpaceTransform = {\n                   
-          { -0.034952, 0.834414, 0.550029, -0.966063 },\n                    { 0.810044,
-          0.345994, -0.47341, 1.403808 },\n                    { -0.585327, 0.429001,
-          -0.688005, -1.601026 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            float3 SDF_1_4__root_q__1_Length;\n            float SDF_1_4__root_q__2_BlendFactor;\n           
-          float4x4 SDF_1_4__root_q__2_SpaceTransform = {\n                    { 1.0,
-          0.0, 0.0, -5.031793 },\n                    { 0.0, 1.0, 0.0, 0.422805 },\n                   
-          { 0.0, 0.0, 1.0, -3.271024 },\n                    { 0.0, 0.0, 0.0, 1.0
-          }\n            };\n            float SDF_1_4_0__root_q_cylinder__1_Height;\n           
-          float SDF_1_4_0__root_q_cylinder__1_Radius;\n            float SDF_1_4_0__root_q_cylinder__1_Rounding;\n           
-          float4x4 SDF_1_4_0__root_q_cylinder__1_SpaceTransform = {\n                   
-          { 1.0, 0.0, 0.0, -5.031793 },\n                    { 0.0, 1.0, 0.0, 0.879805
-          },\n                    { 0.0, 0.0, 1.0, -3.271024 },\n                   
-          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_4_1__root_q_torus__1_MainRadius;\n           
-          float SDF_1_4_1__root_q_torus__1_RingRadius;\n            float2 SDF_1_4_1__root_q_torus__1_Cap;\n           
-          float4x4 SDF_1_4_1__root_q_torus__1_SpaceTransform = {\n                   
-          { 1.0, 0.0, 0.0, -5.031793 },\n                    { 0.0, 1.0, 0.0, 0.116805
-          },\n                    { 0.0, 0.0, 1.0, -3.271024 },\n                   
-          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_5__root_flat__1___1_BlendFactor;\n           
-          float4x4 SDF_1_5__root_flat__1___1_SpaceTransform = {\n                   
-          { 1.0, 0.0, 0.0, -2.190593 },\n                    { 0.0, 1.0, 0.0, -2.254268
-          },\n                    { 0.0, 0.0, 1.0, 1.780801 },\n                   
-          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_5_0__root_flat__1__cylinder__1_Height;\n           
-          float SDF_1_5_0__root_flat__1__cylinder__1_Radius;\n            float SDF_1_5_0__root_flat__1__cylinder__1_Rounding;\n           
-          float4x4 SDF_1_5_0__root_flat__1__cylinder__1_SpaceTransform = {\n                   
-          { 1.0, 0.0, 0.0, -2.190593 },\n                    { 0.0, 1.0, 0.0, -1.797268
-          },\n                    { 0.0, 0.0, 1.0, 1.780801 },\n                   
-          { 0.0, 0.0, 0.0, 1.0 }\n            };\n            float SDF_1_5_1__root_flat__1__torus__1_MainRadius;\n           
-          float SDF_1_5_1__root_flat__1__torus__1_RingRadius;\n            float2
-          SDF_1_5_1__root_flat__1__torus__1_Cap;\n            float4x4 SDF_1_5_1__root_flat__1__torus__1_SpaceTransform
-          = {\n                    { 1.0, 0.0, 0.0, -2.190593 },\n                   
-          { 0.0, 1.0, 0.0, -2.560268 },\n                    { 0.0, 0.0, 1.0, 1.780801
-          },\n                    { 0.0, 0.0, 0.0, 1.0 }\n            };\n           
-          float SDF_1_6__root_combine__1_BlendFactor;\n            float4x4 SDF_1_6__root_combine__1_SpaceTransform
-          = {\n                    { 0.970696, -0.101283, 0.217924, -1.792 },\n                   
-          { 0.128052, 0.985376, -0.112415, -0.962 },\n                    { -0.203352,
-          0.137026, 0.96947, -4.369999 },\n                    { 0.0, 0.0, 0.0, 1.0
-          }\n            };\n            float SDF_1_6_0__root_combine_cone__1_Angle;\n           
-          float SDF_1_6_0__root_combine_cone__1_Height;\n            float4x4 SDF_1_6_0__root_combine_cone__1_SpaceTransform
-          = {\n                    { 0.970696, -0.101283, 0.217924, -1.792 },\n                   
-          { 0.128052, 0.985376, -0.112415, -2.064141 },\n                    { -0.203352,
-          0.137026, 0.96947, -4.207 },\n                    { 0.0, 0.0, 0.0, 1.0
-          }\n            };\n            float SDF_1_6_1__root_combine_cone__1_Angle;\n           
-          float SDF_1_6_1__root_combine_cone__1_Height;\n            float4x4 SDF_1_6_1__root_combine_cone__1_SpaceTransform
-          = {\n                    { -0.970696, 0.101283, -0.217924, 1.792 },\n                   
-          { -0.128052, -0.985376, 0.112415, -0.229412 },\n                    { -0.203352,
-          0.137026, 0.96947, -4.37 },\n                    { 0.0, 0.0, 0.0, 1.0 }\n           
-          };\n            SdfResult SDF_1_0__root_ground__1 (float3 p);\n           
-          SdfResult SDF_1_1_0__root_shroom_1_sphere_1__1 (float3 p);\n           
-          SdfResult SDF_1_1_1__root_shroom_1_cone__1 (float3 p);\n            SdfResult
-          SDF_1_2_0__root_shroom2_sphere_2__1 (float3 p);\n            SdfResult
-          SDF_1_2_1__root_shroom2_cone_2__1 (float3 p);\n            SdfResult SDF_1_2_2__root_shroom2_sphere__1
-          (float3 p);\n            SdfResult SDF_1_3_0_0__root_combine_screw_cylinder__1
-          (float3 p);\n            SdfResult SDF_1_3_0_1_0__root_combine_screw_head_head__1
-          (float3 p);\n            SdfResult SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1
-          (float3 p);\n            SdfResult SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1
-          (float3 p);\n            SdfResult SDF_1_3_0_1_1__root_combine_screw_head_cuts__1
-          (float3 p);\n            SdfResult SDF_1_3_0_1__root_combine_screw_head__1
-          (float3 p);\n            SdfResult SDF_1_3_1__root_combine_sphere__1 (float3
-          p);\n            SdfResult SDF_1_3_2__root_combine_sphere__1 (float3 p);\n           
-          SdfResult SDF_1_3__root_combine__1 (float3 p);\n            SdfResult SDF_1_4_0__root_q_cylinder__1
-          (float3 p);\n            SdfResult SDF_1_4_1__root_q_torus__1 (float3 p);\n           
-          SdfResult SDF_1_4__root_q__2 (float3 p);\n            SdfResult SDF_1_4__root_q__1
-          (float3 p);\n            SdfResult SDF_1_5_0__root_flat__1__cylinder__1
-          (float3 p);\n            SdfResult SDF_1_5_1__root_flat__1__torus__1 (float3
-          p);\n            SdfResult SDF_1_5__root_flat__1___1 (float3 p);\n           
-          SdfResult SDF_1_6_0__root_combine_cone__1 (float3 p);\n            SdfResult
-          SDF_1_6_1__root_combine_cone__1 (float3 p);\n            SdfResult SDF_1_6__root_combine__1
-          (float3 p);\n            SdfResult SDF_1__root__1 (float3 p);\n           
-          SdfResult SDF_1_0__root_ground__1(float3 p) {\n                SdfResult
-          result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_0__root_ground__1_SpaceTransform);\n                result.distance
-          = sdf::primitives3D::box(p, SDF_1_0__root_ground__1_BoxExtents);\n               
-          result.id = int4(0, 0, 0, 2);\n                return result;\n           
-          }\n            SdfResult SDF_1_1_0__root_shroom_1_sphere_1__1(float3 p)
-          {\n                SdfResult result = (SdfResult) 0;\n                p
-          = sdf::operators::transform(p, SDF_1_1_0__root_shroom_1_sphere_1__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::sphere(p, SDF_1_1_0__root_shroom_1_sphere_1__1_Radius);\n               
-          result.id = int4(0, 0, 0, 3);\n                return result;\n           
-          }\n            SdfResult SDF_1_1_1__root_shroom_1_cone__1(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_1_1__root_shroom_1_cone__1_SpaceTransform);\n                result.distance
-          = sdf::primitives3D::cone(p, SDF_1_1_1__root_shroom_1_cone__1_Angle, SDF_1_1_1__root_shroom_1_cone__1_Height);\n               
-          result.id = int4(0, 0, 0, 4);\n                return result;\n           
-          }\n            SdfResult SDF_1_2_0__root_shroom2_sphere_2__1(float3 p)
-          {\n                SdfResult result = (SdfResult) 0;\n                p
-          = sdf::operators::transform(p, SDF_1_2_0__root_shroom2_sphere_2__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::sphere(p, SDF_1_2_0__root_shroom2_sphere_2__1_Radius);\n               
-          result.id = int4(0, 0, 0, 5);\n                return result;\n           
-          }\n            SdfResult SDF_1_2_1__root_shroom2_cone_2__1(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_2_1__root_shroom2_cone_2__1_SpaceTransform);\n                result.distance
-          = sdf::primitives3D::cone(p, SDF_1_2_1__root_shroom2_cone_2__1_Angle, SDF_1_2_1__root_shroom2_cone_2__1_Height);\n               
-          result.id = int4(0, 0, 0, 6);\n                return result;\n           
-          }\n            SdfResult SDF_1_2_2__root_shroom2_sphere__1(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_2_2__root_shroom2_sphere__1_SpaceTransform);\n                result.distance
-          = sdf::primitives3D::sphere(p, SDF_1_2_2__root_shroom2_sphere__1_Radius);\n               
-          result.id = int4(0, 0, 0, 7);\n                return result;\n           
-          }\n            SdfResult SDF_1_3_0_0__root_combine_screw_cylinder__1(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          p = sdf::operators::transform(p, SDF_1_3_0_0__root_combine_screw_cylinder__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::cylinder_capped(p, SDF_1_3_0_0__root_combine_screw_cylinder__1_Height,
-          SDF_1_3_0_0__root_combine_screw_cylinder__1_Radius);\n                result.id
-          = int4(0, 0, 0, 9);\n                return result;\n            }\n           
-          SdfResult SDF_1_3_0_1_0__root_combine_screw_head_head__1(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_3_0_1_0__root_combine_screw_head_head__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::sphere(p, SDF_1_3_0_1_0__root_combine_screw_head_head__1_Radius);\n               
-          result.id = int4(0, 0, 0, 11);\n                return result;\n           
-          }\n            SdfResult SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          p = sdf::operators::transform(p, SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::box(p, SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_BoxExtents);\n               
-          result.id = int4(0, 0, 0, 13);\n                return result;\n           
-          }\n            SdfResult SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          p = sdf::operators::transform(p, SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::box(p, SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_BoxExtents);\n               
-          result.id = int4(0, 0, 0, 14);\n                return result;\n           
-          }\n            SdfResult SDF_1_3_0_1_1__root_combine_screw_head_cuts__1(float3
-          p) {\n                SdfResult result = sdf::operators::unionSimple(SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1(p),
-          SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1(p));\n               
-          result.distance = -result.distance;\n                return result;\n           
-          }\n            SdfResult SDF_1_3_0_1__root_combine_screw_head__1(float3
-          p) {\n                SdfResult result = sdf::operators::intersectSimple(SDF_1_3_0_1_0__root_combine_screw_head_head__1(p),
-          SDF_1_3_0_1_1__root_combine_screw_head_cuts__1(p));\n                return
-          result;\n            }\n            SdfResult SDF_1_3_1__root_combine_sphere__1(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          p = sdf::operators::transform(p, SDF_1_3_1__root_combine_sphere__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::sphere(p, SDF_1_3_1__root_combine_sphere__1_Radius);\n               
-          result.id = int4(0, 0, 0, 15);\n                return result;\n           
-          }\n            SdfResult SDF_1_3_2__root_combine_sphere__1(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_3_2__root_combine_sphere__1_SpaceTransform);\n                result.distance
-          = -sdf::primitives3D::sphere(p, SDF_1_3_2__root_combine_sphere__1_Radius);\n               
-          result.id = int4(0, 0, 0, 16);\n                return result;\n           
-          }\n            SdfResult SDF_1_3__root_combine__1(float3 p) {\n               
-          SdfResult result = sdf::operators::intersectSimple(sdf::operators::intersectSimple(SDF_1_3_0_0__root_combine_screw_cylinder__1(p),
-          SDF_1_3_0_1__root_combine_screw_head__1(p)), sdf::operators::intersectSimple(SDF_1_3_1__root_combine_sphere__1(p),
-          SDF_1_3_2__root_combine_sphere__1(p)));\n                result.id = int4(0,
-          0, 0, 8);\n                return result;\n            }\n            SdfResult
-          SDF_1_4_0__root_q_cylinder__1(float3 p) {\n                SdfResult result
-          = (SdfResult) 0;\n                p = sdf::operators::transform(p, SDF_1_4_0__root_q_cylinder__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::cylinder_capped(p, SDF_1_4_0__root_q_cylinder__1_Height,
-          SDF_1_4_0__root_q_cylinder__1_Radius);\n                result.id = int4(0,
-          0, 0, 19);\n                return result;\n            }\n           
-          SdfResult SDF_1_4_1__root_q_torus__1(float3 p) {\n                SdfResult
-          result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_4_1__root_q_torus__1_SpaceTransform);\n                result.distance
-          = -sdf::primitives3D::torus(p, SDF_1_4_1__root_q_torus__1_MainRadius, SDF_1_4_1__root_q_torus__1_RingRadius);\n               
-          result.id = int4(0, 0, 0, 20);\n                return result;\n           
-          }\n            SdfResult SDF_1_4__root_q__2(float3 p) {\n               
-          SdfResult result = sdf::operators::intersectSimple(SDF_1_4_0__root_q_cylinder__1(p),
-          SDF_1_4_1__root_q_torus__1(p));\n                return result;\n           
-          }\n            SdfResult SDF_1_4__root_q__1(float3 p) {\n               
-          float3 q = abs(p) - SDF_1_4__root_q__1_Length;\n                SdfResult
-          result = SDF_1_4__root_q__2(max(q, 0));\n                result.p = p;\n               
-          result.distance += min(max(q), 0);\n                return result;\n           
-          }\n            SdfResult SDF_1_5_0__root_flat__1__cylinder__1(float3 p)
-          {\n                SdfResult result = (SdfResult) 0;\n                p
-          = sdf::operators::transform(p, SDF_1_5_0__root_flat__1__cylinder__1_SpaceTransform);\n               
-          result.distance = sdf::primitives3D::cylinder_infinite(p, SDF_1_5_0__root_flat__1__cylinder__1_Radius);\n               
-          result.id = int4(0, 0, 0, 22);\n                return result;\n           
-          }\n            SdfResult SDF_1_5_1__root_flat__1__torus__1(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_5_1__root_flat__1__torus__1_SpaceTransform);\n                result.distance
-          = -sdf::primitives3D::torus(p, SDF_1_5_1__root_flat__1__torus__1_MainRadius,
-          SDF_1_5_1__root_flat__1__torus__1_RingRadius);\n                result.id
-          = int4(0, 0, 0, 23);\n                return result;\n            }\n           
-          SdfResult SDF_1_5__root_flat__1___1(float3 p) {\n                SdfResult
-          result = sdf::operators::intersectSimple(SDF_1_5_0__root_flat__1__cylinder__1(p),
-          SDF_1_5_1__root_flat__1__torus__1(p));\n                return result;\n           
-          }\n            SdfResult SDF_1_6_0__root_combine_cone__1(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_6_0__root_combine_cone__1_SpaceTransform);\n                result.distance
-          = sdf::primitives3D::cone(p, SDF_1_6_0__root_combine_cone__1_Angle, SDF_1_6_0__root_combine_cone__1_Height);\n               
-          result.id = int4(0, 0, 0, 25);\n                return result;\n           
-          }\n            SdfResult SDF_1_6_1__root_combine_cone__1(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                p = sdf::operators::transform(p,
-          SDF_1_6_1__root_combine_cone__1_SpaceTransform);\n                result.distance
-          = sdf::primitives3D::cone(p, SDF_1_6_1__root_combine_cone__1_Angle, SDF_1_6_1__root_combine_cone__1_Height);\n               
-          result.id = int4(0, 0, 0, 26);\n                return result;\n           
-          }\n            SdfResult SDF_1_6__root_combine__1(float3 p) {\n               
-          SdfResult result = sdf::operators::intersectSimple(SDF_1_6_0__root_combine_cone__1(p),
-          SDF_1_6_1__root_combine_cone__1(p));\n                return result;\n           
-          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
-          result = sdf::operators::unionSmooth(sdf::operators::unionSmooth(sdf::operators::unionSmooth(SDF_1_0__root_ground__1(p),
-          SDF_1_1_0__root_shroom_1_sphere_1__1(p), SDF_1__root__1_BlendFactor), sdf::operators::unionSmooth(SDF_1_1_1__root_shroom_1_cone__1(p),
-          sdf::operators::unionSmooth(SDF_1_2_0__root_shroom2_sphere_2__1(p), SDF_1_2_1__root_shroom2_cone_2__1(p),
-          SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor),
-          sdf::operators::unionSmooth(sdf::operators::unionSmooth(SDF_1_2_2__root_shroom2_sphere__1(p),
-          SDF_1_3__root_combine__1(p), SDF_1__root__1_BlendFactor), sdf::operators::unionSmooth(SDF_1_4__root_q__1(p),
-          sdf::operators::unionSmooth(SDF_1_5__root_flat__1___1(p), SDF_1_6__root_combine__1(p),
-          SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor), SDF_1__root__1_BlendFactor),
-          SDF_1__root__1_BlendFactor);\n                return result;\n           
-          }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n           
-          }\n            "
-        m_AssetPath: Assets/Prefabs
-        m_PlatformMask: 4294967295
-        m_HardwareTierVariantsMask: 0
-        m_StartLine: 122
-        m_TypesMask: 3
-        m_IncludesHash:
-          serializedVersion: 2
-          Hash: 8f8d8c84546c4c8df122b8423b3c23de
-        m_CodeHash:
-          serializedVersion: 2
-          Hash: 95c95a47139e5c25b304e72afc7c71f9
-        m_FromOther: 0
-        m_ForceSyncCompilation: 1
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
-        m_Language: 3
-        m_VariantsUserGlobal0: []
-        m_VariantsUserGlobal1: []
-        m_VariantsUserGlobal2: []
-        m_VariantsUserGlobal3: []
-        m_VariantsUserGlobal4: []
-        m_VariantsUserGlobal5: []
-        m_VariantsUserGlobal6: []
-        m_VariantsUserLocal0:
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal1:
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal2: []
-        m_VariantsUserLocal3: []
-        m_VariantsUserLocal4: []
-        m_VariantsUserLocal5: []
-        m_VariantsUserLocal6: []
-        m_VariantsBuiltin0: []
-        m_VariantsBuiltin1: []
-        m_VariantsBuiltin2: []
-        m_VariantsBuiltin3: []
-        m_VariantsBuiltin4: []
-        m_VariantsBuiltin5: []
-        m_VariantsBuiltin6: []
-        m_DynamicBranchKeywords: []
-        m_BaseRequirements: 1101803
         m_KeywordTargetInfo:
         - keywordName: SHADOWS_SOFT
           requirements: 227

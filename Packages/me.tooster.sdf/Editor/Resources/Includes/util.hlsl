@@ -42,6 +42,13 @@ float max(in float a, in float b, in float c, in float d) { return max(max(a, b)
 float min(in float4 v) { return min(min(v.x, v.y), min(v.z, v.w)); }
 float min(in float a, in float b, in float c, in float d) { return min(min(a, b), min(c, d)); }
 
+#define REMAP(T) T remap(T value, T srcMin, T srcMax, T dstMin, T dstMax) { return ((value - srcMin) / (srcMax - srcMin)) * (dstMax - dstMin) + dstMin; }
+REMAP(float)
+REMAP(float2)
+REMAP(float3)
+REMAP(float4)
+#undef REMAP
+
 // https://blog.demofox.org/2016/02/19/normalized-vector-interpolation-tldr/
 float3 slerp(in float3 start, in float3 end, in float t) {
     float slerpDot = dot(start, end);
