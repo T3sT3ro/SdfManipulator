@@ -3687,6 +3687,7 @@ Shader:
           % 2 == 0 ? -1 : 0);\n                return fixed4(1.0, .2, 0.0, 1.0);\n           
           }\n            "
         m_AssetPath: Packages/me.tooster.sdf/Editor/Resources/Shaders
+        m_AssetName: 
         m_PlatformMask: 4294967295
         m_HardwareTierVariantsMask: 0
         m_StartLine: 9
@@ -4001,6 +4002,7 @@ Shader:
           return result;\n            }\n            SdfResult sdfScene(float3 p)
           {\n                return SDF_1__root__1(p);\n            }\n            "
         m_AssetPath: Assets/Prefabs
+        m_AssetName: Box SDF Scene.prefab
         m_PlatformMask: 4294967295
         m_HardwareTierVariantsMask: 0
         m_StartLine: 278
