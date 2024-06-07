@@ -12,7 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _DRAWMODE_DYED
+  - _DRAWMODE_STEPS
   - _ORIGIN_LOCAL
   - _PRESERVE_SPACE_SCALE_ON
   - _RAYORIGIN_FACE
@@ -110,7 +110,7 @@ Material:
     - _DBG_A: 0
     - _DEBUG_NORMAL: 1
     - _DetailNormalMapScale: 1
-    - _DrawMode: 2
+    - _DrawMode: 8
     - _DstBlend: 0
     - _Dye: 0.5
     - _EPSILON_NORMAL: 0.0001

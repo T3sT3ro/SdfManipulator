@@ -1,6 +1,3 @@
-#nullable enable
-using System.Collections.Generic;
-using System.Linq;
 using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
@@ -11,14 +8,6 @@ using Parameter = me.tooster.sdf.AST.Hlsl.Syntax.Parameter;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
 namespace me.tooster.sdf.Editor.Controllers.Data {
-#nullable disable
-    public interface ISdfDataSource {
-        public SdfData sdfData { get; }
-    }
-
-
-
-#nullable enable
     /// <summary>
     /// <para>Data for for conventional SDF implementation in a shader.</para>
     /// <para>
@@ -30,14 +19,9 @@ namespace me.tooster.sdf.Editor.Controllers.Data {
     /// </list>
     /// </para>
     /// </summary>
-    public record SdfData : Editor.API.Data {
-        static readonly HlslIncludeFileRequirement typeDefinitionsIncludeRequirement =
-            new("Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl");
-
-        public override IEnumerable<Requirement> Requirements {
-            get => base.Requirements.Append(typeDefinitionsIncludeRequirement);
-            init => base.Requirements = value;
-        }
+    public record SdfData : IData {
+        public static IncludeRequirement includeRaymarchingRequirement(IModifier originator)
+            => new(originator, "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl");
 
         /// type returned by SdfFunction
         public static readonly Type.UserDefined sdfReturnType = new() { id = "SdfResult" };
@@ -52,11 +36,9 @@ namespace me.tooster.sdf.Editor.Controllers.Data {
             evaluationExpression = new Identifier { id = pParamName },
         };
 
-        public delegate Expression<hlsl> EvaluationExpressionFactory(VectorData vectorData);
-
         /// <summary>Expression to evaluate this sdf at a given point</summary>
         /// <returns>Expresion for evaluation this sdf</returns>
-        public EvaluationExpressionFactory? evaluationExpression { get; init; }
+        public Expression<hlsl> evaluationExpression { get; init; }
 
         public static FunctionDefinition createSdfFunction(Identifier identifier, Block functionBody)
             => new()

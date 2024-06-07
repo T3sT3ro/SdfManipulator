@@ -56,15 +56,19 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
         public Token<Lang> GetSeparator(int index) => (Token<Lang>)FullList[(index << 1) + 1];
 
         /// Builds list with separators from A B C -> A [tok] B [tok] C 
-        public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(IEnumerable<TSyntax> list)
-            where TTok : Token<Lang>, new()
-            => new(
-                list.SelectMany(
-                    (x, i) => i == 0
-                        ? new SyntaxOrToken<Lang>[] { x }
-                        : new SyntaxOrToken<Lang>[] { new TTok(), x }
-                )
-            );
+        public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(IEnumerable<TSyntax> list) where TTok : Token<Lang>, new()
+            => new(SeparatedTokenStream<TTok>(list));
+
+        static IEnumerable<SyntaxOrToken<Lang>> SeparatedTokenStream<TSeparator>(IEnumerable<TSyntax> list)
+            where TSeparator : Token<Lang>, new() {
+            using var enumerator = list.GetEnumerator();
+            if (enumerator.MoveNext())
+                yield return enumerator.Current;
+            while (enumerator.MoveNext()) {
+                yield return new TSeparator();
+                yield return enumerator.Current;
+            }
+        }
 
         /// <summary>see <see cref="WithSeparator{TTok}(System.Collections.Generic.IEnumerable{TSyntax})"/></summary>
         public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(params TSyntax[] list) where TTok : Token<Lang>, new()

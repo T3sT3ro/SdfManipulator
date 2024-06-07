@@ -1,10 +1,11 @@
 using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfSphereController), true)]
-    class SdfSphereControllerEditor : SdfControllerEditor {
+    class SdfSphereControllerEditor : SdfPrimitiveControllerEditor {
         SerializedProperty radiusProperty;
 
         protected override void OnSceneGUI() {

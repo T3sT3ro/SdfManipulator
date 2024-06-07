@@ -3,9 +3,10 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.UIElements;
+using SdfBoxController = me.tooster.sdf.Editor.Controllers.SDF.Primitives.SdfBoxController;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfBoxController), true)]
-    class SdfBoxControllerEditor : SdfControllerEditor {
+    class SdfBoxControllerEditor : SdfPrimitiveControllerEditor {
         SerializedProperty boxExtentsProperty;
         BoxBoundsHandle    boxHandle = new();
 

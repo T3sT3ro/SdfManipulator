@@ -1,11 +1,12 @@
 using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfTorusController), true)]
-    class SdfTorusControllerEditor : SdfControllerEditor {
+    class SdfTorusControllerEditor : SdfPrimitiveControllerEditor {
         SerializedProperty mainRadius;
         SerializedProperty ringRadius;
 

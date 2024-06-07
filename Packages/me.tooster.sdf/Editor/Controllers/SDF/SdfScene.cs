@@ -3,15 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
-using me.tooster.sdf.Editor.API;
-using me.tooster.sdf.Editor.Controllers.ShaderPartials;
+using me.tooster.sdf.Editor.Controllers.Generators;
 using me.tooster.sdf.Editor.Util;
 using Unity.Properties;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
+using UnityEngine.Profiling;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     /// <summary>
     /// SdfSceneController is a game object that handles displaying and controling SdfScene asset.
@@ -23,31 +23,67 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
     [Icon("Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-scene-914.png")]
     public class SdfScene : MonoBehaviour { // TODO: inherit from Component to disallow enabling/disabling
 
-        public RaymarchingShader raymarchingShader;
-        public Shader?           controlledShader;
-        public Material?         controlledMaterial; // similarity: https://docs.unity3d.com/ScriptReference/HideFlags.html
+        public string    raymarchingShaderGenerator = null!;
+        public Shader?   controlledShader;   // TODO: remove, generate material only
+        public Material? controlledMaterial; // similarity: https://docs.unity3d.com/ScriptReference/HideFlags.html
 
         public SdfController? sdfSceneRoot;
 
-        readonly ShaderPropertyCollector       shaderPropertyCollector = new();
-        readonly ShaderPropertyUpdatingVisitor shaderPropertyUpdatingVisitor;
+        public Shader targetShader;
 
-        public SdfScene() => shaderPropertyUpdatingVisitor = new ShaderPropertyUpdatingVisitor(this);
+        readonly ShaderPropertyCollector shaderPropertyCollector = new();
+        ShaderPropertyUpdatingVisitor?   _shaderPropertyUpdatingVisitor;
+
+        ShaderPropertyUpdatingVisitor shaderPropertyUpdatingVisitor {
+            get { return _shaderPropertyUpdatingVisitor ??= new ShaderPropertyUpdatingVisitor(this); }
+        }
+
+
+
+        [Serializable]
+        public struct Diagnostic {
+            public enum Severity { ERROR, WARN, INFO }
+
+            public Severity severity;
+            public string   message;
+        }
+
+
+
+        public List<Diagnostic> diagnostics = new();
 
         public SceneData sceneData { get; private set; }
         public bool      IsDirty   { get; set; }
 
-        void Awake() {
+        void Awake() { IsDirty = true; }
+
+        void OnEnable() {
+            AssemblyReloadEvents.afterAssemblyReload += MarkDirty;
+            if (!IsDirty)
+                UpdateShaderUniforms(forceUpdateAll: true);
             PrefabStage.prefabSaved += OnPrefabSaved;
-            IsDirty = true;
         }
+
+
+        void OnDisable() {
+            AssemblyReloadEvents.afterAssemblyReload -= MarkDirty;
+            if (!IsDirty)
+                UpdateShaderUniforms(forceUpdateAll: true);
+            PrefabStage.prefabSaved -= OnPrefabSaved;
+        }
+
+        void MarkDirty() { IsDirty = true; }
+
+        void OnPrefabSaved(GameObject go) { MarkDirty(); }
 
         void LateUpdate() {
             var requiresForceUpdate = IsDirty;
             if (IsDirty) {
                 IsDirty = false;
                 RevalidateScene();
-                GenerateSceneAssets();
+                // assure that regeneration is done only in the prefab stage
+                if (PrefabStageUtility.GetCurrentPrefabStage()?.prefabContentsRoot.gameObject == gameObject)
+                    GenerateSceneAssets();
             }
             UpdateShaderUniforms(forceUpdateAll: requiresForceUpdate);
         }
@@ -55,21 +91,60 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         // TODO: use more event-driven architecture where creation, move, rename and deletion of individual controllers is detected. 
         void OnValidate() {
-            raymarchingShader = RaymarchingShader.instance;
+            diagnostics.Clear();
+            if (!RaymarchingShaderGenerator.allGenerators.ContainsKey(raymarchingShaderGenerator)) {
+                diagnostics.Add(
+                    new Diagnostic
+                    {
+                        severity = Diagnostic.Severity.ERROR,
+                        message = "Unknown raymarching shader generator: '" + raymarchingShaderGenerator +
+                            "'\nAvailable generators:\n"
+                          + string.Join("\n", RaymarchingShaderGenerator.allGenerators.Keys),
+                    }
+                );
+            }
+
+            if (controlledMaterial == null) {
+                controlledMaterial = GetComponent<Material>();
+                if (controlledMaterial == null) {
+                    diagnostics.Add(
+                        new Diagnostic
+                        {
+                            severity = Diagnostic.Severity.ERROR,
+                            message = "No material assigned, generation won't proceed",
+                        }
+                    );
+                }
+            } else if (controlledMaterial.shader != controlledShader) {
+                diagnostics.Add(
+                    new Diagnostic
+                    {
+                        message = "Controlled material's shader is different than controlled shader.",
+                        severity = Diagnostic.Severity.WARN,
+                    }
+                );
+            }
+
+
+            if (TryGetComponent<Renderer>(out var r) && r.sharedMaterial != controlledMaterial) {
+                diagnostics.Add(
+                    new Diagnostic
+                    {
+                        severity = Diagnostic.Severity.WARN,
+                        message = "Material on SdfScene renderer is not the controlled material.",
+                    }
+                );
+            }
+
             if (controlledMaterial == null || controlledShader == null)
                 IsDirty = true;
+
             RevalidateScene(); // fixme: Revalidate triggered without regenerate will cause difference between shader content and scene data
             UpdateShaderUniforms(forceUpdateAll: true);
         }
 
-        static void OnPrefabSaved(GameObject go) {
-            var scene = go.GetComponent<SdfScene>();
-            scene.IsDirty = true;
-        }
-
         internal void RevalidateScene() {
             if (this == null) return; // needed for Unity reasons 
-            raymarchingShader = RaymarchingShader.instance;
 
             if (sdfSceneRoot == null) sdfSceneRoot = GetComponentInChildren<SdfController>();
 
@@ -82,7 +157,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 controller.PropertyChanged -= HandlePropertyChange;
                 controller.PropertyChanged += HandlePropertyChange;
 
-                var controllerId = GenerateControllerIdentifier(controller);
+                var controllerId = generateControllerIdentifier(controller);
 
                 PropertyContainer.Accept(shaderPropertyCollector, controller);
 
@@ -110,7 +185,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         void UpdateProperty(PropertyData pd) {
-            if (!controlledMaterial)
+            if (controlledMaterial == null)
                 throw new Exception("SdfScene is missing controlled material to update a property!");
 
             var controller = pd.controller;
@@ -164,19 +239,26 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 return;
 
             var sdfScenePrefabAssetPath = prefabStage.assetPath;
-            string shaderSource;
-            // try { // TURNED OF DUE TO DEBUGGER NOT STEPPING INTO THE STACK TRACE: https://youtrack.jetbrains.com/issue/RIDER-18382/Rethrown-exceptions-dont-point-to-the-correct-stack-location
-            shaderSource = AssembleShaderSource();
-            Debug.LogFormat("Shader code:\n---\n{0}\n---", shaderSource); // TODO: remove after debugging is done
-            /*} catch (Exception e) {
-                throw new ShaderGenerationException("Shader generation error", e);
-            }*/
-
             if (controlledShader == null)
                 throw new ShaderGenerationException("Missing attached shader asset as a target for generation!");
+            Profiler.BeginSample("shader text generation");
+            var shaderSource = AssembleShaderSource();
+            Profiler.EndSample();
 
             controlledShader.name = "(generated) main shader";
-            ShaderUtil.UpdateShaderAsset(controlledShader, shaderSource);
+            if (AssetDatabase.IsSubAsset(controlledShader)) {
+                ShaderUtil.UpdateShaderAsset(controlledShader, shaderSource);
+                // Debug.LogFormat(
+                //     "Shader sub-asset updated, Shader code:\n---\n{0}\n---",
+                //     shaderSource
+                // ); // debug
+            }
+            if (targetShader != null) {
+                var path = AssetDatabase.GetAssetPath(targetShader);
+                if (File.Exists(path))
+                    File.WriteAllText(path, shaderSource);
+            }
+
 
             // if (commonInclude == null) {
             //     var txt = new TextAsset();
@@ -192,9 +274,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             => $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
 // Last modification: {DateTime.Now}
 
-{raymarchingShader.MainShader(this)}
-"; // ensure empty line at the bottom
-
+{RaymarchingShaderGenerator.InstantiateGenerator(raymarchingShaderGenerator, this).MainShader()}
+";
+        // ensure empty line at the bottom
         /* Used to register a controller under the scene */
 
 
@@ -211,14 +293,14 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
          - Root_Character_Leg__size -> Leg_size
          - Root_Character_Arm__size -> Arm_size
         */
-        string GenerateControllerIdentifier(Controller controller) {
+        string generateControllerIdentifier(Controller controller) {
             var pathFromParent = GetControllerSceneAncestors(controller).Reverse().ToArray();
             var indexedPath = pathFromParent.Select(t => t.GetSiblingIndex().ToString("X")).JoinToString("_");
             return
                 @$"SDF_{indexedPath}__{
                     pathFromParent
                         .Select(t => $"{t.name}")
-                        .Select(API.Extensions.sanitizeToIdentifierString)
+                        .Select(Extensions.sanitizeToIdentifierString)
                         .JoinToString("_")
                 }__{controller.GetComponentIndex().ToString()}";
         }

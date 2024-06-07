@@ -1,11 +1,12 @@
 using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfCylinderController), true)]
-    class SdfCylinderControllerEditor : SdfControllerEditor {
+    class SdfCylinderControllerEditor : SdfPrimitiveControllerEditor {
         SerializedProperty heightProperty;
         SerializedProperty radiusProperty;
         SerializedProperty roundingProperty;

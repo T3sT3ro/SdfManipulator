@@ -13,7 +13,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
      * Runtime would handle updating uniforms/keywords while editor handle updating the material and shader.
      */
     [Icon("Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-icon-256.png")]
-    // [DisallowMultipleComponent]
     public abstract class Controller : MonoBehaviour, INotifyPropertyChanged {
         public delegate void StructureChangedEventHandler(Controller sender);
         // TODO: cache it, register and unregister properly
@@ -46,9 +45,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             return true;
         }
 
-        // TODO: remove this, use IdentifierRequirement instead
-        protected string controllerIdentifier => SdfScene.sceneData.controllers[this].identifier;
-
         public static void TryInstantiate<TController>(string name) where TController : Controller, new() {
             var target = Selection.activeGameObject;
 
@@ -60,9 +56,14 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             ObjectNames.SetNameSmart(sdf, name);
         }
 
-        public T GetNextControllerInStack<T>() where T : Component {
+        public T GetNextControllerInStack<T>() {
             var thisIndex = GetComponentIndex();
-            return GetComponents<T>().First(c => c.GetComponentIndex() > thisIndex);
+            return GetComponents<T>().First(c => (c as Component)!.GetComponentIndex() > thisIndex);
+        }
+
+        public T GetPreviousControllerInStack<T>() {
+            var thisIndex = GetComponentIndex();
+            return GetComponents<T>().First(c => (c as Component)!.GetComponentIndex() > thisIndex);
         }
     }
 }

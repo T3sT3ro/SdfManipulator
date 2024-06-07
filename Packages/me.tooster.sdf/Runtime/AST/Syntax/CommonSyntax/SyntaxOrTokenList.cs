@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
     /// <summary>
     /// List containing both syntax and tokens of specific language
@@ -13,7 +12,13 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
         /// full list with syntax and tokens
         public IReadOnlyList<SyntaxOrToken<Lang>> FullList { get; } = Array.Empty<SyntaxOrToken<Lang>>();
 
-        public SyntaxOrTokenList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) => FullList = fullList.ToList();
+        public SyntaxOrTokenList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) {
+#if DEBUG
+            if (fullList.Any(s => s is null))
+                throw new NullReferenceException("Attempted to create a SyntaxOrTokenList with nulls");
+#endif
+            FullList = fullList.ToList();
+        }
 
         public static readonly SyntaxOrTokenList<Lang> Empty = new();
 
@@ -43,8 +48,8 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
 
-        internal override TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default =>
-            visitor.Visit(Anchor.New(this, parent));
+        internal override TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default
+            => visitor.Visit(Anchor.New(this, parent));
 
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
     }

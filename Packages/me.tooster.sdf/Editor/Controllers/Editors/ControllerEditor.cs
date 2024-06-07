@@ -8,8 +8,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(Controller), true)]
     [CanEditMultipleObjects]
     public class ControllerEditor : UnityEditor.Editor {
-        static readonly ShaderPropertyCollector propertyCollector = new();
-
         public override VisualElement CreateInspectorGUI() {
             var controller = (Controller)target;
 

@@ -7,8 +7,9 @@
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/camera.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/debug.hlsl"
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl"
 
-#pragma region forwardDeclarations
+#pragma region Forward declarations
 
 v2f vertexShader(in appdata_base v_in);
 f2p fragmentShader(in v2f frag_in);
@@ -19,17 +20,21 @@ SdfResult raymarch(inout Ray3D ray, in int max_steps, in float epsilon_ray);
 float3    calculateSdfNormal(in float3 p, in float epsilon_normal);
 float     depthToMaxRayDepth(in Texture2D depthTexture, in float2 screenUV, in float3 rd, in float4x4 inv);
 float     normalSdfOcclusion(in float3 p, in float3 normal, in int i, in float step_size);
+float     classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, in int aoSteps);
 
 #pragma endregion
 
 #ifndef EXPLICIT_RAYMARCHING_PARAMETERS
 static float _EPSILON_RAY = 0.0001;
 static float _EPSILON_NORMAL = 0.0001;
+static float _EPSILON_OCCLUSION = 0.01;
 static float _MAX_DISTANCE = 10000;
 static float _RAY_ORIGIN_BIAS;
 static float _MAX_STEPS = 500;
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #endif
+
+#pragma region vertex and fragment
 
 /// standard vertex shader with additional parameters for raymarching
 v2f vertexShader(in appdata_base v_in) {
@@ -82,37 +87,9 @@ f2p fragmentShader(in v2f frag_in, bool facing : SV_IsFrontFace) {
     return frag_out;
 }
 
-/** \brief temporary function for shading sdf result
-  * \remark TODO: return Material from combination of sdfs. Apply material lighting functions outside of sdfShade
-  */
-fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
-    // frag_out.color = sdf.id == NO_ID ? float4(1.0, 1.0, 0, 1.0) : float4(1.0, 0.1, 0.1, 1.0); // yellow or tomato
-    // float dist = modulo(ray.marchedDistance, 0.1) / 0.1;
-    // fixed3 distColor = dot(CameraWsForward(), ray.rd) * dist; // color by distance
+#pragma endregion
 
-    SurfaceOutput s = (SurfaceOutput)0;
-    s.Albedo = colors::RED;
-    s.Alpha = 1.0;
-    s.Normal = sdf.normal;
-    s.Gloss = 0.5;
-    s.Specular = 0.9;
-
-    UnityLight l = (UnityLight)0;
-    l.color = _LightColor0;
-    l.dir = normalize(_WorldSpaceLightPos0 - sdf.p);
-
-    fixed4 color = UnityLambertLight(s, l);
-    color.rgb += ShadeSH9(half4(sdf.normal, 1));
-
-    fixed4 gridColor = sdf::debug::worldgrid(sdf.p);
-    color.rgb = lerp(color, gridColor.rgb, gridColor.a);
-
-    color.rgb += s.Albedo * .1;
-    color.a = 1;
-    return color;
-}
-
-// ===================================================================================================================
+# pragma region raymarching functions
 
 /**
  * \brief reads the _CameraDepthTexture (rendered BEFORE this shader!) and returns the distance along rd to reach for that depth
@@ -192,12 +169,65 @@ float3 calculateSdfNormal(in float3 p, in float epsilon_normal) {
     );
 }
 
+#pragma endregion
+
+# pragma region shading
+
+/** \brief temporary function for shading sdf result
+  * \remark TODO: return Material from combination of sdfs. Apply material lighting functions outside of sdfShade
+  */
+fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
+    // frag_out.color = sdf.id == NO_ID ? float4(1.0, 1.0, 0, 1.0) : float4(1.0, 0.1, 0.1, 1.0); // yellow or tomato
+    // float dist = modulo(ray.marchedDistance, 0.1) / 0.1;
+    // fixed3 distColor = dot(CameraWsForward(), ray.rd) * dist; // color by distance
+
+    SurfaceOutput s = (SurfaceOutput)0;
+    s.Albedo = colors::RED;
+    s.Alpha = 1.0;
+    s.Normal = sdf.normal;
+    s.Gloss = 0.5;
+    s.Specular = 0.9;
+
+    UnityLight l = (UnityLight)0;
+    l.color = _LightColor0;
+    float3 toLight = _WorldSpaceLightPos0 - sdf.p;
+    l.dir = normalize(toLight);
+
+    fixed4 color = UnityLambertLight(s, l);
+    color.rgb += ShadeSH9(half4(sdf.normal, 1));
+
+    fixed4 gridColor = sdf::debug::worldgrid(sdf.p);
+    color.rgb = lerp(color, gridColor.rgb, gridColor.a);
+
+    color.rgb += s.Albedo * .1;
+    color.a = 1;
+
+    // // raymarch from point using hit point and normal to calculate shadows
+    // Ray3D shadowRay = (Ray3D)0;
+    // shadowRay.rd = normalize(toLight);
+    // shadowRay.ro = sdf.p + shadowRay.rd + 2 * _EPSILON_RAY;
+    // shadowRay.maxDistance = length(toLight);
+    // SdfResult shadowSdf = raymarch(shadowRay, 128, 0.01);
+    //
+    // if (shadowSdf.id.w != NO_ID.w) // if something was hit, we are in full shadow
+    //     color.rgb = 0;
+    //
+    // color = sdf::debug::visualizeNormal(l.dir);
+
+    // dampen the color by occlusion
+    float occlusion = classicAmbientOcclusion(sdf.p, sdf.normal, 4, 2.5, 6);
+
+    color.rgb = lerp(color.rgb, colors::BLACK, 1 - occlusion);
+
+    return color;
+}
+
 /**
- * \brief Calculates simple 
+ * \brief Calculates simple occlusion
  * \param p point to calculate sdf occlusion for
  * \param normal normal at point p
  * \param i number of occlusion steps
- * \return occlusion in 0 (none) — 1 (full) range
+ * \return occlusion in a range [0 (none) ... 1 (full)]
  * \remarks <a href="https://typhomnt.github.io/teaching/ray_tracing/raymarching_intro/">occlusion by typhomnt</a>
  */
 float normalSdfOcclusion(in float3 p, in float3 normal, in int i, in float step_size) {
@@ -208,3 +238,27 @@ float normalSdfOcclusion(in float3 p, in float3 normal, in int i, in float step_
     }
     return occlusion;
 }
+
+/**
+ * Calculates ambient occlusion
+ * @param p point to calculate sdf occlusion for
+ * @param n normal at point p
+ * @param maxDist max distance for occlusion
+ * @param falloff how much to reduce the occlusion
+ * @param aoSteps how many steps to apply, 6 is a godo tradeoff between quality and performance
+ * @return an occlusion in a range [0 (none) ... 1 (full)]
+ * @remarks <a href="https://www.shadertoy.com/view/4sdGWN">occlusion by XT95</a>
+ */
+float classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, in int aoSteps) {
+    float ao = 0.0;
+    for (int i = 0; i < aoSteps; i++) {
+        float  l = noise::hash(float(i)) * maxDist;
+        float3 rd = n * l;
+
+        ao += (l - max(sdfScene(p + rd).distance, 0.0)) / maxDist * falloff;
+    }
+
+    return clamp(1.0 - ao / float(aoSteps), 0.0, 1.0);
+}
+
+#pragma endregion

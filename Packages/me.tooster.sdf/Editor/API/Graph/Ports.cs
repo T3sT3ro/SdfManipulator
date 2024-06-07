@@ -1,7 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
-
+using me.tooster.sdf.Editor.Controllers.Data;
 namespace me.tooster.sdf.Editor.API.Graph {
     #region interfaces
 
@@ -17,19 +17,24 @@ namespace me.tooster.sdf.Editor.API.Graph {
         // public bool Visible        { get; set; }
     }
 
+
+
     // base class used in enumerations and alike
     public interface IInputPort : Port {
         // non nullable, all input ports must have a connection, even if it's a default value
         public IOutputPort Source { get; }
     }
 
+
+
     public interface IOutputPort : Port {
         public IReadOnlyCollection<IInputPort> Targets { get; }
     }
 
 
+
     // TODO: consider adding optional inputs? ShaderGRaph has it for example in NormalFromTexture and SamplerState input
-    public interface IInputPort<T> : IInputPort where T : Data {
+    public interface IInputPort<T> : IInputPort where T : IData {
         new IOutputPort<T>     Source { get; }
         IOutputPort IInputPort.Source => Source;
 
@@ -39,18 +44,21 @@ namespace me.tooster.sdf.Editor.API.Graph {
         public T Eval();
     }
 
-    public interface IOutputPort<T> : IOutputPort where T : Data {
+
+
+    public interface IOutputPort<T> : IOutputPort where T : IData {
         public new IReadOnlyCollection<IInputPort<T>> Targets { get; }
         IReadOnlyCollection<IInputPort> IOutputPort.  Targets => Targets;
 
         // used by Graph to connect ports
-        public void UnsafeAddTarget(IInputPort<T>    target);
+        public void UnsafeAddTarget(IInputPort<T> target);
         public void UnsafeRemoveTarget(IInputPort<T> target);
 
         public T Eval();
     }
 
     #endregion
+
 
     #region implementation
 
@@ -64,8 +72,10 @@ namespace me.tooster.sdf.Editor.API.Graph {
         }
     }
 
+
+
     [Serializable]
-    internal class InputPort<T> : AbstractPort, IInputPort<T> where T : Data {
+    class InputPort<T> : AbstractPort, IInputPort<T> where T : IData {
         internal IOutputPort<T> _connectedOutput; // raw internal value accessible by Graph
 
         public IOutputPort<T>  Source => _connectedOutput;
@@ -75,37 +85,38 @@ namespace me.tooster.sdf.Editor.API.Graph {
 
         public T Eval() => Source.Eval();
 
-        public InputPort(Node node, string displayName, IOutputPort<T> source) : base(node, displayName) {
-            this._connectedOutput = source;
-        }
+        public InputPort(Node node, string displayName, IOutputPort<T> source) : base(node, displayName) => _connectedOutput = source;
     }
 
+
+
     [Serializable]
-    internal class OutputPort<T> : AbstractPort, IOutputPort<T> where T : Data {
+    class OutputPort<T> : AbstractPort, IOutputPort<T> where T : IData {
         // for raw access in this package
-        internal readonly HashSet<IInputPort<T>> _targets = new HashSet<IInputPort<T>>();
+        internal readonly HashSet<IInputPort<T>> _targets = new();
 
         public IReadOnlyCollection<IInputPort<T>>   Targets => _targets;
         IReadOnlyCollection<IInputPort> IOutputPort.Targets => Targets;
 
-        private event Func<T> evaluator;
+        event Func<T> evaluator;
 
-        public void UnsafeAddTarget(IInputPort<T>    target) => _targets.Add(target);
+        public void UnsafeAddTarget(IInputPort<T> target)    => _targets.Add(target);
         public void UnsafeRemoveTarget(IInputPort<T> target) => _targets.Remove(target);
 
-        public OutputPort(Node node, string displayName, Func<T> evaluator) : base(node, displayName) {
-            this.evaluator = evaluator;
-        }
+        public OutputPort(Node node, string displayName, Func<T> evaluator) : base(node, displayName) => this.evaluator = evaluator;
 
         public T Eval() => evaluator.Invoke();
     }
 
+
+
     // FIXME: isn't it messy, complicated? Use a virtual (invisible) node instead of this?
-    public class InOutPort<T> : AbstractPort, IInputPort<T>, IOutputPort<T> where T : Data {
+    public class InOutPort<T> : AbstractPort, IInputPort<T>, IOutputPort<T> where T : IData {
         // transform translates output from input port to output port
         public InOutPort(Node node, string displayName, IOutputPort<T> source, Func<T, T>? transform = null) : base(
             node,
-            displayName) {
+            displayName
+        ) {
             Out = new OutputPort<T>(node, displayName, transform == null ? Eval : () => transform(Eval()));
             In = new InputPort<T>(node, displayName, source);
         }
@@ -113,8 +124,8 @@ namespace me.tooster.sdf.Editor.API.Graph {
         public IInputPort<T>  In  { get; }
         public IOutputPort<T> Out { get; }
 
-        public void UnsafeSetSource(IOutputPort<T>   source) => In.UnsafeSetSource(source);
-        public void UnsafeAddTarget(IInputPort<T>    target) => Out.UnsafeAddTarget(target);
+        public void UnsafeSetSource(IOutputPort<T> source)   => In.UnsafeSetSource(source);
+        public void UnsafeAddTarget(IInputPort<T> target)    => Out.UnsafeAddTarget(target);
         public void UnsafeRemoveTarget(IInputPort<T> target) => Out.UnsafeRemoveTarget(target);
 
 

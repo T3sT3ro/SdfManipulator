@@ -235,10 +235,20 @@ For now, this project contains:
   decompiled `HandleUtility.PickObject`, https://docs.unity3d.com/ScriptReference/HandleUtility-pickGameObjectCustomPasses.html,
   ShaderGraph's scene picking and object ID defines and the following
   thread: https://forum.unity.com/threads/selection-outline-feature-and-selection-outline-shader-for-multi-selection.1022569/
+    - [Github shadergraph depth only pass for picking and selection](https://github.com/Unity-Technologies/Graphics/blob/c8df1d81db96da3d951b102d792852e6712a1a10/Packages/com.unity.shadergraph/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/Includes/DepthOnlyPass.hlsl#L29)
+    - files to reference:
+        - `Library/PackageCache/com.unity.shadergraph@14.0.10/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/Includes/DepthOnlyPass.hlsl`
+        - `Library/PackageCache/com.unity.shadergraph@14.0.10/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/Targets/BuiltInTarget.cs`
 - [ ] URP and HDRP
   support: https://blog.unity.com/engine-platform/migrating-built-in-shaders-to-the-universal-render-pipeline
 - [ ] material preview (see `MaterialEditor` class for `OnPreviewGUI`)
 - [ ] DOM-like model and diffing for improved architecture and data flow
+- [ ] fortify the AST codebase to prevent nulls, only use structs/record structs (not supported in unity for now), fewer
+  allocations (stack managed data), better immutable structures
+- [ ] better syntax generators
+- [ ] line/symbol numbers for easier debugging
+- [ ] integrate with tokenizer and parser
+- [ ] express modifiers with requirements as monads
 
 ## actions interactivity roadmap
 
@@ -258,7 +268,8 @@ The table represents the state of my current knowledge.
 | domain reload in prefab scene | revalidate[^2] |             |                                                         |
 
 [^1]: depending on the commutativity of the parent operator.
-[^2]: only components derived from `Controller` should be affected. Revalidate compares changes and issues a regenerate if needed
+[^2]: only components derived from `Controller` should be affected. Revalidate compares changes and issues a regenerate
+if needed
 [^3]: research `ObjectChangeEvents` and ChangeGameObjectStructure* events
 
 # Important to remember while documenting and while refactoring
@@ -434,16 +445,17 @@ The table represents the state of my current knowledge.
 
 Comparison to other software. The list includes advantages and
 
-| Feature             | Mine                                    | Shadergraph                                            | Womp                                                         | [Unbound](https://www.unbound.io/                        |
-|---------------------|-----------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------|
-| status              | new, experimental, maintained           | stable (in unity sense), active                        | active                                                       | not released as of yet                                   |
-| source availability | open, MIT                               | semi-open (native bindings to closed-source libraries) | proprietary                                                  | not clear, freemium?                                     |
-| tech                | C#, Unity, but not that tightly coupled | Unity-only                                             | Web-only                                                     | Web + addons for other programs, possibly NOT standalone |
-| UX                  | experimental, poor                      | OK but still lacking                                   | Intuitive                                                    | Intuitive, but a bit "kiddy"                             |
-| performance         | quite good actually                     | good                                                   | exponentially worse with increased scene complexity          | Unknown, seems to be ok?                                 |
-| price               | free                                    | free                                                   | paid, maybe freemium but pro plan required for any real uses | freemium, seems like most essential features are free    |
-| extensibility       | high                                    | low                                                    | very low?                                                    | possibly high                                            |
-| preview             | live, realtime                          | live, realtime                                         | live, depends on connection                                  | realtime, in web                                         |
+| Feature             | Mine                                    | Shadergraph                                            | Womp                                                         | [Unbound](https://www.unbound.io/                        | uRaymarching                                               |
+|---------------------|-----------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------|------------------------------------------------------------|
+| status              | new, experimental, maintained           | stable (in unity sense), active                        | active                                                       | not released as of yet                                   | discontinued                                               |
+| source availability | open, MIT                               | semi-open (native bindings to closed-source libraries) | proprietary                                                  | not clear, freemium?                                     | open-source                                                |
+| tech                | C#, Unity, but not that tightly coupled | Unity-only                                             | Web-only                                                     | Web + addons for other programs, possibly NOT standalone | Unity                                                      |
+| UX                  | experimental, poor                      | OK but still lacking                                   | Intuitive                                                    | Intuitive, but a bit "kiddy"                             | Partially intuitive, requires manually constructing scenes |
+| performance         | quite good actually                     | good                                                   | exponentially worse with increased scene complexity          | Unknown, seems to be ok?                                 | fine, but may not work in modern unity                     |
+| price               | free                                    | free                                                   | paid, maybe freemium but pro plan required for any real uses | freemium, seems like most essential features are free    | free                                                       |
+| extensibility       | high                                    | low                                                    | very low?                                                    | possibly high                                            | moderate but difficult                                     |
+| preview             | live, realtime                          | live, realtime                                         | live, depends on connection                                  | realtime, in web                                         | semi-realtime                                              |
+| documentation       | partial                                 | scarce                                                 | only user guide                                              | partial                                                  |
 
 - Free
 - Open source
@@ -639,7 +651,8 @@ Comparison to other software. The list includes advantages and
 - [IQ - smooth min variants and properties](https://iquilezles.org/articles/smin/)
 - [very recent Hlsl and Shaderlab parser by pema99, a unity dev, open license](https://github.com/pema99/UnityShaderParser)
 - [sdf python lib for CSG using sdf, but not interactive](https://github.com/fogleman/sdf)
-- [ShapeUp](https://danielchasehooper.com/posts/shapeup/) - imgui based modeller, also generates glsl shaders, runs in browser, pretty laggy
+- [ShapeUp](https://danielchasehooper.com/posts/shapeup/) - imgui based modeller, also generates glsl shaders, runs in
+  browser, pretty laggy
 
 ## Unity internals:
 

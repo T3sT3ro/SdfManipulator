@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     /// <summary>
     /// 
@@ -10,34 +11,35 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
     /// <remarks>For implementation reference, see <code>Editor/Drawing/MaterialEditor/ShaderGraphPropertyDrawers.cs</code></remarks>
     /// <remarks>As well as <a href="https://github.com/Unity-Technologies/UnityCsReference/blob/1b4b79be1f4bedfe18965946323fd565702597ac/Editor/Mono/Inspector/ShaderInspector.cs">ShaderInspector</a></remarks> 
     public class SdfShaderEditor : ShaderGUI {
-        Vector2 scrollErrorsPosition   = Vector2.zero;
-        Vector2 scrollWarningsPosition = Vector2.zero;
-        bool    showErrors             = false;
-        bool    showWarnings           = false;
-
         public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties) {
             var material = (Material)materialEditor.target;
             var shader = material.shader;
 
-            // DON'T DELETE BELOW - it calls internally FetchCachedMessages, without which the GetShadersMessages has no effect
-            var shaderHasMessages =
-                ShaderUtil.ShaderHasError(shader) || ShaderUtil.ShaderHasWarnings(shader); // << uncomment to see error window populate
+            var root = new VisualElement();
+
+            var errorsFold = new Foldout() { name = "Errors" };
+            var warningsFold = new Foldout() { name = "Warnings" };
+            root.Add(errorsFold);
+            root.Add(warningsFold);
+
+
+            // DON'T DELETE THE LINE BELOW - it calls internally FetchCachedMessages, without which the GetShadersMessages has no effect
+            var shaderHasMessages = ShaderUtil.ShaderHasError(shader) || ShaderUtil.ShaderHasWarnings(shader);
             var messages = ShaderUtil.GetShaderMessages(shader).ToLookup(m => m.severity);
 
             ShowMessageFold(
                 messages[ShaderCompilerMessageSeverity.Error].ToArray(),
                 MessageType.Error,
-                ref showErrors,
-                "Errors",
-                ref scrollErrorsPosition
+                ref errorsFold,
+                "Errors"
             );
             ShowMessageFold(
                 messages[ShaderCompilerMessageSeverity.Warning].ToArray(),
                 MessageType.Warning,
-                ref showWarnings,
-                "Warnings",
-                ref scrollWarningsPosition
+                ref warningsFold,
+                "Warnings"
             );
+
 
             base.OnGUI(materialEditor, properties);
         }
@@ -45,22 +47,21 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
         void ShowMessageFold(
             IReadOnlyCollection<ShaderMessage> messages,
             MessageType severity,
-            ref bool foldEnabled,
-            string foldTitle,
-            ref Vector2 scrollPos
+            ref Foldout foldEnabled,
+            string foldTitle
         ) {
-            using (new EditorGUI.DisabledScope(messages.Count == 0)) {
-                foldEnabled = EditorGUILayout.BeginFoldoutHeaderGroup(foldEnabled, $"{foldTitle} ({messages.Count})");
-                if (foldEnabled) {
-                    using (new EditorGUILayout.ScrollViewScope(scrollPos)) {
-                        foreach (var msg in messages) {
-                            EditorGUILayout.PrefixLabel($"{msg.line}:");
-                            EditorGUILayout.HelpBox(msg.message, severity);
-                        }
-                    }
-                }
-                EditorGUILayout.EndFoldoutHeaderGroup();
-            }
+            // using (new EditorGUI.DisabledScope(messages.Count == 0)) {
+            //     foldEnabled = EditorGUILayout.BeginFoldoutHeaderGroup(foldEnabled, $"{foldTitle} ({messages.Count})");
+            //     if (foldEnabled) {
+            //         using (new EditorGUILayout.ScrollViewScope(scrollPos)) {
+            //             foreach (var msg in messages) {
+            //                 EditorGUILayout.PrefixLabel($"{msg.line}:");
+            //                 EditorGUILayout.HelpBox(msg.message, severity);
+            //             }
+            //         }
+            //     }
+            //     EditorGUILayout.EndFoldoutHeaderGroup();
+            // }
         }
     }
 }

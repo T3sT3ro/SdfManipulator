@@ -1,8 +1,8 @@
 #nullable enable
-using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.Editor.Controllers.Data;
 using Unity.Properties;
+using UnityEditor;
 using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     /**
@@ -10,8 +10,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
      */
     [ExecuteAlways]
     [GeneratePropertyBag]
-    public partial class SdfTransformController : Controller {
-        static readonly PropertyPath spaceTransformPropertyPath = new(nameof(SpaceTransform));
+    public partial class TransformController : Controller, IModifier<VectorData, VectorData> {
+        static readonly PropertyPath spaceTransformProperty = new(nameof(SpaceTransform));
         [CreateProperty] [ShaderProperty(Description = "Space Transform")]
         public virtual Matrix4x4 SpaceTransform => transform.localToWorldMatrix.inverse;
 
@@ -35,6 +35,18 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
         }
 
+        [CreateProperty]
+        public Vector3 LocalScale {
+            get => transform.localScale;
+            set {
+                if (value == transform.localScale) return;
+                transform.localScale = value;
+                OnPropertyChanged(nameof(SpaceTransform));
+            }
+        }
+
+        void Awake() { TransformUtils.SetConstrainProportions(transform, true); }
+
         protected virtual void Update() {
             if (!transform.hasChanged) return;
             OnPropertyChanged(nameof(SpaceTransform));
@@ -49,23 +61,25 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         protected virtual void OnValidate() {
             transform.hasChanged = true;
-            transform.localScale = Vector3.one;
+
+            // ReSharper disable CompareOfFloatsByEqualityOperator
+            if (transform.localScale.x != transform.localScale.y || transform.localScale.y != transform.localScale.z)
+                Debug.LogWarning($"Non-unifom component scale in game object '{name}'. This may cause visual bugs", gameObject);
+            // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 
-        protected VectorData TransformVectorData(VectorData vd)
-            => vd with
+
+        public VectorData Apply(VectorData input, Processor processor) {
+            processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
+
+            return input with
             {
                 evaluationExpression = AST.Hlsl.Extensions.FunctionCall(
                     "sdf::operators::transform",
-                    vd.evaluationExpression,
-                    new Identifier
-                    {
-                        id = this[spaceTransformPropertyPath].identifier,
-                    }
-                ),
-                Requirements = vd.Requirements.Append(
-                    new HlslIncludeFileRequirement("Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl")
+                    input.evaluationExpression,
+                    (Identifier)this[spaceTransformProperty].identifier
                 ),
             };
+        }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using me.tooster.sdf.Editor.Controllers.Data;
 using UnityEngine;
 using Object = System.Object;
 
@@ -17,21 +18,21 @@ namespace me.tooster.sdf.Editor.API.Graph {
     /// </summary>
     [Serializable]
     public class Graph {
-        public record Edge<T>(IOutputPort<T> Source, IInputPort<T> Target) where T : Data;
+        public record Edge<T>(IOutputPort<T> Source, IInputPort<T> Target) where T : IData;
 
         [field: SerializeField] public Guid        Guid         { get; init; } = Guid.NewGuid();
         [field: SerializeField] public string      InternalName { get; }
         [field: SerializeField] public string      DisplayName  { get; }
         [field: SerializeField] public TargetNode? ActiveTarget { get; set; }
 
-        [field: SerializeField] private ISet<Node>            allNodes   = new HashSet<Node>();
-        [field: SerializeField] private ISet<Property>        properties = new HashSet<Property>();
-        [field: SerializeField] private ISet<Edge<Data>> edges      = new HashSet<Edge<Data>>();
+        [field: SerializeField] ISet<Node>        allNodes   = new HashSet<Node>();
+        [field: SerializeField] ISet<Property>    properties = new HashSet<Property>();
+        [field: SerializeField] ISet<Edge<IData>> edges      = new HashSet<Edge<IData>>();
 
         // fixme: should properties be unique per string? should they be used by reference or by key?
 
         // fixme: Maybe instead of the three nodes it should just contain some way of obtaining final syntax tree? 
-        public Graph(string name) { InternalName = DisplayName = name; }
+        public Graph(string name) => InternalName = DisplayName = name;
 
         public Graph(string name, IEnumerable<Node> nodes) : this(name) {
             allNodes.UnionWith(nodes);
@@ -44,7 +45,7 @@ namespace me.tooster.sdf.Editor.API.Graph {
         public IReadOnlyList<Property>         Properties  => properties.ToList();
         public IReadOnlyCollection<TargetNode> TargetNodes => AllNodes.OfType<TargetNode>().ToHashSet();
 
-        private enum TraversalStatus : byte { Enqueued, Visited }
+        enum TraversalStatus : byte { Enqueued, Visited }
 
         // this should be a method on Graph acting as semantic model
         public static string GetUniqueNameForProperty(Property p) => throw new NotImplementedException();
@@ -73,9 +74,12 @@ namespace me.tooster.sdf.Editor.API.Graph {
                         status[connectedNode] = TraversalStatus.Enqueued;
                     } else if (status[connectedNode] == TraversalStatus.Visited) { // cycle detected
                         // here would be a cycleHandler
-                        throw new GraphException(string.Format(
-                            "Cycle detected in graph between node {0} and {1}",
-                            node, connectedNode)
+                        throw new GraphException(
+                            string.Format(
+                                "Cycle detected in graph between node {0} and {1}",
+                                node,
+                                connectedNode
+                            )
                         );
                     } // else skip adding an already enqueued node
                 }
@@ -83,7 +87,7 @@ namespace me.tooster.sdf.Editor.API.Graph {
         }
 
         /// DFS search over input ports to check if edge would create a cycle 
-        private static bool EdgeFormsCycle<T>(IOutputPort<T> source, IInputPort<T> target) where T : Data {
+        static bool EdgeFormsCycle<T>(IOutputPort<T> source, IInputPort<T> target) where T : IData {
             foreach (var node in NodeTopologicalIterator(source.Node)) {
                 if (node == target.Node)
                     return true;
@@ -92,7 +96,7 @@ namespace me.tooster.sdf.Editor.API.Graph {
             return false;
         }
 
-        public string BuildActiveTarget() => ActiveTarget == null ? "" : BuildShaderForTarget(ActiveTarget);
+        public string BuildActiveTarget()                         => ActiveTarget == null ? "" : BuildShaderForTarget(ActiveTarget);
         public string BuildShaderForTarget(TargetNode targetNode) => targetNode.BuildShaderSource();
 
         // TODO use references and out variables for example TryAddNode<T>(out var newNode). For that a default parameterless ctor should be present in node
@@ -114,18 +118,18 @@ namespace me.tooster.sdf.Editor.API.Graph {
             return true;
         }
 
-        
+
         // using reflection
-        public static IEnumerable<Node> CollectNodes(Object o) =>
-            o.GetType().GetFields(BindingFlags.Instance)
+        public static IEnumerable<Node> CollectNodes(Object o)
+            => o.GetType().GetFields(BindingFlags.Instance)
                 .Select(field => field.GetValue(o)).OfType<Node>();
-        
+
         /// <summary>
         /// Attempts to connect ports. Disconnects previous connection. Invokes OnConnect event after connection.
         /// Doesn't invoke OnDisconnect on the disconnected node.
         /// </summary>
         /// <returns>true if connection was successful, false otherwise</returns>
-        public bool TryConnect<T>(IOutputPort<T> source, IInputPort<T> target) where T : Data {
+        public bool TryConnect<T>(IOutputPort<T> source, IInputPort<T> target) where T : IData {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (target == null) throw new ArgumentNullException(nameof(target));
 
@@ -191,6 +195,8 @@ namespace me.tooster.sdf.Editor.API.Graph {
         public event PropertyEvent   OnPropertyDeleted = delegate { };
 
         #endregion
+
+
 
         public class GraphException : Exception {
             public GraphException(string message) : base(message) { }

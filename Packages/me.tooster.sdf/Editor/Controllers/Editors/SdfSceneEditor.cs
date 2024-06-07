@@ -2,68 +2,68 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using me.tooster.sdf.Editor.Controllers.Generators;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
-using UnityEditor.UIElements;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Debug = UnityEngine.Debug;
+using SdfConeController = me.tooster.sdf.Editor.Controllers.SDF.Primitives.SdfConeController;
+using SdfSphereController = me.tooster.sdf.Editor.Controllers.SDF.Primitives.SdfSphereController;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfScene))]
     public class SdfSceneEditor : UnityEditor.Editor {
         public override VisualElement CreateInspectorGUI() {
             var sdfScene = (SdfScene)target;
 
+
             var root = new VisualElement();
             var editor = Resources.Load<VisualTreeAsset>("UI/sdf_scene_editor").Instantiate();
             root.Add(editor);
-
-            var diagnostics = root.Q<VisualElement>("diagnostics");
-            if (!sdfScene.controlledShader)
-                diagnostics.Add(new HelpBox("Missing controlled shader asset.", HelpBoxMessageType.Error));
-            if (!sdfScene.raymarchingShader)
-                diagnostics.Add(new HelpBox("Raymarching shader asset required.", HelpBoxMessageType.Error));
-            if (sdfScene.gameObject.TryGetComponent<Renderer>(out var r) && r.sharedMaterial != sdfScene.controlledMaterial)
-                diagnostics.Add(new HelpBox("Material on SdfScene renderer is not the controlled material.", HelpBoxMessageType.Warning));
-            if (!sdfScene.controlledMaterial)
-                diagnostics.Add(new HelpBox("Controlled material asset required.", HelpBoxMessageType.Error));
-            else if (sdfScene.controlledMaterial.shader != sdfScene.controlledShader) {
-                diagnostics.Add(
-                    new HelpBox(
-                        "Controlled material's shader is different than controlled shader.",
-                        HelpBoxMessageType.Warning
-                    )
-                );
-            }
-
-            var nonUniformScaled = sdfScene.GetComponentsInChildren<Controller>().Any(
-                c => {
-                    var s = c.transform.lossyScale;
-                    return !(Mathf.Approximately(s.x, s.y) && Mathf.Approximately(s.y, s.z));
+            var generatorDropdown = editor.Q<DropdownField>("generatorId");
+            generatorDropdown.choices = RaymarchingShaderGenerator.allGenerators.Keys.ToList();
+            generatorDropdown.value = sdfScene.raymarchingShaderGenerator;
+            var generatorProperty = serializedObject.FindProperty(nameof(sdfScene.raymarchingShaderGenerator));
+            generatorDropdown.RegisterValueChangedCallback(
+                evt => {
+                    generatorProperty.stringValue = evt.newValue;
+                    generatorProperty.serializedObject.ApplyModifiedProperties();
+                    sdfScene.IsDirty = true;
                 }
             );
 
-            if (nonUniformScaled) {
-                diagnostics.Add(
-                    new HelpBox(
-                        "Some controllers end up with non-uniform scale — it may cause weird rendering artifacts",
-                        HelpBoxMessageType.Warning
-                    )
-                );
-            }
+            var diagnostics = root.Q<ListView>("diagnostics");
 
+            diagnostics.itemsSource = sdfScene.diagnostics;
+            diagnostics.makeItem = () => new HelpBox("test diagnostic", HelpBoxMessageType.Info);
+            diagnostics.bindItem = (element, i) => {
+                var helpbox = (HelpBox)element;
+                helpbox.text = sdfScene.diagnostics[i].message;
+                helpbox.messageType = sdfScene.diagnostics[i].severity switch
+                {
+                    SdfScene.Diagnostic.Severity.ERROR => HelpBoxMessageType.Error,
+                    SdfScene.Diagnostic.Severity.WARN  => HelpBoxMessageType.Warning,
+                    _                                  => HelpBoxMessageType.Info,
+                };
+                // rescale if content changes
+                helpbox.style.width = new StyleLength(StyleKeyword.Auto);
+                helpbox.style.height = new StyleLength(StyleKeyword.Auto);
+            };
 
             root.Q<Button>("rebuild").RegisterCallback<ClickEvent>(e => RebuildShader());
             root.Q<Button>("open").RegisterCallback<ClickEvent>(e => OpenGeneratedShader());
 
-            InspectorElement.FillDefaultInspector(root, serializedObject, this);
+
+            // InspectorElement.FillDefaultInspector(root, serializedObject, this);
             return root;
         }
 
+        /*
         [UnityEditor.Callbacks.DidReloadScripts]
         static void OnRecompile() { EditorApplication.delayCall += () => { }; }
+        */
 
         void RebuildShader() {
             var sdfScene = (SdfScene)target;
@@ -147,7 +147,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
              * Creates new scene prefab with sub-asset material and shader and the prefab has the following structure:
              * - new Sdf scene (SdfScene)
              *   |- scene renderer (MeshRenderer + MeshFilter(Cube))
-             *   |- root (SdfCombineController)
+             *   |- root (SdfCombineController) - allows controling the origin of the domain
              *      |- cone (SdfConeController)
              *      |- sphere (SdfSphereController)
              */
@@ -156,35 +156,32 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                 var sdfScene = scenePrefabRoot.AddComponent<SdfScene>();
 
                 var domain = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                DestroyImmediate(domain.AddComponent<BoxCollider>());
+                DestroyImmediate(domain.GetComponent<BoxCollider>());
                 domain.name = "scene renderer";
                 domain.transform.SetParent(scenePrefabRoot.transform);
                 domain.transform.localScale = Vector3.one * 3;
 
                 var sceneRoot = new GameObject("root");
                 sceneRoot.transform.SetParent(scenePrefabRoot.transform);
+                sceneRoot.transform.localPosition = Vector3.down * 1.5f;
                 var rootController = sceneRoot.AddComponent<SdfCombineController>();
                 rootController.Operation = SdfCombineController.CombinationOperation.SMOOTH_UNION;
                 rootController.BlendFactor = 0.3f;
-                rootController.LocalPosition = Vector3.down * 1.5f;
 
                 var coneGameObject = new GameObject("cone");
                 coneGameObject.transform.SetParent(sceneRoot.transform);
                 var coneController = coneGameObject.AddComponent<SdfConeController>();
-                coneController.LocalPosition = Vector3.up * 2f;
+                coneController.transform.localPosition = Vector3.up * 2f;
 
                 var sphereGameObject = new GameObject("sphere");
                 var sphereController = sphereGameObject.AddComponent<SdfSphereController>();
                 sphereGameObject.transform.SetParent(sceneRoot.transform);
-                sphereController.LocalPosition = Vector3.up * 1f;
+                sphereController.transform.localPosition = Vector3.up * 1f;
 
                 sdfScene.sdfSceneRoot = rootController;
                 var shader = ShaderUtil.CreateShaderAsset("// empty shader\n", false);
                 shader.name = "generated shader";
                 var material = new Material(shader) { name = "generated material" };
-
-                AssetDatabase.AddObjectToAsset(shader, path);
-                AssetDatabase.AddObjectToAsset(material, path);
 
                 var domainRenderer = domain.GetComponent<Renderer>();
                 domainRenderer.sharedMaterial = material;
@@ -193,8 +190,11 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                 sdfScene.controlledMaterial = material;
 
                 PrefabUtility.SaveAsPrefabAsset(scenePrefabRoot, path);
-                DestroyImmediate(scenePrefabRoot);
+                AssetDatabase.AddObjectToAsset(shader, path);
+                AssetDatabase.AddObjectToAsset(material, path);
+
                 AssetDatabase.SaveAssetIfDirty(AssetDatabase.GUIDFromAssetPath(path));
+                DestroyImmediate(scenePrefabRoot);
             }
         }
     }

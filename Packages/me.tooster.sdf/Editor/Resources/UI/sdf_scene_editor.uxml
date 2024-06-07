@@ -1,12 +1,26 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements"
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
          xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements"
          noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement name="diagnostics" style="flex-grow: 1;">
+    <ui:GroupBox name="controls">
         <ui:Button text="Rebuild Shader" parse-escape-sequences="true" display-tooltip-when-elided="true" name="rebuild"
                    enable-rich-text="true"/>
         <ui:Button text="Open generated shader" parse-escape-sequences="true" display-tooltip-when-elided="true"
                    name="open"/>
+    </ui:GroupBox>
+    <ui:ListView name="diagnostics" virtualization-method="DynamicHeight" show-border="true" show-foldout-header="true"
+                 header-title="Diagnostics" show-add-remove-footer="false" show-bound-collection-size="false"
+                 selection-type="None"
+                 style="max-height: 300px; min-height: auto; margin-top: 8px; margin-right: 0; margin-bottom: 8px; margin-left: 0; border-left-color: rgb(11, 99, 125); border-right-color: rgb(11, 99, 125); border-top-color: rgb(11, 99, 125); border-bottom-color: rgb(11, 99, 125); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px;"/>
+    <uie:PropertyField name="targetShader" binding-path="targetShader"
+                       tooltip="WARNING! The shader file will be overwritten"
+                       style="margin-top: 6px; margin-right: 3px; margin-bottom: 1px; margin-left: 3px;"/>
+    <ui:GroupBox name="fields">
+        <ui:DropdownField label="Generator" name="generatorId"/>
+        <uie:PropertyField name="sceneRoot" binding-path="sdfSceneRoot"/>
+        <uie:PropertyField name="controlledMaterial" binding-path="controlledMaterial"/>
+    </ui:GroupBox>
+    <ui:GroupBox name="sceneData" style="display: none;">
         <ui:Foldout text="Shader properties" name="shader-properties" focusable="true"
                     style="border-bottom-width: 2px; border-top-width: 2px;"/>
-    </ui:VisualElement>
+    </ui:GroupBox>
 </ui:UXML>

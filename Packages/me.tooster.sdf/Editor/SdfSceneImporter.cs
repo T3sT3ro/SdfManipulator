@@ -1,5 +1,6 @@
 using System;
 using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEditor.AssetImporters;
 using UnityEditor.ProjectWindowCallback;

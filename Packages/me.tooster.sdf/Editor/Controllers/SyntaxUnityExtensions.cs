@@ -3,7 +3,6 @@ using System.Linq;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
-using me.tooster.sdf.Editor.API;
 using UnityEngine;
 using Attribute = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Attribute;
 using FloatKeyword = me.tooster.sdf.AST.Hlsl.Syntax.FloatKeyword;

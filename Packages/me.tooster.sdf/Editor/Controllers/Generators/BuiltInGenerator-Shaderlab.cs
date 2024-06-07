@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST;
-using me.tooster.sdf.AST.Shaderlab;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax.Commands;
 using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
@@ -16,30 +15,20 @@ using UnityEngine;
 using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
 using Shader = me.tooster.sdf.AST.Shaderlab.Syntax.Shader;
 
-namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
-    public partial class RaymarchingShader {
-        [SerializeField] bool transparent = false;
-
-        public string MainShader(SdfScene scene) {
-            if (scene.sdfSceneRoot == null) return "// empty shader";
-            var unformatedSource = shader(scene);
-            var formattedSource = ShaderlabFormatter.Format(unformatedSource);
-            return formattedSource?.ToString() ?? "// empty shader";
-        }
-
-
+namespace me.tooster.sdf.Editor.Controllers.Generators {
+    public partial class BuiltInGenerator {
         #region shaderlab
 
-        Shader shader(SdfScene scene)
+        Shader shader()
             => new()
             {
                 name = scene.name + " (generated)",
-                materialProperties = MaterialProperties(scene),
+                materialProperties = MaterialProperties(),
                 shaderStatements = new ShaderStatement[]
                 {
                     new Fallback { name = "Sdf/Fallback" },
                     new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfShaderEditor" },
-                    SubShader(scene),
+                    SubShader(),
                 },
             };
 
@@ -47,7 +36,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
         ///  generates a material properties block from collected properties
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">property type is not supported</exception>
-        MaterialProperties MaterialProperties(SdfScene scene) {
+        MaterialProperties MaterialProperties() {
             return new MaterialProperties
             {
                 properties = GlobalShaderProperties
@@ -56,7 +45,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                             .Where(p => PropertyContainer.GetProperty(p.controller, p.path).IsPropertyShaderlabCompatible())
                             .GroupBy(pd => pd.controller)
                             .SelectMany(
-                                group => group.Select(pd => generatePropertySyntax(scene, pd))
+                                group => group.Select(generatePropertySyntax)
                                     .Select(
                                         (ps, i) => i > 0
                                             ? ps
@@ -116,7 +105,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             }
         }
 
-        PropertySyntax generatePropertySyntax(SdfScene scene, SdfScene.PropertyData pd) {
+        PropertySyntax generatePropertySyntax(SdfScene.PropertyData pd) {
             var t = pd.property.DeclaredValueType();
 
             var shaderlabType = t.shaderlabTypeKeyword();
@@ -180,27 +169,29 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                 : null,
         }.FilterNotNull();
 
-        SubShader SubShader(SdfScene scene)
-            => new()
-            {
-                statements = new SyntaxList<shaderlab, SubShaderOrPassStatement>(TagsBlock)
-                    .Splice(1, 0, Commands)
-                    .Append<SubShaderOrPassStatement>(
-                        new HlslInclude
-                        {
-                            hlsl = new InjectedLanguage<shaderlab, hlsl>(CommonHlslInclude(scene)),
-                        }
-                    )
-                    .Append(Pass(scene))
-                    .ToList(),
-            };
+        SubShader SubShader()
+            =>
+                // scene.sdfSceneRoot!.Apply(SdfData.pData, this); // ignore retun, only handle requirements
+                new()
+                {
+                    statements = new SyntaxList<shaderlab, SubShaderOrPassStatement>(TagsBlock)
+                        .Splice(1, 0, Commands)
+                        .Append<SubShaderOrPassStatement>(
+                            new HlslInclude
+                            {
+                                hlsl = new InjectedLanguage<shaderlab, hlsl>(CommonHlslInclude()),
+                            }
+                        )
+                        .Append(Pass())
+                        .ToList(),
+                };
 
-        Pass Pass(SdfScene scene)
+        Pass Pass()
             => new()
             {
                 statements = new PassStatement[]
                 {
-                    new HlslProgram { hlsl = new InjectedLanguage<shaderlab, hlsl>(HlslTree(scene)) },
+                    new HlslProgram { hlsl = new InjectedLanguage<shaderlab, hlsl>(HlslTree()) },
                 },
             };
 

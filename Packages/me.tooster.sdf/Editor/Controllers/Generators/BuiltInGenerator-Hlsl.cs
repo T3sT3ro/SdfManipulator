@@ -13,24 +13,18 @@ using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using me.tooster.sdf.Editor.Util.Controllers;
 using Unity.Properties;
-using UnityEditor;
 using UnityEngine;
 using FunctionDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.FunctionDefinition;
 using Parameter = me.tooster.sdf.AST.Hlsl.Syntax.Parameter;
 using VariableDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.VariableDefinition;
-namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
-    public partial class RaymarchingShader {
-        IEnumerable<Trivia<hlsl>> pragmasAndIncludes(IEnumerable<string> collectedIncludes) {
-            yield return new Pragma { tokenString = "editor_sync_compilation" }.ToStructuredTrivia();
+namespace me.tooster.sdf.Editor.Controllers.Generators {
+    public partial class BuiltInGenerator {
+        IEnumerable<Trivia<hlsl>> pragmasAndIncludes() {
+            // yield return new Pragma { tokenString = "editor_sync_compilation" }.ToStructuredTrivia();
             yield return new Pragma { tokenString = "target 5.0" }.ToStructuredTrivia();
             yield return new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia();
 
-            var includes = dependentIncludes.Select(AssetDatabase.GetAssetPath)
-                .Concat(collectedIncludes)
-                .Distinct()
-                .ToList();
-
-            foreach (var include in includes)
+            foreach (var include in includeFiles)
                 yield return new Include { filepath = include }.ToStructuredTrivia();
 
             yield return new Pragma { tokenString = "vertex vertexShader" }.ToStructuredTrivia();
@@ -38,34 +32,25 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
             yield return new NewLine<hlsl>();
         }
 
-        Tree<hlsl> CommonHlslInclude(SdfScene scene) {
-            var sceneData = scene.sdfSceneRoot!.sdfData;
-            var includes = sceneData.Requirements.OfType<HlslIncludeFileRequirement>()
-                .Select(r => r.includeFile);
-            var preprocessorHeader = pragmasAndIncludes(includes);
-            var globals = generateHlslGlobals(scene).Cast<Statement<hlsl>>();
+        Tree<hlsl> CommonHlslInclude() {
+            var preprocessorHeader = pragmasAndIncludes();
+            var globals = generateHlslGlobals().Cast<Statement<hlsl>>();
 
             return new Tree<hlsl>(globals.ToSyntaxList().WithLeadingTrivia(preprocessorHeader));
         }
 
-        Tree<hlsl> HlslTree(SdfScene scene) {
-            var sceneData = scene.sdfSceneRoot!.sdfData;
-            var hlslFunctionRequirements = sceneData.Requirements.OfType<HlslFunctionRequirement>();
-            var functionRequirements = hlslFunctionRequirements as HlslFunctionRequirement[] ?? hlslFunctionRequirements.ToArray();
-            var requiredForwardDeclarations = functionRequirements.Select(r => r.functionDefinition.ForwardDeclaration());
-            var requiredFunctions = functionRequirements
-                .Select(r => r.functionDefinition);
-
+        Tree<hlsl> HlslTree() {
+            var forwardDeclarations = functionDefinitions.Select(f => f.ForwardDeclaration());
 
             return new Tree<hlsl>(
-                requiredForwardDeclarations.Cast<Statement<hlsl>>()
-                    .Concat(requiredFunctions)
-                    .Append(sceneFunctionDefinition(sceneData))
+                forwardDeclarations.Cast<Statement<hlsl>>()
+                    .Concat(functionDefinitions)
+                    .Append(sceneFunctionDefinition())
                     .ToSyntaxList()
             );
         }
 
-        IEnumerable<VariableDefinition> generateHlslGlobals(SdfScene scene)
+        IEnumerable<VariableDefinition> generateHlslGlobals()
             => scene.sceneData.Properties.Select(
                 pd => {
                     try {
@@ -93,7 +78,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                 }
             );
 
-        FunctionDefinition sceneFunctionDefinition(SdfData sceneData)
+        FunctionDefinition sceneFunctionDefinition()
             => new()
             {
                 returnType = SdfData.sdfReturnType,
@@ -101,7 +86,7 @@ namespace me.tooster.sdf.Editor.Controllers.ShaderPartials {
                 paramList = new Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
                 body = new Block
                 {
-                    statements = new Return { expression = sceneData.evaluationExpression(SdfData.pData) },
+                    statements = new Return { expression = scene.sdfSceneRoot.Apply(SdfData.pData, this).evaluationExpression },
                 },
             };
     }

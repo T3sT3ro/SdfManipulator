@@ -31,6 +31,9 @@ namespace me.tooster.sdf.Editor.Util.Controllers {
         public static Call VectorConstructor(params bool[] xs)
             => new() { calee = $"{Constants.ScalarKind.@bool}{xs.Length}", argList = xs.Select(x => (LiteralExpression)x).ToArray() };
 
+        public static Call VectorConstructor(Constants.ScalarKind kind, int dimension, params Expression<hlsl>[] expressions)
+            => new() { calee = $"{kind}{dimension}", argList = expressions };
+
         public static Call VectorConstructor(Vector2 v)    => VectorConstructor(v.x, v.y);
         public static Call VectorConstructor(Vector3 v)    => VectorConstructor(v.x, v.y, v.z);
         public static Call VectorConstructor(Vector4 v)    => VectorConstructor(v.x, v.y, v.z, v.w);
