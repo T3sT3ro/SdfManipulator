@@ -1,3 +1,4 @@
+using System;
 using me.tooster.sdf.Editor.Controllers.Data;
 using UnityEditor;
 using UnityEngine;
@@ -19,5 +20,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             sdfObjectController.sdfModifiers = new Controller[] { transformController, primitiveSdfController };
         }
+
+
+        public override IData Apply(IData input, Processor processor) => Apply((VectorData)input, processor);
+        public override Type  GetInputType()                          => typeof(VectorData);
+        public override Type  GetOutputType()                         => typeof(ScalarData);
     }
 }

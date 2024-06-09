@@ -73,7 +73,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             PrefabStage.prefabSaved -= OnPrefabSaved;
         }
 
-        void MarkDirty() { RequiresRegeneration = true; }
+        void MarkDirty() {
+            RequiresRegeneration = true;
+            RequiresUpdate = true;
+        }
 
         void OnPrefabSaved(GameObject go) { MarkDirty(); }
 

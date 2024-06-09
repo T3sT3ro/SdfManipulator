@@ -1,0 +1,10 @@
+using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
+using UnityEditor;
+namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
+    [CustomEditor(typeof(SdfPlaneController), true)]
+    public class SdfPlaneControllerEditor : SdfPrimitiveControllerEditor {
+        [MenuItem("GameObject/SDF/Primitives/Plane", priority = -20)]
+        public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfPlaneController>("plane");
+    }
+}

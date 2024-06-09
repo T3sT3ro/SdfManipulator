@@ -19,10 +19,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
         static readonly PropertyPath torusRingRadiusProperty = new(nameof(RingRadius));
         static readonly PropertyPath torusCapProperty        = new(nameof(Cap));
 
+        [SerializeField] [DontCreateProperty] TorusVariant variant    = TorusVariant.NORMAL;
         [SerializeField] [DontCreateProperty] float        mainRadius = 1f;
         [SerializeField] [DontCreateProperty] float        ringRadius = 0.25f;
-        [SerializeField] [DontCreateProperty] Vector2      cap        = new(0.1f, 0.1f);
-        [SerializeField] [DontCreateProperty] TorusVariant variant    = TorusVariant.NORMAL;
+        [SerializeField] [DontCreateProperty] float        cap        = Mathf.PI / 4;
 
 
         [CreateProperty] [ShaderProperty(Description = "Torus main radius")]
@@ -38,7 +38,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
         }
 
         [CreateProperty] [ShaderProperty(Description = "Torus cap")]
-        public Vector2 Cap {
+        public float Cap {
             get => cap;
             set => SetField(ref cap, value, false);
         }

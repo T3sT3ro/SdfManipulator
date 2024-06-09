@@ -1,5 +1,5 @@
 // GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
-// Last modification: 09/06/2024 02:21:51
+// Last modification: 09/06/2024 21:55:59
 
 Shader "Box SDF Scene (generated)"
 {
@@ -32,86 +32,86 @@ Shader "Box SDF Scene (generated)"
         [Header (root)]
         SDF_1__root__1_BlendFactor ("Blend factor", Float) = 0.58
 
-        [Header (rootground)]
+        [Header (root ground)]
         SDF_1_0__root_ground__2_BoxExtents ("Box extents", Vector) = (6.442449, 0.169183, 3.634491, 0.0)
 
-        [Header (rootshroom 1leg)]
+        [Header (root shroom 1 leg)]
         SDF_1_1_0__root_shroom_1_leg__2_Radius ("Sphere radius", Float) = 0.582681
 
-        [Header (rootshroom 1cap)]
-        SDF_1_1_1__root_shroom_1_cap__2_Angle ("Cone angle", Float) = 0.924753
-        SDF_1_1_1__root_shroom_1_cap__2_Height ("Cone height", Float) = 0.663531
+        [Header (root shroom 1 cap)]
+        SDF_1_1_1__root_shroom_1_cap__2_Angle ("Cone angle", Float) = 0.924985
+        SDF_1_1_1__root_shroom_1_cap__2_Height ("Cone height", Float) = 0.663211
 
-        [Header (rootshroom2leg)]
+        [Header (root shroom2 leg)]
         SDF_1_2_0__root_shroom2_leg__2_Radius ("Sphere radius", Float) = 0.264981
 
-        [Header (rootshroom2cone)]
+        [Header (root shroom2 cone)]
         SDF_1_2_1__root_shroom2_cone__2_Angle ("Cone angle", Float) = 0.656545
         SDF_1_2_1__root_shroom2_cone__2_Height ("Cone height", Float) = 1.02
 
-        [Header (rootshroom2cap)]
+        [Header (root shroom2 cap)]
         SDF_1_2_2__root_shroom2_cap__2_Radius ("Sphere radius", Float) = 0.339796
 
-        [Header (rootpill)]
+        [Header (root pill)]
         SDF_1_3__root_pill__1_BlendFactor ("Blend factor", Float) = 0.608677
 
-        [Header (rootpillsphere)]
+        [Header (root pill sphere)]
         SDF_1_3_0__root_pill_sphere__2_Radius ("Sphere radius", Float) = 0.538078
 
-        [Header (rootpillsphere)]
+        [Header (root pill sphere)]
         SDF_1_3_1__root_pill_sphere__2_Radius ("Sphere radius", Float) = 0.422096
 
-        [Header (rootscrewbody)]
+        [Header (root screw body)]
         SDF_1_4_0__root_screw_body__2_Height ("Cylinder height", Float) = 1.399991
-        SDF_1_4_0__root_screw_body__2_Radius ("Cylinder radius", Float) = 0.404426
+        SDF_1_4_0__root_screw_body__2_Radius ("Cylinder radius", Float) = 0.08665
         SDF_1_4_0__root_screw_body__2_Rounding ("Rounding", Float) = 0.25
 
-        [Header (rootscrewhead)]
+        [Header (root screw head)]
         SDF_1_4_1__root_screw_head__1_BlendFactor ("Blend factor", Float) = 1.0
 
-        [Header (rootscrewheadball)]
-        SDF_1_4_1_0__root_screw_head_ball__2_Radius ("Sphere radius", Float) = 0.53636
+        [Header (root screw head ball)]
+        SDF_1_4_1_0__root_screw_head_ball__2_Radius ("Sphere radius", Float) = 0.491164
 
-        [Header (rootscrewheadcut 1)]
+        [Header (root screw head cut 1)]
         SDF_1_4_1_1__root_screw_head_cut_1__2_BoxExtents ("Box extents", Vector) = (0.413049, 0.589912, 0.117837, 0.0)
 
-        [Header (rootscrewheadcut 2)]
+        [Header (root screw head cut 2)]
         SDF_1_4_1_2__root_screw_head_cut_2__2_BoxExtents ("Box extents", Vector) = (0.696923, 0.091037, 0.585179, 0.0)
 
-        [Header (rootpeg)]
+        [Header (root peg)]
         SDF_1_5__root_peg__1_BlendFactor ("Blend factor", Float) = 1.0
 
-        [Header (rootpegcylinder)]
+        [Header (root peg cylinder)]
         SDF_1_5_0__root_peg_cylinder__2_Height ("Cylinder height", Float) = 1.442987
         SDF_1_5_0__root_peg_cylinder__2_Radius ("Cylinder radius", Float) = 0.558908
         SDF_1_5_0__root_peg_cylinder__2_Rounding ("Rounding", Float) = 0.11
 
-        [Header (rootpegcutout)]
-        SDF_1_5_1__root_peg_cutout__2_MainRadius ("Torus main radius", Float) = 0.859511
-        SDF_1_5_1__root_peg_cutout__2_RingRadius ("Torus ring radius", Float) = 0.461763
-        SDF_1_5_1__root_peg_cutout__2_Cap ("Torus cap", Vector) = (0.53, -0.18, 0.0, 0.0)
+        [Header (root peg cutout)]
+        SDF_1_5_1__root_peg_cutout__2_MainRadius ("Torus main radius", Float) = 0.446883
+        SDF_1_5_1__root_peg_cutout__2_RingRadius ("Torus ring radius", Float) = 0.195835
+        SDF_1_5_1__root_peg_cutout__2_Cap ("Torus cap", Float) = 1.155339
 
-        [Header (rootinfinitecylinder)]
+        [Header (root infinite cylinder)]
         SDF_1_6__root_infinite_cylinder__1_BlendFactor ("Blend factor", Float) = 1.0
 
-        [Header (rootinfinitecylindercylinder)]
+        [Header (root infinite cylinder cylinder)]
         SDF_1_6_0__root_infinite_cylinder_cylinder__2_Height ("Cylinder height", Float) = 1.426067
         SDF_1_6_0__root_infinite_cylinder_cylinder__2_Radius ("Cylinder radius", Float) = 0.73139
         SDF_1_6_0__root_infinite_cylinder_cylinder__2_Rounding ("Rounding", Float) = 0.0
 
-        [Header (rootinfinitecylindercutout)]
+        [Header (root infinite cylinder cutout)]
         SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius ("Torus main radius", Float) = 0.859511
         SDF_1_6_1__root_infinite_cylinder_cutout__2_RingRadius ("Torus ring radius", Float) = 0.233685
-        SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap ("Torus cap", Vector) = (0.53, -0.18, 0.0, 0.0)
+        SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap ("Torus cap", Float) = 0.785398
 
-        [Header (roottwo cones)]
+        [Header (root two cones)]
         SDF_1_7__root_two_cones__1_BlendFactor ("Blend factor", Float) = 0.46
 
-        [Header (roottwo conescone)]
+        [Header (root two cones cone)]
         SDF_1_7_0__root_two_cones_cone__2_Angle ("Cone angle", Float) = 0.46199
         SDF_1_7_0__root_two_cones_cone__2_Height ("Cone height", Float) = 1.258141
 
-        [Header (roottwo conescone)]
+        [Header (root two cones cone)]
         SDF_1_7_1__root_two_cones_cone__2_Angle ("Cone angle", Float) = 0.383333
         SDF_1_7_1__root_two_cones_cone__2_Height ("Cone height", Float) = 1.199648
     }
@@ -187,7 +187,7 @@ Shader "Box SDF Scene (generated)"
         float    SDF_1_2_2__root_shroom2_cap__2_Radius;
         float    SDF_1_3__root_pill__1_BlendFactor;
         float4x4 SDF_1_3_0__root_pill_sphere__1_SpaceTransform = {
-            {-0.763447, -0.052902, 0.088036, -1.502791},
+            {-0.763447, -0.052902, 0.088036, -1.644791},
             {0.064521, 0.266704, 0.719795, -0.023237},
             {-0.079912, 0.720743, -0.259892, -0.671471},
             {0.0, 0.0, 0.0, 1.0}
@@ -249,7 +249,7 @@ Shader "Box SDF Scene (generated)"
         };
         float    SDF_1_5_1__root_peg_cutout__2_MainRadius;
         float    SDF_1_5_1__root_peg_cutout__2_RingRadius;
-        float2   SDF_1_5_1__root_peg_cutout__2_Cap;
+        float    SDF_1_5_1__root_peg_cutout__2_Cap;
         float    SDF_1_6__root_infinite_cylinder__1_BlendFactor;
         float4x4 SDF_1_6_0__root_infinite_cylinder_cylinder__1_SpaceTransform = {
             {0.66883, 0.00523, -0.743398, -2.774013},
@@ -268,7 +268,7 @@ Shader "Box SDF Scene (generated)"
         };
         float    SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius;
         float    SDF_1_6_1__root_infinite_cylinder_cutout__2_RingRadius;
-        float2   SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap;
+        float    SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap;
         float    SDF_1_7__root_two_cones__1_BlendFactor;
         float4x4 SDF_1_7_0__root_two_cones_cone__1_SpaceTransform = {
             {0.970696, -0.101283, 0.217924, -3.285172},
@@ -439,8 +439,9 @@ Shader "Box SDF Scene (generated)"
 
             SdfResult SDF_1_5_1__root_peg_cutout__3(float3 p) {
                 SdfResult result = (SdfResult)0;
-                result.distance = -sdf::primitives3D::torus(
-                    sdf::operators::transform(p, SDF_1_5_1__root_peg_cutout__1_SpaceTransform), SDF_1_5_1__root_peg_cutout__2_MainRadius, SDF_1_5_1__root_peg_cutout__2_RingRadius
+                result.distance = -sdf::primitives3D::torus_capped(
+                    sdf::operators::transform(p, SDF_1_5_1__root_peg_cutout__1_SpaceTransform), SDF_1_5_1__root_peg_cutout__2_MainRadius, SDF_1_5_1__root_peg_cutout__2_RingRadius,
+                    SDF_1_5_1__root_peg_cutout__2_Cap
                 );
                 result.id = int4(0, 0, 0, 46);
                 return result;

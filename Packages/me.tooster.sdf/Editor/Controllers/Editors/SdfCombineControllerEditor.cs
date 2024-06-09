@@ -1,4 +1,5 @@
 using System.Linq;
+using me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
 using UnityEngine;
@@ -33,6 +34,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
 
 
         [MenuItem("GameObject/SDF/Operators/Combine", priority = 200)]
-        public static void Instantiate() => Controller.TryInstantiate<SdfCombineController>("combine");
+        public static void Instantiate() => InstantiateController<SdfCombineController>("combine");
     }
 }

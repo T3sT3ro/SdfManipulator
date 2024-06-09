@@ -53,9 +53,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             set => SetField(ref singleId, value, true);
         }
 
-        public IModifier[] children = Array.Empty<IModifier>();
+        public Controller[] children = Array.Empty<Controller>();
 
-        void OnTransformChildrenChanged() { children = GetFirstNestedComponents<IModifier<VectorData, SdfData>>(transform).ToArray(); }
+        void OnTransformChildrenChanged() {
+            children = GetFirstNestedComponents<IModifier<VectorData, SdfData>>(transform).OfType<Controller>().ToArray();
+        }
 
         static IEnumerable<T> GetFirstNestedComponents<T>(Transform root) {
             foreach (Transform child in root) {
@@ -68,11 +70,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
         }
 
-        void OnValidate() { children = GetFirstNestedComponents<SdfController>(transform).Cast<IModifier>().ToArray(); }
+        void OnValidate() { children = GetFirstNestedComponents<SdfController>(transform).ToArray(); }
 
         public override SdfData Apply(VectorData input, Processor processor) {
             if (children.Length == 0) {
-                children = GetFirstNestedComponents<SdfController>(transform).Cast<IModifier>().ToArray();
+                children = GetFirstNestedComponents<SdfController>(transform).ToArray();
                 if (children.Length == 0)
                     throw new ArgumentException("SdfCombineController must have at least one child");
             }

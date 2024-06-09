@@ -58,10 +58,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  variant: 0
   mainRadius: 0.85951066
   ringRadius: 0.23368496
-  cap: {x: 0.53, y: -0.18}
-  variant: 0
+  cap: 0.7853982
 --- !u!114 &8744569256047831236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +131,10 @@ MonoBehaviour:
   operation: 1
   blendFactor: 1
   singleId: 0
+  children:
+  - {fileID: 2406151793425901106}
+  - {fileID: 5622485321552068650}
+  - {fileID: 2900768247478921685}
 --- !u!1 &410502594499947735
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,8 +431,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c73fb010ac4729847fb5223dc18512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 0.924753
-  height: 0.6635314
+  angle: 0.92498505
+  height: 0.66321117
   coneOrigin: 0
 --- !u!114 &4694705224852918240
 MonoBehaviour:
@@ -504,10 +508,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainRadius: 0.85951066
-  ringRadius: 0.46176344
-  cap: {x: 0.53, y: -0.18}
-  variant: 0
+  variant: 1
+  mainRadius: 0.4468825
+  ringRadius: 0.19583517
+  cap: 1.1553388
 --- !u!114 &2516914044658714846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,6 +579,9 @@ MonoBehaviour:
   operation: 1
   blendFactor: 0.6086772
   singleId: 1
+  children:
+  - {fileID: 8609718936059448575}
+  - {fileID: 5157029122316181674}
 --- !u!1 &1864924315841634040
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,7 +610,7 @@ Transform:
   m_GameObject: {fileID: 1864924315841634040}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 4.656613e-10, w: 1}
-  m_LocalPosition: {x: -0.192, y: 0.026, z: 0}
+  m_LocalPosition: {x: -0.05, y: 0.026, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -859,6 +866,19 @@ MonoBehaviour:
   operation: 2
   blendFactor: 0.58
   singleId: 0
+  children:
+  - {fileID: 4255145660581018384}
+  - {fileID: 396620361315271423}
+  - {fileID: 4694705224852918240}
+  - {fileID: 6866208780084542629}
+  - {fileID: 5611589382602428208}
+  - {fileID: 7706311406841831557}
+  - {fileID: 470734345421631292}
+  - {fileID: 2859618756810236718}
+  - {fileID: 6970652912099052902}
+  - {fileID: 4937130345883041515}
+  - {fileID: 8620113202361706767}
+  - {fileID: 8569811843425322066}
 --- !u!1 &2548759004693369080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,7 +1176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 1.3999909
-  radius: 0.40442637
+  radius: 0.086650476
   rounding: 0.25
   variant: 1
 --- !u!114 &2859618756810236718
@@ -1233,7 +1253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.53636
+  radius: 0.49116445
 --- !u!114 &2406151793425901106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1409,6 +1429,9 @@ MonoBehaviour:
   operation: 1
   blendFactor: 0.46
   singleId: 0
+  children:
+  - {fileID: 5843362801817183599}
+  - {fileID: 3088287365697968825}
 --- !u!1 &5307838365430051671
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,6 +1558,9 @@ MonoBehaviour:
   operation: 1
   blendFactor: 1
   singleId: 0
+  children:
+  - {fileID: 3421958671201414992}
+  - {fileID: 8744569256047831236}
 --- !u!1 &6251719272083435462
 GameObject:
   m_ObjectHideFlags: 0
@@ -1770,6 +1796,9 @@ MonoBehaviour:
   operation: 1
   blendFactor: 1
   singleId: 0
+  children:
+  - {fileID: 5967554973422254568}
+  - {fileID: 2516914044658714846}
 --- !u!1 &7417548377313532700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1935,7 +1964,6 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _DRAWMODE_SKYBOX
-  - _SHOW_WORLD_GRID
   - _ZWRITE_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -1960,8 +1988,8 @@ Material:
     - SDF_1_1_0__root_shroom_1_sphere_1__2_Radius: 0.58268046
     - SDF_1_1_1__root__shroom_1__cone__1_Angle: 1.0424453
     - SDF_1_1_1__root__shroom_1__cone__1_Height: 0.51368195
-    - SDF_1_1_1__root_shroom_1_cap__2_Angle: 0.924753
-    - SDF_1_1_1__root_shroom_1_cap__2_Height: 0.6635314
+    - SDF_1_1_1__root_shroom_1_cap__2_Angle: 0.92498505
+    - SDF_1_1_1__root_shroom_1_cap__2_Height: 0.66321117
     - SDF_1_1_1__root_shroom_1_cone__1_Angle: 1.0424453
     - SDF_1_1_1__root_shroom_1_cone__1_Height: 0.51368195
     - SDF_1_1_1__root_shroom_1_cone__2_Angle: 0.924753
@@ -2013,7 +2041,7 @@ Material:
     - SDF_1_4_0__root_q_cylinder__1_Radius: 0.73139
     - SDF_1_4_0__root_q_cylinder__1_Rounding: 0
     - SDF_1_4_0__root_screw_body__2_Height: 1.3999909
-    - SDF_1_4_0__root_screw_body__2_Radius: 0.40442637
+    - SDF_1_4_0__root_screw_body__2_Radius: 0.086650476
     - SDF_1_4_0__root_screw_body__2_Rounding: 0.25
     - SDF_1_4_0__root_screw_cylinder__1_Height: 1.3999909
     - SDF_1_4_0__root_screw_cylinder__1_Radius: 0.40442637
@@ -2022,7 +2050,7 @@ Material:
     - SDF_1_4_0__root_screw_cylinder__2_Radius: 0.40442637
     - SDF_1_4_0__root_screw_cylinder__2_Rounding: 0.25
     - SDF_1_4_1_0__root__screw__head__head__1_Radius: 0.53
-    - SDF_1_4_1_0__root_screw_head_ball__2_Radius: 0.53636
+    - SDF_1_4_1_0__root_screw_head_ball__2_Radius: 0.49116445
     - SDF_1_4_1_0__root_screw_head_head__1_Radius: 0.53
     - SDF_1_4_1_0__root_screw_head_head__2_Radius: 0.53
     - SDF_1_4_1_1__root__screw__head__cuts__1_BlendFactor: 1
@@ -2052,8 +2080,9 @@ Material:
     - SDF_1_5_1__root__q__torus__1_RingRadius: 0.23235047
     - SDF_1_5_1__root_flat__1__torus__1_MainRadius: 0.85951066
     - SDF_1_5_1__root_flat__1__torus__1_RingRadius: 0.23235047
-    - SDF_1_5_1__root_peg_cutout__2_MainRadius: 0.85951066
-    - SDF_1_5_1__root_peg_cutout__2_RingRadius: 0.46176344
+    - SDF_1_5_1__root_peg_cutout__2_Cap: 1.1553388
+    - SDF_1_5_1__root_peg_cutout__2_MainRadius: 0.4468825
+    - SDF_1_5_1__root_peg_cutout__2_RingRadius: 0.19583517
     - SDF_1_5_1__root_peg_torus_cutout__2_MainRadius: 0.85951066
     - SDF_1_5_1__root_peg_torus_cutout__2_RingRadius: 0.46176344
     - SDF_1_5_1__root_q_torus__1_MainRadius: 0.85951066
@@ -2088,6 +2117,7 @@ Material:
     - SDF_1_6_1__root_flat__1__torus__1_RingRadius: 0.23235047
     - SDF_1_6_1__root_flat__1__torus__2_MainRadius: 0.85951066
     - SDF_1_6_1__root_flat__1__torus__2_RingRadius: 0.23368496
+    - SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap: 0.7853982
     - SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius: 0.85951066
     - SDF_1_6_1__root_infinite_cylinder_cutout__2_RingRadius: 0.23368496
     - SDF_1_6__root__flat__1___1_BlendFactor: 1
@@ -2232,19 +2262,19 @@ Material:
     - _AoSteps: 6
     - _Cull: 0
     - _DrawMode: 2
-    - _EPSILON_NORMAL: 0.001
-    - _EPSILON_RAY: 0.001
+    - _EPSILON_NORMAL: 0.0001
+    - _EPSILON_RAY: 0.00001
     - _EpsilonNormal: 0.001
     - _EpsilonRay: 0.001
     - _Glossiness: 0.5
     - _MAX_DISTANCE: 200
-    - _MAX_STEPS: 200
+    - _MAX_STEPS: 200.58
     - _MaxDistance: 500
     - _MaxSteps: 2000
     - _Metallic: 0
     - _RAY_ORIGIN_BIAS: 0
     - _RayOriginBias: 0
-    - _SHOW_WORLD_GRID: 1
+    - _SHOW_WORLD_GRID: 0
     - _ShowWorldGrid: 0
     - _ZTest: 4
     - _ZWrite: 1
@@ -2509,7 +2539,7 @@ Shader:
       - m_Name: SDF_1_0__root_ground__2_BoxExtents
         m_Description: Box extents
         m_Attributes:
-        - Header (rootground)
+        - Header (root ground)
         m_Type: 1
         m_Flags: 0
         m_DefValue[0]: 6.442449
@@ -2522,7 +2552,7 @@ Shader:
       - m_Name: SDF_1_1_0__root_shroom_1_leg__2_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header (rootshroom 1leg)
+        - Header (root shroom 1 leg)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.582681
@@ -2535,10 +2565,10 @@ Shader:
       - m_Name: SDF_1_1_1__root_shroom_1_cap__2_Angle
         m_Description: Cone angle
         m_Attributes:
-        - Header (rootshroom 1cap)
+        - Header (root shroom 1 cap)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.924753
+        m_DefValue[0]: 0.924985
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2550,7 +2580,7 @@ Shader:
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.663531
+        m_DefValue[0]: 0.663211
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2560,7 +2590,7 @@ Shader:
       - m_Name: SDF_1_2_0__root_shroom2_leg__2_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header (rootshroom2leg)
+        - Header (root shroom2 leg)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.264981
@@ -2573,7 +2603,7 @@ Shader:
       - m_Name: SDF_1_2_1__root_shroom2_cone__2_Angle
         m_Description: Cone angle
         m_Attributes:
-        - Header (rootshroom2cone)
+        - Header (root shroom2 cone)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.656545
@@ -2598,7 +2628,7 @@ Shader:
       - m_Name: SDF_1_2_2__root_shroom2_cap__2_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header (rootshroom2cap)
+        - Header (root shroom2 cap)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.339796
@@ -2611,7 +2641,7 @@ Shader:
       - m_Name: SDF_1_3__root_pill__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header (rootpill)
+        - Header (root pill)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.608677
@@ -2624,7 +2654,7 @@ Shader:
       - m_Name: SDF_1_3_0__root_pill_sphere__2_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header (rootpillsphere)
+        - Header (root pill sphere)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.538078
@@ -2637,7 +2667,7 @@ Shader:
       - m_Name: SDF_1_3_1__root_pill_sphere__2_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header (rootpillsphere)
+        - Header (root pill sphere)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.422096
@@ -2650,7 +2680,7 @@ Shader:
       - m_Name: SDF_1_4_0__root_screw_body__2_Height
         m_Description: Cylinder height
         m_Attributes:
-        - Header (rootscrewbody)
+        - Header (root screw body)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1.399991
@@ -2665,7 +2695,7 @@ Shader:
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.404426
+        m_DefValue[0]: 0.08665
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2687,7 +2717,7 @@ Shader:
       - m_Name: SDF_1_4_1__root_screw_head__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header (rootscrewhead)
+        - Header (root screw head)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1
@@ -2700,10 +2730,10 @@ Shader:
       - m_Name: SDF_1_4_1_0__root_screw_head_ball__2_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header (rootscrewheadball)
+        - Header (root screw head ball)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.53636
+        m_DefValue[0]: 0.491164
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2713,7 +2743,7 @@ Shader:
       - m_Name: SDF_1_4_1_1__root_screw_head_cut_1__2_BoxExtents
         m_Description: Box extents
         m_Attributes:
-        - Header (rootscrewheadcut 1)
+        - Header (root screw head cut 1)
         m_Type: 1
         m_Flags: 0
         m_DefValue[0]: 0.413049
@@ -2726,7 +2756,7 @@ Shader:
       - m_Name: SDF_1_4_1_2__root_screw_head_cut_2__2_BoxExtents
         m_Description: Box extents
         m_Attributes:
-        - Header (rootscrewheadcut 2)
+        - Header (root screw head cut 2)
         m_Type: 1
         m_Flags: 0
         m_DefValue[0]: 0.696923
@@ -2739,7 +2769,7 @@ Shader:
       - m_Name: SDF_1_5__root_peg__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header (rootpeg)
+        - Header (root peg)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1
@@ -2752,7 +2782,7 @@ Shader:
       - m_Name: SDF_1_5_0__root_peg_cylinder__2_Height
         m_Description: Cylinder height
         m_Attributes:
-        - Header (rootpegcylinder)
+        - Header (root peg cylinder)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1.442987
@@ -2789,10 +2819,10 @@ Shader:
       - m_Name: SDF_1_5_1__root_peg_cutout__2_MainRadius
         m_Description: Torus main radius
         m_Attributes:
-        - Header (rootpegcutout)
+        - Header (root peg cutout)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.859511
+        m_DefValue[0]: 0.446883
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2804,7 +2834,7 @@ Shader:
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.461763
+        m_DefValue[0]: 0.195835
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2814,10 +2844,10 @@ Shader:
       - m_Name: SDF_1_5_1__root_peg_cutout__2_Cap
         m_Description: Torus cap
         m_Attributes: []
-        m_Type: 1
+        m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.53
-        m_DefValue[1]: -0.18
+        m_DefValue[0]: 1.155339
+        m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
@@ -2826,7 +2856,7 @@ Shader:
       - m_Name: SDF_1_6__root_infinite_cylinder__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header (rootinfinitecylinder)
+        - Header (root infinite cylinder)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1
@@ -2839,7 +2869,7 @@ Shader:
       - m_Name: SDF_1_6_0__root_infinite_cylinder_cylinder__2_Height
         m_Description: Cylinder height
         m_Attributes:
-        - Header (rootinfinitecylindercylinder)
+        - Header (root infinite cylinder cylinder)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1.426067
@@ -2876,7 +2906,7 @@ Shader:
       - m_Name: SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius
         m_Description: Torus main radius
         m_Attributes:
-        - Header (rootinfinitecylindercutout)
+        - Header (root infinite cylinder cutout)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.859511
@@ -2901,10 +2931,10 @@ Shader:
       - m_Name: SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap
         m_Description: Torus cap
         m_Attributes: []
-        m_Type: 1
+        m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.53
-        m_DefValue[1]: -0.18
+        m_DefValue[0]: 0.785398
+        m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
@@ -2913,7 +2943,7 @@ Shader:
       - m_Name: SDF_1_7__root_two_cones__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header (roottwo cones)
+        - Header (root two cones)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.46
@@ -2926,7 +2956,7 @@ Shader:
       - m_Name: SDF_1_7_0__root_two_cones_cone__2_Angle
         m_Description: Cone angle
         m_Attributes:
-        - Header (roottwo conescone)
+        - Header (root two cones cone)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.46199
@@ -2951,7 +2981,7 @@ Shader:
       - m_Name: SDF_1_7_1__root_two_cones_cone__2_Angle
         m_Description: Cone angle
         m_Attributes:
-        - Header (roottwo conescone)
+        - Header (root two cones cone)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.383333
@@ -3256,7 +3286,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 41079
+          gpuProgramID: 34077
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -3685,6 +3715,14 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
+  - message: '"SDF_1_5_1__root_peg_cutout__2_Cap" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
   - message: '"SDF_1_5_1__root_peg_cutout__2_MainRadius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
@@ -3801,83 +3839,7 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      38832:
-        serializedVersion: 3
-        m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            #pragma vertex vert\n           
-          #pragma fragment frag\n            #include \"UnityCG.cginc\"\n\n           
-          float4 vert(in float4 pos : POSITION, out float4 screenPos : TEXCOORD1)
-          : SV_POSITION\n            {\n                float4 clipPos = UnityObjectToClipPos(pos);\n               
-          screenPos = ComputeScreenPos(clipPos);\n                return clipPos;\n           
-          }\n\n            fixed4 frag(in float4 screenPos : TEXCOORD1) : SV_Target  
-          \n            {\n                screenPos.xy = trunc(screenPos.xy / screenPos.w
-          * _ScreenParams.xy / 5);\n\n                clip((screenPos.x + screenPos.y)
-          % 2 == 0 ? -1 : 0);\n                return fixed4(1.0, .2, 0.0, 1.0);\n           
-          }\n            "
-        m_AssetPath: Packages/me.tooster.sdf/Editor/Resources/Shaders
-        m_AssetName: 
-        m_PlatformMask: 4294967295
-        m_HardwareTierVariantsMask: 0
-        m_StartLine: 9
-        m_TypesMask: 3
-        m_IncludesHash:
-          serializedVersion: 2
-          Hash: 9116bc3854d5903bc93e42479783cbf1
-        m_CodeHash:
-          serializedVersion: 2
-          Hash: a8f072047a658b7169ff138aeaf74978
-        m_FromOther: 1
-        m_ForceSyncCompilation: 0
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
-        m_Language: 3
-        m_VariantsUserGlobal0: []
-        m_VariantsUserGlobal1: []
-        m_VariantsUserGlobal2: []
-        m_VariantsUserGlobal3: []
-        m_VariantsUserGlobal4: []
-        m_VariantsUserGlobal5: []
-        m_VariantsUserGlobal6: []
-        m_VariantsUserLocal0: []
-        m_VariantsUserLocal1: []
-        m_VariantsUserLocal2: []
-        m_VariantsUserLocal3: []
-        m_VariantsUserLocal4: []
-        m_VariantsUserLocal5: []
-        m_VariantsUserLocal6: []
-        m_VariantsBuiltin0: []
-        m_VariantsBuiltin1: []
-        m_VariantsBuiltin2: []
-        m_VariantsBuiltin3: []
-        m_VariantsBuiltin4: []
-        m_VariantsBuiltin5: []
-        m_VariantsBuiltin6: []
-        m_DynamicBranchKeywords: []
-        m_BaseRequirements: 33
-        m_KeywordTargetInfo:
-        - keywordName: SHADOWS_SOFT
-          requirements: 227
-        - keywordName: DIRLIGHTMAP_COMBINED
-          requirements: 227
-        - keywordName: DYNAMICLIGHTMAP_ON
-          requirements: 227
-        - keywordName: SHADOWS_SCREEN
-          requirements: 227
-        - keywordName: INSTANCING_ON
-          requirements: 2048
-        - keywordName: PROCEDURAL_INSTANCING_ON
-          requirements: 16384
-        - keywordName: STEREO_MULTIVIEW_ON
-          requirements: 4075
-        - keywordName: STEREO_INSTANCING_ON
-          requirements: 4075
-        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
-          requirements: 536870912
-        m_NonStrippedUserKeywords: 
-        m_BuiltinKeywords: 
-      41079:
+      34077:
         serializedVersion: 3
         m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
           1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED 1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED
@@ -3924,7 +3886,7 @@ Shader:
           -0.180165, -0.260241, 0.84638 },\n                { 0.0, 0.0, 0.0, 1.0
           }\n        };\n        float SDF_1_2_2__root_shroom2_cap__2_Radius;\n       
           float SDF_1_3__root_pill__1_BlendFactor;\n        float4x4 SDF_1_3_0__root_pill_sphere__1_SpaceTransform
-          = {\n                { -0.763447, -0.052902, 0.088036, -1.502791 },\n               
+          = {\n                { -0.763447, -0.052902, 0.088036, -1.644791 },\n               
           { 0.064521, 0.266704, 0.719795, -0.023237 },\n                { -0.079912,
           0.720743, -0.259892, -0.671471 },\n                { 0.0, 0.0, 0.0, 1.0
           }\n        };\n        float SDF_1_3_0__root_pill_sphere__2_Radius;\n       
@@ -3963,7 +3925,7 @@ Shader:
           { 1.0, 0.0, 0.0, -3.582294 },\n                { 0.0, 1.0, 0.0, -2.343709
           },\n                { 0.0, 0.0, 1.0, -3.369244 },\n                { 0.0,
           0.0, 0.0, 1.0 }\n        };\n        float SDF_1_5_1__root_peg_cutout__2_MainRadius;\n       
-          float SDF_1_5_1__root_peg_cutout__2_RingRadius;\n        float2 SDF_1_5_1__root_peg_cutout__2_Cap;\n       
+          float SDF_1_5_1__root_peg_cutout__2_RingRadius;\n        float SDF_1_5_1__root_peg_cutout__2_Cap;\n       
           float SDF_1_6__root_infinite_cylinder__1_BlendFactor;\n        float4x4
           SDF_1_6_0__root_infinite_cylinder_cylinder__1_SpaceTransform = {\n               
           { 0.66883, 0.00523, -0.743398, -2.774013 },\n                { -0.024016,
@@ -3978,19 +3940,18 @@ Shader:
           0.668691, -0.469365 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius;\n       
           float SDF_1_6_1__root_infinite_cylinder_cutout__2_RingRadius;\n       
-          float2 SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap;\n        float
-          SDF_1_7__root_two_cones__1_BlendFactor;\n        float4x4 SDF_1_7_0__root_two_cones_cone__1_SpaceTransform
-          = {\n                { 0.970696, -0.101283, 0.217924, -3.285172 },\n               
-          { 0.128052, 0.985376, -0.112415, -1.387878 },\n                { -0.203352,
-          0.137026, 0.96947, 0.130866 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_7_0__root_two_cones_cone__2_Angle;\n        float
-          SDF_1_7_0__root_two_cones_cone__2_Height;\n        float4x4 SDF_1_7_1__root_two_cones_cone__1_SpaceTransform
-          = {\n                { -0.637143, 0.056676, -0.76866, 2.78795 },\n               
-          { -0.131973, -0.990587, 0.036353, 2.333473 },\n                { -0.759363,
-          0.124605, 0.638625, 1.93194 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_7_1__root_two_cones_cone__2_Angle;\n        float
-          SDF_1_7_1__root_two_cones_cone__2_Height;\n        #line 285 \"\"\n#ifdef
-          DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          float SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap;\n        float SDF_1_7__root_two_cones__1_BlendFactor;\n       
+          float4x4 SDF_1_7_0__root_two_cones_cone__1_SpaceTransform = {\n               
+          { 0.970696, -0.101283, 0.217924, -3.285172 },\n                { 0.128052,
+          0.985376, -0.112415, -1.387878 },\n                { -0.203352, 0.137026,
+          0.96947, 0.130866 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
+          float SDF_1_7_0__root_two_cones_cone__2_Angle;\n        float SDF_1_7_0__root_two_cones_cone__2_Height;\n       
+          float4x4 SDF_1_7_1__root_two_cones_cone__1_SpaceTransform = {\n               
+          { -0.637143, 0.056676, -0.76866, 2.78795 },\n                { -0.131973,
+          -0.990587, 0.036353, 2.333473 },\n                { -0.759363, 0.124605,
+          0.638625, 1.93194 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
+          float SDF_1_7_1__root_two_cones_cone__2_Angle;\n        float SDF_1_7_1__root_two_cones_cone__2_Height;\n       
+          #line 285 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
           UNITY: Original start of shader */\n            SdfResult SDF_1_0__root_ground__3
           (float3 p);\n            SdfResult SDF_1_1_0__root_shroom_1_leg__3 (float3
           p);\n            SdfResult SDF_1_1_1__root_shroom_1_cap__3 (float3 p);\n           
@@ -4078,14 +4039,14 @@ Shader:
           SDF_1_5_0__root_peg_cylinder__2_Rounding, SDF_1_5_0__root_peg_cylinder__2_Height);\n               
           result.id = int4(0, 0, 0, 43);\n                return result;\n           
           }\n            SdfResult SDF_1_5_1__root_peg_cutout__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = -sdf::primitives3D::torus(sdf::operators::transform(p,
+          SdfResult result = (SdfResult) 0;\n                result.distance = -sdf::primitives3D::torus_capped(sdf::operators::transform(p,
           SDF_1_5_1__root_peg_cutout__1_SpaceTransform), SDF_1_5_1__root_peg_cutout__2_MainRadius,
-          SDF_1_5_1__root_peg_cutout__2_RingRadius);\n                result.id =
-          int4(0, 0, 0, 46);\n                return result;\n            }\n           
-          SdfResult SDF_1_5__root_peg__1(float3 p) {\n                SdfResult result
-          = SDF_1_5_0__root_peg_cylinder__3(p);\n                result = sdf::operators::intersectSimple(result,
-          SDF_1_5_1__root_peg_cutout__3(p));\n                return result;\n           
-          }\n            SdfResult SDF_1_6_0__root_infinite_cylinder_cylinder__3(float3
+          SDF_1_5_1__root_peg_cutout__2_RingRadius, SDF_1_5_1__root_peg_cutout__2_Cap);\n               
+          result.id = int4(0, 0, 0, 46);\n                return result;\n           
+          }\n            SdfResult SDF_1_5__root_peg__1(float3 p) {\n               
+          SdfResult result = SDF_1_5_0__root_peg_cylinder__3(p);\n               
+          result = sdf::operators::intersectSimple(result, SDF_1_5_1__root_peg_cutout__3(p));\n               
+          return result;\n            }\n            SdfResult SDF_1_6_0__root_infinite_cylinder_cylinder__3(float3
           p) {\n                SdfResult result = (SdfResult) 0;\n               
           result.distance = sdf::primitives3D::cylinder_infinite(sdf::operators::transform(p,
           SDF_1_6_0__root_infinite_cylinder_cylinder__1_SpaceTransform), SDF_1_6_0__root_infinite_cylinder_cylinder__2_Radius);\n               
@@ -4141,10 +4102,10 @@ Shader:
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: e32d4f9d9178a5a8e493fceff59012b3
+          Hash: 48ba9fd9dc75376c022ff8b73e263ce1
         m_CodeHash:
           serializedVersion: 2
-          Hash: f98a593675c40691fbe7f0895b1f7d31
+          Hash: 9d0b32474c9e2c3cbaa4521a623967c7
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0
@@ -4195,6 +4156,82 @@ Shader:
         m_VariantsBuiltin6: []
         m_DynamicBranchKeywords: []
         m_BaseRequirements: 1101803
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
+      38832:
+        serializedVersion: 3
+        m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            #pragma vertex vert\n           
+          #pragma fragment frag\n            #include \"UnityCG.cginc\"\n\n           
+          float4 vert(in float4 pos : POSITION, out float4 screenPos : TEXCOORD1)
+          : SV_POSITION\n            {\n                float4 clipPos = UnityObjectToClipPos(pos);\n               
+          screenPos = ComputeScreenPos(clipPos);\n                return clipPos;\n           
+          }\n\n            fixed4 frag(in float4 screenPos : TEXCOORD1) : SV_Target  
+          \n            {\n                screenPos.xy = trunc(screenPos.xy / screenPos.w
+          * _ScreenParams.xy / 5);\n\n                clip((screenPos.x + screenPos.y)
+          % 2 == 0 ? -1 : 0);\n                return fixed4(1.0, .2, 0.0, 1.0);\n           
+          }\n            "
+        m_AssetPath: Packages/me.tooster.sdf/Editor/Resources/Shaders
+        m_AssetName: 
+        m_PlatformMask: 4294967295
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 9
+        m_TypesMask: 3
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: 9116bc3854d5903bc93e42479783cbf1
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: a8f072047a658b7169ff138aeaf74978
+        m_FromOther: 1
+        m_ForceSyncCompilation: 0
+        m_UseDxcAPIs: 0
+        m_NeverUseDxcAPIs: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0: []
+        m_VariantsUserLocal1: []
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 33
         m_KeywordTargetInfo:
         - keywordName: SHADOWS_SOFT
           requirements: 227

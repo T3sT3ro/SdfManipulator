@@ -3,17 +3,18 @@
 
 /**
  * Collection of core primitive 3D SDFs centered at origin.
- * Math and code taken from
- * <a href="https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm">
- * Inigo Quilez
- * </a>
- *
+ * <p>
+ * Math and code taken based on:
+ * - <a href="https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm">Inigo Quilez, distance functions</a>
+ * - <a href="https://gist.github.com/munrocket/f247155fc22ecb8edf974d905c677de1">munrocket, WGSL 3D SDF Primitives</a>
+ * </p>
+ * <p>
  * General parameter naming:
- * - <c>p</c>       point in 3D space to calculate SDF value for
- * - <c>R</c>       primary radius
- * - <c>r</c>       secondary radius
- * - <c>dim</c>     dimensions vector
- * - <c>e</c>       extrude
+ * - \p p       point in 3D space to calculate SDF value for
+ * - \p R       primary radius
+ * - \p r       secondary radius
+ * - \p e       extrude factor
+ * </p>
  */
 namespace sdf { namespace primitives3D {
     // TODO: dashed line https://www.shadertoy.com/view/Ntyczt
@@ -23,14 +24,14 @@ namespace sdf { namespace primitives3D {
     }
 
 
-    float box(float3 p, float3 dim) {
-        float3 v = abs(p) - dim; // bring point to first octant
+    float box(float3 p, float3 halfsize) {
+        float3 v = abs(p) - halfsize; // bring point to first octant
         return length(max(v, 0.0)) + min(max(v), 0.0);
     }
 
 
-    float box_frame(float3 p, float3 dim, float extrude) {
-        p = abs(p) - dim;
+    float box_frame(float3 p, float3 halfsize, float extrude) {
+        p = abs(p) - halfsize;
         float3 q = abs(p + extrude) - extrude;
         return min(
             length(max(float3(p.x, q.y, q.z), 0.0)) + min(max(p.x, q.y, q.z), 0.0),
@@ -44,10 +45,19 @@ namespace sdf { namespace primitives3D {
         return length(q) - r;
     }
 
-    // FIXME: it "sc" the center or what??? weird rendering artifacts...
-    float torus_capped(in float2 p, in float R, in float r, in float2 sc) {
+    /**
+     * 
+     * @param p point in space
+     * @param R major radius
+     * @param r minor radius
+     * @param angle cutout angle
+     * @return distance to capped torus
+     */
+    float torus_capped(float3 p, in float R, in float r, in float angle) {
+        float2 sc;
+        sincos(angle, sc.x, sc.y);
         p.x = abs(p.x);
-        float k = (sc.y * p.x > sc.x * p.y) ? dot(p.xy, sc) : length(p.xy);
+        float k = (sc.y * p.x > sc.x * p.z) ? dot(float2(p.x, p.z), sc) : length(float2(p.x, p.z));
         return sqrt(dot(p, p) + R * R - 2.0 * R * k) - r;
     }
 

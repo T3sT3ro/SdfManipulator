@@ -9,6 +9,7 @@ using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Util.Controllers;
 using Unity.Properties;
 using UnityEngine;
+using Type = System.Type;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     [GeneratePropertyBag]
     public partial class SdfController : Controller, IModifier<VectorData, SdfData> {
@@ -73,5 +74,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             return new SdfData { evaluationExpression = AST.Hlsl.Extensions.FunctionCall(sdfFunctionName, input.evaluationExpression) };
         }
+
+        public override IData Apply(IData input, Processor processor) => Apply((VectorData)input, processor);
+
+        // redirect to IModifier<..>
+        public override Type GetInputType()  => typeof(VectorData);
+        public override Type GetOutputType() => typeof(SdfData);
     }
 }

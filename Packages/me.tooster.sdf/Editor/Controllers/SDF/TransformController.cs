@@ -4,6 +4,7 @@ using me.tooster.sdf.Editor.Controllers.Data;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
+using Type = System.Type;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     /**
      * A basic controller for sdf primitives and positionable elements.
@@ -81,5 +82,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 ),
             };
         }
+
+        public override IData Apply(IData input, Processor processor) => Apply((VectorData)input, processor);
+        public override Type  GetInputType()                          => typeof(VectorData);
+        public override Type  GetOutputType()                         => typeof(VectorData);
     }
 }

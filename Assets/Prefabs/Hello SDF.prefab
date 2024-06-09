@@ -287,6 +287,9 @@ MonoBehaviour:
   operation: 1
   blendFactor: 0.3
   singleId: 0
+  children:
+  - {fileID: 78627362984689670}
+  - {fileID: 7882024230801206488}
 --- !u!1 &3990274897914640178
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,6 +625,10 @@ MonoBehaviour:
   operation: 0
   blendFactor: 1
   singleId: 0
+  children:
+  - {fileID: 3158257383954458248}
+  - {fileID: 3283671336859373737}
+  - {fileID: 4797073990458803755}
 --- !u!1 &9193416219332840850
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,6 +680,9 @@ MonoBehaviour:
   operation: 1
   blendFactor: 1
   singleId: 0
+  children:
+  - {fileID: 4498576306446372549}
+  - {fileID: 4416803840567294401}
 --- !u!48 &1647923134957676822
 Shader:
   m_ObjectHideFlags: 0

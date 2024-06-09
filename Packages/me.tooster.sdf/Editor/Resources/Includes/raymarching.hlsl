@@ -47,7 +47,7 @@ float     classicAmbientOcclusion(float3 p, float3 n, float maxDist, float fallo
 #pragma endregion
 
 #ifndef EXPLICIT_RAYMARCHING_PARAMETERS
-float _EPSILON_RAY = 0.0001;
+float _EPSILON_RAY = 0.00001;
 float _EPSILON_NORMAL = 0.0001;
 float _MAX_STEPS = 500;
 float _MAX_DISTANCE = 10000;
