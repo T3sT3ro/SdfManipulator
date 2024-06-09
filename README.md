@@ -445,6 +445,13 @@ if needed
 
 Comparison to other software. The list includes advantages and
 
+Other similar tools:
+- uRaymarching
+- Shadergrph
+- [Womp](https://womp.com)
+- [Unbound](https://unbound.io)
+- [magicaCSG](https://ephtracy.github.io/index.html?page=magicacsg#ss-carousel_ss)
+
 | Feature             | Mine                                    | Shadergraph                                            | Womp                                                         | [Unbound](https://www.unbound.io/                        | uRaymarching                                               |
 |---------------------|-----------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------|------------------------------------------------------------|
 | status              | new, experimental, maintained           | stable (in unity sense), active                        | active                                                       | not released as of yet                                   | discontinued                                               |

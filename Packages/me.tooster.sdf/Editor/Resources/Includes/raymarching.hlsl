@@ -3,19 +3,41 @@
 #define V2F_RAYS
 
 #include "UnityCG.cginc"
-#include "util.hlsl"
+#include "Lighting.cginc"
+#include "UnityPBSLighting.cginc"
+#include "AutoLight.cginc"
+
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/camera.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/debug.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl"
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/colors.hlsl"
+
+/// data passed from vertex to fragment shader
+struct v2f {
+    /// clip space vertex pos. Space in vertex shader: (-w, -w, 0)->(w,w,w). In fragment (after hardware perspective divide) is (-1, -1, 0*) to (1,1,1*). Z value depends on platform.
+    float4 vertex : SV_POSITION;
+    float4 screenPos: TEXCOORD1; ///< clip-pos vertex position. This is not perspective divided, so that `w` is not lost beetween stages
+    float3 hitpos : TEXCOORD2; ///< hit position in model space TODO: remove
+
+    #ifdef V2F_RAYS
+    /** \brief unnormalized ray direction in world space. \code noperspective \endcode is needed to prevent warping of direction vectors
+     * \remark <a href="https://www.geogebra.org/calculator/fppufpcf">needed for proper interpolation</a>
+     * \remark <a href="https://mathweb.ucsd.edu/~sbuss/MathCG2/OpenGLsoft/NoPerspective/docNoPerspective.html">how perpective divition works: opengl</a>
+     * \remark <a href="https://docs.vulkan.org/spec/latest/chapters/primsrast.html#primsrast-polygons-basic:~:text=c%2C%20respectively.-,Perspective%20interpolation,-for%20a%20triangle">how perpective divition works: vulkan</a>
+     */
+    noperspective float3 rdWsUnnormalized : TEXCOORD3;
+    /// ray origin in world space. \code noperspective \endcode is needed to prevent warping and bad artifacts inside domain
+    noperspective float3 roWs : TEXCOORD4; ///< ray origin in world space
+    #endif
+};
 
 #pragma region Forward declarations
 
-v2f vertexShader(in appdata_base v_in);
-f2p fragmentShader(in v2f frag_in);
 /// A scene SignedDistanceField function, defined in the included shader
 SdfResult sdfScene(in float3 p);
-fixed4    sdfShade(SdfResult sdf, Ray3D ray);
+
 SdfResult raymarch(inout Ray3D ray, in int max_steps, in float epsilon_ray);
 float3    calculateSdfNormal(in float3 p, in float epsilon_normal);
 float     depthToMaxRayDepth(in Texture2D depthTexture, in float2 screenUV, in float3 rd, in float4x4 inv);
@@ -25,74 +47,19 @@ float     classicAmbientOcclusion(float3 p, float3 n, float maxDist, float fallo
 #pragma endregion
 
 #ifndef EXPLICIT_RAYMARCHING_PARAMETERS
-static float _EPSILON_RAY = 0.0001;
-static float _EPSILON_NORMAL = 0.0001;
-static float _EPSILON_OCCLUSION = 0.01;
-static float _MAX_DISTANCE = 10000;
-static float _RAY_ORIGIN_BIAS;
-static float _MAX_STEPS = 500;
+float _EPSILON_RAY = 0.0001;
+float _EPSILON_NORMAL = 0.0001;
+float _MAX_STEPS = 500;
+float _MAX_DISTANCE = 10000;
+float _RAY_ORIGIN_BIAS = 0;
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #endif
-
-#pragma region vertex and fragment
-
-/// standard vertex shader with additional parameters for raymarching
-v2f vertexShader(in appdata_base v_in) {
-    v2f o = (v2f)0;
-    o.vertex = UnityObjectToClipPos(v_in.vertex); // clip space, from (-w,-w,0) to (w, w, w)
-    o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
-    // o.uv = v.texcoord; // TRANSFORM_TEX(v.texcoord, _BoxmapTex);
-    o.hitpos = v_in.vertex;
-
-    // COMPUTE_EYEDEPTH uses implicitly defined v.vertex.z... so to use `screenPos.z` instead of `o.vertex.z` name, we have to inline it ourselves:
-    o.screenPos.z = -UnityObjectToViewPos(o.vertex).z;
-    #ifdef V2F_RAYS
-    o.rdWsUnnormalized = cameraVsRayFromClipPos(o.screenPos, o.roWs);
-    #endif
-    return o;
-}
-
-/// \TODO remove lighting definitions from this file, it's just temporary
-#include "Lighting.cginc"
-#include "colors.hlsl"
-#include "UnityPBSLighting.cginc"
-#pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
-
-f2p fragmentShader(in v2f frag_in, bool facing : SV_IsFrontFace) {
-    // float3 clipPos = frag_in.screenPos.xyz / frag_in.screenPos.w; // 0,0 to 1,1 on screen
-    Ray3D ray = (Ray3D)0;
-
-    #ifdef V2F_RAYS
-    ray.rd = normalize(frag_in.rdWsUnnormalized);
-    ray.ro = frag_in.roWs;
-    #else
-    ray.rd = cameraRayFromClipPos(frag_in.screenPos, ray.ro);
-    #endif
-
-    ray.maxDistance = _MAX_DISTANCE; // FIXME: parametrize this
-    SdfResult sdf = raymarch(ray, _MAX_STEPS, _EPSILON_RAY);
-
-    clip(sdf.id.w); // discard rays without hit
-
-    sdf.normal = calculateSdfNormal(sdf.p, _EPSILON_NORMAL);
-    f2p frag_out = (f2p)0;
-    frag_out.color = sdfShade(sdf, ray);
-    // frag_out.color = facing ? YELLOW : RED;
-
-    #ifdef _ZWRITE_ON
-    float eyeDepth = -UnityWorldToViewPos(sdf.p).z;
-    frag_out.depth = EncodeCorrectDepth(eyeDepth);
-    #endif
-
-    return frag_out;
-}
-
-#pragma endregion
 
 # pragma region raymarching functions
 
 /**
  * \brief reads the _CameraDepthTexture (rendered BEFORE this shader!) and returns the distance along rd to reach for that depth
+ * \param depthTexture camera depth texture to read from the and determine maximum ray depth
  * \param screenUV a (0,0)->(1,1) screen-space coordinate of the pixel to read depth from
  * \param rd a ray direction from the camera
  * \param inv an inverse projection+world+model* matrix. *depends on the local frame 
@@ -172,55 +139,6 @@ float3 calculateSdfNormal(in float3 p, in float epsilon_normal) {
 #pragma endregion
 
 # pragma region shading
-
-/** \brief temporary function for shading sdf result
-  * \remark TODO: return Material from combination of sdfs. Apply material lighting functions outside of sdfShade
-  */
-fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
-    // frag_out.color = sdf.id == NO_ID ? float4(1.0, 1.0, 0, 1.0) : float4(1.0, 0.1, 0.1, 1.0); // yellow or tomato
-    // float dist = modulo(ray.marchedDistance, 0.1) / 0.1;
-    // fixed3 distColor = dot(CameraWsForward(), ray.rd) * dist; // color by distance
-
-    SurfaceOutput s = (SurfaceOutput)0;
-    s.Albedo = colors::RED;
-    s.Alpha = 1.0;
-    s.Normal = sdf.normal;
-    s.Gloss = 0.5;
-    s.Specular = 0.9;
-
-    UnityLight l = (UnityLight)0;
-    l.color = _LightColor0;
-    float3 toLight = _WorldSpaceLightPos0 - sdf.p;
-    l.dir = normalize(toLight);
-
-    fixed4 color = UnityLambertLight(s, l);
-    color.rgb += ShadeSH9(half4(sdf.normal, 1));
-
-    fixed4 gridColor = sdf::debug::worldgrid(sdf.p);
-    color.rgb = lerp(color, gridColor.rgb, gridColor.a);
-
-    color.rgb += s.Albedo * .1;
-    color.a = 1;
-
-    // // raymarch from point using hit point and normal to calculate shadows
-    // Ray3D shadowRay = (Ray3D)0;
-    // shadowRay.rd = normalize(toLight);
-    // shadowRay.ro = sdf.p + shadowRay.rd + 2 * _EPSILON_RAY;
-    // shadowRay.maxDistance = length(toLight);
-    // SdfResult shadowSdf = raymarch(shadowRay, 128, 0.01);
-    //
-    // if (shadowSdf.id.w != NO_ID.w) // if something was hit, we are in full shadow
-    //     color.rgb = 0;
-    //
-    // color = sdf::debug::visualizeNormal(l.dir);
-
-    // dampen the color by occlusion
-    float occlusion = classicAmbientOcclusion(sdf.p, sdf.normal, 4, 2.5, 6);
-
-    color.rgb = lerp(color.rgb, colors::BLACK, 1 - occlusion);
-
-    return color;
-}
 
 /**
  * \brief Calculates simple occlusion

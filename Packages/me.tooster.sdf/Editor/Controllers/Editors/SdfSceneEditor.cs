@@ -30,7 +30,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                 evt => {
                     generatorProperty.stringValue = evt.newValue;
                     generatorProperty.serializedObject.ApplyModifiedProperties();
-                    sdfScene.IsDirty = true;
+                    sdfScene.RequiresRegeneration = true;
                 }
             );
 

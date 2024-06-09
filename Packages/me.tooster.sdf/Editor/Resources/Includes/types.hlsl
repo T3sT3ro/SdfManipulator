@@ -40,28 +40,9 @@ struct Ray3D {
     float  maxDistance; ///< maximum distance a raymarcher is able to march for that ray
 };
 
-/// data passed from vertex to fragment shader
-struct v2f {
-    /// clip space vertex pos. Space in vertex shader: (-w, -w, 0)->(w,w,w). In fragment (after hardware perspective divide) is (-1, -1, 0*) to (1,1,1*). Z value depends on platform.
-    float4 vertex : SV_POSITION;
-    float4 screenPos: TEXCOORD1; ///< clip-pos vertex position. This is not perspective divided, so that `w` is not lost beetween stages
-    float3 hitpos : TEXCOORD2; ///< hit position in model space TODO: remove
-
-    #ifdef V2F_RAYS
-    /** \brief unnormalized ray direction in world space. \code noperspective \endcode is needed to prevent warping of direction vectors
-     * \remark <a href="https://www.geogebra.org/calculator/fppufpcf">needed for proper interpolation</a>
-     * \remark <a href="https://mathweb.ucsd.edu/~sbuss/MathCG2/OpenGLsoft/NoPerspective/docNoPerspective.html">how perpective divition works: opengl</a>
-     * \remark <a href="https://docs.vulkan.org/spec/latest/chapters/primsrast.html#primsrast-polygons-basic:~:text=c%2C%20respectively.-,Perspective%20interpolation,-for%20a%20triangle">how perpective divition works: vulkan</a>
-     */
-    noperspective float3 rdWsUnnormalized : TEXCOORD3;
-    /// ray origin in world space. \code noperspective \endcode is needed to prevent warping and bad artifacts inside domain
-    noperspective float3 roWs : TEXCOORD4; ///< ray origin in world space
-    #endif
-};
-
 /// result of a fragment shader 
 struct f2p {
-    fixed4 color: SV_Target0; ///< fragment colro output
+    fixed4 color: SV_Target0; ///< fragment output color
     float3 normal: SV_Target1; ///< fragment's world normal
     ID     ID: SV_Target2; ///< ID of hit object, auxiliary data used for picking or domain repetition
     #ifdef _ZWRITE_ON

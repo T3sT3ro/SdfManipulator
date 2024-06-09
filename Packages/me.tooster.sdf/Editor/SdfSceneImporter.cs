@@ -35,7 +35,7 @@ namespace me.tooster.sdf.Editor {
 
         static string getShaderText(string path) {
             var scene = AssetDatabase.LoadAssetAtPath<SdfScene>(path);
-            scene.IsDirty = true;
+            scene.RequiresRegeneration = true;
             throw new NotImplementedException("Empty sdf scene");
         }
 

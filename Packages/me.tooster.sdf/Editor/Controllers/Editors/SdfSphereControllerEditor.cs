@@ -27,6 +27,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
 
 
         [MenuItem("GameObject/SDF/Primitives/Sphere", priority = -20)]
-        public static void Instantiate() => Controller.TryInstantiate<SdfSphereController>("sphere");
+        public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfSphereController>("sphere");
     }
 }

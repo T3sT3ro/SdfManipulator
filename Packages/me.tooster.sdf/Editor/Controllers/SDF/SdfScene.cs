@@ -29,7 +29,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public SdfController? sdfSceneRoot;
 
-        public Shader targetShader;
+        public Shader? targetShader;
 
         readonly ShaderPropertyCollector shaderPropertyCollector = new();
         ShaderPropertyUpdatingVisitor?   _shaderPropertyUpdatingVisitor;
@@ -52,34 +52,35 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public List<Diagnostic> diagnostics = new();
 
-        public SceneData sceneData { get; private set; }
-        public bool      IsDirty   { get; set; }
+        public SceneData sceneData            { get; private set; }
+        public bool      RequiresRegeneration { get; set; }
+        public bool      RequiresUpdate       { get; set; }
 
-        void Awake() { IsDirty = true; }
+        void Awake() { RequiresUpdate = true; }
 
         void OnEnable() {
             AssemblyReloadEvents.afterAssemblyReload += MarkDirty;
-            if (!IsDirty)
-                UpdateShaderUniforms(forceUpdateAll: true);
+            // if (!RequiresUpdate)
+            RequiresUpdate = true;
             PrefabStage.prefabSaved += OnPrefabSaved;
         }
 
 
         void OnDisable() {
             AssemblyReloadEvents.afterAssemblyReload -= MarkDirty;
-            if (!IsDirty)
+            if (!RequiresRegeneration)
                 UpdateShaderUniforms(forceUpdateAll: true);
             PrefabStage.prefabSaved -= OnPrefabSaved;
         }
 
-        void MarkDirty() { IsDirty = true; }
+        void MarkDirty() { RequiresRegeneration = true; }
 
         void OnPrefabSaved(GameObject go) { MarkDirty(); }
 
         void LateUpdate() {
-            var requiresForceUpdate = IsDirty;
-            if (IsDirty) {
-                IsDirty = false;
+            var requiresForceUpdate = RequiresRegeneration;
+            if (RequiresRegeneration) {
+                RequiresRegeneration = false;
                 RevalidateScene();
                 // assure that regeneration is done only in the prefab stage
                 if (PrefabStageUtility.GetCurrentPrefabStage()?.prefabContentsRoot.gameObject == gameObject)
@@ -137,7 +138,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
 
             if (controlledMaterial == null || controlledShader == null)
-                IsDirty = true;
+                RequiresRegeneration = true;
 
             RevalidateScene(); // fixme: Revalidate triggered without regenerate will cause difference between shader content and scene data
             UpdateShaderUniforms(forceUpdateAll: true);
@@ -193,7 +194,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         void HandleStructuralChange(Controller source) {
-            IsDirty = true;
+            RequiresRegeneration = true;
             // RefreshSceneData();
             // GenerateSceneAssets();
             // UpdateShaderUniforms();
@@ -204,6 +205,12 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         internal void UpdateShaderUniforms(bool forceUpdateAll = false) {
+            RequiresUpdate = false;
+
+#if UNITY_EDITOR
+            forceUpdateAll = true; // TODO: this is a temporary solution, but causes poor performance
+#endif
+
             if (forceUpdateAll) QueuePropertyUpdates(sceneData.Properties);
             if (sceneData.queuedPropertyUdates.Count <= 0)
                 return;
@@ -255,8 +262,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
             if (targetShader != null) {
                 var path = AssetDatabase.GetAssetPath(targetShader);
-                if (File.Exists(path))
+                if (File.Exists(path)) {
                     File.WriteAllText(path, shaderSource);
+                    AssetDatabase.SaveAssetIfDirty(targetShader);
+                }
             }
 
 

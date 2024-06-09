@@ -18,6 +18,7 @@
         <ui:DropdownField label="Generator" name="generatorId"/>
         <uie:PropertyField name="sceneRoot" binding-path="sdfSceneRoot"/>
         <uie:PropertyField name="controlledMaterial" binding-path="controlledMaterial"/>
+        <uie:PropertyField name="controlledShader" binding-path="controlledShader"/>
     </ui:GroupBox>
     <ui:GroupBox name="sceneData" style="display: none;">
         <ui:Foldout text="Shader properties" name="shader-properties" focusable="true"

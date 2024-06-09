@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Shaderlab.Syntax;
@@ -38,17 +39,26 @@ namespace me.tooster.sdf.Editor.Controllers {
 
         #region attribute helpers
 
+        static Regex attributeHeaderSanitizeRegex = new("[^a-zA-Z0-9_ ]", RegexOptions.Compiled);
+
         // some more info can be found here: https://docs.unity3d.com/ScriptReference/MaterialPropertyDrawer.html
         // TODO: assure that strings fit pattern of AttributeStringLiteral
         public static Attribute headerAttribute(string headerName)
             => new()
             {
                 id = "Header",
-                arguments = (Attribute.Value)headerName.sanitizeToIdentifierString(),
+                arguments = (Attribute.Value)attributeHeaderSanitizeRegex.Replace(headerName, " "),
             };
 
         public static Attribute spaceAttribute()  => new() { id = "Space" };
         public static Attribute toggleAttribute() => new() { id = "Toggle" };
+
+        public static Attribute toggleAttribute(string keyword)
+            => new()
+            {
+                id = "Toggle",
+                arguments = (Attribute.Value)keyword,
+            };
 
         public static Attribute tooltipAttribute(string tooltip)
             => new()
@@ -64,10 +74,29 @@ namespace me.tooster.sdf.Editor.Controllers {
                 arguments = (Attribute.Value)typeof(T).FullName!,
             };
 
+        /// <summary>
+        /// Generates a <c>[KeyEnum(attr1, attr2)]</c> attribute
+        /// This attribute is ususally disaplayed as an int field
+        /// </summary>
+        /// <param name="values">values for attribues</param>
+        /// <returns>a syntax representing KeyEnum attribute</returns>
         public static Attribute keyEnumAttribute(params string[] values)
             => new()
             {
                 id = "KeyEnum",
+                arguments = values.Select(s => new Attribute.Value { value = s }).ToArray(),
+            };
+
+        /// <summary>
+        /// Generates a <c>[KeywordEnum(attr1, attr2)]</c> attribute
+        /// This attribute is ususally disaplayed as a select box with enum values
+        /// </summary>
+        /// <param name="values">values for attribues</param>
+        /// <returns>a syntax representing KeyEnum attribute</returns>
+        public static Attribute keywordEnumAttribute(params string[] values)
+            => new()
+            {
+                id = "KeywordEnum",
                 arguments = values.Select(s => new Attribute.Value { value = s }).ToArray(),
             };
 

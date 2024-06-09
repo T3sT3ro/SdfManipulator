@@ -16,6 +16,8 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
             "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl",
             "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl",
             "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl",
+            // "Packages/me.tooster.sdf/Editor/Resources/Includes/builtInForwardBase.hlsl",
+            "Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl",
         };
         readonly HashSet<FunctionDefinition> functionDefinitions = new();
 

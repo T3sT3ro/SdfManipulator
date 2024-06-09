@@ -231,7 +231,7 @@ Shader "SDF/Uber shader"
                 int3 ix;
                 p = mul(_main_object_transform, float4(p, 1)).xyz;
                 p = sdf::operators::repeatLim(p, 1.5, float3(1, 0, 1), ix);
-                SdfResult ret;
+                SdfResult ret = (SdfResult)0;
                 ret.distance = sdf::primitives3D::torus(p, _Control.x, _Control.y);
                 ret.id.xyz = ix + 1;
                 ret.id.w = 0;

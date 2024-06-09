@@ -12,6 +12,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _DRAWMODE_MATERIAL
+  - _SHOW_WORLD_GRID
   - _ZWRITE_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -62,18 +64,61 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - SDF_1_1_0__root_shroom_1_leg__2_Radius: 0.582681
+    - SDF_1_1_1__root_shroom_1_cap__2_Angle: 0.924753
+    - SDF_1_1_1__root_shroom_1_cap__2_Height: 0.663531
+    - SDF_1_2_0__root_shroom2_leg__2_Radius: 0.264981
+    - SDF_1_2_1__root_shroom2_cone__2_Angle: 0.656545
+    - SDF_1_2_1__root_shroom2_cone__2_Height: 1.02
+    - SDF_1_2_2__root_shroom2_cap__2_Radius: 0.339796
+    - SDF_1_3_0__root_pill_sphere__2_Radius: 0.538078
+    - SDF_1_3_1__root_pill_sphere__2_Radius: 0.422096
+    - SDF_1_3__root_pill__1_BlendFactor: 0.608677
+    - SDF_1_4_0__root_screw_body__2_Height: 1.399991
+    - SDF_1_4_0__root_screw_body__2_Radius: 0.404426
+    - SDF_1_4_0__root_screw_body__2_Rounding: 0.25
+    - SDF_1_4_1_0__root_screw_head_ball__2_Radius: 0.53636
+    - SDF_1_4_1__root_screw_head__1_BlendFactor: 1
+    - SDF_1_5_0__root_peg_cylinder__2_Height: 1.442987
+    - SDF_1_5_0__root_peg_cylinder__2_Radius: 0.558908
+    - SDF_1_5_0__root_peg_cylinder__2_Rounding: 0.11
+    - SDF_1_5_1__root_peg_cutout__2_MainRadius: 0.859511
+    - SDF_1_5_1__root_peg_cutout__2_RingRadius: 0.461763
+    - SDF_1_5__root_peg__1_BlendFactor: 1
+    - SDF_1_6_0__root_infinite_cylinder_cylinder__2_Height: 1.426067
+    - SDF_1_6_0__root_infinite_cylinder_cylinder__2_Radius: 0.73139
+    - SDF_1_6_0__root_infinite_cylinder_cylinder__2_Rounding: 0
+    - SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius: 0.859511
+    - SDF_1_6_1__root_infinite_cylinder_cutout__2_RingRadius: 0.233685
+    - SDF_1_6__root_infinite_cylinder__1_BlendFactor: 1
+    - SDF_1_7_0__root_two_cones_cone__2_Angle: 0.46199
+    - SDF_1_7_0__root_two_cones_cone__2_Height: 1.258141
+    - SDF_1_7_1__root_two_cones_cone__2_Angle: 0.383333
+    - SDF_1_7_1__root_two_cones_cone__2_Height: 1.199648
+    - SDF_1_7__root_two_cones__1_BlendFactor: 0.46
+    - SDF_1__root__1_BlendFactor: 0.58
+    - _AO_FALLOFF: 2.5
+    - _AO_MAX_DISTANCE: 1
+    - _AO_STEPS: 6
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _DrawMode: 0
     - _DstBlend: 0
+    - _EPSILON_NORMAL: 0.001
+    - _EPSILON_RAY: 0.001
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _MAX_DISTANCE: 200
+    - _MAX_STEPS: 200
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RAY_ORIGIN_BIAS: 0
+    - _SHOW_WORLD_GRID: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -83,6 +128,11 @@ Material:
     - sdfScene__sphere_1_0_radius: 1
     - sdfScene__sphere_2_1_radius: 1
     m_Colors:
+    - SDF_1_0__root_ground__2_BoxExtents: {r: 6.442449, g: 0.169183, b: 3.634491, a: 0}
+    - SDF_1_4_1_1__root_screw_head_cut_1__2_BoxExtents: {r: 0.413049, g: 0.589912, b: 0.117837, a: 0}
+    - SDF_1_4_1_2__root_screw_head_cut_2__2_BoxExtents: {r: 0.696923, g: 0.091037, b: 0.585179, a: 0}
+    - SDF_1_5_1__root_peg_cutout__2_Cap: {r: 0.53, g: -0.18, b: 0, a: 0}
+    - SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap: {r: 0.53, g: -0.18, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - sdfScene__box_2_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}

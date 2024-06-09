@@ -27,7 +27,8 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
                 shaderStatements = new ShaderStatement[]
                 {
                     new Fallback { name = "Sdf/Fallback" },
-                    new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfShaderEditor" },
+                    // off, because Unity doesn't support UIToolkit yet and it's tedious to use UGUI
+                    // new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfShaderEditor" },
                     SubShader(),
                 },
             };
@@ -86,11 +87,11 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
                         initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 1 },
                         attributes = new[]
                         {
+                            SyntaxUnityExtensions.toggleAttribute(),
+                            SyntaxUnityExtensions.keyEnumAttribute("Off", "On"),
                             SyntaxUnityExtensions.tooltipAttribute(
                                 "Enable for correct blending with other geometry and backface rendering"
                             ),
-                            SyntaxUnityExtensions.toggleAttribute(),
-                            SyntaxUnityExtensions.keyEnumAttribute("Off", "On"),
                         },
                     },
                     // [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Int) = 1
@@ -100,6 +101,83 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
                         initializer = new PropertySyntax.Number<IntLiteral>
                             { numberLiteral = (int)UnityEngine.Rendering.CompareFunction.LessEqual },
                         attributes = SyntaxUnityExtensions.enumAttribute<UnityEngine.Rendering.CompareFunction>(),
+                    },
+                    // [KeywordEnum(Material, Albedo, Skybox, Normal, Steps, Depth)] _DrawMode("Draw mode", Int) = 0
+                    new PropertySyntax()
+                    {
+                        id = "_DrawMode", displayName = "Draw mode", propertyType = new IntKeyword(),
+                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 0 },
+                        attributes = new[]
+                        {
+                            SyntaxUnityExtensions.keywordEnumAttribute(
+                                "Material",
+                                "Albedo",
+                                "Skybox",
+                                "Normal",
+                                "Steps",
+                                "Depth",
+                                "Occlusion"
+                            ),
+                        },
+                    },
+                    // [Toggle(_SHOW_WORLD_GRID)] _ShowWorldGrid("Show World Grid overlay", Float) = 1
+                    new PropertySyntax
+                    {
+                        id = "_SHOW_WORLD_GRID", displayName = "Show World Grid overlay", propertyType = new FloatKeyword(),
+                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 1 },
+                        attributes = new[]
+                        {
+                            SyntaxUnityExtensions.toggleAttribute("_SHOW_WORLD_GRID"),
+                            SyntaxUnityExtensions.tooltipAttribute("Show world grid overlay"),
+                        },
+                    },
+                    // _EpsilonRay ("epsilon step for ray to consider hit", Float) = 0.001
+                    new PropertySyntax
+                    {
+                        id = "_EPSILON_RAY", displayName = "epsilon step for ray to consider hit", propertyType = new FloatKeyword(),
+                        initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = 0.001f },
+                    },
+                    // _EPSILON_NORMAL ("epsilon for calculating normal", Float) = 0.001
+                    new PropertySyntax
+                    {
+                        id = "_EPSILON_NORMAL", displayName = "epsilon for calculating normal", propertyType = new FloatKeyword(),
+                        initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = 0.001f },
+                    },
+                    // _MAX_STEPS ("max raymarching steps", Int) = 200
+                    new PropertySyntax
+                    {
+                        id = "_MAX_STEPS", displayName = "max raymarching steps", propertyType = new IntKeyword(),
+                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 200 },
+                    },
+                    // _MAX_DISTANCE ("marx raymarching distance", Float) = 200.0
+                    new PropertySyntax
+                    {
+                        id = "_MAX_DISTANCE", displayName = "max raymarching distance", propertyType = new FloatKeyword(),
+                        initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = 200.0f },
+                    },
+                    // _RAY_ORIGIN_BIAS ("ray origin bias", Float) = 0
+                    new PropertySyntax
+                    {
+                        id = "_RAY_ORIGIN_BIAS", displayName = "ray origin bias", propertyType = new FloatKeyword(),
+                        initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = 0.0f },
+                    },
+                    // _AO_STEPS ("Ambient Occlusion Steps", Integer) = 6;
+                    new PropertySyntax
+                    {
+                        id = "_AO_STEPS", displayName = "Ambient Occlusion Steps", propertyType = new IntKeyword(),
+                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = 6 },
+                    },
+                    // _AO_MAX_DISTANCE ("Ambient Occlusion Max Distance") = 1;
+                    new PropertySyntax
+                    {
+                        id = "_AO_MAX_DISTANCE", displayName = "Ambient Occlusion Max Distance", propertyType = new FloatKeyword(),
+                        initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = 1.0f },
+                    },
+                    // _AO_FALLOFF ("Ambient Occlusion Falloff") = 2.5;
+                    new PropertySyntax
+                    {
+                        id = "_AO_FALLOFF", displayName = "Ambient Occlusion Falloff", propertyType = new FloatKeyword(),
+                        initializer = new PropertySyntax.Number<FloatLiteral> { numberLiteral = 2.5f },
                     },
                 };
             }

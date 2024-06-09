@@ -5,6 +5,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfPlaneController), true)]
     public class SdfPlaneControllerEditor : SdfPrimitiveControllerEditor {
         [MenuItem("GameObject/SDF/Primitives/Plane", priority = -20)]
-        public static void Instantiate() => Controller.TryInstantiate<SdfPlaneController>("plane");
+        public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfPlaneController>("plane");
     }
 }
