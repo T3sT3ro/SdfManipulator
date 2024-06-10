@@ -39,7 +39,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             processor.HandleRequirement(
                 new FunctionDefinitionRequirement(
                     this,
-                    SdfData.createSdfFunction(
+                    createSdfFunction(
                         (Identifier)sdfFunctionName,
                         new[]
                         {
@@ -80,5 +80,14 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         // redirect to IModifier<..>
         public override Type GetInputType()  => typeof(VectorData);
         public override Type GetOutputType() => typeof(SdfData);
+
+        public static FunctionDefinition createSdfFunction(Identifier identifier, Block functionBody)
+            => new()
+            {
+                returnType = SdfData.sdfReturnType,
+                id = identifier,
+                paramList = new Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
+                body = functionBody,
+            };
     }
 }

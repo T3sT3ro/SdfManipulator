@@ -239,6 +239,8 @@ For now, this project contains:
     - files to reference:
         - `Library/PackageCache/com.unity.shadergraph@14.0.10/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/Includes/DepthOnlyPass.hlsl`
         - `Library/PackageCache/com.unity.shadergraph@14.0.10/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/Targets/BuiltInTarget.cs`
+    - seems like [clayxels](https://andrea-intg.itch.io/clayxels) support scene picking??? AND it's open source?! (3rd
+      gif from the top on the sidebar)
 - [ ] URP and HDRP
   support: https://blog.unity.com/engine-platform/migrating-built-in-shaders-to-the-universal-render-pipeline
 - [ ] material preview (see `MaterialEditor` class for `OnPreviewGUI`)
@@ -255,22 +257,29 @@ For now, this project contains:
 The following table serves as a reference for things that are, should or cannot be implemented in unity for some reason.
 The table represents the state of my current knowledge.
 
-| Event                         | Action         | Status      | Info                                                    |
-|-------------------------------|----------------|-------------|---------------------------------------------------------|
-| create primitive              | regenerate     | partial     |                                                         |
-| delete primitive              | regenerate     | partial     |                                                         |
-| reorder children              | regenerate[^1] | partial     | via OnTransformParentChanged                            |
-| object rename                 | regenerate     | missing     | no "rename" hook, possibly requires active regeneration |
-| component added to stack      | revalidate[^2] | missing[^3] | no "componentAdded" hook in editor                      |
-| component removed from stack  | revalidate[^2] | missing[^3] | no "componentRemoved" hook                              |
-| components reordered          | revalidate[^2] | missing[^3] | no "componentOrderChanged" hook                         |
-| observable property changed   | update         | present     |                                                         |
-| domain reload in prefab scene | revalidate[^2] |             |                                                         |
+Status "done" means it was implemented but not stress-tested.
+Status "done?" means it has been done but as a side effect of other change and should be investigated.
 
-[^1]: depending on the commutativity of the parent operator.
-[^2]: only components derived from `Controller` should be affected. Revalidate compares changes and issues a regenerate
+| Event                         | Action         | Status     | Info                                                                       |
+|-------------------------------|----------------|------------|----------------------------------------------------------------------------|
+| create primitive              | regenerate     | done       |                                                                            |
+| delete primitive              | regenerate     | done       |                                                                            |
+| reorder children              | regenerate[^1] | done       | via OnTransformParentChanged                                               |
+| object rename                 | regenerate     | bugged[^5] | no "rename" hook, possibly requires active regeneration. Triggers on save. |
+| component added to stack      | revalidate[^2] | done?[^3]  | [^4]no "componentAdded" hook in editor                                     |
+| component removed from stack  | revalidate[^2] | done?[^3]  | [^4]no "componentRemoved" hook                                             |
+| components reordered          | revalidate[^2] | done?[^3]  | [^4]no "componentOrderChanged" hook                                        |
+| observable property changed   | update         | present    |                                                                            |
+| domain reload in prefab scene | revalidate[^2] | done       | via domain reload static even hook or something                            |
+
+[^1]: `regenerate` as in "perform always"; may depend on the commutativity of the parent operator (e.g. smoothmin), it
+is important to handle.
+[^2]: `revalidate` as in `regenerate if needed`; e.g. only components derived from `Controller` should be affected.
+Revalidate compares changes and issues a regenerate
 if needed
 [^3]: research `ObjectChangeEvents` and ChangeGameObjectStructure* events
+[^4]: works thanks to OnEnable or OnValidate or what???
+[^5]: for some reason saving after renaming refreshes the prefab and restores previous names, but existing and entering prefab stage shows new state 
 
 # Important to remember while documenting and while refactoring
 
@@ -446,11 +455,13 @@ if needed
 Comparison to other software. The list includes advantages and
 
 Other similar tools:
+
 - uRaymarching
 - Shadergrph
 - [Womp](https://womp.com)
 - [Unbound](https://unbound.io)
 - [magicaCSG](https://ephtracy.github.io/index.html?page=magicacsg#ss-carousel_ss)
+- [Mud bunny](http://longbunnylabs.com/mudbun/)
 
 | Feature             | Mine                                    | Shadergraph                                            | Womp                                                         | [Unbound](https://www.unbound.io/                        | uRaymarching                                               |
 |---------------------|-----------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------|------------------------------------------------------------|

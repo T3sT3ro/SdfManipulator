@@ -1,9 +1,11 @@
 using System;
+using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.Controllers.Data;
 using Unity.Properties;
 using UnityEngine;
@@ -33,21 +35,19 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
 
         protected override void OnValidate() {
             base.OnValidate();
-            if (sdfPrimitive == null || sdfPrimitive is not SdfController)
+            if (sdfPrimitive == null || sdfPrimitive is not SdfPrimitiveController)
                 throw new ArgumentException("sdf elongate requires an sdf controller as a target!");
 
-            var sdfController = (IModifier)sdfPrimitive;
-            if (sdfController.GetInputType() != typeof(VectorData) || sdfController.GetInputType() != typeof(ScalarData))
-                throw new ArgumentException("sdfPrimitive must be of type VectorData or ScalarData");
+            // TODO: support elongating combinations i.e. SdfData returning functions as well
         }
 
         public override ScalarData Apply(VectorData input, Processor processor) {
             processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
             processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"));
 
-            var elongatedFunctionDefinition = SdfData.createSdfFunction(
+            var elongatedFunctionDefinition = createSdfPrimitiveFunction(
                 SdfScene.sceneData.controllers[this].identifier,
-                new[]
+                new Statement<hlsl>[]
                 {
                     // float3 q = abs(p) - h
                     AST.Hlsl.Extensions.Var(
@@ -60,11 +60,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
                             right = (Identifier)this[new PropertyPath(nameof(Length))].identifier,
                         }
                     ),
-                    // SdfResult = <some primitive>(abs(q,0))'
+                    /*// SdfResult = <some primitive>(abs(q,0))'
                     AST.Hlsl.Extensions.Var(
                         SdfData.sdfReturnType,
                         "result",
-                        ((SdfController)sdfPrimitive).Apply(
+                        ((SdfPrimitiveController)sdfPrimitive).Apply(
                             qData with
                             {
                                 evaluationExpression = AST.Hlsl.Extensions.FunctionCall(
@@ -75,7 +75,30 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
                             },
                             processor
                         ).evaluationExpression
-                    ),
+                    ),*/
+                    // return primitive(max(q, 0.0)) + min(max(q.x, q.y, q.z)), 0.0);
+                    (Return)new Binary
+                    {
+                        left = ((SdfPrimitiveController)sdfPrimitive).Apply(
+                            qData with
+                            {
+                                evaluationExpression = AST.Hlsl.Extensions.FunctionCall(
+                                    "max",
+                                    qData.evaluationExpression,
+                                    (LiteralExpression)0
+                                ),
+                            },
+                            processor
+                        ).evaluationExpression,
+                        operatorToken = new PlusToken(),
+                        right = AST.Hlsl.Extensions.FunctionCall(
+                            "min",
+                            AST.Hlsl.Extensions.FunctionCall("max", qData.evaluationExpression), // to util.hlsl
+                            (LiteralExpression)0
+                        ),
+                    },
+
+                    /*
                     // result.p = p;
                     AST.Hlsl.Extensions.Assignment($"result.{SdfData.pParamName}", SdfData.pData.evaluationExpression),
                     // result.distance += min(max(q), 0);
@@ -90,6 +113,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
                     ),
                     // return result;
                     (Return)new Identifier { id = "result" },
+                    */
                 }
             );
             processor.HandleRequirement(new FunctionDefinitionRequirement(this, elongatedFunctionDefinition));
@@ -99,8 +123,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
                 evaluationExpression =
                     AST.Hlsl.Extensions.FunctionCall(
                         elongatedFunctionDefinition.id.id.Text,
-                        input.evaluationExpression,
-                        (Identifier)this[new PropertyPath(nameof(Length))].identifier
+                        input.evaluationExpression
+                        // (Identifier)this[new PropertyPath(nameof(Length))].identifier
                     ),
             };
         }

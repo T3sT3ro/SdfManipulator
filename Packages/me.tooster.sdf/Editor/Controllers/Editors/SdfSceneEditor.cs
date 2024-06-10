@@ -10,8 +10,6 @@ using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Debug = UnityEngine.Debug;
-using SdfConeController = me.tooster.sdf.Editor.Controllers.SDF.Primitives.SdfConeController;
-using SdfSphereController = me.tooster.sdf.Editor.Controllers.SDF.Primitives.SdfSphereController;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfScene))]
     public class SdfSceneEditor : UnityEditor.Editor {
@@ -143,58 +141,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                 AssetDatabase.Refresh();
             }
 
-            /**
-             * Creates new scene prefab with sub-asset material and shader and the prefab has the following structure:
-             * - new Sdf scene (SdfScene)
-             *   |- scene renderer (MeshRenderer + MeshFilter(Cube))
-             *   |- root (SdfCombineController) - allows controling the origin of the domain
-             *      |- cone (SdfConeController)
-             *      |- sphere (SdfSphereController)
-             */
             static void CreateSdfSceneAsset(string path) {
-                var scenePrefabRoot = new GameObject("new SDF scene");
-                var sdfScene = scenePrefabRoot.AddComponent<SdfScene>();
-
-                var domain = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                DestroyImmediate(domain.GetComponent<BoxCollider>());
-                domain.name = "scene renderer";
-                domain.transform.SetParent(scenePrefabRoot.transform);
-                domain.transform.localScale = Vector3.one * 3;
-
-                var sceneRoot = new GameObject("root");
-                sceneRoot.transform.SetParent(scenePrefabRoot.transform);
-                sceneRoot.transform.localPosition = Vector3.down * 1.5f;
-                var rootController = sceneRoot.AddComponent<SdfCombineController>();
-                rootController.Operation = SdfCombineController.CombinationOperation.SMOOTH_UNION;
-                rootController.BlendFactor = 0.3f;
-
-                var coneGameObject = new GameObject("cone");
-                coneGameObject.transform.SetParent(sceneRoot.transform);
-                var coneController = coneGameObject.AddComponent<SdfConeController>();
-                coneController.transform.localPosition = Vector3.up * 2f;
-
-                var sphereGameObject = new GameObject("sphere");
-                var sphereController = sphereGameObject.AddComponent<SdfSphereController>();
-                sphereGameObject.transform.SetParent(sceneRoot.transform);
-                sphereController.transform.localPosition = Vector3.up * 1f;
-
-                sdfScene.sdfSceneRoot = rootController;
-                var shader = ShaderUtil.CreateShaderAsset("// empty shader\n", false);
-                shader.name = "generated shader";
-                var material = new Material(shader) { name = "generated material" };
-
-                var domainRenderer = domain.GetComponent<Renderer>();
-                domainRenderer.sharedMaterial = material;
-
-                sdfScene.controlledShader = shader;
-                sdfScene.controlledMaterial = material;
-
-                PrefabUtility.SaveAsPrefabAsset(scenePrefabRoot, path);
-                AssetDatabase.AddObjectToAsset(shader, path);
-                AssetDatabase.AddObjectToAsset(material, path);
-
-                AssetDatabase.SaveAssetIfDirty(AssetDatabase.GUIDFromAssetPath(path));
-                DestroyImmediate(scenePrefabRoot);
+                AssetDatabase.CopyAsset("Packages/me.tooster.sdf/Editor/Resources/Prefabs/Hello SDF.prefab", path);
             }
         }
     }

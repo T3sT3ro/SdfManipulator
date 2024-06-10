@@ -10,6 +10,7 @@ typedef fixed4 ID;
 
 
 /// basic material model for SDFs TODO: migrate to official shading material properties for unity
+/// @todo use SurfaceOutputStandard instead
 struct Material {
     fixed4 albedo; ///< base diffuse color + alpha (in diffuse or specular workflow)
     half   metallic; ///< 0=non-metal, 1=metal

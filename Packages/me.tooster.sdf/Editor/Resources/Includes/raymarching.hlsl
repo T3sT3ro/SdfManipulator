@@ -57,8 +57,15 @@ UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #endif
 
 #ifndef EXPLICIT_SHADER_FEATURES
-#pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_SKYBOX \
-_DRAWMODE_NORMAL _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_OCCLUSION
+#pragma shader_feature_local \
+    _DRAWMODE_MATERIAL \
+    _DRAWMODE_ALBEDO \
+    _DRAWMODE_ID \
+    _DRAWMODE_SKYBOX \
+    _DRAWMODE_NORMAL \
+    _DRAWMODE_STEPS \
+    _DRAWMODE_DEPTH \
+    _DRAWMODE_OCCLUSION
 #pragma shader_feature_local __ _SHOW_WORLD_GRID
 #endif
 
@@ -193,19 +200,22 @@ float classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, 
  * @param sdf sdf data of fragment
  * @param ray ray info for fragment
  * @return modified color of a fragment
+ * @todo check if including this and shader features in global include file increases shader compilation time
  */
 fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D ray) {
     #ifdef _DRAWMODE_MATERIAL
     // dampen the color by occlusion
-    return color;
+    color = color;
     #elif _DRAWMODE_ALBEDO
-    return mat.albedo;
+    color = mat.albedo;
+    #elif _DRAWMODE_ID
+    color = noise::randomColor(sdf.id.w); // TODO: account for xyz
     #elif _DRAWMODE_SKYBOX
     // sample the default reflection cubemap, using the reflection vector
     half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, sdf.normal);
     // decode cubemap data into actual color
     half3 skyColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
-    return fixed4(skyColor, 1.0);
+    color = fixed4(skyColor, 1.0);
     #elif _DRAWMODE_NORMAL
     color = sdf::debug::visualizeNormal(sdf.normal);
     #elif _DRAWMODE_STEPS
@@ -219,7 +229,7 @@ fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D
 
     #ifdef _SHOW_WORLD_GRID
     fixed4 gridColor = sdf::debug::grid(sdf.p, 0.25, .04);
-    color.rgb = lerp(color, gridColor.rgb, gridColor.a);
+    color.rgb = lerp(color, gridColor.rgb, gridColor.a); // mix in the grid
     #endif
 
     return color;

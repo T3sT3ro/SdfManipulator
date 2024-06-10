@@ -83,7 +83,7 @@ f2p fragmentShader(in v2f frag_in, bool facing : SV_IsFrontFace) {
 // TODO: only use forward declaration, generate SdfMaterial based on SDF scene
 Material SdfMaterial(SdfResult sdf) {
     Material m = (Material)0;
-    m.albedo = noise::randomColor(sdf.id.w);
+    m.albedo = colors::LIGHT_MAGENTA;
     m.metallic = .6;
     m.emission = .1;
     m.occlusion = classicAmbientOcclusion(sdf.p, sdf.normal, _AO_MAX_DISTANCE, _AO_FALLOFF, _AO_STEPS);
@@ -139,6 +139,25 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
 
     Material mat = SdfMaterial(sdf);
     fixed4   color = shadeAmbientLambert(sdf, mat);
+
+    // // Get the lighting
+    // SurfaceOutputStandard surfaceOutput = (SurfaceOutputStandard)0;
+    // surfaceOutput.Albedo = mat.albedo.rgb;
+    // surfaceOutput.Metallic = mat.metallic;
+    // surfaceOutput.Smoothness = mat.smoothness;
+    // surfaceOutput.Occlusion = mat.occlusion;
+    // surfaceOutput.Emission = mat.emission;
+    // surfaceOutput.Normal = sdf.normal;
+    // surfaceOutput.Alpha = 1.0;
+    //
+    // half3 worldNormal = sdf.normal;
+    // half3 worldViewDir = normalize(UnityWorldSpaceViewDir(sdf.p));
+    // UnityGI gi = UnityGlobalIllumination(surfaceOutput, worldNormal, worldViewDir);
+    //
+    // // Compute the final color using standard lighting
+    // half4 color = UnityGlobalLighting(surfaceOutput, gi);
+
+
     color = debugOverlay(color, mat, sdf, ray);
 
 

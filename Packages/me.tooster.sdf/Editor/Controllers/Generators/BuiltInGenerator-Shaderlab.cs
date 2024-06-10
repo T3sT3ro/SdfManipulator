@@ -112,6 +112,7 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
                             SyntaxUnityExtensions.keywordEnumAttribute(
                                 "Material",
                                 "Albedo",
+                                "Id",
                                 "Skybox",
                                 "Normal",
                                 "Steps",

@@ -154,7 +154,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             body.Add(new Return { expression = new Identifier { id = result.id.Text } });
 
             var combineFunctionName = SdfScene.sceneData.controllers[this].identifier;
-            processor.HandleRequirement(new FunctionDefinitionRequirement(this, SdfData.createSdfFunction(combineFunctionName, body)));
+            processor.HandleRequirement(new FunctionDefinitionRequirement(this, createSdfFunction(combineFunctionName, body)));
 
             return new SdfData
             {
