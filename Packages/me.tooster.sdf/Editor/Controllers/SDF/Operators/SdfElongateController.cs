@@ -1,4 +1,3 @@
-using System;
 using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
@@ -22,7 +21,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
         [SerializeField] [DontCreateProperty] Vector3 length;
 
         [CreateProperty] [ShaderProperty(Description = "Elongation")]
-        Vector3 Length {
+        public Vector3 Length {
             get => length;
             set => SetField(ref length, value, false);
         }
@@ -36,7 +35,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
         protected override void OnValidate() {
             base.OnValidate();
             if (sdfPrimitive == null || sdfPrimitive is not SdfPrimitiveController)
-                throw new ArgumentException("sdf elongate requires an sdf controller as a target!");
+                Debug.LogError("sdf elongate requires an sdf controller as a target!");
 
             // TODO: support elongating combinations i.e. SdfData returning functions as well
         }

@@ -35,8 +35,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
                 using (var mainRadiusCheck = new EditorGUI.ChangeCheckScope()) {
                     mainRadiusHandle.radius = controller.MainRadius;
                     mainRadiusHandle.axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y;
-                    // TODO: customize gizmo drawing in player prefs
-                    // mainRadiusHandle.center = Vector3.up * controller.RingRadius;
+                    mainRadiusHandle.center = Vector3.zero; // TODO: remove alltogether and the handle will be pinned to the opposite side
+                    // TODO, depending on player prefs, use the this to display on the surface: Vector3.up * controller.RingRadius;
 
                     mainRadiusHandle.DrawHandle();
 

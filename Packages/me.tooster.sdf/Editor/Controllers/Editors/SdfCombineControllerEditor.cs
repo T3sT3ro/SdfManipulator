@@ -12,17 +12,14 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             var baseInspector = base.CreateInspectorGUI();
             var controller = (SdfCombineController)target;
 
-            // hide property field for blend if variant is other than smooth blend. Observe changes to show and hide.
-            if (controller.Operation != SdfCombineController.CombinationOperation.SMOOTH_UNION)
-                return baseInspector;
+            var operation = baseInspector.Q<PropertyField>("PropertyField:operation");
+            var blendField = baseInspector.Q<PropertyField>("PropertyField:blendFactor");
 
-            var operation = baseInspector.Q<PropertyField>("operation");
-            var blendField = baseInspector.Q<PropertyField>("blendFactor");
-
-            operation.visible = false;
 
             operation.RegisterValueChangeCallback(
-                _ => blendField.visible = controller.Operation == SdfCombineController.CombinationOperation.SMOOTH_UNION
+                _ => blendField.style.display = controller.Operation == SdfCombineController.CombinationOperation.SMOOTH_UNION
+                    ? DisplayStyle.Flex
+                    : DisplayStyle.None
             );
 
             return baseInspector;

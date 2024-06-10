@@ -676,7 +676,7 @@ MonoBehaviour:
   sdfModifiers: []
   operation: 0
   blendFactor: 1
-  singleId: 0
+  singleId: 1
   children:
   - {fileID: 3158257383954458248}
   - {fileID: 3283671336859373737}
@@ -731,7 +731,7 @@ MonoBehaviour:
   sdfModifiers: []
   operation: 1
   blendFactor: 1
-  singleId: 0
+  singleId: 1
   children:
   - {fileID: 4498576306446372549}
   - {fileID: 4416803840567294401}
@@ -792,7 +792,7 @@ Shader:
       - m_Name: _DrawMode
         m_Description: Draw mode
         m_Attributes:
-        - KeywordEnum (Material, Albedo, Skybox, Normal, Steps, Depth, Occlusion)
+        - KeywordEnum (Material, Albedo, Id, Skybox, Normal, Steps, Depth, Occlusion)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0
@@ -1384,7 +1384,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 43820
+          gpuProgramID: 17064
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1407,7 +1407,7 @@ Shader:
             m_ConstantBufferBindings: []
             m_UAVParams: []
             m_Samplers: []
-          m_SerializedKeywordStateMask: 00000100020003000400050006000700080009000a000b000c000d00
+          m_SerializedKeywordStateMask: 00000100020003000400050006000700080009000a000b000c000d000e00
         progFragment:
           m_SubPrograms: []
           m_PlayerSubPrograms: []
@@ -1421,7 +1421,7 @@ Shader:
             m_ConstantBufferBindings: []
             m_UAVParams: []
             m_Samplers: []
-          m_SerializedKeywordStateMask: 00000100020003000400050006000700080009000a000b000c000d00
+          m_SerializedKeywordStateMask: 00000100020003000400050006000700080009000a000b000c000d000e00
         progGeometry:
           m_SubPrograms: []
           m_PlayerSubPrograms: []
@@ -1515,7 +1515,8 @@ Shader:
     - _DRAWMODE_DEPTH
     - _DRAWMODE_OCCLUSION
     - _SHOW_WORLD_GRID
-    m_KeywordFlags: 0000000001010101010101010101
+    - _DRAWMODE_ID
+    m_KeywordFlags: 000000000101010101010101010101
     m_Name: Hello SDF (generated)
     m_CustomEditorName: 
     m_FallbackName: Sdf/Fallback
@@ -1552,28 +1553,28 @@ Shader:
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 146
+    line: 153
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: region'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 148
+    line: 155
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: endregion'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 160
+    line: 179
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: endregion'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 228
+    line: 238
     warning: 1
     runtimeError: 0
   - message: '"SDF_1_0_0_0__root_combine_dice_box__1_SpaceTransform" contains consecutive
@@ -1702,6 +1703,187 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
+      17064:
+        serializedVersion: 3
+        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
+          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
+          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 131 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 75\n\n        #pragma target 5.0\n       
+          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
+          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
+          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_combine__1_BlendFactor;\n       
+          float SDF_1_0_0__root_combine_dice__1_BlendFactor;\n        float4x4 SDF_1_0_0_0__root_combine_dice_box__1_SpaceTransform
+          = {\n                { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0,
+          0.0, 0.0 },\n                { 0.0, 0.0, 1.0, 0.0 },\n                {
+          0.0, 0.0, 0.0, 1.0 }\n        };\n        float3 SDF_1_0_0_0__root_combine_dice_box__2_BoxExtents;\n       
+          float4x4 SDF_1_0_0_1__root_combine_dice_sphere__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, 0.0 },\n               
+          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_0_1__root_combine_dice_sphere__2_Radius;\n       
+          float SDF_1_0_1__root_combine_cross__1_BlendFactor;\n        float4x4 SDF_1_0_1_0__root_combine_cross_cylinder__1_SpaceTransform
+          = {\n                { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0,
+          0.0, 0.0 },\n                { 0.0, 0.0, 1.0, 0.0 },\n                {
+          0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_0__root_combine_cross_cylinder__2_Height;\n       
+          float SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius;\n        float
+          SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding;\n        float4x4
+          SDF_1_0_1_1__root_combine_cross_cylinder__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 0.0, 1.0, 0.0 },\n               
+          { 0.0, -1.0, 0.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_1_1__root_combine_cross_cylinder__2_Height;\n       
+          float SDF_1_0_1_1__root_combine_cross_cylinder__2_Radius;\n        float
+          SDF_1_0_1_1__root_combine_cross_cylinder__2_Rounding;\n        float4x4
+          SDF_1_0_1_2__root_combine_cross_cylinder__1_SpaceTransform = {\n               
+          { 0.0, 1.0, 0.0, 0.0 },\n                { -1.0, 0.0, 0.0, 0.0 },\n               
+          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_1_2__root_combine_cross_cylinder__2_Height;\n       
+          float SDF_1_0_1_2__root_combine_cross_cylinder__2_Radius;\n        float
+          SDF_1_0_1_2__root_combine_cross_cylinder__2_Rounding;\n        #line 131
+          \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            SdfResult SDF_1_0_0_0__root_combine_dice_box__3
+          (float3 p);\n            SdfResult SDF_1_0_0_1__root_combine_dice_sphere__3
+          (float3 p);\n            SdfResult SDF_1_0_0__root_combine_dice__1 (float3
+          p);\n            SdfResult SDF_1_0_1_0__root_combine_cross_cylinder__3
+          (float3 p);\n            SdfResult SDF_1_0_1_1__root_combine_cross_cylinder__3
+          (float3 p);\n            SdfResult SDF_1_0_1_2__root_combine_cross_cylinder__3
+          (float3 p);\n            SdfResult SDF_1_0_1__root_combine_cross__1 (float3
+          p);\n            SdfResult SDF_1_0__root_combine__1 (float3 p);\n           
+          SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0_0__root_combine_dice_box__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::box(sdf::operators::transform(p, SDF_1_0_0_0__root_combine_dice_box__1_SpaceTransform),
+          SDF_1_0_0_0__root_combine_dice_box__2_BoxExtents);\n                result.id
+          = int4(0, 0, 0, 6);\n                return result;\n            }\n           
+          SdfResult SDF_1_0_0_1__root_combine_dice_sphere__3(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
+          SDF_1_0_0_1__root_combine_dice_sphere__1_SpaceTransform), SDF_1_0_0_1__root_combine_dice_sphere__2_Radius);\n               
+          result.id = int4(0, 0, 0, 9);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_0__root_combine_dice__1(float3 p) {\n               
+          SdfResult result = SDF_1_0_0_0__root_combine_dice_box__3(p);\n               
+          result = sdf::operators::intersectSimple(result, SDF_1_0_0_1__root_combine_dice_sphere__3(p));\n               
+          result.id = int4(0, 0, 0, 3);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_0__root_combine_cross_cylinder__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::cylinder_rounded(sdf::operators::transform(p,
+          SDF_1_0_1_0__root_combine_cross_cylinder__1_SpaceTransform), SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius,
+          SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding, SDF_1_0_1_0__root_combine_cross_cylinder__2_Height);\n               
+          result.id = int4(0, 0, 0, 13);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_1__root_combine_cross_cylinder__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::cylinder_rounded(sdf::operators::transform(p,
+          SDF_1_0_1_1__root_combine_cross_cylinder__1_SpaceTransform), SDF_1_0_1_1__root_combine_cross_cylinder__2_Radius,
+          SDF_1_0_1_1__root_combine_cross_cylinder__2_Rounding, SDF_1_0_1_1__root_combine_cross_cylinder__2_Height);\n               
+          result.id = int4(0, 0, 0, 16);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_2__root_combine_cross_cylinder__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::transform(p,
+          SDF_1_0_1_2__root_combine_cross_cylinder__1_SpaceTransform), SDF_1_0_1_2__root_combine_cross_cylinder__2_Height,
+          SDF_1_0_1_2__root_combine_cross_cylinder__2_Radius);\n                result.id
+          = int4(0, 0, 0, 19);\n                return result;\n            }\n           
+          SdfResult SDF_1_0_1__root_combine_cross__1(float3 p) {\n               
+          SdfResult result = SDF_1_0_1_0__root_combine_cross_cylinder__3(p);\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_1_1__root_combine_cross_cylinder__3(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_1_2__root_combine_cross_cylinder__3(p));\n               
+          result.distance *= -1;\n                result.id = int4(0, 0, 0, 10);\n               
+          return result;\n            }\n            SdfResult SDF_1_0__root_combine__1(float3
+          p) {\n                SdfResult result = SDF_1_0_0__root_combine_dice__1(p);\n               
+          result = sdf::operators::intersectSimple(result, SDF_1_0_1__root_combine_cross__1(p));\n               
+          return result;\n            }\n            SdfResult SDF_1__root__1(float3
+          p) {\n                SdfResult result = SDF_1_0__root_combine__1(p);\n               
+          return result;\n            }\n            SdfResult sdfScene(float3 p)
+          {\n                return SDF_1__root__1(p);\n            }\n            "
+        m_AssetPath: Assets/Prefabs
+        m_AssetName: Hello SDF.prefab
+        m_PlatformMask: 4294967295
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 133
+        m_TypesMask: 3
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: fc37cee23ef32690301c6905bf0cf4a5
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: a693bf361cb44eb389450e4ad023c856
+        m_FromOther: 0
+        m_ForceSyncCompilation: 0
+        m_UseDxcAPIs: 0
+        m_NeverUseDxcAPIs: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0:
+        - - _DRAWMODE_MATERIAL
+          - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
+          - _DRAWMODE_SKYBOX
+          - _DRAWMODE_NORMAL
+          - _DRAWMODE_STEPS
+          - _DRAWMODE_DEPTH
+          - _DRAWMODE_OCCLUSION
+        - - __
+          - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal1:
+        - - _DRAWMODE_MATERIAL
+          - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
+          - _DRAWMODE_SKYBOX
+          - _DRAWMODE_NORMAL
+          - _DRAWMODE_STEPS
+          - _DRAWMODE_DEPTH
+          - _DRAWMODE_OCCLUSION
+        - - __
+          - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 1101803
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
       38832:
         serializedVersion: 3
         m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
@@ -1778,184 +1960,6 @@ Shader:
           requirements: 536870912
         m_NonStrippedUserKeywords: 
         m_BuiltinKeywords: 
-      43820:
-        serializedVersion: 3
-        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED 1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED 1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED 1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED
-          1\n#define _ZWRITE_ON_KEYWORD_DECLARED 1\n#define _ZWRITE_OFF_KEYWORD_DECLARED
-          1\n#line 131 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 75\n\n        #pragma target 5.0\n       
-          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
-          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
-          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_combine__1_BlendFactor;\n       
-          float SDF_1_0_0__root_combine_dice__1_BlendFactor;\n        float4x4 SDF_1_0_0_0__root_combine_dice_box__1_SpaceTransform
-          = {\n                { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0,
-          0.0, 0.0 },\n                { 0.0, 0.0, 1.0, 0.0 },\n                {
-          0.0, 0.0, 0.0, 1.0 }\n        };\n        float3 SDF_1_0_0_0__root_combine_dice_box__2_BoxExtents;\n       
-          float4x4 SDF_1_0_0_1__root_combine_dice_sphere__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, 0.0 },\n               
-          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_0_1__root_combine_dice_sphere__2_Radius;\n       
-          float SDF_1_0_1__root_combine_cross__1_BlendFactor;\n        float4x4 SDF_1_0_1_0__root_combine_cross_cylinder__1_SpaceTransform
-          = {\n                { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0,
-          0.0, 0.0 },\n                { 0.0, 0.0, 1.0, 0.0 },\n                {
-          0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_0__root_combine_cross_cylinder__2_Height;\n       
-          float SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius;\n        float
-          SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding;\n        float4x4
-          SDF_1_0_1_1__root_combine_cross_cylinder__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 0.0, 1.0, 0.0 },\n               
-          { 0.0, -1.0, 0.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_1_1__root_combine_cross_cylinder__2_Height;\n       
-          float SDF_1_0_1_1__root_combine_cross_cylinder__2_Radius;\n        float
-          SDF_1_0_1_1__root_combine_cross_cylinder__2_Rounding;\n        float4x4
-          SDF_1_0_1_2__root_combine_cross_cylinder__1_SpaceTransform = {\n               
-          { 0.0, 1.0, 0.0, 0.0 },\n                { -1.0, 0.0, 0.0, 0.0 },\n               
-          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_1_2__root_combine_cross_cylinder__2_Height;\n       
-          float SDF_1_0_1_2__root_combine_cross_cylinder__2_Radius;\n        float
-          SDF_1_0_1_2__root_combine_cross_cylinder__2_Rounding;\n        #line 131
-          \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            SdfResult SDF_1_0_0_0__root_combine_dice_box__3
-          (float3 p);\n            SdfResult SDF_1_0_0_1__root_combine_dice_sphere__3
-          (float3 p);\n            SdfResult SDF_1_0_0__root_combine_dice__1 (float3
-          p);\n            SdfResult SDF_1_0_1_0__root_combine_cross_cylinder__3
-          (float3 p);\n            SdfResult SDF_1_0_1_1__root_combine_cross_cylinder__3
-          (float3 p);\n            SdfResult SDF_1_0_1_2__root_combine_cross_cylinder__3
-          (float3 p);\n            SdfResult SDF_1_0_1__root_combine_cross__1 (float3
-          p);\n            SdfResult SDF_1_0__root_combine__1 (float3 p);\n           
-          SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0_0__root_combine_dice_box__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::box(sdf::operators::transform(p, SDF_1_0_0_0__root_combine_dice_box__1_SpaceTransform),
-          SDF_1_0_0_0__root_combine_dice_box__2_BoxExtents);\n                result.id
-          = int4(0, 0, 0, 6);\n                return result;\n            }\n           
-          SdfResult SDF_1_0_0_1__root_combine_dice_sphere__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
-          SDF_1_0_0_1__root_combine_dice_sphere__1_SpaceTransform), SDF_1_0_0_1__root_combine_dice_sphere__2_Radius);\n               
-          result.id = int4(0, 0, 0, 9);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_0__root_combine_dice__1(float3 p) {\n               
-          SdfResult result = SDF_1_0_0_0__root_combine_dice_box__3(p);\n               
-          result = sdf::operators::intersectSimple(result, SDF_1_0_0_1__root_combine_dice_sphere__3(p));\n               
-          return result;\n            }\n            SdfResult SDF_1_0_1_0__root_combine_cross_cylinder__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::cylinder_rounded(sdf::operators::transform(p,
-          SDF_1_0_1_0__root_combine_cross_cylinder__1_SpaceTransform), SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius,
-          SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding, SDF_1_0_1_0__root_combine_cross_cylinder__2_Height);\n               
-          result.id = int4(0, 0, 0, 13);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1_1__root_combine_cross_cylinder__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::cylinder_rounded(sdf::operators::transform(p,
-          SDF_1_0_1_1__root_combine_cross_cylinder__1_SpaceTransform), SDF_1_0_1_1__root_combine_cross_cylinder__2_Radius,
-          SDF_1_0_1_1__root_combine_cross_cylinder__2_Rounding, SDF_1_0_1_1__root_combine_cross_cylinder__2_Height);\n               
-          result.id = int4(0, 0, 0, 16);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1_2__root_combine_cross_cylinder__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::transform(p,
-          SDF_1_0_1_2__root_combine_cross_cylinder__1_SpaceTransform), SDF_1_0_1_2__root_combine_cross_cylinder__2_Height,
-          SDF_1_0_1_2__root_combine_cross_cylinder__2_Radius);\n                result.id
-          = int4(0, 0, 0, 19);\n                return result;\n            }\n           
-          SdfResult SDF_1_0_1__root_combine_cross__1(float3 p) {\n               
-          SdfResult result = SDF_1_0_1_0__root_combine_cross_cylinder__3(p);\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_1_1__root_combine_cross_cylinder__3(p));\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_1_2__root_combine_cross_cylinder__3(p));\n               
-          result.distance *= -1;\n                return result;\n            }\n           
-          SdfResult SDF_1_0__root_combine__1(float3 p) {\n                SdfResult
-          result = SDF_1_0_0__root_combine_dice__1(p);\n                result =
-          sdf::operators::intersectSimple(result, SDF_1_0_1__root_combine_cross__1(p));\n               
-          return result;\n            }\n            SdfResult SDF_1__root__1(float3
-          p) {\n                SdfResult result = SDF_1_0__root_combine__1(p);\n               
-          return result;\n            }\n            SdfResult sdfScene(float3 p)
-          {\n                return SDF_1__root__1(p);\n            }\n            "
-        m_AssetPath: Assets/Prefabs
-        m_AssetName: Hello SDF.prefab
-        m_PlatformMask: 4294967295
-        m_HardwareTierVariantsMask: 0
-        m_StartLine: 133
-        m_TypesMask: 3
-        m_IncludesHash:
-          serializedVersion: 2
-          Hash: 404c775111c2bf84b29f225f13218acd
-        m_CodeHash:
-          serializedVersion: 2
-          Hash: cbf972ecb9b819b433aa560acad16569
-        m_FromOther: 0
-        m_ForceSyncCompilation: 0
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
-        m_Language: 3
-        m_VariantsUserGlobal0: []
-        m_VariantsUserGlobal1: []
-        m_VariantsUserGlobal2: []
-        m_VariantsUserGlobal3: []
-        m_VariantsUserGlobal4: []
-        m_VariantsUserGlobal5: []
-        m_VariantsUserGlobal6: []
-        m_VariantsUserLocal0:
-        - - _DRAWMODE_MATERIAL
-          - _DRAWMODE_ALBEDO
-          - _DRAWMODE_SKYBOX
-          - _DRAWMODE_NORMAL
-          - _DRAWMODE_STEPS
-          - _DRAWMODE_DEPTH
-          - _DRAWMODE_OCCLUSION
-        - - __
-          - _SHOW_WORLD_GRID
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal1:
-        - - _DRAWMODE_MATERIAL
-          - _DRAWMODE_ALBEDO
-          - _DRAWMODE_SKYBOX
-          - _DRAWMODE_NORMAL
-          - _DRAWMODE_STEPS
-          - _DRAWMODE_DEPTH
-          - _DRAWMODE_OCCLUSION
-        - - __
-          - _SHOW_WORLD_GRID
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal2: []
-        m_VariantsUserLocal3: []
-        m_VariantsUserLocal4: []
-        m_VariantsUserLocal5: []
-        m_VariantsUserLocal6: []
-        m_VariantsBuiltin0: []
-        m_VariantsBuiltin1: []
-        m_VariantsBuiltin2: []
-        m_VariantsBuiltin3: []
-        m_VariantsBuiltin4: []
-        m_VariantsBuiltin5: []
-        m_VariantsBuiltin6: []
-        m_DynamicBranchKeywords: []
-        m_BaseRequirements: 1101803
-        m_KeywordTargetInfo:
-        - keywordName: SHADOWS_SOFT
-          requirements: 227
-        - keywordName: DIRLIGHTMAP_COMBINED
-          requirements: 227
-        - keywordName: DYNAMICLIGHTMAP_ON
-          requirements: 227
-        - keywordName: SHADOWS_SCREEN
-          requirements: 227
-        - keywordName: INSTANCING_ON
-          requirements: 2048
-        - keywordName: PROCEDURAL_INSTANCING_ON
-          requirements: 16384
-        - keywordName: STEREO_MULTIVIEW_ON
-          requirements: 4075
-        - keywordName: STEREO_INSTANCING_ON
-          requirements: 4075
-        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
-          requirements: 536870912
-        m_NonStrippedUserKeywords: 
-        m_BuiltinKeywords: 
     m_MeshComponentsFromSnippets: 1
     m_HasSurfaceShaders: 0
     m_HasFixedFunctionShaders: 0
@@ -1973,7 +1977,6 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _DRAWMODE_MATERIAL
-  - _SHOW_WORLD_GRID
   - _ZWRITE_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -2064,7 +2067,7 @@ Material:
     - _MAX_DISTANCE: 200
     - _MAX_STEPS: 200
     - _RAY_ORIGIN_BIAS: 0
-    - _SHOW_WORLD_GRID: 1
+    - _SHOW_WORLD_GRID: 0
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:

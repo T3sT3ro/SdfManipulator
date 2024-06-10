@@ -109,11 +109,12 @@ Transform:
   m_GameObject: {fileID: 1420433336453585074}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.367, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7070351456614148741}
+  - {fileID: 3509528184708922231}
+  - {fileID: 1806639596064250547}
   m_Father: {fileID: 7880227213151402684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7154973885652460484
@@ -130,11 +131,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inverted: 0
   sdfModifiers: []
-  operation: 0
-  blendFactor: 0.3
+  operation: 2
+  blendFactor: 0.06
   singleId: 0
   children:
+  - {fileID: 3684604984550999683}
   - {fileID: 3012950539601230004}
+  - {fileID: 1704820676222859261}
 --- !u!1 &1587513507638785231
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,9 +169,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2878294095912703957}
-  - {fileID: 6583466603638684928}
-  - {fileID: 8010773660946035514}
-  m_Father: {fileID: 7467185068423365875}
+  - {fileID: 8655323752108563462}
+  - {fileID: 8593591136285808105}
+  - {fileID: 6567967217837546271}
+  m_Father: {fileID: 3509528184708922231}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3012950539601230004
 MonoBehaviour:
@@ -184,13 +188,170 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inverted: 0
   sdfModifiers: []
-  operation: 0
-  blendFactor: 1
+  operation: 1
+  blendFactor: 0.19
   singleId: 0
   children:
   - {fileID: 9122925941554526213}
-  - {fileID: 8646651231684711132}
-  - {fileID: 4844311054276239767}
+  - {fileID: 3083360281299287742}
+  - {fileID: 3146675175721698729}
+  - {fileID: 7384664337442921475}
+--- !u!1 &1603178666274647084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8655323752108563462}
+  - component: {fileID: 6318007845690420732}
+  - component: {fileID: 5012508133538802575}
+  - component: {fileID: 3083360281299287742}
+  m_Layer: 0
+  m_Name: eyeL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8655323752108563462
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603178666274647084}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.60744727, y: -0.008057403, z: 0.11130368, w: 0.78648233}
+  m_LocalPosition: {x: -0.012, y: 0.098, z: -1.016}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 7070351456614148741}
+  m_LocalEulerAnglesHint: {x: -72.497, y: -29.455, z: 37.927}
+--- !u!114 &6318007845690420732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603178666274647084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5012508133538802575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603178666274647084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  mainRadius: 0.18546847
+  ringRadius: 0.04714007
+  cap: 1.2084494
+--- !u!114 &3083360281299287742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603178666274647084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 1
+  sdfModifiers:
+  - {fileID: 6318007845690420732}
+  - {fileID: 5012508133538802575}
+--- !u!1 &2739898408813834392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6567967217837546271}
+  - component: {fileID: 4978233344476893587}
+  - component: {fileID: 3574235959727726436}
+  - component: {fileID: 7384664337442921475}
+  m_Layer: 0
+  m_Name: mouth
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6567967217837546271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2739898408813834392}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.05836555, y: -0.6792827, z: 0.7304963, w: 0.03929083}
+  m_LocalPosition: {x: 0.245, y: -0.029000001, z: -1.047}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 7070351456614148741}
+  m_LocalEulerAnglesHint: {x: -261.056, y: 116.899, z: -61.550995}
+--- !u!114 &4978233344476893587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2739898408813834392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3574235959727726436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2739898408813834392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  mainRadius: 0.11436913
+  ringRadius: 0.04860978
+  cap: 1.7621022
+--- !u!114 &7384664337442921475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2739898408813834392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 1
+  sdfModifiers:
+  - {fileID: 4978233344476893587}
+  - {fileID: 3574235959727726436}
 --- !u!1 &2848932529615661074
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,10 +363,10 @@ GameObject:
   - component: {fileID: 2878294095912703957}
   - component: {fileID: 1555475532086954265}
   - component: {fileID: 8866226923386167138}
-  - component: {fileID: 4533480500698683392}
+  - component: {fileID: 353536146897320022}
   - component: {fileID: 9122925941554526213}
   m_Layer: 0
-  m_Name: face
+  m_Name: q
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,7 +381,7 @@ Transform:
   m_GameObject: {fileID: 2848932529615661074}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.176, y: 0, z: -0.527}
+  m_LocalPosition: {x: 0.176, y: -0.043, z: -0.413}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -250,8 +411,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.32984796
---- !u!114 &4533480500698683392
+  radius: 0.65
+--- !u!114 &353536146897320022
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -263,7 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9971b14fd68403285bb5d35a9d0a169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: {x: 0.55, y: 0.5, z: -0.12}
+  length: {x: 0.12, y: 0, z: 0}
   sdfPrimitive: {fileID: 8866226923386167138}
 --- !u!114 &9122925941554526213
 MonoBehaviour:
@@ -280,8 +441,8 @@ MonoBehaviour:
   inverted: 0
   sdfModifiers:
   - {fileID: 1555475532086954265}
-  - {fileID: 4533480500698683392}
---- !u!1 &3894167640329747421
+  - {fileID: 353536146897320022}
+--- !u!1 &2899116005278614894
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,11 +450,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8010773660946035514}
-  - component: {fileID: 4950273026715717199}
-  - component: {fileID: 2480395197962035870}
-  - component: {fileID: 2757743890252922628}
-  - component: {fileID: 4844311054276239767}
+  - component: {fileID: 3509528184708922231}
+  m_Layer: 0
+  m_Name: head-root
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3509528184708922231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2899116005278614894}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.012571826, y: -0.16445735, z: -0.05341778, w: 0.9848565}
+  m_LocalPosition: {x: -0.135, y: 0.058, z: -0.097}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2329851635526922410}
+  - {fileID: 7070351456614148741}
+  m_Father: {fileID: 7467185068423365875}
+  m_LocalEulerAnglesHint: {x: -2.426, y: -18.837, z: -5.807}
+--- !u!1 &3272509109223575922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3469134139367893869}
+  - component: {fileID: 7524608845153701982}
+  - component: {fileID: 4588251317670348184}
+  - component: {fileID: 515662714036896986}
+  - component: {fileID: 4940923768998280114}
   m_Layer: 0
   m_Name: q
   m_TagString: Untagged
@@ -301,67 +495,70 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8010773660946035514
+--- !u!4 &3469134139367893869
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3894167640329747421}
+  m_GameObject: {fileID: 3272509109223575922}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08475223, y: -0.06650845, z: -0.06668198, w: 0.9919411}
-  m_LocalPosition: {x: 0.356, y: 0.998, z: 0}
+  m_LocalRotation: {x: 0.23313546, y: -0.0472441, z: 0.092516355, w: 0.96687984}
+  m_LocalPosition: {x: -0.252, y: 1.014, z: -0.448}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 7070351456614148741}
-  m_LocalEulerAnglesHint: {x: 9.164, y: -8.343, z: -8.362}
---- !u!114 &4950273026715717199
+  m_Father: {fileID: 2329851635526922410}
+  m_LocalEulerAnglesHint: {x: 27.359, y: -3.112, z: 10.174}
+--- !u!114 &7524608845153701982
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3894167640329747421}
+  m_GameObject: {fileID: 3272509109223575922}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2480395197962035870
+--- !u!114 &4588251317670348184
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3894167640329747421}
+  m_GameObject: {fileID: 3272509109223575922}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
+  m_Script: {fileID: 11500000, guid: aa2563b0581842e4ac5660d9df7ba835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxExtents: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &2757743890252922628
+  height: 0.68095875
+  radius: 0.116658434
+  rounding: 0.07
+  variant: 2
+--- !u!114 &515662714036896986
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3894167640329747421}
+  m_GameObject: {fileID: 3272509109223575922}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9971b14fd68403285bb5d35a9d0a169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: {x: 0.47, y: -0.17, z: 0}
-  sdfPrimitive: {fileID: 2480395197962035870}
---- !u!114 &4844311054276239767
+  length: {x: 0.02, y: 0, z: 0}
+  sdfPrimitive: {fileID: 4588251317670348184}
+--- !u!114 &4940923768998280114
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3894167640329747421}
+  m_GameObject: {fileID: 3272509109223575922}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
@@ -369,8 +566,453 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inverted: 0
   sdfModifiers:
-  - {fileID: 4950273026715717199}
-  - {fileID: 2757743890252922628}
+  - {fileID: 7524608845153701982}
+  - {fileID: 515662714036896986}
+--- !u!1 &3483950558604872414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9015719255489412916}
+  - component: {fileID: 4138271525604215247}
+  - component: {fileID: 7275144353055941451}
+  - component: {fileID: 3238415611550892855}
+  m_Layer: 0
+  m_Name: torus (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9015719255489412916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3483950558604872414}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.02059274, y: 0.7235934, z: -0.15982108, w: -0.67115253}
+  m_LocalPosition: {x: 0.192, y: -0.047, z: -1.234}
+  m_LocalScale: {x: 1.0000001, y: 1, z: 1.0000001}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1806639596064250547}
+  m_LocalEulerAnglesHint: {x: 15.007, y: -92.85, z: 371.026}
+--- !u!114 &4138271525604215247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3483950558604872414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7275144353055941451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3483950558604872414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  mainRadius: 1
+  ringRadius: 0.16207922
+  cap: 0.83892584
+--- !u!114 &3238415611550892855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3483950558604872414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 4138271525604215247}
+  - {fileID: 7275144353055941451}
+--- !u!1 &5315439546055877248
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3737494527212880270}
+  - component: {fileID: 338127276826205059}
+  - component: {fileID: 4791637620168771895}
+  - component: {fileID: 5482758081154049519}
+  m_Layer: 0
+  m_Name: torus (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3737494527212880270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315439546055877248}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.35219643, y: 0.36087412, z: 0.68826264, w: -0.52155745}
+  m_LocalPosition: {x: 0.332, y: 0.362, z: -1.216}
+  m_LocalScale: {x: 1.0000001, y: 1, z: 1.0000001}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1806639596064250547}
+  m_LocalEulerAnglesHint: {x: -59.784, y: 12.436, z: 247.142}
+--- !u!114 &338127276826205059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315439546055877248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4791637620168771895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315439546055877248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  mainRadius: 1
+  ringRadius: 0.09601724
+  cap: 0.64044607
+--- !u!114 &5482758081154049519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315439546055877248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 338127276826205059}
+  - {fileID: 4791637620168771895}
+--- !u!1 &5714007422977562751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8593591136285808105}
+  - component: {fileID: 2448753753934908144}
+  - component: {fileID: 5664499827625959731}
+  - component: {fileID: 3146675175721698729}
+  m_Layer: 0
+  m_Name: eyeR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8593591136285808105
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714007422977562751}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5502836, y: -0.018859819, z: -0.21571217, w: 0.8064122}
+  m_LocalPosition: {x: 0.504, y: 0.115, z: -1.003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 7070351456614148741}
+  m_LocalEulerAnglesHint: {x: -116.408005, y: -152.265, z: 132.646}
+--- !u!114 &2448753753934908144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714007422977562751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5664499827625959731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714007422977562751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  mainRadius: 0.13310319
+  ringRadius: 0.042229116
+  cap: 1.1504633
+--- !u!114 &3146675175721698729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714007422977562751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 1
+  sdfModifiers:
+  - {fileID: 2448753753934908144}
+  - {fileID: 5664499827625959731}
+--- !u!1 &5808721681443571405
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3054702808718239116}
+  - component: {fileID: 1579831199828588485}
+  - component: {fileID: 1680234428466185900}
+  - component: {fileID: 614686220867215766}
+  m_Layer: 0
+  m_Name: ear base L
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3054702808718239116
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5808721681443571405}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.14351517, y: -0, z: -0, w: 0.9896481}
+  m_LocalPosition: {x: -0.419, y: 1.603, z: -0.475}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2329851635526922410}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1579831199828588485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5808721681443571405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1680234428466185900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5808721681443571405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.08188343
+--- !u!114 &614686220867215766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5808721681443571405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 1579831199828588485}
+  - {fileID: 1680234428466185900}
+--- !u!1 &6255708793151288171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 36572176239464193}
+  - component: {fileID: 475441003466992129}
+  - component: {fileID: 6102860377549322301}
+  - component: {fileID: 1994505366235891526}
+  m_Layer: 0
+  m_Name: cylinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &36572176239464193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6255708793151288171}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.106475025, y: -0.6582103, z: -0.12351099, w: 0.73496073}
+  m_LocalPosition: {x: 0.219, y: 0.20899999, z: 0.15399998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1806639596064250547}
+  m_LocalEulerAnglesHint: {x: -0.349, y: -83.636, z: -18.767}
+--- !u!114 &475441003466992129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6255708793151288171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6102860377549322301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6255708793151288171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa2563b0581842e4ac5660d9df7ba835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 1
+  radius: 0.25
+  rounding: 0.25
+  variant: 1
+--- !u!114 &1994505366235891526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6255708793151288171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 475441003466992129}
+  - {fileID: 6102860377549322301}
+--- !u!1 &6283039891042249642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2329851635526922410}
+  - component: {fileID: 3684604984550999683}
+  m_Layer: 0
+  m_Name: ears
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2329851635526922410
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6283039891042249642}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.14351517, y: -0, z: -0, w: 0.9896481}
+  m_LocalPosition: {x: 0, y: -0.30299997, z: -0.128}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3469134139367893869}
+  - {fileID: 6583466603638684928}
+  - {fileID: 3054702808718239116}
+  - {fileID: 9162037483615454319}
+  m_Father: {fileID: 3509528184708922231}
+  m_LocalEulerAnglesHint: {x: 16.503, y: 0, z: 0}
+--- !u!114 &3684604984550999683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6283039891042249642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29ed26e558d94e30b2d87bed778a01dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers: []
+  operation: 2
+  blendFactor: 0.73
+  singleId: 0
+  children:
+  - {fileID: 4940923768998280114}
+  - {fileID: 8646651231684711132}
+  - {fileID: 614686220867215766}
+  - {fileID: 4142550549161411983}
 --- !u!1 &6410765630165212652
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,8 +1023,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6583466603638684928}
   - component: {fileID: 2953970661348121828}
-  - component: {fileID: 6351281171430162794}
-  - component: {fileID: 3406524802970432294}
+  - component: {fileID: 7425758732954880983}
   - component: {fileID: 500223712220478607}
   - component: {fileID: 8646651231684711132}
   m_Layer: 0
@@ -400,13 +1041,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6410765630165212652}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08475223, y: -0.06650845, z: -0.06668198, w: 0.9919411}
-  m_LocalPosition: {x: 0.356, y: 0.998, z: 0}
+  m_LocalRotation: {x: 0.16948825, y: -0.0907112, z: -0.19111957, w: 0.9625583}
+  m_LocalPosition: {x: 0.752, y: 0.739, z: -0.408}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 7070351456614148741}
-  m_LocalEulerAnglesHint: {x: 9.164, y: -8.343, z: -8.362}
+  m_Father: {fileID: 2329851635526922410}
+  m_LocalEulerAnglesHint: {x: 16.954, y: -14.495, z: -24.632}
 --- !u!114 &2953970661348121828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +1060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6351281171430162794
+--- !u!114 &7425758732954880983
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -428,25 +1069,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6410765630165212652}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
+  m_Script: {fileID: 11500000, guid: aa2563b0581842e4ac5660d9df7ba835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxExtents: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &3406524802970432294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6410765630165212652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41c73fb010ac4729847fb5223dc18512, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  angle: 0.7853982
-  height: 1
-  coneOrigin: 0
+  height: 0.5095044
+  radius: 0.078961276
+  rounding: -0.17
+  variant: 2
 --- !u!114 &500223712220478607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,8 +1088,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9971b14fd68403285bb5d35a9d0a169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: {x: 0.47, y: -0.17, z: 0}
-  sdfPrimitive: {fileID: 3406524802970432294}
+  length: {x: 0.08, y: 0.07, z: 0}
+  sdfPrimitive: {fileID: 7425758732954880983}
 --- !u!114 &8646651231684711132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,6 +1106,312 @@ MonoBehaviour:
   sdfModifiers:
   - {fileID: 2953970661348121828}
   - {fileID: 500223712220478607}
+--- !u!1 &6559077661426180592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7413308668615816767}
+  - component: {fileID: 356295324112732090}
+  - component: {fileID: 5203294922683174046}
+  - component: {fileID: 8278143125572951129}
+  m_Layer: 0
+  m_Name: torus (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7413308668615816767
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6559077661426180592}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.31434605, y: 0.05862092, z: 0.58916676, w: -0.74204636}
+  m_LocalPosition: {x: 0.861, y: -0.912, z: -0.841}
+  m_LocalScale: {x: 1.0000001, y: 1, z: 1.0000001}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1806639596064250547}
+  m_LocalEulerAnglesHint: {x: 23.418, y: -29.898, z: 276.768}
+--- !u!114 &356295324112732090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6559077661426180592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5203294922683174046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6559077661426180592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  mainRadius: 1.5338982
+  ringRadius: 0.09601724
+  cap: 0.7681219
+--- !u!114 &8278143125572951129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6559077661426180592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 356295324112732090}
+  - {fileID: 5203294922683174046}
+--- !u!1 &6868132478158807016
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 330727002840742354}
+  - component: {fileID: 3055883384769180357}
+  - component: {fileID: 6582398906620477310}
+  - component: {fileID: 6368698406814663142}
+  m_Layer: 0
+  m_Name: torus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &330727002840742354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6868132478158807016}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.35219643, y: 0.36087412, z: 0.68826264, w: -0.52155745}
+  m_LocalPosition: {x: -0.159, y: -0.734, z: 0.819}
+  m_LocalScale: {x: 1.0000001, y: 1, z: 1.0000001}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1806639596064250547}
+  m_LocalEulerAnglesHint: {x: -59.784, y: 12.436, z: 247.142}
+--- !u!114 &3055883384769180357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6868132478158807016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6582398906620477310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6868132478158807016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  mainRadius: 1
+  ringRadius: 0.09601724
+  cap: 0.64044607
+--- !u!114 &6368698406814663142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6868132478158807016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 3055883384769180357}
+  - {fileID: 6582398906620477310}
+--- !u!1 &7743825275612877186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6794995247038104150}
+  - component: {fileID: 2975976090609981974}
+  - component: {fileID: 1678697440425795808}
+  - component: {fileID: 4809778480842963936}
+  m_Layer: 0
+  m_Name: belly
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6794995247038104150
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7743825275612877186}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.545, z: 0.054}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1806639596064250547}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2975976090609981974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7743825275612877186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1678697440425795808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7743825275612877186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.8228996
+--- !u!114 &4809778480842963936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7743825275612877186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 2975976090609981974}
+  - {fileID: 1678697440425795808}
+--- !u!1 &8066299490538739026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9162037483615454319}
+  - component: {fileID: 1740376340776065564}
+  - component: {fileID: 5791087089902842014}
+  - component: {fileID: 4142550549161411983}
+  m_Layer: 0
+  m_Name: ear base R
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9162037483615454319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066299490538739026}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.14351517, y: -0, z: -0, w: 0.9896481}
+  m_LocalPosition: {x: 0.662, y: 1.286, z: -0.217}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2329851635526922410}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1740376340776065564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066299490538739026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5791087089902842014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066299490538739026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.048229314
+--- !u!114 &4142550549161411983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066299490538739026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 1740376340776065564}
+  - {fileID: 5791087089902842014}
 --- !u!1 &8187159479354006610
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +1464,68 @@ MonoBehaviour:
   sdfSceneRoot: {fileID: 7154973885652460484}
   targetShader: {fileID: 4800000, guid: 83bbbbe46d7d4d95bba0d9dd09be7f19, type: 3}
   diagnostics: []
+--- !u!1 &8533257475430257325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1806639596064250547}
+  - component: {fileID: 1704820676222859261}
+  m_Layer: 0
+  m_Name: torso
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1806639596064250547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8533257475430257325}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.011244504, y: -0.82493854, z: -0.14253967, w: 0.54683846}
+  m_LocalPosition: {x: 0.43, y: -1.3, z: -0.584}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 36572176239464193}
+  - {fileID: 6794995247038104150}
+  - {fileID: 330727002840742354}
+  - {fileID: 7413308668615816767}
+  - {fileID: 3737494527212880270}
+  - {fileID: 9015719255489412916}
+  m_Father: {fileID: 7467185068423365875}
+  m_LocalEulerAnglesHint: {x: -14.328, y: -111.895, z: -8.149}
+--- !u!114 &1704820676222859261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8533257475430257325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29ed26e558d94e30b2d87bed778a01dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers: []
+  operation: 2
+  blendFactor: 1
+  singleId: 0
+  children:
+  - {fileID: 1994505366235891526}
+  - {fileID: 4809778480842963936}
+  - {fileID: 6368698406814663142}
+  - {fileID: 8278143125572951129}
+  - {fileID: 5482758081154049519}
+  - {fileID: 3238415611550892855}
 --- !u!48 &1647923134957676822
 Shader:
   m_ObjectHideFlags: 0
@@ -712,83 +1709,308 @@ Shader:
         - Header (root)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.3
+        m_DefValue[0]: 0.06
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0__root_head__1_BlendFactor
+      - m_Name: SDF_1_0_0__root_head_root_ears__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header (root head)
+        - Header (root head root ears)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 1
+        m_DefValue[0]: 0.73
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_0__root_head_face__2_Radius
-        m_Description: Sphere radius
+      - m_Name: SDF_1_0_0_0__root_head_root_ears_q__2_Height
+        m_Description: Cylinder height
         m_Attributes:
-        - Header (root head face)
+        - Header (root head root ears q)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.329848
+        m_DefValue[0]: 0.680959
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_0__root_head_face__3_Length
-        m_Description: Elongation
-        m_Attributes:
-        - Header (root head face)
-        m_Type: 1
-        m_Flags: 0
-        m_DefValue[0]: 0.55
-        m_DefValue[1]: 0.5
-        m_DefValue[2]: -0.12
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_0_1__root_head_q__2_BoxExtents
-        m_Description: Box extents
-        m_Attributes:
-        - Header (root head q)
-        m_Type: 1
-        m_Flags: 0
-        m_DefValue[0]: 0.25
-        m_DefValue[1]: 0.25
-        m_DefValue[2]: 0.25
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_0_1__root_head_q__3_Angle
-        m_Description: Cone angle
-        m_Attributes:
-        - Header (root head q)
-        m_Type: 2
-        m_Flags: 0
-        m_DefValue[0]: 0.785398
-        m_DefValue[1]: 0
-        m_DefValue[2]: 0
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_0_1__root_head_q__3_Height
-        m_Description: Cone height
+      - m_Name: SDF_1_0_0_0__root_head_root_ears_q__2_Radius
+        m_Description: Cylinder radius
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
+        m_DefValue[0]: 0.116658
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0_0__root_head_root_ears_q__2_Rounding
+        m_Description: Rounding
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.07
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0_0__root_head_root_ears_q__3_Length
+        m_Description: Elongation
+        m_Attributes:
+        - Header (root head root ears q)
+        m_Type: 1
+        m_Flags: 0
+        m_DefValue[0]: 0.02
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0_1__root_head_root_ears_q__2_Height
+        m_Description: Cylinder height
+        m_Attributes:
+        - Header (root head root ears q)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.509504
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0_1__root_head_root_ears_q__2_Radius
+        m_Description: Cylinder radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.078961
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0_1__root_head_root_ears_q__2_Rounding
+        m_Description: Rounding
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: -0.17
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0_1__root_head_root_ears_q__3_Length
+        m_Description: Elongation
+        m_Attributes:
+        - Header (root head root ears q)
+        m_Type: 1
+        m_Flags: 0
+        m_DefValue[0]: 0.08
+        m_DefValue[1]: 0.07
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0_2__root_head_root_ears_ear_base_L__2_Radius
+        m_Description: Sphere radius
+        m_Attributes:
+        - Header (root head root ears ear base L)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.081883
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0_3__root_head_root_ears_ear_base_R__2_Radius
+        m_Description: Sphere radius
+        m_Attributes:
+        - Header (root head root ears ear base R)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.048229
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1__root_head_root_head__1_BlendFactor
+        m_Description: Blend factor
+        m_Attributes:
+        - Header (root head root head)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.19
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_0__root_head_root_head_q__2_Radius
+        m_Description: Sphere radius
+        m_Attributes:
+        - Header (root head root head q)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.65
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_0__root_head_root_head_q__3_Length
+        m_Description: Elongation
+        m_Attributes:
+        - Header (root head root head q)
+        m_Type: 1
+        m_Flags: 0
+        m_DefValue[0]: 0.12
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_1__root_head_root_head_eyeL__2_MainRadius
+        m_Description: Torus main radius
+        m_Attributes:
+        - Header (root head root head eyeL)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.185469
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_1__root_head_root_head_eyeL__2_RingRadius
+        m_Description: Torus ring radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.04714
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_1__root_head_root_head_eyeL__2_Cap
+        m_Description: Torus cap
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1.208449
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_2__root_head_root_head_eyeR__2_MainRadius
+        m_Description: Torus main radius
+        m_Attributes:
+        - Header (root head root head eyeR)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.133103
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_2__root_head_root_head_eyeR__2_RingRadius
+        m_Description: Torus ring radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.042229
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_2__root_head_root_head_eyeR__2_Cap
+        m_Description: Torus cap
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1.150463
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_3__root_head_root_head_mouth__2_MainRadius
+        m_Description: Torus main radius
+        m_Attributes:
+        - Header (root head root head mouth)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.114369
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_3__root_head_root_head_mouth__2_RingRadius
+        m_Description: Torus ring radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.04861
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_3__root_head_root_head_mouth__2_Cap
+        m_Description: Torus cap
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1.762102
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1__root_torso__1_BlendFactor
+        m_Description: Blend factor
+        m_Attributes:
+        - Header (root torso)
+        m_Type: 2
+        m_Flags: 0
         m_DefValue[0]: 1
         m_DefValue[1]: 0
         m_DefValue[2]: 0
@@ -796,40 +2018,199 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_1__root_head_q__4_Length
-        m_Description: Elongation
+      - m_Name: SDF_1_1_0__root_torso_cylinder__2_Height
+        m_Description: Cylinder height
         m_Attributes:
-        - Header (root head q)
-        m_Type: 1
+        - Header (root torso cylinder)
+        m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.47
-        m_DefValue[1]: -0.17
+        m_DefValue[0]: 1
+        m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_2__root_head_q__2_BoxExtents
-        m_Description: Box extents
-        m_Attributes:
-        - Header (root head q)
-        m_Type: 1
+      - m_Name: SDF_1_1_0__root_torso_cylinder__2_Radius
+        m_Description: Cylinder radius
+        m_Attributes: []
+        m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.25
-        m_DefValue[1]: 0.25
-        m_DefValue[2]: 0.25
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_2__root_head_q__3_Length
-        m_Description: Elongation
-        m_Attributes:
-        - Header (root head q)
-        m_Type: 1
+      - m_Name: SDF_1_1_0__root_torso_cylinder__2_Rounding
+        m_Description: Rounding
+        m_Attributes: []
+        m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.47
-        m_DefValue[1]: -0.17
+        m_DefValue[0]: 0.25
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_1__root_torso_belly__2_Radius
+        m_Description: Sphere radius
+        m_Attributes:
+        - Header (root torso belly)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.8229
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_2__root_torso_torus__2_MainRadius
+        m_Description: Torus main radius
+        m_Attributes:
+        - Header (root torso torus)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_2__root_torso_torus__2_RingRadius
+        m_Description: Torus ring radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.096017
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_2__root_torso_torus__2_Cap
+        m_Description: Torus cap
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.640446
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_3__root_torso_torus__2___2_MainRadius
+        m_Description: Torus main radius
+        m_Attributes:
+        - Header (root torso torus  2 )
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1.533898
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_3__root_torso_torus__2___2_RingRadius
+        m_Description: Torus ring radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.096017
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_3__root_torso_torus__2___2_Cap
+        m_Description: Torus cap
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.768122
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_4__root_torso_torus__1___2_MainRadius
+        m_Description: Torus main radius
+        m_Attributes:
+        - Header (root torso torus  1 )
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_4__root_torso_torus__1___2_RingRadius
+        m_Description: Torus ring radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.096017
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_4__root_torso_torus__1___2_Cap
+        m_Description: Torus cap
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.640446
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_5__root_torso_torus__3___2_MainRadius
+        m_Description: Torus main radius
+        m_Attributes:
+        - Header (root torso torus  3 )
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_5__root_torso_torus__3___2_RingRadius
+        m_Description: Torus ring radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.162079
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_1_5__root_torso_torus__3___2_Cap
+        m_Description: Torus cap
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.838926
+        m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
@@ -1118,7 +2499,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 48959
+          gpuProgramID: 2002
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1273,45 +2654,17 @@ Shader:
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 111
+    line: 263
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: region'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 111
+    line: 263
     warning: 1
     runtimeError: 0
-  - message: 'Unrecognized #pragma directive: endregion'
-    messageDetails: 
-    file: 
-    compilerPlatform: 26
-    line: 153
-    warning: 1
-    runtimeError: 0
-  - message: 'Unrecognized #pragma directive: region'
-    messageDetails: 
-    file: 
-    compilerPlatform: 26
-    line: 155
-    warning: 1
-    runtimeError: 0
-  - message: 'Unrecognized #pragma directive: endregion'
-    messageDetails: 
-    file: 
-    compilerPlatform: 26
-    line: 179
-    warning: 1
-    runtimeError: 0
-  - message: 'Unrecognized #pragma directive: endregion'
-    messageDetails: 
-    file: 
-    compilerPlatform: 26
-    line: 238
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_0_0__root_head_face__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_0_0_0__root_head_root_ears_q__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1319,7 +2672,252 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_0__root_head_face__2_Radius" contains consecutive underscores
+  - message: '"SDF_1_0_0_0__root_head_root_ears_q__2_Height" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_0__root_head_root_ears_q__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_0__root_head_root_ears_q__2_Rounding" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_0__root_head_root_ears_q__3_Length" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_1__root_head_root_ears_q__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_1__root_head_root_ears_q__2_Height" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_1__root_head_root_ears_q__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_1__root_head_root_ears_q__2_Rounding" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_1__root_head_root_ears_q__3_Length" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_2__root_head_root_ears_ear_base_L__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_2__root_head_root_ears_ear_base_L__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_3__root_head_root_ears_ear_base_R__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_3__root_head_root_ears_ear_base_R__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0__root_head_root_ears__1_BlendFactor" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_head_root_head_q__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_head_root_head_q__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_head_root_head_q__3_Length" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_head_root_head_eyeL__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_head_root_head_eyeL__2_Cap" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_head_root_head_eyeL__2_MainRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_head_root_head_eyeL__2_RingRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_2__root_head_root_head_eyeR__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_2__root_head_root_head_eyeR__2_Cap" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_2__root_head_root_head_eyeR__2_MainRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_2__root_head_root_head_eyeR__2_RingRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_3__root_head_root_head_mouth__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_3__root_head_root_head_mouth__2_Cap" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_3__root_head_root_head_mouth__2_MainRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_3__root_head_root_head_mouth__2_RingRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_0__root_torso_cylinder__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_0__root_torso_cylinder__2_Height" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1327,7 +2925,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_0__root_head_face__3_Length" contains consecutive underscores
+  - message: '"SDF_1_1_0__root_torso_cylinder__2_Radius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1335,7 +2933,15 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1__root_head_q__1_SpaceTransform" contains consecutive underscores
+  - message: '"SDF_1_1_1__root_torso_belly__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_torso_belly__2_Radius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1343,7 +2949,15 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1__root_head_q__3_Angle" contains consecutive underscores
+  - message: '"SDF_1_1_2__root_torso_torus__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_2__root_torso_torus__2_Cap" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1351,7 +2965,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1__root_head_q__3_Height" contains consecutive underscores
+  - message: '"SDF_1_1_2__root_torso_torus__2_MainRadius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1359,7 +2973,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1__root_head_q__4_Length" contains consecutive underscores
+  - message: '"SDF_1_1_2__root_torso_torus__2_RingRadius" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1367,7 +2981,15 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_2__root_head_q__1_SpaceTransform" contains consecutive underscores
+  - message: '"SDF_1_1_3__root_torso_torus__2___1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_3__root_torso_torus__2___2_Cap" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1375,7 +2997,31 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_2__root_head_q__2_BoxExtents" contains consecutive underscores
+  - message: '"SDF_1_1_3__root_torso_torus__2___2_MainRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_3__root_torso_torus__2___2_RingRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_4__root_torso_torus__1___1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_4__root_torso_torus__1___2_Cap" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -1383,8 +3029,64 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_2__root_head_q__3_Length" contains consecutive underscores
+  - message: '"SDF_1_1_4__root_torso_torus__1___2_MainRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_4__root_torso_torus__1___2_RingRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_5__root_torso_torus__3___1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_5__root_torso_torus__3___2_Cap" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_5__root_torso_torus__3___2_MainRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_5__root_torso_torus__3___2_RingRadius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1__root_torso__1_BlendFactor" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1__root__1_BlendFactor" contains consecutive underscores ("__"),
+      such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
     compilerPlatform: 18
@@ -1393,6 +3095,324 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
+      2002:
+        serializedVersion: 3
+        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
+          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
+          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 261 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 125\n\n        #pragma target 5.0\n       
+          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
+          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
+          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0_0__root_head_root_ears__1_BlendFactor;\n       
+          float4x4 SDF_1_0_0_0__root_head_root_ears_q__1_SpaceTransform = {\n               
+          { 0.876204, 0.019977, 0.481527, 0.340481 },\n                { -0.327837,
+          0.757063, 0.565136, -1.505296 },\n                { -0.353256, -0.653036,
+          0.669891, 1.681305 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_0_0__root_head_root_ears_q__2_Height;\n       
+          float SDF_1_0_0_0__root_head_root_ears_q__2_Radius;\n        float SDF_1_0_0_0__root_head_root_ears_q__2_Rounding;\n       
+          float3 SDF_1_0_0_0__root_head_root_ears_q__3_Length;\n        float4x4
+          SDF_1_0_0_1__root_head_root_ears_q__1_SpaceTransform = {\n               
+          { 0.813388, -0.503336, 0.291639, 0.383809 },\n                { 0.205647,
+          0.717763, 0.665225, -1.381917 },\n                { -0.54416, -0.481112,
+          0.68733, 1.390806 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
+          float SDF_1_0_0_1__root_head_root_ears_q__2_Height;\n        float SDF_1_0_0_1__root_head_root_ears_q__2_Radius;\n       
+          float SDF_1_0_0_1__root_head_root_ears_q__2_Rounding;\n        float3 SDF_1_0_0_1__root_head_root_ears_q__3_Length;\n       
+          float4x4 SDF_1_0_0_2__root_head_root_ears_ear_base_L__1_SpaceTransform
+          = {\n                { 0.940201, -0.101083, 0.325277, 0.721522 },\n               
+          { 0.109353, 0.993977, -0.007193, -2.771248 },\n                { -0.322591,
+          0.042333, 0.945592, 0.115935 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_0_2__root_head_root_ears_ear_base_L__2_Radius;\n       
+          float4x4 SDF_1_0_0_3__root_head_root_ears_ear_base_R__1_SpaceTransform
+          = {\n                { 0.940201, -0.101083, 0.325277, -0.359478 },\n               
+          { 0.109353, 0.993977, -0.007193, -2.394019 },\n                { -0.322591,
+          0.042333, 0.945592, -0.04139 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_0_3__root_head_root_ears_ear_base_R__2_Radius;\n       
+          float SDF_1_0_1__root_head_root_head__1_BlendFactor;\n        float4x4
+          SDF_1_0_1_0__root_head_root_head_q__1_SpaceTransform = {\n               
+          { 0.940201, -0.101083, 0.325277, 0.126522 },\n                { 0.109353,
+          0.993977, -0.007193, -1.359352 },\n                { -0.322591, 0.042333,
+          0.945592, 0.400848 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_1_0__root_head_root_head_q__2_Radius;\n       
+          float3 SDF_1_0_1_0__root_head_root_head_q__3_Length;\n        float4x4
+          SDF_1_0_1_1__root_head_root_head_eyeL__1_SpaceTransform = {\n               
+          { 0.976532, 0.079999, 0.199965, -0.093695 },\n                { 0.179351,
+          0.211993, -0.960673, -1.368899 },\n                { -0.119244, 0.973991,
+          0.19267, -1.214508 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_1_1__root_head_root_head_eyeL__2_MainRadius;\n       
+          float SDF_1_0_1_1__root_head_root_head_eyeL__2_RingRadius;\n        float
+          SDF_1_0_1_1__root_head_root_head_eyeL__2_Cap;\n        float4x4 SDF_1_0_1_2__root_head_root_head_eyeR__1_SpaceTransform
+          = {\n                { 0.729861, -0.405445, 0.550379, 0.579188 },\n               
+          { 0.663244, 0.225006, -0.713779, -1.402801 },\n                { 0.165559,
+          0.885995, 0.433132, -1.010654 },\n                { 0.0, 0.0, 0.0, 1.0
+          }\n        };\n        float SDF_1_0_1_2__root_head_root_head_eyeR__2_MainRadius;\n       
+          float SDF_1_0_1_2__root_head_root_head_eyeR__2_RingRadius;\n        float
+          SDF_1_0_1_2__root_head_root_head_eyeR__2_Cap;\n        float4x4 SDF_1_0_1_3__root_head_root_head_mouth__1_SpaceTransform
+          = {\n                { -0.905656, 0.234605, -0.353197, -0.277689 },\n               
+          { 0.334109, -0.118035, -0.935114, -0.928785 },\n                { -0.261073,
+          -0.964898, 0.028516, 1.421466 },\n                { 0.0, 0.0, 0.0, 1.0
+          }\n        };\n        float SDF_1_0_1_3__root_head_root_head_mouth__2_MainRadius;\n       
+          float SDF_1_0_1_3__root_head_root_head_mouth__2_RingRadius;\n        float
+          SDF_1_0_1_3__root_head_root_head_mouth__2_Cap;\n        float SDF_1_1__root_torso__1_BlendFactor;\n       
+          float4x4 SDF_1_1_0__root_torso_cylinder__1_SpaceTransform = {\n               
+          { -0.943662, -0.089787, -0.318498, 0.12552 },\n                { -0.138334,
+          0.981387, 0.133201, -0.18457 },\n                { 0.30061, 0.169756, -0.938518,
+          -0.489426 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
+          float SDF_1_1_0__root_torso_cylinder__2_Height;\n        float SDF_1_1_0__root_torso_cylinder__2_Radius;\n       
+          float SDF_1_1_0__root_torso_cylinder__2_Rounding;\n        float4x4 SDF_1_1_1__root_torso_belly__1_SpaceTransform
+          = {\n                { -0.401682, -0.13734, 0.905422, 0.710692 },\n               
+          { 0.174445, 0.959112, 0.222875, 0.535888 },\n                { -0.899011,
+          0.247471, -0.3613, 0.104995 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_1_1__root_torso_belly__2_Radius;\n        float4x4
+          SDF_1_1_2__root_torso_torus__1_SpaceTransform = {\n                { -0.771663,
+          -0.203097, -0.602733, -1.085366 },\n                { -0.540898, -0.289,
+          0.789879, 0.618359 },\n                { -0.334612, 0.935538, 0.113155,
+          0.396289 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
+          float SDF_1_1_2__root_torso_torus__2_MainRadius;\n        float SDF_1_1_2__root_torso_torus__2_RingRadius;\n       
+          float SDF_1_1_2__root_torso_torus__2_Cap;\n        float4x4 SDF_1_1_3__root_torso_torus__2___1_SpaceTransform
+          = {\n                { -0.024234, -0.985158, 0.169927, -1.15107 },\n               
+          { -0.799059, 0.121235, 0.588903, 0.507341 },\n                { -0.600764,
+          -0.12151, -0.790138, 0.505401 },\n                { 0.0, 0.0, 0.0, 1.0
+          }\n        };\n        float SDF_1_1_3__root_torso_torus__2___2_MainRadius;\n       
+          float SDF_1_1_3__root_torso_torus__2___2_RingRadius;\n        float SDF_1_1_3__root_torso_torus__2___2_Cap;\n       
+          float4x4 SDF_1_1_4__root_torso_torus__1___1_SpaceTransform = {\n               
+          { -0.771663, -0.203097, -0.602733, 1.277581 },\n                { -0.540898,
+          -0.289, 0.789879, 0.618574 },\n                { -0.334612, 0.935538, 0.113155,
+          0.396098 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
+          float SDF_1_1_4__root_torso_torus__1___2_MainRadius;\n        float SDF_1_1_4__root_torso_torus__1___2_RingRadius;\n       
+          float SDF_1_1_4__root_torso_torus__1___2_Cap;\n        float4x4 SDF_1_1_5__root_torso_torus__3___1_SpaceTransform
+          = {\n                { -0.807418, 0.432662, -0.401099, 1.318193 },\n               
+          { 0.446611, 0.892461, 0.063657, -0.374495 },\n                { 0.385507,
+          -0.127737, -0.91382, -0.577088 },\n                { 0.0, 0.0, 0.0, 1.0
+          }\n        };\n        float SDF_1_1_5__root_torso_torus__3___2_MainRadius;\n       
+          float SDF_1_1_5__root_torso_torus__3___2_RingRadius;\n        float SDF_1_1_5__root_torso_torus__3___2_Cap;\n       
+          #line 261 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            float SDF_1_0_0_0__root_head_root_ears_q__3
+          (float3 p);\n            SdfResult SDF_1_0_0_0__root_head_root_ears_q__4
+          (float3 p);\n            float SDF_1_0_0_1__root_head_root_ears_q__3 (float3
+          p);\n            SdfResult SDF_1_0_0_1__root_head_root_ears_q__4 (float3
+          p);\n            SdfResult SDF_1_0_0_2__root_head_root_ears_ear_base_L__3
+          (float3 p);\n            SdfResult SDF_1_0_0_3__root_head_root_ears_ear_base_R__3
+          (float3 p);\n            SdfResult SDF_1_0_0__root_head_root_ears__1 (float3
+          p);\n            float SDF_1_0_1_0__root_head_root_head_q__3 (float3 p);\n           
+          SdfResult SDF_1_0_1_0__root_head_root_head_q__4 (float3 p);\n           
+          SdfResult SDF_1_0_1_1__root_head_root_head_eyeL__3 (float3 p);\n           
+          SdfResult SDF_1_0_1_2__root_head_root_head_eyeR__3 (float3 p);\n           
+          SdfResult SDF_1_0_1_3__root_head_root_head_mouth__3 (float3 p);\n           
+          SdfResult SDF_1_0_1__root_head_root_head__1 (float3 p);\n            SdfResult
+          SDF_1_1_0__root_torso_cylinder__3 (float3 p);\n            SdfResult SDF_1_1_1__root_torso_belly__3
+          (float3 p);\n            SdfResult SDF_1_1_2__root_torso_torus__3 (float3
+          p);\n            SdfResult SDF_1_1_3__root_torso_torus__2___3 (float3 p);\n           
+          SdfResult SDF_1_1_4__root_torso_torus__1___3 (float3 p);\n            SdfResult
+          SDF_1_1_5__root_torso_torus__3___3 (float3 p);\n            SdfResult SDF_1_1__root_torso__1
+          (float3 p);\n            SdfResult SDF_1__root__1 (float3 p);\n           
+          float SDF_1_0_0_0__root_head_root_ears_q__3(float3 p) {\n               
+          float3 q = abs(p) - SDF_1_0_0_0__root_head_root_ears_q__3_Length;\n               
+          return sdf::primitives3D::cylinder_rounded(max(q, 0), SDF_1_0_0_0__root_head_root_ears_q__2_Radius,
+          SDF_1_0_0_0__root_head_root_ears_q__2_Rounding, SDF_1_0_0_0__root_head_root_ears_q__2_Height)
+          + min(max(q), 0);\n            }\n            SdfResult SDF_1_0_0_0__root_head_root_ears_q__4(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = SDF_1_0_0_0__root_head_root_ears_q__3(sdf::operators::transform(p,
+          SDF_1_0_0_0__root_head_root_ears_q__1_SpaceTransform));\n               
+          result.id = int4(0, 0, 0, 6);\n                return result;\n           
+          }\n            float SDF_1_0_0_1__root_head_root_ears_q__3(float3 p) {\n               
+          float3 q = abs(p) - SDF_1_0_0_1__root_head_root_ears_q__3_Length;\n               
+          return sdf::primitives3D::cylinder_rounded(max(q, 0), SDF_1_0_0_1__root_head_root_ears_q__2_Radius,
+          SDF_1_0_0_1__root_head_root_ears_q__2_Rounding, SDF_1_0_0_1__root_head_root_ears_q__2_Height)
+          + min(max(q), 0);\n            }\n            SdfResult SDF_1_0_0_1__root_head_root_ears_q__4(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = SDF_1_0_0_1__root_head_root_ears_q__3(sdf::operators::transform(p,
+          SDF_1_0_0_1__root_head_root_ears_q__1_SpaceTransform));\n               
+          result.id = int4(0, 0, 0, 10);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_0_2__root_head_root_ears_ear_base_L__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
+          SDF_1_0_0_2__root_head_root_ears_ear_base_L__1_SpaceTransform), SDF_1_0_0_2__root_head_root_ears_ear_base_L__2_Radius);\n               
+          result.id = int4(0, 0, 0, 13);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_0_3__root_head_root_ears_ear_base_R__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
+          SDF_1_0_0_3__root_head_root_ears_ear_base_R__1_SpaceTransform), SDF_1_0_0_3__root_head_root_ears_ear_base_R__2_Radius);\n               
+          result.id = int4(0, 0, 0, 16);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_0__root_head_root_ears__1(float3 p) {\n               
+          SdfResult result = SDF_1_0_0_0__root_head_root_ears_q__4(p);\n               
+          result = sdf::operators::unionSmooth(result, SDF_1_0_0_1__root_head_root_ears_q__4(p),
+          SDF_1_0_0__root_head_root_ears__1_BlendFactor);\n                result
+          = sdf::operators::unionSmooth(result, SDF_1_0_0_2__root_head_root_ears_ear_base_L__3(p),
+          SDF_1_0_0__root_head_root_ears__1_BlendFactor);\n                result
+          = sdf::operators::unionSmooth(result, SDF_1_0_0_3__root_head_root_ears_ear_base_R__3(p),
+          SDF_1_0_0__root_head_root_ears__1_BlendFactor);\n                return
+          result;\n            }\n            float SDF_1_0_1_0__root_head_root_head_q__3(float3
+          p) {\n                float3 q = abs(p) - SDF_1_0_1_0__root_head_root_head_q__3_Length;\n               
+          return sdf::primitives3D::sphere(max(q, 0), SDF_1_0_1_0__root_head_root_head_q__2_Radius)
+          + min(max(q), 0);\n            }\n            SdfResult SDF_1_0_1_0__root_head_root_head_q__4(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = SDF_1_0_1_0__root_head_root_head_q__3(sdf::operators::transform(p,
+          SDF_1_0_1_0__root_head_root_head_q__1_SpaceTransform));\n               
+          result.id = int4(0, 0, 0, 21);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_1__root_head_root_head_eyeL__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = -sdf::primitives3D::torus_capped(sdf::operators::transform(p,
+          SDF_1_0_1_1__root_head_root_head_eyeL__1_SpaceTransform), SDF_1_0_1_1__root_head_root_head_eyeL__2_MainRadius,
+          SDF_1_0_1_1__root_head_root_head_eyeL__2_RingRadius, SDF_1_0_1_1__root_head_root_head_eyeL__2_Cap);\n               
+          result.id = int4(0, 0, 0, 24);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_2__root_head_root_head_eyeR__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = -sdf::primitives3D::torus_capped(sdf::operators::transform(p,
+          SDF_1_0_1_2__root_head_root_head_eyeR__1_SpaceTransform), SDF_1_0_1_2__root_head_root_head_eyeR__2_MainRadius,
+          SDF_1_0_1_2__root_head_root_head_eyeR__2_RingRadius, SDF_1_0_1_2__root_head_root_head_eyeR__2_Cap);\n               
+          result.id = int4(0, 0, 0, 27);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_3__root_head_root_head_mouth__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = -sdf::primitives3D::torus_capped(sdf::operators::transform(p,
+          SDF_1_0_1_3__root_head_root_head_mouth__1_SpaceTransform), SDF_1_0_1_3__root_head_root_head_mouth__2_MainRadius,
+          SDF_1_0_1_3__root_head_root_head_mouth__2_RingRadius, SDF_1_0_1_3__root_head_root_head_mouth__2_Cap);\n               
+          result.id = int4(0, 0, 0, 30);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1__root_head_root_head__1(float3 p) {\n               
+          SdfResult result = SDF_1_0_1_0__root_head_root_head_q__4(p);\n               
+          result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_head_root_head_eyeL__3(p));\n               
+          result = sdf::operators::intersectSimple(result, SDF_1_0_1_2__root_head_root_head_eyeR__3(p));\n               
+          result = sdf::operators::intersectSimple(result, SDF_1_0_1_3__root_head_root_head_mouth__3(p));\n               
+          return result;\n            }\n            SdfResult SDF_1_1_0__root_torso_cylinder__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::transform(p,
+          SDF_1_1_0__root_torso_cylinder__1_SpaceTransform), SDF_1_1_0__root_torso_cylinder__2_Height,
+          SDF_1_1_0__root_torso_cylinder__2_Radius);\n                result.id =
+          int4(0, 0, 0, 34);\n                return result;\n            }\n           
+          SdfResult SDF_1_1_1__root_torso_belly__3(float3 p) {\n                SdfResult
+          result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
+          SDF_1_1_1__root_torso_belly__1_SpaceTransform), SDF_1_1_1__root_torso_belly__2_Radius);\n               
+          result.id = int4(0, 0, 0, 37);\n                return result;\n           
+          }\n            SdfResult SDF_1_1_2__root_torso_torus__3(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::torus_capped(sdf::operators::transform(p,
+          SDF_1_1_2__root_torso_torus__1_SpaceTransform), SDF_1_1_2__root_torso_torus__2_MainRadius,
+          SDF_1_1_2__root_torso_torus__2_RingRadius, SDF_1_1_2__root_torso_torus__2_Cap);\n               
+          result.id = int4(0, 0, 0, 40);\n                return result;\n           
+          }\n            SdfResult SDF_1_1_3__root_torso_torus__2___3(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::torus_capped(sdf::operators::transform(p,
+          SDF_1_1_3__root_torso_torus__2___1_SpaceTransform), SDF_1_1_3__root_torso_torus__2___2_MainRadius,
+          SDF_1_1_3__root_torso_torus__2___2_RingRadius, SDF_1_1_3__root_torso_torus__2___2_Cap);\n               
+          result.id = int4(0, 0, 0, 43);\n                return result;\n           
+          }\n            SdfResult SDF_1_1_4__root_torso_torus__1___3(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::torus_capped(sdf::operators::transform(p,
+          SDF_1_1_4__root_torso_torus__1___1_SpaceTransform), SDF_1_1_4__root_torso_torus__1___2_MainRadius,
+          SDF_1_1_4__root_torso_torus__1___2_RingRadius, SDF_1_1_4__root_torso_torus__1___2_Cap);\n               
+          result.id = int4(0, 0, 0, 46);\n                return result;\n           
+          }\n            SdfResult SDF_1_1_5__root_torso_torus__3___3(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::torus_capped(sdf::operators::transform(p,
+          SDF_1_1_5__root_torso_torus__3___1_SpaceTransform), SDF_1_1_5__root_torso_torus__3___2_MainRadius,
+          SDF_1_1_5__root_torso_torus__3___2_RingRadius, SDF_1_1_5__root_torso_torus__3___2_Cap);\n               
+          result.id = int4(0, 0, 0, 49);\n                return result;\n           
+          }\n            SdfResult SDF_1_1__root_torso__1(float3 p) {\n               
+          SdfResult result = SDF_1_1_0__root_torso_cylinder__3(p);\n               
+          result = sdf::operators::unionSmooth(result, SDF_1_1_1__root_torso_belly__3(p),
+          SDF_1_1__root_torso__1_BlendFactor);\n                result = sdf::operators::unionSmooth(result,
+          SDF_1_1_2__root_torso_torus__3(p), SDF_1_1__root_torso__1_BlendFactor);\n               
+          result = sdf::operators::unionSmooth(result, SDF_1_1_3__root_torso_torus__2___3(p),
+          SDF_1_1__root_torso__1_BlendFactor);\n                result = sdf::operators::unionSmooth(result,
+          SDF_1_1_4__root_torso_torus__1___3(p), SDF_1_1__root_torso__1_BlendFactor);\n               
+          result = sdf::operators::unionSmooth(result, SDF_1_1_5__root_torso_torus__3___3(p),
+          SDF_1_1__root_torso__1_BlendFactor);\n                return result;\n           
+          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
+          result = SDF_1_0_0__root_head_root_ears__1(p);\n                result
+          = sdf::operators::unionSmooth(result, SDF_1_0_1__root_head_root_head__1(p),
+          SDF_1__root__1_BlendFactor);\n                result = sdf::operators::unionSmooth(result,
+          SDF_1_1__root_torso__1(p), SDF_1__root__1_BlendFactor);\n               
+          return result;\n            }\n            SdfResult sdfScene(float3 p)
+          {\n                return SDF_1__root__1(p);\n            }\n            "
+        m_AssetPath: Assets/Prefabs
+        m_AssetName: bunny.prefab
+        m_PlatformMask: 4294967295
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 263
+        m_TypesMask: 3
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: 9046fda7ef0bffbda228c551a03b17c7
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: 979f15178d20ba40cfa71cfcd33922e5
+        m_FromOther: 0
+        m_ForceSyncCompilation: 0
+        m_UseDxcAPIs: 0
+        m_NeverUseDxcAPIs: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0:
+        - - _DRAWMODE_MATERIAL
+          - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
+          - _DRAWMODE_SKYBOX
+          - _DRAWMODE_NORMAL
+          - _DRAWMODE_STEPS
+          - _DRAWMODE_DEPTH
+          - _DRAWMODE_OCCLUSION
+        - - __
+          - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal1:
+        - - _DRAWMODE_MATERIAL
+          - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
+          - _DRAWMODE_SKYBOX
+          - _DRAWMODE_NORMAL
+          - _DRAWMODE_STEPS
+          - _DRAWMODE_DEPTH
+          - _DRAWMODE_OCCLUSION
+        - - __
+          - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 1101803
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
       38832:
         serializedVersion: 3
         m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
@@ -1469,163 +3489,6 @@ Shader:
           requirements: 536870912
         m_NonStrippedUserKeywords: 
         m_BuiltinKeywords: 
-      48959:
-        serializedVersion: 3
-        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
-          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
-          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 109 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 70\n\n        #pragma target 5.0\n       
-          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
-          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
-          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_head__1_BlendFactor;\n       
-          float4x4 SDF_1_0_0__root_head_face__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, -0.176 },\n                { 0.0, 1.0, 0.0, 0.0 },\n               
-          { 0.0, 0.0, 1.0, 0.527 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_0__root_head_face__2_Radius;\n        float3
-          SDF_1_0_0__root_head_face__3_Length;\n        float4x4 SDF_1_0_1__root_head_q__1_SpaceTransform
-          = {\n                { 0.98226, -0.143563, 0.120642, -0.206409 },\n               
-          { 0.121016, 0.976741, 0.177008, -1.017869 },\n                { -0.143248,
-          -0.159269, 0.976787, 0.209946 },\n                { 0.0, 0.0, 0.0, 1.0
-          }\n        };\n        float3 SDF_1_0_1__root_head_q__2_BoxExtents;\n       
-          float SDF_1_0_1__root_head_q__3_Angle;\n        float SDF_1_0_1__root_head_q__3_Height;\n       
-          float3 SDF_1_0_1__root_head_q__4_Length;\n        float4x4 SDF_1_0_2__root_head_q__1_SpaceTransform
-          = {\n                { 0.98226, -0.143563, 0.120642, -0.206409 },\n               
-          { 0.121016, 0.976741, 0.177008, -1.017869 },\n                { -0.143248,
-          -0.159269, 0.976787, 0.209946 },\n                { 0.0, 0.0, 0.0, 1.0
-          }\n        };\n        float3 SDF_1_0_2__root_head_q__2_BoxExtents;\n       
-          float3 SDF_1_0_2__root_head_q__3_Length;\n        #line 109 \"\"\n#ifdef
-          DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            float SDF_1_0_0__root_head_face__3
-          (float3 p);\n            SdfResult SDF_1_0_0__root_head_face__4 (float3
-          p);\n            float SDF_1_0_1__root_head_q__4 (float3 p);\n           
-          SdfResult SDF_1_0_1__root_head_q__5 (float3 p);\n            float SDF_1_0_2__root_head_q__3
-          (float3 p);\n            SdfResult SDF_1_0_2__root_head_q__4 (float3 p);\n           
-          SdfResult SDF_1_0__root_head__1 (float3 p);\n            SdfResult SDF_1__root__1
-          (float3 p);\n            float SDF_1_0_0__root_head_face__3(float3 p) {\n               
-          float3 q = abs(p) - SDF_1_0_0__root_head_face__3_Length;\n               
-          return sdf::primitives3D::sphere(max(q, 0), SDF_1_0_0__root_head_face__2_Radius)
-          + min(max(q), 0);\n            }\n            SdfResult SDF_1_0_0__root_head_face__4(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = SDF_1_0_0__root_head_face__3(sdf::operators::transform(p,
-          SDF_1_0_0__root_head_face__1_SpaceTransform));\n                result.id
-          = int4(0, 0, 0, 6);\n                return result;\n            }\n           
-          float SDF_1_0_1__root_head_q__4(float3 p) {\n                float3 q =
-          abs(p) - SDF_1_0_1__root_head_q__4_Length;\n                return sdf::primitives3D::cone((max(q,
-          0) - float3( 0, SDF_1_0_1__root_head_q__3_Height, 0)), SDF_1_0_1__root_head_q__3_Angle,
-          SDF_1_0_1__root_head_q__3_Height) + min(max(q), 0);\n            }\n           
-          SdfResult SDF_1_0_1__root_head_q__5(float3 p) {\n                SdfResult
-          result = (SdfResult) 0;\n                result.distance = SDF_1_0_1__root_head_q__4(sdf::operators::transform(p,
-          SDF_1_0_1__root_head_q__1_SpaceTransform));\n                result.id
-          = int4(0, 0, 0, 11);\n                return result;\n            }\n           
-          float SDF_1_0_2__root_head_q__3(float3 p) {\n                float3 q =
-          abs(p) - SDF_1_0_2__root_head_q__3_Length;\n                return sdf::primitives3D::box(max(q,
-          0), SDF_1_0_2__root_head_q__2_BoxExtents) + min(max(q), 0);\n           
-          }\n            SdfResult SDF_1_0_2__root_head_q__4(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = SDF_1_0_2__root_head_q__3(sdf::operators::transform(p,
-          SDF_1_0_2__root_head_q__1_SpaceTransform));\n                result.id
-          = int4(0, 0, 0, 15);\n                return result;\n            }\n           
-          SdfResult SDF_1_0__root_head__1(float3 p) {\n                SdfResult
-          result = SDF_1_0_0__root_head_face__4(p);\n                result = sdf::operators::unionSimple(result,
-          SDF_1_0_1__root_head_q__5(p));\n                result = sdf::operators::unionSimple(result,
-          SDF_1_0_2__root_head_q__4(p));\n                return result;\n           
-          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
-          result = SDF_1_0__root_head__1(p);\n                return result;\n           
-          }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n           
-          }\n            "
-        m_AssetPath: Assets/Prefabs
-        m_AssetName: bunny.prefab
-        m_PlatformMask: 4294967295
-        m_HardwareTierVariantsMask: 0
-        m_StartLine: 111
-        m_TypesMask: 3
-        m_IncludesHash:
-          serializedVersion: 2
-          Hash: fc37cee23ef32690301c6905bf0cf4a5
-        m_CodeHash:
-          serializedVersion: 2
-          Hash: b663659ad40f7dfb6f35bd4e58f4f070
-        m_FromOther: 0
-        m_ForceSyncCompilation: 0
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
-        m_Language: 3
-        m_VariantsUserGlobal0: []
-        m_VariantsUserGlobal1: []
-        m_VariantsUserGlobal2: []
-        m_VariantsUserGlobal3: []
-        m_VariantsUserGlobal4: []
-        m_VariantsUserGlobal5: []
-        m_VariantsUserGlobal6: []
-        m_VariantsUserLocal0:
-        - - _DRAWMODE_MATERIAL
-          - _DRAWMODE_ALBEDO
-          - _DRAWMODE_ID
-          - _DRAWMODE_SKYBOX
-          - _DRAWMODE_NORMAL
-          - _DRAWMODE_STEPS
-          - _DRAWMODE_DEPTH
-          - _DRAWMODE_OCCLUSION
-        - - __
-          - _SHOW_WORLD_GRID
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal1:
-        - - _DRAWMODE_MATERIAL
-          - _DRAWMODE_ALBEDO
-          - _DRAWMODE_ID
-          - _DRAWMODE_SKYBOX
-          - _DRAWMODE_NORMAL
-          - _DRAWMODE_STEPS
-          - _DRAWMODE_DEPTH
-          - _DRAWMODE_OCCLUSION
-        - - __
-          - _SHOW_WORLD_GRID
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal2: []
-        m_VariantsUserLocal3: []
-        m_VariantsUserLocal4: []
-        m_VariantsUserLocal5: []
-        m_VariantsUserLocal6: []
-        m_VariantsBuiltin0: []
-        m_VariantsBuiltin1: []
-        m_VariantsBuiltin2: []
-        m_VariantsBuiltin3: []
-        m_VariantsBuiltin4: []
-        m_VariantsBuiltin5: []
-        m_VariantsBuiltin6: []
-        m_DynamicBranchKeywords: []
-        m_BaseRequirements: 1101803
-        m_KeywordTargetInfo:
-        - keywordName: SHADOWS_SOFT
-          requirements: 227
-        - keywordName: DIRLIGHTMAP_COMBINED
-          requirements: 227
-        - keywordName: DYNAMICLIGHTMAP_ON
-          requirements: 227
-        - keywordName: SHADOWS_SCREEN
-          requirements: 227
-        - keywordName: INSTANCING_ON
-          requirements: 2048
-        - keywordName: PROCEDURAL_INSTANCING_ON
-          requirements: 16384
-        - keywordName: STEREO_MULTIVIEW_ON
-          requirements: 4075
-        - keywordName: STEREO_INSTANCING_ON
-          requirements: 4075
-        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
-          requirements: 536870912
-        m_NonStrippedUserKeywords: 
-        m_BuiltinKeywords: 
     m_MeshComponentsFromSnippets: 1
     m_HasSurfaceShaders: 0
     m_HasFixedFunctionShaders: 0
@@ -1657,45 +3520,142 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - SDF_1_0_0_0__root_GameObject_ears_q__2_Height: 0.680959
+    - SDF_1_0_0_0__root_GameObject_ears_q__2_Radius: 0.116658
+    - SDF_1_0_0_0__root_GameObject_ears_q__2_Rounding: 0.07
+    - SDF_1_0_0_0__root_head_root_ears_q__2_Height: 0.68095875
+    - SDF_1_0_0_0__root_head_root_ears_q__2_Radius: 0.116658434
+    - SDF_1_0_0_0__root_head_root_ears_q__2_Rounding: 0.07
+    - SDF_1_0_0_1__root_GameObject_ears_q__2_Height: 0.509504
+    - SDF_1_0_0_1__root_GameObject_ears_q__2_Radius: 0.078961
+    - SDF_1_0_0_1__root_GameObject_ears_q__2_Rounding: -0.17
     - SDF_1_0_0_1__root_combine_dice_sphere__2_Radius: 0.8
+    - SDF_1_0_0_1__root_head_root_ears_q__2_Height: 0.5095044
+    - SDF_1_0_0_1__root_head_root_ears_q__2_Radius: 0.078961276
+    - SDF_1_0_0_1__root_head_root_ears_q__2_Rounding: -0.17
+    - SDF_1_0_0_2__root_GameObject_ears_ear_base_L__2_Radius: 0.081883
+    - SDF_1_0_0_2__root_head_root_ears_ear_base_L__2_Radius: 0.08188343
+    - SDF_1_0_0_3__root_GameObject_ears_ear_base_R__2_Radius: 0.048229
+    - SDF_1_0_0_3__root_head_root_ears_ear_base_R__2_Radius: 0.048229314
+    - SDF_1_0_0__root_GameObject_ears__1_BlendFactor: 0.73
     - SDF_1_0_0__root_combine_dice__1_BlendFactor: 1
-    - SDF_1_0_0__root_combine_q__2_Radius: 0.400412
+    - SDF_1_0_0__root_combine_q__2_Height: 0.68095875
+    - SDF_1_0_0__root_combine_q__2_Radius: 0.116658434
+    - SDF_1_0_0__root_combine_q__2_Rounding: 0.07
     - SDF_1_0_0__root_combine_sphere__1_Radius: 1
     - SDF_1_0_0__root_combine_sphere__2_Radius: 1
+    - SDF_1_0_0__root_ears_earL__2_Height: 0.68095875
+    - SDF_1_0_0__root_ears_earL__2_Radius: 0.116658434
+    - SDF_1_0_0__root_ears_earL__2_Rounding: 0.07
+    - SDF_1_0_0__root_ears_ear_L__2_Height: 0.68095875
+    - SDF_1_0_0__root_ears_ear_L__2_Radius: 0.116658434
+    - SDF_1_0_0__root_ears_ear_L__2_Rounding: 0.07
+    - SDF_1_0_0__root_ears_q__2_Height: 0.68095875
+    - SDF_1_0_0__root_ears_q__2_Radius: 0.116658434
+    - SDF_1_0_0__root_ears_q__2_Rounding: 0.07
     - SDF_1_0_0__root_head_ear__2_Radius: 0.400412
     - SDF_1_0_0__root_head_face__2_Radius: 0.32984796
     - SDF_1_0_0__root_head_q__2_Radius: 0.32984796
+    - SDF_1_0_0__root_head_root_ears__1_BlendFactor: 0.73
+    - SDF_1_0_1_0__root_GameObject_head_q__2_Radius: 0.65
     - SDF_1_0_1_0__root_combine_cross_cutout_cylinder__2_Height: 1
     - SDF_1_0_1_0__root_combine_cross_cutout_cylinder__2_Radius: 0.4
     - SDF_1_0_1_0__root_combine_cross_cutout_cylinder__2_Rounding: 0.25
     - SDF_1_0_1_0__root_combine_cross_cylinder__2_Height: 1
     - SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius: 0.4
     - SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding: 0.25
+    - SDF_1_0_1_0__root_head_root_head_q__2_Radius: 0.65
+    - SDF_1_0_1_1__root_GameObject_head_eyeL__2_Cap: 1.208449
+    - SDF_1_0_1_1__root_GameObject_head_eyeL__2_MainRadius: 0.185469
+    - SDF_1_0_1_1__root_GameObject_head_eyeL__2_RingRadius: 0.04714
     - SDF_1_0_1_1__root_combine_cross_cutout_cylinder__2_Height: 1
     - SDF_1_0_1_1__root_combine_cross_cutout_cylinder__2_Radius: 0.4
     - SDF_1_0_1_1__root_combine_cross_cutout_cylinder__2_Rounding: 0.25
     - SDF_1_0_1_1__root_combine_cross_cylinder__2_Height: 1
     - SDF_1_0_1_1__root_combine_cross_cylinder__2_Radius: 0.4
     - SDF_1_0_1_1__root_combine_cross_cylinder__2_Rounding: 0.25
+    - SDF_1_0_1_1__root_head_root_head_eyeL__2_Cap: 1.2084494
+    - SDF_1_0_1_1__root_head_root_head_eyeL__2_MainRadius: 0.18546847
+    - SDF_1_0_1_1__root_head_root_head_eyeL__2_RingRadius: 0.04714007
+    - SDF_1_0_1_2__root_GameObject_head_eyeR__2_Cap: 1.150463
+    - SDF_1_0_1_2__root_GameObject_head_eyeR__2_MainRadius: 0.133103
+    - SDF_1_0_1_2__root_GameObject_head_eyeR__2_RingRadius: 0.042229
     - SDF_1_0_1_2__root_combine_cross_cutout_cylinder__2_Height: 1
     - SDF_1_0_1_2__root_combine_cross_cutout_cylinder__2_Radius: 0.4
     - SDF_1_0_1_2__root_combine_cross_cutout_cylinder__2_Rounding: 0.25
     - SDF_1_0_1_2__root_combine_cross_cylinder__2_Height: 1
     - SDF_1_0_1_2__root_combine_cross_cylinder__2_Radius: 0.4
     - SDF_1_0_1_2__root_combine_cross_cylinder__2_Rounding: 0.25
+    - SDF_1_0_1_2__root_head_root_head_eyeR__2_Cap: 1.1504633
+    - SDF_1_0_1_2__root_head_root_head_eyeR__2_MainRadius: 0.13310319
+    - SDF_1_0_1_2__root_head_root_head_eyeR__2_RingRadius: 0.042229116
+    - SDF_1_0_1_3__root_GameObject_head_mouth__2_Cap: 1.762102
+    - SDF_1_0_1_3__root_GameObject_head_mouth__2_MainRadius: 0.114369
+    - SDF_1_0_1_3__root_GameObject_head_mouth__2_RingRadius: 0.04861
+    - SDF_1_0_1_3__root_head_root_head_mouth__2_Cap: 1.7621022
+    - SDF_1_0_1_3__root_head_root_head_mouth__2_MainRadius: 0.11436913
+    - SDF_1_0_1_3__root_head_root_head_mouth__2_RingRadius: 0.04860978
+    - SDF_1_0_1__root_GameObject_head__1_BlendFactor: 0.19
     - SDF_1_0_1__root_combine_cross__1_BlendFactor: 1
     - SDF_1_0_1__root_combine_cross_cutout__1_BlendFactor: 1
+    - SDF_1_0_1__root_combine_q__2_Height: 0.5095044
+    - SDF_1_0_1__root_combine_q__2_Radius: 0.078961276
+    - SDF_1_0_1__root_combine_q__2_Rounding: -0.17
     - SDF_1_0_1__root_combine_sphere__2_Radius: 0.77261275
     - SDF_1_0_1__root_dice_sphere__2_Radius: 0.8
+    - SDF_1_0_1__root_ears_earR__2_Height: 0.5095044
+    - SDF_1_0_1__root_ears_earR__2_Radius: 0.078961276
+    - SDF_1_0_1__root_ears_earR__2_Rounding: -0.17
+    - SDF_1_0_1__root_ears_ear_R__2_Height: 0.5095044
+    - SDF_1_0_1__root_ears_ear_R__2_Radius: 0.078961276
+    - SDF_1_0_1__root_ears_ear_R__2_Rounding: -0.17
+    - SDF_1_0_1__root_ears_q__2_Height: 0.5095044
+    - SDF_1_0_1__root_ears_q__2_Radius: 0.078961276
+    - SDF_1_0_1__root_ears_q__2_Rounding: -0.17
+    - SDF_1_0_1__root_head_ear1__2_Angle: 0.082533665
+    - SDF_1_0_1__root_head_ear1__2_Height: 0.48593187
     - SDF_1_0_1__root_head_ear__3_Angle: 0.7853982
     - SDF_1_0_1__root_head_ear__3_Height: 1
+    - SDF_1_0_1__root_head_q__2_Angle: 0.082533665
+    - SDF_1_0_1__root_head_q__2_Height: 0.22704902
+    - SDF_1_0_1__root_head_q__2_Radius: 0.07
+    - SDF_1_0_1__root_head_q__2_Rounding: 0.07
     - SDF_1_0_1__root_head_q__3_Angle: 0.7853982
-    - SDF_1_0_1__root_head_q__3_Height: 1
+    - SDF_1_0_1__root_head_q__3_Height: 0.22704902
+    - SDF_1_0_1__root_head_q__3_Radius: 0.306503
+    - SDF_1_0_1__root_head_q__3_Rounding: 0.25
+    - SDF_1_0_1__root_head_q__4_Height: 0.22704902
+    - SDF_1_0_1__root_head_q__4_Radius: 0.30650282
+    - SDF_1_0_1__root_head_q__4_Rounding: 0.25
+    - SDF_1_0_1__root_head_q__5_Height: 1
+    - SDF_1_0_1__root_head_q__5_Radius: 0.25
+    - SDF_1_0_1__root_head_q__5_Rounding: 0.25
+    - SDF_1_0_1__root_head_root_head__1_BlendFactor: 0.19
     - SDF_1_0_2__root_combine_cone__2_Angle: 0.7853982
     - SDF_1_0_2__root_combine_cone__2_Height: 1
-    - SDF_1_0__root_combine__1_BlendFactor: 1
+    - SDF_1_0_2__root_combine_sphere__2_Radius: 0.08188343
+    - SDF_1_0_2__root_ears_ear_base_L__2_Radius: 0.08188343
+    - SDF_1_0_2__root_head_ear2__2_Angle: 0.082533665
+    - SDF_1_0_2__root_head_ear2__2_Height: 0.48593187
+    - SDF_1_0_2__root_head_q__2_Angle: 0.087535664
+    - SDF_1_0_2__root_head_q__2_Height: 0.22704902
+    - SDF_1_0_2__root_head_q__2_Radius: 0.07
+    - SDF_1_0_2__root_head_q__2_Rounding: 0.07
+    - SDF_1_0_3__root_combine_sphere__1___2_Radius: 0.048229314
+    - SDF_1_0_3__root_ears_ear_base_R__2_Radius: 0.048229314
+    - SDF_1_0_3__root_head_torus__2_Cap: 1.2084494
+    - SDF_1_0_3__root_head_torus__2_MainRadius: 0.25299692
+    - SDF_1_0_3__root_head_torus__2_RingRadius: 0.018901408
+    - SDF_1_0_4__root_head_torus__1___2_Cap: 1.498899
+    - SDF_1_0_4__root_head_torus__1___2_MainRadius: 0.1489619
+    - SDF_1_0_4__root_head_torus__1___2_RingRadius: 0.021843433
+    - SDF_1_0_5__root_head_torus__2___2_Cap: 0.8605565
+    - SDF_1_0_5__root_head_torus__2___2_MainRadius: 0.11436913
+    - SDF_1_0_5__root_head_torus__2___2_RingRadius: 0.021843433
+    - SDF_1_0__root_combine__1_BlendFactor: 0.73
     - SDF_1_0__root_dice__1_BlendFactor: 1
-    - SDF_1_0__root_head__1_BlendFactor: 1
+    - SDF_1_0__root_ears__1_BlendFactor: 0.73
+    - SDF_1_0__root_head__1_BlendFactor: 0.19
     - SDF_1_0__root_sphere__2_Radius: 1
     - SDF_1_0__root_torus__2_Cap: 0.68554664
     - SDF_1_0__root_torus__2_MainRadius: 1.6563723
@@ -1705,6 +3665,11 @@ Material:
     - SDF_1_1_0__root_cross_cylinder__2_Height: 0.71953154
     - SDF_1_1_0__root_cross_cylinder__2_Radius: 0.33935428
     - SDF_1_1_0__root_cross_cylinder__2_Rounding: 0.25
+    - SDF_1_1_0__root_head_face__2_Radius: 0.65
+    - SDF_1_1_0__root_head_q__2_Radius: 0.65
+    - SDF_1_1_0__root_torso_cylinder__2_Height: 1
+    - SDF_1_1_0__root_torso_cylinder__2_Radius: 0.25
+    - SDF_1_1_0__root_torso_cylinder__2_Rounding: 0.25
     - SDF_1_1_1_0__root_combine_cross_cylinder__2_Height: 0.71953154
     - SDF_1_1_1_0__root_combine_cross_cylinder__2_Radius: 0.33935428
     - SDF_1_1_1_0__root_combine_cross_cylinder__2_Rounding: 0.25
@@ -1721,24 +3686,74 @@ Material:
     - SDF_1_1_1__root_cross_cylinder__2_Height: 1
     - SDF_1_1_1__root_cross_cylinder__2_Radius: 0.20634887
     - SDF_1_1_1__root_cross_cylinder__2_Rounding: 0.25
+    - SDF_1_1_1__root_head_eyeL__2_Cap: 1.2084494
+    - SDF_1_1_1__root_head_eyeL__2_MainRadius: 0.18546847
+    - SDF_1_1_1__root_head_eyeL__2_RingRadius: 0.04714007
+    - SDF_1_1_1__root_head_torus__2_Cap: 1.2084494
+    - SDF_1_1_1__root_head_torus__2_MainRadius: 0.18546847
+    - SDF_1_1_1__root_head_torus__2_RingRadius: 0.04714007
+    - SDF_1_1_1__root_torso_belly__2_Radius: 0.8228996
     - SDF_1_1_2__root_cross_cylinder__1_Height: 1
     - SDF_1_1_2__root_cross_cylinder__1_Radius: 0.25
     - SDF_1_1_2__root_cross_cylinder__1_Rounding: 0.25
     - SDF_1_1_2__root_cross_cylinder__2_Height: 1
     - SDF_1_1_2__root_cross_cylinder__2_Radius: 0.07119972
     - SDF_1_1_2__root_cross_cylinder__2_Rounding: 0.25
+    - SDF_1_1_2__root_head_eyeR__2_Cap: 1.1504633
+    - SDF_1_1_2__root_head_eyeR__2_MainRadius: 0.13310319
+    - SDF_1_1_2__root_head_eyeR__2_RingRadius: 0.042229116
+    - SDF_1_1_2__root_head_torus__1___2_Cap: 1.1504633
+    - SDF_1_1_2__root_head_torus__1___2_MainRadius: 0.13310319
+    - SDF_1_1_2__root_head_torus__1___2_RingRadius: 0.042229116
+    - SDF_1_1_2__root_torso_torus__2_Cap: 0.64044607
+    - SDF_1_1_2__root_torso_torus__2_MainRadius: 1
+    - SDF_1_1_2__root_torso_torus__2_RingRadius: 0.09601724
+    - SDF_1_1_3__root_head_mouth__2_Cap: 1.7621022
+    - SDF_1_1_3__root_head_mouth__2_MainRadius: 0.11436913
+    - SDF_1_1_3__root_head_mouth__2_RingRadius: 0.04860978
+    - SDF_1_1_3__root_head_torus__2___2_Cap: 1.7621022
+    - SDF_1_1_3__root_head_torus__2___2_MainRadius: 0.11436913
+    - SDF_1_1_3__root_head_torus__2___2_RingRadius: 0.04860978
+    - SDF_1_1_3__root_torso_torus__2___2_Cap: 0.7681219
+    - SDF_1_1_3__root_torso_torus__2___2_MainRadius: 1.5338982
+    - SDF_1_1_3__root_torso_torus__2___2_RingRadius: 0.09601724
+    - SDF_1_1_4__root_torso_torus__1___2_Cap: 0.64044607
+    - SDF_1_1_4__root_torso_torus__1___2_MainRadius: 1
+    - SDF_1_1_4__root_torso_torus__1___2_RingRadius: 0.09601724
+    - SDF_1_1_5__root_torso_torus__3___2_Cap: 0.83892584
+    - SDF_1_1_5__root_torso_torus__3___2_MainRadius: 1
+    - SDF_1_1_5__root_torso_torus__3___2_RingRadius: 0.16207922
     - SDF_1_1__root_combine__1_BlendFactor: 1
     - SDF_1_1__root_cone__2_Angle: 0.7853982
     - SDF_1_1__root_cone__2_Height: 1
     - SDF_1_1__root_cross__1_BlendFactor: 1
+    - SDF_1_1__root_head__1_BlendFactor: 0.19
     - SDF_1_1__root_sphere__2_Radius: 0.5901029
+    - SDF_1_1__root_torso__1_BlendFactor: 1
     - SDF_1_1__root_torus__2_Cap: 0.7853982
     - SDF_1_1__root_torus__2_MainRadius: 1.2606895
     - SDF_1_1__root_torus__2_RingRadius: 0.17567778
+    - SDF_1_2_0__root_torso_cylinder__2_Height: 1
+    - SDF_1_2_0__root_torso_cylinder__2_Radius: 0.25
+    - SDF_1_2_0__root_torso_cylinder__2_Rounding: 0.25
+    - SDF_1_2_1__root_torso_belly__2_Radius: 0.8228996
+    - SDF_1_2_2__root_torso_torus__2_Cap: 0.64044607
+    - SDF_1_2_2__root_torso_torus__2_MainRadius: 1
+    - SDF_1_2_2__root_torso_torus__2_RingRadius: 0.09601724
+    - SDF_1_2_3__root_torso_torus__2___2_Cap: 0.7681219
+    - SDF_1_2_3__root_torso_torus__2___2_MainRadius: 1.5338982
+    - SDF_1_2_3__root_torso_torus__2___2_RingRadius: 0.09601724
+    - SDF_1_2_4__root_torso_torus__1___2_Cap: 0.64044607
+    - SDF_1_2_4__root_torso_torus__1___2_MainRadius: 1
+    - SDF_1_2_4__root_torso_torus__1___2_RingRadius: 0.09601724
+    - SDF_1_2_5__root_torso_torus__3___2_Cap: 0.83892584
+    - SDF_1_2_5__root_torso_torus__3___2_MainRadius: 1
+    - SDF_1_2_5__root_torso_torus__3___2_RingRadius: 0.16207922
+    - SDF_1_2__root_torso__1_BlendFactor: 1
     - SDF_1_2__root_torus__2_Cap: 0.7853982
     - SDF_1_2__root_torus__2_MainRadius: 0.5929258
     - SDF_1_2__root_torus__2_RingRadius: 0.23173279
-    - SDF_1__root__1_BlendFactor: 0.3
+    - SDF_1__root__1_BlendFactor: 0.06
     - SDF_2__torus__2_Cap: 0.7853982
     - SDF_2__torus__2_MainRadius: 1.2606895
     - SDF_2__torus__2_RingRadius: 0.17567778
@@ -1756,29 +3771,46 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
+    - SDF_1_0_0_0__root_GameObject_ears_q__3_Length: {r: 0.02, g: 0, b: 0, a: 0}
     - SDF_1_0_0_0__root_combine_dice_box__2_BoxExtents: {r: 0.6, g: 0.6, b: 0.6, a: 0}
+    - SDF_1_0_0_0__root_head_root_ears_q__3_Length: {r: 0.02, g: 0, b: 0, a: 0}
+    - SDF_1_0_0_1__root_GameObject_ears_q__3_Length: {r: 0.08, g: 0.07, b: 0, a: 0}
+    - SDF_1_0_0_1__root_head_root_ears_q__3_Length: {r: 0.08, g: 0.07, b: 0, a: 0}
     - SDF_1_0_0__root_combine_box__2_BoxExtents: {r: 0.6, g: 0.6, b: 0.6, a: 0}
-    - SDF_1_0_0__root_combine_q__3_Length: {r: 0.55, g: 0.5, b: -0.12, a: 0}
+    - SDF_1_0_0__root_combine_q__3_Length: {r: 0.02, g: 0, b: 0, a: 0}
     - SDF_1_0_0__root_dice_box__2_BoxExtents: {r: 0.6, g: 0.6, b: 0.6, a: 0}
+    - SDF_1_0_0__root_ears_earL__3_Length: {r: 0.02, g: 0, b: 0, a: 0}
+    - SDF_1_0_0__root_ears_ear_L__3_Length: {r: 0.02, g: 0, b: 0, a: 0}
+    - SDF_1_0_0__root_ears_q__3_Length: {r: 0.02, g: 0, b: 0, a: 0}
     - SDF_1_0_0__root_head_ear__3_Length: {r: 0.55, g: 0.5, b: -0.12, a: 0}
-    - SDF_1_0_0__root_head_face__3_Length: {r: 0.55, g: 0.5, b: -0.12, a: 0}
-    - SDF_1_0_0__root_head_q__3_Length: {r: 0.55, g: 0.5, b: -0.12, a: 0}
+    - SDF_1_0_0__root_head_face__3_Length: {r: 0.55, g: 0.5, b: 0.12, a: 0}
+    - SDF_1_0_0__root_head_q__3_Length: {r: 0.55, g: 0.5, b: 0.12, a: 0}
+    - SDF_1_0_1_0__root_GameObject_head_q__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
+    - SDF_1_0_1_0__root_head_root_head_q__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
     - SDF_1_0_1__root_combine_box__1_BoxExtents: {r: 0.7716299, g: 0.7716299, b: 0.8054754, a: 0}
     - SDF_1_0_1__root_combine_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - SDF_1_0_1__root_combine_box__3_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
     - SDF_1_0_1__root_combine_q__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_1__root_combine_q__3_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
+    - SDF_1_0_1__root_combine_q__3_Length: {r: 0.08, g: 0.07, b: 0, a: 0}
+    - SDF_1_0_1__root_ears_earR__3_Length: {r: 0.08, g: 0.07, b: 0, a: 0}
+    - SDF_1_0_1__root_ears_ear_R__3_Length: {r: 0.08, g: 0.07, b: 0, a: 0}
+    - SDF_1_0_1__root_ears_q__3_Length: {r: 0.08, g: 0.07, b: 0, a: 0}
     - SDF_1_0_1__root_head_ear1__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_1__root_head_ear1__3_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
+    - SDF_1_0_1__root_head_ear1__3_Length: {r: 0.11, g: 0.05, b: 0.04, a: 0}
     - SDF_1_0_1__root_head_ear__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - SDF_1_0_1__root_head_ear__3_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
     - SDF_1_0_1__root_head_ear__4_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
     - SDF_1_0_1__root_head_q__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_1__root_head_q__3_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
+    - SDF_1_0_1__root_head_q__2_Length: {r: 0.11, g: 0.05, b: 0.04, a: 0}
+    - SDF_1_0_1__root_head_q__3_Length: {r: 0.06, g: 0.31, b: 0, a: 0}
     - SDF_1_0_1__root_head_q__4_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
     - SDF_1_0_2__root_head_ear2__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_2__root_head_ear2__3_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
+    - SDF_1_0_2__root_head_ear2__3_Length: {r: 0.11, g: 0.05, b: 0.04, a: 0}
     - SDF_1_0_2__root_head_q__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_2__root_head_q__3_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
+    - SDF_1_0_2__root_head_q__3_Length: {r: 0.06, g: 0.31, b: 0, a: 0}
+    - SDF_1_0_3__root_head_q__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - SDF_1_0_3__root_head_q__3_Length: {r: 0.47, g: -0.17, b: 0, a: 0}
     - SDF_1_1_0_0__root_combine_dice_box__2_BoxExtents: {r: 0.5721375, g: 0.5977406, b: 0.6381427, a: 0}
+    - SDF_1_1_0__root_head_face__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
+    - SDF_1_1_0__root_head_q__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

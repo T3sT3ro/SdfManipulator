@@ -83,7 +83,7 @@ f2p fragmentShader(in v2f frag_in, bool facing : SV_IsFrontFace) {
 // TODO: only use forward declaration, generate SdfMaterial based on SDF scene
 Material SdfMaterial(SdfResult sdf) {
     Material m = (Material)0;
-    m.albedo = colors::LIGHT_MAGENTA;
+    m.albedo = RGB255(245, 255, 255); // snow-white
     m.metallic = .6;
     m.emission = .1;
     m.occlusion = classicAmbientOcclusion(sdf.p, sdf.normal, _AO_MAX_DISTANCE, _AO_FALLOFF, _AO_STEPS);
