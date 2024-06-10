@@ -2,13 +2,34 @@ using System.Linq;
 using me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfCombineController))]
     public class SdfCombineControllerEditor : SdfPrimitiveControllerEditor {
+        public override VisualElement CreateInspectorGUI() {
+            var baseInspector = base.CreateInspectorGUI();
+            var controller = (SdfCombineController)target;
+
+            // hide property field for blend if variant is other than smooth blend. Observe changes to show and hide.
+            if (controller.Operation != SdfCombineController.CombinationOperation.SMOOTH_UNION)
+                return baseInspector;
+
+            var operation = baseInspector.Q<PropertyField>("operation");
+            var blendField = baseInspector.Q<PropertyField>("blendFactor");
+
+            operation.visible = false;
+
+            operation.RegisterValueChangeCallback(
+                _ => blendField.visible = controller.Operation == SdfCombineController.CombinationOperation.SMOOTH_UNION
+            );
+
+            return baseInspector;
+        }
+
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
-
             var controller = (SdfCombineController)target;
             using var scope = new EditorGUI.ChangeCheckScope();
             foreach (var child in controller.children.OfType<SdfController>()) {

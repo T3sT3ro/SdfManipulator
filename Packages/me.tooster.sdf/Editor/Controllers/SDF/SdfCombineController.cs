@@ -56,7 +56,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public Controller[] children = Array.Empty<Controller>();
 
         void OnTransformChildrenChanged() {
-            children = GetFirstNestedComponents<IModifier<VectorData, SdfData>>(transform).OfType<Controller>().ToArray();
+            refreshChildren();
+            OnStructureChanged();
         }
 
         static IEnumerable<T> GetFirstNestedComponents<T>(Transform root) {
@@ -70,14 +71,26 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
         }
 
-        void OnValidate() { children = GetFirstNestedComponents<SdfController>(transform).ToArray(); }
+        protected override void OnEnable() {
+            base.OnEnable();
+            refreshChildren();
+        }
+
+        protected override void OnValidate() {
+            base.OnValidate();
+            refreshChildren();
+        }
+
+        void refreshChildren() {
+            children = GetFirstNestedComponents<IModifier<VectorData, SdfData>>(transform)
+                .OfType<Controller>()
+                .Where(c => c != null) // checks if child was destroyed
+                .ToArray();
+        }
 
         public override SdfData Apply(VectorData input, Processor processor) {
-            if (children.Length == 0) {
-                children = GetFirstNestedComponents<SdfController>(transform).ToArray();
-                if (children.Length == 0)
-                    throw new ArgumentException("SdfCombineController must have at least one child");
-            }
+            if (children.Length == 0)
+                throw new ArgumentException("SdfCombineController must have at least one child");
 
             processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
 

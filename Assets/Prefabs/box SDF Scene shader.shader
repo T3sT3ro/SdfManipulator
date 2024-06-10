@@ -1,5 +1,5 @@
 // GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
-// Last modification: 09/06/2024 21:55:59
+// Last modification: 10/06/2024 00:21:08
 
 Shader "Box SDF Scene (generated)"
 {
@@ -33,14 +33,14 @@ Shader "Box SDF Scene (generated)"
         SDF_1__root__1_BlendFactor ("Blend factor", Float) = 0.58
 
         [Header (root ground)]
-        SDF_1_0__root_ground__2_BoxExtents ("Box extents", Vector) = (6.442449, 0.169183, 3.634491, 0.0)
+        SDF_1_0__root_ground__2_BoxExtents ("Box extents", Vector) = (6.442449, 0.169183, 4.148325, 0.0)
 
         [Header (root shroom 1 leg)]
         SDF_1_1_0__root_shroom_1_leg__2_Radius ("Sphere radius", Float) = 0.582681
 
         [Header (root shroom 1 cap)]
-        SDF_1_1_1__root_shroom_1_cap__2_Angle ("Cone angle", Float) = 0.924985
-        SDF_1_1_1__root_shroom_1_cap__2_Height ("Cone height", Float) = 0.663211
+        SDF_1_1_1__root_shroom_1_cap__2_Angle ("Cone angle", Float) = 0.72257
+        SDF_1_1_1__root_shroom_1_cap__2_Height ("Cone height", Float) = 0.994662
 
         [Header (root shroom2 leg)]
         SDF_1_2_0__root_shroom2_leg__2_Radius ("Sphere radius", Float) = 0.264981
@@ -87,9 +87,9 @@ Shader "Box SDF Scene (generated)"
         SDF_1_5_0__root_peg_cylinder__2_Rounding ("Rounding", Float) = 0.11
 
         [Header (root peg cutout)]
-        SDF_1_5_1__root_peg_cutout__2_MainRadius ("Torus main radius", Float) = 0.446883
+        SDF_1_5_1__root_peg_cutout__2_MainRadius ("Torus main radius", Float) = 0.447159
         SDF_1_5_1__root_peg_cutout__2_RingRadius ("Torus ring radius", Float) = 0.195835
-        SDF_1_5_1__root_peg_cutout__2_Cap ("Torus cap", Float) = 1.155339
+        SDF_1_5_1__root_peg_cutout__2_Cap ("Torus cap", Float) = 1.313056
 
         [Header (root infinite cylinder)]
         SDF_1_6__root_infinite_cylinder__1_BlendFactor ("Blend factor", Float) = 1.0
@@ -112,8 +112,8 @@ Shader "Box SDF Scene (generated)"
         SDF_1_7_0__root_two_cones_cone__2_Height ("Cone height", Float) = 1.258141
 
         [Header (root two cones cone)]
-        SDF_1_7_1__root_two_cones_cone__2_Angle ("Cone angle", Float) = 0.383333
-        SDF_1_7_1__root_two_cones_cone__2_Height ("Cone height", Float) = 1.199648
+        SDF_1_7_1__root_two_cones_cone__2_Angle ("Cone angle", Float) = 0.411671
+        SDF_1_7_1__root_two_cones_cone__2_Height ("Cone height", Float) = 1.10805
     }
     Fallback "Sdf/Fallback"
     SubShader

@@ -60,7 +60,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         void OnDrawGizmos() => Gizmos.DrawIcon(transform.position, "Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-icon-256.png", true);
 
-        protected virtual void OnValidate() {
+        protected override void OnValidate() {
+            base.OnValidate();
             transform.hasChanged = true;
 
             // ReSharper disable CompareOfFloatsByEqualityOperator

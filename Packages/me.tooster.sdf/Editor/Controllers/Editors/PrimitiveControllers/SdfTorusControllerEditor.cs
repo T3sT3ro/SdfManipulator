@@ -3,7 +3,6 @@ using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfTorusController), true)]
     class SdfTorusControllerEditor : SdfPrimitiveControllerEditor {
@@ -17,6 +16,14 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
         // a single point cap on the main radius handle for picking a cap
         ArcHandle capArcHandle = new();
 
+        protected override void OnEnable() {
+            base.OnEnable();
+            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
+            mainRadius = serializedObject.FindProperty("mainRadius");
+            ringRadius = serializedObject.FindProperty("ringRadius");
+            cap = serializedObject.FindProperty("cap");
+        }
+
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
             var controller = (SdfTorusController)target;
@@ -28,7 +35,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
                 using (var mainRadiusCheck = new EditorGUI.ChangeCheckScope()) {
                     mainRadiusHandle.radius = controller.MainRadius;
                     mainRadiusHandle.axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y;
-                    mainRadiusHandle.center = Vector3.up * controller.RingRadius;
+                    // TODO: customize gizmo drawing in player prefs
+                    // mainRadiusHandle.center = Vector3.up * controller.RingRadius;
 
                     mainRadiusHandle.DrawHandle();
 
@@ -62,15 +70,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
             }
 
             if (anyChanged) serializedObject.ApplyModifiedProperties();
-        }
-
-        public override VisualElement CreateInspectorGUI() {
-            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
-            mainRadius = serializedObject.FindProperty(nameof(mainRadius));
-            ringRadius = serializedObject.FindProperty(nameof(ringRadius));
-            cap = serializedObject.FindProperty(nameof(cap));
-
-            return base.CreateInspectorGUI();
         }
 
 

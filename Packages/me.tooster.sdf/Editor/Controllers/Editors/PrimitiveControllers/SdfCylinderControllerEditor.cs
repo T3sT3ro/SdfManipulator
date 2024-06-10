@@ -3,7 +3,6 @@ using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfCylinderController), true)]
     class SdfCylinderControllerEditor : SdfPrimitiveControllerEditor {
@@ -12,6 +11,14 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
         SerializedProperty roundingProperty;
 
         readonly BoxBoundsHandle boxBoundsHandle = new();
+
+        protected override void OnEnable() {
+            base.OnEnable();
+            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
+            heightProperty = serializedObject.FindProperty("height");
+            radiusProperty = serializedObject.FindProperty("radius");
+            roundingProperty = serializedObject.FindProperty("rounding");
+        }
 
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
@@ -36,15 +43,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
 
             serializedObject.ApplyModifiedProperties();
         }
-
-        public override VisualElement CreateInspectorGUI() {
-            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
-            heightProperty = serializedObject.FindProperty("height");
-            radiusProperty = serializedObject.FindProperty("radius");
-            roundingProperty = serializedObject.FindProperty("rounding");
-            return base.CreateInspectorGUI();
-        }
-
 
         [MenuItem("GameObject/SDF/Primitives/Cylinder", priority = -20)]
         public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfCylinderController>("cylinder");

@@ -68,8 +68,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         void OnDisable() {
             AssemblyReloadEvents.afterAssemblyReload -= MarkDirty;
-            if (!RequiresRegeneration)
-                UpdateShaderUniforms(forceUpdateAll: true);
+            RequiresUpdate = true;
             PrefabStage.prefabSaved -= OnPrefabSaved;
         }
 
@@ -144,7 +143,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 RequiresRegeneration = true;
 
             RevalidateScene(); // fixme: Revalidate triggered without regenerate will cause difference between shader content and scene data
-            UpdateShaderUniforms(forceUpdateAll: true);
+            RequiresUpdate = true;
         }
 
         internal void RevalidateScene() {
@@ -189,11 +188,18 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         void UpdateProperty(PropertyData pd) {
+            var currentPrefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            // Trigger updates only from prefab instance outside of prefab stage or prefab root inside prefab stage.
+            // Otherwise an instance of a prefab in scene would leak to prefab edited in context
+            if (currentPrefabStage != null && currentPrefabStage.prefabContentsRoot != gameObject)
+                return;
+
             if (controlledMaterial == null)
                 throw new Exception("SdfScene is missing controlled material to update a property!");
 
-            var controller = pd.controller;
-            PropertyContainer.Accept(shaderPropertyUpdatingVisitor, ref controller, pd.path);
+            // make sure the controller hasn't been destroyed
+            if (pd.controller is { } controller && controller != null)
+                PropertyContainer.Accept(shaderPropertyUpdatingVisitor, ref controller, pd.path);
         }
 
         void HandleStructuralChange(Controller source) {

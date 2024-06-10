@@ -1,5 +1,6 @@
 #pragma once
 
+/// calculate rays in the vertex shader
 #define V2F_RAYS
 
 #include "UnityCG.cginc"
@@ -53,6 +54,12 @@ float _MAX_STEPS = 500;
 float _MAX_DISTANCE = 10000;
 float _RAY_ORIGIN_BIAS = 0;
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
+#endif
+
+#ifndef EXPLICIT_SHADER_FEATURES
+#pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_SKYBOX \
+_DRAWMODE_NORMAL _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_OCCLUSION
+#pragma shader_feature_local __ _SHOW_WORLD_GRID
 #endif
 
 # pragma region raymarching functions
@@ -177,6 +184,45 @@ float classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, 
     }
 
     return clamp(1.0 - ao / float(aoSteps), 0.0, 1.0);
+}
+
+/**
+ * 
+ * @param color normal shaded color of the fragment, usually the result of regular shading function like Phong, Lambert or BRDF
+ * @param mat material data of fragment
+ * @param sdf sdf data of fragment
+ * @param ray ray info for fragment
+ * @return modified color of a fragment
+ */
+fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D ray) {
+    #ifdef _DRAWMODE_MATERIAL
+    // dampen the color by occlusion
+    return color;
+    #elif _DRAWMODE_ALBEDO
+    return mat.albedo;
+    #elif _DRAWMODE_SKYBOX
+    // sample the default reflection cubemap, using the reflection vector
+    half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, sdf.normal);
+    // decode cubemap data into actual color
+    half3 skyColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
+    return fixed4(skyColor, 1.0);
+    #elif _DRAWMODE_NORMAL
+    color = sdf::debug::visualizeNormal(sdf.normal);
+    #elif _DRAWMODE_STEPS
+    color = sdf::debug::visualizeOverhead(ray.steps/_MAX_STEPS);
+    #elif _DRAWMODE_DEPTH
+    float eyeDepth = -UnityWorldToViewPos(sdf.p).z;
+    color = fixed4((float3)eyeDepth/5., 1);
+    #elif _DRAWMODE_OCCLUSION
+    color = mat.occlusion;
+    #endif
+
+    #ifdef _SHOW_WORLD_GRID
+    fixed4 gridColor = sdf::debug::grid(sdf.p, 0.25, .04);
+    color.rgb = lerp(color, gridColor.rgb, gridColor.a);
+    #endif
+
+    return color;
 }
 
 #pragma endregion

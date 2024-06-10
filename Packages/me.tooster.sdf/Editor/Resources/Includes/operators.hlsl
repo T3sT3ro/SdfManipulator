@@ -104,7 +104,7 @@ namespace sdf { namespace operators {
     }
 
     /**
-     * Elongate the primitive. This is a prefix operation that transforms point passed to primitive.
+     * Elongate the primitive. This is a circumfix operation that transforms point passed to primitive.
      * This is the exact method 
      */
     // float elongate_exact(float3 p, float3 dim)

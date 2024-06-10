@@ -431,8 +431,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c73fb010ac4729847fb5223dc18512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 0.92498505
-  height: 0.66321117
+  angle: 0.7225697
+  height: 0.99466157
   coneOrigin: 0
 --- !u!114 &4694705224852918240
 MonoBehaviour:
@@ -509,9 +509,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   variant: 1
-  mainRadius: 0.4468825
+  mainRadius: 0.44715935
   ringRadius: 0.19583517
-  cap: 1.1553388
+  cap: 1.3130559
 --- !u!114 &2516914044658714846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,8 +790,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c73fb010ac4729847fb5223dc18512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: 0.38333246
-  height: 1.1996478
+  angle: 0.41167137
+  height: 1.1080496
   coneOrigin: 0
 --- !u!114 &3088287365697968825
 MonoBehaviour:
@@ -1619,7 +1619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxExtents: {x: 6.442449, y: 0.16918316, z: 3.634491}
+  boxExtents: {x: 6.442449, y: 0.16918316, z: 4.148325}
 --- !u!114 &4255145660581018384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1988,8 +1988,8 @@ Material:
     - SDF_1_1_0__root_shroom_1_sphere_1__2_Radius: 0.58268046
     - SDF_1_1_1__root__shroom_1__cone__1_Angle: 1.0424453
     - SDF_1_1_1__root__shroom_1__cone__1_Height: 0.51368195
-    - SDF_1_1_1__root_shroom_1_cap__2_Angle: 0.92498505
-    - SDF_1_1_1__root_shroom_1_cap__2_Height: 0.66321117
+    - SDF_1_1_1__root_shroom_1_cap__2_Angle: 0.7225697
+    - SDF_1_1_1__root_shroom_1_cap__2_Height: 0.99466157
     - SDF_1_1_1__root_shroom_1_cone__1_Angle: 1.0424453
     - SDF_1_1_1__root_shroom_1_cone__1_Height: 0.51368195
     - SDF_1_1_1__root_shroom_1_cone__2_Angle: 0.924753
@@ -2080,8 +2080,8 @@ Material:
     - SDF_1_5_1__root__q__torus__1_RingRadius: 0.23235047
     - SDF_1_5_1__root_flat__1__torus__1_MainRadius: 0.85951066
     - SDF_1_5_1__root_flat__1__torus__1_RingRadius: 0.23235047
-    - SDF_1_5_1__root_peg_cutout__2_Cap: 1.1553388
-    - SDF_1_5_1__root_peg_cutout__2_MainRadius: 0.4468825
+    - SDF_1_5_1__root_peg_cutout__2_Cap: 1.3130559
+    - SDF_1_5_1__root_peg_cutout__2_MainRadius: 0.44715935
     - SDF_1_5_1__root_peg_cutout__2_RingRadius: 0.19583517
     - SDF_1_5_1__root_peg_torus_cutout__2_MainRadius: 0.85951066
     - SDF_1_5_1__root_peg_torus_cutout__2_RingRadius: 0.46176344
@@ -2138,8 +2138,8 @@ Material:
     - SDF_1_7_1__root_combine_cone__1_Height: 1.7514118
     - SDF_1_7_1__root_combine_cone__2_Angle: 0.5187972
     - SDF_1_7_1__root_combine_cone__2_Height: 1.7514118
-    - SDF_1_7_1__root_two_cones_cone__2_Angle: 0.38333246
-    - SDF_1_7_1__root_two_cones_cone__2_Height: 1.1996478
+    - SDF_1_7_1__root_two_cones_cone__2_Angle: 0.41167137
+    - SDF_1_7_1__root_two_cones_cone__2_Height: 1.1080496
     - SDF_1_7__root__combine__1_BlendFactor: 0.46
     - SDF_1_7__root_combine__1_BlendFactor: 0.46
     - SDF_1_7__root_two_cones__1_BlendFactor: 0.46
@@ -2287,7 +2287,7 @@ Material:
     m_Colors:
     - SDF_1_0__root__ground__1_BoxExtents: {r: 6.442449, g: 0.16918316, b: 3.634491, a: 0}
     - SDF_1_0__root_ground__1_BoxExtents: {r: 6.442449, g: 0.16918316, b: 3.634491, a: 0}
-    - SDF_1_0__root_ground__2_BoxExtents: {r: 6.442449, g: 0.16918316, b: 3.634491, a: 0}
+    - SDF_1_0__root_ground__2_BoxExtents: {r: 6.442449, g: 0.16918316, b: 4.148325, a: 0}
     - SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_BoxExtents: {r: 0.413049, g: 0.589912, b: 0.117837, a: 0}
     - SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_BoxExtents: {r: 0.696923, g: 0.091037, b: 0.587924, a: 0}
     - SDF_1_3_2_1__root_combine_q_torus__1_Cap: {r: 0.53, g: -0.18, b: 0, a: 0}
@@ -2544,7 +2544,7 @@ Shader:
         m_Flags: 0
         m_DefValue[0]: 6.442449
         m_DefValue[1]: 0.169183
-        m_DefValue[2]: 3.634491
+        m_DefValue[2]: 4.148325
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
@@ -2568,7 +2568,7 @@ Shader:
         - Header (root shroom 1 cap)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.924985
+        m_DefValue[0]: 0.72257
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2580,7 +2580,7 @@ Shader:
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.663211
+        m_DefValue[0]: 0.994662
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2822,7 +2822,7 @@ Shader:
         - Header (root peg cutout)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.446883
+        m_DefValue[0]: 0.447159
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2846,7 +2846,7 @@ Shader:
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 1.155339
+        m_DefValue[0]: 1.313056
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2984,7 +2984,7 @@ Shader:
         - Header (root two cones cone)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.383333
+        m_DefValue[0]: 0.411671
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2996,7 +2996,7 @@ Shader:
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 1.199648
+        m_DefValue[0]: 1.10805
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -3286,7 +3286,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 34077
+          gpuProgramID: 31213
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -3839,13 +3839,13 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      34077:
+      31213:
         serializedVersion: 3
         m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
           1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED 1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED
           1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED 1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
-          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED 1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED
+          1\n#define _ZWRITE_ON_KEYWORD_DECLARED 1\n#define _ZWRITE_OFF_KEYWORD_DECLARED
           1\n#line 285 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
           UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
           UNITY_INSTANCED_RENDERER_BOUNDS\n#line 128\n\n        #pragma target 5.0\n       
@@ -4102,10 +4102,10 @@ Shader:
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: 48ba9fd9dc75376c022ff8b73e263ce1
+          Hash: 404c775111c2bf84b29f225f13218acd
         m_CodeHash:
           serializedVersion: 2
-          Hash: 9d0b32474c9e2c3cbaa4521a623967c7
+          Hash: 53a9637b21f4dbfde19e280b27326644
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0
@@ -4126,10 +4126,10 @@ Shader:
           - _DRAWMODE_STEPS
           - _DRAWMODE_DEPTH
           - _DRAWMODE_OCCLUSION
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
         - - __
           - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
         m_VariantsUserLocal1:
         - - _DRAWMODE_MATERIAL
           - _DRAWMODE_ALBEDO
@@ -4138,10 +4138,10 @@ Shader:
           - _DRAWMODE_STEPS
           - _DRAWMODE_DEPTH
           - _DRAWMODE_OCCLUSION
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
         - - __
           - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
         m_VariantsUserLocal2: []
         m_VariantsUserLocal3: []
         m_VariantsUserLocal4: []

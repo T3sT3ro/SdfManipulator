@@ -10,10 +10,7 @@
 #include "colors.hlsl"
 #include "raymarching.hlsl"
 
-#pragma shader_feature_local _DRAWMODE_MATERIAL _DRAWMODE_ALBEDO _DRAWMODE_SKYBOX \
-_DRAWMODE_NORMAL _DRAWMODE_STEPS _DRAWMODE_DEPTH _DRAWMODE_OCCLUSION
 #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
-#pragma shader_feature_local __ _SHOW_WORLD_GRID
 
 #ifndef EXPLICIT_RAYMARCHING_PARAMETERS
 int   _AO_STEPS = 6;
@@ -142,6 +139,8 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
 
     Material mat = SdfMaterial(sdf);
     fixed4   color = shadeAmbientLambert(sdf, mat);
+    color = debugOverlay(color, mat, sdf, ray);
+
 
     // // raymarch from point using hit point and normal to calculate shadows
     // Ray3D shadowRay = (Ray3D)0;
@@ -154,34 +153,6 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
     //     color.rgb = 0;
     //
     // color = sdf::debug::visualizeNormal(l.dir);
-
-
-    #ifdef _DRAWMODE_MATERIAL
-    // dampen the color by occlusion
-    color *= mat.occlusion;
-    #elif _DRAWMODE_ALBEDO
-    color = mat.albedo;
-    #elif _DRAWMODE_SKYBOX
-    // sample the default reflection cubemap, using the reflection vector
-    half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, sdf.normal);
-    // decode cubemap data into actual color
-    half3 skyColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
-    color = fixed4(skyColor, 1.0);
-    #elif _DRAWMODE_NORMAL
-    color = sdf::debug::visualizeNormal(sdf.normal);
-    #elif _DRAWMODE_STEPS
-    color = sdf::debug::visualizeOverhead(ray.steps/_MAX_STEPS);
-    #elif _DRAWMODE_DEPTH
-    float eyeDepth = -UnityWorldToViewPos(sdf.p).z;
-    color = fixed4((float3)eyeDepth/5., 1);
-    #elif _DRAWMODE_OCCLUSION
-    color = mat.occlusion;
-    #endif
-
-    #ifdef _SHOW_WORLD_GRID
-    fixed4 gridColor = sdf::debug::grid(sdf.p, 0.25, .04);
-    color.rgb = lerp(color, gridColor.rgb, gridColor.a);
-    #endif
 
     return color;
 }

@@ -9,13 +9,14 @@ using Unity.Properties;
 using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
     /*
+     * https://iquilezles.org/articles/distfunctions/
      * Elongates an Sdf by performing the following operation
      *  elongate(sdf3d primitive, vec3p, vec3 h):
      *      vec3 q = abs(p)-h;
      *      return primitive(max(q, 0.0)) + min(max(q.x, q.y, q.z)), 0.0);
      */
     [GeneratePropertyBag]
-    public partial class SdfElongate : SdfPrimitiveController {
+    public partial class SdfElongateController : SdfPrimitiveController {
         [SerializeField] [DontCreateProperty] Vector3 length;
 
         [CreateProperty] [ShaderProperty(Description = "Elongation")]
@@ -30,7 +31,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
 
         public Controller sdfPrimitive;
 
-        void OnValidate() {
+        protected override void OnValidate() {
+            base.OnValidate();
             if (sdfPrimitive == null || sdfPrimitive is not SdfController)
                 throw new ArgumentException("sdf elongate requires an sdf controller as a target!");
 

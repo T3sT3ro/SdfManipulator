@@ -7,7 +7,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     public class SdfPrimitiveControllerEditor : ControllerEditor {
         SdfController parentSdfObject;
 
-        void OnEnable() { parentSdfObject = (target as SdfPrimitiveController)?.GetComponent<SdfController>(); }
+        protected virtual void OnEnable() { parentSdfObject = (target as SdfPrimitiveController)?.GetComponent<SdfController>(); }
 
         protected virtual void OnSceneGUI() { Gizmos.color = Handles.color = GetGizmoColor(target as Controller); }
 

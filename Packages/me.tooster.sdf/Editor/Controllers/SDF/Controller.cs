@@ -12,6 +12,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
      * Runtime would handle updating uniforms/keywords while editor handle updating the material and shader.
      */
     [Icon("Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-icon-256.png")]
+    [ExecuteAlways]
     public abstract class Controller : MonoBehaviour, INotifyPropertyChanged, IModifier {
         public delegate void StructureChangedEventHandler(Controller sender);
 
@@ -20,12 +21,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public SdfScene.PropertyData this[PropertyPath p] => SdfScene.sceneData.controllers[this].properties[p];
 
-        void OnValidate() {
-            if (SdfScene == null)
-                sdfScene = GetComponentInParent<SdfScene>();
-        }
+        protected virtual void OnValidate() { sdfScene = GetComponentInParent<SdfScene>(); }
 
-        void OnEnable() { sdfScene = GetComponentInParent<SdfScene>(); }
+        protected virtual void OnEnable() { sdfScene = GetComponentInParent<SdfScene>(); }
+
+        void OnDestroy() { StructureChanged?.Invoke(this); }
 
         void OnTransformParentChanged() {
             sdfScene = GetComponentInParent<SdfScene>(true);

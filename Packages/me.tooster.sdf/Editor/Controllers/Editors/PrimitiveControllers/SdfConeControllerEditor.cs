@@ -3,7 +3,6 @@ using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfConeController), true)]
     class SdfConeControllerEditor : SdfPrimitiveControllerEditor {
@@ -11,6 +10,13 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
         SerializedProperty heightProperty;
 
         SphereBoundsHandle radiusHandle = new();
+
+        protected override void OnEnable() {
+            base.OnEnable();
+            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
+            angleProperty = serializedObject.FindProperty("angle");
+            heightProperty = serializedObject.FindProperty("height");
+        }
 
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
@@ -50,13 +56,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
             controller.Height = heightProperty.floatValue = tipPosition.y;
 
             serializedObject.ApplyModifiedProperties();
-        }
-
-        public override VisualElement CreateInspectorGUI() {
-            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
-            angleProperty = serializedObject.FindProperty(nameof(angleProperty));
-            heightProperty = serializedObject.FindProperty(nameof(heightProperty));
-            return base.CreateInspectorGUI();
         }
 
 
