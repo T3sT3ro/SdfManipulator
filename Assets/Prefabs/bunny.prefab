@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 353536146897320022}
   - component: {fileID: 9122925941554526213}
   m_Layer: 0
-  m_Name: q
+  m_Name: face
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1868,10 +1868,10 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_1_0__root_head_root_head_q__2_Radius
+      - m_Name: SDF_1_0_1_0__root_head_root_head_face__2_Radius
         m_Description: Sphere radius
         m_Attributes:
-        - Header (root head root head q)
+        - Header (root head root head face)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.65
@@ -1881,10 +1881,10 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_1_0__root_head_root_head_q__3_Length
+      - m_Name: SDF_1_0_1_0__root_head_root_head_face__3_Length
         m_Description: Elongation
         m_Attributes:
-        - Header (root head root head q)
+        - Header (root head root head face)
         m_Type: 1
         m_Flags: 0
         m_DefValue[0]: 0.12
@@ -1998,7 +1998,7 @@ Shader:
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 1.762102
+        m_DefValue[0]: 1.339747
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -2499,7 +2499,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 2002
+          gpuProgramID: 74
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -2786,7 +2786,16 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_head_root_head_q__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_0_1_0__root_head_root_head_face__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: bunny (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_head_root_head_face__2_Radius" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -2794,15 +2803,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_head_root_head_q__2_Radius" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: bunny (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_head_root_head_q__3_Length" contains consecutive
+  - message: '"SDF_1_0_1_0__root_head_root_head_face__3_Length" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: bunny (generated)
@@ -3095,7 +3096,7 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      2002:
+      74:
         serializedVersion: 3
         m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
           1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
@@ -3137,12 +3138,12 @@ Shader:
           0.042333, 0.945592, -0.04139 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float SDF_1_0_0_3__root_head_root_ears_ear_base_R__2_Radius;\n       
           float SDF_1_0_1__root_head_root_head__1_BlendFactor;\n        float4x4
-          SDF_1_0_1_0__root_head_root_head_q__1_SpaceTransform = {\n               
+          SDF_1_0_1_0__root_head_root_head_face__1_SpaceTransform = {\n               
           { 0.940201, -0.101083, 0.325277, 0.126522 },\n                { 0.109353,
           0.993977, -0.007193, -1.359352 },\n                { -0.322591, 0.042333,
           0.945592, 0.400848 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_1_0__root_head_root_head_q__2_Radius;\n       
-          float3 SDF_1_0_1_0__root_head_root_head_q__3_Length;\n        float4x4
+          };\n        float SDF_1_0_1_0__root_head_root_head_face__2_Radius;\n       
+          float3 SDF_1_0_1_0__root_head_root_head_face__3_Length;\n        float4x4
           SDF_1_0_1_1__root_head_root_head_eyeL__1_SpaceTransform = {\n               
           { 0.976532, 0.079999, 0.199965, -0.093695 },\n                { 0.179351,
           0.211993, -0.960673, -1.368899 },\n                { -0.119244, 0.973991,
@@ -3202,20 +3203,20 @@ Shader:
           p);\n            SdfResult SDF_1_0_0_2__root_head_root_ears_ear_base_L__3
           (float3 p);\n            SdfResult SDF_1_0_0_3__root_head_root_ears_ear_base_R__3
           (float3 p);\n            SdfResult SDF_1_0_0__root_head_root_ears__1 (float3
-          p);\n            float SDF_1_0_1_0__root_head_root_head_q__3 (float3 p);\n           
-          SdfResult SDF_1_0_1_0__root_head_root_head_q__4 (float3 p);\n           
-          SdfResult SDF_1_0_1_1__root_head_root_head_eyeL__3 (float3 p);\n           
-          SdfResult SDF_1_0_1_2__root_head_root_head_eyeR__3 (float3 p);\n           
-          SdfResult SDF_1_0_1_3__root_head_root_head_mouth__3 (float3 p);\n           
-          SdfResult SDF_1_0_1__root_head_root_head__1 (float3 p);\n            SdfResult
-          SDF_1_1_0__root_torso_cylinder__3 (float3 p);\n            SdfResult SDF_1_1_1__root_torso_belly__3
-          (float3 p);\n            SdfResult SDF_1_1_2__root_torso_torus__3 (float3
-          p);\n            SdfResult SDF_1_1_3__root_torso_torus__2___3 (float3 p);\n           
-          SdfResult SDF_1_1_4__root_torso_torus__1___3 (float3 p);\n            SdfResult
-          SDF_1_1_5__root_torso_torus__3___3 (float3 p);\n            SdfResult SDF_1_1__root_torso__1
-          (float3 p);\n            SdfResult SDF_1__root__1 (float3 p);\n           
-          float SDF_1_0_0_0__root_head_root_ears_q__3(float3 p) {\n               
-          float3 q = abs(p) - SDF_1_0_0_0__root_head_root_ears_q__3_Length;\n               
+          p);\n            float SDF_1_0_1_0__root_head_root_head_face__3 (float3
+          p);\n            SdfResult SDF_1_0_1_0__root_head_root_head_face__4 (float3
+          p);\n            SdfResult SDF_1_0_1_1__root_head_root_head_eyeL__3 (float3
+          p);\n            SdfResult SDF_1_0_1_2__root_head_root_head_eyeR__3 (float3
+          p);\n            SdfResult SDF_1_0_1_3__root_head_root_head_mouth__3 (float3
+          p);\n            SdfResult SDF_1_0_1__root_head_root_head__1 (float3 p);\n           
+          SdfResult SDF_1_1_0__root_torso_cylinder__3 (float3 p);\n            SdfResult
+          SDF_1_1_1__root_torso_belly__3 (float3 p);\n            SdfResult SDF_1_1_2__root_torso_torus__3
+          (float3 p);\n            SdfResult SDF_1_1_3__root_torso_torus__2___3 (float3
+          p);\n            SdfResult SDF_1_1_4__root_torso_torus__1___3 (float3 p);\n           
+          SdfResult SDF_1_1_5__root_torso_torus__3___3 (float3 p);\n            SdfResult
+          SDF_1_1__root_torso__1 (float3 p);\n            SdfResult SDF_1__root__1
+          (float3 p);\n            float SDF_1_0_0_0__root_head_root_ears_q__3(float3
+          p) {\n                float3 q = abs(p) - SDF_1_0_0_0__root_head_root_ears_q__3_Length;\n               
           return sdf::primitives3D::cylinder_rounded(max(q, 0), SDF_1_0_0_0__root_head_root_ears_q__2_Radius,
           SDF_1_0_0_0__root_head_root_ears_q__2_Rounding, SDF_1_0_0_0__root_head_root_ears_q__2_Height)
           + min(max(q), 0);\n            }\n            SdfResult SDF_1_0_0_0__root_head_root_ears_q__4(float3
@@ -3250,13 +3251,13 @@ Shader:
           SDF_1_0_0__root_head_root_ears__1_BlendFactor);\n                result
           = sdf::operators::unionSmooth(result, SDF_1_0_0_3__root_head_root_ears_ear_base_R__3(p),
           SDF_1_0_0__root_head_root_ears__1_BlendFactor);\n                return
-          result;\n            }\n            float SDF_1_0_1_0__root_head_root_head_q__3(float3
-          p) {\n                float3 q = abs(p) - SDF_1_0_1_0__root_head_root_head_q__3_Length;\n               
-          return sdf::primitives3D::sphere(max(q, 0), SDF_1_0_1_0__root_head_root_head_q__2_Radius)
-          + min(max(q), 0);\n            }\n            SdfResult SDF_1_0_1_0__root_head_root_head_q__4(float3
+          result;\n            }\n            float SDF_1_0_1_0__root_head_root_head_face__3(float3
+          p) {\n                float3 q = abs(p) - SDF_1_0_1_0__root_head_root_head_face__3_Length;\n               
+          return sdf::primitives3D::sphere(max(q, 0), SDF_1_0_1_0__root_head_root_head_face__2_Radius)
+          + min(max(q), 0);\n            }\n            SdfResult SDF_1_0_1_0__root_head_root_head_face__4(float3
           p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = SDF_1_0_1_0__root_head_root_head_q__3(sdf::operators::transform(p,
-          SDF_1_0_1_0__root_head_root_head_q__1_SpaceTransform));\n               
+          result.distance = SDF_1_0_1_0__root_head_root_head_face__3(sdf::operators::transform(p,
+          SDF_1_0_1_0__root_head_root_head_face__1_SpaceTransform));\n               
           result.id = int4(0, 0, 0, 21);\n                return result;\n           
           }\n            SdfResult SDF_1_0_1_1__root_head_root_head_eyeL__3(float3
           p) {\n                SdfResult result = (SdfResult) 0;\n               
@@ -3277,7 +3278,7 @@ Shader:
           SDF_1_0_1_3__root_head_root_head_mouth__2_RingRadius, SDF_1_0_1_3__root_head_root_head_mouth__2_Cap);\n               
           result.id = int4(0, 0, 0, 30);\n                return result;\n           
           }\n            SdfResult SDF_1_0_1__root_head_root_head__1(float3 p) {\n               
-          SdfResult result = SDF_1_0_1_0__root_head_root_head_q__4(p);\n               
+          SdfResult result = SDF_1_0_1_0__root_head_root_head_face__4(p);\n               
           result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_head_root_head_eyeL__3(p));\n               
           result = sdf::operators::intersectSimple(result, SDF_1_0_1_2__root_head_root_head_eyeR__3(p));\n               
           result = sdf::operators::intersectSimple(result, SDF_1_0_1_3__root_head_root_head_mouth__3(p));\n               
@@ -3336,10 +3337,10 @@ Shader:
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: 9046fda7ef0bffbda228c551a03b17c7
+          Hash: 8676def93f12a835a189847233d29c26
         m_CodeHash:
           serializedVersion: 2
-          Hash: 979f15178d20ba40cfa71cfcd33922e5
+          Hash: f95a7b5a0bfc48f52eff7ab169216c52
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0
@@ -3505,7 +3506,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _DRAWMODE_MATERIAL
+  - _DRAWMODE_NORMAL
   - _ZWRITE_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -3564,6 +3565,7 @@ Material:
     - SDF_1_0_1_0__root_combine_cross_cylinder__2_Height: 1
     - SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius: 0.4
     - SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding: 0.25
+    - SDF_1_0_1_0__root_head_root_head_face__2_Radius: 0.65
     - SDF_1_0_1_0__root_head_root_head_q__2_Radius: 0.65
     - SDF_1_0_1_1__root_GameObject_head_eyeL__2_Cap: 1.208449
     - SDF_1_0_1_1__root_GameObject_head_eyeL__2_MainRadius: 0.185469
@@ -3761,8 +3763,8 @@ Material:
     - _AO_MAX_DISTANCE: 1
     - _AO_STEPS: 6
     - _Cull: 0
-    - _DrawMode: 0
-    - _EPSILON_NORMAL: 0.001
+    - _DrawMode: 4
+    - _EPSILON_NORMAL: 0.01
     - _EPSILON_RAY: 0.001
     - _MAX_DISTANCE: 200
     - _MAX_STEPS: 200
@@ -3786,6 +3788,7 @@ Material:
     - SDF_1_0_0__root_head_face__3_Length: {r: 0.55, g: 0.5, b: 0.12, a: 0}
     - SDF_1_0_0__root_head_q__3_Length: {r: 0.55, g: 0.5, b: 0.12, a: 0}
     - SDF_1_0_1_0__root_GameObject_head_q__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
+    - SDF_1_0_1_0__root_head_root_head_face__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
     - SDF_1_0_1_0__root_head_root_head_q__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
     - SDF_1_0_1__root_combine_box__1_BoxExtents: {r: 0.7716299, g: 0.7716299, b: 0.8054754, a: 0}
     - SDF_1_0_1__root_combine_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}

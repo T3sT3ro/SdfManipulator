@@ -27,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8206449657062974}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 4.656613e-10, w: 1}
-  m_LocalPosition: {x: 0, y: 0.306, z: 0}
+  m_LocalRotation: {x: -0.13353643, y: -0.46851566, z: 0.30185533, w: 0.81947815}
+  m_LocalPosition: {x: 0.00000013411045, y: 0.30599993, z: 0.00000004004687}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3917854249297177818}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 3.669, y: -58.237, z: 38.399}
 --- !u!114 &4134102037939227837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,7 +578,7 @@ MonoBehaviour:
   sdfModifiers: []
   operation: 1
   blendFactor: 0.6086772
-  singleId: 1
+  singleId: 0
   children:
   - {fileID: 8609718936059448575}
   - {fileID: 5157029122316181674}
@@ -1403,15 +1403,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4868412684331812366}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.324, y: 1.31, z: 0.024}
+  m_LocalRotation: {x: 0.082826674, y: -0.27811304, z: 0.16540636, w: 0.94256765}
+  m_LocalPosition: {x: -2.58, y: 1.04, z: 1.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5539593193615144114}
   - {fileID: 3228674007715426602}
   m_Father: {fileID: 3023576962427499183}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 14.368, y: -30.859, z: 15.922}
 --- !u!114 &8569811843425322066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1532,7 +1532,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5365129198550944035}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.023365937, y: 0.4989719, z: 0.08762996, w: 0.8618597}
+  m_LocalRotation: {x: -0.016606279, y: 0.21679187, z: 0.6139756, w: 0.75878817}
   m_LocalPosition: {x: 1.5099999, y: 2.702, z: -1.863}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -1540,7 +1540,7 @@ Transform:
   - {fileID: 391145436102673856}
   - {fileID: 7852303409221158797}
   m_Father: {fileID: 3023576962427499183}
-  m_LocalEulerAnglesHint: {x: -177.296, y: -480.101, z: -169.947}
+  m_LocalEulerAnglesHint: {x: -163.058, y: -521.179, z: -104.87201}
 --- !u!114 &8620113202361706767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1619,7 +1619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxExtents: {x: 6.442449, y: 0.16918316, z: 4.148325}
+  boxExtents: {x: 9.666056, y: 0.16918316, z: 9.426851}
 --- !u!114 &4255145660581018384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1770,15 +1770,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7383794931903252248}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06294881, y: 0.106313154, z: 0.057875015, w: 0.990649}
-  m_LocalPosition: {x: 4.044, y: 2.093, z: 2.809}
+  m_LocalRotation: {x: 0.008897317, y: -0.2757213, z: -0.09959464, w: 0.9560228}
+  m_LocalPosition: {x: -3.632, y: 1.906, z: -0.684}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5170235656460581978}
   - {fileID: 1923285476706485340}
   m_Father: {fileID: 3023576962427499183}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -2.173, y: -31.961, z: -11.273}
 --- !u!114 &4937130345883041515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1963,7 +1963,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _DRAWMODE_SKYBOX
+  - _DRAWMODE_MATERIAL
   - _ZWRITE_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -2261,7 +2261,7 @@ Material:
     - _AoMaxDistance: 1
     - _AoSteps: 6
     - _Cull: 0
-    - _DrawMode: 2
+    - _DrawMode: 0
     - _EPSILON_NORMAL: 0.0001
     - _EPSILON_RAY: 0.00001
     - _EpsilonNormal: 0.001
@@ -2287,7 +2287,7 @@ Material:
     m_Colors:
     - SDF_1_0__root__ground__1_BoxExtents: {r: 6.442449, g: 0.16918316, b: 3.634491, a: 0}
     - SDF_1_0__root_ground__1_BoxExtents: {r: 6.442449, g: 0.16918316, b: 3.634491, a: 0}
-    - SDF_1_0__root_ground__2_BoxExtents: {r: 6.442449, g: 0.16918316, b: 4.148325, a: 0}
+    - SDF_1_0__root_ground__2_BoxExtents: {r: 9.666056, g: 0.16918316, b: 9.426851, a: 0}
     - SDF_1_3_0_1_1_0__root_combine_screw_head_cuts_cut_1__1_BoxExtents: {r: 0.413049, g: 0.589912, b: 0.117837, a: 0}
     - SDF_1_3_0_1_1_1__root_combine_screw_head_cuts_cut_2__1_BoxExtents: {r: 0.696923, g: 0.091037, b: 0.587924, a: 0}
     - SDF_1_3_2_1__root_combine_q_torus__1_Cap: {r: 0.53, g: -0.18, b: 0, a: 0}
@@ -2403,7 +2403,7 @@ Shader:
       - m_Name: _DrawMode
         m_Description: Draw mode
         m_Attributes:
-        - KeywordEnum (Material, Albedo, Skybox, Normal, Steps, Depth, Occlusion)
+        - KeywordEnum (Material, Albedo, Id, Skybox, Normal, Steps, Depth, Occlusion)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0
@@ -2542,9 +2542,9 @@ Shader:
         - Header (root ground)
         m_Type: 1
         m_Flags: 0
-        m_DefValue[0]: 6.442449
+        m_DefValue[0]: 9.666056
         m_DefValue[1]: 0.169183
-        m_DefValue[2]: 4.148325
+        m_DefValue[2]: 9.426851
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
@@ -3286,7 +3286,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 31213
+          gpuProgramID: 19754
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -3309,7 +3309,7 @@ Shader:
             m_ConstantBufferBindings: []
             m_UAVParams: []
             m_Samplers: []
-          m_SerializedKeywordStateMask: 0000010002000300040005000600070009000e000f00130014001600
+          m_SerializedKeywordStateMask: 0000010002000300040005000600070009000d000e000f00130014001600
         progFragment:
           m_SubPrograms: []
           m_PlayerSubPrograms: []
@@ -3323,7 +3323,7 @@ Shader:
             m_ConstantBufferBindings: []
             m_UAVParams: []
             m_Samplers: []
-          m_SerializedKeywordStateMask: 0000010002000300040005000600070009000e000f00130014001600
+          m_SerializedKeywordStateMask: 0000010002000300040005000600070009000d000e000f00130014001600
         progGeometry:
           m_SubPrograms: []
           m_PlayerSubPrograms: []
@@ -3839,14 +3839,14 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      31213:
+      19754:
         serializedVersion: 3
         m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED 1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED 1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED 1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED
-          1\n#define _ZWRITE_ON_KEYWORD_DECLARED 1\n#define _ZWRITE_OFF_KEYWORD_DECLARED
-          1\n#line 285 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
+          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
+          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 285 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
           UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
           UNITY_INSTANCED_RENDERER_BOUNDS\n#line 128\n\n        #pragma target 5.0\n       
           #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
@@ -3917,41 +3917,43 @@ Shader:
           0.216762, -2.927725 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float3 SDF_1_4_1_2__root_screw_head_cut_2__2_BoxExtents;\n       
           float SDF_1_5__root_peg__1_BlendFactor;\n        float4x4 SDF_1_5_0__root_peg_cylinder__1_SpaceTransform
-          = {\n                { 1.0, 0.0, 0.0, -3.582294 },\n                { 0.0,
-          1.0, 0.0, -1.580709 },\n                { 0.0, 0.0, 1.0, -3.369244 },\n               
-          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_5_0__root_peg_cylinder__2_Height;\n       
-          float SDF_1_5_0__root_peg_cylinder__2_Radius;\n        float SDF_1_5_0__root_peg_cylinder__2_Rounding;\n       
+          = {\n                { 0.671992, -0.204357, 0.711804, 3.766299 },\n               
+          { 0.290951, 0.956738, 0.0, -0.676227 },\n                { -0.68101, 0.2071,
+          0.702378, -1.440798 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_5_0__root_peg_cylinder__2_Height;\n        float
+          SDF_1_5_0__root_peg_cylinder__2_Radius;\n        float SDF_1_5_0__root_peg_cylinder__2_Rounding;\n       
           float4x4 SDF_1_5_1__root_peg_cutout__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, -3.582294 },\n                { 0.0, 1.0, 0.0, -2.343709
-          },\n                { 0.0, 0.0, 1.0, -3.369244 },\n                { 0.0,
-          0.0, 0.0, 1.0 }\n        };\n        float SDF_1_5_1__root_peg_cutout__2_MainRadius;\n       
-          float SDF_1_5_1__root_peg_cutout__2_RingRadius;\n        float SDF_1_5_1__root_peg_cutout__2_Cap;\n       
-          float SDF_1_6__root_infinite_cylinder__1_BlendFactor;\n        float4x4
-          SDF_1_6_0__root_infinite_cylinder_cylinder__1_SpaceTransform = {\n               
-          { 0.66883, 0.00523, -0.743398, -2.774013 },\n                { -0.024016,
-          0.999605, -0.014575, -1.770684 },\n                { 0.743028, 0.027601,
-          0.668691, -0.469365 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          { 0.671992, -0.204357, 0.711804, 3.766299 },\n                { 0.290951,
+          0.956738, 0.0, -1.439227 },\n                { -0.68101, 0.2071, 0.702378,
+          -1.440798 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
+          float SDF_1_5_1__root_peg_cutout__2_MainRadius;\n        float SDF_1_5_1__root_peg_cutout__2_RingRadius;\n       
+          float SDF_1_5_1__root_peg_cutout__2_Cap;\n        float SDF_1_6__root_infinite_cylinder__1_BlendFactor;\n       
+          float4x4 SDF_1_6_0__root_infinite_cylinder_cylinder__1_SpaceTransform =
+          {\n                { 0.337055, 0.847756, -0.409517, -3.365204 },\n               
+          { -0.929011, 0.370051, 0.00143, 1.623275 },\n                { 0.152754,
+          0.379963, 0.912302, 0.439577 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float SDF_1_6_0__root_infinite_cylinder_cylinder__2_Height;\n       
           float SDF_1_6_0__root_infinite_cylinder_cylinder__2_Radius;\n        float
           SDF_1_6_0__root_infinite_cylinder_cylinder__2_Rounding;\n        float4x4
           SDF_1_6_1__root_infinite_cylinder_cutout__1_SpaceTransform = {\n               
-          { 0.66883, 0.00523, -0.743398, -2.774012 },\n                { -0.024016,
-          0.999605, -0.014575, -2.533684 },\n                { 0.743028, 0.027601,
-          0.668691, -0.469365 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          { -0.34321, 0.811601, 0.472768, -0.439231 },\n                { -0.927795,
+          -0.214544, -0.305234, 1.696064 },\n                { -0.146299, -0.543392,
+          0.826633, 3.031229 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius;\n       
           float SDF_1_6_1__root_infinite_cylinder_cutout__2_RingRadius;\n       
           float SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap;\n        float SDF_1_7__root_two_cones__1_BlendFactor;\n       
           float4x4 SDF_1_7_0__root_two_cones_cone__1_SpaceTransform = {\n               
-          { 0.970696, -0.101283, 0.217924, -3.285172 },\n                { 0.128052,
-          0.985376, -0.112415, -1.387878 },\n                { -0.203352, 0.137026,
-          0.96947, 0.130866 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
-          float SDF_1_7_0__root_two_cones_cone__2_Angle;\n        float SDF_1_7_0__root_two_cones_cone__2_Height;\n       
-          float4x4 SDF_1_7_1__root_two_cones_cone__1_SpaceTransform = {\n               
-          { -0.637143, 0.056676, -0.76866, 2.78795 },\n                { -0.131973,
-          -0.990587, 0.036353, 2.333473 },\n                { -0.759363, 0.124605,
-          0.638625, 1.93194 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n       
-          float SDF_1_7_1__root_two_cones_cone__2_Angle;\n        float SDF_1_7_1__root_two_cones_cone__2_Height;\n       
-          #line 285 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          { 0.689264, 0.257378, 0.677253, 1.084762 },\n                { -0.24115,
+          0.962974, -0.120535, -2.066904 },\n                { -0.6832, -0.080239,
+          0.72581, -1.952641 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_7_0__root_two_cones_cone__2_Angle;\n        float
+          SDF_1_7_0__root_two_cones_cone__2_Height;\n        float4x4 SDF_1_7_1__root_two_cones_cone__1_SpaceTransform
+          = {\n                { -0.145044, -0.096575, -0.984701, 0.553466 },\n               
+          { 0.277084, -0.959368, 0.053277, 3.077221 },\n                { -0.949835,
+          -0.265118, 0.16591, -2.352023 },\n                { 0.0, 0.0, 0.0, 1.0
+          }\n        };\n        float SDF_1_7_1__root_two_cones_cone__2_Angle;\n       
+          float SDF_1_7_1__root_two_cones_cone__2_Height;\n        #line 285 \"\"\n#ifdef
+          DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
           UNITY: Original start of shader */\n            SdfResult SDF_1_0__root_ground__3
           (float3 p);\n            SdfResult SDF_1_1_0__root_shroom_1_leg__3 (float3
           p);\n            SdfResult SDF_1_1_1__root_shroom_1_cap__3 (float3 p);\n           
@@ -4009,9 +4011,9 @@ Shader:
           }\n            SdfResult SDF_1_3__root_pill__1(float3 p) {\n               
           SdfResult result = SDF_1_3_0__root_pill_sphere__3(p);\n               
           result = sdf::operators::intersectSimple(result, SDF_1_3_1__root_pill_sphere__3(p));\n               
-          result.id = int4(0, 0, 0, 20);\n                return result;\n           
-          }\n            SdfResult SDF_1_4_0__root_screw_body__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::transform(p,
+          return result;\n            }\n            SdfResult SDF_1_4_0__root_screw_body__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::transform(p,
           SDF_1_4_0__root_screw_body__1_SpaceTransform), SDF_1_4_0__root_screw_body__2_Height,
           SDF_1_4_0__root_screw_body__2_Radius);\n                result.id = int4(0,
           0, 0, 29);\n                return result;\n            }\n           
@@ -4102,10 +4104,10 @@ Shader:
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: 404c775111c2bf84b29f225f13218acd
+          Hash: 8676def93f12a835a189847233d29c26
         m_CodeHash:
           serializedVersion: 2
-          Hash: 53a9637b21f4dbfde19e280b27326644
+          Hash: e79779e5934329bb08c5482f931620ee
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0
@@ -4121,6 +4123,7 @@ Shader:
         m_VariantsUserLocal0:
         - - _DRAWMODE_MATERIAL
           - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
           - _DRAWMODE_SKYBOX
           - _DRAWMODE_NORMAL
           - _DRAWMODE_STEPS
@@ -4133,6 +4136,7 @@ Shader:
         m_VariantsUserLocal1:
         - - _DRAWMODE_MATERIAL
           - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
           - _DRAWMODE_SKYBOX
           - _DRAWMODE_NORMAL
           - _DRAWMODE_STEPS

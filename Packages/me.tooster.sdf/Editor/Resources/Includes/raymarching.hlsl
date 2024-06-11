@@ -209,7 +209,8 @@ fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D
     #elif _DRAWMODE_ALBEDO
     color = mat.albedo;
     #elif _DRAWMODE_ID
-    color = noise::randomColor(sdf.id.w); // TODO: account for xyz
+    // dampen the color by occlusion, otherwise depth perception is very bad
+    color = noise::randomColor(sdf.id.w)*(mat.occlusion); // TODO: account for xyz
     #elif _DRAWMODE_SKYBOX
     // sample the default reflection cubemap, using the reflection vector
     half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, sdf.normal);

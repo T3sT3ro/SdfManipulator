@@ -91,14 +91,6 @@ Material SdfMaterial(SdfResult sdf) {
     return m;
 }
 
-fixed3 lightDirection(float3 worldPosition) {
-    #ifdef USING_DIRECTIONAL_LIGHT
-    return _WorldSpaceLightPos0.xyz;
-    #else
-    return normalize(UnityWorldSpaceLightDir(worldPosition));
-    #endif
-}
-
 fixed4 shadeAmbientLambert(SdfResult sdf, Material mat) {
     float  atten = 1.0;
     float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
@@ -106,6 +98,16 @@ fixed4 shadeAmbientLambert(SdfResult sdf, Material mat) {
     float3 lightFinal = diffuseReflection + UNITY_LIGHTMODEL_AMBIENT.xyz;
 
     return float4(lightFinal * mat.albedo, 1.0);
+}
+
+fixed4 shadePhongWithSkybox(SdfResult sdf, Material mat) {
+    // sample the default reflection cubemap, using the reflection vector
+    half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, sdf.normal);
+    // decode cubemap data into actual color
+    half3 skyColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
+
+    fixed3 lightFinal = skyColor * mat.albedo;
+    return fixed4(lightFinal * mat.metallic, 1.0);
 }
 
 /** \brief temporary function for shading sdf result
@@ -138,7 +140,17 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
     // color.a = 1;
 
     Material mat = SdfMaterial(sdf);
-    fixed4   color = shadeAmbientLambert(sdf, mat);
+    Ray3D    toLight = (Ray3D)0;
+    toLight.ro = sdf.p;
+    toLight.rd = normalize(_WorldSpaceLightPos0 - sdf.p);
+    toLight.maxDistance = _MAX_DISTANCE;
+    mat.albedo = noise::randomColor(sdf.id.w) * (mat.occlusion);
+
+    fixed4 color = shadeAmbientLambert(sdf, mat);
+    // SdfResult shadows = raymarch(toLight, _MAX_STEPS, _EPSILON_RAY);
+
+    // if (isHit(shadows))
+    // color = shadeAmbientLambert(shadows, mat);
 
     // // Get the lighting
     // SurfaceOutputStandard surfaceOutput = (SurfaceOutputStandard)0;

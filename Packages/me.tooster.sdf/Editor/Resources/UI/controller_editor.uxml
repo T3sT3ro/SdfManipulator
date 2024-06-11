@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements"
          xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements"
          noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/me.tooster.sdf/Editor/Resources/UI/shared_editor_style.uss?fileID=7433441132597879392&amp;guid=195e287ed625c3735969def44b0eb223&amp;type=3#shared_editor_style"/>
     <ui:Foldout text="Default inspector" name="default-inspector"
                 style="border-top-width: 2px; border-left-color: rgb(90, 85, 85); border-right-color: rgb(90, 85, 85); border-top-color: rgb(90, 85, 85); border-bottom-color: rgb(90, 85, 85); border-bottom-width: 2px; padding-top: 4px; padding-bottom: 4px;"/>
 </ui:UXML>

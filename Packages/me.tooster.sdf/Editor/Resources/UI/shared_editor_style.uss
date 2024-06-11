@@ -1,0 +1,16 @@
+VisualElement {
+}
+
+.shader-structural Label {
+    border-color: orange;
+    border-right-width: 3px;
+    border-bottom-width: 1px;
+    color: wheat;
+}
+
+.shader-property Label {
+    border-color: lightskyblue;
+    border-right-width: 3px;
+    border-bottom-width: 1px;
+    color: aliceblue;
+}

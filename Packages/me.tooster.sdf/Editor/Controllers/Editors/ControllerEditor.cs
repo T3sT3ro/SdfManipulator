@@ -1,21 +1,25 @@
 using me.tooster.sdf.Editor.Controllers.SDF;
 using Unity.Properties;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     /**
      * A base controller editor which binds serialized fields to events for triggering uniform updates and shader regenerations.
-     * Prerequisites for Controller to make the editor work as intended::
-     * - controller has serialized fields and reactive properties (i.e. ones that trigget SetField and OnPropertyChanged)
-     * - the serialized field and the reactive property have the same name, but the property is capitalized e.g. field 'size' and property 'Size'
-     * - properties are annotated with either [ShaderProperty] (for uniforms or [ShaderStructural] (for regenerating with new definitions)
+     * Prerequisites for Controller to make the editor work as intended:
+     * <list type="bullet">
+     * <item>controller has serialized fields and reactive properties (i.e. ones that trigget SetField and OnPropertyChanged)</item>
+     * <item>the serialized field and the reactive property have the same name, but the property is capitalized e.g. field 'size' and property 'Size'</item>
+     * <item>properties are annotated with either [ShaderProperty] (for uniforms or [ShaderStructural] (for regenerating with new definitions)</item>
+     * </list>
      */
     [CustomEditor(typeof(Controller), true)]
     [CanEditMultipleObjects]
     public class ControllerEditor : UnityEditor.Editor {
         const string UI_CONTROLLER_EDITOR_RESOURCE = "UI/controller_editor";
+        const string STRUCTURAL_TOOLTIP            = "Structural property regenerating a shader. Editable only in a prefab stage.";
 
         public override VisualElement CreateInspectorGUI() {
             var controller = (Controller)target;
@@ -43,13 +47,24 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                     if (!PropertyContainer.TryGetProperty(controller, new PropertyPath(capitalizedProperty), out var p))
                         return;
 
-                    if (p.GetAttribute<ShaderPropertyAttribute>() is not null)
+                    if (p.GetAttribute<ShaderPropertyAttribute>() is not null) {
+                        // A runtime proeprty can be updated at any time
                         propertyField.RegisterValueChangeCallback(_ => controller.OnPropertyChanged(capitalizedProperty));
+                        propertyField.AddToClassList("shader-property");
+                    }
 
                     // TrackPropertyValue is here required, because the change event is triggered when inspector opens for regular property field
                     // this caused regenerations every time the selected object changed 
-                    if (p.GetAttribute<ShaderStructuralAttribute>() is not null)
+                    if (p.GetAttribute<ShaderStructuralAttribute>() is not null) {
                         propertyField.TrackPropertyValue(serializedObject.FindProperty(propertyPath), _ => controller.OnStructureChanged());
+                        // add 'structural' USS class to property field
+                        propertyField.AddToClassList("shader-structural");
+                        propertyField.tooltip = propertyField.tooltip is null or ""
+                            ? STRUCTURAL_TOOLTIP
+                            : propertyField.tooltip + $"\n{STRUCTURAL_TOOLTIP}";
+                        if (PrefabStageUtility.GetPrefabStage(controller.gameObject) == null)
+                            propertyField.SetEnabled(false);
+                    }
                 }
             );
             return root;

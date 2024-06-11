@@ -1567,14 +1567,14 @@ Shader:
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 179
+    line: 191
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: endregion'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 238
+    line: 239
     warning: 1
     runtimeError: 0
   - message: '"SDF_1_0_0_0__root_combine_dice_box__1_SpaceTransform" contains consecutive
@@ -1807,7 +1807,7 @@ Shader:
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: fc37cee23ef32690301c6905bf0cf4a5
+          Hash: 8676def93f12a835a189847233d29c26
         m_CodeHash:
           serializedVersion: 2
           Hash: a693bf361cb44eb389450e4ad023c856

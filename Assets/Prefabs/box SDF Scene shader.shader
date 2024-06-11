@@ -1,5 +1,5 @@
 // GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
-// Last modification: 10/06/2024 00:21:08
+// Last modification: 11/06/2024 15:14:46
 
 Shader "Box SDF Scene (generated)"
 {
@@ -15,7 +15,7 @@ Shader "Box SDF Scene (generated)"
         _ZWrite ("ZWrite", Float) = 1
         [Enum (UnityEngine.Rendering.CompareFunction)]
         _ZTest ("ZTest", Int) = 4
-        [KeywordEnum (Material, Albedo, Skybox, Normal, Steps, Depth, Occlusion)]
+        [KeywordEnum (Material, Albedo, Id, Skybox, Normal, Steps, Depth, Occlusion)]
         _DrawMode ("Draw mode", Int) = 0
         [Toggle (_SHOW_WORLD_GRID)]
         [Tooltip (Show world grid overlay)]
@@ -33,7 +33,7 @@ Shader "Box SDF Scene (generated)"
         SDF_1__root__1_BlendFactor ("Blend factor", Float) = 0.58
 
         [Header (root ground)]
-        SDF_1_0__root_ground__2_BoxExtents ("Box extents", Vector) = (6.442449, 0.169183, 4.148325, 0.0)
+        SDF_1_0__root_ground__2_BoxExtents ("Box extents", Vector) = (9.666056, 0.169183, 9.426851, 0.0)
 
         [Header (root shroom 1 leg)]
         SDF_1_1_0__root_shroom_1_leg__2_Radius ("Sphere radius", Float) = 0.582681
@@ -233,18 +233,18 @@ Shader "Box SDF Scene (generated)"
         float3   SDF_1_4_1_2__root_screw_head_cut_2__2_BoxExtents;
         float    SDF_1_5__root_peg__1_BlendFactor;
         float4x4 SDF_1_5_0__root_peg_cylinder__1_SpaceTransform = {
-            {1.0, 0.0, 0.0, -3.582294},
-            {0.0, 1.0, 0.0, -1.580709},
-            {0.0, 0.0, 1.0, -3.369244},
+            {0.671992, -0.204357, 0.711804, 3.766299},
+            {0.290951, 0.956738, 0.0, -0.676227},
+            {-0.68101, 0.2071, 0.702378, -1.440798},
             {0.0, 0.0, 0.0, 1.0}
         };
         float    SDF_1_5_0__root_peg_cylinder__2_Height;
         float    SDF_1_5_0__root_peg_cylinder__2_Radius;
         float    SDF_1_5_0__root_peg_cylinder__2_Rounding;
         float4x4 SDF_1_5_1__root_peg_cutout__1_SpaceTransform = {
-            {1.0, 0.0, 0.0, -3.582294},
-            {0.0, 1.0, 0.0, -2.343709},
-            {0.0, 0.0, 1.0, -3.369244},
+            {0.671992, -0.204357, 0.711804, 3.766299},
+            {0.290951, 0.956738, 0.0, -1.439227},
+            {-0.68101, 0.2071, 0.702378, -1.440798},
             {0.0, 0.0, 0.0, 1.0}
         };
         float    SDF_1_5_1__root_peg_cutout__2_MainRadius;
@@ -252,18 +252,18 @@ Shader "Box SDF Scene (generated)"
         float    SDF_1_5_1__root_peg_cutout__2_Cap;
         float    SDF_1_6__root_infinite_cylinder__1_BlendFactor;
         float4x4 SDF_1_6_0__root_infinite_cylinder_cylinder__1_SpaceTransform = {
-            {0.66883, 0.00523, -0.743398, -2.774013},
-            {-0.024016, 0.999605, -0.014575, -1.770684},
-            {0.743028, 0.027601, 0.668691, -0.469365},
+            {0.337055, 0.847756, -0.409517, -3.365204},
+            {-0.929011, 0.370051, 0.00143, 1.623275},
+            {0.152754, 0.379963, 0.912302, 0.439577},
             {0.0, 0.0, 0.0, 1.0}
         };
         float    SDF_1_6_0__root_infinite_cylinder_cylinder__2_Height;
         float    SDF_1_6_0__root_infinite_cylinder_cylinder__2_Radius;
         float    SDF_1_6_0__root_infinite_cylinder_cylinder__2_Rounding;
         float4x4 SDF_1_6_1__root_infinite_cylinder_cutout__1_SpaceTransform = {
-            {0.66883, 0.00523, -0.743398, -2.774012},
-            {-0.024016, 0.999605, -0.014575, -2.533684},
-            {0.743028, 0.027601, 0.668691, -0.469365},
+            {-0.34321, 0.811601, 0.472768, -0.439231},
+            {-0.927795, -0.214544, -0.305234, 1.696064},
+            {-0.146299, -0.543392, 0.826633, 3.031229},
             {0.0, 0.0, 0.0, 1.0}
         };
         float    SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius;
@@ -271,17 +271,17 @@ Shader "Box SDF Scene (generated)"
         float    SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap;
         float    SDF_1_7__root_two_cones__1_BlendFactor;
         float4x4 SDF_1_7_0__root_two_cones_cone__1_SpaceTransform = {
-            {0.970696, -0.101283, 0.217924, -3.285172},
-            {0.128052, 0.985376, -0.112415, -1.387878},
-            {-0.203352, 0.137026, 0.96947, 0.130866},
+            {0.689264, 0.257378, 0.677253, 1.084762},
+            {-0.24115, 0.962974, -0.120535, -2.066904},
+            {-0.6832, -0.080239, 0.72581, -1.952641},
             {0.0, 0.0, 0.0, 1.0}
         };
         float    SDF_1_7_0__root_two_cones_cone__2_Angle;
         float    SDF_1_7_0__root_two_cones_cone__2_Height;
         float4x4 SDF_1_7_1__root_two_cones_cone__1_SpaceTransform = {
-            {-0.637143, 0.056676, -0.76866, 2.78795},
-            {-0.131973, -0.990587, 0.036353, 2.333473},
-            {-0.759363, 0.124605, 0.638625, 1.93194},
+            {-0.145044, -0.096575, -0.984701, 0.553466},
+            {0.277084, -0.959368, 0.053277, 3.077221},
+            {-0.949835, -0.265118, 0.16591, -2.352023},
             {0.0, 0.0, 0.0, 1.0}
         };
         float SDF_1_7_1__root_two_cones_cone__2_Angle;
@@ -380,7 +380,6 @@ Shader "Box SDF Scene (generated)"
             SdfResult SDF_1_3__root_pill__1(float3 p) {
                 SdfResult result = SDF_1_3_0__root_pill_sphere__3(p);
                 result = sdf::operators::intersectSimple(result, SDF_1_3_1__root_pill_sphere__3(p));
-                result.id = int4(0, 0, 0, 20);
                 return result;
             }
 
