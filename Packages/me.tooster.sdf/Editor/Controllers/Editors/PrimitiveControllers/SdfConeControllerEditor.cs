@@ -9,7 +9,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
         SerializedProperty angleProperty;
         SerializedProperty heightProperty;
 
-        SphereBoundsHandle radiusHandle = new();
+        SphereBoundsHandle radiusHandle = new() { axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y };
 
         protected override void OnEnable() {
             base.OnEnable();
@@ -23,15 +23,14 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
             var controller = (SdfConeController)target;
 
 
+            using var drawingScope =
+                new Handles.DrawingScope(Matrix4x4.TRS(controller.transform.position, controller.transform.rotation, Vector3.one));
             using var scope = new EditorGUI.ChangeCheckScope();
 
             radiusHandle.radius = controller.Height * Mathf.Tan(controller.Angle);
-            radiusHandle.axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y;
             radiusHandle.center = controller.ConeOrigin == SdfConeController.OriginPosition.TIP
                 ? Vector3.up * -controller.Height
                 : Vector3.zero;
-
-            Handles.matrix = Matrix4x4.TRS(controller.transform.position, controller.transform.rotation, Vector3.one);
 
             radiusHandle.DrawHandle();
 

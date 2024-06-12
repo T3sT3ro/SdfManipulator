@@ -20,20 +20,17 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
             var controller = (SdfBoxController)target;
             var tr = controller.transform;
 
-            var anyChanged = false;
-            using (new Handles.DrawingScope(Matrix4x4.TRS(tr.position, tr.rotation, Vector3.one))) {
-                using (var extentsCheck = new EditorGUI.ChangeCheckScope()) {
-                    boxHandle.center = Vector3.zero;
-                    boxHandle.size = controller.BoxExtents * 2;
+            using var drawingScope = new Handles.DrawingScope(Matrix4x4.TRS(tr.position, tr.rotation, Vector3.one));
+            using var extentsCheck = new EditorGUI.ChangeCheckScope();
+            boxHandle.center = Vector3.zero;
+            boxHandle.size = controller.BoxExtents * 2;
 
-                    boxHandle.DrawHandle();
+            boxHandle.DrawHandle();
 
-                    anyChanged |= extentsCheck.changed;
-                    if (extentsCheck.changed) controller.BoxExtents = boxExtents.vector3Value = boxHandle.size / 2;
-                }
-            }
-
-            if (anyChanged) serializedObject.ApplyModifiedProperties();
+            if (!extentsCheck.changed)
+                return;
+            controller.BoxExtents = boxExtents.vector3Value = boxHandle.size / 2;
+            serializedObject.ApplyModifiedProperties();
         }
 
         [MenuItem("GameObject/SDF/Primitives/Box")]
