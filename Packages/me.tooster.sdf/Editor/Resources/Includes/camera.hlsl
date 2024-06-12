@@ -37,7 +37,7 @@ float3 cameraRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
     clipPos.xy /= clipPos.w; // perspective divide
     clipPos.xy = (clipPos.xy - 0.5) * 2; // transform to origin 0,0 at center and extents of ±1
     clipPos.x *= AspectRatio(); // clipPos becomes x: [-aspectRatio, aspectRatio] and y: [-1, 1]
-    // The ray is constructed from a flat ray on the clip near plane and the forward vector. TODO: account for orthographic camera
+    // The ray is constructed from a flat (z=0) ray on the near clip plane, and the camera forward vector, i.e. it forms a triangle
 
     float focalLength = CameraFocalLength();
     if (CameraIsOrtho()) {
@@ -56,7 +56,7 @@ float3 cameraVsRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
     clipPos.xy /= clipPos.w; // perspective divide
     clipPos.xy = (clipPos.xy - 0.5) * 2; // transform to origin 0,0 at center and extents of ±1
     clipPos.x *= AspectRatio(); // clipPos becomes x: [-aspectRatio, aspectRatio] and y: [-1, 1]
-    // The ray is constructed from a flat ray on the clip near plane and the forward vector. TODO: account for orthographic camera
+    // The ray is constructed from a flat (z=0) ray on the near clip plane, and the camera forward vector, i.e. it forms a triangle
 
     float focalLength = CameraFocalLength();
     if (CameraIsOrtho()) {
