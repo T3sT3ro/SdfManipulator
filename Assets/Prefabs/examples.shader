@@ -1,5 +1,5 @@
 // GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
-// Last modification: 14/06/2024 20:24:47
+// Last modification: 15/06/2024 00:22:16
 
 Shader "examples (generated)"
 {
@@ -67,8 +67,11 @@ Shader "examples (generated)"
 
         [Header (root allObjects cylinder)]
         SDF_1_0_4__root_allObjects_cylinder__2_Height ("Cylinder height", Float) = 1.0
-        SDF_1_0_4__root_allObjects_cylinder__2_Radius ("Cylinder radius", Float) = 0.75
+        SDF_1_0_4__root_allObjects_cylinder__2_Radius ("Cylinder radius", Float) = 0.650901
         SDF_1_0_4__root_allObjects_cylinder__2_Rounding ("Rounding", Float) = 0.25
+
+        [Header (root allObjects cylinder)]
+        SDF_1_0_4__root_allObjects_cylinder__3_BendFactor ("Bend factor", Float) = -0.64
 
         [Header (root allObjects rounded cylinder)]
         SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height ("Cylinder height", Float) = 0.240286
@@ -79,6 +82,9 @@ Shader "examples (generated)"
         SDF_1_0_6__root_allObjects_torus__2_MainRadius ("Torus main radius", Float) = 0.630713
         SDF_1_0_6__root_allObjects_torus__2_RingRadius ("Torus ring radius", Float) = 0.25
         SDF_1_0_6__root_allObjects_torus__2_Cap ("Torus cap", Float) = 1.738993
+
+        [Header (root allObjects torus)]
+        SDF_1_0_6__root_allObjects_torus__3_BendFactor ("Bend factor", Float) = 1.43
 
         [Header (root cutoff)]
         SDF_1_1__root_cutoff__2_BoxExtents ("Box extents", Vector) = (6.891491, 0.873901, 3.763167, 0.0)
@@ -154,14 +160,15 @@ Shader "examples (generated)"
         };
         float    SDF_1_0_3__root_allObjects_sphere__2_Radius;
         float4x4 SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform = {
-            {1.0, 0.0, 0.0, 2.0},
+            {0.0, 0.0, -1.0, 0.0},
             {0.0, 1.0, 0.0, -0.25},
-            {0.0, 0.0, 1.0, -1.495},
+            {1.0, 0.0, 0.0, 2.0},
             {0.0, 0.0, 0.0, 1.0}
         };
         float    SDF_1_0_4__root_allObjects_cylinder__2_Height;
         float    SDF_1_0_4__root_allObjects_cylinder__2_Radius;
         float    SDF_1_0_4__root_allObjects_cylinder__2_Rounding;
+        float    SDF_1_0_4__root_allObjects_cylinder__3_BendFactor;
         float4x4 SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform = {
             {1.0, 0.0, 0.0, 2.0},
             {0.0, 1.0, 0.0, 0.154},
@@ -173,13 +180,14 @@ Shader "examples (generated)"
         float    SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding;
         float4x4 SDF_1_0_6__root_allObjects_torus__1_SpaceTransform = {
             {1.0, 0.0, 0.0, 2.0},
-            {0.0, 1.0, 0.0, -0.25},
+            {0.0, 1.0, 0.0, -0.108},
             {0.0, 0.0, 1.0, 4.0},
             {0.0, 0.0, 0.0, 1.0}
         };
         float    SDF_1_0_6__root_allObjects_torus__2_MainRadius;
         float    SDF_1_0_6__root_allObjects_torus__2_RingRadius;
         float    SDF_1_0_6__root_allObjects_torus__2_Cap;
+        float    SDF_1_0_6__root_allObjects_torus__3_BendFactor;
         float4x4 SDF_1_1__root_cutoff__1_SpaceTransform = {
             {1.0, 0.0, 0.0, 0.0},
             {0.0, 1.0, 0.0, -1.214},
@@ -197,9 +205,9 @@ Shader "examples (generated)"
             SdfResult SDF_1_0_1__root_allObjects_toroid__1(float3 p);
             SdfResult SDF_1_0_2__root_allObjects_cone__3(float3 p);
             SdfResult SDF_1_0_3__root_allObjects_sphere__3(float3 p);
-            SdfResult SDF_1_0_4__root_allObjects_cylinder__3(float3 p);
+            SdfResult SDF_1_0_4__root_allObjects_cylinder__4(float3 p);
             SdfResult SDF_1_0_5__root_allObjects_rounded_cylinder__3(float3 p);
-            SdfResult SDF_1_0_6__root_allObjects_torus__3(float3 p);
+            SdfResult SDF_1_0_6__root_allObjects_torus__4(float3 p);
             SdfResult SDF_1_0__root_allObjects__1(float3 p);
             SdfResult SDF_1_1__root_cutoff__3(float3 p);
             SdfResult SDF_1__root__1(float3 p);
@@ -260,13 +268,14 @@ Shader "examples (generated)"
                 return result;
             }
 
-            SdfResult SDF_1_0_4__root_allObjects_cylinder__3(float3 p) {
+            SdfResult SDF_1_0_4__root_allObjects_cylinder__4(float3 p) {
                 SdfResult result = (SdfResult)0;
                 result.distance = sdf::primitives3D::cylinder_capped(
-                    sdf::operators::transform(p, SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform), SDF_1_0_4__root_allObjects_cylinder__2_Height,
-                    SDF_1_0_4__root_allObjects_cylinder__2_Radius
+                    sdf::operators::cheap_bend(
+                        sdf::operators::transform(p, SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform), SDF_1_0_4__root_allObjects_cylinder__3_BendFactor
+                    ), SDF_1_0_4__root_allObjects_cylinder__2_Height, SDF_1_0_4__root_allObjects_cylinder__2_Radius
                 );
-                result.id = int4(0, 0, 0, 23);
+                result.id = int4(0, 0, 0, 24);
                 return result;
             }
 
@@ -276,17 +285,17 @@ Shader "examples (generated)"
                     sdf::operators::transform(p, SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform), SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius,
                     SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding, SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height
                 );
-                result.id = int4(0, 0, 0, 26);
+                result.id = int4(0, 0, 0, 27);
                 return result;
             }
 
-            SdfResult SDF_1_0_6__root_allObjects_torus__3(float3 p) {
+            SdfResult SDF_1_0_6__root_allObjects_torus__4(float3 p) {
                 SdfResult result = (SdfResult)0;
                 result.distance = sdf::primitives3D::torus_capped(
-                    sdf::operators::transform(p, SDF_1_0_6__root_allObjects_torus__1_SpaceTransform), SDF_1_0_6__root_allObjects_torus__2_MainRadius,
-                    SDF_1_0_6__root_allObjects_torus__2_RingRadius, SDF_1_0_6__root_allObjects_torus__2_Cap
+                    sdf::operators::cheap_bend(sdf::operators::transform(p, SDF_1_0_6__root_allObjects_torus__1_SpaceTransform), SDF_1_0_6__root_allObjects_torus__3_BendFactor),
+                    SDF_1_0_6__root_allObjects_torus__2_MainRadius, SDF_1_0_6__root_allObjects_torus__2_RingRadius, SDF_1_0_6__root_allObjects_torus__2_Cap
                 );
-                result.id = int4(0, 0, 0, 29);
+                result.id = int4(0, 0, 0, 31);
                 return result;
             }
 
@@ -295,16 +304,16 @@ Shader "examples (generated)"
                 result = sdf::operators::unionSimple(result, SDF_1_0_1__root_allObjects_toroid__1(p));
                 result = sdf::operators::unionSimple(result, SDF_1_0_2__root_allObjects_cone__3(p));
                 result = sdf::operators::unionSimple(result, SDF_1_0_3__root_allObjects_sphere__3(p));
-                result = sdf::operators::unionSimple(result, SDF_1_0_4__root_allObjects_cylinder__3(p));
+                result = sdf::operators::unionSimple(result, SDF_1_0_4__root_allObjects_cylinder__4(p));
                 result = sdf::operators::unionSimple(result, SDF_1_0_5__root_allObjects_rounded_cylinder__3(p));
-                result = sdf::operators::unionSimple(result, SDF_1_0_6__root_allObjects_torus__3(p));
+                result = sdf::operators::unionSimple(result, SDF_1_0_6__root_allObjects_torus__4(p));
                 return result;
             }
 
             SdfResult SDF_1_1__root_cutoff__3(float3 p) {
                 SdfResult result = (SdfResult)0;
                 result.distance = -sdf::primitives3D::box(sdf::operators::transform(p, SDF_1_1__root_cutoff__1_SpaceTransform), SDF_1_1__root_cutoff__2_BoxExtents);
-                result.id = int4(0, 0, 0, 32);
+                result.id = int4(0, 0, 0, 34);
                 return result;
             }
 

@@ -298,6 +298,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             // AssetDatabase.SaveAssetIfDirty(AssetDatabase.GUIDFromAssetPath(prefabStage.assetPath)); // this caused preventing adding objects to prefab in prefab stage 
             // AssetDatabase.SaveAssets();
         }
+
+        // a context menu for regenerating material sub asset
+        [ContextMenu("Regenerate material")]
+        void RegenerateMaterial(MenuCommand menuCommand) { GenerateSceneAssets(); }
+
 #endif
 
         internal string AssembleShaderSource() {

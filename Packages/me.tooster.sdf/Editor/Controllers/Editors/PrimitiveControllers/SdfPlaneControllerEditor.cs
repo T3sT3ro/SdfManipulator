@@ -5,9 +5,6 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfPlaneController), true)]
     public class SdfPlaneControllerEditor : SdfPrimitiveControllerEditor {
-        [MenuItem("GameObject/SDF/Primitives/Plane", priority = -20)]
-        public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfPlaneController>("plane");
-
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
 
@@ -25,5 +22,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
                 Handles.ArrowHandleCap(0, Vector3.zero, Quaternion.LookRotation(Vector3.up), .5f, EventType.Repaint);
             }
         }
+
+        [MenuItem("GameObject/SDF/Primitives/Plane")]
+        public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfPlaneController>("plane");
     }
 }

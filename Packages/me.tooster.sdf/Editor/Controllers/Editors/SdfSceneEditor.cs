@@ -134,17 +134,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             }
         }
 
-        // a context menu for regenerating material sub asset
-        [ContextMenu("Regenerate material")]
-        static void RegenerateMaterial(MenuCommand menuCommand) { ((SdfScene)menuCommand.context).GenerateSceneAssets(); }
-
-        [MenuItem("GameObject/SDF/Scene")]
-        static void CreateSdfScene() { // TODO: add shortcut accelerators to this and nodes (when sdf editing is enabled)
-            var scene = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            scene.name = "SDF Scene";
-            scene.AddComponent<SdfScene>();
-        }
-
         [MenuItem("Assets/Create/SDF/Scene Asset")]
         static void CreateSdfSceneAsset() {
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(

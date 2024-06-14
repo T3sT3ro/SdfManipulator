@@ -68,6 +68,7 @@ Material:
     - SDF_1_0_4__root_allObjects_cylinder__2_Height: 1
     - SDF_1_0_4__root_allObjects_cylinder__2_Radius: 0.75
     - SDF_1_0_4__root_allObjects_cylinder__2_Rounding: 0.25
+    - SDF_1_0_4__root_allObjects_cylinder__3_BendFactor: 0.61
     - SDF_1_0_5__root_allObjects_cylinder__1___2_Height: 0.24028566
     - SDF_1_0_5__root_allObjects_cylinder__1___2_Radius: 0.75
     - SDF_1_0_5__root_allObjects_cylinder__1___2_Rounding: 0.25
@@ -77,6 +78,7 @@ Material:
     - SDF_1_0_6__root_allObjects_torus__2_Cap: 1.7389926
     - SDF_1_0_6__root_allObjects_torus__2_MainRadius: 0.630713
     - SDF_1_0_6__root_allObjects_torus__2_RingRadius: 0.25
+    - SDF_1_0_6__root_allObjects_torus__3_BendFactor: 0
     - SDF_1_0__root_GameObject__1_BlendFactor: 0.55
     - SDF_1_0__root_allObjects__1_BlendFactor: 0.55
     - SDF_1_0__root_box__3_Thickness: 0.24

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6261370928575604657}
   - component: {fileID: 5171449688801912680}
   - component: {fileID: 6529700756650775987}
+  - component: {fileID: 8817382433033363048}
   - component: {fileID: 7751388247970373751}
   m_Layer: 0
   m_Name: cylinder
@@ -27,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 208894789909819368}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -2, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2577227687338379036}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &5171449688801912680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,9 +60,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 1
-  radius: 0.75
+  radius: 0.6509005
   rounding: 0.25
   variant: 1
+--- !u!114 &8817382433033363048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208894789909819368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d59b510f6b34c8aba43906bbbc1ca4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bendFactor: -0.64
 --- !u!114 &7751388247970373751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,6 +91,7 @@ MonoBehaviour:
   inverted: 0
   sdfModifiers:
   - {fileID: 5171449688801912680}
+  - {fileID: 8817382433033363048}
   - {fileID: 6529700756650775987}
 --- !u!1 &1375840051302624120
 GameObject:
@@ -432,6 +447,7 @@ GameObject:
   - component: {fileID: 7886350089286854222}
   - component: {fileID: 2600727523156923817}
   - component: {fileID: 5568248851304499556}
+  - component: {fileID: 1526131354860004639}
   - component: {fileID: 858736482330734670}
   m_Layer: 0
   m_Name: torus
@@ -449,7 +465,7 @@ Transform:
   m_GameObject: {fileID: 5127263858812829483}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: -2}
+  m_LocalPosition: {x: -2, y: -0.142, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -483,6 +499,19 @@ MonoBehaviour:
   mainRadius: 0.630713
   ringRadius: 0.25
   cap: 1.7389926
+--- !u!114 &1526131354860004639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5127263858812829483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d59b510f6b34c8aba43906bbbc1ca4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bendFactor: 1.43
 --- !u!114 &858736482330734670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,6 +527,7 @@ MonoBehaviour:
   inverted: 0
   sdfModifiers:
   - {fileID: 2600727523156923817}
+  - {fileID: 1526131354860004639}
   - {fileID: 5568248851304499556}
 --- !u!1 &6144671692104147463
 GameObject:
@@ -1435,7 +1465,7 @@ Shader:
         m_Attributes: []
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.75
+        m_DefValue[0]: 0.650901
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -1448,6 +1478,19 @@ Shader:
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.25
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_4__root_allObjects_cylinder__3_BendFactor
+        m_Description: Bend factor
+        m_Attributes:
+        - Header (root allObjects cylinder)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: -0.64
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -1522,6 +1565,19 @@ Shader:
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1.738993
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_6__root_allObjects_torus__3_BendFactor
+        m_Description: Bend factor
+        m_Attributes:
+        - Header (root allObjects torus)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1.43
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -1824,7 +1880,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 54683
+          gpuProgramID: 10916
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1979,21 +2035,14 @@ Shader:
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 188
+    line: 196
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: region'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 188
-    warning: 1
-    runtimeError: 0
-  - message: 'Unrecognized #pragma directive: endregion'
-    messageDetails: 
-    file: 
-    compilerPlatform: 26
-    line: 191
+    line: 196
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: endregion'
@@ -2159,6 +2208,14 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
+  - message: '"SDF_1_0_4__root_allObjects_cylinder__3_BendFactor" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
   - message: '"SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform" contains
       consecutive underscores ("__"), such names are reserved and might result in
       undefined behaviour'
@@ -2225,6 +2282,14 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
+  - message: '"SDF_1_0_6__root_allObjects_torus__3_BendFactor" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
   - message: '"SDF_1_1__root_cutoff__1_SpaceTransform" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
@@ -2243,6 +2308,236 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
+      10916:
+        serializedVersion: 3
+        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
+          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
+          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 194 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 102\n\n        #pragma target 5.0\n       
+          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
+          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
+          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_allObjects__1_BlendFactor;\n       
+          float4x4 SDF_1_0_0__root_allObjects_box__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, -0.25 },\n               
+          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float3 SDF_1_0_0__root_allObjects_box__2_BoxExtents;\n       
+          float SDF_1_0_0__root_allObjects_box__3_Thickness;\n        int SDF_1_0_0__root_allObjects_box__3_Layers;\n       
+          float SDF_1_0_1__root_allObjects_toroid__1_BlendFactor;\n        float4x4
+          SDF_1_0_1_0__root_allObjects_toroid_torus__1_SpaceTransform = {\n               
+          { 0.0, 1.0, 0.0, -0.25 },\n                { -1.0, 0.0, 0.0, 0.0 },\n               
+          { 0.0, 0.0, 1.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius;\n       
+          float SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius;\n       
+          float SDF_1_0_1_0__root_allObjects_toroid_torus__2_Cap;\n        float
+          SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness;\n        int SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers;\n       
+          float4x4 SDF_1_0_1_1__root_allObjects_toroid_sphere__1_SpaceTransform =
+          {\n                { 1.0, 0.0, 0.0, -0.684 },\n                { 0.0, 1.0,
+          0.0, -0.25 },\n                { 0.0, 0.0, 1.0, 2.0 },\n               
+          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius;\n       
+          float4x4 SDF_1_0_2__root_allObjects_cone__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, 0.143 },\n               
+          { 0.0, 0.0, 1.0, 4.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_2__root_allObjects_cone__2_Angle;\n        float
+          SDF_1_0_2__root_allObjects_cone__2_Height;\n        float4x4 SDF_1_0_3__root_allObjects_sphere__1_SpaceTransform
+          = {\n                { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0,
+          0.0, -0.25 },\n                { 0.0, 0.0, 1.0, 6.0 },\n               
+          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_3__root_allObjects_sphere__2_Radius;\n       
+          float4x4 SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform = {\n               
+          { 0.0, 0.0, -1.0, 0.0 },\n                { 0.0, 1.0, 0.0, -0.25 },\n               
+          { 1.0, 0.0, 0.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_4__root_allObjects_cylinder__2_Height;\n       
+          float SDF_1_0_4__root_allObjects_cylinder__2_Radius;\n        float SDF_1_0_4__root_allObjects_cylinder__2_Rounding;\n       
+          float SDF_1_0_4__root_allObjects_cylinder__3_BendFactor;\n        float4x4
+          SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 2.0 },\n                { 0.0, 1.0, 0.0, 0.154 },\n               
+          { 0.0, 0.0, 1.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height;\n       
+          float SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius;\n        float
+          SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding;\n        float4x4
+          SDF_1_0_6__root_allObjects_torus__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 2.0 },\n                { 0.0, 1.0, 0.0, -0.108 },\n               
+          { 0.0, 0.0, 1.0, 4.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_6__root_allObjects_torus__2_MainRadius;\n       
+          float SDF_1_0_6__root_allObjects_torus__2_RingRadius;\n        float SDF_1_0_6__root_allObjects_torus__2_Cap;\n       
+          float SDF_1_0_6__root_allObjects_torus__3_BendFactor;\n        float4x4
+          SDF_1_1__root_cutoff__1_SpaceTransform = {\n                { 1.0, 0.0,
+          0.0, 0.0 },\n                { 0.0, 1.0, 0.0, -1.214 },\n               
+          { 0.0, 0.0, 1.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float3 SDF_1_1__root_cutoff__2_BoxExtents;\n        #line 194
+          \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            SdfResult SDF_1_0_0__root_allObjects_box__4
+          (float3 p);\n            SdfResult SDF_1_0_1_0__root_allObjects_toroid_torus__4
+          (float3 p);\n            SdfResult SDF_1_0_1_1__root_allObjects_toroid_sphere__3
+          (float3 p);\n            SdfResult SDF_1_0_1__root_allObjects_toroid__1
+          (float3 p);\n            SdfResult SDF_1_0_2__root_allObjects_cone__3 (float3
+          p);\n            SdfResult SDF_1_0_3__root_allObjects_sphere__3 (float3
+          p);\n            SdfResult SDF_1_0_4__root_allObjects_cylinder__4 (float3
+          p);\n            SdfResult SDF_1_0_5__root_allObjects_rounded_cylinder__3
+          (float3 p);\n            SdfResult SDF_1_0_6__root_allObjects_torus__4
+          (float3 p);\n            SdfResult SDF_1_0__root_allObjects__1 (float3
+          p);\n            SdfResult SDF_1_1__root_cutoff__3 (float3 p);\n           
+          SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0__root_allObjects_box__4(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::operators::onion_skin(sdf::primitives3D::box(sdf::operators::transform(p,
+          SDF_1_0_0__root_allObjects_box__1_SpaceTransform), SDF_1_0_0__root_allObjects_box__2_BoxExtents),
+          SDF_1_0_0__root_allObjects_box__3_Thickness, SDF_1_0_0__root_allObjects_box__3_Layers);\n               
+          result.id = int4(0, 0, 0, 6);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_0__root_allObjects_toroid_torus__4(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::operators::onion_skin(sdf::primitives3D::torus(sdf::operators::transform(p,
+          SDF_1_0_1_0__root_allObjects_toroid_torus__1_SpaceTransform), SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius,
+          SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius), SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness,
+          SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers);\n               
+          result.id = int4(0, 0, 0, 11);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_1__root_allObjects_toroid_sphere__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
+          SDF_1_0_1_1__root_allObjects_toroid_sphere__1_SpaceTransform), SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius);\n               
+          result.id = int4(0, 0, 0, 14);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1__root_allObjects_toroid__1(float3 p)
+          {\n                SdfResult result = SDF_1_0_1_0__root_allObjects_toroid_torus__4(p);\n               
+          result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_allObjects_toroid_sphere__3(p));\n               
+          return result;\n            }\n            SdfResult SDF_1_0_2__root_allObjects_cone__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::cone((sdf::operators::transform(p,
+          SDF_1_0_2__root_allObjects_cone__1_SpaceTransform) - float3( 0, SDF_1_0_2__root_allObjects_cone__2_Height,
+          0)), SDF_1_0_2__root_allObjects_cone__2_Angle, SDF_1_0_2__root_allObjects_cone__2_Height);\n               
+          result.id = int4(0, 0, 0, 17);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_3__root_allObjects_sphere__3(float3 p)
+          {\n                SdfResult result = (SdfResult) 0;\n                result.distance
+          = sdf::primitives3D::sphere(sdf::operators::transform(p, SDF_1_0_3__root_allObjects_sphere__1_SpaceTransform),
+          SDF_1_0_3__root_allObjects_sphere__2_Radius);\n                result.id
+          = int4(0, 0, 0, 20);\n                return result;\n            }\n           
+          SdfResult SDF_1_0_4__root_allObjects_cylinder__4(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::cheap_bend(sdf::operators::transform(p,
+          SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform), SDF_1_0_4__root_allObjects_cylinder__3_BendFactor),
+          SDF_1_0_4__root_allObjects_cylinder__2_Height, SDF_1_0_4__root_allObjects_cylinder__2_Radius);\n               
+          result.id = int4(0, 0, 0, 24);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_5__root_allObjects_rounded_cylinder__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::cylinder_rounded(sdf::operators::transform(p,
+          SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform), SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius,
+          SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding, SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height);\n               
+          result.id = int4(0, 0, 0, 27);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_6__root_allObjects_torus__4(float3 p)
+          {\n                SdfResult result = (SdfResult) 0;\n                result.distance
+          = sdf::primitives3D::torus_capped(sdf::operators::cheap_bend(sdf::operators::transform(p,
+          SDF_1_0_6__root_allObjects_torus__1_SpaceTransform), SDF_1_0_6__root_allObjects_torus__3_BendFactor),
+          SDF_1_0_6__root_allObjects_torus__2_MainRadius, SDF_1_0_6__root_allObjects_torus__2_RingRadius,
+          SDF_1_0_6__root_allObjects_torus__2_Cap);\n                result.id =
+          int4(0, 0, 0, 31);\n                return result;\n            }\n           
+          SdfResult SDF_1_0__root_allObjects__1(float3 p) {\n                SdfResult
+          result = SDF_1_0_0__root_allObjects_box__4(p);\n                result
+          = sdf::operators::unionSimple(result, SDF_1_0_1__root_allObjects_toroid__1(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_2__root_allObjects_cone__3(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_3__root_allObjects_sphere__3(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_4__root_allObjects_cylinder__4(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_5__root_allObjects_rounded_cylinder__3(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_6__root_allObjects_torus__4(p));\n               
+          return result;\n            }\n            SdfResult SDF_1_1__root_cutoff__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = -sdf::primitives3D::box(sdf::operators::transform(p,
+          SDF_1_1__root_cutoff__1_SpaceTransform), SDF_1_1__root_cutoff__2_BoxExtents);\n               
+          result.id = int4(0, 0, 0, 34);\n                return result;\n           
+          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
+          result = SDF_1_0__root_allObjects__1(p);\n                result = sdf::operators::intersectSimple(result,
+          SDF_1_1__root_cutoff__3(p));\n                return result;\n           
+          }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n           
+          }\n            "
+        m_AssetPath: Assets/Prefabs
+        m_AssetName: examples.prefab
+        m_PlatformMask: 4294967295
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 196
+        m_TypesMask: 3
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: f6bcae91438bd03526c10a01d1ed5c1c
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: b358d0c6544156bd0073360270ed01b1
+        m_FromOther: 0
+        m_ForceSyncCompilation: 0
+        m_UseDxcAPIs: 0
+        m_NeverUseDxcAPIs: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0:
+        - - _DRAWMODE_MATERIAL
+          - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
+          - _DRAWMODE_SKYBOX
+          - _DRAWMODE_NORMAL
+          - _DRAWMODE_STEPS
+          - _DRAWMODE_DEPTH
+          - _DRAWMODE_OCCLUSION
+        - - __
+          - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal1:
+        - - _DRAWMODE_MATERIAL
+          - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
+          - _DRAWMODE_SKYBOX
+          - _DRAWMODE_NORMAL
+          - _DRAWMODE_STEPS
+          - _DRAWMODE_DEPTH
+          - _DRAWMODE_OCCLUSION
+        - - __
+          - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 1101803
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
       38832:
         serializedVersion: 3
         m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
@@ -2298,232 +2593,6 @@ Shader:
         m_VariantsBuiltin6: []
         m_DynamicBranchKeywords: []
         m_BaseRequirements: 33
-        m_KeywordTargetInfo:
-        - keywordName: SHADOWS_SOFT
-          requirements: 227
-        - keywordName: DIRLIGHTMAP_COMBINED
-          requirements: 227
-        - keywordName: DYNAMICLIGHTMAP_ON
-          requirements: 227
-        - keywordName: SHADOWS_SCREEN
-          requirements: 227
-        - keywordName: INSTANCING_ON
-          requirements: 2048
-        - keywordName: PROCEDURAL_INSTANCING_ON
-          requirements: 16384
-        - keywordName: STEREO_MULTIVIEW_ON
-          requirements: 4075
-        - keywordName: STEREO_INSTANCING_ON
-          requirements: 4075
-        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
-          requirements: 536870912
-        m_NonStrippedUserKeywords: 
-        m_BuiltinKeywords: 
-      54683:
-        serializedVersion: 3
-        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
-          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
-          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 186 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 96\n\n        #pragma target 5.0\n       
-          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
-          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
-          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_allObjects__1_BlendFactor;\n       
-          float4x4 SDF_1_0_0__root_allObjects_box__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, -0.25 },\n               
-          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float3 SDF_1_0_0__root_allObjects_box__2_BoxExtents;\n       
-          float SDF_1_0_0__root_allObjects_box__3_Thickness;\n        int SDF_1_0_0__root_allObjects_box__3_Layers;\n       
-          float SDF_1_0_1__root_allObjects_toroid__1_BlendFactor;\n        float4x4
-          SDF_1_0_1_0__root_allObjects_toroid_torus__1_SpaceTransform = {\n               
-          { 0.0, 1.0, 0.0, -0.25 },\n                { -1.0, 0.0, 0.0, 0.0 },\n               
-          { 0.0, 0.0, 1.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius;\n       
-          float SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius;\n       
-          float SDF_1_0_1_0__root_allObjects_toroid_torus__2_Cap;\n        float
-          SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness;\n        int SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers;\n       
-          float4x4 SDF_1_0_1_1__root_allObjects_toroid_sphere__1_SpaceTransform =
-          {\n                { 1.0, 0.0, 0.0, -0.684 },\n                { 0.0, 1.0,
-          0.0, -0.25 },\n                { 0.0, 0.0, 1.0, 2.0 },\n               
-          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius;\n       
-          float4x4 SDF_1_0_2__root_allObjects_cone__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, 0.143 },\n               
-          { 0.0, 0.0, 1.0, 4.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_2__root_allObjects_cone__2_Angle;\n        float
-          SDF_1_0_2__root_allObjects_cone__2_Height;\n        float4x4 SDF_1_0_3__root_allObjects_sphere__1_SpaceTransform
-          = {\n                { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0,
-          0.0, -0.25 },\n                { 0.0, 0.0, 1.0, 6.0 },\n               
-          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_3__root_allObjects_sphere__2_Radius;\n       
-          float4x4 SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, 2.0 },\n                { 0.0, 1.0, 0.0, -0.25 },\n               
-          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_4__root_allObjects_cylinder__2_Height;\n       
-          float SDF_1_0_4__root_allObjects_cylinder__2_Radius;\n        float SDF_1_0_4__root_allObjects_cylinder__2_Rounding;\n       
-          float4x4 SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform
-          = {\n                { 1.0, 0.0, 0.0, 2.0 },\n                { 0.0, 1.0,
-          0.0, 0.154 },\n                { 0.0, 0.0, 1.0, 2.0 },\n               
-          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height;\n       
-          float SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius;\n        float
-          SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding;\n        float4x4
-          SDF_1_0_6__root_allObjects_torus__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, 2.0 },\n                { 0.0, 1.0, 0.0, -0.25 },\n               
-          { 0.0, 0.0, 1.0, 4.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_6__root_allObjects_torus__2_MainRadius;\n       
-          float SDF_1_0_6__root_allObjects_torus__2_RingRadius;\n        float SDF_1_0_6__root_allObjects_torus__2_Cap;\n       
-          float4x4 SDF_1_1__root_cutoff__1_SpaceTransform = {\n                {
-          1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, -1.214 },\n               
-          { 0.0, 0.0, 1.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float3 SDF_1_1__root_cutoff__2_BoxExtents;\n        #line 186
-          \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            SdfResult SDF_1_0_0__root_allObjects_box__4
-          (float3 p);\n            SdfResult SDF_1_0_1_0__root_allObjects_toroid_torus__4
-          (float3 p);\n            SdfResult SDF_1_0_1_1__root_allObjects_toroid_sphere__3
-          (float3 p);\n            SdfResult SDF_1_0_1__root_allObjects_toroid__1
-          (float3 p);\n            SdfResult SDF_1_0_2__root_allObjects_cone__3 (float3
-          p);\n            SdfResult SDF_1_0_3__root_allObjects_sphere__3 (float3
-          p);\n            SdfResult SDF_1_0_4__root_allObjects_cylinder__3 (float3
-          p);\n            SdfResult SDF_1_0_5__root_allObjects_rounded_cylinder__3
-          (float3 p);\n            SdfResult SDF_1_0_6__root_allObjects_torus__3
-          (float3 p);\n            SdfResult SDF_1_0__root_allObjects__1 (float3
-          p);\n            SdfResult SDF_1_1__root_cutoff__3 (float3 p);\n           
-          SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0__root_allObjects_box__4(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::operators::onion_skin(sdf::primitives3D::box(sdf::operators::transform(p,
-          SDF_1_0_0__root_allObjects_box__1_SpaceTransform), SDF_1_0_0__root_allObjects_box__2_BoxExtents),
-          SDF_1_0_0__root_allObjects_box__3_Thickness, SDF_1_0_0__root_allObjects_box__3_Layers);\n               
-          result.id = int4(0, 0, 0, 6);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1_0__root_allObjects_toroid_torus__4(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::operators::onion_skin(sdf::primitives3D::torus(sdf::operators::transform(p,
-          SDF_1_0_1_0__root_allObjects_toroid_torus__1_SpaceTransform), SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius,
-          SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius), SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness,
-          SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers);\n               
-          result.id = int4(0, 0, 0, 11);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1_1__root_allObjects_toroid_sphere__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
-          SDF_1_0_1_1__root_allObjects_toroid_sphere__1_SpaceTransform), SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius);\n               
-          result.id = int4(0, 0, 0, 14);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1__root_allObjects_toroid__1(float3 p)
-          {\n                SdfResult result = SDF_1_0_1_0__root_allObjects_toroid_torus__4(p);\n               
-          result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_allObjects_toroid_sphere__3(p));\n               
-          return result;\n            }\n            SdfResult SDF_1_0_2__root_allObjects_cone__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::cone((sdf::operators::transform(p,
-          SDF_1_0_2__root_allObjects_cone__1_SpaceTransform) - float3( 0, SDF_1_0_2__root_allObjects_cone__2_Height,
-          0)), SDF_1_0_2__root_allObjects_cone__2_Angle, SDF_1_0_2__root_allObjects_cone__2_Height);\n               
-          result.id = int4(0, 0, 0, 17);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_3__root_allObjects_sphere__3(float3 p)
-          {\n                SdfResult result = (SdfResult) 0;\n                result.distance
-          = sdf::primitives3D::sphere(sdf::operators::transform(p, SDF_1_0_3__root_allObjects_sphere__1_SpaceTransform),
-          SDF_1_0_3__root_allObjects_sphere__2_Radius);\n                result.id
-          = int4(0, 0, 0, 20);\n                return result;\n            }\n           
-          SdfResult SDF_1_0_4__root_allObjects_cylinder__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::transform(p,
-          SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform), SDF_1_0_4__root_allObjects_cylinder__2_Height,
-          SDF_1_0_4__root_allObjects_cylinder__2_Radius);\n                result.id
-          = int4(0, 0, 0, 23);\n                return result;\n            }\n           
-          SdfResult SDF_1_0_5__root_allObjects_rounded_cylinder__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::cylinder_rounded(sdf::operators::transform(p,
-          SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform), SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius,
-          SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding, SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height);\n               
-          result.id = int4(0, 0, 0, 26);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_6__root_allObjects_torus__3(float3 p)
-          {\n                SdfResult result = (SdfResult) 0;\n                result.distance
-          = sdf::primitives3D::torus_capped(sdf::operators::transform(p, SDF_1_0_6__root_allObjects_torus__1_SpaceTransform),
-          SDF_1_0_6__root_allObjects_torus__2_MainRadius, SDF_1_0_6__root_allObjects_torus__2_RingRadius,
-          SDF_1_0_6__root_allObjects_torus__2_Cap);\n                result.id =
-          int4(0, 0, 0, 29);\n                return result;\n            }\n           
-          SdfResult SDF_1_0__root_allObjects__1(float3 p) {\n                SdfResult
-          result = SDF_1_0_0__root_allObjects_box__4(p);\n                result
-          = sdf::operators::unionSimple(result, SDF_1_0_1__root_allObjects_toroid__1(p));\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_2__root_allObjects_cone__3(p));\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_3__root_allObjects_sphere__3(p));\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_4__root_allObjects_cylinder__3(p));\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_5__root_allObjects_rounded_cylinder__3(p));\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_6__root_allObjects_torus__3(p));\n               
-          return result;\n            }\n            SdfResult SDF_1_1__root_cutoff__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = -sdf::primitives3D::box(sdf::operators::transform(p,
-          SDF_1_1__root_cutoff__1_SpaceTransform), SDF_1_1__root_cutoff__2_BoxExtents);\n               
-          result.id = int4(0, 0, 0, 32);\n                return result;\n           
-          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
-          result = SDF_1_0__root_allObjects__1(p);\n                result = sdf::operators::intersectSimple(result,
-          SDF_1_1__root_cutoff__3(p));\n                return result;\n           
-          }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n           
-          }\n            "
-        m_AssetPath: Assets/Prefabs
-        m_AssetName: examples.prefab
-        m_PlatformMask: 4294967295
-        m_HardwareTierVariantsMask: 0
-        m_StartLine: 188
-        m_TypesMask: 3
-        m_IncludesHash:
-          serializedVersion: 2
-          Hash: 31b82487eb050e59adeab8ffea607ad2
-        m_CodeHash:
-          serializedVersion: 2
-          Hash: 3a6da7f5d255a41bf6672580c551a1a1
-        m_FromOther: 0
-        m_ForceSyncCompilation: 0
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
-        m_Language: 3
-        m_VariantsUserGlobal0: []
-        m_VariantsUserGlobal1: []
-        m_VariantsUserGlobal2: []
-        m_VariantsUserGlobal3: []
-        m_VariantsUserGlobal4: []
-        m_VariantsUserGlobal5: []
-        m_VariantsUserGlobal6: []
-        m_VariantsUserLocal0:
-        - - _DRAWMODE_MATERIAL
-          - _DRAWMODE_ALBEDO
-          - _DRAWMODE_ID
-          - _DRAWMODE_SKYBOX
-          - _DRAWMODE_NORMAL
-          - _DRAWMODE_STEPS
-          - _DRAWMODE_DEPTH
-          - _DRAWMODE_OCCLUSION
-        - - __
-          - _SHOW_WORLD_GRID
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal1:
-        - - _DRAWMODE_MATERIAL
-          - _DRAWMODE_ALBEDO
-          - _DRAWMODE_ID
-          - _DRAWMODE_SKYBOX
-          - _DRAWMODE_NORMAL
-          - _DRAWMODE_STEPS
-          - _DRAWMODE_DEPTH
-          - _DRAWMODE_OCCLUSION
-        - - __
-          - _SHOW_WORLD_GRID
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal2: []
-        m_VariantsUserLocal3: []
-        m_VariantsUserLocal4: []
-        m_VariantsUserLocal5: []
-        m_VariantsUserLocal6: []
-        m_VariantsBuiltin0: []
-        m_VariantsBuiltin1: []
-        m_VariantsBuiltin2: []
-        m_VariantsBuiltin3: []
-        m_VariantsBuiltin4: []
-        m_VariantsBuiltin5: []
-        m_VariantsBuiltin6: []
-        m_DynamicBranchKeywords: []
-        m_BaseRequirements: 1101803
         m_KeywordTargetInfo:
         - keywordName: SHADOWS_SOFT
           requirements: 227
@@ -2615,8 +2684,9 @@ Material:
     - SDF_1_0_3__root_GameObject_sphere__2_Radius: 0.9950453
     - SDF_1_0_3__root_allObjects_sphere__2_Radius: 0.75
     - SDF_1_0_4__root_allObjects_cylinder__2_Height: 1
-    - SDF_1_0_4__root_allObjects_cylinder__2_Radius: 0.75
+    - SDF_1_0_4__root_allObjects_cylinder__2_Radius: 0.6509005
     - SDF_1_0_4__root_allObjects_cylinder__2_Rounding: 0.25
+    - SDF_1_0_4__root_allObjects_cylinder__3_BendFactor: -0.64
     - SDF_1_0_5__root_allObjects_cylinder__1___2_Height: 0.24028566
     - SDF_1_0_5__root_allObjects_cylinder__1___2_Radius: 0.75
     - SDF_1_0_5__root_allObjects_cylinder__1___2_Rounding: 0.25
@@ -2626,6 +2696,7 @@ Material:
     - SDF_1_0_6__root_allObjects_torus__2_Cap: 1.7389926
     - SDF_1_0_6__root_allObjects_torus__2_MainRadius: 0.630713
     - SDF_1_0_6__root_allObjects_torus__2_RingRadius: 0.25
+    - SDF_1_0_6__root_allObjects_torus__3_BendFactor: 1.43
     - SDF_1_0__root_GameObject__1_BlendFactor: 0.55
     - SDF_1_0__root_allObjects__1_BlendFactor: 0.55
     - SDF_1_0__root_box__3_Thickness: 0.24

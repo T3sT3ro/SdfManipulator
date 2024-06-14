@@ -154,4 +154,12 @@ namespace sdf { namespace operators {
     float interpolate(in float d1, in float d2, in float t) {
         return lerp(d1, d2, t);
     }
+
+    /// Bend space by factor k. Some artifacts are present if k is too big.
+    float3 cheap_bend(in float3 p, in float k) {
+        float    c = cos(k * p.x);
+        float    s = sin(k * p.x);
+        float2x2 m = float2x2(c, -s, s, c);
+        return float3(mul(m, p.xy), p.z);
+    }
 }}

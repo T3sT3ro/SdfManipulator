@@ -73,7 +73,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
         }
 
 
-        [MenuItem("GameObject/SDF/Primitives/Torus", priority = -20)]
+        [MenuItem("GameObject/SDF/Primitives/Torus")]
         public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfTorusController>("torus");
     }
 }

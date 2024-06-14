@@ -44,7 +44,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
             serializedObject.ApplyModifiedProperties();
         }
 
-        [MenuItem("GameObject/SDF/Primitives/Cylinder", priority = -20)]
+        [MenuItem("GameObject/SDF/Primitives/Cylinder")]
         public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfCylinderController>("cylinder");
     }
 }
