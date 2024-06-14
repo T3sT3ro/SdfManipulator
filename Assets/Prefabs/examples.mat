@@ -8,12 +8,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: examples
-  m_Shader: {fileID: 4800000, guid: 2cf3757fc67cf5e588f33f5c12f4775f, type: 3}
+  m_Shader: {fileID: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _DRAWMODE_MATERIAL
-  - _SHOW_WORLD_GRID
+  - _DRAWMODE_NORMAL
   - _ZWRITE_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -25,83 +24,117 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailAlbedoMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailMask:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailNormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ParallaxMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Ints:
+    - SDF_1_0_0__root_GameObject_box__3_Layers: 5
+    - SDF_1_0_0__root_allObjects_box__3_Layers: 5
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__3_Layers: 4
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers: 4
     - SDF_1_0_1_0__root_combine_cutout_box__1___4_Layers: 3
+    - SDF_1_0_1__root_GameObject_torus__3_Layers: 4
+    - SDF_1_0__root_box__3_Layers: 5
+    - SDF_1_1_0__root_GameObject_box__3_Layers: 5
+    - SDF_1_1_0__root_GameObject_torus__3_Layers: 4
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__3_Layers: 4
+    - SDF_1_1_1__root_GameObject_torus__3_Layers: 4
+    - SDF_1_2_0__root_GameObject_torus__3_Layers: 4
     m_Floats:
+    - SDF_1_0_0__root_GameObject_box__3_Thickness: 0.24
+    - SDF_1_0_0__root_allObjects_box__3_Thickness: 0.32
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__2_Cap: 0.7606551
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius: 0.49804693
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius: 0.25
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness: 0.12
     - SDF_1_0_1_0__root_combine_cutout_box__1___3_Rounding: 0.11
+    - SDF_1_0_1_0__root_combine_cutout_box__1___4_Layers: 3
     - SDF_1_0_1_0__root_combine_cutout_box__1___4_Thickness: 0.03
+    - SDF_1_0_1_1__root_GameObject_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius: 0.9950453
+    - SDF_1_0_1__root_GameObject_GameObject__1_BlendFactor: 1
+    - SDF_1_0_1__root_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_0_1__root_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_0_1__root_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_0_1__root_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_0_1__root_allObjects_toroid__1_BlendFactor: 1
     - SDF_1_0_1__root_combine_cutout__1_BlendFactor: 1
+    - SDF_1_0_2__root_allObjects_cone__2_Angle: 0.543944
+    - SDF_1_0_2__root_allObjects_cone__2_Height: 1.2673638
+    - SDF_1_0_3__root_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_0_3__root_allObjects_sphere__2_Radius: 0.75
+    - SDF_1_0_4__root_allObjects_cylinder__2_Height: 1
+    - SDF_1_0_4__root_allObjects_cylinder__2_Radius: 0.75
+    - SDF_1_0_4__root_allObjects_cylinder__2_Rounding: 0.25
+    - SDF_1_0_5__root_allObjects_cylinder__1___2_Height: 0.24028566
+    - SDF_1_0_5__root_allObjects_cylinder__1___2_Radius: 0.75
+    - SDF_1_0_5__root_allObjects_cylinder__1___2_Rounding: 0.25
+    - SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height: 0.24028566
+    - SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius: 0.75
+    - SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding: 0.25
+    - SDF_1_0_6__root_allObjects_torus__2_Cap: 1.7389926
+    - SDF_1_0_6__root_allObjects_torus__2_MainRadius: 0.630713
+    - SDF_1_0_6__root_allObjects_torus__2_RingRadius: 0.25
+    - SDF_1_0__root_GameObject__1_BlendFactor: 0.55
+    - SDF_1_0__root_allObjects__1_BlendFactor: 0.55
+    - SDF_1_0__root_box__3_Thickness: 0.24
     - SDF_1_0__root_combine__1_BlendFactor: 1
+    - SDF_1_1_0__root_GameObject_box__3_Thickness: 0.24
+    - SDF_1_1_0__root_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_1_0__root_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_1_0__root_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_1_0__root_GameObject_torus__3_Layers: 0
+    - SDF_1_1_0__root_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_1_1_1__root_GameObject_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_1_1__root_GameObject_GameObject__1_BlendFactor: 1
+    - SDF_1_1_1__root_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_1_1__root_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_1_1__root_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_1_1__root_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_1_2__root_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_1__root_GameObject__1_BlendFactor: 0.55
+    - SDF_1_1__root_torus__2_Cap: 0.7606551
+    - SDF_1_1__root_torus__2_MainRadius: 0.49804693
+    - SDF_1_1__root_torus__2_RingRadius: 0.25
+    - SDF_1_2_0__root_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_2_0__root_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_2_0__root_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_2_0__root_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_2_1__root_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_2__root_GameObject__1_BlendFactor: 0.55
     - SDF_1__root__1_BlendFactor: 0.3
     - _AO_FALLOFF: 2.5
     - _AO_MAX_DISTANCE: 1
     - _AO_STEPS: 6
-    - _BumpScale: 1
-    - _Cull: 2
-    - _Cutoff: 0.5
-    - _DetailNormalMapScale: 1
-    - _DrawMode: 0
-    - _DstBlend: 0
+    - _Cull: 0
+    - _DrawMode: 4
     - _EPSILON_NORMAL: 0.001
     - _EPSILON_RAY: 0.001
-    - _GlossMapScale: 1
-    - _Glossiness: 0.5
-    - _GlossyReflections: 1
     - _MAX_DISTANCE: 200
     - _MAX_STEPS: 200
-    - _Metallic: 0
-    - _Mode: 0
-    - _OcclusionStrength: 1
-    - _Parallax: 0.02
     - _RAY_ORIGIN_BIAS: 0
-    - _SHOW_WORLD_GRID: 1
-    - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _UVSec: 0
+    - _SHOW_WORLD_GRID: 0
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
+    - SDF_1_0_0__root_GameObject_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - SDF_1_0_0__root_allObjects_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - SDF_1_0_0__root_combine_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - SDF_1_0_1_0__root_combine_cutout_box__1___2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents: {r: 2.06916, g: 1.312932, b: 2.970853, a: 0}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents: {r: 2.0691597, g: 1.312932, b: 2.9708533, a: 0}
+    - SDF_1_0_2__root_GameObject_box__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_0__root_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - SDF_1_0__root_custoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_1_0__root_GameObject_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - SDF_1_1_1__root_GameObject_box__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_1__root_box__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_1__root_custoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_1__root_cutoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_2__custoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
   m_BuildTextureStacks: []

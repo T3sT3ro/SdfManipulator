@@ -110,7 +110,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         // TODO: use more event-driven architecture where creation, move, rename and deletion of individual controllers is detected. 
         void OnValidate() {
             diagnostics.Clear();
-            if ((shaderPreset ??= ShaderPreset.InstantiatePreset(ShaderPreset.DetectedShaderPresets[0])) == null)
+            if (shaderPreset == null)
                 diagnostics.Add(Diagnostic.Error("No shader preset set. The generation won't proceed."));
 
             if (controlledMaterial == null) {
@@ -259,8 +259,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             var sdfScenePrefabAssetPath = prefabStage.assetPath;
             if (controlledShader == null)
                 throw new ShaderGenerationException("Missing attached shader asset as a target for generation!");
-            if (shaderPreset == null)
-                throw new ShaderGenerationException("Shader preset for generation missing, generation won't proceed!");
 
             Profiler.BeginSample("shader text generation");
             var shaderSource = AssembleShaderSource();
@@ -285,7 +283,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             if (targetMaterial != null) {
                 var path = AssetDatabase.GetAssetPath(targetMaterial);
                 if (File.Exists(path)) {
-                    File.WriteAllText(path, shaderSource);
+                    targetMaterial.shader = ShaderUtil.CreateShaderAsset(shaderSource);
                     AssetDatabase.SaveAssetIfDirty(targetMaterial);
                 }
             }
@@ -302,12 +300,15 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 #endif
 
-        internal string AssembleShaderSource()
-            => $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
+        internal string AssembleShaderSource() {
+            if (shaderPreset == null)
+                throw new ShaderGenerationException("No shader preset attached, generation won't proceed!");
+            return $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
 // Last modification: {DateTime.Now}
 
 {shaderPreset.MainShaderForScene(this)}
 ";
+        }
         // ensure empty line at the bottom
         /* Used to register a controller under the scene */
 

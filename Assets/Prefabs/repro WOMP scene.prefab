@@ -481,9 +481,17 @@ MonoBehaviour:
     - rid: 2082630382636761137
       type: {class: BIRPShaderPreset, ns: me.tooster.sdf.Editor.Controllers.Generators, asm: me.tooster.sdf.Editor.Controllers}
       data:
-        customPragmas: []
-        customDefines: []
-        customIncludes: []
+        pragmas:
+        - vertex vertexShader
+        - fragment fragmentShader
+        defines: []
+        includes:
+        - Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl
+        - Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl
+        - Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl
+        - Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl
+        - Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl
+        - Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl
 --- !u!1 &6054086836978895531
 GameObject:
   m_ObjectHideFlags: 0

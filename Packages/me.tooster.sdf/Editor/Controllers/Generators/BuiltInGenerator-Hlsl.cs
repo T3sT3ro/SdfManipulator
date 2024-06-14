@@ -24,11 +24,18 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
             yield return new Pragma { tokenString = "target 5.0" }.ToStructuredTrivia();
             yield return new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia();
 
-            foreach (var include in includeFiles)
+            // handle simple keyword defines
+            foreach (var define in defines)
+                yield return new Define { id = define }.ToStructuredTrivia();
+
+            foreach (var include in includeFiles.Distinct())
                 yield return new Include { filepath = include }.ToStructuredTrivia();
 
-            yield return new Pragma { tokenString = "vertex vertexShader" }.ToStructuredTrivia();
-            yield return new Pragma { tokenString = "fragment fragmentShader" }.ToStructuredTrivia();
+            // pragmas can be used to select used shader functions
+            foreach (var pragma in pragmas.Distinct())
+                yield return new Pragma { tokenString = pragma }.ToStructuredTrivia();
+
+
             yield return new NewLine<hlsl>();
         }
 

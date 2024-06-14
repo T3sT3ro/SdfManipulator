@@ -1,17 +1,32 @@
 using System;
 using me.tooster.sdf.Editor.Controllers.SDF;
-using UnityEditor;
 namespace me.tooster.sdf.Editor.Controllers.Generators {
     /// <summary>
     /// An implementation of a shader preset for the built-in generator
     /// </summary>
     [Serializable]
     public class BIRPShaderPreset : ShaderPreset {
-        public string[]        customPragmas;
-        public string[]        customDefines;
-        public ShaderInclude[] customIncludes;
+        public string[] pragmas =
+        {
+            "vertex vertexShader",
+            "fragment fragmentShader",
+        };
+        public string[] defines = { };
+        public string[] includes =
+        {
+            "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl",
+            "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl",
+            "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl",
+            "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl",
+            "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl",
+            // "Packages/me.tooster.sdf/Editor/Resources/Includes/builtInForwardBase.hlsl",
+            "Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl",
+        };
 
-        protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene) => new BuiltInGenerator(scene);
+        // "Packages/me.tooster.sdf/Editor/Resources/Includes/builtInForwardBase.hlsl",
+
+        protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene)
+            => new BuiltInGenerator(scene, pragmas, defines, includes);
     }
 
 

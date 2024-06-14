@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Shaderlab;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.Generators {
     public partial class BuiltInGenerator : RaymarchingShaderGenerator {
-        public BuiltInGenerator(SdfScene scene) : base(scene) { }
+        public BuiltInGenerator(SdfScene scene, string[] pragmas, string[] defines, string[] includes) : base(scene) {
+            includeFiles = includes.ToList();
+            this.pragmas = pragmas;
+            this.defines = defines;
+        }
 
-        readonly HashSet<string> includeFiles = new()
-        {
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl",
-            // "Packages/me.tooster.sdf/Editor/Resources/Includes/builtInForwardBase.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl",
-        };
+        List<string>      includeFiles;
+        readonly string[] defines;
+        readonly string[] pragmas;
+
         readonly HashSet<FunctionDefinition> functionDefinitions = new();
 
         [SerializeField] bool transparent = false;
