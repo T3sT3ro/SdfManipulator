@@ -104,20 +104,53 @@ namespace sdf { namespace operators {
     }
 
     /**
-     * Elongate the primitive. This is a circumfix operation that transforms point passed to primitive.
-     * This is the exact method 
+     * Exact elongation of primitive. This is a circumfix operation that transforms point passed to primitive.
+     * Impossible to implement generically and requires hardcoded SDF function, because it does postprocess(SDF(preoprocess(p))).
      */
     // float elongate_exact(float3 p, float3 dim)
     // {
     //     float3 q = abs(p) - dim;
-    //     return __SDF(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+    //     return SDF(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
     // }
 
+    /**
+     * Calculates the onion skin effect for a given distance and thickness.
+     *
+     * @param distance The distance to apply the onion skin effect to.
+     * @param thickness The thickness of the onion skin layer.
+     *
+     * @return The resulting distance after applying the onion skin effect.
+     */
     float onion_skin(in float distance, in float thickness) {
         return abs(distance) - thickness;
     }
 
+    /**
+     * Calculates the repeated onion skin effect for a given distance and number of layers.
+     *
+     * @param distance The distance to apply the onion skin effect to.
+     * @param thickness The thickness of each onion skin layer.
+     * @param layers The number of onion skin layers to apply.
+     *
+     * @return The resulting distance after applying the repeated onion skin effect.
+     */
+    float onion_skin(in float distance, in float thickness, in int layers) {
+        for (int i = 0; i < layers; i++) {
+            distance = onion_skin(distance, thickness);
+            thickness /= 2;
+        }
+        return distance;
+    }
 
+    /**
+     * Interpolates between two distances based on a given t value.
+     *
+     * @param d1 First distance.
+     * @param d2 Second distance.
+     * @param t The interpolation factor between 0 and 1.
+     *
+     * @return The interpolated distance value.
+     */
     float interpolate(in float d1, in float d2, in float t) {
         return lerp(d1, d2, t);
     }

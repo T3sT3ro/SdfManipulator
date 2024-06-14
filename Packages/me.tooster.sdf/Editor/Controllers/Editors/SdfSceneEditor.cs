@@ -6,6 +6,7 @@ using me.tooster.sdf.Editor.Controllers.Generators;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
+using UnityEditor.UIElements;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -49,6 +50,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                 helpbox.style.width = new StyleLength(StyleKeyword.Auto);
                 helpbox.style.height = new StyleLength(StyleKeyword.Auto);
             };
+            diagnostics.BindProperty(serializedObject.FindProperty("diagnostics"));
 
             root.Q<Button>("rebuild").RegisterCallback<ClickEvent>(e => RebuildShader());
             root.Q<Button>("open").RegisterCallback<ClickEvent>(e => OpenGeneratedShader());
@@ -112,6 +114,10 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                 p.Start();
             }
         }
+
+        // a context menu for regenerating material sub asset
+        [ContextMenu("Regenerate material")]
+        static void RegenerateMaterial(MenuCommand menuCommand) { ((SdfScene)menuCommand.context).GenerateSceneAssets(); }
 
         [MenuItem("GameObject/SDF/Scene")]
         static void CreateSdfScene() { // TODO: add shortcut accelerators to this and nodes (when sdf editing is enabled)

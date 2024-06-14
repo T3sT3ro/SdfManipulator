@@ -156,7 +156,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7694659, y: -0.14081846, z: 0.53358805, w: -0.32152182}
   m_LocalPosition: {x: 0.488, y: -0.005, z: -1.607}
-  m_LocalScale: {x: 0.76991, y: 0.76991, z: 0.76991}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7070351456614148741}
@@ -523,7 +523,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.8330113, y: -0.31462696, z: 0.45338276, w: -0.03932089}
   m_LocalPosition: {x: -0.738, y: -0.468, z: -1.306}
-  m_LocalScale: {x: 0.76991, y: 0.76991, z: 0.76991}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7070351456614148741}
@@ -906,7 +906,7 @@ Transform:
   m_GameObject: {fileID: 5478049853707758942}
   serializedVersion: 2
   m_LocalRotation: {x: -0.06784756, y: -0, z: -0, w: 0.99769574}
-  m_LocalPosition: {x: 0, y: 0.243, z: 1.389}
+  m_LocalPosition: {x: 0, y: 0.248, z: 1.429}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -985,7 +985,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.92691547, y: 0.08939769, z: -0.33662838, w: 0.13970356}
   m_LocalPosition: {x: 0.742, y: -0.012, z: 0.374}
-  m_LocalScale: {x: 0.76991, y: 0.76991, z: 0.76991}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7070351456614148741}
@@ -1270,7 +1270,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7867044, y: -0.49825737, z: -0.18004835, w: 0.31688857}
   m_LocalPosition: {x: -0.748, y: 0.063, z: 0.654}
-  m_LocalScale: {x: 0.76991, y: 0.76991, z: 0.76991}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7070351456614148741}
@@ -1502,6 +1502,7 @@ MonoBehaviour:
   controlledMaterial: {fileID: 8983876818240441392}
   sdfSceneRoot: {fileID: 7154973885652460484}
   targetShader: {fileID: 0}
+  targetMaterial: {fileID: 0}
   diagnostics: []
 --- !u!1 &8503848740225460154
 GameObject:
@@ -2538,7 +2539,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 15128
+          gpuProgramID: 42748
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -3099,7 +3100,83 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      15128:
+      38832:
+        serializedVersion: 3
+        m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            #pragma vertex vert\n           
+          #pragma fragment frag\n            #include \"UnityCG.cginc\"\n\n           
+          float4 vert(in float4 pos : POSITION, out float4 screenPos : TEXCOORD1)
+          : SV_POSITION\n            {\n                float4 clipPos = UnityObjectToClipPos(pos);\n               
+          screenPos = ComputeScreenPos(clipPos);\n                return clipPos;\n           
+          }\n\n            fixed4 frag(in float4 screenPos : TEXCOORD1) : SV_Target  
+          \n            {\n                screenPos.xy = trunc(screenPos.xy / screenPos.w
+          * _ScreenParams.xy / 5);\n\n                clip((screenPos.x + screenPos.y)
+          % 2 == 0 ? -1 : 0);\n                return fixed4(1.0, .2, 0.0, 1.0);\n           
+          }\n            "
+        m_AssetPath: Packages/me.tooster.sdf/Editor/Resources/Shaders
+        m_AssetName: 
+        m_PlatformMask: 4294967295
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 9
+        m_TypesMask: 3
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: 9116bc3854d5903bc93e42479783cbf1
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: a8f072047a658b7169ff138aeaf74978
+        m_FromOther: 1
+        m_ForceSyncCompilation: 0
+        m_UseDxcAPIs: 0
+        m_NeverUseDxcAPIs: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0: []
+        m_VariantsUserLocal1: []
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 33
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
+      42748:
         serializedVersion: 3
         m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
           1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
@@ -3118,7 +3195,7 @@ Shader:
           #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
           \n        float SDF_1__root__1_BlendFactor;\n        float4x4 SDF_1_0__root_torus__1_SpaceTransform
           = {\n                { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 0.990793,
-          -0.135382, -0.052717 },\n                { 0.0, 0.135382, 0.990793, -1.40911
+          -0.135382, -0.052255 },\n                { 0.0, 0.135382, 0.990793, -1.449419
           },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0__root_torus__2_MainRadius;\n       
           float SDF_1_0__root_torus__2_RingRadius;\n        float SDF_1_0__root_torus__2_Cap;\n       
           float SDF_1_1__root_combine__1_BlendFactor;\n        float4x4 SDF_1_1_0__root_combine_sphere__1_SpaceTransform
@@ -3141,29 +3218,29 @@ Shader:
           float SDF_1_2_1__root_combine__1__torus__2_RingRadius;\n        float SDF_1_2_1__root_combine__1__torus__2_Cap;\n       
           float SDF_1_3__root_combine__1_BlendFactor;\n        float SDF_1_3_0__root_combine_combine__1_BlendFactor;\n       
           float4x4 SDF_1_3_0_0__root_combine_combine_leg__1_SpaceTransform = {\n               
-          { 0.983724, 0.093091, -0.842995, -0.413526 },\n                { 0.337422,
-          -1.227393, 0.258211, -0.361667 },\n                { -0.778109, -0.414561,
-          -0.953785, 0.929098 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          { 0.757379, 0.071672, -0.649031, -0.318378 },\n                { 0.259785,
+          -0.944982, 0.198799, -0.278451 },\n                { -0.599074, -0.319174,
+          -0.734329, 0.715322 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float SDF_1_3_0_0__root_combine_combine_leg__2_Height;\n       
           float SDF_1_3_0_0__root_combine_combine_leg__2_Radius;\n        float SDF_1_3_0_0__root_combine_combine_leg__2_Rounding;\n       
           float4x4 SDF_1_3_0_1__root_combine_combine_leg__2___1_SpaceTransform =
-          {\n                { 0.569735, -1.166465, 0.042205, 0.472047 },\n               
-          { -0.870039, -0.393088, 0.880643, -1.201966 },\n                { -0.778109,
-          -0.414561, -0.953785, 0.067867 },\n                { 0.0, 0.0, 0.0, 1.0
+          {\n                { 0.438644, -0.898073, 0.032494, 0.363433 },\n               
+          { -0.669852, -0.302643, 0.678016, -0.925405 },\n                { -0.599074,
+          -0.319174, -0.734328, 0.052252 },\n                { 0.0, 0.0, 0.0, 1.0
           }\n        };\n        float SDF_1_3_0_1__root_combine_combine_leg__2___2_Height;\n       
           float SDF_1_3_0_1__root_combine_combine_leg__2___2_Radius;\n        float
           SDF_1_3_0_1__root_combine_combine_leg__2___2_Rounding;\n        float4x4
           SDF_1_3_0_2__root_combine_combine_leg__1___1_SpaceTransform = {\n               
-          { 0.507732, -0.727137, 0.948946, 1.273548 },\n                { 0.164188,
-          -0.9788, -0.837862, -1.431462 },\n                { 1.184175, 0.447483,
-          -0.290703, -1.042799 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          { 0.390908, -0.55983, 0.730603, 0.980517 },\n                { 0.12641,
+          -0.753588, -0.645078, -1.102097 },\n                { 0.911708, 0.344522,
+          -0.223815, -0.802862 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float SDF_1_3_0_2__root_combine_combine_leg__1___2_Height;\n       
           float SDF_1_3_0_2__root_combine_combine_leg__1___2_Radius;\n        float
           SDF_1_3_0_2__root_combine_combine_leg__1___2_Rounding;\n        float4x4
           SDF_1_3_0_3__root_combine_combine_leg__3___1_SpaceTransform = {\n               
-          { 0.507732, -0.727138, 0.948946, 1.273729 },\n                { -0.634517,
-          -1.037689, -0.455641, -1.548979 },\n                { 1.013221, -0.285466,
-          -0.760863, -0.379528 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          { 0.390908, -0.55983, 0.730603, 0.980657 },\n                { -0.488521,
+          -0.798927, -0.350802, -1.192574 },\n                { 0.780089, -0.219783,
+          -0.585796, -0.292202 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float SDF_1_3_0_3__root_combine_combine_leg__3___2_Height;\n       
           float SDF_1_3_0_3__root_combine_combine_leg__3___2_Radius;\n        float
           SDF_1_3_0_3__root_combine_combine_leg__3___2_Rounding;\n        float4x4
@@ -3341,10 +3418,10 @@ Shader:
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: 424d270fa64f87113c67626c4c0e21b6
+          Hash: 65f49a27c0f6580d6b7495508f38186e
         m_CodeHash:
           serializedVersion: 2
-          Hash: 512dfe6c8188ae15f1cfe42f68fa60c1
+          Hash: 0c67ae9105020971f7aac7911a3d8928
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0
@@ -3397,82 +3474,6 @@ Shader:
         m_VariantsBuiltin6: []
         m_DynamicBranchKeywords: []
         m_BaseRequirements: 1101803
-        m_KeywordTargetInfo:
-        - keywordName: SHADOWS_SOFT
-          requirements: 227
-        - keywordName: DIRLIGHTMAP_COMBINED
-          requirements: 227
-        - keywordName: DYNAMICLIGHTMAP_ON
-          requirements: 227
-        - keywordName: SHADOWS_SCREEN
-          requirements: 227
-        - keywordName: INSTANCING_ON
-          requirements: 2048
-        - keywordName: PROCEDURAL_INSTANCING_ON
-          requirements: 16384
-        - keywordName: STEREO_MULTIVIEW_ON
-          requirements: 4075
-        - keywordName: STEREO_INSTANCING_ON
-          requirements: 4075
-        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
-          requirements: 536870912
-        m_NonStrippedUserKeywords: 
-        m_BuiltinKeywords: 
-      38832:
-        serializedVersion: 3
-        m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            #pragma vertex vert\n           
-          #pragma fragment frag\n            #include \"UnityCG.cginc\"\n\n           
-          float4 vert(in float4 pos : POSITION, out float4 screenPos : TEXCOORD1)
-          : SV_POSITION\n            {\n                float4 clipPos = UnityObjectToClipPos(pos);\n               
-          screenPos = ComputeScreenPos(clipPos);\n                return clipPos;\n           
-          }\n\n            fixed4 frag(in float4 screenPos : TEXCOORD1) : SV_Target  
-          \n            {\n                screenPos.xy = trunc(screenPos.xy / screenPos.w
-          * _ScreenParams.xy / 5);\n\n                clip((screenPos.x + screenPos.y)
-          % 2 == 0 ? -1 : 0);\n                return fixed4(1.0, .2, 0.0, 1.0);\n           
-          }\n            "
-        m_AssetPath: Packages/me.tooster.sdf/Editor/Resources/Shaders
-        m_AssetName: 
-        m_PlatformMask: 4294967295
-        m_HardwareTierVariantsMask: 0
-        m_StartLine: 9
-        m_TypesMask: 3
-        m_IncludesHash:
-          serializedVersion: 2
-          Hash: 9116bc3854d5903bc93e42479783cbf1
-        m_CodeHash:
-          serializedVersion: 2
-          Hash: a8f072047a658b7169ff138aeaf74978
-        m_FromOther: 1
-        m_ForceSyncCompilation: 0
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
-        m_Language: 3
-        m_VariantsUserGlobal0: []
-        m_VariantsUserGlobal1: []
-        m_VariantsUserGlobal2: []
-        m_VariantsUserGlobal3: []
-        m_VariantsUserGlobal4: []
-        m_VariantsUserGlobal5: []
-        m_VariantsUserGlobal6: []
-        m_VariantsUserLocal0: []
-        m_VariantsUserLocal1: []
-        m_VariantsUserLocal2: []
-        m_VariantsUserLocal3: []
-        m_VariantsUserLocal4: []
-        m_VariantsUserLocal5: []
-        m_VariantsUserLocal6: []
-        m_VariantsBuiltin0: []
-        m_VariantsBuiltin1: []
-        m_VariantsBuiltin2: []
-        m_VariantsBuiltin3: []
-        m_VariantsBuiltin4: []
-        m_VariantsBuiltin5: []
-        m_VariantsBuiltin6: []
-        m_DynamicBranchKeywords: []
-        m_BaseRequirements: 33
         m_KeywordTargetInfo:
         - keywordName: SHADOWS_SOFT
           requirements: 227

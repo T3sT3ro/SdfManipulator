@@ -1,80 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &373691533487524213
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1725567659335167622}
-  - component: {fileID: 3726365795708698896}
-  - component: {fileID: 3495112626142567906}
-  - component: {fileID: 7325928685706680951}
-  m_Layer: 0
-  m_Name: box
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1725567659335167622
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373691533487524213}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 7070351456614148741}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3726365795708698896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373691533487524213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3495112626142567906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373691533487524213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boxExtents: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &7325928685706680951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373691533487524213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inverted: 0
-  sdfModifiers:
-  - {fileID: 3726365795708698896}
-  - {fileID: 3495112626142567906}
 --- !u!1 &1375840051302624120
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 14.9982, y: 14.9982, z: 14.9982}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7880227213151402684}
@@ -188,7 +113,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7070351456614148741}
+  - {fileID: 2577227687338379036}
+  - {fileID: 1717016055659349770}
   m_Father: {fileID: 7880227213151402684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7154973885652460484
@@ -205,12 +131,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inverted: 0
   sdfModifiers: []
-  operation: 0
+  operation: 1
   blendFactor: 0.3
   singleId: 0
   children:
-  - {fileID: 3012950539601230004}
---- !u!1 &1587513507638785231
+  - {fileID: 2512574452604008374}
+  - {fileID: 5841691969529003525}
+--- !u!1 &1703028860602430373
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -218,39 +145,335 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7070351456614148741}
-  - component: {fileID: 3012950539601230004}
+  - component: {fileID: 1717016055659349770}
+  - component: {fileID: 7128357919998208801}
+  - component: {fileID: 197798378831618137}
+  - component: {fileID: 5841691969529003525}
   m_Layer: 0
-  m_Name: combine
+  m_Name: cutoff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7070351456614148741
+--- !u!4 &1717016055659349770
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587513507638785231}
+  m_GameObject: {fileID: 1703028860602430373}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.214, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1725567659335167622}
-  - {fileID: 5426299456199226248}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
   m_Father: {fileID: 7467185068423365875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3012950539601230004
+--- !u!114 &7128357919998208801
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587513507638785231}
+  m_GameObject: {fileID: 1703028860602430373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &197798378831618137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703028860602430373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxExtents: {x: 6.891491, y: 0.87390125, z: 3.7631674}
+--- !u!114 &5841691969529003525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703028860602430373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 1
+  sdfModifiers:
+  - {fileID: 7128357919998208801}
+  - {fileID: 197798378831618137}
+--- !u!1 &2944500535674129792
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8647305247198464788}
+  - component: {fileID: 6668809761950411001}
+  m_Layer: 0
+  m_Name: toroid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8647305247198464788
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2944500535674129792}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8426167009949837530}
+  - {fileID: 8426148119458511751}
+  m_Father: {fileID: 2577227687338379036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6668809761950411001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2944500535674129792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29ed26e558d94e30b2d87bed778a01dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers: []
+  operation: 1
+  blendFactor: 1
+  singleId: 0
+  children:
+  - {fileID: 306104063086917264}
+  - {fileID: 468980860546971771}
+--- !u!1 &6144671692104147463
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8426148119458511751}
+  - component: {fileID: 5338349887958149039}
+  - component: {fileID: 9192884039193135461}
+  - component: {fileID: 468980860546971771}
+  m_Layer: 0
+  m_Name: sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8426148119458511751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6144671692104147463}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.684, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 8647305247198464788}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5338349887958149039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6144671692104147463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9192884039193135461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6144671692104147463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.9950453
+--- !u!114 &468980860546971771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6144671692104147463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 5338349887958149039}
+  - {fileID: 9192884039193135461}
+--- !u!1 &6183245964136789429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6073090112662320101}
+  - component: {fileID: 5271409024312101400}
+  - component: {fileID: 8961985592840649116}
+  - component: {fileID: 4118769173362321343}
+  - component: {fileID: 597672031700351248}
+  m_Layer: 0
+  m_Name: box
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6073090112662320101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183245964136789429}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2577227687338379036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5271409024312101400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183245964136789429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8961985592840649116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183245964136789429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxExtents: {x: 0.25, y: 0.25, z: 0.25}
+--- !u!114 &4118769173362321343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183245964136789429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccc065056454d00bfa1309e4e07eb77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  thickness: 0.32
+  layers: 5
+--- !u!114 &597672031700351248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183245964136789429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 5271409024312101400}
+  - {fileID: 8961985592840649116}
+  - {fileID: 4118769173362321343}
+--- !u!1 &7611757301165207321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2577227687338379036}
+  - component: {fileID: 2512574452604008374}
+  m_Layer: 0
+  m_Name: allObjects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2577227687338379036
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611757301165207321}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.25, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6073090112662320101}
+  - {fileID: 8647305247198464788}
+  m_Father: {fileID: 7467185068423365875}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2512574452604008374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7611757301165207321}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29ed26e558d94e30b2d87bed778a01dd, type: 3}
@@ -259,206 +482,11 @@ MonoBehaviour:
   inverted: 0
   sdfModifiers: []
   operation: 0
-  blendFactor: 1
+  blendFactor: 0.55
   singleId: 0
   children:
-  - {fileID: 7325928685706680951}
-  - {fileID: 2863002950696514462}
---- !u!1 &3440866847659068466
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3167144166169392931}
-  - component: {fileID: 7838379003831605018}
-  - component: {fileID: 2171390056851319816}
-  - component: {fileID: 6901272947664443467}
-  m_Layer: 0
-  m_Name: minus
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3167144166169392931
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3440866847659068466}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0.369, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 5426299456199226248}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7838379003831605018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3440866847659068466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2171390056851319816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3440866847659068466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boxExtents: {x: 0.63574785, y: 0.25147438, z: 0.6846704}
---- !u!114 &6901272947664443467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3440866847659068466}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inverted: 1
-  sdfModifiers:
-  - {fileID: 7838379003831605018}
-  - {fileID: 2171390056851319816}
---- !u!1 &4788894989590151456
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5877888198493929546}
-  - component: {fileID: 8844666288872094998}
-  - component: {fileID: 3703863302326661498}
-  - component: {fileID: 5196289873049970310}
-  - component: {fileID: 7922221102207903908}
-  - component: {fileID: 5440575978855680555}
-  - component: {fileID: 2409568953778123847}
-  m_Layer: 0
-  m_Name: box (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5877888198493929546
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4788894989590151456}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 5426299456199226248}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8844666288872094998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4788894989590151456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3703863302326661498
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4788894989590151456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boxExtents: {x: 0.25, y: 0.25, z: 0.25}
---- !u!114 &5196289873049970310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4788894989590151456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71183b835735445f8501250b07630c88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rounding: 0.11
---- !u!114 &7922221102207903908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4788894989590151456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccc065056454d00bfa1309e4e07eb77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  thickness: 0.1
---- !u!114 &5440575978855680555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4788894989590151456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ccc065056454d00bfa1309e4e07eb77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  thickness: 0.07
---- !u!114 &2409568953778123847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4788894989590151456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inverted: 0
-  sdfModifiers:
-  - {fileID: 8844666288872094998}
-  - {fileID: 3703863302326661498}
-  - {fileID: 5196289873049970310}
-  - {fileID: 7922221102207903908}
-  - {fileID: 5440575978855680555}
+  - {fileID: 597672031700351248}
+  - {fileID: 6668809761950411001}
 --- !u!1 &8187159479354006610
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,9 +537,10 @@ MonoBehaviour:
   controlledShader: {fileID: 1647923134957676822}
   controlledMaterial: {fileID: 8983876818240441392}
   sdfSceneRoot: {fileID: 7154973885652460484}
-  targetShader: {fileID: 0}
+  targetShader: {fileID: 4800000, guid: 2cf3757fc67cf5e588f33f5c12f4775f, type: 3}
+  targetMaterial: {fileID: 0}
   diagnostics: []
---- !u!1 &8456420149560369117
+--- !u!1 &8307604896785199408
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -519,52 +548,93 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5426299456199226248}
-  - component: {fileID: 2863002950696514462}
+  - component: {fileID: 8426167009949837530}
+  - component: {fileID: 5878441262915003613}
+  - component: {fileID: 7492590097188014307}
+  - component: {fileID: 6299968792960716739}
+  - component: {fileID: 306104063086917264}
   m_Layer: 0
-  m_Name: cutout
+  m_Name: torus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5426299456199226248
+--- !u!4 &8426167009949837530
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8456420149560369117}
+  m_GameObject: {fileID: 8307604896785199408}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.70710677, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5877888198493929546}
-  - {fileID: 3167144166169392931}
-  m_Father: {fileID: 7070351456614148741}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2863002950696514462
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 8647305247198464788}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &5878441262915003613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8456420149560369117}
+  m_GameObject: {fileID: 8307604896785199408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29ed26e558d94e30b2d87bed778a01dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7492590097188014307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8307604896785199408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 0
+  mainRadius: 0.49804693
+  ringRadius: 0.25
+  cap: 0.7606551
+--- !u!114 &6299968792960716739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8307604896785199408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccc065056454d00bfa1309e4e07eb77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variant: 1
+  thickness: 0.12
+  layers: 4
+--- !u!114 &306104063086917264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8307604896785199408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inverted: 0
-  sdfModifiers: []
-  operation: 1
-  blendFactor: 1
-  singleId: 0
-  children:
-  - {fileID: 2409568953778123847}
-  - {fileID: 6901272947664443467}
+  sdfModifiers:
+  - {fileID: 5878441262915003613}
+  - {fileID: 7492590097188014307}
+  - {fileID: 6299968792960716739}
 --- !u!48 &1647923134957676822
 Shader:
   m_ObjectHideFlags: 0
@@ -581,10 +651,11 @@ Shader:
         m_Attributes:
         - Header (global raymarching properties)
         - Space
+        - Tooltip (turn OFF to raymarch inside object)
         - Enum (UnityEngine.Rendering.CullMode)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 2
+        m_DefValue[0]: 0
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -755,23 +826,23 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0__root_combine__1_BlendFactor
+      - m_Name: SDF_1_0__root_allObjects__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header (root combine)
+        - Header (root allObjects)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 1
+        m_DefValue[0]: 0.55
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_0__root_combine_box__2_BoxExtents
+      - m_Name: SDF_1_0_0__root_allObjects_box__2_BoxExtents
         m_Description: Box extents
         m_Attributes:
-        - Header (root combine box)
+        - Header (root allObjects box)
         m_Type: 1
         m_Flags: 0
         m_DefValue[0]: 0.25
@@ -781,10 +852,35 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_1__root_combine_cutout__1_BlendFactor
+      - m_Name: SDF_1_0_0__root_allObjects_box__3_Thickness
+        m_Description: Thickness
+        m_Attributes:
+        - Header (root allObjects box)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.32
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_0__root_allObjects_box__3_Layers
+        m_Description: Layers
+        m_Attributes: []
+        m_Type: 5
+        m_Flags: 0
+        m_DefValue[0]: 7e-45
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1__root_allObjects_toroid__1_BlendFactor
         m_Description: Blend factor
         m_Attributes:
-        - Header (root combine cutout)
+        - Header (root allObjects toroid)
         m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 1
@@ -794,67 +890,90 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_1_0__root_combine_cutout_box__1___2_BoxExtents
-        m_Description: Box extents
+      - m_Name: SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius
+        m_Description: Torus main radius
         m_Attributes:
-        - Header (root combine cutout box  1 )
-        m_Type: 1
+        - Header (root allObjects toroid torus)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.498047
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius
+        m_Description: Torus ring radius
+        m_Attributes: []
+        m_Type: 2
         m_Flags: 0
         m_DefValue[0]: 0.25
-        m_DefValue[1]: 0.25
-        m_DefValue[2]: 0.25
-        m_DefValue[3]: 0
-        m_DefTexture:
-          m_DefaultName: 
-          m_TexDim: 1
-      - m_Name: SDF_1_0_1_0__root_combine_cutout_box__1___3_Rounding
-        m_Description: Rounding
-        m_Attributes:
-        - Header (root combine cutout box  1 )
-        m_Type: 2
-        m_Flags: 0
-        m_DefValue[0]: 0.11
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_1_0__root_combine_cutout_box__1___4_Rounding
+      - m_Name: SDF_1_0_1_0__root_allObjects_toroid_torus__2_Cap
+        m_Description: Torus cap
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.760655
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness
         m_Description: Thickness
         m_Attributes:
-        - Header (root combine cutout box  1 )
+        - Header (root allObjects toroid torus)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.1
+        m_DefValue[0]: 0.12
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_1_0__root_combine_cutout_box__1___5_Rounding
-        m_Description: Thickness
+      - m_Name: SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers
+        m_Description: Layers
+        m_Attributes: []
+        m_Type: 5
+        m_Flags: 0
+        m_DefValue[0]: 6e-45
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius
+        m_Description: Sphere radius
         m_Attributes:
-        - Header (root combine cutout box  1 )
+        - Header (root allObjects toroid sphere)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.07
+        m_DefValue[0]: 0.995045
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
-      - m_Name: SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents
+      - m_Name: SDF_1_1__root_cutoff__2_BoxExtents
         m_Description: Box extents
         m_Attributes:
-        - Header (root combine cutout minus)
+        - Header (root cutoff)
         m_Type: 1
         m_Flags: 0
-        m_DefValue[0]: 0.635748
-        m_DefValue[1]: 0.251474
-        m_DefValue[2]: 0.68467
+        m_DefValue[0]: 6.891491
+        m_DefValue[1]: 0.873901
+        m_DefValue[2]: 3.763167
         m_DefValue[3]: 0
         m_DefTexture:
           m_DefaultName: 
@@ -1142,7 +1261,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 58720
+          gpuProgramID: 12580
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1297,14 +1416,14 @@ Shader:
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 109
+    line: 124
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: region'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 109
+    line: 124
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: endregion'
@@ -1335,7 +1454,7 @@ Shader:
     line: 239
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_0__root_combine_box__1_SpaceTransform" contains consecutive
+  - message: '"SDF_1_0_0__root_allObjects_box__1_SpaceTransform" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: examples (generated)
@@ -1343,7 +1462,15 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_0__root_combine_box__2_BoxExtents" contains consecutive underscores
+  - message: '"SDF_1_0_0__root_allObjects_box__2_BoxExtents" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0__root_allObjects_box__3_Layers" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: examples (generated)
@@ -1351,7 +1478,15 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_combine_cutout_box__1___1_SpaceTransform" contains
+  - message: '"SDF_1_0_0__root_allObjects_box__3_Thickness" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_allObjects_toroid_torus__1_SpaceTransform" contains
       consecutive underscores ("__"), such names are reserved and might result in
       undefined behaviour'
     messageDetails: 
@@ -1360,39 +1495,7 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_combine_cutout_box__1___2_BoxExtents" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: examples (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_combine_cutout_box__1___3_Rounding" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: examples (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_combine_cutout_box__1___4_Rounding" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: examples (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_combine_cutout_box__1___5_Rounding" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
-    messageDetails: 
-    file: examples (generated)
-    compilerPlatform: 18
-    line: -1
-    warning: 1
-    runtimeError: 0
-  - message: '"SDF_1_0_1_1__root_combine_cutout_minus__1_SpaceTransform" contains
+  - message: '"SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius" contains
       consecutive underscores ("__"), such names are reserved and might result in
       undefined behaviour'
     messageDetails: 
@@ -1401,8 +1504,58 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents" contains consecutive
+  - message: '"SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers" contains consecutive
       underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_allObjects_toroid_sphere__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1__root_cutoff__1_SpaceTransform" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1__root_cutoff__2_BoxExtents" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: examples (generated)
     compilerPlatform: 18
@@ -1411,6 +1564,171 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
+      12580:
+        serializedVersion: 3
+        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
+          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
+          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
+          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 122 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 74\n\n        #pragma target 5.0\n       
+          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
+          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
+          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
+          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_allObjects__1_BlendFactor;\n       
+          float4x4 SDF_1_0_0__root_allObjects_box__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, 0.0 },\n               
+          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float3 SDF_1_0_0__root_allObjects_box__2_BoxExtents;\n       
+          float SDF_1_0_0__root_allObjects_box__3_Thickness;\n        int SDF_1_0_0__root_allObjects_box__3_Layers;\n       
+          float SDF_1_0_1__root_allObjects_toroid__1_BlendFactor;\n        float4x4
+          SDF_1_0_1_0__root_allObjects_toroid_torus__1_SpaceTransform = {\n               
+          { 0.0, 1.0, 0.0, -0.25 },\n                { -1.0, 0.0, 0.0, 0.0 },\n               
+          { 0.0, 0.0, 1.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius;\n       
+          float SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius;\n       
+          float SDF_1_0_1_0__root_allObjects_toroid_torus__2_Cap;\n        float
+          SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness;\n        int SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers;\n       
+          float4x4 SDF_1_0_1_1__root_allObjects_toroid_sphere__1_SpaceTransform =
+          {\n                { 1.0, 0.0, 0.0, -0.684 },\n                { 0.0, 1.0,
+          0.0, -0.25 },\n                { 0.0, 0.0, 1.0, 2.0 },\n               
+          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius;\n       
+          float4x4 SDF_1_1__root_cutoff__1_SpaceTransform = {\n                {
+          1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, -1.214 },\n               
+          { 0.0, 0.0, 1.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float3 SDF_1_1__root_cutoff__2_BoxExtents;\n        #line 122
+          \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          UNITY: Original start of shader */\n            SdfResult SDF_1_0_0__root_allObjects_box__4
+          (float3 p);\n            SdfResult SDF_1_0_1_0__root_allObjects_toroid_torus__4
+          (float3 p);\n            SdfResult SDF_1_0_1_1__root_allObjects_toroid_sphere__3
+          (float3 p);\n            SdfResult SDF_1_0_1__root_allObjects_toroid__1
+          (float3 p);\n            SdfResult SDF_1_0__root_allObjects__1 (float3
+          p);\n            SdfResult SDF_1_1__root_cutoff__3 (float3 p);\n           
+          SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0__root_allObjects_box__4(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::operators::onion_skin(sdf::primitives3D::box(sdf::operators::transform(p,
+          SDF_1_0_0__root_allObjects_box__1_SpaceTransform), SDF_1_0_0__root_allObjects_box__2_BoxExtents),
+          SDF_1_0_0__root_allObjects_box__3_Thickness, SDF_1_0_0__root_allObjects_box__3_Layers);\n               
+          result.id = int4(0, 0, 0, 6);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_0__root_allObjects_toroid_torus__4(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::operators::onion_skin(sdf::primitives3D::torus(sdf::operators::transform(p,
+          SDF_1_0_1_0__root_allObjects_toroid_torus__1_SpaceTransform), SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius,
+          SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius), SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness,
+          SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers);\n               
+          result.id = int4(0, 0, 0, 11);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1_1__root_allObjects_toroid_sphere__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
+          SDF_1_0_1_1__root_allObjects_toroid_sphere__1_SpaceTransform), SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius);\n               
+          result.id = int4(0, 0, 0, 14);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_1__root_allObjects_toroid__1(float3 p)
+          {\n                SdfResult result = SDF_1_0_1_0__root_allObjects_toroid_torus__4(p);\n               
+          result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_allObjects_toroid_sphere__3(p));\n               
+          return result;\n            }\n            SdfResult SDF_1_0__root_allObjects__1(float3
+          p) {\n                SdfResult result = SDF_1_0_0__root_allObjects_box__4(p);\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_1__root_allObjects_toroid__1(p));\n               
+          return result;\n            }\n            SdfResult SDF_1_1__root_cutoff__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = -sdf::primitives3D::box(sdf::operators::transform(p,
+          SDF_1_1__root_cutoff__1_SpaceTransform), SDF_1_1__root_cutoff__2_BoxExtents);\n               
+          result.id = int4(0, 0, 0, 17);\n                return result;\n           
+          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
+          result = SDF_1_0__root_allObjects__1(p);\n                result = sdf::operators::intersectSimple(result,
+          SDF_1_1__root_cutoff__3(p));\n                return result;\n           
+          }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n           
+          }\n            "
+        m_AssetPath: Assets/Prefabs
+        m_AssetName: examples.prefab
+        m_PlatformMask: 4294967295
+        m_HardwareTierVariantsMask: 0
+        m_StartLine: 124
+        m_TypesMask: 3
+        m_IncludesHash:
+          serializedVersion: 2
+          Hash: 31b82487eb050e59adeab8ffea607ad2
+        m_CodeHash:
+          serializedVersion: 2
+          Hash: c2c8f5ae4ec009450dc13e89823528d0
+        m_FromOther: 0
+        m_ForceSyncCompilation: 0
+        m_UseDxcAPIs: 0
+        m_NeverUseDxcAPIs: 0
+        m_Language: 3
+        m_VariantsUserGlobal0: []
+        m_VariantsUserGlobal1: []
+        m_VariantsUserGlobal2: []
+        m_VariantsUserGlobal3: []
+        m_VariantsUserGlobal4: []
+        m_VariantsUserGlobal5: []
+        m_VariantsUserGlobal6: []
+        m_VariantsUserLocal0:
+        - - _DRAWMODE_MATERIAL
+          - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
+          - _DRAWMODE_SKYBOX
+          - _DRAWMODE_NORMAL
+          - _DRAWMODE_STEPS
+          - _DRAWMODE_DEPTH
+          - _DRAWMODE_OCCLUSION
+        - - __
+          - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal1:
+        - - _DRAWMODE_MATERIAL
+          - _DRAWMODE_ALBEDO
+          - _DRAWMODE_ID
+          - _DRAWMODE_SKYBOX
+          - _DRAWMODE_NORMAL
+          - _DRAWMODE_STEPS
+          - _DRAWMODE_DEPTH
+          - _DRAWMODE_OCCLUSION
+        - - __
+          - _SHOW_WORLD_GRID
+        - - _ZWRITE_ON
+          - _ZWRITE_OFF
+        m_VariantsUserLocal2: []
+        m_VariantsUserLocal3: []
+        m_VariantsUserLocal4: []
+        m_VariantsUserLocal5: []
+        m_VariantsUserLocal6: []
+        m_VariantsBuiltin0: []
+        m_VariantsBuiltin1: []
+        m_VariantsBuiltin2: []
+        m_VariantsBuiltin3: []
+        m_VariantsBuiltin4: []
+        m_VariantsBuiltin5: []
+        m_VariantsBuiltin6: []
+        m_DynamicBranchKeywords: []
+        m_BaseRequirements: 1101803
+        m_KeywordTargetInfo:
+        - keywordName: SHADOWS_SOFT
+          requirements: 227
+        - keywordName: DIRLIGHTMAP_COMBINED
+          requirements: 227
+        - keywordName: DYNAMICLIGHTMAP_ON
+          requirements: 227
+        - keywordName: SHADOWS_SCREEN
+          requirements: 227
+        - keywordName: INSTANCING_ON
+          requirements: 2048
+        - keywordName: PROCEDURAL_INSTANCING_ON
+          requirements: 16384
+        - keywordName: STEREO_MULTIVIEW_ON
+          requirements: 4075
+        - keywordName: STEREO_INSTANCING_ON
+          requirements: 4075
+        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
+          requirements: 536870912
+        m_NonStrippedUserKeywords: 
+        m_BuiltinKeywords: 
       38832:
         serializedVersion: 3
         m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
@@ -1487,156 +1805,6 @@ Shader:
           requirements: 536870912
         m_NonStrippedUserKeywords: 
         m_BuiltinKeywords: 
-      58720:
-        serializedVersion: 3
-        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
-          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
-          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 107 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 69\n\n        #pragma target 5.0\n       
-          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
-          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
-          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_combine__1_BlendFactor;\n       
-          float4x4 SDF_1_0_0__root_combine_box__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, -1.0 },\n                { 0.0, 1.0, 0.0, 0.0 },\n               
-          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float3 SDF_1_0_0__root_combine_box__2_BoxExtents;\n       
-          float SDF_1_0_1__root_combine_cutout__1_BlendFactor;\n        float4x4
-          SDF_1_0_1_0__root_combine_cutout_box__1___1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, -1.0 },\n                { 0.0, 1.0, 0.0, 0.0 },\n               
-          { 0.0, 0.0, 1.0, 1.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float3 SDF_1_0_1_0__root_combine_cutout_box__1___2_BoxExtents;\n       
-          float SDF_1_0_1_0__root_combine_cutout_box__1___3_Rounding;\n        float
-          SDF_1_0_1_0__root_combine_cutout_box__1___4_Rounding;\n        float SDF_1_0_1_0__root_combine_cutout_box__1___5_Rounding;\n       
-          float4x4 SDF_1_0_1_1__root_combine_cutout_minus__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, -1.0 },\n                { 0.0, 1.0, 0.0, -0.369 },\n               
-          { 0.0, 0.0, 1.0, 1.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float3 SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents;\n       
-          #line 107 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            SdfResult SDF_1_0_0__root_combine_box__3
-          (float3 p);\n            SdfResult SDF_1_0_1_0__root_combine_cutout_box__1___6
-          (float3 p);\n            SdfResult SDF_1_0_1_1__root_combine_cutout_minus__3
-          (float3 p);\n            SdfResult SDF_1_0_1__root_combine_cutout__1 (float3
-          p);\n            SdfResult SDF_1_0__root_combine__1 (float3 p);\n           
-          SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0__root_combine_box__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::box(sdf::operators::transform(p, SDF_1_0_0__root_combine_box__1_SpaceTransform),
-          SDF_1_0_0__root_combine_box__2_BoxExtents);\n                result.id
-          = int4(0, 0, 0, 5);\n                return result;\n            }\n           
-          SdfResult SDF_1_0_1_0__root_combine_cutout_box__1___6(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::operators::onion_skin(sdf::operators::onion_skin(sdf::operators::round_sdf(sdf::primitives3D::box(sdf::operators::transform(p,
-          SDF_1_0_1_0__root_combine_cutout_box__1___1_SpaceTransform), SDF_1_0_1_0__root_combine_cutout_box__1___2_BoxExtents),
-          SDF_1_0_1_0__root_combine_cutout_box__1___3_Rounding), SDF_1_0_1_0__root_combine_cutout_box__1___4_Rounding),
-          SDF_1_0_1_0__root_combine_cutout_box__1___5_Rounding);\n               
-          result.id = int4(0, 0, 0, 12);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1_1__root_combine_cutout_minus__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = -sdf::primitives3D::box(sdf::operators::transform(p,
-          SDF_1_0_1_1__root_combine_cutout_minus__1_SpaceTransform), SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents);\n               
-          result.id = int4(0, 0, 0, 15);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1__root_combine_cutout__1(float3 p) {\n               
-          SdfResult result = SDF_1_0_1_0__root_combine_cutout_box__1___6(p);\n               
-          result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_combine_cutout_minus__3(p));\n               
-          return result;\n            }\n            SdfResult SDF_1_0__root_combine__1(float3
-          p) {\n                SdfResult result = SDF_1_0_0__root_combine_box__3(p);\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_1__root_combine_cutout__1(p));\n               
-          return result;\n            }\n            SdfResult SDF_1__root__1(float3
-          p) {\n                SdfResult result = SDF_1_0__root_combine__1(p);\n               
-          return result;\n            }\n            SdfResult sdfScene(float3 p)
-          {\n                return SDF_1__root__1(p);\n            }\n            "
-        m_AssetPath: Assets/Prefabs
-        m_AssetName: examples.prefab
-        m_PlatformMask: 4294967295
-        m_HardwareTierVariantsMask: 0
-        m_StartLine: 109
-        m_TypesMask: 3
-        m_IncludesHash:
-          serializedVersion: 2
-          Hash: 424d270fa64f87113c67626c4c0e21b6
-        m_CodeHash:
-          serializedVersion: 2
-          Hash: bd85765323cf493484387175270c44b0
-        m_FromOther: 0
-        m_ForceSyncCompilation: 0
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
-        m_Language: 3
-        m_VariantsUserGlobal0: []
-        m_VariantsUserGlobal1: []
-        m_VariantsUserGlobal2: []
-        m_VariantsUserGlobal3: []
-        m_VariantsUserGlobal4: []
-        m_VariantsUserGlobal5: []
-        m_VariantsUserGlobal6: []
-        m_VariantsUserLocal0:
-        - - _DRAWMODE_MATERIAL
-          - _DRAWMODE_ALBEDO
-          - _DRAWMODE_ID
-          - _DRAWMODE_SKYBOX
-          - _DRAWMODE_NORMAL
-          - _DRAWMODE_STEPS
-          - _DRAWMODE_DEPTH
-          - _DRAWMODE_OCCLUSION
-        - - __
-          - _SHOW_WORLD_GRID
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal1:
-        - - _DRAWMODE_MATERIAL
-          - _DRAWMODE_ALBEDO
-          - _DRAWMODE_ID
-          - _DRAWMODE_SKYBOX
-          - _DRAWMODE_NORMAL
-          - _DRAWMODE_STEPS
-          - _DRAWMODE_DEPTH
-          - _DRAWMODE_OCCLUSION
-        - - __
-          - _SHOW_WORLD_GRID
-        - - _ZWRITE_ON
-          - _ZWRITE_OFF
-        m_VariantsUserLocal2: []
-        m_VariantsUserLocal3: []
-        m_VariantsUserLocal4: []
-        m_VariantsUserLocal5: []
-        m_VariantsUserLocal6: []
-        m_VariantsBuiltin0: []
-        m_VariantsBuiltin1: []
-        m_VariantsBuiltin2: []
-        m_VariantsBuiltin3: []
-        m_VariantsBuiltin4: []
-        m_VariantsBuiltin5: []
-        m_VariantsBuiltin6: []
-        m_DynamicBranchKeywords: []
-        m_BaseRequirements: 1101803
-        m_KeywordTargetInfo:
-        - keywordName: SHADOWS_SOFT
-          requirements: 227
-        - keywordName: DIRLIGHTMAP_COMBINED
-          requirements: 227
-        - keywordName: DYNAMICLIGHTMAP_ON
-          requirements: 227
-        - keywordName: SHADOWS_SCREEN
-          requirements: 227
-        - keywordName: INSTANCING_ON
-          requirements: 2048
-        - keywordName: PROCEDURAL_INSTANCING_ON
-          requirements: 16384
-        - keywordName: STEREO_MULTIVIEW_ON
-          requirements: 4075
-        - keywordName: STEREO_INSTANCING_ON
-          requirements: 4075
-        - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
-          requirements: 536870912
-        m_NonStrippedUserKeywords: 
-        m_BuiltinKeywords: 
     m_MeshComponentsFromSnippets: 1
     m_HasSurfaceShaders: 0
     m_HasFixedFunctionShaders: 0
@@ -1666,80 +1834,75 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs: []
-    m_Ints: []
+    m_Ints:
+    - SDF_1_0_0__root_GameObject_box__3_Layers: 5
+    - SDF_1_0_0__root_allObjects_box__3_Layers: 5
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__3_Layers: 4
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__3_Layers: 4
+    - SDF_1_0_1_0__root_combine_cutout_box__1___4_Layers: 3
+    - SDF_1_0_1__root_GameObject_torus__3_Layers: 4
+    - SDF_1_0__root_box__3_Layers: 5
+    - SDF_1_1_0__root_GameObject_box__3_Layers: 5
+    - SDF_1_1_0__root_GameObject_torus__3_Layers: 4
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__3_Layers: 4
+    - SDF_1_1_1__root_GameObject_torus__3_Layers: 4
+    - SDF_1_2_0__root_GameObject_torus__3_Layers: 4
     m_Floats:
-    - SDF_1_0_0_1__root_combine_dice_sphere__2_Radius: 0.8
-    - SDF_1_0_0__root_combine_dice__1_BlendFactor: 1
-    - SDF_1_0_0__root_combine_sphere__1_Radius: 1
-    - SDF_1_0_0__root_combine_sphere__2_Radius: 1
-    - SDF_1_0_1_0__root_combine_cross_cylinder__2_Height: 1
-    - SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius: 0.4
-    - SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding: 0.25
+    - SDF_1_0_0__root_GameObject_box__3_Thickness: 0.24
+    - SDF_1_0_0__root_allObjects_box__3_Thickness: 0.32
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_0_1_0__root_GameObject_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__2_Cap: 0.7606551
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius: 0.49804693
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius: 0.25
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness: 0.12
     - SDF_1_0_1_0__root_combine_cutout_box__1___3_Rounding: 0.11
-    - SDF_1_0_1_0__root_combine_cutout_box__1___4_Rounding: 0.1
-    - SDF_1_0_1_0__root_combine_cutout_box__1___5_Rounding: 0.07
-    - SDF_1_0_1_1__root_combine_cross_cylinder__2_Height: 1
-    - SDF_1_0_1_1__root_combine_cross_cylinder__2_Radius: 0.4
-    - SDF_1_0_1_1__root_combine_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_0_1_2__root_combine_cross_cylinder__2_Height: 1
-    - SDF_1_0_1_2__root_combine_cross_cylinder__2_Radius: 0.4
-    - SDF_1_0_1_2__root_combine_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_0_1__root_combine_box__1___3_Rounding: 0.11
-    - SDF_1_0_1__root_combine_box__1___4_Rounding: 0.17
-    - SDF_1_0_1__root_combine_cross__1_BlendFactor: 1
+    - SDF_1_0_1_0__root_combine_cutout_box__1___4_Layers: 3
+    - SDF_1_0_1_0__root_combine_cutout_box__1___4_Thickness: 0.03
+    - SDF_1_0_1_1__root_GameObject_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius: 0.9950453
+    - SDF_1_0_1__root_GameObject_GameObject__1_BlendFactor: 1
+    - SDF_1_0_1__root_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_0_1__root_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_0_1__root_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_0_1__root_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_0_1__root_allObjects_toroid__1_BlendFactor: 1
     - SDF_1_0_1__root_combine_cutout__1_BlendFactor: 1
-    - SDF_1_0_1__root_combine_sphere__2_Radius: 0.77261275
-    - SDF_1_0_1__root_dice_sphere__2_Radius: 0.7695998
-    - SDF_1_0_2__root_combine_cone__2_Angle: 0.7853982
-    - SDF_1_0_2__root_combine_cone__2_Height: 1
+    - SDF_1_0_3__root_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_0__root_GameObject__1_BlendFactor: 0.55
+    - SDF_1_0__root_allObjects__1_BlendFactor: 0.55
+    - SDF_1_0__root_box__3_Thickness: 0.24
     - SDF_1_0__root_combine__1_BlendFactor: 1
-    - SDF_1_0__root_dice__1_BlendFactor: 1
-    - SDF_1_0__root_sphere__2_Radius: 1
-    - SDF_1_0__root_torus__2_Cap: 0.68554664
-    - SDF_1_0__root_torus__2_MainRadius: 1.6563723
-    - SDF_1_0__root_torus__2_RingRadius: 0.13735406
-    - SDF_1_1_0_1__root_combine_dice_sphere__2_Radius: 0.8379761
-    - SDF_1_1_0__root_combine_dice__1_BlendFactor: 1
-    - SDF_1_1_0__root_cross_cylinder__2_Height: 0.71953154
-    - SDF_1_1_0__root_cross_cylinder__2_Radius: 0.33935428
-    - SDF_1_1_0__root_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_1_1_0__root_combine_cross_cylinder__2_Height: 0.71953154
-    - SDF_1_1_1_0__root_combine_cross_cylinder__2_Radius: 0.33935428
-    - SDF_1_1_1_0__root_combine_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_1_1_1__root_combine_cross_cylinder__2_Height: 1
-    - SDF_1_1_1_1__root_combine_cross_cylinder__2_Radius: 0.20634887
-    - SDF_1_1_1_1__root_combine_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_1_1_2__root_combine_cross_cylinder__2_Height: 1
-    - SDF_1_1_1_2__root_combine_cross_cylinder__2_Radius: 0.07119972
-    - SDF_1_1_1_2__root_combine_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_1_1__root_combine_cross__1_BlendFactor: 1
-    - SDF_1_1_1__root_cross_cylinder__1_Height: 1
-    - SDF_1_1_1__root_cross_cylinder__1_Radius: 0.25
-    - SDF_1_1_1__root_cross_cylinder__1_Rounding: 0.25
-    - SDF_1_1_1__root_cross_cylinder__2_Height: 1
-    - SDF_1_1_1__root_cross_cylinder__2_Radius: 0.20634887
-    - SDF_1_1_1__root_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_1_2__root_cross_cylinder__1_Height: 1
-    - SDF_1_1_2__root_cross_cylinder__1_Radius: 0.25
-    - SDF_1_1_2__root_cross_cylinder__1_Rounding: 0.25
-    - SDF_1_1_2__root_cross_cylinder__2_Height: 1
-    - SDF_1_1_2__root_cross_cylinder__2_Radius: 0.07119972
-    - SDF_1_1_2__root_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_1__root_combine__1_BlendFactor: 1
-    - SDF_1_1__root_cone__2_Angle: 0.7853982
-    - SDF_1_1__root_cone__2_Height: 1
-    - SDF_1_1__root_cross__1_BlendFactor: 1
-    - SDF_1_1__root_sphere__2_Radius: 0.5901029
-    - SDF_1_1__root_torus__2_Cap: 0.7853982
-    - SDF_1_1__root_torus__2_MainRadius: 1.2606895
-    - SDF_1_1__root_torus__2_RingRadius: 0.17567778
-    - SDF_1_2__root_torus__2_Cap: 0.7853982
-    - SDF_1_2__root_torus__2_MainRadius: 0.5929258
-    - SDF_1_2__root_torus__2_RingRadius: 0.23173279
+    - SDF_1_1_0__root_GameObject_box__3_Thickness: 0.24
+    - SDF_1_1_0__root_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_1_0__root_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_1_0__root_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_1_0__root_GameObject_torus__3_Layers: 0
+    - SDF_1_1_0__root_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_1_1_0__root_GameObject_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_1_1_1__root_GameObject_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_1_1__root_GameObject_GameObject__1_BlendFactor: 1
+    - SDF_1_1_1__root_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_1_1__root_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_1_1__root_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_1_1__root_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_1_2__root_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_1__root_GameObject__1_BlendFactor: 0.55
+    - SDF_1_1__root_torus__2_Cap: 0.7606551
+    - SDF_1_1__root_torus__2_MainRadius: 0.49804693
+    - SDF_1_1__root_torus__2_RingRadius: 0.25
+    - SDF_1_2_0__root_GameObject_torus__2_Cap: 0.7606551
+    - SDF_1_2_0__root_GameObject_torus__2_MainRadius: 0.49804693
+    - SDF_1_2_0__root_GameObject_torus__2_RingRadius: 0.25
+    - SDF_1_2_0__root_GameObject_torus__3_Thickness: 0.12
+    - SDF_1_2_1__root_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_2__root_GameObject__1_BlendFactor: 0.55
     - SDF_1__root__1_BlendFactor: 0.3
-    - SDF_2__torus__2_Cap: 0.7853982
-    - SDF_2__torus__2_MainRadius: 1.2606895
-    - SDF_2__torus__2_RingRadius: 0.17567778
     - _AO_FALLOFF: 2.5
     - _AO_MAX_DISTANCE: 1
     - _AO_STEPS: 6
@@ -1754,13 +1917,18 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
-    - SDF_1_0_0_0__root_combine_dice_box__2_BoxExtents: {r: 0.6, g: 0.6, b: 0.6, a: 0}
+    - SDF_1_0_0__root_GameObject_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - SDF_1_0_0__root_allObjects_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - SDF_1_0_0__root_combine_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_0__root_dice_box__2_BoxExtents: {r: 0.5721375, g: 0.5977406, b: 0.6381427, a: 0}
     - SDF_1_0_1_0__root_combine_cutout_box__1___2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents: {r: 0.63574785, g: 0.25147438, b: 0.6846704, a: 0}
-    - SDF_1_0_1__root_combine_box__1_BoxExtents: {r: 0.7716299, g: 0.7716299, b: 0.8054754, a: 0}
-    - SDF_1_0_1__root_combine_box__1___2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
-    - SDF_1_0_1__root_combine_box__2_BoxExtents: {r: 1.0968182, g: 1.0968182, b: 1.0968182, a: 0}
-    - SDF_1_1_0_0__root_combine_dice_box__2_BoxExtents: {r: 0.5721375, g: 0.5977406, b: 0.6381427, a: 0}
+    - SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents: {r: 2.0691597, g: 1.312932, b: 2.9708533, a: 0}
+    - SDF_1_0_2__root_GameObject_box__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_0__root_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - SDF_1_0__root_custoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_1_0__root_GameObject_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
+    - SDF_1_1_1__root_GameObject_box__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_1__root_box__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_1__root_custoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_1__root_cutoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_2__custoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
   m_BuildTextureStacks: []

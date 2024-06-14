@@ -29,7 +29,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public SdfController? sdfSceneRoot;
 
+
+        [Tooltip("A target shader asset to regenerate")]
         public Shader? targetShader;
+        [Tooltip("A target material to regenerate shader with")]
+        public Material? targetMaterial;
 
         readonly ShaderPropertyCollector shaderPropertyCollector = new();
         ShaderPropertyUpdatingVisitor?   _shaderPropertyUpdatingVisitor;
@@ -277,6 +281,15 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 }
             }
 
+            if (targetMaterial != null) {
+                var path = AssetDatabase.GetAssetPath(targetMaterial);
+                if (File.Exists(path)) {
+                    File.WriteAllText(path, shaderSource);
+                    AssetDatabase.SaveAssetIfDirty(targetMaterial);
+                }
+            }
+
+            AssetDatabase.Refresh();
 
             // if (commonInclude == null) {
             //     var txt = new TextAsset();

@@ -48,12 +48,14 @@ namespace me.tooster.sdf.AST.Hlsl {
                 },
             };
 
-        public static Call FunctionCall(string function, params Expression[] args)
+        public static Call FunctionCall(string function, IEnumerable<Expression> args)
             => new()
             {
                 calee = NameFrom(function),
                 argList = args.ToArgumentList(),
             };
+
+        public static Call FunctionCall(string function, params Expression[] args) => FunctionCall(function, args.AsEnumerable());
 
         /// takes string like 'x' or 'a.b.c' and generates an lvalue expression, like <see cref="Identifier"/> or <see cref="Member"/>
         public static Expression LValue(string path) {

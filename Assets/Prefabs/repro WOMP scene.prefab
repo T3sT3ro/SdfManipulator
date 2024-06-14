@@ -472,6 +472,7 @@ MonoBehaviour:
   controlledMaterial: {fileID: 1571854654217766705}
   sdfSceneRoot: {fileID: 6873469658069886936}
   targetShader: {fileID: 0}
+  targetMaterial: {fileID: 0}
   diagnostics: []
 --- !u!1 &6054086836978895531
 GameObject:
@@ -531,7 +532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5619386
+  radius: 0.5611774
 --- !u!114 &1754213323786168580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,7 +548,6 @@ MonoBehaviour:
   inverted: 0
   sdfModifiers:
   - {fileID: 5098085342412353933}
-  - {fileID: 4859401043723726551}
   - {fileID: 4859401043723726551}
 --- !u!1 &6329935897886186643
 GameObject:
@@ -924,7 +924,7 @@ Material:
     - SDF_1_0_0__root_combine_nose__2_Radius: 0.087049246
     - SDF_1_0_0__root_combine_sphere__1_Radius: 0.11
     - SDF_1_0_1_0__root_combine_face_eye__2_Radius: 0.11
-    - SDF_1_0_1_1__root_combine_face_skull__2_Radius: 0.5619386
+    - SDF_1_0_1_1__root_combine_face_skull__2_Radius: 0.5611774
     - SDF_1_0_1__root_combine_face__1_BlendFactor: 1
     - SDF_1_0_1__root_combine_head__1_Radius: 0.5619386
     - SDF_1_0_1__root_combine_head__2_Radius: 0.5619386
@@ -1027,7 +1027,7 @@ Material:
     - _EPSILON_NORMAL: 0.001
     - _EPSILON_RAY: 0.001
     - _MAX_DISTANCE: 200
-    - _MAX_STEPS: 200
+    - _MAX_STEPS: 500
     - _RAY_ORIGIN_BIAS: 0
     - _SHOW_WORLD_GRID: 0
     - _ZTest: 4
@@ -1074,10 +1074,11 @@ Shader:
         m_Attributes:
         - Header (global raymarching properties)
         - Space
+        - Tooltip (turn OFF to raymarch inside object)
         - Enum (UnityEngine.Rendering.CullMode)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 2
+        m_DefValue[0]: 0
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -1306,7 +1307,7 @@ Shader:
         - Header (root combine face skull)
         m_Type: 2
         m_Flags: 0
-        m_DefValue[0]: 0.561939
+        m_DefValue[0]: 0.561177
         m_DefValue[1]: 0
         m_DefValue[2]: 0
         m_DefValue[3]: 0
@@ -1720,7 +1721,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 46476
+          gpuProgramID: 47164
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1875,14 +1876,14 @@ Shader:
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 149
+    line: 150
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: region'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 149
+    line: 150
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: endregion'
@@ -2159,16 +2160,16 @@ Shader:
           requirements: 536870912
         m_NonStrippedUserKeywords: 
         m_BuiltinKeywords: 
-      46476:
+      47164:
         serializedVersion: 3
         m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
           1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
           1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
           1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
           1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
-          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 147 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 148 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
           UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 78\n\n        #pragma target 5.0\n       
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 79\n\n        #pragma target 5.0\n       
           #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
           #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
           #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
@@ -2207,7 +2208,7 @@ Shader:
           },\n                { 0.0, 1.0, 0.0, 2.316 },\n                { 0.0, 0.0,
           0.0, 1.0 }\n        };\n        float SDF_1_2_2__root_limbs_torus__2_MainRadius;\n       
           float SDF_1_2_2__root_limbs_torus__2_RingRadius;\n        float SDF_1_2_2__root_limbs_torus__2_Cap;\n       
-          #line 147 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
+          #line 148 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
           UNITY: Original start of shader */\n            SdfResult SDF_1_0_0__root_combine_nose__3
           (float3 p);\n            SdfResult SDF_1_0_1_0__root_combine_face_eye__3
           (float3 p);\n            SdfResult SDF_1_0_1_1__root_combine_face_skull__3
@@ -2270,14 +2271,14 @@ Shader:
         m_AssetName: repro WOMP scene.prefab
         m_PlatformMask: 4294967295
         m_HardwareTierVariantsMask: 0
-        m_StartLine: 149
+        m_StartLine: 150
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: 8676def93f12a835a189847233d29c26
+          Hash: 87dbeb5185956268f24ccac96c436b37
         m_CodeHash:
           serializedVersion: 2
-          Hash: a8f7c0758990400f51700d22fddae297
+          Hash: 5be459b459665c8f2487ce6f3c8c9461
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0

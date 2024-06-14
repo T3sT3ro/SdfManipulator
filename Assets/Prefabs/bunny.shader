@@ -1,5 +1,5 @@
 // GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
-// Last modification: 11/06/2024 21:00:07
+// Last modification: 13/06/2024 20:13:55
 
 Shader "bunny (generated)"
 {
@@ -60,11 +60,11 @@ Shader "bunny (generated)"
         [Header (root head root head)]
         SDF_1_0_1__root_head_root_head__1_BlendFactor ("Blend factor", Float) = 0.19
 
-        [Header (root head root head face)]
-        SDF_1_0_1_0__root_head_root_head_face__2_Radius ("Sphere radius", Float) = 0.65
+        [Header (root head root head q)]
+        SDF_1_0_1_0__root_head_root_head_q__2_Radius ("Sphere radius", Float) = 0.65
 
-        [Header (root head root head face)]
-        SDF_1_0_1_0__root_head_root_head_face__3_Length ("Elongation", Vector) = (0.12, 0.0, 0.0, 0.0)
+        [Header (root head root head q)]
+        SDF_1_0_1_0__root_head_root_head_q__3_Length ("Elongation", Vector) = (0.12, 0.0, 0.0, 0.0)
 
         [Header (root head root head eyeL)]
         SDF_1_0_1_1__root_head_root_head_eyeL__2_MainRadius ("Torus main radius", Float) = 0.185469
@@ -79,7 +79,7 @@ Shader "bunny (generated)"
         [Header (root head root head mouth)]
         SDF_1_0_1_3__root_head_root_head_mouth__2_MainRadius ("Torus main radius", Float) = 0.114369
         SDF_1_0_1_3__root_head_root_head_mouth__2_RingRadius ("Torus ring radius", Float) = 0.04861
-        SDF_1_0_1_3__root_head_root_head_mouth__2_Cap ("Torus cap", Float) = 1.339747
+        SDF_1_0_1_3__root_head_root_head_mouth__2_Cap ("Torus cap", Float) = 1.762102
 
         [Header (root torso)]
         SDF_1_1__root_torso__1_BlendFactor ("Blend factor", Float) = 1.0
@@ -174,14 +174,14 @@ Shader "bunny (generated)"
         };
         float    SDF_1_0_0_3__root_head_root_ears_ear_base_R__2_Radius;
         float    SDF_1_0_1__root_head_root_head__1_BlendFactor;
-        float4x4 SDF_1_0_1_0__root_head_root_head_face__1_SpaceTransform = {
+        float4x4 SDF_1_0_1_0__root_head_root_head_q__1_SpaceTransform = {
             {0.940201, -0.101083, 0.325277, 0.126522},
             {0.109353, 0.993977, -0.007193, -1.359352},
             {-0.322591, 0.042333, 0.945592, 0.400848},
             {0.0, 0.0, 0.0, 1.0}
         };
-        float    SDF_1_0_1_0__root_head_root_head_face__2_Radius;
-        float3   SDF_1_0_1_0__root_head_root_head_face__3_Length;
+        float    SDF_1_0_1_0__root_head_root_head_q__2_Radius;
+        float3   SDF_1_0_1_0__root_head_root_head_q__3_Length;
         float4x4 SDF_1_0_1_1__root_head_root_head_eyeL__1_SpaceTransform = {
             {0.976532, 0.079999, 0.199965, -0.093695},
             {0.179351, 0.211993, -0.960673, -1.368899},
@@ -273,8 +273,8 @@ Shader "bunny (generated)"
             SdfResult SDF_1_0_0_2__root_head_root_ears_ear_base_L__3(float3 p);
             SdfResult SDF_1_0_0_3__root_head_root_ears_ear_base_R__3(float3 p);
             SdfResult SDF_1_0_0__root_head_root_ears__1(float3 p);
-            float     SDF_1_0_1_0__root_head_root_head_face__3(float3 p);
-            SdfResult SDF_1_0_1_0__root_head_root_head_face__4(float3 p);
+            float     SDF_1_0_1_0__root_head_root_head_q__3(float3 p);
+            SdfResult SDF_1_0_1_0__root_head_root_head_q__4(float3 p);
             SdfResult SDF_1_0_1_1__root_head_root_head_eyeL__3(float3 p);
             SdfResult SDF_1_0_1_2__root_head_root_head_eyeR__3(float3 p);
             SdfResult SDF_1_0_1_3__root_head_root_head_mouth__3(float3 p);
@@ -342,14 +342,14 @@ Shader "bunny (generated)"
                 return result;
             }
 
-            float SDF_1_0_1_0__root_head_root_head_face__3(float3 p) {
-                float3 q = abs(p) - SDF_1_0_1_0__root_head_root_head_face__3_Length;
-                return sdf::primitives3D::sphere(max(q, 0), SDF_1_0_1_0__root_head_root_head_face__2_Radius) + min(max(q), 0);
+            float SDF_1_0_1_0__root_head_root_head_q__3(float3 p) {
+                float3 q = abs(p) - SDF_1_0_1_0__root_head_root_head_q__3_Length;
+                return sdf::primitives3D::sphere(max(q, 0), SDF_1_0_1_0__root_head_root_head_q__2_Radius) + min(max(q), 0);
             }
 
-            SdfResult SDF_1_0_1_0__root_head_root_head_face__4(float3 p) {
+            SdfResult SDF_1_0_1_0__root_head_root_head_q__4(float3 p) {
                 SdfResult result = (SdfResult)0;
-                result.distance = SDF_1_0_1_0__root_head_root_head_face__3(sdf::operators::transform(p, SDF_1_0_1_0__root_head_root_head_face__1_SpaceTransform));
+                result.distance = SDF_1_0_1_0__root_head_root_head_q__3(sdf::operators::transform(p, SDF_1_0_1_0__root_head_root_head_q__1_SpaceTransform));
                 result.id = int4(0, 0, 0, 21);
                 return result;
             }
@@ -385,7 +385,7 @@ Shader "bunny (generated)"
             }
 
             SdfResult SDF_1_0_1__root_head_root_head__1(float3 p) {
-                SdfResult result = SDF_1_0_1_0__root_head_root_head_face__4(p);
+                SdfResult result = SDF_1_0_1_0__root_head_root_head_q__4(p);
                 result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_head_root_head_eyeL__3(p));
                 result = sdf::operators::intersectSimple(result, SDF_1_0_1_2__root_head_root_head_eyeR__3(p));
                 result = sdf::operators::intersectSimple(result, SDF_1_0_1_3__root_head_root_head_mouth__3(p));

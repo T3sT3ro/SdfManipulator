@@ -1,3 +1,4 @@
+using System.Linq;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using Unity.Properties;
 using UnityEditor;
@@ -65,6 +66,29 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                         if (PrefabStageUtility.GetPrefabStage(controller.gameObject) == null)
                             propertyField.SetEnabled(false);
                     }
+
+                    // track property visibility if it depends on some enum value of a backing field
+                    // for example an int property "Layers" in onion skin operator depends on property Variant with enum value "LAYERS"
+                    // this means we should RegisterValueChangeCallback when the enum value changes in Variant and hide/show the Layers property using initial display style or None
+                    void addConoditionalHooks(VisibleWhenAttribute visibleWhenAttribute) {
+                        var driverEnumSerializedProperty = serializedObject.FindProperty(visibleWhenAttribute.enumBackingField);
+                        var driverEnumPropertyField =
+                            defaultInspector.Q<PropertyField>("PropertyField:" + driverEnumSerializedProperty.propertyPath);
+                        var initialDisplayStyle = driverEnumPropertyField.style.display;
+
+                        // depends on the implicit change event when a property field is instantiated
+                        driverEnumPropertyField.RegisterValueChangeCallback(
+                            evt => {
+                                propertyField.style.display =
+                                    visibleWhenAttribute.enumValues.Contains(evt.changedProperty.enumValueIndex)
+                                        ? initialDisplayStyle
+                                        : DisplayStyle.None;
+                            }
+                        );
+                    }
+
+                    if (p.GetAttribute<VisibleWhenAttribute>() is { } dependsOn)
+                        addConoditionalHooks(dependsOn);
                 }
             );
             return root;

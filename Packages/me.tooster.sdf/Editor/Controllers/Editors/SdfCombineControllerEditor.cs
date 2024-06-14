@@ -2,29 +2,10 @@ using System.Linq;
 using me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfCombineController))]
     public class SdfCombineControllerEditor : SdfPrimitiveControllerEditor {
-        public override VisualElement CreateInspectorGUI() {
-            var baseInspector = base.CreateInspectorGUI();
-            var controller = (SdfCombineController)target;
-
-            var operation = baseInspector.Q<PropertyField>("PropertyField:operation");
-            var blendField = baseInspector.Q<PropertyField>("PropertyField:blendFactor");
-
-
-            operation.RegisterValueChangeCallback(
-                _ => blendField.style.display = controller.Operation == SdfCombineController.CombinationOperation.SMOOTH_UNION
-                    ? DisplayStyle.Flex
-                    : DisplayStyle.None
-            );
-
-            return baseInspector;
-        }
-
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
             var controller = (SdfCombineController)target;

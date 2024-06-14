@@ -29,7 +29,7 @@ namespace me.tooster.sdf.Editor.Controllers {
         public static TypeKeyword shaderlabTypeKeyword(this Type t)
             => t switch
             {
-                not null when t == typeof(int)                        => new AST.Shaderlab.Syntax.IntKeyword(),
+                not null when t == typeof(int)                        => new IntegerKeyword(),
                 not null when t == typeof(float) || t == typeof(bool) => new AST.Shaderlab.Syntax.FloatKeyword(),
                 not null when t == typeof(Vector2) || t == typeof(Vector3) || t == typeof(Vector4)
                  || t == typeof(Vector2Int) || t == typeof(Vector3Int) => new VectorKeyword(),

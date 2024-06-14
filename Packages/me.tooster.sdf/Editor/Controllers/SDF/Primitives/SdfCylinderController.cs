@@ -26,6 +26,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
         [SerializeField] [DontCreateProperty] CylinderVariant variant  = CylinderVariant.CAPPED;
 
         [CreateProperty] [ShaderProperty(Description = "Cylinder height")]
+        [VisibleWhen(nameof(variant), (int)CylinderVariant.CAPPED, (int)CylinderVariant.ROUNDED)]
         public float Height {
             get => height;
             set => SetField(ref height, value, false);
@@ -38,6 +39,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
         }
 
         [CreateProperty] [ShaderProperty(Description = "Rounding")]
+        [VisibleWhen(nameof(variant), (int)CylinderVariant.ROUNDED)]
         public float Rounding {
             get => rounding;
             set => SetField(ref rounding, value, false);

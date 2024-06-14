@@ -38,6 +38,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
         }
 
         [CreateProperty] [ShaderProperty(Description = "Torus cap")]
+        [VisibleWhen(nameof(variant), (int)TorusVariant.CAPPED)]
         public float Cap {
             get => cap;
             set => SetField(ref cap, value, false);

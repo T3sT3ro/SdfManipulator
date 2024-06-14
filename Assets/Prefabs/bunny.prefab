@@ -1463,6 +1463,7 @@ MonoBehaviour:
   controlledMaterial: {fileID: 8983876818240441392}
   sdfSceneRoot: {fileID: 7154973885652460484}
   targetShader: {fileID: 4800000, guid: 83bbbbe46d7d4d95bba0d9dd09be7f19, type: 3}
+  targetMaterial: {fileID: 0}
   diagnostics: []
 --- !u!1 &8533257475430257325
 GameObject:

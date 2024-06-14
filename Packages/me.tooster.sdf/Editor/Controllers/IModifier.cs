@@ -70,10 +70,10 @@ namespace me.tooster.sdf.Editor.Controllers {
     // Dynamic modifier stack, factory for typed stack
     [Serializable]
     public class ModifierStack : IModifier {
-        readonly IModifier[] _modifiers;
+        readonly IModifier[] modifiers;
 
         ModifierStack(IEnumerable<IModifier> modifiers) {
-            _modifiers = modifiers.ToArray();
+            this.modifiers = modifiers.ToArray();
             ValidatePipeline();
         }
 
@@ -86,21 +86,25 @@ namespace me.tooster.sdf.Editor.Controllers {
             return stack;
         }
 
-        public Data.IData Apply(Data.IData input, Processor processor) => processor.ProcessStack(input, _modifiers);
+        public Data.IData Apply(Data.IData input, Processor processor) => processor.ProcessStack(input, modifiers);
 
-        public Type GetInputType()  => _modifiers[0].GetInputType();
-        public Type GetOutputType() => _modifiers[^1].GetOutputType();
+        public Type GetInputType()  => modifiers[0].GetInputType();
+        public Type GetOutputType() => modifiers[^1].GetOutputType();
 
         void ValidatePipeline() {
-            if (_modifiers.Length == 0)
+            if (modifiers.Length == 0)
                 throw new ArgumentException("Modifier stack requires at least one modifier");
 
-            for (var i = 0; i < _modifiers.Length - 1; i++) {
-                var outputType = _modifiers[i].GetOutputType();
-                var inputType = _modifiers[i + 1].GetInputType();
+            for (var i = 0; i < modifiers.Length - 1; i++) {
+                var producer = modifiers[i];
+                var outputType = producer.GetOutputType();
+                var consumer = modifiers[i + 1];
+                var inputType = consumer.GetInputType();
                 if (!inputType.IsAssignableFrom(outputType)) {
                     throw new InvalidOperationException(
-                        $"Pipeline is invalid between modifier {i} ({outputType.Name}) and {i + 1} ({inputType.Name}) in modifier {this}"
+                        $"Pipeline is invalid between modifiers at index {i} and {i + 1} in modifier {this}:"
+                      + $"\n{outputType.Name} produced by {producer}"
+                      + $"\n{inputType.Name} consumed by {consumer}"
                     );
                 }
             }

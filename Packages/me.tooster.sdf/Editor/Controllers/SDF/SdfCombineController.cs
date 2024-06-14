@@ -28,9 +28,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         static readonly PropertyPath blendFactorProperty = new(nameof(BlendFactor));
 
 
-        [SerializeField] [DontCreateProperty] CombinationOperation operation = SIMPLE_UNION;
-
-        [SerializeField] [DontCreateProperty] float blendFactor = 1;
+        [SerializeField] [DontCreateProperty] CombinationOperation operation   = SIMPLE_UNION;
+        [SerializeField] [DontCreateProperty] float                blendFactor = 1;
+        [Tooltip("Generate one ID for the combination")]
+        [SerializeField] [DontCreateProperty] bool singleId;
 
         [CreateProperty] [ShaderStructural]
         public CombinationOperation Operation {
@@ -39,13 +40,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         [CreateProperty] [ShaderProperty(Description = "Blend factor")]
+        [VisibleWhen(nameof(operation), (int)SMOOTH_UNION)]
         public float BlendFactor {
             get => blendFactor;
             set => SetField(ref blendFactor, value, false);
         }
-
-        [Tooltip("If enabled, one SdfResult.id will return only one value for this ")]
-        [SerializeField] [DontCreateProperty] bool singleId;
 
         [CreateProperty] [ShaderStructural]
         public bool SingleId {

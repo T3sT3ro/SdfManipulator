@@ -1,6 +1,8 @@
 #nullable enable
+using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Editor.Util;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
@@ -64,9 +66,17 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             base.OnValidate();
             transform.hasChanged = true;
 
-            // ReSharper disable CompareOfFloatsByEqualityOperator
-            if (transform.localScale.x != transform.localScale.y || transform.localScale.y != transform.localScale.z)
-                Debug.LogWarning($"Non-unifom component scale in game object '{name}'. This may cause visual bugs", gameObject);
+            // mean square error of transform.localScale components and 1 to ensure uniform scale
+            var error = (transform.localScale - Vector3.one).sqrMagnitude;
+
+            if (Mathf.Abs(error) > 0.001f) {
+                Debug.LogWarning(
+                    $"Non-unifom scale on an SDF component '{name}' (local scale is {transform.localScale}). This may cause visual bugs."
+                  + $"\nPath to this component: '{PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject)}' » "
+                  + $"{transform.AncestorsAndSelf().Select(t => t.name).JoinToString(" > ")}",
+                    this
+                );
+            }
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
 

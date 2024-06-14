@@ -72,11 +72,12 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
                     new PropertySyntax
                     {
                         id = "_Cull", displayName = "Cull", propertyType = new IntKeyword(),
-                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = (int)UnityEngine.Rendering.CullMode.Back },
+                        initializer = new PropertySyntax.Number<IntLiteral> { numberLiteral = (int)UnityEngine.Rendering.CullMode.Off },
                         attributes = new[]
                         {
                             SyntaxUnityExtensions.headerAttribute("global raymarching properties"),
                             SyntaxUnityExtensions.spaceAttribute(),
+                            SyntaxUnityExtensions.tooltipAttribute("turn OFF to raymarch inside object"),
                             SyntaxUnityExtensions.enumAttribute<UnityEngine.Rendering.CullMode>(),
                         },
                     },

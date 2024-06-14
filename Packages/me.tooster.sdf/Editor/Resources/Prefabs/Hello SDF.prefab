@@ -624,6 +624,7 @@ MonoBehaviour:
   controlledMaterial: {fileID: 8983876818240441392}
   sdfSceneRoot: {fileID: 7154973885652460484}
   targetShader: {fileID: 0}
+  targetMaterial: {fileID: 0}
   diagnostics: []
 --- !u!1 &8845851258876820289
 GameObject:
