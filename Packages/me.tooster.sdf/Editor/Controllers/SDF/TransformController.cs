@@ -2,7 +2,7 @@
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.Editor.Controllers.Data;
-using me.tooster.sdf.Editor.Util;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;

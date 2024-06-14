@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using me.tooster.sdf.Editor.Controllers.Generators;
-using me.tooster.sdf.Editor.Util;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEditor;
 using UnityEditor.SceneManagement;

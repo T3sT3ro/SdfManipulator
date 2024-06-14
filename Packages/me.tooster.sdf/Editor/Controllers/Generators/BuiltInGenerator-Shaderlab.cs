@@ -9,7 +9,7 @@ using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using me.tooster.sdf.Editor.Controllers.SDF;
-using me.tooster.sdf.Editor.Util;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
 using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;

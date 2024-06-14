@@ -16,15 +16,6 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
 
 
 
-    [Serializable]
-    public class OtherPreset : ShaderPreset {
-        public string test = "TEST";
-
-        protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene) => new BuiltInGenerator(scene);
-    }
-
-
-
     /// <summary>
     /// A processor for generating raymarching shaders
     /// </summary>

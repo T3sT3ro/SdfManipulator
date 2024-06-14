@@ -2,8 +2,15 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Unity.Properties;
 using UnityEngine;
-namespace me.tooster.sdf.Editor.Controllers {
+namespace me.tooster.sdf.Util {
     public static class Extensions {
+        public static string JoinToString<TItem>(this IEnumerable<TItem> items, string separator) => string.Join(separator, items);
+
+        /// <summary>
+        /// Inverts a scale vector by dividing 1 by each component
+        /// </summary>
+        public static Vector3 Invert(this Vector3 vec) => new(1 / vec.x, 1 / vec.y, 1 / vec.z);
+
         public static bool IsPropertyShaderlabCompatible(this IProperty p) {
             var t = p.DeclaredValueType();
             return

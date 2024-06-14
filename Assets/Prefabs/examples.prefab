@@ -1,5 +1,83 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &208894789909819368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6261370928575604657}
+  - component: {fileID: 5171449688801912680}
+  - component: {fileID: 6529700756650775987}
+  - component: {fileID: 7751388247970373751}
+  m_Layer: 0
+  m_Name: cylinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6261370928575604657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208894789909819368}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2, y: 0, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2577227687338379036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5171449688801912680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208894789909819368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6529700756650775987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208894789909819368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa2563b0581842e4ac5660d9df7ba835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 1
+  radius: 0.75
+  rounding: 0.25
+  variant: 1
+--- !u!114 &7751388247970373751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208894789909819368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 5171449688801912680}
+  - {fileID: 6529700756650775987}
 --- !u!1 &1375840051302624120
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,6 +344,83 @@ MonoBehaviour:
   children:
   - {fileID: 306104063086917264}
   - {fileID: 468980860546971771}
+--- !u!1 &5099263986397305105
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7649073985392596337}
+  - component: {fileID: 535445103664592465}
+  - component: {fileID: 9052084508724797049}
+  - component: {fileID: 7350729766917701545}
+  m_Layer: 0
+  m_Name: cone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7649073985392596337
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099263986397305105}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.393, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2577227687338379036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &535445103664592465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099263986397305105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9052084508724797049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099263986397305105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41c73fb010ac4729847fb5223dc18512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angle: 0.543944
+  height: 1.2673638
+  coneOrigin: 0
+--- !u!114 &7350729766917701545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099263986397305105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 535445103664592465}
+  - {fileID: 9052084508724797049}
 --- !u!1 &6144671692104147463
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,6 +588,84 @@ MonoBehaviour:
   - {fileID: 5271409024312101400}
   - {fileID: 8961985592840649116}
   - {fileID: 4118769173362321343}
+--- !u!1 &6313334318472840721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 37534742330538777}
+  - component: {fileID: 808739688250612942}
+  - component: {fileID: 221301176864512887}
+  - component: {fileID: 3556409826913651564}
+  m_Layer: 0
+  m_Name: rounded cylinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &37534742330538777
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6313334318472840721}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2, y: -0.557, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2577227687338379036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &808739688250612942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6313334318472840721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &221301176864512887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6313334318472840721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa2563b0581842e4ac5660d9df7ba835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 0.24028566
+  radius: 0.75
+  rounding: 0.25
+  variant: 1
+--- !u!114 &3556409826913651564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6313334318472840721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 808739688250612942}
+  - {fileID: 221301176864512887}
 --- !u!1 &7611757301165207321
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,6 +698,10 @@ Transform:
   m_Children:
   - {fileID: 6073090112662320101}
   - {fileID: 8647305247198464788}
+  - {fileID: 7649073985392596337}
+  - {fileID: 4791280821360478932}
+  - {fileID: 6261370928575604657}
+  - {fileID: 37534742330538777}
   m_Father: {fileID: 7467185068423365875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2512574452604008374
@@ -487,6 +724,10 @@ MonoBehaviour:
   children:
   - {fileID: 597672031700351248}
   - {fileID: 6668809761950411001}
+  - {fileID: 7350729766917701545}
+  - {fileID: 8189918967043093638}
+  - {fileID: 7751388247970373751}
+  - {fileID: 3556409826913651564}
 --- !u!1 &8187159479354006610
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,6 +792,81 @@ MonoBehaviour:
         customDefines:
         - TEST
         customIncludes: []
+--- !u!1 &8298603222563385315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4791280821360478932}
+  - component: {fileID: 4009831705253776336}
+  - component: {fileID: 5938041641386494490}
+  - component: {fileID: 8189918967043093638}
+  m_Layer: 0
+  m_Name: sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4791280821360478932
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8298603222563385315}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2577227687338379036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4009831705253776336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8298603222563385315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5938041641386494490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8298603222563385315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.75
+--- !u!114 &8189918967043093638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8298603222563385315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inverted: 0
+  sdfModifiers:
+  - {fileID: 4009831705253776336}
+  - {fileID: 5938041641386494490}
 --- !u!1 &8307604896785199408
 GameObject:
   m_ObjectHideFlags: 0
@@ -976,6 +1292,118 @@ Shader:
         m_DefTexture:
           m_DefaultName: 
           m_TexDim: 1
+      - m_Name: SDF_1_0_2__root_allObjects_cone__2_Angle
+        m_Description: Cone angle
+        m_Attributes:
+        - Header (root allObjects cone)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.543944
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_2__root_allObjects_cone__2_Height
+        m_Description: Cone height
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1.267364
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_3__root_allObjects_sphere__2_Radius
+        m_Description: Sphere radius
+        m_Attributes:
+        - Header (root allObjects sphere)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.75
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_4__root_allObjects_cylinder__2_Height
+        m_Description: Cylinder height
+        m_Attributes:
+        - Header (root allObjects cylinder)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 1
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_4__root_allObjects_cylinder__2_Radius
+        m_Description: Cylinder radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.75
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_4__root_allObjects_cylinder__2_Rounding
+        m_Description: Rounding
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.25
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height
+        m_Description: Cylinder height
+        m_Attributes:
+        - Header (root allObjects rounded cylinder)
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.240286
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius
+        m_Description: Cylinder radius
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.75
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
+      - m_Name: SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding
+        m_Description: Rounding
+        m_Attributes: []
+        m_Type: 2
+        m_Flags: 0
+        m_DefValue[0]: 0.25
+        m_DefValue[1]: 0
+        m_DefValue[2]: 0
+        m_DefValue[3]: 0
+        m_DefTexture:
+          m_DefaultName: 
+          m_TexDim: 1
       - m_Name: SDF_1_1__root_cutoff__2_BoxExtents
         m_Description: Box extents
         m_Attributes:
@@ -1272,7 +1700,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 11386
+          gpuProgramID: 7659
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1427,28 +1855,14 @@ Shader:
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 124
+    line: 174
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: region'
     messageDetails: 
     file: 
     compilerPlatform: 26
-    line: 124
-    warning: 1
-    runtimeError: 0
-  - message: 'Unrecognized #pragma directive: endregion'
-    messageDetails: 
-    file: 
-    compilerPlatform: 26
-    line: 153
-    warning: 1
-    runtimeError: 0
-  - message: 'Unrecognized #pragma directive: region'
-    messageDetails: 
-    file: 
-    compilerPlatform: 26
-    line: 155
+    line: 174
     warning: 1
     runtimeError: 0
   - message: 'Unrecognized #pragma directive: endregion'
@@ -1557,6 +1971,95 @@ Shader:
     line: -1
     warning: 1
     runtimeError: 0
+  - message: '"SDF_1_0_2__root_allObjects_cone__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_2__root_allObjects_cone__2_Angle" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_2__root_allObjects_cone__2_Height" contains consecutive underscores
+      ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_3__root_allObjects_sphere__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_3__root_allObjects_sphere__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_4__root_allObjects_cylinder__2_Height" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_4__root_allObjects_cylinder__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform" contains
+      consecutive underscores ("__"), such names are reserved and might result in
+      undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius" contains consecutive
+      underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: examples (generated)
+    compilerPlatform: 18
+    line: -1
+    warning: 1
+    runtimeError: 0
   - message: '"SDF_1_1__root_cutoff__1_SpaceTransform" contains consecutive underscores
       ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
@@ -1575,16 +2078,16 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      11386:
+      7659:
         serializedVersion: 3
         m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
           1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
           1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
           1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
           1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
-          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 122 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
+          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 172 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
           UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 74\n\n        #pragma target 5.0\n       
+          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 91\n\n        #pragma target 5.0\n       
           #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
           #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
           #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
@@ -1610,15 +2113,38 @@ Shader:
           {\n                { 1.0, 0.0, 0.0, -0.684 },\n                { 0.0, 1.0,
           0.0, -0.25 },\n                { 0.0, 0.0, 1.0, 2.0 },\n               
           { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_1__root_allObjects_toroid_sphere__2_Radius;\n       
-          float4x4 SDF_1_1__root_cutoff__1_SpaceTransform = {\n                {
-          1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, -1.214 },\n               
+          float4x4 SDF_1_0_2__root_allObjects_cone__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, 0.143 },\n               
+          { 0.0, 0.0, 1.0, 4.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_2__root_allObjects_cone__2_Angle;\n        float
+          SDF_1_0_2__root_allObjects_cone__2_Height;\n        float4x4 SDF_1_0_3__root_allObjects_sphere__1_SpaceTransform
+          = {\n                { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0,
+          0.0, -0.25 },\n                { 0.0, 0.0, 1.0, 6.0 },\n               
+          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_3__root_allObjects_sphere__2_Radius;\n       
+          float4x4 SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform = {\n               
+          { 1.0, 0.0, 0.0, 2.0 },\n                { 0.0, 1.0, 0.0, -0.25 },\n               
+          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
+          };\n        float SDF_1_0_4__root_allObjects_cylinder__2_Height;\n       
+          float SDF_1_0_4__root_allObjects_cylinder__2_Radius;\n        float SDF_1_0_4__root_allObjects_cylinder__2_Rounding;\n       
+          float4x4 SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform
+          = {\n                { 1.0, 0.0, 0.0, 2.0 },\n                { 0.0, 1.0,
+          0.0, 0.307 },\n                { 0.0, 0.0, 1.0, 2.0 },\n               
+          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height;\n       
+          float SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius;\n        float
+          SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding;\n        float4x4
+          SDF_1_1__root_cutoff__1_SpaceTransform = {\n                { 1.0, 0.0,
+          0.0, 0.0 },\n                { 0.0, 1.0, 0.0, -1.214 },\n               
           { 0.0, 0.0, 1.0, 2.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float3 SDF_1_1__root_cutoff__2_BoxExtents;\n        #line 122
+          };\n        float3 SDF_1_1__root_cutoff__2_BoxExtents;\n        #line 172
           \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
           UNITY: Original start of shader */\n            SdfResult SDF_1_0_0__root_allObjects_box__4
           (float3 p);\n            SdfResult SDF_1_0_1_0__root_allObjects_toroid_torus__4
           (float3 p);\n            SdfResult SDF_1_0_1_1__root_allObjects_toroid_sphere__3
           (float3 p);\n            SdfResult SDF_1_0_1__root_allObjects_toroid__1
+          (float3 p);\n            SdfResult SDF_1_0_2__root_allObjects_cone__3 (float3
+          p);\n            SdfResult SDF_1_0_3__root_allObjects_sphere__3 (float3
+          p);\n            SdfResult SDF_1_0_4__root_allObjects_cylinder__3 (float3
+          p);\n            SdfResult SDF_1_0_5__root_allObjects_rounded_cylinder__3
           (float3 p);\n            SdfResult SDF_1_0__root_allObjects__1 (float3
           p);\n            SdfResult SDF_1_1__root_cutoff__3 (float3 p);\n           
           SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0__root_allObjects_box__4(float3
@@ -1642,14 +2168,39 @@ Shader:
           }\n            SdfResult SDF_1_0_1__root_allObjects_toroid__1(float3 p)
           {\n                SdfResult result = SDF_1_0_1_0__root_allObjects_toroid_torus__4(p);\n               
           result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_allObjects_toroid_sphere__3(p));\n               
-          return result;\n            }\n            SdfResult SDF_1_0__root_allObjects__1(float3
-          p) {\n                SdfResult result = SDF_1_0_0__root_allObjects_box__4(p);\n               
+          return result;\n            }\n            SdfResult SDF_1_0_2__root_allObjects_cone__3(float3
+          p) {\n                SdfResult result = (SdfResult) 0;\n               
+          result.distance = sdf::primitives3D::cone((sdf::operators::transform(p,
+          SDF_1_0_2__root_allObjects_cone__1_SpaceTransform) - float3( 0, SDF_1_0_2__root_allObjects_cone__2_Height,
+          0)), SDF_1_0_2__root_allObjects_cone__2_Angle, SDF_1_0_2__root_allObjects_cone__2_Height);\n               
+          result.id = int4(0, 0, 0, 17);\n                return result;\n           
+          }\n            SdfResult SDF_1_0_3__root_allObjects_sphere__3(float3 p)
+          {\n                SdfResult result = (SdfResult) 0;\n                result.distance
+          = sdf::primitives3D::sphere(sdf::operators::transform(p, SDF_1_0_3__root_allObjects_sphere__1_SpaceTransform),
+          SDF_1_0_3__root_allObjects_sphere__2_Radius);\n                result.id
+          = int4(0, 0, 0, 20);\n                return result;\n            }\n           
+          SdfResult SDF_1_0_4__root_allObjects_cylinder__3(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::transform(p,
+          SDF_1_0_4__root_allObjects_cylinder__1_SpaceTransform), SDF_1_0_4__root_allObjects_cylinder__2_Height,
+          SDF_1_0_4__root_allObjects_cylinder__2_Radius);\n                result.id
+          = int4(0, 0, 0, 23);\n                return result;\n            }\n           
+          SdfResult SDF_1_0_5__root_allObjects_rounded_cylinder__3(float3 p) {\n               
+          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::cylinder_capped(sdf::operators::transform(p,
+          SDF_1_0_5__root_allObjects_rounded_cylinder__1_SpaceTransform), SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height,
+          SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius);\n               
+          result.id = int4(0, 0, 0, 26);\n                return result;\n           
+          }\n            SdfResult SDF_1_0__root_allObjects__1(float3 p) {\n               
+          SdfResult result = SDF_1_0_0__root_allObjects_box__4(p);\n               
           result = sdf::operators::unionSimple(result, SDF_1_0_1__root_allObjects_toroid__1(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_2__root_allObjects_cone__3(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_3__root_allObjects_sphere__3(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_4__root_allObjects_cylinder__3(p));\n               
+          result = sdf::operators::unionSimple(result, SDF_1_0_5__root_allObjects_rounded_cylinder__3(p));\n               
           return result;\n            }\n            SdfResult SDF_1_1__root_cutoff__3(float3
           p) {\n                SdfResult result = (SdfResult) 0;\n               
           result.distance = -sdf::primitives3D::box(sdf::operators::transform(p,
           SDF_1_1__root_cutoff__1_SpaceTransform), SDF_1_1__root_cutoff__2_BoxExtents);\n               
-          result.id = int4(0, 0, 0, 17);\n                return result;\n           
+          result.id = int4(0, 0, 0, 29);\n                return result;\n           
           }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
           result = SDF_1_0__root_allObjects__1(p);\n                result = sdf::operators::intersectSimple(result,
           SDF_1_1__root_cutoff__3(p));\n                return result;\n           
@@ -1659,14 +2210,14 @@ Shader:
         m_AssetName: examples.prefab
         m_PlatformMask: 4294967295
         m_HardwareTierVariantsMask: 0
-        m_StartLine: 124
+        m_StartLine: 174
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
           Hash: 31b82487eb050e59adeab8ffea607ad2
         m_CodeHash:
           serializedVersion: 2
-          Hash: 225aa95e4b9d90e3aeb9e4090a71fe02
+          Hash: 09868eb2f726503fd7a603f5138905ea
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0
@@ -1881,7 +2432,19 @@ Material:
     - SDF_1_0_1__root_GameObject_torus__3_Thickness: 0.12
     - SDF_1_0_1__root_allObjects_toroid__1_BlendFactor: 1
     - SDF_1_0_1__root_combine_cutout__1_BlendFactor: 1
+    - SDF_1_0_2__root_allObjects_cone__2_Angle: 0.543944
+    - SDF_1_0_2__root_allObjects_cone__2_Height: 1.2673638
     - SDF_1_0_3__root_GameObject_sphere__2_Radius: 0.9950453
+    - SDF_1_0_3__root_allObjects_sphere__2_Radius: 0.75
+    - SDF_1_0_4__root_allObjects_cylinder__2_Height: 1
+    - SDF_1_0_4__root_allObjects_cylinder__2_Radius: 0.75
+    - SDF_1_0_4__root_allObjects_cylinder__2_Rounding: 0.25
+    - SDF_1_0_5__root_allObjects_cylinder__1___2_Height: 0.24028566
+    - SDF_1_0_5__root_allObjects_cylinder__1___2_Radius: 0.75
+    - SDF_1_0_5__root_allObjects_cylinder__1___2_Rounding: 0.25
+    - SDF_1_0_5__root_allObjects_rounded_cylinder__2_Height: 0.24028566
+    - SDF_1_0_5__root_allObjects_rounded_cylinder__2_Radius: 0.75
+    - SDF_1_0_5__root_allObjects_rounded_cylinder__2_Rounding: 0.25
     - SDF_1_0__root_GameObject__1_BlendFactor: 0.55
     - SDF_1_0__root_allObjects__1_BlendFactor: 0.55
     - SDF_1_0__root_box__3_Thickness: 0.24
