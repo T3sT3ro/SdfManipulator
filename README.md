@@ -1,6 +1,6 @@
 # Overview
 
-![Image gallery link](https://imgur.com/a/H5ey91M)
+[Image gallery link](https://imgur.com/a/H5ey91M)
 
 For now, this project contains:
 
