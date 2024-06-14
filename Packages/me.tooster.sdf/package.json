@@ -6,6 +6,7 @@
   "unity": "2022.1",
   "dependencies": {
   },
+  "hideInEditor": false,
   "keywords": [
     "SDF",
     "Shader",

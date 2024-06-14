@@ -533,13 +533,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d2fa28bedd4a74a79b0b5235977da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raymarchingShaderGenerator: me.tooster.sdf.Editor.Controllers.Generators.BuiltInGenerator
   controlledShader: {fileID: 1647923134957676822}
   controlledMaterial: {fileID: 8983876818240441392}
   sdfSceneRoot: {fileID: 7154973885652460484}
   targetShader: {fileID: 4800000, guid: 2cf3757fc67cf5e588f33f5c12f4775f, type: 3}
   targetMaterial: {fileID: 0}
+  shaderPreset:
+    rid: 2082630382636761148
   diagnostics: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 2082630382636761148
+      type: {class: BIRPShaderPreset, ns: me.tooster.sdf.Editor.Controllers.Generators, asm: me.tooster.sdf.Editor.Controllers}
+      data:
+        customPragmas: []
+        customDefines:
+        - TEST
+        customIncludes: []
 --- !u!1 &8307604896785199408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1261,7 +1272,7 @@ Shader:
               name: <noninit>
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 12580
+          gpuProgramID: 11386
           m_Tags:
             tags:
               IGNOREPROJECTOR: true
@@ -1564,7 +1575,7 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      12580:
+      11386:
         serializedVersion: 3
         m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
           1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
@@ -1583,7 +1594,7 @@ Shader:
           #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
           \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_allObjects__1_BlendFactor;\n       
           float4x4 SDF_1_0_0__root_allObjects_box__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, 0.0 },\n               
+          { 1.0, 0.0, 0.0, 0.0 },\n                { 0.0, 1.0, 0.0, -0.25 },\n               
           { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
           };\n        float3 SDF_1_0_0__root_allObjects_box__2_BoxExtents;\n       
           float SDF_1_0_0__root_allObjects_box__3_Thickness;\n        int SDF_1_0_0__root_allObjects_box__3_Layers;\n       
@@ -1655,7 +1666,7 @@ Shader:
           Hash: 31b82487eb050e59adeab8ffea607ad2
         m_CodeHash:
           serializedVersion: 2
-          Hash: c2c8f5ae4ec009450dc13e89823528d0
+          Hash: 225aa95e4b9d90e3aeb9e4090a71fe02
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_UseDxcAPIs: 0

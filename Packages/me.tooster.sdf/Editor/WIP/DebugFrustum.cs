@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections.Generic;
 using me.tooster.sdf.Editor.Util;
@@ -85,3 +86,7 @@ namespace me.tooster.sdf.Editor {
         }
     }
 }
+*/
+
+
+

@@ -672,6 +672,7 @@ Other similar tools:
 - [ShapeUp](https://danielchasehooper.com/posts/shapeup/) - imgui based modeller, also generates glsl shaders, runs in
   browser, pretty laggy
 - [Distance estimated 3D Fractals(III): Folding Space](http://blog.hvidtfeldts.net/index.php/2011/08/distance-estimated-3d-fractals-iii-folding-space/) - a very nice looking fractals and some techniques explained
+- [Adobe Project Neo](https://projectneo.adobe.com/?require_beta_authorization=true&redirect_path=%2Fstudio%2Fa25ec3f2-a3d1-4a3d-b959-6af93187cdd6) - looks like an SDF modeller?
 
 ## Unity internals:
 

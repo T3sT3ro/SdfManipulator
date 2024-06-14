@@ -1,6 +1,3 @@
-VisualElement {
-}
-
 .shader-structural Label {
     border-color: orange;
     border-right-width: 3px;
@@ -13,4 +10,14 @@ VisualElement {
     border-right-width: 3px;
     border-bottom-width: 1px;
     color: aliceblue;
+}
+
+Label.unity-group-box__label {
+    -unity-font-style: bold;
+}
+
+#diagnostics .unity-foldout__content {
+    margin-left: 15px;
+    margin-top: 4px;
+    margin-bottom: 2px;
 }

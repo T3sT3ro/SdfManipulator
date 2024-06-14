@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿/*
+using UnityEditor;
 using UnityEngine;
 namespace me.tooster.sdf.Editor {
     /// <summary>
@@ -21,7 +22,7 @@ namespace me.tooster.sdf.Editor {
             SceneViewFilter[] cameraFilters = Camera.main.GetComponents<SceneViewFilter>();
             SceneViewFilter[] sceneFilters = sv.camera.GetComponents<SceneViewFilter>();
 
-            // Let's see if the lists are different lengths or something like that. 
+            // Let's see if the lists are different lengths or something like that.
             // If so, we simply destroy all scene filters and recreate from maincame
             if (cameraFilters.Length != sceneFilters.Length) {
                 Recreate(sv);
@@ -56,3 +57,7 @@ namespace me.tooster.sdf.Editor {
 #endif
     }
 }
+*/
+
+
+

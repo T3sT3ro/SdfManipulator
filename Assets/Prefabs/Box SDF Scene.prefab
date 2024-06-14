@@ -925,13 +925,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d2fa28bedd4a74a79b0b5235977da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raymarchingShaderGenerator: me.tooster.sdf.Editor.Controllers.Generators.BuiltInGenerator
   controlledShader: {fileID: 9049197093735229171}
   controlledMaterial: {fileID: -7359810486466910638}
   sdfSceneRoot: {fileID: 1072539253589772629}
   targetShader: {fileID: 4800000, guid: c908da278fe72e112b4dfa380ee7d056, type: 3}
   targetMaterial: {fileID: 0}
+  shaderPreset:
+    rid: 2082630382636761138
   diagnostics: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 2082630382636761138
+      type: {class: BIRPShaderPreset, ns: me.tooster.sdf.Editor.Controllers.Generators, asm: me.tooster.sdf.Editor.Controllers}
+      data:
+        customPragmas: []
+        customDefines: []
+        customIncludes: []
 --- !u!1 &2687820899826952031
 GameObject:
   m_ObjectHideFlags: 0

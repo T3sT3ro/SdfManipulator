@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 namespace me.tooster.sdf.Editor {
     // See SceneViewFilter.cs on how to render scene view raymarching
@@ -17,9 +18,13 @@ namespace me.tooster.sdf.Editor {
         // }
 
         // [MenuItem("Tools/Custom Render Mode on SceneView")]
-        // static void SceneViewCustomSceneMode() 
+        // static void SceneViewCustomSceneMode()
         // {
         //     SceneView.currentDrawingSceneView.SetSceneViewShaderReplace(Shader, null);
         // }
     }
 }
+*/
+
+
+

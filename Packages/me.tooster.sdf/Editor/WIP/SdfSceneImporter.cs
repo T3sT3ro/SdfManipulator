@@ -1,3 +1,4 @@
+/*
 using System;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
@@ -9,7 +10,7 @@ namespace me.tooster.sdf.Editor {
     // based on https://github.com/Unity-Technologies/ShaderGraph/blob/master/com.unity.shadergraph/Editor/Importers/ShaderGraphImporter.cs
     /**
      * This importer creates a compound assets: main asset is the prefab, scene description. Sub assets include generated Shader (from scene prefab) and a default material
-     */
+     #1#
     [ScriptedImporter(1, "sdf")]
     public class SdfSceneImporter : ScriptedImporter {
         public override void OnImportAsset(AssetImportContext ctx) {
@@ -70,3 +71,6 @@ namespace me.tooster.sdf.Editor {
         }
     }
 }
+*/
+
+

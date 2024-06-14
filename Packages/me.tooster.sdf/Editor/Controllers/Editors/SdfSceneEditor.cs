@@ -6,6 +6,7 @@ using me.tooster.sdf.Editor.Controllers.Generators;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
+using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEditorInternal;
 using UnityEngine;
@@ -21,22 +22,14 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             var root = new VisualElement();
             var editor = Resources.Load<VisualTreeAsset>("UI/sdf_scene_editor").Instantiate();
             root.Add(editor);
-            var generatorDropdown = editor.Q<DropdownField>("generatorId");
-            generatorDropdown.choices = RaymarchingShaderGenerator.allGenerators.Keys.ToList();
-            generatorDropdown.value = sdfScene.raymarchingShaderGenerator;
-            var generatorProperty = serializedObject.FindProperty(nameof(sdfScene.raymarchingShaderGenerator));
-            generatorDropdown.RegisterValueChangedCallback(
-                evt => {
-                    generatorProperty.stringValue = evt.newValue;
-                    generatorProperty.serializedObject.ApplyModifiedProperties();
-                    sdfScene.RequiresRegeneration = true;
-                }
-            );
+
+            root.Q<Button>("rebuild").RegisterCallback<ClickEvent>(e => RebuildShader());
+            root.Q<Button>("open").RegisterCallback<ClickEvent>(e => OpenGeneratedShader());
 
             var diagnostics = root.Q<ListView>("diagnostics");
 
             diagnostics.itemsSource = sdfScene.diagnostics;
-            diagnostics.makeItem = () => new HelpBox("test diagnostic", HelpBoxMessageType.Info);
+            diagnostics.makeItem = () => new HelpBox("Nothing to report", HelpBoxMessageType.Info);
             diagnostics.bindItem = (element, i) => {
                 var helpbox = (HelpBox)element;
                 helpbox.text = sdfScene.diagnostics[i].message;
@@ -52,12 +45,38 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             };
             diagnostics.BindProperty(serializedObject.FindProperty("diagnostics"));
 
-            root.Q<Button>("rebuild").RegisterCallback<ClickEvent>(e => RebuildShader());
-            root.Q<Button>("open").RegisterCallback<ClickEvent>(e => OpenGeneratedShader());
+            var warningBox = root.Q<VisualElement>("warning");
+            if (PrefabStageUtility.GetPrefabStage(sdfScene.gameObject) is null) {
+                warningBox.Add(
+                    new HelpBox(
+                        "The following options should ONLY be edited in a prefab stage.",
+                        HelpBoxMessageType.Warning
+                    )
+                );
+                root.Q<VisualElement>("prefabStageGroup").SetEnabled(false);
+            } else warningBox.style.display = DisplayStyle.None;
 
+            var shaderPresetPropertyField = editor.Q<PropertyField>("shaderPreset");
+            var shaderPresetSerializedProperty = serializedObject.FindProperty(shaderPresetPropertyField.bindingPath);
+            // whenever a generator serialized property changes, shader should be regenerated
+            shaderPresetPropertyField.TrackPropertyValue(shaderPresetSerializedProperty, _ => sdfScene.RequiresRegeneration = true);
+
+            // Create a dropdown based on detected ShaderPresets. Changing the dropdown should assign the preset on the SdfScene to a new
+            // ShaderPreset instance. The SdfScene should then regenerate the shader based on the new ShaderPreset.
+            var presetDropdown = root.Q<DropdownField>("preset");
+            presetDropdown.choices = ShaderPreset.DetectedShaderPresets.Select(t => $"{t.Name} ({t})").ToList();
+            presetDropdown.index = 0;
+
+            presetDropdown.RegisterCallback<ChangeEvent<string>>(e => assignPreset(presetDropdown.index));
 
             // InspectorElement.FillDefaultInspector(root, serializedObject, this);
             return root;
+
+            void assignPreset(int presetIndex) {
+                shaderPresetSerializedProperty.managedReferenceValue =
+                    ShaderPreset.InstantiatePreset(ShaderPreset.DetectedShaderPresets[presetIndex]);
+                serializedObject.ApplyModifiedProperties();
+            }
         }
 
         /*

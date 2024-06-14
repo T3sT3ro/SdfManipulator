@@ -23,9 +23,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
     [Icon("Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-scene-914.png")]
     public class SdfScene : MonoBehaviour { // TODO: inherit from Component to disallow enabling/disabling
 
-        public string    raymarchingShaderGenerator = null!;
         public Shader?   controlledShader;   // TODO: remove, generate material only
         public Material? controlledMaterial; // similarity: https://docs.unity3d.com/ScriptReference/HideFlags.html
+
 
         public SdfController? sdfSceneRoot;
 
@@ -33,7 +33,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         [Tooltip("A target shader asset to regenerate")]
         public Shader? targetShader;
         [Tooltip("A target material to regenerate shader with")]
-        public Material? targetMaterial;
+        public Material? targetMaterial; // Todo: Materials[], plural, support control of many, maybe?
+        [Tooltip("Preset to use for shader generation")]
+        [SerializeReference] public ShaderPreset? shaderPreset;
+
 
         readonly ShaderPropertyCollector shaderPropertyCollector = new();
         ShaderPropertyUpdatingVisitor?   _shaderPropertyUpdatingVisitor;
@@ -48,8 +51,13 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public struct Diagnostic {
             public enum Severity { ERROR, WARN, INFO }
 
+            Diagnostic(string message, Severity severity) => (this.message, this.severity) = (message, severity);
             public Severity severity;
             public string   message;
+
+            public static Diagnostic Error(string message) => new() { severity = Severity.ERROR, message = message };
+            public static Diagnostic Warn(string message)  => new() { severity = Severity.WARN, message = message };
+            public static Diagnostic Info(string message)  => new() { severity = Severity.INFO, message = message };
         }
 
 
@@ -60,7 +68,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public bool      RequiresRegeneration { get; set; }
         public bool      RequiresUpdate       { get; set; }
 
-        void Awake() { RequiresUpdate = true; }
+        void Awake() {
+            RequiresUpdate = true;
+            shaderPreset ??= (ShaderPreset)Activator.CreateInstance(ShaderPreset.DetectedShaderPresets[0]);
+        }
 
         void OnEnable() {
             AssemblyReloadEvents.afterAssemblyReload += MarkDirty;
@@ -99,54 +110,41 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         // TODO: use more event-driven architecture where creation, move, rename and deletion of individual controllers is detected. 
         void OnValidate() {
             diagnostics.Clear();
-            if (!RaymarchingShaderGenerator.allGenerators.ContainsKey(raymarchingShaderGenerator)) {
-                diagnostics.Add(
-                    new Diagnostic
-                    {
-                        severity = Diagnostic.Severity.ERROR,
-                        message = "Unknown raymarching shader generator: '" + raymarchingShaderGenerator +
-                            "'\nAvailable generators:\n"
-                          + string.Join("\n", RaymarchingShaderGenerator.allGenerators.Keys),
-                    }
-                );
-            }
+            if ((shaderPreset ??= ShaderPreset.InstantiatePreset(ShaderPreset.DetectedShaderPresets[0])) == null)
+                diagnostics.Add(Diagnostic.Error("No shader preset set. The generation won't proceed."));
 
             if (controlledMaterial == null) {
                 controlledMaterial = GetComponent<Material>();
-                if (controlledMaterial == null) {
-                    diagnostics.Add(
-                        new Diagnostic
-                        {
-                            severity = Diagnostic.Severity.ERROR,
-                            message = "No material assigned, generation won't proceed",
-                        }
-                    );
-                }
-            } else if (controlledMaterial.shader != controlledShader) {
-                diagnostics.Add(
-                    new Diagnostic
-                    {
-                        message = "Controlled material's shader is different than controlled shader.",
-                        severity = Diagnostic.Severity.WARN,
-                    }
-                );
-            }
+                if (controlledMaterial == null)
+                    diagnostics.Add(Diagnostic.Error("No material assigned, generation won't proceed"));
+            } else if (controlledMaterial.shader != controlledShader)
+                diagnostics.Add(Diagnostic.Warn("Controlled material's shader is different than controlled shader."));
 
 
-            if (TryGetComponent<Renderer>(out var r) && r.sharedMaterial != controlledMaterial) {
-                diagnostics.Add(
-                    new Diagnostic
-                    {
-                        severity = Diagnostic.Severity.WARN,
-                        message = "Material on SdfScene renderer is not the controlled material.",
-                    }
-                );
-            }
+            if (TryGetComponent<Renderer>(out var r) && r.sharedMaterial != controlledMaterial)
+                diagnostics.Add(Diagnostic.Warn("Material on SdfScene renderer is not the controlled material."));
+
+            if (sdfSceneRoot is not { transform: { parent: { } sdfSceneRootParentTransform } } || sdfSceneRootParentTransform != transform)
+                diagnostics.Add(Diagnostic.Warn("SdfScene root is not a child of SdfScene."));
 
             if (controlledMaterial == null || controlledShader == null)
                 RequiresRegeneration = true;
 
             RevalidateScene(); // fixme: Revalidate triggered without regenerate will cause difference between shader content and scene data
+            foreach (var diagnostic in diagnostics) {
+                switch (diagnostic.severity) {
+                    case Diagnostic.Severity.ERROR:
+                        Debug.LogError(diagnostic.message);
+                        break;
+                    case Diagnostic.Severity.WARN:
+                        Debug.LogWarning(diagnostic.message);
+                        break;
+                    case Diagnostic.Severity.INFO:
+                        Debug.Log(diagnostic.message);
+                        break;
+                }
+            }
+
             RequiresUpdate = true;
         }
 
@@ -261,6 +259,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             var sdfScenePrefabAssetPath = prefabStage.assetPath;
             if (controlledShader == null)
                 throw new ShaderGenerationException("Missing attached shader asset as a target for generation!");
+            if (shaderPreset == null)
+                throw new ShaderGenerationException("Shader preset for generation missing, generation won't proceed!");
+
             Profiler.BeginSample("shader text generation");
             var shaderSource = AssembleShaderSource();
             Profiler.EndSample();
@@ -305,7 +306,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             => $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
 // Last modification: {DateTime.Now}
 
-{RaymarchingShaderGenerator.InstantiateGenerator(raymarchingShaderGenerator, this).MainShader()}
+{shaderPreset.MainShaderForScene(this)}
 ";
         // ensure empty line at the bottom
         /* Used to register a controller under the scene */
@@ -452,9 +453,19 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             public readonly IReadOnlyDictionary<IProperty, PropertyData>    propertyLookup;
 
             public PropertyCache(IEnumerable<PropertyData> propertiesData) {
-                identifierLookup = propertiesData.ToDictionary(pd => pd.identifier);
-                pathLookup = propertiesData.ToDictionary(pd => pd.path);
-                propertyLookup = propertiesData.ToDictionary(pd => pd.property);
+                var identifiers = new Dictionary<string, PropertyData>();
+                var paths = new Dictionary<PropertyPath, PropertyData>();
+                var properties = new Dictionary<IProperty, PropertyData>();
+
+                foreach (var pd in propertiesData) {
+                    identifiers[pd.identifier] = pd;
+                    paths[pd.path] = pd;
+                    properties[pd.property] = pd;
+                }
+
+                identifierLookup = identifiers;
+                pathLookup = paths;
+                propertyLookup = properties;
             }
 
             public PropertyData this[string propertyId] => identifierLookup[propertyId];

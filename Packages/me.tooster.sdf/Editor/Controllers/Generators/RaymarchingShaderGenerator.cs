@@ -1,27 +1,37 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using me.tooster.sdf.Editor.Controllers.SDF;
+using UnityEditor;
 namespace me.tooster.sdf.Editor.Controllers.Generators {
-    public abstract class RaymarchingShaderGenerator {
-        protected SdfScene scene;
-        public RaymarchingShaderGenerator(SdfScene scene) => this.scene = scene;
+    /// <summary>
+    /// An implementation of a shader preset for the built-in generator
+    /// </summary>
+    [Serializable]
+    public class BIRPShaderPreset : ShaderPreset {
+        public string[]        customPragmas;
+        public string[]        customDefines;
+        public ShaderInclude[] customIncludes;
+
+        protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene) => new BuiltInGenerator(scene);
+    }
+
+
+
+    [Serializable]
+    public class OtherPreset : ShaderPreset {
+        public string test = "TEST";
+
+        protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene) => new BuiltInGenerator(scene);
+    }
+
+
+
+    /// <summary>
+    /// A processor for generating raymarching shaders
+    /// </summary>
+    public abstract class RaymarchingShaderGenerator : Processor {
+        protected readonly SdfScene scene;
+        protected RaymarchingShaderGenerator(SdfScene scene) => this.scene = scene;
 
         public abstract string MainShader();
-
-        public static readonly Dictionary<string, Type> allGenerators;
-
-        static RaymarchingShaderGenerator() {
-            allGenerators = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(domainAssembly => domainAssembly.GetTypes())
-                .Where(
-                    type => type.IsSubclassOf(typeof(RaymarchingShaderGenerator))
-                     && !type.IsAbstract
-                     && type.GetConstructor(new[] { typeof(SdfScene) }) != null
-                ).ToDictionary(t => t.FullName);
-        }
-
-        public static RaymarchingShaderGenerator InstantiateGenerator(string name, SdfScene scene)
-            => (RaymarchingShaderGenerator)allGenerators[name].GetConstructor(new[] { typeof(SdfScene) })!.Invoke(new object[] { scene });
     }
 }

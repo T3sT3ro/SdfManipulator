@@ -5,8 +5,7 @@ using me.tooster.sdf.AST.Shaderlab;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.Generators {
-    // TODO: refactor into builder + SO and cache partially generated syntax
-    public partial class BuiltInGenerator : RaymarchingShaderGenerator, Processor {
+    public partial class BuiltInGenerator : RaymarchingShaderGenerator {
         public BuiltInGenerator(SdfScene scene) : base(scene) { }
 
         readonly HashSet<string> includeFiles = new()
@@ -31,7 +30,7 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
         }
 
 
-        public void HandleRequirement(Requirement requirement) {
+        public override void HandleRequirement(Requirement requirement) {
             switch (requirement) {
                 case IncludeRequirement includeRequirement:
                     includeFiles.Add(includeRequirement.FileName);

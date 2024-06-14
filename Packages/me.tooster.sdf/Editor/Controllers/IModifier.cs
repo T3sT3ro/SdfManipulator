@@ -27,11 +27,30 @@ namespace me.tooster.sdf.Editor.Controllers {
 
 
     // Evaluator that processes the modifier stack and handles requirements
-    public interface Processor {
-        public void HandleRequirement(Requirement requirement);
+    public abstract class Processor {
+        public abstract void               HandleRequirement(Requirement requirement);
+        readonly        Stack<IModifier>   modifierEvaluationStack = new();
+        readonly        HashSet<IModifier> pendingModifiers        = new();
 
-        public Data.IData ProcessStack(Data.IData input, IModifier[] modifiers) {
-            return modifiers.Aggregate(input, (current, modifier) => modifier.Apply(current, this));
+        public Data.IData Process(Data.IData input, params IModifier[] modifiers) {
+            return modifiers.Aggregate(
+                input,
+                (current, modifier) => {
+                    if (pendingModifiers.Contains(modifier)) {
+                        throw new InvalidOperationException(
+                            "Cyclic dependency detected when tryin to process modifiers. Evaluation stack:\n"
+                          + string.Join("\n", modifierEvaluationStack)
+                        );
+                    }
+
+                    modifierEvaluationStack.Push(modifier);
+                    pendingModifiers.Add(modifier);
+                    var returnValue = modifier.Apply(current, this);
+                    modifierEvaluationStack.Pop();
+                    pendingModifiers.Remove(modifier);
+                    return returnValue;
+                }
+            );
         }
     }
 
@@ -86,7 +105,7 @@ namespace me.tooster.sdf.Editor.Controllers {
             return stack;
         }
 
-        public Data.IData Apply(Data.IData input, Processor processor) => processor.ProcessStack(input, modifiers);
+        public Data.IData Apply(Data.IData input, Processor processor) => processor.Process(input, modifiers);
 
         public Type GetInputType()  => modifiers[0].GetInputType();
         public Type GetOutputType() => modifiers[^1].GetOutputType();

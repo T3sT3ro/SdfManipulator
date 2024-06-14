@@ -1,3 +1,4 @@
+/*
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEditor.Toolbars;
@@ -16,3 +17,5 @@ namespace me.tooster.sdf.Editor {
         public EditorWindow containerWindow { get; set; }
     }
 }
+*/
+
