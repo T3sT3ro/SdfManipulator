@@ -157,9 +157,9 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     
     // types: https://docs.unity3d.com/Manual/SL-Properties.html
     [TokenNode] public abstract partial record TypeKeyword : Token<shaderlab>;
-    [Obsolete("Integer properties don't work while Int work, when used in calculated arguments, for example."
-+" Although Int is legacy and Integer is new, at least Int works.")]
+    // Integer sometimes didn't work for some reason, for example in calculated arguments to commands, while Int worked.
     [TokenNode("Integer")]   public partial record IntegerKeyword : TypeKeyword;
+    [Obsolete("Int is a legacy keyword, use Integer instead. Remark: sometimes lgacy Int worked (e.g. claculated arguments) while Integer didn't.")]
     [TokenNode("Int")]       public partial record IntKeyword : TypeKeyword;
     [TokenNode("Float")]     public partial record FloatKeyword : TypeKeyword;
     [TokenNode("Range")]     public partial record RangeKeyword : TypeKeyword;
