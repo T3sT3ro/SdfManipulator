@@ -1,5 +1,3 @@
----
-
 # Problems
 
 - [x] unified perspective and ortho rays - something wrong with the inverse projection of ray origin and ends
@@ -386,6 +384,8 @@ Other similar tools:
 - [Unbound](https://unbound.io)
 - [magicaCSG](https://ephtracy.github.io/index.html?page=magicacsg#ss-carousel_ss)
 - [Mud bunny](http://longbunnylabs.com/mudbun/)
+- [Godot plugin for raymarching with gizmos and whatnot](https://github.com/Zylann/godot_sdf_blender)
+- [Sdf Modeler](https://sascha-rode.itch.io/sdf-modeler)
 
 | Feature             | Mine                                    | Shadergraph                                            | Womp                                                         | [Unbound](https://www.unbound.io/                        | uRaymarching                                               |
 |---------------------|-----------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|----------------------------------------------------------|------------------------------------------------------------|
@@ -514,7 +514,7 @@ relates to why my view direction in vertex shader differed from those calculated
 - [Stackoverflow - perspective correct interpolation of values](https://computergraphics.stackexchange.com/questions/4079/perspective-correct-texture-mapping?rq=1) -
 look into that when trying to move to ray generation in vertex shader
 - [Another one on perspective correct interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes.html)
--
+
 Additionally: [Depth interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/visibility-problem-depth-buffer-depth-interpolation.html)
 - [depth interpolation or something in NDC](http://simonstechblog.blogspot.com/2012/04/)
 - [depth buffer, spanish article](https://iguagofernando.wordpress.com/2018/03/04/entendiendo-el-buffer-de-profundidad/)
@@ -599,6 +599,7 @@ browser, pretty laggy
 a very nice looking fractals and some techniques explained
 - [Adobe Project Neo](https://projectneo.adobe.com/?require_beta_authorization=true&redirect_path=%2Fstudio%2Fa25ec3f2-a3d1-4a3d-b959-6af93187cdd6) -
 looks like an SDF modeller?
+- [A collection of SDF primitives/operators/fractals etc.](https://jbaker.graphics/writings/DEC.html)
 
 ## Unity internals:
 
