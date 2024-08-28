@@ -11,17 +11,7 @@ For now, this project contains:
 
 ## Gallery
 
-[Image gallery link on imgur](https://imgur.com/a/H5ey91M)
-
-<!-- <video controls src="https://i.imgur.com/fQZA06Z.mp4" title="Title"></video> -->
-![SDF modelling process](https://i.imgur.com/fQZA06Z.mp4)
-![SDF bunny HDR](https://i.imgur.com/VPo1lo7.png)
-![SDF primitives and operators](https://i.imgur.com/2eERgoE.png)
-![SDF CSG operations and onion](https://i.imgur.com/TWIqg05.png)
-![SDF unicorn](https://i.imgur.com/cv1sIsF.png)
-![SDF guy](https://i.imgur.com/WAFLz9s.png)
-![SDF CSG](https://i.imgur.com/GAZzuap.png)
-![SDF scene with debug overlays](https://i.imgur.com/T2EUYrW.png)
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/H5ey91M"  ><a href="//imgur.com/a/H5ey91M">SDF Raymarching shader generator tool for unity</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 ## Installation:
 
