@@ -1,7 +1,5 @@
 # Overview
 
-[Image gallery link](https://imgur.com/a/H5ey91M)
-
 For now, this project contains:
 
 - A package with vast collection of SDF primitives, operators and useful HLSL functions used to construct raymarching
@@ -10,6 +8,20 @@ For now, this project contains:
   usages. There are also several scenes showcasing the usage of instantiated SDF scenes.
 - the tool itself as an embedded package inside `Packages/me.tooster.sdf/`
 - There is some unused or experimental code for future work.
+
+## Gallery
+
+[Image gallery link on imgur](https://imgur.com/a/H5ey91M)
+
+<!-- <video controls src="https://i.imgur.com/fQZA06Z.mp4" title="Title"></video> -->
+![SDF modelling process](https://i.imgur.com/fQZA06Z.mp4)
+![SDF bunny HDR](https://i.imgur.com/VPo1lo7.png)
+![SDF primitives and operators](https://i.imgur.com/2eERgoE.png)
+![SDF CSG operations and onion](https://i.imgur.com/TWIqg05.png)
+![SDF unicorn](https://i.imgur.com/cv1sIsF.png)
+![SDF guy](https://i.imgur.com/WAFLz9s.png)
+![SDF CSG](https://i.imgur.com/GAZzuap.png)
+![SDF scene with debug overlays](https://i.imgur.com/T2EUYrW.png)
 
 ## Installation:
 
@@ -21,6 +33,33 @@ For now, this project contains:
       performance issues on linux. To start with vulkan use `-force-vulkan -force-gfx-mt` in extra command lines passed
       to Unity (can be
       set inside unity hub)
+
+## Usage:
+
+- Refer to existing controllers
+    - for now (due to engine limitations) the properties of the controller must be defined with a field annotated
+      with `[DontCreateProperty]` in lowerCase and a corresponding property annotated with `[CreateProperty]`
+      and `[ShaderProperty]` or `[ShaderStructural]` returning and setting it (and invoking appropriate events). THE
+      PROPERTY MUST BE NAMED THE SAME AS THE FIELD FOR NOW, ONLY STARTING WITH "PascalCase", e.g. field `someRadius` and
+      property `SomeRadius`. Without it, the default inspector won't generate and bind property, so manual editor
+      creation will be necessary
+    - return a subclass of `Data` that is used to build the AST. `Data` forms a kind of contract: two separate
+      components can expect an SdfData to be of some certain shape and hold some required data. For example `SdfData`
+      may include `evaluationExpression` that can be assumed to hold an expression of type `(float3) -> SdfResult` and a
+      bunch of `Requirements` including a path to the required `hlsl` file or an exported SdfFunction required to be
+      present in the generated shader for the evaluation expression to evaluate.
+    - `Processor`, `ShaderPreset` and `RaymarchingShaderGenerator` for assembling final shader code. Refer to their
+    - usage for detailed understanding. Basically `Processor` is mainly a marker/handler of requirements/evaluation
+      context, `ShaderPreset` is configurable generator factory and generators are stateful but ephemeral and disposable
+      generators based on `Processor`.
+- Creating scenes:
+    - Use context menu in the Assets folder and select `SDF > Scene` option. Opening the prefab will open the stage for
+      editing the scene. Editing SDF scenes takes place inside prefabs, so be aware that modifying instances may not
+      yield any results.
+    - The scenes are not editable outside the prefab stage (e.g. adding new primitive). They are only controllable (e.g.
+      updating a uniform/keyword)
+    - Adding primitives is as simple as adding components to game objects or using `SDF` context menu in game object
+      hierarchy window.
 
 ## TOP-LEVEL concepts:
 
@@ -58,33 +97,6 @@ For now, this project contains:
       generate required partial classes for AST classes. This subproject uses Roslyn heavily.
 - "IsExternalInitShim" - this is a separate asmdef that can be easily included to add support for records and `init`
   only proeprties in the current C# version used by unity.
-
-## Usage:
-
-- Refer to existing controllers
-    - for now (due to engine limitations) the properties of the controller must be defined with a field annotated
-      with `[DontCreateProperty]` in lowerCase and a corresponding property annotated with `[CreateProperty]`
-      and `[ShaderProperty]` or `[ShaderStructural]` returning and setting it (and invoking appropriate events). THE
-      PROPERTY MUST BE NAMED THE SAME AS THE FIELD FOR NOW, ONLY STARTING WITH "PascalCase", e.g. field `someRadius` and
-      property `SomeRadius`. Without it, the default inspector won't generate and bind property, so manual editor
-      creation will be necessary
-    - return a subclass of `Data` that is used to build the AST. `Data` forms a kind of contract: two separate
-      components can expect an SdfData to be of some certain shape and hold some required data. For example `SdfData`
-      may include `evaluationExpression` that can be assumed to hold an expression of type `(float3) -> SdfResult` and a
-      bunch of `Requirements` including a path to the required `hlsl` file or an exported SdfFunction required to be
-      present in the generated shader for the evaluation expression to evaluate.
-    - `Processor`, `ShaderPreset` and `RaymarchingShaderGenerator` for assembling final shader code. Refer to their
-    - usage for detailed understanding. Basically `Processor` is mainly a marker/handler of requirements/evaluation
-      context, `ShaderPreset` is configurable generator factory and generators are stateful but ephemeral and disposable
-      generators based on `Processor`.
-- Creating scenes:
-    - Use context menu in the Assets folder and select `SDF > Scene` option. Opening the prefab will open the stage for
-      editing the scene. Editing SDF scenes takes place inside prefabs, so be aware that modifying instances may not
-      yield any results.
-    - The scenes are not editable outside the prefab stage (e.g. adding new primitive). They are only controllable (e.g.
-      updating a uniform/keyword)
-    - Adding primitives is as simple as adding components to game objects or using `SDF` context menu in game object
-      hierarchy window.
 
 # Used packages
 
