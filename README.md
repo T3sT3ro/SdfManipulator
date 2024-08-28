@@ -1,17 +1,41 @@
 # Overview
 
+This is a monorepo for the SDF manipulator (work title) Unity Package. It implements a visual editor for SDF scenes using easy to use gizmos and composable primitieves. The tool runs in realtime in the editor and generates ready to use HLSL shaders drawing the SDF scenes.
+
 For now, this project contains:
 
 - A package with vast collection of SDF primitives, operators and useful HLSL functions used to construct raymarching
   shaders.
 - Several test assets in the main `Assets/` directory, of which `Prefabs/` holds main test scenes demonstrating
   usages. There are also several scenes showcasing the usage of instantiated SDF scenes.
-- the tool itself as an embedded package inside `Packages/me.tooster.sdf/`
-- There is some unused or experimental code for future work.
+- the tool itself as an embedded package inside `Packages/me.tooster.sdf/`, containing definitions of primitives, operators, their visual controllers, shader generators and an embedded HLSL syntax tree API for assembling shader code using ASTs.
+- Some unused or experimental code meant to be organized and cleaned later.
+
+## Table of Contents
+
+- [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Gallery](#gallery)
+  - [Installation:](#installation)
+  - [Usage:](#usage)
+  - [TOP-LEVEL concepts:](#top-level-concepts)
+  - [Used packages](#used-packages)
+  - [Limitations, known issues](#limitations-known-issues)
 
 ## Gallery
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/H5ey91M"  ><a href="//imgur.com/a/H5ey91M">SDF Raymarching shader generator tool for unity</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+[Link to Imgur gallery](https://imgur.com/a/sdf-raymarching-shader-generator-tool-unity-H5ey91M)
+
+https://github.com/user-attachments/assets/f52581a2-1cf7-49b1-a8d6-941ec3a6ccc7
+
+![SDF Bunny HDR](https://github.com/user-attachments/assets/99d74eb7-17c4-4dc5-9b28-2ded13da247a)
+*SDF Bunny HDR*
+![SDF Primitives and operators](https://github.com/user-attachments/assets/86403f4f-b96c-44e1-85b0-f66b316dd952)
+![SDF CSG example with onion skin](https://github.com/user-attachments/assets/595ddb11-8099-44d0-940e-a3a7bdea3cfa)
+![Uncanny SDF unicorn, 3 minutes of work](https://github.com/user-attachments/assets/065294c6-b160-43e2-8b9d-eb89e11b3e78)
+![a simple smooth figure of a guy](https://github.com/user-attachments/assets/e3ac588a-51a0-47f9-9dd8-e3e2ba1d6cd9)
+![Standard CSG example with Lambert shading](https://github.com/user-attachments/assets/d54df9d2-de01-4790-89a5-39de7e10522f)
+![SDF scene with debug overlays](https://github.com/user-attachments/assets/972dc458-562c-47c1-a7e5-cd9f7345de5c)
 
 ## Installation:
 
@@ -85,11 +109,22 @@ For now, this project contains:
       from `SyntaxGenerators/SyntaxGenerators/bin/Debug/netstandard2.0/Generators.dll`.
     - The `SyntaxGenerators` defines a sub-project (separate and independent of unity) for a syntax generator used to
       generate required partial classes for AST classes. This subproject uses Roslyn heavily.
-- "IsExternalInitShim" - this is a separate asmdef that can be easily included to add support for records and `init`
-  only proeprties in the current C# version used by unity.
+- `IsExternalInitShim` - this is a separate asmdef that can be easily included to add support for records and `init`
+  only properties in the current C# version used by unity. In the future version of Unity with more comprehensive support for records/struct records, this shim won't be needed anymore.
 
-# Used packages
+## Used packages
 
 - `Unity.Properties` (built-in, auto included)
-- ~~`UI Toolkit Runtime bindings`~~ for now UI Toolkit editor bindings are used
-- Roslyn compiler, bundled in unity.
+- ~~`UI Toolkit Runtime bindings`~~ for now UI Toolkit editor bindings are used instead, but some investigative work is being done to migrate to this new system and make the interface more reactive and editor integration deeper.
+- Roslyn compiler, bundled in unity (for syntax generators).
+
+## Limitations, known issues
+
+- Due to how Unity shaders and assets are processed recompiled, some changes may cause needless shader regenerations and recompilations, while some others may require manual refresh to fully regenerate. This is a work-in-progress issue.
+- Currently only basic fake Lambert/debug/unshaded drawing is implemented in the default generators. Users can define and customize generated shaders by extending existing generators and implementing their own shading etc.
+- Some UI elements are still being enhanced to provide smooth UX/DX. Due to the limitations of Unity editor API, this issue is currently being worked on.
+- Current generated shaders aren't tested for VR and for other rendering pipelines except forward Built-in. Extending the support with shadow caster pass, culing, depth etc. is being worked on, and can be done directly by users by extending the existing generators.
+- The HLSL AST API is still in its's early stages and the smooth DX was preferred over performance for now. This should be currently a non-issue, as the generation isn't too frequent and the AST operations aren't a bottleneck in current realistic usage scenarios.
+- The AST API implements currently only the necessary subset of HLSL and Shaderlab grammars. They should be easily extendable by users though, thanks to the presence of source generators which automatically build necessarry classes for the AST API.
+- Currently the SDF scenes are implemented based on prefabs and shader assets. An attempt was made to use prefabs and sub-asssets, but this caused needless asset reimports on every save (causing regenerations). Another attempt was made with custom asset types, asset importers and postprocessors, but the API for that in Unity is quite limited, difficult to use and poorly documented. Soem work may be done in the future to use better format, but for now prefabs must suffice (additional benefit of prefabs is that they provide "a controllable skeleton" for SDF scenes).
+- Performance in OpenGL on linux is so-so. It is highly recommended (often necesssary) to use Vulkan mode of the unity editor to work interactively with SDFs.
