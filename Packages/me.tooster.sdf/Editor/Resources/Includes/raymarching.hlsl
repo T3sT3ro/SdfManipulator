@@ -135,6 +135,28 @@ SdfResult raymarch(inout Ray3D ray, in int max_steps, in float epsilon_ray) {
 }
 
 /**
+ * Marches the ray and returns a soft shadow factor between 0 (no shadow) and 1 (full shadow)
+ * \param ray ray to march
+ * \param dampening dampening factor
+ * \return soft shadow factor
+ * \remarks from <a href="https://iquilezles.org/articles/rmshadows/">IQ's blog about soft shadows</a>
+ */
+float softShadow(Ray3D ray, float dampening) {
+    float res = 1.0;
+
+    for (int i = 0; i < 256 && ray.marchedDistance < ray.maxDistance; i++) {
+        SdfResult sdf_result = sdfScene(ray.ro + ray.marchedDistance * ray.rd);
+
+        res = min(res, sdf_result.distance / (dampening * ray.marchedDistance));
+        ray.marchedDistance += clamp(sdf_result.distance, 0.005, 0.50);
+        if (res < -1.0 || ray.marchedDistance > ray.maxDistance)
+            break;
+    }
+    res = max(res, -1.0);
+    return 0.25 * (1.0 + res) * (1.0 + res) * (2.0 - res);
+}
+
+/**
  * \brief calculates normal as a gradient of the sdf using tetrahedron technique
  * \remarks see <a href="https://iquilezles.org/www/articles/normalsSDF/normalsSDF.htm">calculating normals by iq</a>
  */

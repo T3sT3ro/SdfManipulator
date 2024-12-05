@@ -95,7 +95,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
         void OpenGeneratedShader() {
             var sdfScene = (SdfScene)target;
 
-            var assetName = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(sdfScene.controlledShader));
+            var assetName = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(sdfScene));
             var shaderText = sdfScene.AssembleShaderSource();
             var path = $"Temp/GeneratedSdfScene-{assetName.Replace(" ", "")}.shader";
             WriteToFile(path, shaderText);

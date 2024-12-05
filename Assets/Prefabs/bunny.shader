@@ -1,5 +1,5 @@
 // GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
-// Last modification: 13/06/2024 20:13:55
+// Last modification: 18/06/2024 23:11:54
 
 Shader "bunny (generated)"
 {
@@ -7,8 +7,9 @@ Shader "bunny (generated)"
     {
         [Header (global raymarching properties)]
         [Space]
+        [Tooltip (turn OFF to raymarch inside object)]
         [Enum (UnityEngine.Rendering.CullMode)]
-        _Cull ("Cull", Int) = 2
+        _Cull ("Cull", Int) = 0
         [Toggle]
         [KeyEnum (Off, On)]
         [Tooltip (Enable for correct blending with other geometry and backface rendering)]

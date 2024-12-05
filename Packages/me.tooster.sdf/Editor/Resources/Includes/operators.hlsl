@@ -162,4 +162,26 @@ namespace sdf { namespace operators {
         float2x2 m = float2x2(c, -s, s, c);
         return float3(mul(m, p.xy), p.z);
     }
+
+    /**
+     * "Kink" operator, a distance semi-preserving alternative to "bend" to introduce an "elbow bend" effect (i.e. localized bend) around center.
+     * @remark basd on CC0 code from https://www.shadertoy.com/view/3llfRl
+     * @param p The input 2D vector representing a point in space.
+     * @param k A factor that controls the amount of kink or bend. A value of 1 means no kink, while lower values increase the kink.
+     * @returns The transformed 2D vector with the "kink" applied.
+     */
+    float3 kink(float3 p, float k) {
+        // Convert to polar coordinates in the xy plane
+        float ang = atan2(p.y, p.x); // Note: atan2 is used for correct angle calculation
+        float len = length(float2(p.x, p.y));
+
+        // Warp angle with sigmoid function
+        ang -= ang / sqrt(1.0 + ang * ang) * (1.0 - k);
+
+        // Convert back to cartesian coordinates
+        float2 rotated = float2(sin(ang), cos(ang)) * len;
+
+        // Return the transformed vector with the rotated xy components and unchanged z component
+        return float3(rotated.x, rotated.y, p.z);
+    }
 }}

@@ -9,8 +9,19 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
     /// Cheaply bend the space
     [GeneratePropertyBag]
     public partial class SdfBendController : Controller, IModifier<VectorData, VectorData> {
-        static readonly                       PropertyPath bendFactorProperty = new(nameof(BendFactor));
-        [SerializeField] [DontCreateProperty] float        bendFactor;
+        public enum BendVariant { CHEAP, KINK }
+
+        [SerializeField] [DontCreateProperty] BendVariant variant;
+        [SerializeField] [DontCreateProperty] float       bendFactor;
+
+        [CreateProperty] [ShaderStructural]
+        public BendVariant Variant {
+            get => variant;
+            set => SetField(ref variant, value, true);
+        }
+
+        static readonly PropertyPath bendFactorProperty = new(nameof(BendFactor));
+
 
         [CreateProperty] [ShaderProperty(Description = "Bend factor")]
         public float BendFactor {
@@ -24,7 +35,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
             return new VectorData
             {
                 evaluationExpression = FunctionCall(
-                    "sdf::operators::cheap_bend",
+                    Variant == BendVariant.CHEAP ? "sdf::operators::cheap_bend" : "sdf::operators::kink",
                     input.evaluationExpression,
                     (Identifier)this[bendFactorProperty].identifier
                 ),

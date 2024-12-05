@@ -142,15 +142,18 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
     Material mat = SdfMaterial(sdf);
     Ray3D    toLight = (Ray3D)0;
     toLight.ro = sdf.p;
-    toLight.rd = normalize(_WorldSpaceLightPos0 - sdf.p);
+
+    toLight.rd = normalize(UnityWorldSpaceLightDir(mul(sdf.p, unity_WorldToObject)));
+    toLight.ro += toLight.rd + 2 * _EPSILON_RAY;
     toLight.maxDistance = _MAX_DISTANCE;
     mat.albedo = noise::randomColor(sdf.id.w) * (mat.occlusion);
 
-    fixed4 color = shadeAmbientLambert(sdf, mat);
-    // SdfResult shadows = raymarch(toLight, _MAX_STEPS, _EPSILON_RAY);
+    fixed4    color = shadeAmbientLambert(sdf, mat);
+    SdfResult shadows = raymarch(toLight, _MAX_STEPS, _EPSILON_RAY);
 
-    // if (isHit(shadows))
-    // color = shadeAmbientLambert(shadows, mat);
+
+    if (isHit(shadows))
+        color = shadeAmbientLambert(shadows, mat);
 
     // // Get the lighting
     // SurfaceOutputStandard surfaceOutput = (SurfaceOutputStandard)0;

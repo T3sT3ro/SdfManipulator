@@ -12,6 +12,7 @@ using me.tooster.sdf.Editor.Util.Controllers;
 using Unity.Properties;
 using UnityEngine;
 using static me.tooster.sdf.Editor.Controllers.SDF.SdfCombineController.CombinationOperation;
+using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
 
 
 namespace me.tooster.sdf.Editor.Controllers.SDF {
@@ -78,6 +79,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         protected override void OnValidate() {
             base.OnValidate();
             refreshChildren();
+            foreach (var child in children) {
+                child.StructureChanged -= OnStructureChanged;
+                child.StructureChanged += OnStructureChanged;
+            }
         }
 
         void refreshChildren() {
@@ -105,7 +110,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             // SdfResult result = <children[0]>(<input>);
             var body = new List<Statement<hlsl>>
             {
-                AST.Hlsl.Extensions.Var(
+                Extensions.Var(
                     SdfData.sdfReturnType,
                     result.id.Text,
                     ((SdfData)children[0].Apply(input, processor)).evaluationExpression
@@ -121,9 +126,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 arguments[1] = ((SdfData)sdfChild.Apply(input, processor)).evaluationExpression;
                 // result = <combine>(result, <primitive>(p), [optional blendFactor])
                 body.Add(
-                    AST.Hlsl.Extensions.Assignment(
+                    Extensions.Assignment(
                         result.id.Text,
-                        AST.Hlsl.Extensions.FunctionCall(combinatorFunction, arguments)
+                        Extensions.FunctionCall(combinatorFunction, arguments)
                     )
                 );
             }
@@ -131,7 +136,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             // if inverted => result.distance *= -1;
             if (Inverted) {
                 body.Add(
-                    AST.Hlsl.Extensions.Assignment(
+                    Extensions.Assignment(
                         $"result.{SdfData.sdfResultDistanceMemberName}",
                         new Unary { operatorToken = new MinusToken(), expression = (LiteralExpression)1 },
                         new AsteriskEqualsToken()
@@ -141,7 +146,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             if (SingleId) {
                 body.Add(
-                    AST.Hlsl.Extensions.Assignment(
+                    Extensions.Assignment(
                         $"result.{SdfData.sdfResultIdMemberName}",
                         HlslExtensions.VectorConstructor(0, 0, 0, SdfScene.sceneData.controllers[this].numericId)
                     )
@@ -157,7 +162,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             return new SdfData
             {
-                evaluationExpression = AST.Hlsl.Extensions.FunctionCall(combineFunctionName, (Identifier)SdfData.pParamName),
+                evaluationExpression = Extensions.FunctionCall(combineFunctionName, (Identifier)SdfData.pParamName),
             };
         }
     }

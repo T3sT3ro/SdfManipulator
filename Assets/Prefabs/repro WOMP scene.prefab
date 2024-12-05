@@ -467,14 +467,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d2fa28bedd4a74a79b0b5235977da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlledShader: {fileID: 1875978401803820694}
   controlledMaterial: {fileID: 1571854654217766705}
   sdfSceneRoot: {fileID: 6873469658069886936}
   targetShader: {fileID: 0}
   targetMaterial: {fileID: 0}
   shaderPreset:
     rid: 2082630382636761137
-  diagnostics: []
+  diagnostics:
+  - severity: 2
+    message: No target shader set. Any changes will be applied directly to the material.
   references:
     version: 2
     RefIds:

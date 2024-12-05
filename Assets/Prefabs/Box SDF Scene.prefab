@@ -126,8 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inverted: 0
-  sdfModifiers:
-  - {fileID: 6970652912099052902}
+  sdfModifiers: []
   operation: 1
   blendFactor: 1
   singleId: 0
@@ -925,7 +924,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d2fa28bedd4a74a79b0b5235977da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlledShader: {fileID: 9049197093735229171}
   controlledMaterial: {fileID: -7359810486466910638}
   sdfSceneRoot: {fileID: 1072539253589772629}
   targetShader: {fileID: 4800000, guid: c908da278fe72e112b4dfa380ee7d056, type: 3}

@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2563b0581842e4ac5660d9df7ba835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: 1
+  height: 0.9889344
   radius: 0.4
   rounding: 0.25
   variant: 2
@@ -214,7 +214,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8983876818240441392}
+  - {fileID: 2100000, guid: 58762ce19783278f5a4ceaf58fd4b258, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxExtents: {x: 0.6, y: 0.6, z: 0.6}
+  boxExtents: {x: 0.6, y: 0.6, z: 0.60162544}
 --- !u!114 &4498576306446372549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,7 +554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 1
-  radius: 0.4
+  radius: 0.40236157
   rounding: 0.25
   variant: 2
 --- !u!114 &3283671336859373737
@@ -619,11 +619,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d2fa28bedd4a74a79b0b5235977da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlledShader: {fileID: 1647923134957676822}
-  controlledMaterial: {fileID: 8983876818240441392}
+  controlledMaterial: {fileID: 2100000, guid: 58762ce19783278f5a4ceaf58fd4b258, type: 2}
   sdfSceneRoot: {fileID: 7154973885652460484}
-  targetShader: {fileID: 0}
-  targetMaterial: {fileID: 0}
+  targetShader: {fileID: 4800000, guid: eebef58b465c0a519822eba64b14b055, type: 3}
+  targetMaterial: {fileID: 2100000, guid: 58762ce19783278f5a4ceaf58fd4b258, type: 2}
   shaderPreset:
     rid: 2082630382636761134
   diagnostics: []
@@ -2067,8 +2066,8 @@ Material:
     - SDF_1_1__root_cross__1_BlendFactor: 1
     - SDF_1_1__root_sphere__2_Radius: 0.5901029
     - SDF_1_1__root_torus__2_Cap: 0.7853982
-    - SDF_1_1__root_torus__2_MainRadius: 1.2606895
-    - SDF_1_1__root_torus__2_RingRadius: 0.17567778
+    - SDF_1_1__root_torus__2_MainRadius: 0.72412133
+    - SDF_1_1__root_torus__2_RingRadius: 0.25
     - SDF_1_2__root_torus__2_Cap: 0.7853982
     - SDF_1_2__root_torus__2_MainRadius: 0.5929258
     - SDF_1_2__root_torus__2_RingRadius: 0.23173279

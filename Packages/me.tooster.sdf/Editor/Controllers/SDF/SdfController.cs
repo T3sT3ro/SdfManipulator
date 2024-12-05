@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Linq;
+using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
@@ -24,6 +25,15 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         public Controller[] sdfModifiers = Array.Empty<Controller>();
 
+        protected override void OnValidate() {
+            base.OnValidate();
+            sdfModifiers = sdfModifiers.Where(m => m != null).ToArray();
+            foreach (var child in sdfModifiers) {
+                child.StructureChanged -= OnStructureChanged;
+                child.StructureChanged += OnStructureChanged;
+            }
+        }
+
         public virtual SdfData Apply(VectorData input, Processor processor) {
             processor.HandleRequirement(SdfData.includeRaymarchingRequirement(this));
 
@@ -44,13 +54,13 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                         new[]
                         {
                             // SdfResult result = (SdfResult) 0;
-                            AST.Hlsl.Extensions.Var(
+                            Extensions.Var(
                                 SdfData.sdfReturnType,
                                 "result",
                                 new Cast { type = SdfData.sdfReturnType, expression = (LiteralExpression)0 }
                             ),
                             // result.distance = [-]<(vector) -> scalar expression of p>
-                            AST.Hlsl.Extensions.Assignment(
+                            Extensions.Assignment(
                                 $"result.{SdfData.sdfResultDistanceMemberName}",
                                 Inverted
                                     ? new Unary
@@ -61,7 +71,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                                     : evalSdfData.evaluationExpression
                             ),
                             // result.id = <primitiveID integer>;
-                            AST.Hlsl.Extensions.Assignment(
+                            Extensions.Assignment(
                                 $"result.{SdfData.sdfResultIdMemberName}",
                                 HlslExtensions.VectorConstructor(0, 0, 0, SdfScene.sceneData.controllers[this].numericId)
                             ),
@@ -72,7 +82,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 )
             );
 
-            return new SdfData { evaluationExpression = AST.Hlsl.Extensions.FunctionCall(sdfFunctionName, input.evaluationExpression) };
+            return new SdfData { evaluationExpression = Extensions.FunctionCall(sdfFunctionName, input.evaluationExpression) };
         }
 
         public override IData Apply(IData input, Processor processor) => Apply((VectorData)input, processor);

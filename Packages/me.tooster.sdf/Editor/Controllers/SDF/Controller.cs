@@ -38,10 +38,10 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public event PropertyChangedEventHandler?  PropertyChanged;
         public event StructureChangedEventHandler? StructureChanged;
 
-        public void OnStructureChanged() => StructureChanged?.Invoke(this);
+        public void OnStructureChanged(Controller? sender = null) => StructureChanged?.Invoke(sender == null ? this : sender);
 
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public void OnPropertyChanged([CallerMemberName] string? propertyName = null, Controller? sender = null) {
+            PropertyChanged?.Invoke(sender == null ? this : sender, new PropertyChangedEventArgs(propertyName));
         }
 
         public bool SetField<T>(ref T field, T value, bool structural, [CallerMemberName] string? propertyName = null) {
@@ -56,5 +56,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public abstract IData Apply(IData input, Processor processor);
         public abstract Type  GetInputType();
         public abstract Type  GetOutputType();
+
+        public override string ToString()
+            => SdfScene.sceneData.controllers.TryGetValue(this, out var c) ? $"{c.identifier} ({base.ToString()})" : base.ToString();
     }
 }

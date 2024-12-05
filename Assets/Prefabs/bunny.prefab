@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8983876818240441392}
+  - {fileID: 2100000, guid: 30729be7fb2457d8ba99c715f71ea199, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 353536146897320022}
   - component: {fileID: 9122925941554526213}
   m_Layer: 0
-  m_Name: face
+  m_Name: q
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1458,11 +1458,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d2fa28bedd4a74a79b0b5235977da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlledShader: {fileID: 1647923134957676822}
-  controlledMaterial: {fileID: 8983876818240441392}
+  controlledMaterial: {fileID: 2100000, guid: 30729be7fb2457d8ba99c715f71ea199, type: 2}
   sdfSceneRoot: {fileID: 7154973885652460484}
   targetShader: {fileID: 4800000, guid: 83bbbbe46d7d4d95bba0d9dd09be7f19, type: 3}
-  targetMaterial: {fileID: 0}
+  targetMaterial: {fileID: 2100000, guid: 30729be7fb2457d8ba99c715f71ea199, type: 2}
   shaderPreset:
     rid: 2082630382636761133
   diagnostics: []
