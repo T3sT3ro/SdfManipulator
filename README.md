@@ -9,6 +9,7 @@ For now, this project contains:
 - Several test assets in the main `Assets/` directory, of which `Prefabs/` holds main test scenes demonstrating
   usages. There are also several scenes showcasing the usage of instantiated SDF scenes.
 - the tool itself as an embedded package inside `Packages/me.tooster.sdf/`, containing definitions of primitives, operators, their visual controllers, shader generators and an embedded HLSL syntax tree API for assembling shader code using ASTs.
+- A custom API based on source generators for programaticaly working with ShaderLab and HLSL languages. It allows to build and transform syntax trees in a concise way. Also safer than a basic string concatenation. Not optimized yet, requires refactors and simplification (don't judge me on the code quality now, :P), but it implements a big part of the aforementioned languages. Located in https://github.com/T3sT3ro/SdfManipulator/tree/master/Packages/me.tooster.sdf/SyntaxGenerators~ and independent of any Unity API iirc. It's modeled after the Roslyn's Syntax API.
 - Some unused or experimental code meant to be organized and cleaned later.
 
 ## Table of Contents
