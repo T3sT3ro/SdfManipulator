@@ -1,9 +1,9 @@
-using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Primitives;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using SdfBoxController = me.tooster.sdf.Editor.Controllers.SDF.Primitives.SdfBoxController;
-namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
+using SdfBoxController = me.tooster.sdf.Primitives.SdfBoxController;
+namespace me.tooster.sdf.Editor.Inspectors.Primitives {
     [CustomEditor(typeof(SdfBoxController), true)]
     class SdfBoxControllerEditor : SdfPrimitiveControllerEditor {
         readonly BoxBoundsHandle boxHandle = new();

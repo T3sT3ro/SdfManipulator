@@ -1,7 +1,7 @@
 #nullable enable
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax;
-using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Data;
 using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
@@ -10,7 +10,7 @@ using UnityEditor;
 #endif
 using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
 using Type = System.Type;
-namespace me.tooster.sdf.Editor.Controllers.SDF {
+namespace me.tooster.sdf {
     /**
      * A basic controller for sdf primitives and positionable elements.
      */

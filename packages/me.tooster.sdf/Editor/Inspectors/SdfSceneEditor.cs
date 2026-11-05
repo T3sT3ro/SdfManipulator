@@ -2,8 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using me.tooster.sdf.Editor.Controllers.Generators;
-using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Generators;
 using me.tooster.sdf.Util;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
@@ -14,7 +13,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Debug = UnityEngine.Debug;
 
-namespace me.tooster.sdf.Editor.Controllers.Editors {
+namespace me.tooster.sdf.Editor.Inspectors {
     [CustomEditor(typeof(SdfScene))]
     public class SdfSceneEditor : UnityEditor.Editor {
         public override VisualElement CreateInspectorGUI() {

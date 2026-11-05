@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
-using me.tooster.sdf.Editor.Controllers.SDF;
-namespace me.tooster.sdf.Editor.Controllers.Generators {
+namespace me.tooster.sdf.Generators {
     /// <summary>
     ///     A raymarching shader factory is serialized as a field in the SdfScene. It can persist data and influence the shape
     ///     of the generated shader

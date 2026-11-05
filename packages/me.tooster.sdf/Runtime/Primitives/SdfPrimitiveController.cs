@@ -1,10 +1,10 @@
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
-using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Data;
 using UnityEngine;
 using Type = System.Type;
-namespace me.tooster.sdf.Editor.Controllers.SDF {
+namespace me.tooster.sdf.Primitives {
     public abstract class SdfPrimitiveController : Controller, IModifier<VectorData, ScalarData> {
         public abstract ScalarData Apply(VectorData input, Processor processor);
 

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Shaderlab;
-using me.tooster.sdf.Editor.Controllers.SDF;
-namespace me.tooster.sdf.Editor.Controllers.Generators {
+namespace me.tooster.sdf.Generators {
     public partial class BuiltInGenerator : RaymarchingShaderGenerator {
         readonly string[] defines;
 

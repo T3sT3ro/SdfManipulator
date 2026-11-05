@@ -3,14 +3,13 @@ using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
-using me.tooster.sdf.Editor.Controllers.Data;
-using me.tooster.sdf.Editor.Util.Controllers;
+using me.tooster.sdf.Data;
 using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
 
-namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
+namespace me.tooster.sdf.Primitives {
     [GeneratePropertyBag]
     public partial class SdfConeController : SdfPrimitiveController {
         public enum OriginPosition {

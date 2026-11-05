@@ -1,12 +1,11 @@
 using System.Linq;
-using me.tooster.sdf.Editor.Controllers.SDF;
 using Unity.Properties;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-namespace me.tooster.sdf.Editor.Controllers.Editors {
+namespace me.tooster.sdf.Editor.Inspectors {
     /**
      * A base controller editor which binds serialized fields to events for triggering uniform updates and shader
      * regenerations.

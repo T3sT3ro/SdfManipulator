@@ -1,8 +1,7 @@
-using me.tooster.sdf.Editor.Controllers.SDF;
-using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
+using me.tooster.sdf.Primitives;
 using UnityEditor;
 using UnityEngine;
-namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
+namespace me.tooster.sdf.Editor.Inspectors.Primitives {
     [CustomEditor(typeof(SdfPlaneController), true)]
     public class SdfPlaneControllerEditor : SdfPrimitiveControllerEditor {
         protected override void OnSceneGUI() {

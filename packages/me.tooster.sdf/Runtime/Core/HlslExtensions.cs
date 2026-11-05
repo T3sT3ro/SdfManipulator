@@ -10,7 +10,7 @@ using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using UnityEngine;
-namespace me.tooster.sdf.Editor.Util.Controllers {
+namespace me.tooster.sdf {
     public static class HlslExtensions {
         // convert typed enumerables to literal enumerables
         static IEnumerable<LiteralExpression> ToLiterals(this IEnumerable<float> vals)

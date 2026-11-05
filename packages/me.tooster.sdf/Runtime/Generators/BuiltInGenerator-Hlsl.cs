@@ -9,15 +9,13 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
-using me.tooster.sdf.Editor.Controllers.Data;
-using me.tooster.sdf.Editor.Controllers.SDF;
-using me.tooster.sdf.Editor.Util.Controllers;
+using me.tooster.sdf.Data;
 using Unity.Properties;
 using UnityEngine;
 using FunctionDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.FunctionDefinition;
 using Parameter = me.tooster.sdf.AST.Hlsl.Syntax.Parameter;
 using VariableDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.VariableDefinition;
-namespace me.tooster.sdf.Editor.Controllers.Generators {
+namespace me.tooster.sdf.Generators {
     public partial class BuiltInGenerator {
         IEnumerable<Trivia<hlsl>> pragmasAndIncludes() {
             // yield return new Pragma { tokenString = "editor_sync_compilation" }.ToStructuredTrivia();

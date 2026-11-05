@@ -1,9 +1,8 @@
-using me.tooster.sdf.Editor.Controllers.SDF;
-using me.tooster.sdf.Editor.Controllers.SDF.Primitives;
+using me.tooster.sdf.Primitives;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
+namespace me.tooster.sdf.Editor.Inspectors.Primitives {
     [CustomEditor(typeof(SdfConeController), true)]
     class SdfConeControllerEditor : SdfPrimitiveControllerEditor {
         readonly SphereBoundsHandle radiusHandle = new() { axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y };

@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Data;
 using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
-namespace me.tooster.sdf.Editor.Controllers.SDF {
+namespace me.tooster.sdf {
     /**
      * TODO: refactor to a editor + runtime type with conditional compilation.
      * Runtime would handle updating uniforms/keywords while editor handle updating the material and shader.

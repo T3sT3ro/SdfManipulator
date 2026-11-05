@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
-using me.tooster.sdf.Editor.Controllers.Data;
-namespace me.tooster.sdf.Editor.Controllers {
+using me.tooster.sdf.Data;
+namespace me.tooster.sdf {
     // Base interface for all modifiers
     public interface IModifier {
         IData Apply(IData input, Processor processor);

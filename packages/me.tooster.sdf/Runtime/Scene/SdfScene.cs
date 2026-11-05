@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using me.tooster.sdf.Editor.Controllers.Generators;
+using me.tooster.sdf.Generators;
 using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
@@ -14,7 +14,7 @@ using UnityEngine.Profiling;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
-namespace me.tooster.sdf.Editor.Controllers.SDF {
+namespace me.tooster.sdf {
     /// <summary>
     ///     SdfSceneController is a game object that handles displaying and controling SdfScene asset.
     ///     TODO: split into asset (holding shader + scene description) and the controller "skeleton" (prefab?) + material (?

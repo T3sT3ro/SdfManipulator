@@ -9,7 +9,7 @@ using Attribute = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Attribute;
 using FloatKeyword = me.tooster.sdf.AST.Hlsl.Syntax.FloatKeyword;
 using IntKeyword = me.tooster.sdf.AST.Hlsl.Syntax.IntKeyword;
 using Type = System.Type;
-namespace me.tooster.sdf.Editor.Controllers {
+namespace me.tooster.sdf {
     public static class SyntaxUnityExtensions {
         public static PredefinedTypeToken hlslTypeToken(this Type t)
             => t switch

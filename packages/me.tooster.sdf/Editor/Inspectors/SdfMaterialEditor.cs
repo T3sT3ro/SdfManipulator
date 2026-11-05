@@ -1,5 +1,5 @@
 using UnityEditor;
-namespace me.tooster.sdf.Editor.Controllers.Editors {
+namespace me.tooster.sdf.Editor.Inspectors {
     /// <summary>
     ///     Temporarily this class is empty and only invokes base editor, but in the future it could be improved.
     ///     In the future, where UIToolkit supports the materia editor :|

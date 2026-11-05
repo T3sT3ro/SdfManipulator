@@ -1,9 +1,9 @@
 using System.Linq;
-using me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers;
-using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Editor.Inspectors.Primitives;
+using me.tooster.sdf.Operators;
 using UnityEditor;
 using UnityEngine;
-namespace me.tooster.sdf.Editor.Controllers.Editors {
+namespace me.tooster.sdf.Editor.Inspectors.Operators {
     [CustomEditor(typeof(SdfCombineController))]
     public class SdfCombineControllerEditor : SdfPrimitiveControllerEditor {
         protected override void OnSceneGUI() {

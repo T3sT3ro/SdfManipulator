@@ -1,5 +1,5 @@
 using System;
-namespace me.tooster.sdf.Editor.Controllers {
+namespace me.tooster.sdf {
     /**
      * Shader properties are used to expose properties as uniforms and material properties in the shader
      */

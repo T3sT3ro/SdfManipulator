@@ -5,7 +5,7 @@ using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Util;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
-namespace me.tooster.sdf.Editor.Controllers.Data {
+namespace me.tooster.sdf.Data {
     /// <summary>
     ///     <para>Data for for conventional SDF implementation in a shader.</para>
     ///     <para>

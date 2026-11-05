@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Properties;
-namespace me.tooster.sdf.Editor.Controllers {
+namespace me.tooster.sdf {
     public class ShaderPropertyCollector : IPropertyBagVisitor {
         public List<(PropertyPath Path, IProperty Property)> ShaderProperties { get; private set; }
 

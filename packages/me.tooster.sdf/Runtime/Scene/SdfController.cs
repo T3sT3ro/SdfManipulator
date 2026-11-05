@@ -6,12 +6,11 @@ using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
-using me.tooster.sdf.Editor.Controllers.Data;
-using me.tooster.sdf.Editor.Util.Controllers;
+using me.tooster.sdf.Data;
 using Unity.Properties;
 using UnityEngine;
 using Type = System.Type;
-namespace me.tooster.sdf.Editor.Controllers.SDF {
+namespace me.tooster.sdf {
     [GeneratePropertyBag]
     public partial class SdfController : Controller, IModifier<VectorData, SdfData> {
         [SerializeField] [DontCreateProperty] bool inverted;

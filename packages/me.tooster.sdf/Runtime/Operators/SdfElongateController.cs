@@ -5,12 +5,13 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Data;
+using me.tooster.sdf.Primitives;
 using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
 using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
-namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
+namespace me.tooster.sdf.Operators {
     /*
      * https://iquilezles.org/articles/distfunctions/
      * Elongates an Sdf by performing the following operation

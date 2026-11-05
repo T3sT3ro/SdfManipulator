@@ -8,7 +8,6 @@ using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
-using me.tooster.sdf.Editor.Controllers.SDF;
 using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
@@ -16,7 +15,7 @@ using UnityEngine.Rendering;
 using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
 using Shader = me.tooster.sdf.AST.Shaderlab.Syntax.Shader;
 
-namespace me.tooster.sdf.Editor.Controllers.Generators {
+namespace me.tooster.sdf.Generators {
     public partial class BuiltInGenerator {
         #region shaderlab
 
@@ -29,7 +28,7 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
                 {
                     new Fallback { name = "Sdf/Fallback" },
                     // off, because Unity doesn't support UIToolkit yet and it's tedious to use UGUI
-                    // new CustomEditor { editor = "me.tooster.sdf.Editor.Controllers.Editors.SdfShaderEditor" },
+                    // new CustomEditor { editor = "me.tooster.sdf.Editor.Inspectors.SdfShaderEditor" },
                     SubShader(),
                 },
             };

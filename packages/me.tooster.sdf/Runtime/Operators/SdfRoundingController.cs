@@ -1,12 +1,12 @@
 using me.tooster.sdf.AST.Hlsl.Syntax;
-using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Data;
 using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
 using Type = System.Type;
 
-namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
+namespace me.tooster.sdf.Operators {
     /// Round SDF, simply by jumping to another isosurface
     [GeneratePropertyBag]
     public partial class SdfRoundingController : Controller, IModifier<ScalarData, ScalarData> {

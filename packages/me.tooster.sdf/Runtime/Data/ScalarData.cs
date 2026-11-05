@@ -2,7 +2,7 @@ using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-namespace me.tooster.sdf.Editor.Controllers.Data {
+namespace me.tooster.sdf.Data {
     public record ScalarData : IData {
         /// returns a HLSL's TypeSyntax node representing this vector type
         public readonly Type typeSyntax;

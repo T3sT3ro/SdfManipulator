@@ -1,4 +1,4 @@
-namespace me.tooster.sdf.Editor.Controllers.Data {
+namespace me.tooster.sdf.Data {
     /// <summary>
     ///     Marker interface for data passed between modifiers
     ///     It's a convenient wrapper for data passed to construct a shader. Originally it was meant for the graph model.

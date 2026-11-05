@@ -1,8 +1,8 @@
-using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Primitives;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
+namespace me.tooster.sdf.Editor.Inspectors.Primitives {
     [CustomEditor(typeof(SdfPrimitiveController), true)]
     public class SdfPrimitiveControllerEditor : ControllerEditor {
         SdfController parentSdfObject;

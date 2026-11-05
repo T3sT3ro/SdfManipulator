@@ -1,8 +1,8 @@
-using me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers;
-using me.tooster.sdf.Editor.Controllers.SDF.Operators;
+using me.tooster.sdf.Editor.Inspectors.Primitives;
+using me.tooster.sdf.Operators;
 using UnityEditor;
 using UnityEngine;
-namespace me.tooster.sdf.Editor.Controllers.Editors.Operators {
+namespace me.tooster.sdf.Editor.Inspectors.Operators {
     [CustomEditor(typeof(SdfElongateController))]
     public class SdfElongateControllerEditor : SdfPrimitiveControllerEditor {
         static readonly Color gizmoColor = new(1f, 1f, 0f, 0.4f);
