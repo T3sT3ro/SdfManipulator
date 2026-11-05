@@ -7,11 +7,13 @@ using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEditor.SceneManagement;
+using UnityEditor.SearchService;
 using UnityEditor.UIElements;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Debug = UnityEngine.Debug;
+
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     [CustomEditor(typeof(SdfScene))]
     public class SdfSceneEditor : UnityEditor.Editor {
@@ -54,12 +56,15 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                     )
                 );
                 root.Q<VisualElement>("prefabStageGroup").SetEnabled(false);
-            } else warningBox.style.display = DisplayStyle.None;
+            } else {
+                warningBox.style.display = DisplayStyle.None;
+            }
 
             var shaderPresetPropertyField = editor.Q<PropertyField>("shaderPreset");
             var shaderPresetSerializedProperty = serializedObject.FindProperty(shaderPresetPropertyField.bindingPath);
             // whenever a generator serialized property changes, shader should be regenerated
-            shaderPresetPropertyField.TrackPropertyValue(shaderPresetSerializedProperty, _ => sdfScene.RequiresRegeneration = true);
+            shaderPresetPropertyField.TrackPropertyValue(shaderPresetSerializedProperty,
+                _ => sdfScene.RequiresRegeneration = true);
 
             // Create a dropdown based on detected ShaderPresets. Changing the dropdown should assign the preset on the SdfScene to a new
             // ShaderPreset instance. The SdfScene should then regenerate the shader based on the new ShaderPreset.
@@ -106,7 +111,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
         static void WriteToFile(string path, string content) {
             try {
                 File.WriteAllText(path, content);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 Debug.LogError(e);
             }
         }
@@ -120,9 +126,9 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             }
 
             var externalScriptEditor = ScriptEditorUtility.GetExternalScriptEditor();
-            if (externalScriptEditor != "internal")
+            if (externalScriptEditor != "internal") {
                 InternalEditorUtility.OpenFileAtLineExternal(filePath, 0);
-            else {
+            } else {
                 var p = new Process();
                 p.StartInfo.FileName = filePath;
                 p.EnableRaisingEvents = true;
@@ -137,26 +143,24 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
         [MenuItem("Assets/Create/SDF/Scene Asset")]
         static void CreateSdfSceneAsset() {
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(
-                0,
+                EntityId.None,
                 CreateInstance<CreateSceneAction>(),
-                "New SDF scene.prefab",
+                "sdf-scene.prefab",
                 null,
-                null,
-                true
+                null
             );
         }
 
 
-
         // based on ShaderGraph's `CreateShaderGraph`
-        class CreateSceneAction : EndNameEditAction {
-            public override void Action(int instanceId, string pathName, string resourceFile) {
-                CreateSdfSceneAsset(pathName);
-                AssetDatabase.Refresh();
+        class CreateSceneAction : AssetCreationEndAction {
+            static void createSdfSceneAsset(string path) {
+                AssetDatabase.CopyAsset("Packages/me.tooster.sdf/Editor/Resources/Prefabs/Hello SDF.prefab", path);
             }
 
-            static void CreateSdfSceneAsset(string path) {
-                AssetDatabase.CopyAsset("Packages/me.tooster.sdf/Editor/Resources/Prefabs/Hello SDF.prefab", path);
+            public override void Action(EntityId entityId, string pathName, string resourceFile) {
+                createSdfSceneAsset(pathName);
+                AssetDatabase.Refresh();
             }
         }
     }
