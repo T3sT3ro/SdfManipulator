@@ -942,7 +942,7 @@ MonoBehaviour:
     version: 2
     RefIds:
     - rid: 2082630382636761138
-      type: {class: BIRPShaderPreset, ns: me.tooster.sdf.Editor.Controllers.Generators, asm: me.tooster.sdf.Editor.Controllers}
+      type: {class: BIRPShaderPreset, ns: me.tooster.sdf.Generators, asm: me.tooster.sdf}
       data:
         pragmas:
         - vertex vertexShader
