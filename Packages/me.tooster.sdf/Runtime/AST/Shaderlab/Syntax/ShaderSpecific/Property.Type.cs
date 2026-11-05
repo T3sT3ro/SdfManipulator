@@ -1,7 +1,6 @@
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
     public partial record Property {
         [SyntaxNode] public abstract partial record Type {
-
             public static implicit operator Type(TypeKeyword keyword) => new PredefinedType { type = keyword };
         }
 

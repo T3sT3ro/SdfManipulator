@@ -28,10 +28,9 @@ namespace sdf { namespace operators {
         if (a < b) {
             blend_factor = m;
             return a - s;
-        } else {
-            blend_factor = 1.0 - m;
-            return b - s;
         }
+        blend_factor = 1.0 - m;
+        return b - s;
     }
 
     float3 transform(float3 p, float4x4 invTransform) {
@@ -54,17 +53,20 @@ namespace sdf { namespace operators {
         // this is dumb, but returning in ternary produces GL error about type mismatch
         // Also returning in the middle of the body produces warning of "uninitialized variable"...
         SdfResult result = b;
-        if (a.distance < b.distance)
+        if (a.distance < b.distance) {
             result = a;
+        }
         return result;
     }
 
     SdfResult intersectSimple(in SdfResult a, in SdfResult b) {
         SdfResult result;
         if (a.distance > b.distance) // this is dumb, but ternary produces GL error about type mismatch
+        {
             result = a;
-        else
+        } else {
             result = b;
+        }
         return result;
     }
 

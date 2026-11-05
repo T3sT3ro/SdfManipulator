@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using me.tooster.sdf.AST.Shaderlab;
 namespace me.tooster.sdf.AST.Syntax {
     public static class Extensions {
+        // empty whitespace is redundant
+        public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
         /// Appends an item to an enumerable if it is not null.
         public static IEnumerable<T> AppendNotNull<T>(this IEnumerable<T> enumerable, T? item)
             where T : class
@@ -30,7 +33,8 @@ namespace me.tooster.sdf.AST.Syntax {
         }
 
         public static IEnumerable<T> AsReverseEnumerator<T>(this IReadOnlyList<T> list) {
-            for (var i = list.Count; --i >= 0;) yield return list[i];
+            for (var i = list.Count; --i >= 0;)
+                yield return list[i];
         }
 
         public static int FindLastIndex<T>(this IReadOnlyList<T> list, Func<T, bool> predicate) {
@@ -56,7 +60,10 @@ namespace me.tooster.sdf.AST.Syntax {
          * <param name="self">base enumerable to act upon</param>
          * <param name="index">index where splicing should occur</param>
          * <param name="deleteCount">number of elements that will be deleted starting from index</param>
-         * <param name="other">elements which will get inserted starting at index (previous elements starting at index are pushed back)</param>
+         * <param name="other">
+         *     elements which will get inserted starting at index (previous elements starting at index are pushed
+         *     back)
+         * </param>
          * <returns>new enumerable with elements changed accordingly</returns>
          */
         public static IEnumerable<T> Splice<T>(
@@ -65,7 +72,8 @@ namespace me.tooster.sdf.AST.Syntax {
             int deleteCount,
             IEnumerable<T> other
         ) {
-            if (other == null) throw new ArgumentNullException(nameof(other));
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
             if (deleteCount < 0)
                 throw new ArgumentOutOfRangeException(nameof(deleteCount), "Delete count cannot be negative.");
 
@@ -78,18 +86,22 @@ namespace me.tooster.sdf.AST.Syntax {
                 i++;
             }
 
-            foreach (var inserted in other) yield return inserted;
+            foreach (var inserted in other)
+                yield return inserted;
 
-            while (i < index + deleteCount && enumerator.MoveNext()) i++;
+            while (i < index + deleteCount && enumerator.MoveNext())
+                i++;
 
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
         }
 
-        /** <inheritdoc cref="Splice{T}(IEnumerable{T}, int, int, IEnumerable{T})"/> */
+        /**
+         * <inheritdoc cref="Splice{T}(IEnumerable{T}, int, int, IEnumerable{T})" />
+         */
         public static IEnumerable<T>
             Splice<T>(this IEnumerable<T> self, int index, int deleteCount, params T[] other)
-            => Splice(self, index, deleteCount, other.AsEnumerable());
+            => self.Splice(index, deleteCount, other.AsEnumerable());
 
         public static IEnumerable<Syntax<Lang>> DescendantNodes<Lang>(this Syntax<Lang> root) => root.DescendantNodesAndSelf().Skip(1);
 
@@ -114,7 +126,8 @@ namespace me.tooster.sdf.AST.Syntax {
                 var current = stack.Pop();
                 yield return current;
 
-                if (current is not Syntax<Lang> node) continue;
+                if (current is not Syntax<Lang> node)
+                    continue;
 
                 foreach (var child in node.ChildNodesAndTokens().Reverse())
                     stack.Push(child);
@@ -123,12 +136,79 @@ namespace me.tooster.sdf.AST.Syntax {
 
 
 
-        /// similar to https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxLastTokenReplacer.cs
-        /// and https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxFirstTokenReplacer.cs
+        public static TriviaList<Lang>? LeadingTriviaList<Lang>(this Syntax<Lang> syntax)
+            => Anchor.New(syntax).FirstToken()?.Node.LeadingTriviaList;
+
+        /*public static TriviaList<Lang>? TrailingTriviaList<Lang>(this Syntax<Lang> syntax)
+            => Anchor.New(syntax).LastToken()?.Node.TrailingTriviaList;*/
+
+        public static TSyntax WithLeadingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang>? triviaList)
+            where TSyntax : Syntax<Lang>
+            => syntax.WithTriviaList(triviaList /*, Navigation.Direction.FORWARD*/);
+
+        public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
+            where TSyntax : Syntax<Lang>
+            => syntax.WithTriviaList(new TriviaList<Lang>(trivia) /*, Navigation.Direction.FORWARD*/);
+
+        public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, IEnumerable<Trivia<Lang>> trivia)
+            where TSyntax : Syntax<Lang>
+            => syntax.WithTriviaList(new TriviaList<Lang>(trivia) /*, Navigation.Direction.FORWARD*/);
+
+        // public static TSyntax WithTrailingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang>? triviaList)
+        //     where TSyntax : Syntax<Lang>
+        //     => WithTriviaList(syntax, triviaList, Navigation.Direction.BACKWARD);
+        //
+        // public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
+        //     where TSyntax : Syntax<Lang>
+        //     => WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
+        //
+        // public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, IEnumerable<Trivia<Lang>> trivia)
+        //     where TSyntax : Syntax<Lang>
+        //     => WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
+
+        static TSyntax WithTriviaList<TSyntax, Lang>(
+            this TSyntax syntax,
+            TriviaList<Lang>? triviaList /*,
+            Navigation.Direction direction*/
+        ) where TSyntax : Syntax<Lang> {
+            var oldToken = /*direction is Navigation.Direction.FORWARD
+                ?*/ Anchor.New(syntax).FirstToken()
+                /*: Anchor.New(syntax).LastToken()*/;
+
+            if (oldToken is null)
+                return syntax;
+
+            triviaList ??= TriviaList<Lang>.Empty;
+
+            var newToken = /*direction is Navigation.Direction.FORWARD
+                ? */oldToken.Node with { LeadingTriviaList = triviaList }
+                /*: oldToken.Node with { TrailingTriviaList = triviaList }*/;
+
+            return ((syntax, oldToken.Node, newToken) switch
+            {
+                (Syntax<shaderlab> s, Token<shaderlab> tOld, Token<shaderlab> tNew) =>
+                    new ShaderlabEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
+                (Syntax<hlsl> s, Token<hlsl> tOld, Token<hlsl> tNew) =>
+                    new HlslEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
+                _ => throw new ArgumentException("Unhandled node type"),
+            })!;
+        }
+
+        public static StructuredTrivia<Lang> ToStructuredTrivia<Lang>(this Syntax<Lang> syntax)         => new() { Structure = syntax };
+        public static TriviaList<Lang>       AsTriviaList<Lang>(this IEnumerable<Trivia<Lang>> trivias) => new(trivias);
+
+        public static string Repeat(this string s, uint n) => string.Concat(Enumerable.Repeat(s, (int)n));
+
+
+
+        /// similar to
+        /// https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxLastTokenReplacer.cs
+        /// and
+        /// https://github.com/dotnet/roslyn/blob/main/src/Compilers/CSharp/Portable/Syntax/InternalSyntax/SyntaxFirstTokenReplacer.cs
         /// TODO: decouple from Hlsl and Shaderlab after syntax-tree refactor
         class EdgeTokenReplacerState<Lang> {
-            internal readonly Token<Lang> oldToken;
             internal readonly Token<Lang> newToken;
+            internal readonly Token<Lang> oldToken;
             bool                          found;
 
             internal EdgeTokenReplacerState(Token<Lang> oldToken, Token<Lang> newToken) {
@@ -137,7 +217,8 @@ namespace me.tooster.sdf.AST.Syntax {
             }
 
             internal Token<Lang> TryReplace(Token<Lang> node) {
-                if (found || node != oldToken) return node;
+                if (found || node != oldToken)
+                    return node;
 
                 found = true;
                 return newToken;
@@ -146,7 +227,7 @@ namespace me.tooster.sdf.AST.Syntax {
 
 
 
-        class ShaderlabEdgeTokenReplacer : Shaderlab.Mapper {
+        class ShaderlabEdgeTokenReplacer : Mapper {
             readonly EdgeTokenReplacerState<shaderlab> state;
 
             public ShaderlabEdgeTokenReplacer(Token<shaderlab> oldToken, Token<shaderlab> newToken)
@@ -171,72 +252,5 @@ namespace me.tooster.sdf.AST.Syntax {
                 return ReferenceEquals(replaced, state.newToken) ? replaced : base.Visit(a);
             }
         }
-
-
-
-        public static TriviaList<Lang>? LeadingTriviaList<Lang>(this Syntax<Lang> syntax)
-            => Anchor.New(syntax).FirstToken()?.Node.LeadingTriviaList;
-
-        /*public static TriviaList<Lang>? TrailingTriviaList<Lang>(this Syntax<Lang> syntax)
-            => Anchor.New(syntax).LastToken()?.Node.TrailingTriviaList;*/
-
-        public static TSyntax WithLeadingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang>? triviaList)
-            where TSyntax : Syntax<Lang>
-            => WithTriviaList(syntax, triviaList /*, Navigation.Direction.FORWARD*/);
-
-        public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
-            where TSyntax : Syntax<Lang>
-            => WithTriviaList(syntax, new TriviaList<Lang>(trivia) /*, Navigation.Direction.FORWARD*/);
-
-        public static TSyntax WithLeadingTrivia<TSyntax, Lang>(this TSyntax syntax, IEnumerable<Trivia<Lang>> trivia)
-            where TSyntax : Syntax<Lang>
-            => WithTriviaList(syntax, new TriviaList<Lang>(trivia) /*, Navigation.Direction.FORWARD*/);
-
-        // public static TSyntax WithTrailingTriviaList<TSyntax, Lang>(this TSyntax syntax, TriviaList<Lang>? triviaList)
-        //     where TSyntax : Syntax<Lang>
-        //     => WithTriviaList(syntax, triviaList, Navigation.Direction.BACKWARD);
-        //
-        // public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, params Trivia<Lang>[] trivia)
-        //     where TSyntax : Syntax<Lang>
-        //     => WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
-        //
-        // public static TSyntax WithTrailingTrivia<TSyntax, Lang>(this TSyntax syntax, IEnumerable<Trivia<Lang>> trivia)
-        //     where TSyntax : Syntax<Lang>
-        //     => WithTriviaList(syntax, new TriviaList<Lang>(trivia), Navigation.Direction.BACKWARD);
-
-        static TSyntax WithTriviaList<TSyntax, Lang>(
-            this TSyntax syntax,
-            TriviaList<Lang>? triviaList /*,
-            Navigation.Direction direction*/
-        ) where TSyntax : Syntax<Lang> {
-            var oldToken = /*direction is Navigation.Direction.FORWARD
-                ?*/ Anchor.New(syntax).FirstToken()
-                /*: Anchor.New(syntax).LastToken()*/;
-
-            if (oldToken is null) return syntax;
-
-            triviaList ??= TriviaList<Lang>.Empty;
-
-            var newToken = /*direction is Navigation.Direction.FORWARD
-                ? */oldToken.Node with { LeadingTriviaList = triviaList }
-                /*: oldToken.Node with { TrailingTriviaList = triviaList }*/;
-
-            return ((syntax, oldToken.Node, newToken) switch
-            {
-                (Syntax<shaderlab> s, Token<shaderlab> tOld, Token<shaderlab> tNew) =>
-                    new ShaderlabEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
-                (Syntax<hlsl> s, Token<hlsl> tOld, Token<hlsl> tNew) =>
-                    new HlslEdgeTokenReplacer(tOld, tNew).Visit(Anchor.New(s)) as TSyntax,
-                _ => throw new ArgumentException("Unhandled node type"),
-            })!;
-        }
-
-        public static StructuredTrivia<Lang> ToStructuredTrivia<Lang>(this Syntax<Lang> syntax)         => new() { Structure = syntax };
-        public static TriviaList<Lang>       AsTriviaList<Lang>(this IEnumerable<Trivia<Lang>> trivias) => new(trivias);
-
-        // empty whitespace is redundant
-        public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
-
-        public static string Repeat(this string s, uint n) => string.Concat(Enumerable.Repeat(s, (int)n));
     }
 }

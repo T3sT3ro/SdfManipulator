@@ -16,19 +16,19 @@ float3 CameraWsRight() { return UNITY_MATRIX_V[0].xyz; }
 /// returns camera up direction in world space
 float3 CameraWsUp() { return UNITY_MATRIX_V[1].xyz; }
 /// returns camera near clip plane value
-float CameraNearClipPlane() { return _ProjectionParams.y; }
+float  CameraNearClipPlane() { return _ProjectionParams.y; }
 /// returns camera far clip plane value
-float CameraFarClipPlane() { return _ProjectionParams.z; }
+float  CameraFarClipPlane() { return _ProjectionParams.z; }
 /// returns focal length of camera, i.e. ctg(fov_y/2)
-float CameraFocalLength() { return abs(UNITY_MATRIX_P[1][1]); }
+float  CameraFocalLength() { return abs(UNITY_MATRIX_P[1][1]); }
 /// returns width of an orthographic camera
-float CameraOrthoWidth() { return unity_OrthoParams.x; }
+float  CameraOrthoWidth() { return unity_OrthoParams.x; }
 /// returns height of an orthographic camera  
-float CameraOrthoHeight() { return unity_OrthoParams.y; }
+float  CameraOrthoHeight() { return unity_OrthoParams.y; }
 /// returns 1.0 if camera is orthographic, 0.0 if perspective
-float CameraIsOrtho() { return unity_OrthoParams.w; }
+float  CameraIsOrtho() { return unity_OrthoParams.w; }
 /// returns camera aspect ration (width / height)
-float AspectRatio() { return _ScreenParams.x / _ScreenParams.y; }
+float  AspectRatio() { return _ScreenParams.x / _ScreenParams.y; }
 
 /// generates camera ray direction for a given clip pos
 /// based on my question and answer to it:
@@ -42,14 +42,14 @@ float3 cameraRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
     float focalLength = CameraFocalLength();
     if (CameraIsOrtho()) {
         // without focal length divide zoom won't work;
-        float3 toNearPlane = (CameraWsForward() * CameraNearClipPlane() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) / focalLength;
+        float3 toNearPlane = (CameraWsForward() * CameraNearClipPlane() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) /
+            focalLength;
         rayOrigin = CameraWsPosition() + toNearPlane;
         return CameraWsForward();
-    } else {
-        float3 toNearPlane = CameraWsForward() * focalLength + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y;
-        rayOrigin = CameraWsPosition() + toNearPlane * CameraNearClipPlane();
-        return normalize(toNearPlane);
     }
+    float3 toNearPlane = CameraWsForward() * focalLength + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y;
+    rayOrigin = CameraWsPosition() + toNearPlane * CameraNearClipPlane();
+    return normalize(toNearPlane);
 }
 
 float3 cameraVsRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
@@ -61,12 +61,12 @@ float3 cameraVsRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
     float focalLength = CameraFocalLength();
     if (CameraIsOrtho()) {
         // without focal length divide zoom won't work;
-        float3 toNearPlane = (CameraWsForward() * CameraNearClipPlane() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) / focalLength;
+        float3 toNearPlane = (CameraWsForward() * CameraNearClipPlane() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) /
+            focalLength;
         rayOrigin = CameraWsPosition() + toNearPlane;
         return CameraWsForward();
-    } else {
-        float3 toNearPlane = CameraWsForward() * focalLength + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y;
-        rayOrigin = CameraWsPosition() + toNearPlane * CameraNearClipPlane();
-        return toNearPlane;
     }
+    float3 toNearPlane = CameraWsForward() * focalLength + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y;
+    rayOrigin = CameraWsPosition() + toNearPlane * CameraNearClipPlane();
+    return toNearPlane;
 }

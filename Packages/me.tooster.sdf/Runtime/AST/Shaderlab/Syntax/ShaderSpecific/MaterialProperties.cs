@@ -1,6 +1,4 @@
-using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
     // Properties { \n...\n }
     /// <a href="https://docs.unity3d.com/Manual/SL-Properties.html">Properties</a>

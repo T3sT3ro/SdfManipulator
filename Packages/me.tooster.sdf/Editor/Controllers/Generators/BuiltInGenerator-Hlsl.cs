@@ -58,8 +58,7 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
         }
 
         IEnumerable<VariableDefinition> generateHlslGlobals()
-            => scene.sceneData.Properties.Select(
-                pd => {
+            => scene.sceneData.Properties.Select(pd => {
                     try {
                         var declaredPropertyType = PropertyContainer.GetProperty(pd.controller, pd.path).DeclaredValueType();
                         return new VariableDefinition

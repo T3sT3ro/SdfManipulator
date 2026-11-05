@@ -19,7 +19,8 @@ namespace me.tooster.sdf.Editor.Controllers {
 
 
     /// <summary>
-    /// When added to a property, the auto generated property field will be shown only when the enum value of specified bcking field matches one of the values.
+    ///     When added to a property, the auto generated property field will be shown only when the enum value of specified
+    ///     bcking field matches one of the values.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public class VisibleWhenAttribute : Attribute {

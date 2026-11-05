@@ -6,11 +6,10 @@ using System.Linq;
 using System.Text;
 namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
     /// <summary>
-    /// List containing both syntax and tokens of specific language
+    ///     List containing both syntax and tokens of specific language
     /// </summary>
     public record SyntaxOrTokenList<Lang> : Syntax<Lang>, IReadOnlyList<SyntaxOrToken<Lang>> {
-        /// full list with syntax and tokens
-        public IReadOnlyList<SyntaxOrToken<Lang>> FullList { get; } = Array.Empty<SyntaxOrToken<Lang>>();
+        public static readonly SyntaxOrTokenList<Lang> Empty = new();
 
         public SyntaxOrTokenList(IReadOnlyList<SyntaxOrToken<Lang>> fullList) {
 #if DEBUG
@@ -20,19 +19,20 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
             FullList = fullList.ToList();
         }
 
-        public static readonly SyntaxOrTokenList<Lang> Empty = new();
-
         public SyntaxOrTokenList(IEnumerable<SyntaxOrToken<Lang>> list) : this(list.ToList()) { }
         public SyntaxOrTokenList(params SyntaxOrToken<Lang>[] list) : this(list.ToList()) { }
         public SyntaxOrTokenList() { }
+        /// full list with syntax and tokens
+        public         IReadOnlyList<SyntaxOrToken<Lang>> FullList        { get; } = Array.Empty<SyntaxOrToken<Lang>>();
+        public virtual IEnumerator<SyntaxOrToken<Lang>>   GetEnumerator() => FullList.GetEnumerator();
+        IEnumerator IEnumerable.                          GetEnumerator() => GetEnumerator();
 
-        public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens() => FullList;
-        public virtual  IEnumerator<SyntaxOrToken<Lang>>   GetEnumerator()       => FullList.GetEnumerator();
-        IEnumerator IEnumerable.                           GetEnumerator()       => GetEnumerator();
-        public virtual int                                 Count                 => FullList.Count;
+        public virtual int Count => FullList.Count;
 
         // indexers
         public virtual SyntaxOrToken<Lang> this[int index] => FullList[index];
+
+        public override IReadOnlyList<SyntaxOrToken<Lang>> ChildNodesAndTokens() => FullList;
 
         // IMPORTANT: UNCOMMENTING BELOW OPERATORS CRASHES UNITY WITH NATIVE CODE EXCEPTION AND CRASHES IT WHEN TRYING TO COMPILE CODE
         // utility casts for trivias. Possibly could be migrated to typed Token list?
@@ -42,7 +42,7 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         public SyntaxOrTokenList<Lang> Slice(int start, int length) => new(FullList.Skip(start).Take(length));
 
-        /// <inheritdoc cref="Extensions.Splice{T}(IEnumerable{T}, int, int, IEnumerable{T})"/>
+        /// <inheritdoc cref="Extensions.Splice{T}(IEnumerable{T}, int, int, IEnumerable{T})" />
         public virtual SyntaxOrTokenList<Lang> Splice(int index, int deleteCount, IEnumerable<SyntaxOrToken<Lang>> elements)
             => new(FullList.Splice(index, deleteCount, elements));
 

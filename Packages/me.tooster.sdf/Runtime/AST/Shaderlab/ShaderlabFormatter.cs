@@ -11,8 +11,8 @@ using NewLine = me.tooster.sdf.AST.Syntax.CommonTrivia.NewLine<me.tooster.sdf.AS
 
 namespace me.tooster.sdf.AST.Shaderlab {
     public class ShaderlabFormatter : Mapper, IFormatter<shaderlab> {
-        public FormatterState State { get; }
         ShaderlabFormatter(FormatterState? state = null) => State = state ?? new FormatterState();
+        public FormatterState State { get; }
 
         int IFormatter<shaderlab>. getIndentChange<T>(Anchor<T> a)                      => getIndentChange(a);
         bool IFormatter<shaderlab>.breakLineAfter<T>(Anchor<T> a, out int newLineCount) => breakLineAfter(a, out newLineCount);
@@ -42,8 +42,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
                 case { Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or HlslIncludeKeyword or EndHlslKeyword }:
                 case { Node: InjectedLanguageEndToken<shaderlab> }:
                 case { Node: QuotedStringLiteral, Parent: { Node: CommandArgument } }:
-                case { Node: CloseBracketToken, Parent  : { Node: Attribute } }:
-                    return true;
+                case { Node: CloseBracketToken, Parent  : { Node: Attribute } }: return true;
             }
 
             var nextToken = a.NextToken();
@@ -80,7 +79,8 @@ namespace me.tooster.sdf.AST.Shaderlab {
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<Token<shaderlab>> a) {
-            if (base.Visit(a) is not Token<shaderlab> token) return null;
+            if (base.Visit(a) is not Token<shaderlab> token)
+                return null;
 
             return ((IFormatter<shaderlab>)this).NormalizeWhitespace(Anchor.New(token, a.Parent));
         }

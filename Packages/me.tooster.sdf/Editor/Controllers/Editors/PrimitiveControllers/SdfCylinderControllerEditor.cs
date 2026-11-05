@@ -6,11 +6,10 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfCylinderController), true)]
     class SdfCylinderControllerEditor : SdfPrimitiveControllerEditor {
-        SerializedProperty heightProperty;
-        SerializedProperty radiusProperty;
-        SerializedProperty roundingProperty;
-
         readonly BoxBoundsHandle boxBoundsHandle = new();
+        SerializedProperty       heightProperty;
+        SerializedProperty       radiusProperty;
+        SerializedProperty       roundingProperty;
 
         protected override void OnEnable() {
             base.OnEnable();
@@ -35,7 +34,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
 
             boxBoundsHandle.DrawHandle();
 
-            if (!scope.changed) return;
+            if (!scope.changed)
+                return;
 
             controller.Height = heightProperty.floatValue = boxBoundsHandle.size.y / 2;
             controller.Radius = radiusProperty.floatValue = boxBoundsHandle.size.x / 2;

@@ -1,7 +1,6 @@
 #nullable enable
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
     public abstract partial record Type {
         // anonymous and empty: struct {}

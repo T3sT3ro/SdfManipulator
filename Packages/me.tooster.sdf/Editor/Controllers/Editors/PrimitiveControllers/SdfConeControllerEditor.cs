@@ -6,10 +6,9 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfConeController), true)]
     class SdfConeControllerEditor : SdfPrimitiveControllerEditor {
-        SerializedProperty angleProperty;
-        SerializedProperty heightProperty;
-
-        SphereBoundsHandle radiusHandle = new() { axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y };
+        readonly SphereBoundsHandle radiusHandle = new() { axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y };
+        SerializedProperty          angleProperty;
+        SerializedProperty          heightProperty;
 
         protected override void OnEnable() {
             base.OnEnable();
@@ -49,7 +48,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
             Handles.DrawLine(radiusHandle.center, tipPosition);
             Handles.Label(tipPosition / 2, $"Height: {tipPosition.y}");
 
-            if (!scope.changed) return;
+            if (!scope.changed)
+                return;
 
             controller.Angle = angleProperty.floatValue = Mathf.Atan2(radiusHandle.radius, tipPosition.y);
             controller.Height = heightProperty.floatValue = tipPosition.y;

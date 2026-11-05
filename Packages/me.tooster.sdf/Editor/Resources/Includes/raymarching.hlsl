@@ -3,17 +3,17 @@
 /// calculate rays in the vertex shader
 #define V2F_RAYS
 
-#include "UnityCG.cginc"
-#include "Lighting.cginc"
-#include "UnityPBSLighting.cginc"
 #include "AutoLight.cginc"
+#include "Lighting.cginc"
+#include "UnityCG.cginc"
+#include "UnityPBSLighting.cginc"
 
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/camera.hlsl"
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/colors.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/debug.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/colors.hlsl"
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
 
 /// data passed from vertex to fragment shader
 struct v2f {
@@ -117,8 +117,11 @@ SdfResult raymarch(inout Ray3D ray, in int max_steps, in float epsilon_ray) {
     // ray can start inside SDF, this implementation makes it perform one step onto the surface
     // is it good or bad, well, depends on the use case 
     for (ray.steps = 0; ray.steps < max_steps; ray.steps++) {
-        if (ray.marchedDistance >= ray.maxDistance) // there was a check before for ray.max distance OR _MAX_DISTANCE... but it can just be done in the outer scope
+        if (ray.marchedDistance >= ray.maxDistance)
+        // there was a check before for ray.max distance OR _MAX_DISTANCE... but it can just be done in the outer scope
+        {
             return sdf;
+        }
 
         sdf.p = ray.ro + ray.marchedDistance * ray.rd;
 
@@ -149,8 +152,9 @@ float softShadow(Ray3D ray, float dampening) {
 
         res = min(res, sdf_result.distance / (dampening * ray.marchedDistance));
         ray.marchedDistance += clamp(sdf_result.distance, 0.005, 0.50);
-        if (res < -1.0 || ray.marchedDistance > ray.maxDistance)
+        if (res < -1.0 || ray.marchedDistance > ray.maxDistance) {
             break;
+        }
     }
     res = max(res, -1.0);
     return 0.25 * (1.0 + res) * (1.0 + res) * (2.0 - res);
@@ -232,7 +236,7 @@ fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D
     color = mat.albedo;
     #elif _DRAWMODE_ID
     // dampen the color by occlusion, otherwise depth perception is very bad
-    color = noise::randomColor(sdf.id.w)*(mat.occlusion); // TODO: account for xyz
+    color = noise::randomColor(sdf.id.w) * (mat.occlusion); // TODO: account for xyz
     #elif _DRAWMODE_SKYBOX
     // sample the default reflection cubemap, using the reflection vector
     half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, sdf.normal);
@@ -242,10 +246,10 @@ fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D
     #elif _DRAWMODE_NORMAL
     color = sdf::debug::visualizeNormal(sdf.normal);
     #elif _DRAWMODE_STEPS
-    color = sdf::debug::visualizeOverhead(ray.steps/_MAX_STEPS);
+    color = sdf::debug::visualizeOverhead(ray.steps / _MAX_STEPS);
     #elif _DRAWMODE_DEPTH
     float eyeDepth = -UnityWorldToViewPos(sdf.p).z;
-    color = fixed4((float3)eyeDepth/5., 1);
+    color = fixed4((float3)eyeDepth / 5., 1);
     #elif _DRAWMODE_OCCLUSION
     color = mat.occlusion;
     #endif

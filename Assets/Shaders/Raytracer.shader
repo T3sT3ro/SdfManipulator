@@ -123,8 +123,8 @@ Shader "SDF/Uber shader"
         static const float4x4 inv = mul(
             SCALE_MATRIX,
             #ifdef _ORIGIN_WORLD
-                                        mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
-                                        // inverse(UNITY_MATRIX_VP)
+            mul(UNITY_MATRIX_I_V, unity_CameraInvProjection)
+            // inverse(UNITY_MATRIX_VP)
             #else
             mul(unity_WorldToObject, mul(UNITY_MATRIX_I_V, unity_CameraInvProjection))
             // inverse(UNITY_MATRIX_MVP)
@@ -292,7 +292,7 @@ Shader "SDF/Uber shader"
                 {
                     float4 rs =
                         #ifdef _ORIGIN_WORLD
-                            mul(UNITY_MATRIX_M, float4(objectHitpos, 1));
+                        mul(UNITY_MATRIX_M, float4(objectHitpos, 1));
                         #else
                         fixed4(objectHitpos, 1);
                     #endif
@@ -325,7 +325,7 @@ Shader "SDF/Uber shader"
                 sdf.normal = calculateSdfNormal(sdf.p, _EPSILON_NORMAL);
 
                 fixed4       color_material = __MATERIAL(sdf.id.x); // color
-                BoxMapParams boxmapParams = {sampler_BoxmapTex, _BoxmapTex, {_BoxmapTex_ST}};
+                BoxMapParams boxmapParams = { sampler_BoxmapTex, _BoxmapTex, { _BoxmapTex_ST } };
                 fixed4       color_trimap = trimap(boxmapParams, sdf.p, sdf.normal, 10.);
 
                 fixed4 color_dyed = color_material; // basic albedo
@@ -353,33 +353,33 @@ Shader "SDF/Uber shader"
                 f2p o = {
                     {
                         #ifdef _DRAWMODE_MATERIAL
-                         color_material*color_trimap
+                        color_material * color_trimap
                         #elif _DRAWMODE_ALBEDO
-                         color_material
+                        color_material
                         #elif _DRAWMODE_DYED
-                         color_dyed*color_trimap
+                        color_dyed * color_trimap
                         #elif _DRAWMODE_SKYBOX
-                         shade(sdf)
+                        shade(sdf)
                         #elif _DRAWMODE_TEXTURE
-                         color_trimap
+                        color_trimap
                         #elif _DRAWMODE_NORMALLOCAL
-                         sdf::debug::visualizeNormal(sdf.normal)
+                        sdf::debug::visualizeNormal(sdf.normal)
                         #elif _DRAWMODE_NORMALWORLD
-                         sdf::debug::visualizeNormal(UnityObjectToWorldNormal(sdf.normal))
+                        sdf::debug::visualizeNormal(UnityObjectToWorldNormal(sdf.normal))
                         #elif _DRAWMODE_ID
-                         color_id
+                        color_id
                         #elif _DRAWMODE_STEPS
-                         sdf::debug::visualizeOverhead(ray.steps/_MAX_STEPS)
+                        sdf::debug::visualizeOverhead(ray.steps / _MAX_STEPS)
                         #elif _DRAWMODE_DEPTH
-                         fixed4((float3)eyeDepth/5., 1)
+                        fixed4((float3)eyeDepth / 5., 1)
                         #elif _DRAWMODE_FACING
-                         fixed4(facing ? 1 : 0, 0, 0, 1)
+                        fixed4(facing ? 1 : 0, 0, 0, 1)
                         #elif _DRAWMODE_DEBUG
-                         fixed4(abs(i.rd_cam), 1)
+                        fixed4(abs(i.rd_cam), 1)
                         #endif
                     },
-                    {float3(normalize(sdf.normal) * .5 + .5)},
-                    {sdf.id},
+                    { float3(normalize(sdf.normal) * .5 + .5) },
+                    { sdf.id },
                     #ifdef _ZWRITE_ON
                     EncodeCorrectDepth(eyeDepth)
                     #endif

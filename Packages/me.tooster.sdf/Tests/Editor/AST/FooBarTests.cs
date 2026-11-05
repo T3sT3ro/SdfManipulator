@@ -24,7 +24,7 @@ namespace me.tooster.sdf.AST.FooLang {
         public Expr           left  { get; init; }
         public Token<foolang> op    { get; init; }
         public Expr           right { get; init; }
-        
+
         internal override void Accept(AST.Visitor<foolang> visitor, Anchor a) => ((Visitor)visitor).Visit(Anchor.New(this, a));
         internal override R? Accept<R>(AST.Visitor<foolang, R> visitor, Anchor a)
             where R : default => ((Visitor<R>)visitor).Visit(Anchor.New(this, a));
@@ -33,7 +33,7 @@ namespace me.tooster.sdf.AST.FooLang {
     [SyntaxNode] public partial record Literal : Expr {
         public Token<foolang> val { get; init; }
     }
-    
+
     // @formatter off
     record LangToken : Token<barlang>          { public override string FullText => "BARLANG"; }
     abstract record OpToken : Token<foolang>;
@@ -49,7 +49,7 @@ namespace me.tooster.sdf.AST.FooLang {
 
 namespace me.tooster.sdf.Tests.Editor.AST {
     // ========= TESTING =========
-    
+
     public class FoobarSyntaxTests {
         [Test]
         public void FoobarSyntaxSmokeTest() {
@@ -84,3 +84,8 @@ namespace me.tooster.sdf.Tests.Editor.AST {
     }
 }
 */
+
+
+
+
+

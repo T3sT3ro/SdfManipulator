@@ -11,7 +11,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             var controller = (SdfCombineController)target;
             using var scope = new EditorGUI.ChangeCheckScope();
             foreach (var child in controller.children.OfType<SdfController>()) {
-                if (child is not Component { transform: { position: var childPos } }) continue;
+                if (child is not Component { transform: { position: var childPos } })
+                    continue;
                 Handles.color = GetGizmoColor(controller);
                 var parentPos = controller.transform.position;
                 Handles.DrawLine(parentPos, childPos, 8);

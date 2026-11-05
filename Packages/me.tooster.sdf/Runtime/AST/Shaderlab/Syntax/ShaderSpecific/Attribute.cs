@@ -14,7 +14,9 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific {
         [SyntaxNode] public partial record Value {
             public AttributeStringLiteral value { get; init; }
 
-            public static implicit operator Value(string literal) => new Value { value = literal };
+            public static implicit operator Value(string literal)
+                => new()
+                    { value = literal };
         }
     }
 }

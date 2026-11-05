@@ -44,10 +44,10 @@ namespace me.tooster.sdf.Editor.Util.Controllers {
         public static BracedInitializerExpression ToBracedInitializerList(this Vector4 vec)
             => new[] { vec.x, vec.y, vec.z, vec.w }.ToLiterals().Cast<Expression<hlsl>>().ToBracedList();
 
-        /// constructs braced innitializer syntax for this matrix looking like: <code>{{m11,m12,m13,m14}, {...}, {...}, {...}}</code>
+        /// constructs braced innitializer syntax for this matrix looking like:
+        /// <code>{{m11,m12,m13,m14}, {...}, {...}, {...}}</code>
         public static BracedInitializerExpression ToMatrixInitializerList(this Matrix4x4 value)
-            => Enumerable.Range(0, 4).Select(
-                    i => value.GetRow(i).ToBracedInitializerList() as Expression<hlsl>
+            => Enumerable.Range(0, 4).Select(i => value.GetRow(i).ToBracedInitializerList() as Expression<hlsl>
                 )
                 .ToBracedList();
 

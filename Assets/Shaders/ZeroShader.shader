@@ -351,7 +351,7 @@
                 float3      vv = normalize(cross(uu, ww));
                 const float Deg2Rad = UNITY_PI / 180.0;
 
-                float s = 2.0; //UNITY_PI;//2.0;//0.25*UNITY_PI;//UNITY_PI;//2.0*UNITY_PI;
+                float  s = 2.0; //UNITY_PI;//2.0;//0.25*UNITY_PI;//UNITY_PI;//2.0*UNITY_PI;
                 //float3 Xinc = (s*tan(_fFOV*Deg2Rad*0.5))*uu;
                 //float3 Yinc = (s*tan(_fFOV*Deg2Rad*0.5))*vv;
                 //float3 rd   = normalize( p.x*Xinc + p.y*Yinc + 1.0*ww );

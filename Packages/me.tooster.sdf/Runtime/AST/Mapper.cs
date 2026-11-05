@@ -4,9 +4,8 @@ using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 namespace me.tooster.sdf.AST {
     public abstract class Mapper<Lang> : Visitor<Lang, Tree<Lang>.Node> {
-        protected bool descendIntoTrivia { get; init; } = false;
-
         protected Mapper(bool descendIntoTrivia = default) => this.descendIntoTrivia = descendIntoTrivia;
+        protected bool descendIntoTrivia { get; init; }
 
         public virtual Tree<Lang>.Node? Visit(Anchor<Token<Lang>> a) {
             var token = a.Node;
@@ -55,7 +54,8 @@ namespace me.tooster.sdf.AST {
 
         public virtual Tree<Lang>.Node? Visit(Anchor<StructuredTrivia<Lang>> a) {
             var trivia = a.Node;
-            if (trivia.Structure is null) return trivia;
+            if (trivia.Structure is null)
+                return trivia;
 
             var newStructure = Visit(Anchor.New(trivia.Structure, a)) as Syntax<Lang>;
             return ReferenceEquals(trivia.Structure, newStructure)

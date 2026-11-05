@@ -5,17 +5,17 @@
  * source: https://github.com/hecomi/uRaymarchingExamples/blob/master/Assets/uRaymarching/Shaders/Include/ForwardBaseStandard.cginc
  */
 
-#include "UnityCG.cginc"
-#include "Lighting.cginc"
-#include "UnityPBSLighting.cginc"
 #include "AutoLight.cginc"
+#include "Lighting.cginc"
+#include "UnityCG.cginc"
+#include "UnityPBSLighting.cginc"
 
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/camera.hlsl"
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/colors.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/debug.hlsl"
 #include "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/colors.hlsl"
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
+#include "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"
 
 #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
 
@@ -31,7 +31,7 @@ struct VertOutput {
     #ifndef SPHERICAL_HARMONICS_PER_PIXEL
     #ifndef LIGHTMAP_ON
     #if UNITY_SHOULD_SAMPLE_SH
-        half3 sh : TEXCOORD6;
+    half3 sh : TEXCOORD6;
     #endif
     #endif
     #endif
@@ -76,21 +76,22 @@ VertOutput Vert(appdata_full v) {
     #if !defined(SPHERICAL_HARMONICS_PER_PIXEL)
     #ifndef LIGHTMAP_ON
     #if UNITY_SHOULD_SAMPLE_SH
-            o.sh = 0;
+    o.sh = 0;
     #ifdef VERTEXLIGHT_ON
-                o.sh += Shade4PointLights(
-                    unity_4LightPosX0, 
-                    unity_4LightPosY0, 
-                    unity_4LightPosZ0,
-                    unity_LightColor[0].rgb, 
-                    unity_LightColor[1].rgb, 
-                    unity_LightColor[2].rgb, 
-                    unity_LightColor[3].rgb,
-                    unity_4LightAtten0, 
-                    o.worldPos, 
-                    o.worldNormal);
+    o.sh += Shade4PointLights(
+        unity_4LightPosX0,
+        unity_4LightPosY0,
+        unity_4LightPosZ0,
+        unity_LightColor[0].rgb,
+        unity_LightColor[1].rgb,
+        unity_LightColor[2].rgb,
+        unity_LightColor[3].rgb,
+        unity_4LightAtten0,
+        o.worldPos,
+        o.worldNormal
+    );
     #endif
-            o.sh = ShadeSHPerVertex(o.worldNormal, o.sh);
+    o.sh = ShadeSHPerVertex(o.worldNormal, o.sh);
     #endif
     #endif
     #endif

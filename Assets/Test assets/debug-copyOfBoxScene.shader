@@ -138,193 +138,193 @@ Shader "Box SDF Scene (generated)"
 
             float    _1_root_BlendFactor;
             float4x4 _1_root_SpaceTransform = {
-                {0.970696, -0.101283, 0.217924, 0.0},
-                {0.128052, 0.985376, -0.112415, 0.0},
-                {-0.203352, 0.137026, 0.96947, 0.0},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.970696, -0.101283, 0.217924, 0.0 },
+                { 0.128052, 0.985376, -0.112415, 0.0 },
+                { -0.203352, 0.137026, 0.96947, 0.0 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float3   _1_0_root_ground_BoxExtents;
             float4x4 _1_0_root_ground_SpaceTransform = {
-                {0.985253, 0.039483, 0.166489, 0.324491},
-                {-0.049748, 0.99708, 0.057943, -0.128134},
-                {-0.163715, -0.065371, 0.98434, 0.235927},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.985253, 0.039483, 0.166489, 0.324491 },
+                { -0.049748, 0.99708, 0.057943, -0.128134 },
+                { -0.163715, -0.065371, 0.98434, 0.235927 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_1_0_root_shroom_1_sphere_1_Radius;
             float4x4 _1_1_0_root_shroom_1_sphere_1_SpaceTransform = {
-                {0.970696, -0.101283, 0.217924, -1.052},
-                {0.128052, 0.985376, -0.112415, -0.635},
-                {-0.203352, 0.137026, 0.96947, 0.0},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.970696, -0.101283, 0.217924, -1.052 },
+                { 0.128052, 0.985376, -0.112415, -0.635 },
+                { -0.203352, 0.137026, 0.96947, 0.0 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_1_1_root_shroom_1_cone_Angle;
             float    _1_1_1_root_shroom_1_cone_Height;
             float4x4 _1_1_1_root_shroom_1_cone_SpaceTransform = {
-                {0.939308, 0.069367, -0.335989, -0.983747},
-                {-0.061828, 0.997538, 0.033097, -1.64916},
-                {0.337457, -0.010315, 0.941284, -0.503346},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.939308, 0.069367, -0.335989, -0.983747 },
+                { -0.061828, 0.997538, 0.033097, -1.64916 },
+                { 0.337457, -0.010315, 0.941284, -0.503346 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_2_0_root_shroom2_sphere_2_Radius;
             float4x4 _1_2_0_root_shroom2_sphere_2_SpaceTransform = {
-                {-0.02342, 0.103423, -0.994362, -1.403706},
-                {0.097179, 0.99016, 0.100697, -0.481317},
-                {0.994991, -0.094273, -0.03324, 1.095647},
-                {0.0, 0.0, 0.0, 1.0}
+                { -0.02342, 0.103423, -0.994362, -1.403706 },
+                { 0.097179, 0.99016, 0.100697, -0.481317 },
+                { 0.994991, -0.094273, -0.03324, 1.095647 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_2_1_root_shroom2_cone_2_Angle;
             float    _1_2_1_root_shroom2_cone_2_Height;
             float4x4 _1_2_1_root_shroom2_cone_2_SpaceTransform = {
-                {-0.773348, 0.262247, -0.5772, -1.840792},
-                {0.241606, 0.963641, 0.114114, -1.722459},
-                {0.586139, -0.051205, -0.808591, -0.388022},
-                {0.0, 0.0, 0.0, 1.0}
+                { -0.773348, 0.262247, -0.5772, -1.840792 },
+                { 0.241606, 0.963641, 0.114114, -1.722459 },
+                { 0.586139, -0.051205, -0.808591, -0.388022 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_2_2_root_shroom2_sphere_Radius;
             float4x4 _1_2_2_root_shroom2_sphere_SpaceTransform = {
-                {-0.212623, 0.246355, -0.945569, -1.814044},
-                {0.23447, 0.952287, 0.195382, -1.342781},
-                {0.948586, -0.180165, -0.260241, 0.808436},
-                {0.0, 0.0, 0.0, 1.0}
+                { -0.212623, 0.246355, -0.945569, -1.814044 },
+                { 0.23447, 0.952287, 0.195382, -1.342781 },
+                { 0.948586, -0.180165, -0.260241, 0.808436 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_3_root_combine_BlendFactor;
             float4x4 _1_3_root_combine_SpaceTransform = {
-                {-0.034952, 0.834414, 0.550029, -0.580062},
-                {0.810044, 0.345994, -0.47341, 1.560808},
-                {-0.585327, 0.429001, -0.688005, -1.601026},
-                {0.0, 0.0, 0.0, 1.0}
+                { -0.034952, 0.834414, 0.550029, -0.580062 },
+                { 0.810044, 0.345994, -0.47341, 1.560808 },
+                { -0.585327, 0.429001, -0.688005, -1.601026 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_3_0_root_combine_sphere_Radius;
             float4x4 _1_3_0_root_combine_sphere_SpaceTransform = {
-                {-0.034952, 0.834414, 0.550029, -0.388063},
-                {0.810044, 0.345994, -0.47341, 1.534808},
-                {-0.585327, 0.429001, -0.688005, -1.601026},
-                {0.0, 0.0, 0.0, 1.0}
+                { -0.034952, 0.834414, 0.550029, -0.388063 },
+                { 0.810044, 0.345994, -0.47341, 1.534808 },
+                { -0.585327, 0.429001, -0.688005, -1.601026 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_3_1_root_combine_sphere_Radius;
             float4x4 _1_3_1_root_combine_sphere_SpaceTransform = {
-                {-0.034952, 0.834414, 0.550029, -0.966063},
-                {0.810044, 0.345994, -0.47341, 1.403808},
-                {-0.585327, 0.429001, -0.688005, -1.601026},
-                {0.0, 0.0, 0.0, 1.0}
+                { -0.034952, 0.834414, 0.550029, -0.966063 },
+                { 0.810044, 0.345994, -0.47341, 1.403808 },
+                { -0.585327, 0.429001, -0.688005, -1.601026 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_4_0_root_screw_cylinder_Height;
             float    _1_4_0_root_screw_cylinder_Radius;
             float    _1_4_0_root_screw_cylinder_Rounding;
             float4x4 _1_4_0_root_screw_cylinder_SpaceTransform = {
-                {0.347078, -0.299924, 0.888585, -0.469882},
-                {-0.301492, 0.861506, 0.408546, -2.520037},
-                {-0.888054, -0.409698, 0.208585, -2.888125},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.347078, -0.299924, 0.888585, -0.469882 },
+                { -0.301492, 0.861506, 0.408546, -2.520037 },
+                { -0.888054, -0.409698, 0.208585, -2.888125 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_4_1_root_screw_head_BlendFactor;
             float4x4 _1_4_1_root_screw_head_SpaceTransform = {
-                {0.355245, -0.296137, 0.886625, -0.443254},
-                {-0.301492, 0.861506, 0.408546, -3.717037},
-                {-0.884818, -0.412444, 0.216763, -2.892332},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.355245, -0.296137, 0.886625, -0.443254 },
+                { -0.301492, 0.861506, 0.408546, -3.717037 },
+                { -0.884818, -0.412444, 0.216763, -2.892332 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_4_1_0_root_screw_head_head_Radius;
             float4x4 _1_4_1_0_root_screw_head_head_SpaceTransform = {
-                {0.355245, -0.296137, 0.886625, -0.443254},
-                {-0.301492, 0.861506, 0.408546, -4.110037},
-                {-0.884818, -0.412444, 0.216763, -2.892332},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.355245, -0.296137, 0.886625, -0.443254 },
+                { -0.301492, 0.861506, 0.408546, -4.110037 },
+                { -0.884818, -0.412444, 0.216763, -2.892332 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_4_1_1_root_screw_head_cuts_BlendFactor;
             float4x4 _1_4_1_1_root_screw_head_cuts_SpaceTransform = {
-                {0.301492, -0.861506, -0.408546, 4.140037},
-                {0.355245, -0.296137, 0.886625, -0.443254},
-                {-0.884818, -0.412444, 0.216763, -2.892332},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.301492, -0.861506, -0.408546, 4.140037 },
+                { 0.355245, -0.296137, 0.886625, -0.443254 },
+                { -0.884818, -0.412444, 0.216763, -2.892332 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float3   _1_4_1_1_0_root_screw_head_cuts_cut_1_BoxExtents;
             float4x4 _1_4_1_1_0_root_screw_head_cuts_cut_1_SpaceTransform = {
-                {0.301492, -0.861506, -0.408546, 4.409037},
-                {0.355245, -0.296137, 0.886625, -0.443254},
-                {-0.884818, -0.412444, 0.216763, -2.892332},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.301492, -0.861506, -0.408546, 4.409037 },
+                { 0.355245, -0.296137, 0.886625, -0.443254 },
+                { -0.884818, -0.412444, 0.216763, -2.892332 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float3   _1_4_1_1_1_root_screw_head_cuts_cut_2_BoxExtents;
             float4x4 _1_4_1_1_1_root_screw_head_cuts_cut_2_SpaceTransform = {
-                {0.301492, -0.861506, -0.408546, 4.538037},
-                {0.355245, -0.296137, 0.886625, -0.443254},
-                {-0.884818, -0.412444, 0.216763, -2.892333},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.301492, -0.861506, -0.408546, 4.538037 },
+                { 0.355245, -0.296137, 0.886625, -0.443254 },
+                { -0.884818, -0.412444, 0.216763, -2.892333 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float3   _1_5_root_q_Length;
             float    _1_5_root_q_BlendFactor;
             float4x4 _1_5_root_q_SpaceTransform = {
-                {1.0, 0.0, 0.0, 2.898605},
-                {0.0, 1.0, 0.0, -2.253964},
-                {0.0, 0.0, 1.0, 1.780652},
-                {0.0, 0.0, 0.0, 1.0}
+                { 1.0, 0.0, 0.0, 2.898605 },
+                { 0.0, 1.0, 0.0, -2.253964 },
+                { 0.0, 0.0, 1.0, 1.780652 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_5_0_root_q_cylinder_Height;
             float    _1_5_0_root_q_cylinder_Radius;
             float    _1_5_0_root_q_cylinder_Rounding;
             float4x4 _1_5_0_root_q_cylinder_SpaceTransform = {
-                {1.0, 0.0, 0.0, 2.898605},
-                {0.0, 1.0, 0.0, -1.796963},
-                {0.0, 0.0, 1.0, 1.780652},
-                {0.0, 0.0, 0.0, 1.0}
+                { 1.0, 0.0, 0.0, 2.898605 },
+                { 0.0, 1.0, 0.0, -1.796963 },
+                { 0.0, 0.0, 1.0, 1.780652 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_5_1_root_q_torus_MainRadius;
             float    _1_5_1_root_q_torus_RingRadius;
             float2   _1_5_1_root_q_torus_Cap;
             float4x4 _1_5_1_root_q_torus_SpaceTransform = {
-                {1.0, 0.0, 0.0, 2.898605},
-                {0.0, 1.0, 0.0, -2.559964},
-                {0.0, 0.0, 1.0, 1.780652},
-                {0.0, 0.0, 0.0, 1.0}
+                { 1.0, 0.0, 0.0, 2.898605 },
+                { 0.0, 1.0, 0.0, -2.559964 },
+                { 0.0, 0.0, 1.0, 1.780652 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_6_root_flat__1__BlendFactor;
             float4x4 _1_6_root_flat__1__SpaceTransform = {
-                {1.0, 0.0, 0.0, -2.190593},
-                {0.0, 1.0, 0.0, -2.254268},
-                {0.0, 0.0, 1.0, 1.780801},
-                {0.0, 0.0, 0.0, 1.0}
+                { 1.0, 0.0, 0.0, -2.190593 },
+                { 0.0, 1.0, 0.0, -2.254268 },
+                { 0.0, 0.0, 1.0, 1.780801 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_6_0_root_flat__1__cylinder_Height;
             float    _1_6_0_root_flat__1__cylinder_Radius;
             float    _1_6_0_root_flat__1__cylinder_Rounding;
             float4x4 _1_6_0_root_flat__1__cylinder_SpaceTransform = {
-                {1.0, 0.0, 0.0, -2.190593},
-                {0.0, 1.0, 0.0, -1.797268},
-                {0.0, 0.0, 1.0, 1.780801},
-                {0.0, 0.0, 0.0, 1.0}
+                { 1.0, 0.0, 0.0, -2.190593 },
+                { 0.0, 1.0, 0.0, -1.797268 },
+                { 0.0, 0.0, 1.0, 1.780801 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_6_1_root_flat__1__torus_MainRadius;
             float    _1_6_1_root_flat__1__torus_RingRadius;
             float2   _1_6_1_root_flat__1__torus_Cap;
             float4x4 _1_6_1_root_flat__1__torus_SpaceTransform = {
-                {1.0, 0.0, 0.0, -2.190593},
-                {0.0, 1.0, 0.0, -2.560268},
-                {0.0, 0.0, 1.0, 1.780801},
-                {0.0, 0.0, 0.0, 1.0}
+                { 1.0, 0.0, 0.0, -2.190593 },
+                { 0.0, 1.0, 0.0, -2.560268 },
+                { 0.0, 0.0, 1.0, 1.780801 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_7_root_combine_BlendFactor;
             float4x4 _1_7_root_combine_SpaceTransform = {
-                {0.970696, -0.101283, 0.217924, -1.792},
-                {0.128052, 0.985376, -0.112415, -0.962},
-                {-0.203352, 0.137026, 0.96947, -4.369999},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.970696, -0.101283, 0.217924, -1.792 },
+                { 0.128052, 0.985376, -0.112415, -0.962 },
+                { -0.203352, 0.137026, 0.96947, -4.369999 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_7_0_root_combine_cone_Angle;
             float    _1_7_0_root_combine_cone_Height;
             float4x4 _1_7_0_root_combine_cone_SpaceTransform = {
-                {0.970696, -0.101283, 0.217924, -1.792},
-                {0.128052, 0.985376, -0.112415, -2.064141},
-                {-0.203352, 0.137026, 0.96947, -4.207},
-                {0.0, 0.0, 0.0, 1.0}
+                { 0.970696, -0.101283, 0.217924, -1.792 },
+                { 0.128052, 0.985376, -0.112415, -2.064141 },
+                { -0.203352, 0.137026, 0.96947, -4.207 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
             float    _1_7_1_root_combine_cone_Angle;
             float    _1_7_1_root_combine_cone_Height;
             float4x4 _1_7_1_root_combine_cone_SpaceTransform = {
-                {-0.970696, 0.101283, -0.217924, 1.792},
-                {-0.128052, -0.985376, 0.112415, -0.229412},
-                {-0.203352, 0.137026, 0.96947, -4.37},
-                {0.0, 0.0, 0.0, 1.0}
+                { -0.970696, 0.101283, -0.217924, 1.792 },
+                { -0.128052, -0.985376, 0.112415, -0.229412 },
+                { -0.203352, 0.137026, 0.96947, -4.37 },
+                { 0.0, 0.0, 0.0, 1.0 }
             };
 
             SdfResult _1_0_root_ground(float3 p) {
@@ -400,7 +400,11 @@ Shader "Box SDF Scene (generated)"
             SdfResult _1_4_0_root_screw_cylinder(float3 p) {
                 SdfResult result = (SdfResult)0;
                 p = sdf::operators::transform(p, _1_4_0_root_screw_cylinder_SpaceTransform);
-                result.distance = sdf::primitives3D::cylinder_capped(p, _1_4_0_root_screw_cylinder_Height, _1_4_0_root_screw_cylinder_Radius);
+                result.distance = sdf::primitives3D::cylinder_capped(
+                    p,
+                    _1_4_0_root_screw_cylinder_Height,
+                    _1_4_0_root_screw_cylinder_Radius
+                );
                 result.id = int4(0, 0, 0, 11);
                 return result;
             }
@@ -430,7 +434,10 @@ Shader "Box SDF Scene (generated)"
             }
 
             SdfResult _1_4_1_1_root_screw_head_cuts(float3 p) {
-                SdfResult result = sdf::operators::unionSimple(_1_4_1_1_0_root_screw_head_cuts_cut_1(p), _1_4_1_1_1_root_screw_head_cuts_cut_2(p));
+                SdfResult result = sdf::operators::unionSimple(
+                    _1_4_1_1_0_root_screw_head_cuts_cut_1(p),
+                    _1_4_1_1_1_root_screw_head_cuts_cut_2(p)
+                );
                 result.distance = -result.distance;
                 return result;
             }
@@ -472,7 +479,11 @@ Shader "Box SDF Scene (generated)"
             SdfResult _1_6_1_root_flat__1__torus(float3 p) {
                 SdfResult result = (SdfResult)0;
                 p = sdf::operators::transform(p, _1_6_1_root_flat__1__torus_SpaceTransform);
-                result.distance = -sdf::primitives3D::torus(p, _1_6_1_root_flat__1__torus_MainRadius, _1_6_1_root_flat__1__torus_RingRadius);
+                result.distance = -sdf::primitives3D::torus(
+                    p,
+                    _1_6_1_root_flat__1__torus_MainRadius,
+                    _1_6_1_root_flat__1__torus_RingRadius
+                );
                 result.id = int4(0, 0, 0, 23);
                 return result;
             }
@@ -507,19 +518,35 @@ Shader "Box SDF Scene (generated)"
                 SdfResult result = sdf::operators::unionSmooth(
                     sdf::operators::unionSmooth(
                         sdf::operators::unionSmooth(
-                            _1_0_root_ground(p), sdf::operators::unionSmooth(_1_1_0_root_shroom_1_sphere_1(p), _1_1_1_root_shroom_1_cone(p), _1_root_BlendFactor),
+                            _1_0_root_ground(p),
+                            sdf::operators::unionSmooth(
+                                _1_1_0_root_shroom_1_sphere_1(p),
+                                _1_1_1_root_shroom_1_cone(p),
+                                _1_root_BlendFactor
+                            ),
                             _1_root_BlendFactor
-                        ), sdf::operators::unionSmooth(
-                            _1_2_0_root_shroom2_sphere_2(p), sdf::operators::unionSmooth(_1_2_1_root_shroom2_cone_2(p), _1_2_2_root_shroom2_sphere(p), _1_root_BlendFactor),
-                            _1_root_BlendFactor
-                        ), _1_root_BlendFactor
-                    ), sdf::operators::unionSmooth(
+                        ),
                         sdf::operators::unionSmooth(
-                            _1_3_root_combine(p), sdf::operators::unionSmooth(_1_4_0_root_screw_cylinder(p), _1_4_1_root_screw_head(p), _1_root_BlendFactor), _1_root_BlendFactor
-                        ), sdf::operators::unionSmooth(
-                            _1_5_root_q(p), sdf::operators::unionSmooth(_1_6_root_flat__1_(p), _1_7_root_combine(p), _1_root_BlendFactor), _1_root_BlendFactor
-                        ), _1_root_BlendFactor
-                    ), _1_root_BlendFactor
+                            _1_2_0_root_shroom2_sphere_2(p),
+                            sdf::operators::unionSmooth(_1_2_1_root_shroom2_cone_2(p), _1_2_2_root_shroom2_sphere(p), _1_root_BlendFactor),
+                            _1_root_BlendFactor
+                        ),
+                        _1_root_BlendFactor
+                    ),
+                    sdf::operators::unionSmooth(
+                        sdf::operators::unionSmooth(
+                            _1_3_root_combine(p),
+                            sdf::operators::unionSmooth(_1_4_0_root_screw_cylinder(p), _1_4_1_root_screw_head(p), _1_root_BlendFactor),
+                            _1_root_BlendFactor
+                        ),
+                        sdf::operators::unionSmooth(
+                            _1_5_root_q(p),
+                            sdf::operators::unionSmooth(_1_6_root_flat__1_(p), _1_7_root_combine(p), _1_root_BlendFactor),
+                            _1_root_BlendFactor
+                        ),
+                        _1_root_BlendFactor
+                    ),
+                    _1_root_BlendFactor
                 );
                 return result;
             }

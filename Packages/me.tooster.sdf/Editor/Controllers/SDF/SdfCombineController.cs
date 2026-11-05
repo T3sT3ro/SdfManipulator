@@ -34,6 +34,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         [Tooltip("Generate one ID for the combination")]
         [SerializeField] [DontCreateProperty] bool singleId;
 
+        public Controller[] children = Array.Empty<Controller>();
+
         [CreateProperty] [ShaderStructural]
         public CombinationOperation Operation {
             get => operation;
@@ -53,27 +55,14 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             set => SetField(ref singleId, value, true);
         }
 
-        public Controller[] children = Array.Empty<Controller>();
+        protected override void OnEnable() {
+            base.OnEnable();
+            refreshChildren();
+        }
 
         void OnTransformChildrenChanged() {
             refreshChildren();
             OnStructureChanged();
-        }
-
-        static IEnumerable<T> GetFirstNestedComponents<T>(Transform root) {
-            foreach (Transform child in root) {
-                if (child.GetComponent<T>() is { } component)
-                    yield return component;
-                else {
-                    foreach (var c in GetFirstNestedComponents<T>(child))
-                        yield return c;
-                }
-            }
-        }
-
-        protected override void OnEnable() {
-            base.OnEnable();
-            refreshChildren();
         }
 
         protected override void OnValidate() {
@@ -82,6 +71,17 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             foreach (var child in children) {
                 child.StructureChanged -= OnStructureChanged;
                 child.StructureChanged += OnStructureChanged;
+            }
+        }
+
+        static IEnumerable<T> GetFirstNestedComponents<T>(Transform root) {
+            foreach (Transform child in root) {
+                if (child.GetComponent<T>() is { } component) {
+                    yield return component;
+                } else {
+                    foreach (var c in GetFirstNestedComponents<T>(child))
+                        yield return c;
+                }
             }
         }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.Controllers.Data;
 using Unity.Properties;
 using UnityEngine;
@@ -50,7 +51,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
         public ScalarData Apply(ScalarData input, Processor processor) {
             processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
 
-            var arguments = new List<AST.Syntax.CommonSyntax.Expression<hlsl>>
+            var arguments = new List<Expression<hlsl>>
             {
                 input.evaluationExpression,
                 (Identifier)this[thicknessProperty].identifier,

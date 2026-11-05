@@ -12,7 +12,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
         protected virtual void OnSceneGUI() { Gizmos.color = Handles.color = GetGizmoColor(target as Controller); }
 
         protected virtual Color GetGizmoColor(Controller controller) {
-            if (parentSdfObject != null) return parentSdfObject.Inverted ? Color.red : Color.green;
+            if (parentSdfObject != null)
+                return parentSdfObject.Inverted ? Color.red : Color.green;
             return Color.white;
         }
 

@@ -9,12 +9,14 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
 
 
-    /// ( T , ... , T ) 
+    /// ( T , ... , T )
     [SyntaxNode] public partial record ArgumentList<T> : Syntax<hlsl>, IArgumentList where T : Syntax<hlsl> {
-        public OpenParenToken         openParenToken  { get; init; } = new();
-        public SeparatedList<hlsl, T> arguments       { get; init; } = new();
-        ISeparatedList IArgumentList. arguments       => arguments;
-        public CloseParenToken        closeParenToken { get; init; } = new();
+        public SeparatedList<hlsl, T> arguments      { get; init; } = new();
+        public OpenParenToken         openParenToken { get; init; } = new();
+
+        ISeparatedList IArgumentList.arguments => arguments;
+
+        public CloseParenToken closeParenToken { get; init; } = new();
 
         public static implicit operator ArgumentList<T>(T[] args) => new() { arguments = args.CommaSeparated() };
         public static implicit operator ArgumentList<T>(T singleton) => new() { arguments = singleton.CommaSeparated() };
@@ -23,7 +25,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
 
 
-    /// <inheritdoc cref="BracedList{T}"/>
+    /// <inheritdoc cref="BracedList{T}" />
     public interface IBracedList {
         public OpenBraceToken  openBraceToken  { get; init; }
         public ISeparatedList  arguments       { get; }
@@ -34,9 +36,10 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
     /// { T , ... , T }
     [SyntaxNode] public partial record BracedList<T> : Syntax<hlsl>, IBracedList where T : Syntax<hlsl> {
-        public OpenBraceToken         openBraceToken { get; init; } = new();
         public SeparatedList<hlsl, T> arguments      { get; init; } = new();
-        ISeparatedList IBracedList.   arguments      => arguments;
+        public OpenBraceToken         openBraceToken { get; init; } = new();
+
+        ISeparatedList IBracedList.arguments => arguments;
 
         public CloseBraceToken closeBraceToken { get; init; } = new();
 

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Unity.Collections;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -14,27 +15,15 @@ namespace Editor {
      * authors: atomicjoe, arkano22, YoxerG
      */
     public class SaveTextureToFileWindow : EditorWindow {
-        ObjectField     texture;
-        TextField       filePath;
-        Vector2IntField size;
-        EnumField       format;
-
-        string uniqueFilePath;
-
-
-
         public enum SaveTextureFileFormat {
             EXR, JPG, PNG, TGA,
-        };
-
-
-
-        [MenuItem("Tools/Save Texture To File Window")]
-        public static void ShowWindow() {
-            var wnd = GetWindow<SaveTextureToFileWindow>();
-            wnd.minSize = new Vector2(300, 105);
-            wnd.titleContent = new GUIContent("Save Texture To File");
         }
+        TextField       filePath;
+        EnumField       format;
+        Vector2IntField size;
+        ObjectField     texture;
+
+        string uniqueFilePath;
 
         public void CreateGUI() {
             var root = rootVisualElement;
@@ -49,6 +38,15 @@ namespace Editor {
             root.Add(format);
             root.Add(new Button(Save) { text = "Save" });
             root.Add(new Button(RenderCamera) { text = "Render main camera" });
+        }
+
+
+
+        [MenuItem("Tools/Save Texture To File Window")]
+        public static void ShowWindow() {
+            var wnd = GetWindow<SaveTextureToFileWindow>();
+            wnd.minSize = new Vector2(300, 105);
+            wnd.titleContent = new GUIContent("Save Texture To File");
         }
 
         void Save() {
@@ -94,8 +92,9 @@ namespace Editor {
                 AssetDatabase.Refresh();
                 var file = AssetDatabase.LoadAssetAtPath(uniqueFilePath, typeof(Texture2D));
                 Debug.Log($"Texture saved to [{uniqueFilePath}]", file);
-            } else
-                Debug.LogError($"Failed to save texture.");
+            } else {
+                Debug.LogError("Failed to save texture.");
+            }
         }
 
         static void SaveTextureToFile(
@@ -160,7 +159,7 @@ namespace Editor {
                             _ => ImageConversion.EncodeNativeArrayToPNG(narray, resizeRT.graphicsFormat, (uint)width, (uint)height),
                         };
 
-                        System.IO.File.WriteAllBytes(filePath, encoded.ToArray());
+                        File.WriteAllBytes(filePath, encoded.ToArray());
                         encoded.Dispose();
                     }
 

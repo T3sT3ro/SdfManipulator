@@ -6,9 +6,8 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfSphereController), true)]
     class SdfSphereControllerEditor : SdfPrimitiveControllerEditor {
-        SerializedProperty radiusProperty;
-
-        SphereBoundsHandle radiusHandle = new();
+        readonly SphereBoundsHandle radiusHandle = new();
+        SerializedProperty          radiusProperty;
 
         protected override void OnEnable() {
             base.OnEnable();
@@ -28,7 +27,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
 
                     radiusHandle.DrawHandle();
 
-                    if (!radiusCheck.changed) return;
+                    if (!radiusCheck.changed)
+                        return;
 
                     controller.Radius = radiusProperty.floatValue = radiusHandle.radius;
                     serializedObject.ApplyModifiedProperties();

@@ -6,6 +6,7 @@ using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
+using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
 using Type = System.Type;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     /**
@@ -15,6 +16,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
     [GeneratePropertyBag]
     public partial class TransformController : Controller, IModifier<VectorData, VectorData> {
         static readonly PropertyPath spaceTransformProperty = new(nameof(SpaceTransform));
+
         [CreateProperty] [ShaderProperty(Description = "Space Transform")]
         public virtual Matrix4x4 SpaceTransform => transform.localToWorldMatrix.inverse;
 
@@ -22,7 +24,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public Vector3 LocalPosition {
             get => transform.localPosition;
             set {
-                if (value == transform.localPosition) return;
+                if (value == transform.localPosition)
+                    return;
                 transform.localPosition = value;
                 OnPropertyChanged(nameof(SpaceTransform));
             }
@@ -32,7 +35,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public Quaternion LocalRotation {
             get => transform.localRotation;
             set {
-                if (value == transform.localRotation) return;
+                if (value == transform.localRotation)
+                    return;
                 transform.localRotation = value;
                 OnPropertyChanged(nameof(SpaceTransform));
             }
@@ -42,7 +46,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         public Vector3 LocalScale {
             get => transform.localScale;
             set {
-                if (value == transform.localScale) return;
+                if (value == transform.localScale)
+                    return;
                 transform.localScale = value;
                 OnPropertyChanged(nameof(SpaceTransform));
             }
@@ -51,7 +56,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         void Awake() { TransformUtils.SetConstrainProportions(transform, true); }
 
         protected virtual void Update() {
-            if (!transform.hasChanged) return;
+            if (!transform.hasChanged)
+                return;
             OnPropertyChanged(nameof(SpaceTransform));
         }
 
@@ -86,7 +92,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             return input with
             {
-                evaluationExpression = AST.Hlsl.Extensions.FunctionCall(
+                evaluationExpression = Extensions.FunctionCall(
                     "sdf::operators::transform",
                     input.evaluationExpression,
                     (Identifier)this[spaceTransformProperty].identifier

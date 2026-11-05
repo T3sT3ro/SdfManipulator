@@ -2,7 +2,6 @@ using System.Collections;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using NUnit.Framework;
-
 namespace me.tooster.sdf.Tests.Editor.AST {
     public class HlslTests {
         public static IEnumerator affixTest() {
@@ -14,7 +13,7 @@ namespace me.tooster.sdf.Tests.Editor.AST {
             Assert.AreEqual("foo++", postInc.ToString());
             yield break;
         }
-        
+
         [Test]
         public static IEnumerator HlslSyntaxSmokeTest() {
             var varDeclaration = new VariableDeclarator

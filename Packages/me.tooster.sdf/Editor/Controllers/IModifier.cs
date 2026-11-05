@@ -2,37 +2,38 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
+using me.tooster.sdf.Editor.Controllers.Data;
 namespace me.tooster.sdf.Editor.Controllers {
     // Base interface for all modifiers
     public interface IModifier {
-        Data.IData Apply(Data.IData input, Processor processor);
-        Type       GetInputType();
-        Type       GetOutputType();
+        IData Apply(IData input, Processor processor);
+        Type  GetInputType();
+        Type  GetOutputType();
     }
 
 
 
     // Base class for strongly typed modifiers
     public interface IModifier<in TInput, out TOutput> : IModifier
-        where TInput : Data.IData where TOutput : Data.IData {
-        Data.IData IModifier.Apply(Data.IData input, Processor processor) => Apply((TInput)input, processor);
-        public TOutput       Apply(TInput input, Processor processor);
+        where TInput : IData where TOutput : IData {
+        IData IModifier.Apply(IData input, Processor processor) => Apply((TInput)input, processor);
 
-        Type IModifier. GetInputType()  => GetInputType();
-        Type IModifier. GetOutputType() => GetOutputType();
-        public new Type GetInputType()  => typeof(TInput);
-        public new Type GetOutputType() => typeof(TOutput);
+        Type IModifier.    GetInputType()  => GetInputType();
+        Type IModifier.    GetOutputType() => GetOutputType();
+        public     TOutput Apply(TInput input, Processor processor);
+        public new Type    GetInputType()  => typeof(TInput);
+        public new Type    GetOutputType() => typeof(TOutput);
     }
 
 
 
     // Evaluator that processes the modifier stack and handles requirements
     public abstract class Processor {
-        public abstract void               HandleRequirement(Requirement requirement);
         readonly        Stack<IModifier>   modifierEvaluationStack = new();
         readonly        HashSet<IModifier> pendingModifiers        = new();
+        public abstract void               HandleRequirement(Requirement requirement);
 
-        public Data.IData Process(Data.IData input, params IModifier[] modifiers) {
+        public IData Process(IData input, params IModifier[] modifiers) {
             return modifiers.Aggregate(
                 input,
                 (current, modifier) => {
@@ -63,25 +64,23 @@ namespace me.tooster.sdf.Editor.Controllers {
 
 
     public abstract class Requirement : IRequirement {
-        public IModifier Originator { get; }
         protected Requirement(IModifier originator) => Originator = originator;
+        public IModifier Originator { get; }
     }
 
 
 
     public class IncludeRequirement : Requirement {
-        public string FileName { get; init; }
-
         public IncludeRequirement(IModifier originator, string fileName) : base(originator) => FileName = fileName;
+        public string FileName { get; init; }
     }
 
 
 
     public class FunctionDefinitionRequirement : Requirement {
-        public FunctionDefinition functionDefinition { get; init; }
-
         public FunctionDefinitionRequirement(IModifier originator, FunctionDefinition functionDefinition) : base(originator)
             => this.functionDefinition = functionDefinition;
+        public FunctionDefinition functionDefinition { get; init; }
     }
 
 
@@ -96,6 +95,11 @@ namespace me.tooster.sdf.Editor.Controllers {
             ValidatePipeline();
         }
 
+        public IData Apply(IData input, Processor processor) => processor.Process(input, modifiers);
+
+        public Type GetInputType()  => modifiers[0].GetInputType();
+        public Type GetOutputType() => modifiers[^1].GetOutputType();
+
         public static ModifierStack Compose<TInput, TOutput>(params IModifier[] modifiers) {
             var stack = new ModifierStack(modifiers);
             if (stack.GetInputType() != typeof(TInput))
@@ -104,11 +108,6 @@ namespace me.tooster.sdf.Editor.Controllers {
                 throw new ArgumentException("Modifier stack expected output type " + typeof(TOutput).Name);
             return stack;
         }
-
-        public Data.IData Apply(Data.IData input, Processor processor) => processor.Process(input, modifiers);
-
-        public Type GetInputType()  => modifiers[0].GetInputType();
-        public Type GetOutputType() => modifiers[^1].GetOutputType();
 
         void ValidatePipeline() {
             if (modifiers.Length == 0)

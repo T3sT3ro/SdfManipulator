@@ -15,13 +15,13 @@ namespace me.tooster.sdf.AST {
 
 
     /// <summary>
-    /// A node with a parent, used for navigation. To pattern match on a node, use <see cref="Anchor{T}"/> like this:
-    /// <code>someAnchor.Parent is Anchor&lt;SomeNode&gt; anchor</code>
+    ///     A node with a parent, used for navigation. To pattern match on a node, use <see cref="Anchor{T}" /> like this:
+    ///     <code>someAnchor.Parent is Anchor&lt;SomeNode&gt; anchor</code>
     /// </summary>
     public abstract record Anchor : IAnchor {
         /// <summary>
-        /// A node with a parent, used for navigation. To pattern match on a node, use <see cref="Anchor{T}"/> like this:
-        /// <code>someAnchor.Parent is Anchor&lt;SomeNode&gt; anchor</code>
+        ///     A node with a parent, used for navigation. To pattern match on a node, use <see cref="Anchor{T}" /> like this:
+        ///     <code>someAnchor.Parent is Anchor&lt;SomeNode&gt; anchor</code>
         /// </summary>
         protected Anchor(object Node, Anchor? Parent = null) {
             this.Parent = Parent;
@@ -45,27 +45,27 @@ namespace me.tooster.sdf.AST {
 
 
     public interface IAnchor<out T> : IAnchor {
-        Anchor? IAnchor.Parent => Parent;
-        object IAnchor. Node   => Node;
-
-
         public new Anchor? Parent { get; }
         public new T       Node   { get; }
+
+        Anchor? IAnchor.Parent => Parent;
+
+        object IAnchor.Node => Node;
     }
 
 
 
     /// <summary>
-    /// An <see cref="Anchor"/> holding a value of type <typeparamref name="T"/> 
+    ///     An <see cref="Anchor" /> holding a value of type <typeparamref name="T" />
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed record Anchor<T> : Anchor, IAnchor<T> {
+        internal Anchor(T node, Anchor? parent = null) : base(node!, parent) => Node = node;
+
         public new T Node {
             get => (T)base.Node;
             private init => base.Node = value ?? throw new ArgumentNullException(nameof(value));
         }
-
-        internal Anchor(T node, Anchor? parent = null) : base(node!, parent) => Node = node;
 
         public static implicit operator T(Anchor<T> anchor) => anchor.Node;
 

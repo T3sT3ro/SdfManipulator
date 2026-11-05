@@ -8,12 +8,22 @@ using UnityEngine;
 using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Controllers.Editors {
     /**
-     * A base controller editor which binds serialized fields to events for triggering uniform updates and shader regenerations.
+     * A base controller editor which binds serialized fields to events for triggering uniform updates and shader
+     * regenerations.
      * Prerequisites for Controller to make the editor work as intended:
      * <list type="bullet">
-     * <item>controller has serialized fields and reactive properties (i.e. ones that trigget SetField and OnPropertyChanged)</item>
-     * <item>the serialized field and the reactive property have the same name, but the property is capitalized e.g. field 'size' and property 'Size'</item>
-     * <item>properties are annotated with either [ShaderProperty] (for uniforms or [ShaderStructural] (for regenerating with new definitions)</item>
+     *     <item>
+     *         controller has serialized fields and reactive properties (i.e. ones that trigget SetField and
+     *         OnPropertyChanged)
+     *     </item>
+     *     <item>
+     *         the serialized field and the reactive property have the same name, but the property is capitalized e.g. field
+     *         'size' and property 'Size'
+     *     </item>
+     *     <item>
+     *         properties are annotated with either [ShaderProperty] (for uniforms or [ShaderStructural] (for regenerating
+     *         with new definitions)
+     *     </item>
      * </list>
      */
     [CustomEditor(typeof(Controller), true)]
@@ -38,8 +48,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             var defaultInspector = editor.Q<VisualElement>("default-inspector");
             InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
 
-            defaultInspector.Query<PropertyField>().ForEach(
-                propertyField => {
+            defaultInspector.Query<PropertyField>().ForEach(propertyField => {
                     // this is bound to a field
                     var propertyPath = propertyField.bindingPath;
                     // implicit assumption: a controller has a reactive property with the same name, but capitalized. That property triggers events
@@ -77,8 +86,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
                         var initialDisplayStyle = driverEnumPropertyField.style.display;
 
                         // depends on the implicit change event when a property field is instantiated
-                        driverEnumPropertyField.RegisterValueChangeCallback(
-                            evt => {
+                        driverEnumPropertyField.RegisterValueChangeCallback(evt => {
                                 propertyField.style.display =
                                     visibleWhenAttribute.enumValues.Contains(evt.changedProperty.enumValueIndex)
                                         ? initialDisplayStyle
@@ -99,7 +107,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
 
             var sdf = new GameObject(name);
             ObjectNames.SetNameSmart(sdf, name);
-            if (target) sdf.transform.SetParent(Selection.activeTransform);
+            if (target)
+                sdf.transform.SetParent(Selection.activeTransform);
             sdf.transform.localPosition = Vector3.zero;
             sdf.AddComponent<TController>();
         }

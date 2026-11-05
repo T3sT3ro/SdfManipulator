@@ -1,14 +1,14 @@
-#include "UnityCG.cginc"
-#include "Lighting.cginc"
-#include "UnityPBSLighting.cginc"
 #include "AutoLight.cginc"
+#include "Lighting.cginc"
+#include "UnityCG.cginc"
+#include "UnityPBSLighting.cginc"
 
-#include "types.hlsl"
 #include "camera.hlsl"
+#include "colors.hlsl"
 #include "debug.hlsl"
 #include "noise.hlsl"
-#include "colors.hlsl"
 #include "raymarching.hlsl"
+#include "types.hlsl"
 
 #pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
 
@@ -20,7 +20,7 @@ float _AO_FALLOFF = 2.5;
 
 #pragma region forward declarations
 /// A function for shading the SdfResult
-fixed4 sdfShade(SdfResult sdf, Ray3D ray);
+fixed4   sdfShade(SdfResult sdf, Ray3D ray);
 /// A function for determining a material at a given point
 Material SdfMaterial(SdfResult sdf);
 
@@ -152,8 +152,9 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
     SdfResult shadows = raymarch(toLight, _MAX_STEPS, _EPSILON_RAY);
 
 
-    if (isHit(shadows))
+    if (isHit(shadows)) {
         color = shadeAmbientLambert(shadows, mat);
+    }
 
     // // Get the lighting
     // SurfaceOutputStandard surfaceOutput = (SurfaceOutputStandard)0;

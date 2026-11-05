@@ -12,15 +12,19 @@ namespace me.tooster.sdf.AST.Hlsl {
     // For reference of formatting HLSL check out:
     //  https://github.com/tgjones/HlslTools/blob/master/src/ShaderTools.CodeAnalysis.Hlsl/Formatting/FormattingVisitor.cs
     public class HlslFormatter : Mapper, IFormatter<hlsl> {
-        public FormatterState State { get; }
-
         public HlslFormatter(FormatterState? state = null) {
             descendIntoTrivia = true;
             State = state ?? new FormatterState();
         }
+        public FormatterState State { get; }
+
+        int IFormatter<hlsl>. getIndentChange<T>(Anchor<T> a)                      => getIndentChange(a);
+        bool IFormatter<hlsl>.breakLineAfter<T>(Anchor<T> a, out int newLineCount) => breakLineAfter(a, out newLineCount);
+        bool IFormatter<hlsl>.whitespaceAfter<T>(Anchor<T> a)                      => whitespaceAfter(a);
 
         public static T? Format<T>(T? node, FormatterState? state = null) where T : Tree<hlsl>.Node {
-            if (node is null) return null;
+            if (node is null)
+                return null;
             var formatter = new HlslFormatter(state);
             return node.Accept(formatter, Anchor.New(node)) as T;
         }
@@ -45,8 +49,8 @@ namespace me.tooster.sdf.AST.Hlsl {
             switch (nextToken) {
                 case { Node: EndOfDirectiveToken }: return false;
                 case { Node: CloseBraceToken }:     return nextToken is not { Parent: { Node: IBracedList } };
-                case { Node: { } t } when Navigation.ParentsWithTokenOnEdge(nextToken).Any(a => a is { Node: FunctionDefinition }):
-                    return true;
+                case { Node: { } t }
+                    when Navigation.ParentsWithTokenOnEdge(nextToken).Any(a => a is { Node: FunctionDefinition }): return true;
                 default: return false;
             }
         }
@@ -55,8 +59,7 @@ namespace me.tooster.sdf.AST.Hlsl {
             switch (a) {
                 case { Node  : OpenParenToken or OpenBracketToken or ColonColonToken }
                     or { Node: HashToken, Parent: { Node: PreprocessorSyntax } }:
-                case { Node: DotToken, Parent: { Node: Member } }:
-                    return false;
+                case { Node: DotToken, Parent: { Node: Member } }: return false;
             }
 
             if (a.Parent is { Node: Unary u } && ReferenceEquals(a.Node, u.operatorToken))
@@ -67,16 +70,15 @@ namespace me.tooster.sdf.AST.Hlsl {
                 case { Node: CloseParenToken or SemicolonToken or ColonColonToken or CommaToken or EndOfDirectiveToken }:
                 case { Node: DotToken, Parent: { Node: Member } }:
                 case { Node: OpenParenToken op, Parent: { Node: IArgumentList argList, Parent: { Node: Call or FunctionDefinition } } }
-                    when ReferenceEquals(argList.openParenToken, op):
-
-                    return false;
+                    when ReferenceEquals(argList.openParenToken, op): return false;
             }
 
             return true;
         }
 
         public override Tree<hlsl>.Node? Visit(Anchor<Token<hlsl>> a) {
-            if (base.Visit(a) is not Token<hlsl> token) return null;
+            if (base.Visit(a) is not Token<hlsl> token)
+                return null;
 
             var fmt = (IFormatter<hlsl>)this;
 
@@ -87,9 +89,5 @@ namespace me.tooster.sdf.AST.Hlsl {
 
             return fmt.NormalizeWhitespace(Anchor.New(token, a.Parent));
         }
-
-        int IFormatter<hlsl>. getIndentChange<T>(Anchor<T> a)                      => getIndentChange(a);
-        bool IFormatter<hlsl>.breakLineAfter<T>(Anchor<T> a, out int newLineCount) => breakLineAfter(a, out newLineCount);
-        bool IFormatter<hlsl>.whitespaceAfter<T>(Anchor<T> a)                      => whitespaceAfter(a);
     }
 }

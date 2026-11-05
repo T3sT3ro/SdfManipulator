@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
-    public partial record CompilationUnit<Lang> : Statement<Lang> {
+    public record CompilationUnit<Lang> : Statement<Lang> {
         public SyntaxList<Lang, Statement<Lang>> topLevelStatements { get; init; }
         public EofToken<Lang>                    eofToken           { get; init; }
 

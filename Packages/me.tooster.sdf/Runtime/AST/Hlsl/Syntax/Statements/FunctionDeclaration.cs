@@ -3,9 +3,9 @@ using Statement = me.tooster.sdf.AST.Syntax.CommonSyntax.Statement<me.tooster.sd
 
 namespace me.tooster.sdf.AST.Hlsl.Syntax.Statements {
     /// <summary>
-    /// Function signature declaration
-    /// Sometimes Hlsl may require forward declarations.
-    /// <code> 
+    ///     Function signature declaration
+    ///     Sometimes Hlsl may require forward declarations.
+    ///     <code> 
     /// int foo(float x, row_major float y : VPOS = 7.0f);
     /// void foo(out float);
     /// </code>

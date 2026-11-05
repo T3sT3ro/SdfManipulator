@@ -5,9 +5,8 @@ using me.tooster.sdf.AST.Syntax.CommonSyntax;
 namespace me.tooster.sdf.AST {
     // instead of doing double dispatch using visit-accept pairs, pattern match can be used
     public abstract class Walker<Lang> : Visitor<Lang> {
-        bool DescentIntoStructuredTrivia { get; }
-
         protected Walker(bool descendIntoStructuredTrivia = false) => DescentIntoStructuredTrivia = descendIntoStructuredTrivia;
+        bool DescentIntoStructuredTrivia { get; }
 
 
         public void Visit(Anchor<Syntax<Lang>> a) {

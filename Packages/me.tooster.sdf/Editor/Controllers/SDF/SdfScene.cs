@@ -14,8 +14,9 @@ using UnityEngine;
 using UnityEngine.Profiling;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     /// <summary>
-    /// SdfSceneController is a game object that handles displaying and controling SdfScene asset.
-    /// TODO: split into asset (holding shader + scene description) and the controller "skeleton" (prefab?) + material (? default only?)
+    ///     SdfSceneController is a game object that handles displaying and controling SdfScene asset.
+    ///     TODO: split into asset (holding shader + scene description) and the controller "skeleton" (prefab?) + material (?
+    ///     default only?)
     /// </summary>
     [DisallowMultipleComponent]
     [SelectionBase]
@@ -37,31 +38,16 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         [SerializeReference] public ShaderPreset? shaderPreset;
 
 
+
+        public List<Diagnostic> diagnostics = new();
+
+
         readonly ShaderPropertyCollector shaderPropertyCollector = new();
         ShaderPropertyUpdatingVisitor?   _shaderPropertyUpdatingVisitor;
 
         ShaderPropertyUpdatingVisitor shaderPropertyUpdatingVisitor {
             get { return _shaderPropertyUpdatingVisitor ??= new ShaderPropertyUpdatingVisitor(this); }
         }
-
-
-
-        [Serializable]
-        public struct Diagnostic {
-            public enum Severity { ERROR, WARN, INFO }
-
-            Diagnostic(string message, Severity severity) => (this.message, this.severity) = (message, severity);
-            public Severity severity;
-            public string   message;
-
-            public static Diagnostic Error(string message) => new() { severity = Severity.ERROR, message = message };
-            public static Diagnostic Warn(string message)  => new() { severity = Severity.WARN, message = message };
-            public static Diagnostic Info(string message)  => new() { severity = Severity.INFO, message = message };
-        }
-
-
-
-        public List<Diagnostic> diagnostics = new();
 
         public SceneData sceneData            { get; private set; } = null!;
         public bool      RequiresRegeneration { get; set; }
@@ -70,6 +56,18 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         void Awake() {
             RequiresUpdate = true;
             shaderPreset ??= (ShaderPreset)Activator.CreateInstance(ShaderPreset.DetectedShaderPresets[0]);
+        }
+
+        void LateUpdate() {
+            var requiresForceUpdate = RequiresRegeneration;
+            if (RequiresRegeneration) {
+                RequiresRegeneration = false;
+                RevalidateScene();
+                // assure that regeneration is done only in the prefab stage
+                if (IsEditingContextOpen(out var prefabStage))
+                    GenerateSceneAssets();
+            }
+            UpdateShaderUniforms(forceUpdateAll: requiresForceUpdate);
         }
 
         void OnEnable() {
@@ -85,28 +83,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             RequiresUpdate = true;
             PrefabStage.prefabSaved -= OnPrefabSaved;
         }
-
-        void MarkDirty() {
-            RequiresRegeneration = true;
-            RequiresUpdate = true;
-        }
-
-        void OnPrefabSaved(GameObject go) { MarkDirty(); }
-
-        void LateUpdate() {
-            var requiresForceUpdate = RequiresRegeneration;
-            if (RequiresRegeneration) {
-                RequiresRegeneration = false;
-                RevalidateScene();
-                // assure that regeneration is done only in the prefab stage
-                if (IsEditingContextOpen(out var prefabStage))
-                    GenerateSceneAssets();
-            }
-            UpdateShaderUniforms(forceUpdateAll: requiresForceUpdate);
-        }
-
-        bool IsEditingContextOpen(out PrefabStage prefabStageEditingContext)
-            => (prefabStageEditingContext = PrefabStageUtility.GetCurrentPrefabStage())?.prefabContentsRoot.gameObject == gameObject;
 
 
         // TODO: use more event-driven architecture where creation, move, rename and deletion of individual controllers is detected. 
@@ -147,10 +123,22 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             RequiresUpdate = true;
         }
 
-        internal void RevalidateScene() {
-            if (this == null) return; // needed for Unity reasons 
+        void MarkDirty() {
+            RequiresRegeneration = true;
+            RequiresUpdate = true;
+        }
 
-            if (sdfSceneRoot == null) sdfSceneRoot = GetComponentInChildren<SdfController>();
+        void OnPrefabSaved(GameObject go) { MarkDirty(); }
+
+        bool IsEditingContextOpen(out PrefabStage prefabStageEditingContext)
+            => (prefabStageEditingContext = PrefabStageUtility.GetCurrentPrefabStage())?.prefabContentsRoot.gameObject == gameObject;
+
+        internal void RevalidateScene() {
+            if (this == null)
+                return; // needed for Unity reasons 
+
+            if (sdfSceneRoot == null)
+                sdfSceneRoot = GetComponentInChildren<SdfController>();
 
             var controllerData = new Dictionary<Controller, ControllerData>();
 
@@ -165,11 +153,16 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
                 PropertyContainer.Accept(shaderPropertyCollector, controller);
 
-                var propertyData = shaderPropertyCollector.ShaderProperties.Select(
-                    p => {
+                var propertyData = shaderPropertyCollector.ShaderProperties.Select(p => {
                         var propertyIdentifier = $"{controllerId}_{p.Property.Name.sanitizeToIdentifierString()}";
                         var shaderId = Shader.PropertyToID(propertyIdentifier);
-                        return new PropertyData(controller, shaderId, propertyIdentifier, p.Path, p.Property);
+                        return new PropertyData(
+                            controller,
+                            shaderId,
+                            propertyIdentifier,
+                            p.Path,
+                            p.Property
+                        );
                     }
                 );
 
@@ -221,7 +214,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             forceUpdateAll = true; // TODO: this is a temporary solution, but causes poor performance
 #endif
 
-            if (forceUpdateAll) QueuePropertyUpdates(sceneData.Properties);
+            if (forceUpdateAll)
+                QueuePropertyUpdates(sceneData.Properties);
             if (sceneData.queuedPropertyUdates.Count <= 0)
                 return;
 
@@ -241,65 +235,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             EditorApplication.QueuePlayerLoopUpdate(); // needed for smooth experience in editor
         }
 
-#if UNITY_EDITOR
-
-        /// <summary>
-        /// Generates the Shader and Material as sub-assets of the prefab, if inside the prefab stage.
-        /// Outside of prefab stage, this function doesn't trigger and print a warning instead.
-        /// The intent behind that is that shaders are compiled, so there is 1 to 1 mapping between prefab scene and generated shader.
-        /// Any instance with changed structure would require another shader asset, or otherwise would conflict with the prefab's shader.
-        /// </summary>
-        /// <exception cref="ShaderGenerationException"></exception>
-        internal void GenerateSceneAssets() {
-            // We allow editing and regenerating shaders only in prefab stage
-            if (!IsEditingContextOpen(out var prefabStage))
-                return;
-
-            Profiler.BeginSample("shader text generation");
-            var shaderSource = AssembleShaderSource();
-            Profiler.EndSample();
-
-            if (targetShader != null) {
-                var path = AssetDatabase.GetAssetPath(targetShader);
-                if (File.Exists(path)) {
-                    File.WriteAllText(path, shaderSource);
-                    AssetDatabase.SaveAssetIfDirty(targetShader);
-                }
-            }
-
-            // if (targetMaterial != null) {
-            //     var path = AssetDatabase.GetAssetPath(targetMaterial);
-            //     if (File.Exists(path)) {
-            //         // targetMaterial.shader = ShaderUtil.CreateShaderAsset(shaderSource);
-            //         AssetDatabase.SaveAssetIfDirty(targetMaterial);
-            //     }
-            // }
-
-            // needed because we write to shader asset file directly
-            AssetDatabase.Refresh();
-        }
-
-        // a context menu for regenerating material sub asset
-        [ContextMenu("Regenerate material")]
-        void RegenerateMaterial(MenuCommand menuCommand) { GenerateSceneAssets(); }
-
-        [ContextMenu("Remove sub-assets")]
-        void RemoveSubAssets(MenuCommand menuCommand) {
-            foreach (var subAsset in AssetDatabase.LoadAllAssetRepresentationsAtPath(AssetDatabase.GetAssetPath(gameObject))) {
-                if (!EditorUtility.DisplayDialog(
-                        $"Remove sub-asset",
-                        $"Are you sure you want to delete sub asset {subAsset.name} ({subAsset.GetType()})? Existing references to these materials will break!",
-                        "Yes",
-                        "No"
-                    ))
-                    AssetDatabase.RemoveObjectFromAsset(subAsset);
-            }
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
-#endif
-
         internal string AssembleShaderSource() {
             if (shaderPreset == null)
                 throw new ShaderGenerationException("No shader preset attached, generation won't proceed!");
@@ -314,7 +249,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
 
         /// <summary>
-        /// Returns a sequence of transforms starting (and excluding) scene name down to the controller.
+        ///     Returns a sequence of transforms starting (and excluding) scene name down to the controller.
         /// </summary>
         /// <param name="controller"></param>
         /// <returns></returns>
@@ -340,6 +275,21 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
 
 
+        [Serializable]
+        public struct Diagnostic {
+            public enum Severity { ERROR, WARN, INFO }
+
+            Diagnostic(string message, Severity severity) => (this.message, this.severity) = (message, severity);
+            public Severity severity;
+            public string   message;
+
+            public static Diagnostic Error(string message) => new() { severity = Severity.ERROR, message = message };
+            public static Diagnostic Warn(string message)  => new() { severity = Severity.WARN, message = message };
+            public static Diagnostic Info(string message)  => new() { severity = Severity.INFO, message = message };
+        }
+
+
+
         // TODO: bind action callbacks with shaderId in the closure to update the material instead of dispatching with visitor
         class ShaderPropertyUpdatingVisitor
             :
@@ -359,15 +309,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 AddAdapter(this);
                 this.scene = scene;
             }
-
-            public void Visit<TContainer>(in VisitContext<TContainer, bool> context, ref TContainer container, ref bool value)
-                => scene.controlledMaterial!.SetFloat(GetShaderId(container, context.Property), value ? 1 : 0);
-
-            public void Visit<TContainer>(in VisitContext<TContainer, float> context, ref TContainer container, ref float value)
-                => scene.controlledMaterial!.SetFloat(GetShaderId(container, context.Property), value);
-
-            public void Visit<TContainer>(in VisitContext<TContainer, int> context, ref TContainer container, ref int value)
-                => scene.controlledMaterial!.SetInteger(GetShaderId(container, context.Property), value);
 
             public void Visit<TContainer>(in VisitContext<TContainer, Matrix4x4> context, ref TContainer container, ref Matrix4x4 value)
                 => scene.controlledMaterial!.SetMatrix(GetShaderId(container, context.Property), value);
@@ -394,6 +335,15 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             public void Visit<TContainer>(in VisitContext<TContainer, Vector4> context, ref TContainer container, ref Vector4 value)
                 => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), value);
+
+            public void Visit<TContainer>(in VisitContext<TContainer, bool> context, ref TContainer container, ref bool value)
+                => scene.controlledMaterial!.SetFloat(GetShaderId(container, context.Property), value ? 1 : 0);
+
+            public void Visit<TContainer>(in VisitContext<TContainer, float> context, ref TContainer container, ref float value)
+                => scene.controlledMaterial!.SetFloat(GetShaderId(container, context.Property), value);
+
+            public void Visit<TContainer>(in VisitContext<TContainer, int> context, ref TContainer container, ref int value)
+                => scene.controlledMaterial!.SetInteger(GetShaderId(container, context.Property), value);
 
             int GetShaderId<TContainer>(TContainer controller, IProperty property)
                 => scene.sceneData
@@ -471,7 +421,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
 
             public PropertyData this[string propertyId] => identifierLookup[propertyId];
+
             public PropertyData this[PropertyPath propertyPath] => pathLookup[propertyPath];
+
             public PropertyData this[IProperty property] => propertyLookup[property];
 
             /// Returns all PropertyData in this cache
@@ -479,5 +431,66 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
+
+#if UNITY_EDITOR
+
+        /// <summary>
+        ///     Generates the Shader and Material as sub-assets of the prefab, if inside the prefab stage.
+        ///     Outside of prefab stage, this function doesn't trigger and print a warning instead.
+        ///     The intent behind that is that shaders are compiled, so there is 1 to 1 mapping between prefab scene and generated
+        ///     shader.
+        ///     Any instance with changed structure would require another shader asset, or otherwise would conflict with the
+        ///     prefab's shader.
+        /// </summary>
+        /// <exception cref="ShaderGenerationException"></exception>
+        internal void GenerateSceneAssets() {
+            // We allow editing and regenerating shaders only in prefab stage
+            if (!IsEditingContextOpen(out var prefabStage))
+                return;
+
+            Profiler.BeginSample("shader text generation");
+            var shaderSource = AssembleShaderSource();
+            Profiler.EndSample();
+
+            if (targetShader != null) {
+                var path = AssetDatabase.GetAssetPath(targetShader);
+                if (File.Exists(path)) {
+                    File.WriteAllText(path, shaderSource);
+                    AssetDatabase.SaveAssetIfDirty(targetShader);
+                }
+            }
+
+            // if (targetMaterial != null) {
+            //     var path = AssetDatabase.GetAssetPath(targetMaterial);
+            //     if (File.Exists(path)) {
+            //         // targetMaterial.shader = ShaderUtil.CreateShaderAsset(shaderSource);
+            //         AssetDatabase.SaveAssetIfDirty(targetMaterial);
+            //     }
+            // }
+
+            // needed because we write to shader asset file directly
+            AssetDatabase.Refresh();
+        }
+
+        // a context menu for regenerating material sub asset
+        [ContextMenu("Regenerate material")]
+        void RegenerateMaterial(MenuCommand menuCommand) { GenerateSceneAssets(); }
+
+        [ContextMenu("Remove sub-assets")]
+        void RemoveSubAssets(MenuCommand menuCommand) {
+            foreach (var subAsset in AssetDatabase.LoadAllAssetRepresentationsAtPath(AssetDatabase.GetAssetPath(gameObject))) {
+                if (!EditorUtility.DisplayDialog(
+                        "Remove sub-asset",
+                        $"Are you sure you want to delete sub asset {subAsset.name} ({subAsset.GetType()})? Existing references to these materials will break!",
+                        "Yes",
+                        "No"
+                    ))
+                    AssetDatabase.RemoveObjectFromAsset(subAsset);
+            }
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+#endif
     }
 }

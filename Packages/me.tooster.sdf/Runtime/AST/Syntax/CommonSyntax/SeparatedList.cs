@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +21,12 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         #region specializations
 
-        /// Returns number of syntax nodes in this separated list 
+        /// Returns number of syntax nodes in this separated list
         public override int Count => FullList.Count >> 1;
 
         public new TSyntax this[int index] => (TSyntax)base[index << 1];
 
-        public static SeparatedList<Lang, TSyntax> Empty { get; } = new(Array.Empty<SyntaxOrToken<Lang>>());
+        public static SeparatedList<Lang, TSyntax> Empty { get; } = new();
 
         /// returns a valid, separated syntax-list with tokens
         /// A, B, C, D -> slice(1, 2) -> B, C
@@ -49,13 +48,13 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
         public int SeparatorCount => FullList.Count >> 1;
 
         /// <summary>
-        /// Gets the separator at the given index in this list.
+        ///     Gets the separator at the given index in this list.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
         public Token<Lang> GetSeparator(int index) => (Token<Lang>)FullList[(index << 1) + 1];
 
-        /// Builds list with separators from A B C -> A [tok] B [tok] C 
+        /// Builds list with separators from A B C -> A [tok] B [tok] C
         public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(IEnumerable<TSyntax> list) where TTok : Token<Lang>, new()
             => new(SeparatedTokenStream<TTok>(list));
 
@@ -70,7 +69,7 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
             }
         }
 
-        /// <summary>see <see cref="WithSeparator{TTok}(System.Collections.Generic.IEnumerable{TSyntax})"/></summary>
+        /// <summary>see <see cref="WithSeparator{TTok}(System.Collections.Generic.IEnumerable{TSyntax})" /></summary>
         public static SeparatedList<Lang, TSyntax> WithSeparator<TTok>(params TSyntax[] list) where TTok : Token<Lang>, new()
             => WithSeparator<TTok>(list.AsEnumerable());
 

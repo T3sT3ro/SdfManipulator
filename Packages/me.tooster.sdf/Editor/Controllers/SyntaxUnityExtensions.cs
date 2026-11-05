@@ -39,7 +39,7 @@ namespace me.tooster.sdf.Editor.Controllers {
 
         #region attribute helpers
 
-        static Regex attributeHeaderSanitizeRegex = new("[^a-zA-Z0-9_ ]", RegexOptions.Compiled);
+        static readonly Regex attributeHeaderSanitizeRegex = new("[^a-zA-Z0-9_ ]", RegexOptions.Compiled);
 
         // some more info can be found here: https://docs.unity3d.com/ScriptReference/MaterialPropertyDrawer.html
         // TODO: assure that strings fit pattern of AttributeStringLiteral
@@ -75,8 +75,8 @@ namespace me.tooster.sdf.Editor.Controllers {
             };
 
         /// <summary>
-        /// Generates a <c>[KeyEnum(attr1, attr2)]</c> attribute
-        /// This attribute is ususally disaplayed as an int field
+        ///     Generates a <c>[KeyEnum(attr1, attr2)]</c> attribute
+        ///     This attribute is ususally disaplayed as an int field
         /// </summary>
         /// <param name="values">values for attribues</param>
         /// <returns>a syntax representing KeyEnum attribute</returns>
@@ -88,8 +88,8 @@ namespace me.tooster.sdf.Editor.Controllers {
             };
 
         /// <summary>
-        /// Generates a <c>[KeywordEnum(attr1, attr2)]</c> attribute
-        /// This attribute is ususally disaplayed as a select box with enum values
+        ///     Generates a <c>[KeywordEnum(attr1, attr2)]</c> attribute
+        ///     This attribute is ususally disaplayed as a select box with enum values
         /// </summary>
         /// <param name="values">values for attribues</param>
         /// <returns>a syntax representing KeyEnum attribute</returns>

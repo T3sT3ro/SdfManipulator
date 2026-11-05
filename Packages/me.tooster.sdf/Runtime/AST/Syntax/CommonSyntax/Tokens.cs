@@ -40,21 +40,24 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
 
     public record EofToken<Lang> : Token<Lang> {
-        public override string Text       => "";
+        public override string Text => "";
+
         public override string ToString() => base.ToString();
     }
 
 
 
     public record InjectedLanguageStartToken<Lang> : Token<Lang> {
-        public override string Text       => "";
+        public override string Text => "";
+
         public override string ToString() => base.ToString();
     }
 
 
 
     public record InjectedLanguageEndToken<Lang> : Token<Lang> {
-        public override string Text       => "";
+        public override string Text => "";
+
         public override string ToString() => base.ToString();
     }
 }

@@ -19,7 +19,13 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
                 Handles.DrawSolidDisc(Vector3.zero, Vector3.up, .5f);
 
                 Handles.color = Color.white;
-                Handles.ArrowHandleCap(0, Vector3.zero, Quaternion.LookRotation(Vector3.up), .5f, EventType.Repaint);
+                Handles.ArrowHandleCap(
+                    0,
+                    Vector3.zero,
+                    Quaternion.LookRotation(Vector3.up),
+                    .5f,
+                    EventType.Repaint
+                );
             }
         }
 

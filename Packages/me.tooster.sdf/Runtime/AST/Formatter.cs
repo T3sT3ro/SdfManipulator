@@ -6,16 +6,16 @@ using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 namespace me.tooster.sdf.AST {
     /// <summary>
-    /// Mutable state of the formatter to support line breaks and indents
+    ///     Mutable state of the formatter to support line breaks and indents
     /// </summary>
     public record FormatterState {
-        string        SingleIndent { get; init; }        = "    ";
+        int           indentLevel;
+        string        SingleIndent { get; }              = "    ";
         public string IndentString { get; private set; } = "";
-        int           indentLevel = 0;
 
 
         /// <summary>
-        /// Gets or sets current indent level
+        ///     Gets or sets current indent level
         /// </summary>
         public int IndentLevel {
             get => indentLevel;
@@ -68,8 +68,9 @@ namespace me.tooster.sdf.AST {
 
             if (previousToken == null && isFirstTokenOfStructuredTrivia(a))
                 // FIXME: this truncated leading trivia of a structured trivia syntax (it did before refactor, idk if it still does). Good for now, but generally should be fixed with a more general solution.
+            {
                 leading = leading.SkipWhile(t => t is Whitespace<Lang> or NewLine<Lang>).ToList();
-            else {
+            } else {
                 var newLeading = new List<Trivia<Lang>>();
                 if (previousToken == null && State.IndentLevel > 0)
                     newLeading.Add(new Whitespace<Lang>(State.IndentString));
@@ -87,9 +88,12 @@ namespace me.tooster.sdf.AST {
                 var consecutiveNewlines = 0; // Track consecutive newlines
                 var i = 0;
                 // skip first [ws]*[nl]?[ws]*
-                while (i < leading.Count && leading[i] is Whitespace<Lang>) i++;
-                if (i < leading.Count && leading[i] is NewLine<Lang>) i++;
-                while (i < leading.Count && leading[i] is Whitespace<Lang>) i++;
+                while (i < leading.Count && leading[i] is Whitespace<Lang>)
+                    i++;
+                if (i < leading.Count && leading[i] is NewLine<Lang>)
+                    i++;
+                while (i < leading.Count && leading[i] is Whitespace<Lang>)
+                    i++;
 
                 if (startingTrivia is NewLine<Lang>)
                     addNewLineAndIndent(newLeading, ref consecutiveNewlines, startingTrivia);

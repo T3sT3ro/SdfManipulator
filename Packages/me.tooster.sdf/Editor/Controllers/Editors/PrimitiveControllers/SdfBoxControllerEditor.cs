@@ -6,8 +6,8 @@ using SdfBoxController = me.tooster.sdf.Editor.Controllers.SDF.Primitives.SdfBox
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfBoxController), true)]
     class SdfBoxControllerEditor : SdfPrimitiveControllerEditor {
-        SerializedProperty boxExtents;
-        BoxBoundsHandle    boxHandle = new();
+        readonly BoxBoundsHandle boxHandle = new();
+        SerializedProperty       boxExtents;
 
         protected override void OnEnable() {
             base.OnEnable();

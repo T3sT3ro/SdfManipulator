@@ -1,6 +1,12 @@
 #nullable enable
 namespace me.tooster.sdf.AST.Shaderlab.Syntax.Commands {
-    /// Blend [renderTarget] (<see cref="StateArgument"/> | <see cref="SrcDstArguments"/> | <see cref="RgbaFactorArguments"/>);
+    /// Blend [renderTarget] (
+    /// <see cref="StateArgument" />
+    /// |
+    /// <see cref="SrcDstArguments" />
+    /// |
+    /// <see cref="RgbaFactorArguments" />
+    /// );
     /// <a href="https://docs.unity3d.com/Manual/SL-Blend.html">Blend</a>
     [SyntaxNode] public partial record Blend : Command {
         public BlendKeyword     blendKeyword   { get; init; } = new();

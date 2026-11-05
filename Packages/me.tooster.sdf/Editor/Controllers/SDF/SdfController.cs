@@ -14,7 +14,9 @@ using Type = System.Type;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     [GeneratePropertyBag]
     public partial class SdfController : Controller, IModifier<VectorData, SdfData> {
-        [SerializeField] [DontCreateProperty] bool inverted = false;
+        [SerializeField] [DontCreateProperty] bool inverted;
+
+        public Controller[] sdfModifiers = Array.Empty<Controller>();
 
         /// Should the sdf be inverted, i.e. "inside out"?
         [CreateProperty] [ShaderStructural]
@@ -22,8 +24,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             get => inverted;
             set => SetField(ref inverted, value, true);
         }
-
-        public Controller[] sdfModifiers = Array.Empty<Controller>();
 
         protected override void OnValidate() {
             base.OnValidate();

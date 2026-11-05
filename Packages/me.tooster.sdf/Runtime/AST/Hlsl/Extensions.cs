@@ -36,7 +36,7 @@ namespace me.tooster.sdf.AST.Hlsl {
             where T : Syntax<hlsl>
             => SeparatedList<hlsl, T>.WithSeparator<CommaToken>(singleton);
 
-        /// from a left string like 'a.b.c' generates assignment expression 
+        /// from a left string like 'a.b.c' generates assignment expression
         public static Statement Assignment(string left, Expression right, AssignmentToken assignmentToken = null)
             => new ExpressionStatement
             {
@@ -57,10 +57,14 @@ namespace me.tooster.sdf.AST.Hlsl {
 
         public static Call FunctionCall(string function, params Expression[] args) => FunctionCall(function, args.AsEnumerable());
 
-        /// takes string like 'x' or 'a.b.c' and generates an lvalue expression, like <see cref="Identifier"/> or <see cref="Member"/>
+        /// takes string like 'x' or 'a.b.c' and generates an lvalue expression, like
+        /// <see cref="Identifier" />
+        /// or
+        /// <see cref="Member" />
         public static Expression LValue(string path) {
             var names = path.Split('.');
-            if (names.Length == 1) return (Identifier)names[0];
+            if (names.Length == 1)
+                return (Identifier)names[0];
             return names.Skip(1).Aggregate(
                 (Identifier)names.First() as Expression,
                 (left, name) => new Member { expression = left, member = name }
@@ -81,7 +85,8 @@ namespace me.tooster.sdf.AST.Hlsl {
                 case 0: throw new ArgumentException("can't create empty name");
                 case 1: {
                     names = names[0].Split("::");
-                    if (names.Length == 1) return new Identifier { id = names[0] };
+                    if (names.Length == 1)
+                        return new Identifier { id = names[0] };
                     break;
                 }
             }

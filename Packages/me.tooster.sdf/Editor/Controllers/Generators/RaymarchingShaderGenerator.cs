@@ -2,7 +2,7 @@ using System;
 using me.tooster.sdf.Editor.Controllers.SDF;
 namespace me.tooster.sdf.Editor.Controllers.Generators {
     /// <summary>
-    /// An implementation of a shader preset for the built-in generator
+    ///     An implementation of a shader preset for the built-in generator
     /// </summary>
     [Serializable]
     public class BIRPShaderPreset : ShaderPreset {
@@ -32,7 +32,7 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
 
 
     /// <summary>
-    /// A processor for generating raymarching shaders
+    ///     A processor for generating raymarching shaders
     /// </summary>
     public abstract class RaymarchingShaderGenerator : Processor {
         protected readonly SdfScene scene;

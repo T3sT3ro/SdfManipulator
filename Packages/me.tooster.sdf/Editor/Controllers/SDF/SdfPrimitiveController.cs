@@ -9,6 +9,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
     public abstract class SdfPrimitiveController : Controller, IModifier<VectorData, ScalarData> {
         public abstract ScalarData Apply(VectorData input, Processor processor);
 
+
+        public override IData Apply(IData input, Processor processor) => Apply((VectorData)input, processor);
+        public override Type  GetInputType()                          => typeof(VectorData);
+        public override Type  GetOutputType()                         => typeof(ScalarData);
+
         public static void InstantiatePrimitive<TController>(string name) where TController : SdfPrimitiveController, new() {
             Undo.IncrementCurrentGroup();
 
@@ -26,7 +31,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             sdfObjectController.sdfModifiers = new Controller[] { transformController, primitiveSdfController };
 
             // call this after adding components to properly filter in OnTransformChildrenChange
-            if (target) sdf.transform.SetParent(Selection.activeTransform);
+            if (target)
+                sdf.transform.SetParent(Selection.activeTransform);
             sdf.transform.localPosition = Vector3.zero;
 
             Undo.RegisterCompleteObjectUndo(sdf, $"Create {name}");
@@ -35,11 +41,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
             Undo.SetCurrentGroupName($"Create a primitive SDF {name}");
         }
-
-
-        public override IData Apply(IData input, Processor processor) => Apply((VectorData)input, processor);
-        public override Type  GetInputType()                          => typeof(VectorData);
-        public override Type  GetOutputType()                         => typeof(ScalarData);
 
         public static FunctionDefinition createSdfPrimitiveFunction(Identifier identifier, Block functionBody)
             => new()

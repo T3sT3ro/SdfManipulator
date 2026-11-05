@@ -1,7 +1,6 @@
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
     [SyntaxNode] public abstract partial record NameSyntax : Expression<hlsl> {
-
         public static implicit operator NameSyntax(string name) => Extensions.NameFrom(name);
     }
 

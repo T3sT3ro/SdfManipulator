@@ -6,15 +6,15 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
     [CustomEditor(typeof(SdfTorusController), true)]
     class SdfTorusControllerEditor : SdfPrimitiveControllerEditor {
-        SerializedProperty mainRadius;
-        SerializedProperty ringRadius;
-        SerializedProperty cap;
+        // a single point cap on the main radius handle for picking a cap
+        readonly ArcHandle capArcHandle = new();
 
         // two ring handles for major and minor radius of torus
-        SphereBoundsHandle mainRadiusHandle = new();
-        SphereBoundsHandle ringRadiusHandle = new();
-        // a single point cap on the main radius handle for picking a cap
-        ArcHandle capArcHandle = new();
+        readonly SphereBoundsHandle mainRadiusHandle = new();
+        readonly SphereBoundsHandle ringRadiusHandle = new();
+        SerializedProperty          cap;
+        SerializedProperty          mainRadius;
+        SerializedProperty          ringRadius;
 
         protected override void OnEnable() {
             base.OnEnable();
@@ -41,7 +41,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
                     mainRadiusHandle.DrawHandle();
 
                     anyChanged |= mainRadiusCheck.changed;
-                    if (mainRadiusCheck.changed) controller.MainRadius = mainRadius.floatValue = mainRadiusHandle.radius;
+                    if (mainRadiusCheck.changed)
+                        controller.MainRadius = mainRadius.floatValue = mainRadiusHandle.radius;
                 }
 
                 using (var ringRadiusCheck = new EditorGUI.ChangeCheckScope()) {
@@ -52,7 +53,8 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
                     ringRadiusHandle.DrawHandle();
 
                     anyChanged |= ringRadiusCheck.changed;
-                    if (ringRadiusCheck.changed) controller.RingRadius = ringRadius.floatValue = ringRadiusHandle.radius;
+                    if (ringRadiusCheck.changed)
+                        controller.RingRadius = ringRadius.floatValue = ringRadiusHandle.radius;
                 }
 
 
@@ -64,12 +66,14 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
                         capArcHandle.DrawHandle();
 
                         anyChanged |= capCheck.changed;
-                        if (capCheck.changed) controller.Cap = cap.floatValue = Mathf.Deg2Rad * capArcHandle.angle;
+                        if (capCheck.changed)
+                            controller.Cap = cap.floatValue = Mathf.Deg2Rad * capArcHandle.angle;
                     }
                 }
             }
 
-            if (anyChanged) serializedObject.ApplyModifiedProperties();
+            if (anyChanged)
+                serializedObject.ApplyModifiedProperties();
         }
 
 

@@ -8,7 +8,7 @@ using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.Controllers.Data;
 using Unity.Properties;
 using UnityEngine;
-
+using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
 namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
     /*
      * https://iquilezles.org/articles/distfunctions/
@@ -19,8 +19,14 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
      */
     [GeneratePropertyBag]
     public partial class SdfElongateController : SdfPrimitiveController {
+        const string qDataName = "q";
+
+        static readonly VectorData qData = new()
+            { scalarType = Constants.ScalarKind.@float, arity = 3, evaluationExpression = (Identifier)qDataName };
         [SerializeField] [DontCreateProperty]
         Vector3 length;
+
+        public Controller sdfPrimitive;
 
         [CreateProperty]
         [ShaderProperty(Description = "Elongation")]
@@ -28,13 +34,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
             get => length;
             set => SetField(ref length, value, false);
         }
-
-        const string qDataName = "q";
-
-        static VectorData qData = new()
-            { scalarType = Constants.ScalarKind.@float, arity = 3, evaluationExpression = (Identifier)qDataName };
-
-        public Controller sdfPrimitive;
 
         protected override void OnValidate() {
             base.OnValidate();
@@ -45,22 +44,30 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
         }
 
         public override ScalarData Apply(VectorData input, Processor processor) {
-            processor.HandleRequirement(new IncludeRequirement(this,
-                "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
-            processor.HandleRequirement(new IncludeRequirement(this,
-                "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"));
+            processor.HandleRequirement(
+                new IncludeRequirement(
+                    this,
+                    "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"
+                )
+            );
+            processor.HandleRequirement(
+                new IncludeRequirement(
+                    this,
+                    "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"
+                )
+            );
 
             var elongatedFunctionDefinition = createSdfPrimitiveFunction(
                 SdfScene.sceneData.controllers[this].identifier,
                 new Statement<hlsl>[]
                 {
                     // float3 q = abs(p) - h
-                    AST.Hlsl.Extensions.Var(
+                    Extensions.Var(
                         qData.typeSyntax,
                         name = qDataName,
                         new Binary
                         {
-                            left = AST.Hlsl.Extensions.FunctionCall("abs", SdfData.pData.evaluationExpression),
+                            left = Extensions.FunctionCall("abs", SdfData.pData.evaluationExpression),
                             operatorToken = new MinusToken(),
                             right = (Identifier)this[new PropertyPath(nameof(Length))].identifier,
                         }
@@ -87,7 +94,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
                         left = ((SdfPrimitiveController)sdfPrimitive).Apply(
                             qData with
                             {
-                                evaluationExpression = AST.Hlsl.Extensions.FunctionCall(
+                                evaluationExpression = Extensions.FunctionCall(
                                     "max",
                                     qData.evaluationExpression,
                                     (LiteralExpression)0
@@ -96,9 +103,9 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
                             processor
                         ).evaluationExpression,
                         operatorToken = new PlusToken(),
-                        right = AST.Hlsl.Extensions.FunctionCall(
+                        right = Extensions.FunctionCall(
                             "min",
-                            AST.Hlsl.Extensions.FunctionCall("max", qData.evaluationExpression), // to util.hlsl
+                            Extensions.FunctionCall("max", qData.evaluationExpression), // to util.hlsl
                             (LiteralExpression)0
                         ),
                     },
@@ -126,7 +133,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
             return new ScalarData
             {
                 evaluationExpression =
-                    AST.Hlsl.Extensions.FunctionCall(
+                    Extensions.FunctionCall(
                         elongatedFunctionDefinition.id.id.Text,
                         input.evaluationExpression
                         // (Identifier)this[new PropertyPath(nameof(Length))].identifier

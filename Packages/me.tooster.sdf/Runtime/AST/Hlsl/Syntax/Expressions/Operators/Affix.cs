@@ -10,8 +10,9 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators {
         [SyntaxNode] public partial record Pre : Affix {
             public AffixOperatorToken prefixOperator { get; init; }
 
-            public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens() => new SyntaxOrToken<hlsl>[]
-                { prefixOperator, id };
+            public override IReadOnlyList<SyntaxOrToken<hlsl>> ChildNodesAndTokens()
+                => new SyntaxOrToken<hlsl>[]
+                    { prefixOperator, id };
         }
 
         // x++, x--

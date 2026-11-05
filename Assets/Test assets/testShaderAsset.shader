@@ -128,9 +128,13 @@ Shader "Box SDF Scene (generated)"
 
             SdfResult sdfScene(float3 p) {
                 return sdf::operators::unionSimple(
-                    sdf::operators::unionSimple(_0_0_combine_sphere_1(p), _0_1_combine_sphere_2(p)), sdf::operators::unionSimple(
-                        sdf::operators::intersectSimple(_0_2_0_combine_intersect_sphere(p), _0_2_1_combine_intersect_box(p)), sdf::operators::unionSmooth(
-                            _0_3_0_combine_smooth_sphere(p), _0_3_1_combine_smooth_box(p), _0_3_combine_smooth_blendFactor
+                    sdf::operators::unionSimple(_0_0_combine_sphere_1(p), _0_1_combine_sphere_2(p)),
+                    sdf::operators::unionSimple(
+                        sdf::operators::intersectSimple(_0_2_0_combine_intersect_sphere(p), _0_2_1_combine_intersect_box(p)),
+                        sdf::operators::unionSmooth(
+                            _0_3_0_combine_smooth_sphere(p),
+                            _0_3_1_combine_smooth_box(p),
+                            _0_3_combine_smooth_blendFactor
                         )
                     )
                 );

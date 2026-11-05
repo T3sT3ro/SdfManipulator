@@ -7,7 +7,6 @@ using me.tooster.sdf.Editor.Controllers.SDF;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEditor.SceneManagement;
-using UnityEditor.SearchService;
 using UnityEditor.UIElements;
 using UnityEditorInternal;
 using UnityEngine;
@@ -63,8 +62,10 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
             var shaderPresetPropertyField = editor.Q<PropertyField>("shaderPreset");
             var shaderPresetSerializedProperty = serializedObject.FindProperty(shaderPresetPropertyField.bindingPath);
             // whenever a generator serialized property changes, shader should be regenerated
-            shaderPresetPropertyField.TrackPropertyValue(shaderPresetSerializedProperty,
-                _ => sdfScene.RequiresRegeneration = true);
+            shaderPresetPropertyField.TrackPropertyValue(
+                shaderPresetSerializedProperty,
+                _ => sdfScene.RequiresRegeneration = true
+            );
 
             // Create a dropdown based on detected ShaderPresets. Changing the dropdown should assign the preset on the SdfScene to a new
             // ShaderPreset instance. The SdfScene should then regenerate the shader based on the new ShaderPreset.
@@ -111,8 +112,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
         static void WriteToFile(string path, string content) {
             try {
                 File.WriteAllText(path, content);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Debug.LogError(e);
             }
         }

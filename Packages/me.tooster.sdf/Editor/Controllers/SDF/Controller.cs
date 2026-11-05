@@ -16,12 +16,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
     public abstract class Controller : MonoBehaviour, INotifyPropertyChanged, IModifier {
         public delegate void StructureChangedEventHandler(Controller sender);
 
-        SdfScene?       sdfScene;
+        SdfScene? sdfScene;
+
         public SdfScene SdfScene => sdfScene == null ? sdfScene = GetComponentInParent<SdfScene>(true) : sdfScene;
 
         public SdfScene.PropertyData this[PropertyPath p] => SdfScene.sceneData.controllers[this].properties[p];
-
-        protected virtual void OnValidate() { sdfScene = GetComponentInParent<SdfScene>(); }
 
         protected virtual void OnEnable() { sdfScene = GetComponentInParent<SdfScene>(); }
 
@@ -34,6 +33,12 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 StructureChanged = parentController.StructureChanged; // clear all previous listeners as well
             StructureChanged?.Invoke(this);
         }
+
+        protected virtual void OnValidate() { sdfScene = GetComponentInParent<SdfScene>(); }
+
+        public abstract IData Apply(IData input, Processor processor);
+        public abstract Type  GetInputType();
+        public abstract Type  GetOutputType();
 
         public event PropertyChangedEventHandler?  PropertyChanged;
         public event StructureChangedEventHandler? StructureChanged;
@@ -48,14 +53,12 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             if (EqualityComparer<T>.Default.Equals(field, value))
                 return false;
             field = value;
-            if (structural) OnStructureChanged();
-            else OnPropertyChanged(propertyName);
+            if (structural)
+                OnStructureChanged();
+            else
+                OnPropertyChanged(propertyName);
             return true;
         }
-
-        public abstract IData Apply(IData input, Processor processor);
-        public abstract Type  GetInputType();
-        public abstract Type  GetOutputType();
 
         public override string ToString()
             => SdfScene.sceneData.controllers.TryGetValue(this, out var c) ? $"{c.identifier} ({base.ToString()})" : base.ToString();

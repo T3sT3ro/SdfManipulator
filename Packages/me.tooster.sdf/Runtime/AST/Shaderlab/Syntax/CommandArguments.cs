@@ -1,5 +1,3 @@
-using me.tooster.sdf.AST.Syntax;
-
 namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     /// fixed argument: Blend Off
     /// calculated argument: Blend [_BlendState]
@@ -8,7 +6,9 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     }
 
     /// <summary>Command argument using material property e.g. <c>Cull [_CullValue]</c></summary>
-    /// <remarks><a href="https://docs.unity3d.com/Manual/SL-Properties.html">Unity docs</a></remarks>
+    /// <remarks>
+    ///     <a href="https://docs.unity3d.com/Manual/SL-Properties.html">Unity docs</a>
+    /// </remarks>
     [SyntaxNode] public partial record CalculatedArgument : CommandArgument {
         public OpenBracketToken  openBracket  { get; init; } = new();
         public IdentifierToken   id           { get; init; }

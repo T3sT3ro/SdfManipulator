@@ -4,6 +4,8 @@ using me.tooster.sdf.AST.Syntax;
 namespace me.tooster.sdf.AST {
     // TODO: move to Zipper data structure with necessary extensions
     public static class Navigation {
+        /// subtree side
+        public enum Side { LEFT = +1, RIGHT = -1 }
         public static IEnumerable<IAnchor> Ancestors(this IAnchor node) {
             var current = node;
             while (current.Parent is not null) {
@@ -12,11 +14,6 @@ namespace me.tooster.sdf.AST {
                 current = current.Parent;
             }
         }
-
-
-
-        /// subtree side 
-        public enum Side { LEFT = +1, RIGHT = -1 }
 
 
 
@@ -32,7 +29,8 @@ namespace me.tooster.sdf.AST {
             while (stack.Count > 0) {
                 var current = stack.Pop();
 
-                if (current is { Node: Token<TLang> tok }) return Anchor.New(tok, current.Parent);
+                if (current is { Node: Token<TLang> tok })
+                    return Anchor.New(tok, current.Parent);
 
                 var childrenOrdered = ((Syntax<TLang>)current.Node).ChildNodesAndTokens();
                 foreach (var child in side != Side.LEFT
@@ -45,7 +43,10 @@ namespace me.tooster.sdf.AST {
         }
 
         /// returns neighboring token
-        /// <remarks>based on https://github.com/dotnet/roslyn/blob/462e180642875c0540ae1379e60425f635ec4f78/src/Compilers/Core/Portable/Syntax/SyntaxNavigator.cs#L435</remarks>
+        /// <remarks>
+        ///     based on
+        ///     https://github.com/dotnet/roslyn/blob/462e180642875c0540ae1379e60425f635ec4f78/src/Compilers/Core/Portable/Syntax/SyntaxNavigator.cs#L435
+        /// </remarks>
         public static Anchor<Token<Lang>>? NextToken<Lang>(
             this IAnchor<Token<Lang>> aToken,
             Side to = Side.RIGHT
@@ -59,16 +60,19 @@ namespace me.tooster.sdf.AST {
                              ? syntax.ChildNodesAndTokens()
                              : syntax.ChildNodesAndTokens().AsReverseEnumerator()) {
                     if (returnNext) {
-                        if (child is Token<Lang> tok) return Anchor.New(tok, parent);
+                        if (child is Token<Lang> tok)
+                            return Anchor.New(tok, parent);
 
                         if (Anchor.New((Syntax<Lang>)child, parent).FirstToken(to.Opposite()) is { } firstToken)
                             return firstToken;
-                    } else if (ReferenceEquals(child, lookingFor?.Node))
+                    } else if (ReferenceEquals(child, lookingFor?.Node)) {
                         returnNext = true;
+                    }
                 }
 
                 // when we reach final token in list we have to search for this syntax in parent
-                if (returnNext) lookingFor = parent as IAnchor<SyntaxOrToken<Lang>>;
+                if (returnNext)
+                    lookingFor = parent as IAnchor<SyntaxOrToken<Lang>>;
                 parent = parent.Parent;
             }
 
@@ -87,9 +91,8 @@ namespace me.tooster.sdf.AST {
                 switch (parent) {
                     case { Node: StructuredTrivia<Lang> }:
                     case { Node: Syntax<Lang> s } when ReferenceEquals(lookingFor.Node, s.ChildNodesAndTokens()[edgeIndex]):
-                    case { Node: TriviaList<Lang> triviaList } when ReferenceEquals(lookingFor.Node, triviaList[edgeIndex]):
-                        yield return parent;
-                        break;
+                    case { Node: TriviaList<Lang> triviaList }
+                        when ReferenceEquals(lookingFor.Node, triviaList[edgeIndex]): yield return parent; break;
                 }
                 lookingFor = parent;
                 parent = lookingFor.Parent;

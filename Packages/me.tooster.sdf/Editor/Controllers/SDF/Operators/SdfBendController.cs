@@ -11,6 +11,8 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
     public partial class SdfBendController : Controller, IModifier<VectorData, VectorData> {
         public enum BendVariant { CHEAP, KINK }
 
+        static readonly PropertyPath bendFactorProperty = new(nameof(BendFactor));
+
         [SerializeField] [DontCreateProperty] BendVariant variant;
         [SerializeField] [DontCreateProperty] float       bendFactor;
 
@@ -19,8 +21,6 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
             get => variant;
             set => SetField(ref variant, value, true);
         }
-
-        static readonly PropertyPath bendFactorProperty = new(nameof(BendFactor));
 
 
         [CreateProperty] [ShaderProperty(Description = "Bend factor")]

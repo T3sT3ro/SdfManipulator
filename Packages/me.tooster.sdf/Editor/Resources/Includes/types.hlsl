@@ -21,7 +21,8 @@ struct Material {
 
 /// Result of a raymarching operation
 struct SdfResult {
-    ID id; ///< id of a hit object. <code>(-1, -1, -1, -1)</code> if not hit. <code>XYZ</code> can be used in domain repetition, and <code>W</code> holds unique primitive ID
+    ID       id;
+    ///< id of a hit object. <code>(-1, -1, -1, -1)</code> if not hit. <code>XYZ</code> can be used in domain repetition, and <code>W</code> holds unique primitive ID
     // TODO: maybe remove this and expose it as *out* parameter wherever it's needed?
     float3   p; ///< 3D point where SDF was evaluated
     float    distance; ///< result of the SDF at point \p p

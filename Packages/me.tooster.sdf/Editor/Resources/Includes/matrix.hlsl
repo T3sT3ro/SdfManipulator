@@ -4,15 +4,13 @@
 
 #define MATRIX_ID float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 
-float4x4 inverse_diagonal(float4x4 input)
-{
+float4x4 inverse_diagonal(float4x4 input) {
     return float4x4(1 / input._11, 0, 0, 0, 0, 1 / input._22, 0, 0, 0, 0, 1 / input._33, 0, 0, 0, 0, 1 / input._44);
 }
 
 float4x4 inverse(float4x4 input); // forward declarations
 
-float4x4 inverse(float4x4 input)
-{
+float4x4 inverse(float4x4 input) {
     #define minor(a,b,c) determinant(float3x3(input.a, input.b, input.c))
     //determinant(float3x3(input._22_23_23, input._32_33_34, input._42_43_44))
 
@@ -41,8 +39,7 @@ float4x4 inverse(float4x4 input)
     return transpose(cofactors) / determinant(input);
 }
 
-float4x4 inverse_old(float4x4 m)
-{
+float4x4 inverse_old(float4x4 m) {
     float n11 = m[0][0], n12 = m[1][0], n13 = m[2][0], n14 = m[3][0];
     float n21 = m[0][1], n22 = m[1][1], n23 = m[2][1], n24 = m[3][1];
     float n31 = m[0][2], n32 = m[1][2], n33 = m[2][2], n34 = m[3][2];
@@ -98,37 +95,29 @@ float4x4 inverse_old(float4x4 m)
 }
 
 // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
-float4 matrix_to_quaternion(float4x4 m)
-{
-    float tr = m[0][0] + m[1][1] + m[2][2];
+float4 matrix_to_quaternion(float4x4 m) {
+    float  tr = m[0][0] + m[1][1] + m[2][2];
     float4 q = float4(0, 0, 0, 0);
 
-    if (tr > 0)
-    {
+    if (tr > 0) {
         float s = sqrt(tr + 1.0) * 2; // S=4*qw 
         q.w = 0.25 * s;
         q.x = (m[2][1] - m[1][2]) / s;
         q.y = (m[0][2] - m[2][0]) / s;
         q.z = (m[1][0] - m[0][1]) / s;
-    }
-    else if ((m[0][0] > m[1][1]) && (m[0][0] > m[2][2]))
-    {
+    } else if ((m[0][0] > m[1][1]) && (m[0][0] > m[2][2])) {
         float s = sqrt(1.0 + m[0][0] - m[1][1] - m[2][2]) * 2; // S=4*qx 
         q.w = (m[2][1] - m[1][2]) / s;
         q.x = 0.25 * s;
         q.y = (m[0][1] + m[1][0]) / s;
         q.z = (m[0][2] + m[2][0]) / s;
-    }
-    else if (m[1][1] > m[2][2])
-    {
+    } else if (m[1][1] > m[2][2]) {
         float s = sqrt(1.0 + m[1][1] - m[0][0] - m[2][2]) * 2; // S=4*qy
         q.w = (m[0][2] - m[2][0]) / s;
         q.x = (m[0][1] + m[1][0]) / s;
         q.y = 0.25 * s;
         q.z = (m[1][2] + m[2][1]) / s;
-    }
-    else
-    {
+    } else {
         float s = sqrt(1.0 + m[2][2] - m[0][0] - m[1][1]) * 2; // S=4*qz
         q.w = (m[1][0] - m[0][1]) / s;
         q.x = (m[0][2] + m[2][0]) / s;
@@ -139,12 +128,11 @@ float4 matrix_to_quaternion(float4x4 m)
     return q;
 }
 
-float4x4 quaternion_to_matrix(float4 quat)
-{
+float4x4 quaternion_to_matrix(float4 quat) {
     float4x4 m = float4x4(float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0), float4(0, 0, 0, 0));
 
-    float x = quat.x, y = quat.y, z = quat.z, w = quat.w;
-    float x2 = x + x, y2 = y + y, z2 = z + z;
+    float x = quat.x,  y = quat.y,  z = quat.z, w = quat.w;
+    float x2 = x + x,  y2 = y + y,  z2 = z + z;
     float xx = x * x2, xy = x * y2, xz = x * z2;
     float yy = y * y2, yz = y * z2, zz = z * z2;
     float wx = w * x2, wy = w * y2, wz = w * z2;
@@ -166,14 +154,12 @@ float4x4 quaternion_to_matrix(float4 quat)
     return m;
 }
 
-float4x4 m_scale(float3 v)
-{
-    float4x4 m = {v.x, 0, 0, 0, 0, v.y, 0, 0, 0, 0, 0, v.z, 0, 0, 0, 1};
+float4x4 m_scale(float3 v) {
+    float4x4 m = { v.x, 0, 0, 0, 0, v.y, 0, 0, 0, 0, 0, v.z, 0, 0, 0, 1 };
     return m;
 }
 
-float4x4 m_scale(float4x4 m, float3 v)
-{
+float4x4 m_scale(float4x4 m, float3 v) {
     float x = v.x, y = v.y, z = v.z;
     m[0][0] *= x;
     m[1][0] *= y;
@@ -196,8 +182,7 @@ float4x4 m_scale(float4x4 m, float3 v)
 
 // Rotation with angle (in radians) and axis
 // source: https://gist.github.com/keijiro/ee439d5e7388f3aafc5296005c8c3f33
-float4x4 m_rotate(float angle, float3 axis)
-{
+float4x4 m_rotate(float angle, float3 axis) {
     float c, s;
     sincos(angle, s, c);
 
@@ -207,24 +192,34 @@ float4x4 m_rotate(float angle, float3 axis)
     float z = axis.z;
 
     return float4x4(
-        t * x * x + c, t * x * y - s * z, t * x * z + s * y, 0,
-        t * x * y + s * z, t * y * y + c, t * y * z - s * x, 0,
-        t * x * z - s * y, t * y * z + s * x, t * z * z + c, 0,
-        0, 0, 0, 1
+        t * x * x + c,
+        t * x * y - s * z,
+        t * x * z + s * y,
+        0,
+        t * x * y + s * z,
+        t * y * y + c,
+        t * y * z - s * x,
+        0,
+        t * x * z - s * y,
+        t * y * z + s * x,
+        t * z * z + c,
+        0,
+        0,
+        0,
+        0,
+        1
     );
 }
 
-float4x4 m_translate(float3 v)
-{
-    float4x4 m = {1, 0, 0, v.x, 0, 1, 0, v.y, 0, 0, 1, v.z, 0, 0, 0, 1};
+float4x4 m_translate(float3 v) {
+    float4x4 m = { 1, 0, 0, v.x, 0, 1, 0, v.y, 0, 0, 1, v.z, 0, 0, 0, 1 };
     return m;
 }
 
 
 // Euler angles rotation matrix
 // source: https://github.com/keijiro/ShurikenPlus/blob/master/Assets/ShurikenPlus/Shaders/Common.hlsl
-float4x4 euler_to_rot(float3 v)
-{
+float4x4 euler_to_rot(float3 v) {
     float sx, cx;
     float sy, cy;
     float sz, cz;
@@ -241,8 +236,7 @@ float4x4 euler_to_rot(float3 v)
     );
 }
 
-float4x4 m_translate(float4x4 m, float3 v)
-{
+float4x4 m_translate(float4x4 m, float3 v) {
     float x = v.x, y = v.y, z = v.z;
     m[0][3] = x;
     m[1][3] = y;
@@ -250,24 +244,21 @@ float4x4 m_translate(float4x4 m, float3 v)
     return m;
 }
 
-float4x4 compose(float3 position, float4 quat, float3 scale)
-{
+float4x4 compose(float3 position, float4 quat, float3 scale) {
     float4x4 m = quaternion_to_matrix(quat);
     m = m_scale(m, scale);
     m = m_translate(m, position);
     return m;
 }
 
-void decompose(in float4x4 m, out float3 position, out float4 rotation, out float3 scale)
-{
+void decompose(in float4x4 m, out float3 position, out float4 rotation, out float3 scale) {
     float sx = length(float3(m[0][0], m[0][1], m[0][2]));
     float sy = length(float3(m[1][0], m[1][1], m[1][2]));
     float sz = length(float3(m[2][0], m[2][1], m[2][2]));
 
     // if determine is negative, we need to invert one scale
     float det = determinant(m);
-    if (det < 0)
-    {
+    if (det < 0) {
         sx = -sx;
     }
 
@@ -300,46 +291,53 @@ void decompose(in float4x4 m, out float3 position, out float4 rotation, out floa
     scale.z = sz;
 }
 
-float4x4 axis_matrix(float3 right, float3 up, float3 forward)
-{
+float4x4 axis_matrix(float3 right, float3 up, float3 forward) {
     float3 xaxis = right;
     float3 yaxis = up;
     float3 zaxis = forward;
     return float4x4(
-        xaxis.x, yaxis.x, zaxis.x, 0,
-        xaxis.y, yaxis.y, zaxis.y, 0,
-        xaxis.z, yaxis.z, zaxis.z, 0,
-        0, 0, 0, 1
+        xaxis.x,
+        yaxis.x,
+        zaxis.x,
+        0,
+        xaxis.y,
+        yaxis.y,
+        zaxis.y,
+        0,
+        xaxis.z,
+        yaxis.z,
+        zaxis.z,
+        0,
+        0,
+        0,
+        0,
+        1
     );
 }
 
 // http://stackoverflow.com/questions/349050/calculating-a-lookat-matrix
-float4x4 look_at_matrix(float3 forward, float3 up)
-{
+float4x4 look_at_matrix(float3 forward, float3 up) {
     float3 xaxis = normalize(cross(forward, up));
     float3 yaxis = up;
     float3 zaxis = forward;
     return axis_matrix(xaxis, yaxis, zaxis);
 }
 
-float4x4 look_at_matrix(float3 at, float3 eye, float3 up)
-{
+float4x4 look_at_matrix(float3 at, float3 eye, float3 up) {
     float3 zaxis = normalize(at - eye);
     float3 xaxis = normalize(cross(up, zaxis));
     float3 yaxis = cross(zaxis, xaxis);
     return axis_matrix(xaxis, yaxis, zaxis);
 }
 
-float4x4 extract_rotation_matrix(float4x4 m)
-{
+float4x4 extract_rotation_matrix(float4x4 m) {
     float sx = length(float3(m[0][0], m[0][1], m[0][2]));
     float sy = length(float3(m[1][0], m[1][1], m[1][2]));
     float sz = length(float3(m[2][0], m[2][1], m[2][2]));
 
     // if determine is negative, we need to invert one scale
     float det = determinant(m);
-    if (det < 0)
-    {
+    if (det < 0) {
         sx = -sx;
     }
 
@@ -370,8 +368,7 @@ float4x4 extract_rotation_matrix(float4x4 m)
     return m;
 }
 
-float3 extract_scale(float4x4 m)
-{
+float3 extract_scale(float4x4 m) {
     float sx = length(float3(m[0][0], m[0][1], m[0][2]));
     float sy = length(float3(m[1][0], m[1][1], m[1][2]));
     float sz = length(float3(m[2][0], m[2][1], m[2][2]));
@@ -379,13 +376,12 @@ float3 extract_scale(float4x4 m)
     return float3(sx, sy, sz);
 }
 
-float4x4 extract_scale_matrix(float4x4 m)
-{
+float4x4 extract_scale_matrix(float4x4 m) {
     float4x4 ret = {
-        {length(float3(m[0].x, m[1].x, m[2].x)), 0, 0, 0},
-        {0, length(float3(m[0].y, m[1].y, m[2].y)), 0, 0},
-        {0, 0, length(float3(m[0].z, m[1].z, m[2].z)), 0},
-        {0, 0, 0, 1}
+        { length(float3(m[0].x, m[1].x, m[2].x)), 0, 0, 0 },
+        { 0, length(float3(m[0].y, m[1].y, m[2].y)), 0, 0 },
+        { 0, 0, length(float3(m[0].z, m[1].z, m[2].z)), 0 },
+        { 0, 0, 0, 1 }
     };
     return ret;
 }
