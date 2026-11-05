@@ -426,6 +426,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &5971444212389349882
 GameObject:
@@ -1091,7 +1092,7 @@ Shader:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  serializedVersion: 3
+  serializedVersion: 4
   m_ParsedForm:
     m_PropInfo:
       m_Props:
@@ -1467,7 +1468,7 @@ Shader:
     m_SubShaders:
     - m_Passes:
       - serializedVersion: 2
-        m_NameIndices: {}
+        m_NameIndices: []
         m_Type: 0
         m_State:
           serializedVersion: 2
@@ -1768,7 +1769,7 @@ Shader:
             m_ConstantBufferBindings: []
             m_UAVParams: []
             m_Samplers: []
-          m_SerializedKeywordStateMask: 00000100020003000400050006000700080009000a000b000c000d000e00
+          m_SerializedKeywordStateMask: 00000100020003000400050006000700080009000a000b000c000d000e00t
         progFragment:
           m_SubPrograms: []
           m_PlayerSubPrograms: []
@@ -1782,7 +1783,7 @@ Shader:
             m_ConstantBufferBindings: []
             m_UAVParams: []
             m_Samplers: []
-          m_SerializedKeywordStateMask: 00000100020003000400050006000700080009000a000b000c000d000e00
+          m_SerializedKeywordStateMask: 00000100020003000400050006000700080009000a000b000c000d000e00t
         progGeometry:
           m_SubPrograms: []
           m_PlayerSubPrograms: []
@@ -1861,6 +1862,7 @@ Shader:
         m_Requirements: []
         m_StatusMessage: 
         m_CombinedStatus: 1
+      m_StripFromBuild: 0
     m_KeywordNames:
     - STEREO_INSTANCING_ON
     - UNITY_SINGLE_PASS_STEREO
@@ -1877,7 +1879,7 @@ Shader:
     - _DRAWMODE_OCCLUSION
     - _SHOW_WORLD_GRID
     - _DRAWMODE_ID
-    m_KeywordFlags: 000000000101010101010101010101
+    m_KeywordFlags: 000000000101010101010101010101y
     m_Name: repro WOMP scene (generated)
     m_CustomEditorName: 
     m_FallbackName: Sdf/Fallback
@@ -1938,168 +1940,147 @@ Shader:
     line: 239
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_0__root_combine_nose__1_SpaceTransform" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_0_0__root_combine_nose__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_0__root_combine_nose__2_Radius" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_0_0__root_combine_nose__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_combine_face_eye__1_SpaceTransform" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_0_1_0__root_combine_face_eye__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_0__root_combine_face_eye__2_Radius" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_0_1_0__root_combine_face_eye__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_1__root_combine_face_skull__1_SpaceTransform" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_0_1_1__root_combine_face_skull__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_0_1_1__root_combine_face_skull__2_Radius" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_0_1_1__root_combine_face_skull__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_1__root_torso__1_SpaceTransform" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_1__root_torso__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_1__root_torso__2_Radius" contains consecutive underscores ("__"),
-      such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_1__root_torso__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_0__root_limbs_uper_arm__1_SpaceTransform" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_0__root_limbs_uper_arm__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Height" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Radius" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Rounding" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_1__root_limbs_torus__1_SpaceTransform" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_1__root_limbs_torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_1__root_limbs_torus__2_Cap" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_1__root_limbs_torus__2_Cap" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_1__root_limbs_torus__2_MainRadius" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_1__root_limbs_torus__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_1__root_limbs_torus__2_RingRadius" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_1__root_limbs_torus__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_2__root_limbs_torus__1_SpaceTransform" contains consecutive
-      underscores ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_2__root_limbs_torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_2__root_limbs_torus__2_Cap" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_2__root_limbs_torus__2_Cap" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_2__root_limbs_torus__2_MainRadius" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_2__root_limbs_torus__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1_2_2__root_limbs_torus__2_RingRadius" contains consecutive underscores
-      ("__"), such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1_2_2__root_limbs_torus__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
     runtimeError: 0
-  - message: '"SDF_1__root__1_BlendFactor" contains consecutive underscores ("__"),
-      such names are reserved and might result in undefined behaviour'
+  - message: '"SDF_1__root__1_BlendFactor" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: repro WOMP scene (generated)
     compilerPlatform: 18
@@ -2108,37 +2089,26 @@ Shader:
     runtimeError: 0
   m_CompileInfo:
     m_Snippets:
-      38832:
+      10124:
         serializedVersion: 3
-        m_Code: "#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 7 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            #pragma vertex vert\n           
-          #pragma fragment frag\n            #include \"UnityCG.cginc\"\n\n           
-          float4 vert(in float4 pos : POSITION, out float4 screenPos : TEXCOORD1)
-          : SV_POSITION\n            {\n                float4 clipPos = UnityObjectToClipPos(pos);\n               
-          screenPos = ComputeScreenPos(clipPos);\n                return clipPos;\n           
-          }\n\n            fixed4 frag(in float4 screenPos : TEXCOORD1) : SV_Target  
-          \n            {\n                screenPos.xy = trunc(screenPos.xy / screenPos.w
-          * _ScreenParams.xy / 5);\n\n                clip((screenPos.x + screenPos.y)
-          % 2 == 0 ? -1 : 0);\n                return fixed4(1.0, .2, 0.0, 1.0);\n           
-          }\n            "
+        m_Code: "#define KEYWORD_TYPE_FLAG_SPECIALIZED_VARIANTS (1 << 0)\n#define KEYWORD_TYPE_FLAG_RUNTIME_BRANCHING (1 << 1)\n#line 10 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define UNITY_INSTANCED_RENDERER_BOUNDS\n#line 10 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/* UNITY: Original start of shader */\n            #pragma vertex vert\n            #pragma fragment frag\n            #include \"UnityCG.cginc\"\n\n            float4 vert(in float4 pos : POSITION, out float4 screenPos : TEXCOORD1) : SV_POSITION {\n                float4 clipPos = UnityObjectToClipPos(pos);\n                screenPos = ComputeScreenPos(clipPos);\n                return clipPos;\n            }\n\n            fixed4 frag(in float4 screenPos : TEXCOORD1) : SV_Target {\n                screenPos.xy = trunc(screenPos.xy / screenPos.w * _ScreenParams.xy / 5);\n\n                clip((screenPos.x + screenPos.y) % 2 == 0 ? -1 : 0);\n                return fixed4(1.0, .2, 0.0, 1.0);\n            }\n            "
         m_AssetPath: Packages/me.tooster.sdf/Editor/Resources/Shaders
         m_AssetName: SdfFallback.shader
         m_PlatformMask: 4294967295
         m_HardwareTierVariantsMask: 0
-        m_StartLine: 9
+        m_StartLine: 12
         m_TypesMask: 3
         m_IncludesHash:
           serializedVersion: 2
-          Hash: 9116bc3854d5903bc93e42479783cbf1
+          Hash: 81d22487be878058c4bbdd520657a8f0
         m_CodeHash:
           serializedVersion: 2
-          Hash: a8f072047a658b7169ff138aeaf74978
+          Hash: 8e74524ea8305d81dbca3eac42e6d930
         m_FromOther: 1
         m_ForceSyncCompilation: 0
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
+        m_PerAPICompilerToolchain: 0000000000000000000000000000000000000000000000000000000000y
+        m_UsedShaderApiDefinesMask: 202166816
+        m_ShaderCompilationFlags: 0
         m_Language: 3
         m_VariantsUserGlobal0: []
         m_VariantsUserGlobal1: []
@@ -2162,6 +2132,13 @@ Shader:
         m_VariantsBuiltin5: []
         m_VariantsBuiltin6: []
         m_DynamicBranchKeywords: []
+        m_PrunedKeywords0: []
+        m_PrunedKeywords1: []
+        m_PrunedKeywords2: []
+        m_PrunedKeywords3: []
+        m_PrunedKeywords4: []
+        m_PrunedKeywords5: []
+        m_PrunedKeywords6: []
         m_BaseRequirements: 33
         m_KeywordTargetInfo:
         - keywordName: SHADOWS_SOFT
@@ -2182,115 +2159,13 @@ Shader:
           requirements: 4075
         - keywordName: UNITY_DEVICE_SUPPORTS_NATIVE_16BIT
           requirements: 536870912
+        - keywordName: UNITY_DEVICE_SUPPORTS_INLINE_RAY_TRACING
+          requirements: 34359738368
         m_NonStrippedUserKeywords: 
         m_BuiltinKeywords: 
       47164:
         serializedVersion: 3
-        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED
-          1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED
-          1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED
-          1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 148 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define
-          UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define
-          UNITY_INSTANCED_RENDERER_BOUNDS\n#line 79\n\n        #pragma target 5.0\n       
-          #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n       
-          #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n       
-          #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n       
-          \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_combine__1_BlendFactor;\n       
-          float4x4 SDF_1_0_0__root_combine_nose__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, -1.093 },\n                { 0.0, 1.0, 0.0, -0.045 },\n               
-          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_0__root_combine_nose__2_Radius;\n        float
-          SDF_1_0_1__root_combine_face__1_BlendFactor;\n        float4x4 SDF_1_0_1_0__root_combine_face_eye__1_SpaceTransform
-          = {\n                { 1.0, 0.0, 0.0, -0.758 },\n                { 0.0,
-          1.0, 0.0, -0.018 },\n                { 0.0, 0.0, 1.0, 0.561 },\n               
-          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_0__root_combine_face_eye__2_Radius;\n       
-          float4x4 SDF_1_0_1_1__root_combine_face_skull__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, -0.518 },\n                { 0.0, 1.0, 0.0, -0.014 },\n               
-          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_0_1_1__root_combine_face_skull__2_Radius;\n       
-          float4x4 SDF_1_1__root_torso__1_SpaceTransform = {\n                { 1.0,
-          0.0, 0.0, 0.777 },\n                { 0.0, 1.0, 0.0, 0.403 },\n               
-          { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_1__root_torso__2_Radius;\n        float4x4 SDF_1_2_0__root_limbs_uper_arm__1_SpaceTransform
-          = {\n                { 1.0, 0.0, 0.0, 0.805 },\n                { 0.0,
-          1.0, 0.0, -0.852 },\n                { 0.0, 0.0, 1.0, 0.0 },\n               
-          { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_2_0__root_limbs_uper_arm__2_Height;\n       
-          float SDF_1_2_0__root_limbs_uper_arm__2_Radius;\n        float SDF_1_2_0__root_limbs_uper_arm__2_Rounding;\n       
-          float4x4 SDF_1_2_1__root_limbs_torus__1_SpaceTransform = {\n               
-          { -1.0, 0.0, 0.0, 1.0 },\n                { 0.0, 0.0, -1.0, 0.0 },\n               
-          { 0.0, -1.0, 0.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n       
-          };\n        float SDF_1_2_1__root_limbs_torus__2_MainRadius;\n        float
-          SDF_1_2_1__root_limbs_torus__2_RingRadius;\n        float SDF_1_2_1__root_limbs_torus__2_Cap;\n       
-          float4x4 SDF_1_2_2__root_limbs_torus__1_SpaceTransform = {\n               
-          { 1.0, 0.0, 0.0, 0.869001 },\n                { 0.0, 0.0, -1.0, -0.000001
-          },\n                { 0.0, 1.0, 0.0, 2.316 },\n                { 0.0, 0.0,
-          0.0, 1.0 }\n        };\n        float SDF_1_2_2__root_limbs_torus__2_MainRadius;\n       
-          float SDF_1_2_2__root_limbs_torus__2_RingRadius;\n        float SDF_1_2_2__root_limbs_torus__2_Cap;\n       
-          #line 148 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/*
-          UNITY: Original start of shader */\n            SdfResult SDF_1_0_0__root_combine_nose__3
-          (float3 p);\n            SdfResult SDF_1_0_1_0__root_combine_face_eye__3
-          (float3 p);\n            SdfResult SDF_1_0_1_1__root_combine_face_skull__3
-          (float3 p);\n            SdfResult SDF_1_0_1__root_combine_face__1 (float3
-          p);\n            SdfResult SDF_1_0__root_combine__1 (float3 p);\n           
-          SdfResult SDF_1_1__root_torso__3 (float3 p);\n            SdfResult SDF_1_2_0__root_limbs_uper_arm__3
-          (float3 p);\n            SdfResult SDF_1_2_1__root_limbs_torus__3 (float3
-          p);\n            SdfResult SDF_1_2_2__root_limbs_torus__3 (float3 p);\n           
-          SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0__root_combine_nose__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
-          SDF_1_0_0__root_combine_nose__1_SpaceTransform), SDF_1_0_0__root_combine_nose__2_Radius);\n               
-          result.id = int4(0, 0, 0, 5);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1_0__root_combine_face_eye__3(float3 p)
-          {\n                SdfResult result = (SdfResult) 0;\n                result.distance
-          = -sdf::primitives3D::sphere(sdf::operators::transform(p, SDF_1_0_1_0__root_combine_face_eye__1_SpaceTransform),
-          SDF_1_0_1_0__root_combine_face_eye__2_Radius);\n                result.id
-          = int4(0, 0, 0, 9);\n                return result;\n            }\n           
-          SdfResult SDF_1_0_1_1__root_combine_face_skull__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
-          SDF_1_0_1_1__root_combine_face_skull__1_SpaceTransform), SDF_1_0_1_1__root_combine_face_skull__2_Radius);\n               
-          result.id = int4(0, 0, 0, 12);\n                return result;\n           
-          }\n            SdfResult SDF_1_0_1__root_combine_face__1(float3 p) {\n               
-          SdfResult result = SDF_1_0_1_0__root_combine_face_eye__3(p);\n               
-          result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_combine_face_skull__3(p));\n               
-          return result;\n            }\n            SdfResult SDF_1_0__root_combine__1(float3
-          p) {\n                SdfResult result = SDF_1_0_0__root_combine_nose__3(p);\n               
-          result = sdf::operators::unionSimple(result, SDF_1_0_1__root_combine_face__1(p));\n               
-          return result;\n            }\n            SdfResult SDF_1_1__root_torso__3(float3
-          p) {\n                SdfResult result = (SdfResult) 0;\n               
-          result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p,
-          SDF_1_1__root_torso__1_SpaceTransform), SDF_1_1__root_torso__2_Radius);\n               
-          result.id = int4(0, 0, 0, 15);\n                return result;\n           
-          }\n            SdfResult SDF_1_2_0__root_limbs_uper_arm__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::cylinder_rounded(sdf::operators::transform(p,
-          SDF_1_2_0__root_limbs_uper_arm__1_SpaceTransform), SDF_1_2_0__root_limbs_uper_arm__2_Radius,
-          SDF_1_2_0__root_limbs_uper_arm__2_Rounding, SDF_1_2_0__root_limbs_uper_arm__2_Height);\n               
-          result.id = int4(0, 0, 0, 18);\n                return result;\n           
-          }\n            SdfResult SDF_1_2_1__root_limbs_torus__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::torus_capped(sdf::operators::transform(p,
-          SDF_1_2_1__root_limbs_torus__1_SpaceTransform), SDF_1_2_1__root_limbs_torus__2_MainRadius,
-          SDF_1_2_1__root_limbs_torus__2_RingRadius, SDF_1_2_1__root_limbs_torus__2_Cap);\n               
-          result.id = int4(0, 0, 0, 21);\n                return result;\n           
-          }\n            SdfResult SDF_1_2_2__root_limbs_torus__3(float3 p) {\n               
-          SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::torus_capped(sdf::operators::transform(p,
-          SDF_1_2_2__root_limbs_torus__1_SpaceTransform), SDF_1_2_2__root_limbs_torus__2_MainRadius,
-          SDF_1_2_2__root_limbs_torus__2_RingRadius, SDF_1_2_2__root_limbs_torus__2_Cap);\n               
-          result.id = int4(0, 0, 0, 24);\n                return result;\n           
-          }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult
-          result = SDF_1_0__root_combine__1(p);\n                result = sdf::operators::unionSmooth(result,
-          SDF_1_1__root_torso__3(p), SDF_1__root__1_BlendFactor);\n               
-          result = sdf::operators::unionSmooth(result, SDF_1_2_0__root_limbs_uper_arm__3(p),
-          SDF_1__root__1_BlendFactor);\n                result = sdf::operators::unionSmooth(result,
-          SDF_1_2_1__root_limbs_torus__3(p), SDF_1__root__1_BlendFactor);\n               
-          result = sdf::operators::unionSmooth(result, SDF_1_2_2__root_limbs_torus__3(p),
-          SDF_1__root__1_BlendFactor);\n                return result;\n           
-          }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n           
-          }\n            "
+        m_Code: "#define _DRAWMODE_MATERIAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_ALBEDO_KEYWORD_DECLARED 1\n#define _DRAWMODE_ID_KEYWORD_DECLARED 1\n#define _DRAWMODE_SKYBOX_KEYWORD_DECLARED 1\n#define _DRAWMODE_NORMAL_KEYWORD_DECLARED 1\n#define _DRAWMODE_STEPS_KEYWORD_DECLARED 1\n#define _DRAWMODE_DEPTH_KEYWORD_DECLARED 1\n#define _DRAWMODE_OCCLUSION_KEYWORD_DECLARED 1\n#define _SHOW_WORLD_GRID_KEYWORD_DECLARED 1\n#define _ZWRITE_ON_KEYWORD_DECLARED 1\n#define _ZWRITE_OFF_KEYWORD_DECLARED 1\n#line 148 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define UNITY_INSTANCED_RENDERER_BOUNDS\n#line 79\n\n        #pragma target 5.0\n        #include \"UnityCG.cginc\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl\"\n        #include \"Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl\"\n        #pragma vertex vertexShader\n        #pragma fragment fragmentShader\n        \n        float SDF_1__root__1_BlendFactor;\n        float SDF_1_0__root_combine__1_BlendFactor;\n        float4x4 SDF_1_0_0__root_combine_nose__1_SpaceTransform = {\n                { 1.0, 0.0, 0.0, -1.093 },\n                { 0.0, 1.0, 0.0, -0.045 },\n                { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_0__root_combine_nose__2_Radius;\n        float SDF_1_0_1__root_combine_face__1_BlendFactor;\n        float4x4 SDF_1_0_1_0__root_combine_face_eye__1_SpaceTransform = {\n                { 1.0, 0.0, 0.0, -0.758 },\n                { 0.0, 1.0, 0.0, -0.018 },\n                { 0.0, 0.0, 1.0, 0.561 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_0__root_combine_face_eye__2_Radius;\n        float4x4 SDF_1_0_1_1__root_combine_face_skull__1_SpaceTransform = {\n                { 1.0, 0.0, 0.0, -0.518 },\n                { 0.0, 1.0, 0.0, -0.014 },\n                { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_0_1_1__root_combine_face_skull__2_Radius;\n        float4x4 SDF_1_1__root_torso__1_SpaceTransform = {\n                { 1.0, 0.0, 0.0, 0.777 },\n                { 0.0, 1.0, 0.0, 0.403 },\n                { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_1__root_torso__2_Radius;\n        float4x4 SDF_1_2_0__root_limbs_uper_arm__1_SpaceTransform = {\n                { 1.0, 0.0, 0.0, 0.805 },\n                { 0.0, 1.0, 0.0, -0.852 },\n                { 0.0, 0.0, 1.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_2_0__root_limbs_uper_arm__2_Height;\n        float SDF_1_2_0__root_limbs_uper_arm__2_Radius;\n        float SDF_1_2_0__root_limbs_uper_arm__2_Rounding;\n        float4x4 SDF_1_2_1__root_limbs_torus__1_SpaceTransform = {\n                { -1.0, 0.0, 0.0, 1.0 },\n                { 0.0, 0.0, -1.0, 0.0 },\n                { 0.0, -1.0, 0.0, 0.0 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_2_1__root_limbs_torus__2_MainRadius;\n        float SDF_1_2_1__root_limbs_torus__2_RingRadius;\n        float SDF_1_2_1__root_limbs_torus__2_Cap;\n        float4x4 SDF_1_2_2__root_limbs_torus__1_SpaceTransform = {\n                { 1.0, 0.0, 0.0, 0.869001 },\n                { 0.0, 0.0, -1.0, -0.000001 },\n                { 0.0, 1.0, 0.0, 2.316 },\n                { 0.0, 0.0, 0.0, 1.0 }\n        };\n        float SDF_1_2_2__root_limbs_torus__2_MainRadius;\n        float SDF_1_2_2__root_limbs_torus__2_RingRadius;\n        float SDF_1_2_2__root_limbs_torus__2_Cap;\n        #line 148 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/* UNITY: Original start of shader */\n            SdfResult SDF_1_0_0__root_combine_nose__3 (float3 p);\n            SdfResult SDF_1_0_1_0__root_combine_face_eye__3 (float3 p);\n            SdfResult SDF_1_0_1_1__root_combine_face_skull__3 (float3 p);\n            SdfResult SDF_1_0_1__root_combine_face__1 (float3 p);\n            SdfResult SDF_1_0__root_combine__1 (float3 p);\n            SdfResult SDF_1_1__root_torso__3 (float3 p);\n            SdfResult SDF_1_2_0__root_limbs_uper_arm__3 (float3 p);\n            SdfResult SDF_1_2_1__root_limbs_torus__3 (float3 p);\n            SdfResult SDF_1_2_2__root_limbs_torus__3 (float3 p);\n            SdfResult SDF_1__root__1 (float3 p);\n            SdfResult SDF_1_0_0__root_combine_nose__3(float3 p) {\n                SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p, SDF_1_0_0__root_combine_nose__1_SpaceTransform), SDF_1_0_0__root_combine_nose__2_Radius);\n                result.id = int4(0, 0, 0, 5);\n                return result;\n            }\n            SdfResult SDF_1_0_1_0__root_combine_face_eye__3(float3 p) {\n                SdfResult result = (SdfResult) 0;\n                result.distance = -sdf::primitives3D::sphere(sdf::operators::transform(p, SDF_1_0_1_0__root_combine_face_eye__1_SpaceTransform), SDF_1_0_1_0__root_combine_face_eye__2_Radius);\n                result.id = int4(0, 0, 0, 9);\n                return result;\n            }\n            SdfResult SDF_1_0_1_1__root_combine_face_skull__3(float3 p) {\n                SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p, SDF_1_0_1_1__root_combine_face_skull__1_SpaceTransform), SDF_1_0_1_1__root_combine_face_skull__2_Radius);\n                result.id = int4(0, 0, 0, 12);\n                return result;\n            }\n            SdfResult SDF_1_0_1__root_combine_face__1(float3 p) {\n                SdfResult result = SDF_1_0_1_0__root_combine_face_eye__3(p);\n                result = sdf::operators::intersectSimple(result, SDF_1_0_1_1__root_combine_face_skull__3(p));\n                return result;\n            }\n            SdfResult SDF_1_0__root_combine__1(float3 p) {\n                SdfResult result = SDF_1_0_0__root_combine_nose__3(p);\n                result = sdf::operators::unionSimple(result, SDF_1_0_1__root_combine_face__1(p));\n                return result;\n            }\n            SdfResult SDF_1_1__root_torso__3(float3 p) {\n                SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::sphere(sdf::operators::transform(p, SDF_1_1__root_torso__1_SpaceTransform), SDF_1_1__root_torso__2_Radius);\n                result.id = int4(0, 0, 0, 15);\n                return result;\n            }\n            SdfResult SDF_1_2_0__root_limbs_uper_arm__3(float3 p) {\n                SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::cylinder_rounded(sdf::operators::transform(p, SDF_1_2_0__root_limbs_uper_arm__1_SpaceTransform), SDF_1_2_0__root_limbs_uper_arm__2_Radius, SDF_1_2_0__root_limbs_uper_arm__2_Rounding, SDF_1_2_0__root_limbs_uper_arm__2_Height);\n                result.id = int4(0, 0, 0, 18);\n                return result;\n            }\n            SdfResult SDF_1_2_1__root_limbs_torus__3(float3 p) {\n                SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::torus_capped(sdf::operators::transform(p, SDF_1_2_1__root_limbs_torus__1_SpaceTransform), SDF_1_2_1__root_limbs_torus__2_MainRadius, SDF_1_2_1__root_limbs_torus__2_RingRadius, SDF_1_2_1__root_limbs_torus__2_Cap);\n                result.id = int4(0, 0, 0, 21);\n                return result;\n            }\n            SdfResult SDF_1_2_2__root_limbs_torus__3(float3 p) {\n                SdfResult result = (SdfResult) 0;\n                result.distance = sdf::primitives3D::torus_capped(sdf::operators::transform(p, SDF_1_2_2__root_limbs_torus__1_SpaceTransform), SDF_1_2_2__root_limbs_torus__2_MainRadius, SDF_1_2_2__root_limbs_torus__2_RingRadius, SDF_1_2_2__root_limbs_torus__2_Cap);\n                result.id = int4(0, 0, 0, 24);\n                return result;\n            }\n            SdfResult SDF_1__root__1(float3 p) {\n                SdfResult result = SDF_1_0__root_combine__1(p);\n                result = sdf::operators::unionSmooth(result, SDF_1_1__root_torso__3(p), SDF_1__root__1_BlendFactor);\n                result = sdf::operators::unionSmooth(result, SDF_1_2_0__root_limbs_uper_arm__3(p), SDF_1__root__1_BlendFactor);\n                result = sdf::operators::unionSmooth(result, SDF_1_2_1__root_limbs_torus__3(p), SDF_1__root__1_BlendFactor);\n                result = sdf::operators::unionSmooth(result, SDF_1_2_2__root_limbs_torus__3(p), SDF_1__root__1_BlendFactor);\n                return result;\n            }\n            SdfResult sdfScene(float3 p) {\n                return SDF_1__root__1(p);\n            }\n            "
         m_AssetPath: Assets/Prefabs
         m_AssetName: repro WOMP scene.prefab
         m_PlatformMask: 4294967295
@@ -2305,8 +2180,9 @@ Shader:
           Hash: 5be459b459665c8f2487ce6f3c8c9461
         m_FromOther: 0
         m_ForceSyncCompilation: 0
-        m_UseDxcAPIs: 0
-        m_NeverUseDxcAPIs: 0
+        m_PerAPICompilerToolchain: 0000000000000000000000000000000000000000000000000000000000y
+        m_UsedShaderApiDefinesMask: 0
+        m_ShaderCompilationFlags: 0
         m_Language: 3
         m_VariantsUserGlobal0: []
         m_VariantsUserGlobal1: []
@@ -2354,6 +2230,13 @@ Shader:
         m_VariantsBuiltin5: []
         m_VariantsBuiltin6: []
         m_DynamicBranchKeywords: []
+        m_PrunedKeywords0: []
+        m_PrunedKeywords1: []
+        m_PrunedKeywords2: []
+        m_PrunedKeywords3: []
+        m_PrunedKeywords4: []
+        m_PrunedKeywords5: []
+        m_PrunedKeywords6: []
         m_BaseRequirements: 1101803
         m_KeywordTargetInfo:
         - keywordName: SHADOWS_SOFT
@@ -2381,3 +2264,4 @@ Shader:
     m_HasFixedFunctionShaders: 0
   m_CompileSmokeTestAfterImport: 1
   m_AssetGUID: 00000000000000000000000000000000
+  m_AssetLocalIdentifierInFile: 0
