@@ -1,0 +1,30 @@
+# Normalize line endings to LF in the repository.
+* text=auto
+
+# Unity serializes these as YAML text. `*.asset` is left to auto-detection:
+# some (e.g. LightingData.asset) are binary and must never be normalized.
+*.unity          text
+*.prefab         text
+*.mat            text
+*.meta           text
+*.asmdef         text
+*.shadergraph    text
+*.shadersubgraph text
+
+# Source that should always be treated as text.
+*.cs             text diff=csharp
+*.hlsl           text
+*.shader         text
+*.uxml           text
+*.uss            text
+
+# Binary formats.
+*.png            binary
+*.jpg            binary
+*.jpeg           binary
+*.hdr            binary
+*.exr            binary
+*.ora            binary
+*.psd            binary
+*.fbx            binary
+*.dll            binary
