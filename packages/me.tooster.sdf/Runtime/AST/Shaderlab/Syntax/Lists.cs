@@ -12,12 +12,13 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     /// ( SYNTAX TOKEN SYNTAX TOKEN )
     [SyntaxNode] public partial record ArgumentList<TSyntax> : Syntax<shaderlab>, IArgumentList where TSyntax : Syntax<shaderlab> {
         public ArgumentList(params TSyntax[] elements) => arguments = elements.CommaSeparated();
-        public SeparatedList<shaderlab, TSyntax> arguments      { get; init; } = new();
-        public OpenParenToken                    openParenToken { get; init; } = new();
+
+        // Declaration order is syntax order: the source generator emits children in this order.
+        public OpenParenToken                    openParenToken  { get; init; } = new();
+        public SeparatedList<shaderlab, TSyntax> arguments       { get; init; } = new();
+        public CloseParenToken                   closeParenToken { get; init; } = new();
 
         ISeparatedList IArgumentList.arguments => arguments;
-
-        public CloseParenToken closeParenToken { get; init; } = new();
 
         public static implicit operator ArgumentList<TSyntax>(TSyntax[] arguments)
             => new() { arguments = SeparatedList<shaderlab, TSyntax>.WithSeparator<CommaToken>(arguments) };

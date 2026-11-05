@@ -11,12 +11,12 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
     /// ( T , ... , T )
     [SyntaxNode] public partial record ArgumentList<T> : Syntax<hlsl>, IArgumentList where T : Syntax<hlsl> {
-        public SeparatedList<hlsl, T> arguments      { get; init; } = new();
-        public OpenParenToken         openParenToken { get; init; } = new();
+        // Declaration order is syntax order: the source generator emits children in this order.
+        public OpenParenToken         openParenToken  { get; init; } = new();
+        public SeparatedList<hlsl, T> arguments       { get; init; } = new();
+        public CloseParenToken        closeParenToken { get; init; } = new();
 
         ISeparatedList IArgumentList.arguments => arguments;
-
-        public CloseParenToken closeParenToken { get; init; } = new();
 
         public static implicit operator ArgumentList<T>(T[] args) => new() { arguments = args.CommaSeparated() };
         public static implicit operator ArgumentList<T>(T singleton) => new() { arguments = singleton.CommaSeparated() };
@@ -36,12 +36,12 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
     /// { T , ... , T }
     [SyntaxNode] public partial record BracedList<T> : Syntax<hlsl>, IBracedList where T : Syntax<hlsl> {
-        public SeparatedList<hlsl, T> arguments      { get; init; } = new();
-        public OpenBraceToken         openBraceToken { get; init; } = new();
+        // Declaration order is syntax order: the source generator emits children in this order.
+        public OpenBraceToken         openBraceToken  { get; init; } = new();
+        public SeparatedList<hlsl, T> arguments       { get; init; } = new();
+        public CloseBraceToken        closeBraceToken { get; init; } = new();
 
         ISeparatedList IBracedList.arguments => arguments;
-
-        public CloseBraceToken closeBraceToken { get; init; } = new();
 
         public static implicit operator BracedList<T>(SyntaxOrToken<hlsl>[] args) => new() { arguments = new SeparatedList<hlsl, T>(args) };
         public static implicit operator BracedList<T>(T[] args) => new() { arguments = args.CommaSeparated() };
