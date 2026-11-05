@@ -21,7 +21,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
     [DisallowMultipleComponent]
     [SelectionBase]
     [ExecuteAlways] /* using ExecuteInEditMode has documented problems in prefab edit scene */
-    [Icon("Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-scene-914.png")]
+    [Icon(SdfPaths.Icons.SdfScene)]
     public class SdfScene : MonoBehaviour { // TODO: inherit from Component to disallow enabling/disabling
 
         public Material? controlledMaterial; // similarity: https://docs.unity3d.com/ScriptReference/HideFlags.html

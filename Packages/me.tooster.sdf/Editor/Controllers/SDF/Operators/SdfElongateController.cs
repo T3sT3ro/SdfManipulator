@@ -6,6 +6,7 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
 using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
@@ -47,13 +48,13 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
             processor.HandleRequirement(
                 new IncludeRequirement(
                     this,
-                    "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"
+                    SdfPaths.ShaderLibrary.Operators
                 )
             );
             processor.HandleRequirement(
                 new IncludeRequirement(
                     this,
-                    "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"
+                    SdfPaths.ShaderLibrary.Util
                 )
             );
 

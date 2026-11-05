@@ -9,6 +9,7 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Util.Controllers;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
 using static me.tooster.sdf.Editor.Controllers.SDF.SdfCombineController.CombinationOperation;
@@ -96,7 +97,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             if (children.Length == 0)
                 throw new ArgumentException("SdfCombineController must have at least one child");
 
-            processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
+            processor.HandleRequirement(new IncludeRequirement(this, SdfPaths.ShaderLibrary.Operators));
 
             var combinatorFunction = Operation switch
             {

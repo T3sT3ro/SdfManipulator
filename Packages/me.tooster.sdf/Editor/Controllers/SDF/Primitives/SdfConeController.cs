@@ -5,6 +5,7 @@ using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Editor.Util.Controllers;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
@@ -72,7 +73,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Primitives {
         }
 
         public override ScalarData Apply(VectorData input, Processor processor) {
-            processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"));
+            processor.HandleRequirement(new IncludeRequirement(this, SdfPaths.ShaderLibrary.Primitives));
 
             var transformedOrigin = transformOrigin(input);
             return new ScalarData

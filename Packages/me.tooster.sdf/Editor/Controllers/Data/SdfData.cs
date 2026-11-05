@@ -2,6 +2,7 @@ using me.tooster.sdf.AST;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
+using me.tooster.sdf.Util;
 using Type = me.tooster.sdf.AST.Hlsl.Syntax.Type;
 
 namespace me.tooster.sdf.Editor.Controllers.Data {
@@ -42,6 +43,6 @@ namespace me.tooster.sdf.Editor.Controllers.Data {
         /// <returns>Expresion for evaluation this sdf</returns>
         public Expression<hlsl> evaluationExpression { get; init; }
         public static IncludeRequirement includeRaymarchingRequirement(IModifier originator)
-            => new(originator, "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl");
+            => new(originator, SdfPaths.ShaderLibrary.Raymarching);
     }
 }

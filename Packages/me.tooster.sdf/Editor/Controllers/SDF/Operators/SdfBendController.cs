@@ -1,5 +1,6 @@
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.Editor.Controllers.Data;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
 using static me.tooster.sdf.AST.Hlsl.Extensions;
@@ -30,7 +31,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
         }
 
         public VectorData Apply(VectorData input, Processor processor) {
-            processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
+            processor.HandleRequirement(new IncludeRequirement(this, SdfPaths.ShaderLibrary.Operators));
 
             return new VectorData
             {

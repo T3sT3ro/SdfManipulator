@@ -1,5 +1,6 @@
 using System;
 using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Util;
 namespace me.tooster.sdf.Editor.Controllers.Generators {
     /// <summary>
     ///     An implementation of a shader preset for the built-in generator
@@ -14,16 +15,16 @@ namespace me.tooster.sdf.Editor.Controllers.Generators {
         public string[] defines = { };
         public string[] includes =
         {
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl",
-            // "Packages/me.tooster.sdf/Editor/Resources/Includes/builtInForwardBase.hlsl",
-            "Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl",
+            SdfPaths.ShaderLibrary.Raymarching,
+            SdfPaths.ShaderLibrary.Util,
+            SdfPaths.ShaderLibrary.Operators,
+            SdfPaths.ShaderLibrary.Matrix,
+            SdfPaths.ShaderLibrary.Primitives,
+            // SdfPaths.ShaderLibrary.BuiltInForwardBase,
+            SdfPaths.ShaderLibrary.DebugBaseShading,
         };
 
-        // "Packages/me.tooster.sdf/Editor/Resources/Includes/builtInForwardBase.hlsl",
+        // SdfPaths.ShaderLibrary.BuiltInForwardBase,
 
         protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene)
             => new BuiltInGenerator(scene, pragmas, defines, includes);

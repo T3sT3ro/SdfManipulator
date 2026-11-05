@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using me.tooster.sdf.Editor.Controllers.Generators;
 using me.tooster.sdf.Editor.Controllers.SDF;
+using me.tooster.sdf.Util;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using UnityEditor.SceneManagement;
@@ -155,7 +156,7 @@ namespace me.tooster.sdf.Editor.Controllers.Editors {
         // based on ShaderGraph's `CreateShaderGraph`
         class CreateSceneAction : AssetCreationEndAction {
             static void createSdfSceneAsset(string path) {
-                AssetDatabase.CopyAsset("Packages/me.tooster.sdf/Editor/Resources/Prefabs/Hello SDF.prefab", path);
+                AssetDatabase.CopyAsset(SdfPaths.Templates.HelloSdfPrefab, path);
             }
 
             public override void Action(EntityId entityId, string pathName, string resourceFile) {

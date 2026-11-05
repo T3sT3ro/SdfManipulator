@@ -66,7 +66,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
                 transform.hasChanged = false;
         }
 
-        void OnDrawGizmos() => Gizmos.DrawIcon(transform.position, "Packages/me.tooster.sdf/Editor/Resources/Icons/sdf-icon-256.png", true);
+        void OnDrawGizmos() => Gizmos.DrawIcon(transform.position, SdfPaths.Icons.Sdf, true);
 
         protected override void OnValidate() {
             base.OnValidate();
@@ -88,7 +88,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
 
         public VectorData Apply(VectorData input, Processor processor) {
-            processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
+            processor.HandleRequirement(new IncludeRequirement(this, SdfPaths.ShaderLibrary.Operators));
 
             return input with
             {
