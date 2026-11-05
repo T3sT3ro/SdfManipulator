@@ -8,6 +8,7 @@ using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.Editor.Controllers.Data;
 using Unity.Properties;
 using UnityEngine;
+
 namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
     /*
      * https://iquilezles.org/articles/distfunctions/
@@ -18,15 +19,18 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
      */
     [GeneratePropertyBag]
     public partial class SdfElongateController : SdfPrimitiveController {
-        [SerializeField] [DontCreateProperty] Vector3 length;
+        [SerializeField] [DontCreateProperty]
+        Vector3 length;
 
-        [CreateProperty] [ShaderProperty(Description = "Elongation")]
+        [CreateProperty]
+        [ShaderProperty(Description = "Elongation")]
         public Vector3 Length {
             get => length;
             set => SetField(ref length, value, false);
         }
 
         const string qDataName = "q";
+
         static VectorData qData = new()
             { scalarType = Constants.ScalarKind.@float, arity = 3, evaluationExpression = (Identifier)qDataName };
 
@@ -35,14 +39,16 @@ namespace me.tooster.sdf.Editor.Controllers.SDF.Operators {
         protected override void OnValidate() {
             base.OnValidate();
             if (sdfPrimitive == null || sdfPrimitive is not SdfPrimitiveController)
-                Debug.LogError("sdf elongate requires an sdf controller as a target!");
+                Debug.LogError("sdf elongate requires an sdf controller as a target!", this);
 
             // TODO: support elongating combinations i.e. SdfData returning functions as well
         }
 
         public override ScalarData Apply(VectorData input, Processor processor) {
-            processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
-            processor.HandleRequirement(new IncludeRequirement(this, "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"));
+            processor.HandleRequirement(new IncludeRequirement(this,
+                "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"));
+            processor.HandleRequirement(new IncludeRequirement(this,
+                "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"));
 
             var elongatedFunctionDefinition = createSdfPrimitiveFunction(
                 SdfScene.sceneData.controllers[this].identifier,
