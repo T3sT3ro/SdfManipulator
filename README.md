@@ -18,7 +18,7 @@ This is a monorepo for the SDF manipulator (work title) Unity Package. It implem
 | Path | Contents |
 |---|---|
 | [`packages/me.tooster.sdf/`](packages/me.tooster.sdf) | The Unity package: SDF primitives and operators, their visual controllers, shader generators, a collection of HLSL functions for raymarching shaders, and an HLSL/ShaderLab syntax tree API for assembling shader code. |
-| [`projects/SdfManipulator/`](projects/SdfManipulator) | Unity project for developing and demoing the package; it references the package as a local package. `Assets/Prefabs/` holds the main test scenes, and other scenes show instantiated SDF scenes. It still contains some unused or experimental assets to be organized later. |
+| [`projects/SdfManipulator/`](projects/SdfManipulator) | Unity project for developing and demoing the package; it references the package as a local package. `Assets/Examples/` holds self-contained SDF scenes (one folder per prefab with its generated shader and material) that should always work; `Assets/Sandbox/` holds experiments, test assets and playground scenes that may break; `Assets/DevTools/` holds editor tooling such as batchmode checks. |
 | [`tools/SyntaxGenerators/`](tools/SyntaxGenerators) | Roslyn source generators behind the syntax tree API, independent of Unity. The API is modeled after Roslyn's Syntax API and builds and transforms ShaderLab and HLSL syntax trees, which is safer than string concatenation. Not optimized yet and in need of refactoring (don't judge me on the code quality now, :P), but it covers a big part of both languages. |
 | [`docs/`](docs) | Design notes, diagrams and RenderDoc capture settings. |
 
