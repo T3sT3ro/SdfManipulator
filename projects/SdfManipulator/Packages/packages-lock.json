@@ -223,9 +223,9 @@
       "url": "https://packages.unity.com"
     },
     "me.tooster.sdf": {
-      "version": "file:me.tooster.sdf",
+      "version": "file:../../../packages/me.tooster.sdf",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {}
     },
     "com.unity.modules.accessibility": {

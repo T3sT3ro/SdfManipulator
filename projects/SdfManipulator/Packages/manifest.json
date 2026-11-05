@@ -14,6 +14,7 @@
     "com.unity.toolchain.linux-x86_64-linux": "1.1.1",
     "com.unity.ugui": "2.6.0",
     "com.unity.visualscripting": "1.9.12",
+    "me.tooster.sdf": "file:../../../packages/me.tooster.sdf",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
@@ -50,5 +51,8 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "testables": [
+    "me.tooster.sdf"
+  ]
 }
