@@ -50,7 +50,7 @@ ExportedObj/
 *.tmp
 
 # Hand-written .NET tooling projects are source, not generated
-!**/SyntaxGenerators~/**/*.csproj
+!/tools/**/*.csproj
 
 # --- Local scratch ----------------------------------------------------------
 /download/
