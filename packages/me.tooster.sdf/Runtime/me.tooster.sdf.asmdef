@@ -1,6 +1,6 @@
 {
-  "name": "me.tooster.sdf.Editor.Controllers",
-  "rootNamespace": "me.tooster.sdf.Editor.Controllers",
+  "name": "me.tooster.sdf",
+  "rootNamespace": "me.tooster.sdf",
   "references": [
     "GUID:02ab15579b13e2b7c9ac136bbf96633c",
     "GUID:1d773a5b1f524c7f89714bef6e9aea3e",

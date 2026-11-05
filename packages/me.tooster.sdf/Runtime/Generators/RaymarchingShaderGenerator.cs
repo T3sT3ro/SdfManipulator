@@ -1,11 +1,13 @@
 using System;
 using me.tooster.sdf.Editor.Controllers.SDF;
 using me.tooster.sdf.Util;
+using UnityEngine.Scripting.APIUpdating;
 namespace me.tooster.sdf.Editor.Controllers.Generators {
     /// <summary>
     ///     An implementation of a shader preset for the built-in generator
     /// </summary>
     [Serializable]
+    [MovedFrom(true, sourceAssembly: "me.tooster.sdf.Editor.Controllers")]
     public class BIRPShaderPreset : ShaderPreset {
         public string[] pragmas =
         {
