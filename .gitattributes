@@ -28,3 +28,6 @@
 *.psd            binary
 *.fbx            binary
 *.dll            binary
+
+# Synced copy of projects/SdfManipulator/Assets/Examples (tools/sync-samples.sh); collapse it in diffs.
+packages/me.tooster.sdf/Samples~/** linguist-generated=true

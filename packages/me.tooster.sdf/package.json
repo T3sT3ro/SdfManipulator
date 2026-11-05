@@ -25,5 +25,12 @@
     "type": "git",
     "url": "https://github.com/T3sT3ro/SdfManipulator.git",
     "directory": "packages/me.tooster.sdf"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Examples",
+      "description": "Example SDF scenes (Hello SDF, primitives, CSG box, bunny, rhino-rat) and a Showcase scene with all of them under an HDRI sky. Built-in Render Pipeline.",
+      "path": "Samples~/Examples"
+    }
+  ]
 }
