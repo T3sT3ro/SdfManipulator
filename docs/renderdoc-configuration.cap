@@ -2,7 +2,7 @@
     "rdocCaptureSettings": 1,
     "settings": {
         "autoStart": false,
-        "commandLine": "-force-vulkan -force-gfx-mt -projectPath \"/home/tooster/workspace/ttr/SdfManipulator\"",
+        "commandLine": "-force-vulkan -force-gfx-mt -projectPath \"/home/tooster/workspace/ttr/SdfManipulator/projects/SdfManipulator\"",
         "environment": [
         ],
         "executable": "/home/tooster/Applications/Unity/Editor/6000.6.8f1/Editor/Unity",

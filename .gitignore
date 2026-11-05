@@ -1,19 +1,19 @@
-# --- Unity project (still at the repo root) ----------------------------------
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
-/[Mm]emoryCaptures/
-/[Rr]ecordings/
-/UIElementsSchema/
+# --- Unity projects (projects/<name>/) ---------------------------------------
+/projects/*/[Ll]ibrary/
+/projects/*/[Tt]emp/
+/projects/*/[Oo]bj/
+/projects/*/[Bb]uild/
+/projects/*/[Bb]uilds/
+/projects/*/[Ll]ogs/
+/projects/*/[Uu]ser[Ss]ettings/
+/projects/*/[Mm]emoryCaptures/
+/projects/*/[Rr]ecordings/
+/projects/*/UIElementsSchema/
 
-/[Aa]ssets/Plugins/Editor/JetBrains*
-/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
+/projects/*/[Aa]ssets/Plugins/Editor/JetBrains*
+/projects/*/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/projects/*/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/projects/*/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 *.pidb.meta
 *.pdb.meta
@@ -50,7 +50,7 @@ ExportedObj/
 *.tmp
 
 # Hand-written .NET tooling projects are source, not generated
-!/Packages/me.tooster.sdf/SyntaxGenerators~/**/*.csproj
+!**/SyntaxGenerators~/**/*.csproj
 
 # --- Local scratch ----------------------------------------------------------
 /download/
