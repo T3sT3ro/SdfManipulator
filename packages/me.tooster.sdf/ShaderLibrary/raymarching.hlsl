@@ -8,12 +8,12 @@
 #include "UnityCG.cginc"
 #include "UnityPBSLighting.cginc"
 
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/camera.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/colors.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/debug.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
-#include "Packages/me.tooster.sdf/Editor/Resources/Includes/types.hlsl"
+#include "camera.hlsl"
+#include "colors.hlsl"
+#include "debug.hlsl"
+#include "noise.hlsl"
+#include "types.hlsl"
+#include "types.hlsl"
 
 /// data passed from vertex to fragment shader
 struct v2f {

@@ -13,7 +13,7 @@ namespace me.tooster.sdf.Util {
 
         /// <summary>HLSL include files used by generated shaders.</summary>
         public static class ShaderLibrary {
-            public const string Root               = PackageRoot + "/Editor/Resources/Includes";
+            public const string Root               = PackageRoot + "/ShaderLibrary";
             public const string BuiltInForwardBase = Root + "/builtInForwardBase.hlsl";
             public const string DebugBaseShading   = Root + "/debugBaseShading.hlsl";
             public const string Matrix             = Root + "/matrix.hlsl";
@@ -24,13 +24,13 @@ namespace me.tooster.sdf.Util {
         }
 
         public static class Icons {
-            public const string Root     = PackageRoot + "/Editor/Resources/Icons";
+            public const string Root     = PackageRoot + "/Editor/Icons";
             public const string Sdf      = Root + "/sdf-icon-256.png";
             public const string SdfScene = Root + "/sdf-scene-914.png";
         }
 
         public static class Templates {
-            public const string HelloSdfPrefab = PackageRoot + "/Editor/Resources/Prefabs/Hello SDF.prefab";
+            public const string HelloSdfPrefab = PackageRoot + "/Editor/Templates/Hello SDF.prefab";
         }
     }
 }

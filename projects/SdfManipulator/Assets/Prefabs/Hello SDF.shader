@@ -79,12 +79,12 @@ Shader "Hello SDF (generated)"
         HLSLINCLUDE
         #pragma target 5.0
         #include "UnityCG.cginc"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/debugBaseShading.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/raymarching.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/util.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/operators.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/matrix.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/primitives.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/debugBaseShading.hlsl"
         #pragma vertex vertexShader
         #pragma fragment fragmentShader
 

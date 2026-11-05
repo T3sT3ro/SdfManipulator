@@ -77,14 +77,14 @@ Shader "SDF/Uber shader"
         float _RAY_ORIGIN_BIAS;
         float _MAX_STEPS;
 
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/raymarching.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/util.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/matrix.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/primitives.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/operators.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/noise.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/textureMapping.hlsl"
-        #include "Packages/me.tooster.sdf/Editor/Resources/Includes/debug.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/raymarching.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/util.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/matrix.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/primitives.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/operators.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/noise.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/textureMapping.hlsl"
+        #include "Packages/me.tooster.sdf/ShaderLibrary/debug.hlsl"
 
         // NON-PROPERTY UNIFORMS
         uniform float4x4 _main_object_transform = MATRIX_ID;

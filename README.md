@@ -104,7 +104,7 @@ are untested.
   Essentially a stateful factory for final shader generators. Think of it as a "cooking school" for creating chefs.
 - "Shader generators" - for now just a `BuiltInGenerator` which can generate specialized shader for built-in, forward
   render pipeline.
-- hlsl include files in `Editor/Resources/Includes` (probably should be moved to Runtime?) store easy to edit hlsl parts
+- hlsl include files in `ShaderLibrary/` store easy to edit hlsl parts
   that can be used by controllers
     - `operators.hlsl` defines common SDF operators, for example `union` or `intersection`
     - `primitives.hlsl` defines a bunch of SDF primitive functions like `torus` or `sphere`
