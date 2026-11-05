@@ -1,9 +1,13 @@
 {
   "name": "me.tooster.sdf",
-  "version": "0.0.1",
-  "displayName": "SDF",
-  "description": "Easily create Signed Distance Field based shaders in unity",
-  "unity": "2022.1",
+  "version": "0.1.0",
+  "displayName": "SDF Manipulator",
+  "description": "Compose Signed Distance Field scenes from components and gizmos in the editor, and generate raymarching shaders for them.",
+  "unity": "6000.6",
+  "license": "Apache-2.0",
+  "documentationUrl": "https://github.com/T3sT3ro/SdfManipulator/blob/master/packages/me.tooster.sdf/Documentation~/index.md",
+  "changelogUrl": "https://github.com/T3sT3ro/SdfManipulator/blob/master/packages/me.tooster.sdf/CHANGELOG.md",
+  "licensesUrl": "https://github.com/T3sT3ro/SdfManipulator/blob/master/packages/me.tooster.sdf/LICENSE.md",
   "dependencies": {
   },
   "hideInEditor": false,
@@ -15,7 +19,11 @@
   ],
   "author": {
     "name": "Tooster",
-    "email": "",
     "url": "https://github.com/T3sT3ro/SdfManipulator"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/T3sT3ro/SdfManipulator.git",
+    "directory": "packages/me.tooster.sdf"
   }
 }
