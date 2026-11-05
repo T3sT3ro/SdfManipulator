@@ -51,6 +51,7 @@ ExportedObj/
 
 # Hand-written .NET tooling projects are source, not generated
 !/tools/**/*.csproj
+!/tools/**/*.sln
 
 # --- Local scratch ----------------------------------------------------------
 /download/

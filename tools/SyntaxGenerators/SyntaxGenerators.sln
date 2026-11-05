@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxGenerators", "SyntaxGenerators\SyntaxGenerators.csproj", "{1E76960D-F812-46BC-B1A8-3CE2E79C4D73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneratorTest", "GeneratorTest\GeneratorTest.csproj", "{E0BF7216-F99F-45F9-9794-27746B6708D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E76960D-F812-46BC-B1A8-3CE2E79C4D73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E76960D-F812-46BC-B1A8-3CE2E79C4D73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E76960D-F812-46BC-B1A8-3CE2E79C4D73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E76960D-F812-46BC-B1A8-3CE2E79C4D73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0BF7216-F99F-45F9-9794-27746B6708D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0BF7216-F99F-45F9-9794-27746B6708D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0BF7216-F99F-45F9-9794-27746B6708D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0BF7216-F99F-45F9-9794-27746B6708D2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -16,4 +16,15 @@
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" />
     </ItemGroup>
 
+    <!-- Release builds refresh the analyzer DLL shipped in the Unity package (its .meta keeps the
+         RoslynAnalyzer label). Override UnityPackageAstDir to build somewhere else. -->
+    <PropertyGroup>
+        <UnityPackageAstDir Condition="'$(UnityPackageAstDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\packages\me.tooster.sdf\Runtime\AST\</UnityPackageAstDir>
+    </PropertyGroup>
+
+    <Target Name="CopyGeneratorToUnityPackage" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(UnityPackageAstDir)" />
+        <Message Importance="high" Text="Copied $(TargetFileName) to $(UnityPackageAstDir)" />
+    </Target>
+
 </Project>
