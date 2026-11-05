@@ -40,5 +40,4 @@ https://github.com/T3sT3ro/SdfManipulator.git?path=/packages/me.tooster.sdf
   tested against `2022.3.32f1`, see `archive/POC-2022.3.32f1` tag.
 - Generated shaders target the Built-in Render Pipeline (forward rendering).
 
-See the [repository README](https://github.com/T3sT3ro/SdfManipulator#readme) for usage, concepts and known
-limitations.
+See the [documentation](Documentation~/index.md) for samples, usage, concepts and known limitations.
