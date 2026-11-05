@@ -21,6 +21,13 @@ namespace SdfManipulator.DevTools {
 
         [MenuItem("Tools/SDF Dev/Check Shader Errors")]
         public static void Run() {
+            var ok = Check();
+            if (Application.isBatchMode)
+                EditorApplication.Exit(ok ? 0 : 1);
+        }
+
+        /// <returns>true when no checked shader has compile errors</returns>
+        public static bool Check() {
             var paths = AssetDatabase.FindAssets("t:Shader", new[] { "Assets", "Packages/me.tooster.sdf" })
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Where(path => !path.StartsWith(SandboxFolder))
@@ -42,8 +49,7 @@ namespace SdfManipulator.DevTools {
             }
 
             Debug.Log($"[ShaderErrorsCheck] checked {shaders} shader(s) in {paths.Count} asset(s), {failed} with errors");
-            if (Application.isBatchMode)
-                EditorApplication.Exit(failed == 0 ? 0 : 1);
+            return failed == 0;
         }
 
         static IEnumerable<string> Errors(Shader shader) {

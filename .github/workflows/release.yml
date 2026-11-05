@@ -1,0 +1,56 @@
+name: Release
+
+# Push a tag `vX.Y.Z` on master after setting package.json's version to X.Y.Z and dating its CHANGELOG entry.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check version and changelog
+        id: version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          package_version="$(jq -r .version packages/me.tooster.sdf/package.json)"
+          if [[ "$version" != "$package_version" ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match package.json version $package_version"
+            exit 1
+          fi
+          if ! grep -Eq "^## \[$version\] - [0-9]{4}-[0-9]{2}-[0-9]{2}$" packages/me.tooster.sdf/CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no dated entry '## [$version] - YYYY-MM-DD'"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check the package sample is in sync
+        run: tools/sync-samples.sh --check
+
+      - name: Pack the package
+        run: npm pack ./packages/me.tooster.sdf --pack-destination "$RUNNER_TEMP"
+
+      # A branch with the package at its root, for `https://github.com/T3sT3ro/SdfManipulator.git#upm/vX.Y.Z` installs.
+      - name: Publish the upm branch
+        run: |
+          git subtree split --prefix=packages/me.tooster.sdf -b upm
+          git push origin upm
+          git tag "upm/$GITHUB_REF_NAME" upm
+          git push origin "upm/$GITHUB_REF_NAME"
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          awk -v v="$VERSION" 'index($0, "## [" v "]") == 1 { p = 1; next } p && /^## \[/ { exit } p' \
+            packages/me.tooster.sdf/CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP"/me.tooster.sdf-*.tgz \
+            --title "$GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/notes.md"

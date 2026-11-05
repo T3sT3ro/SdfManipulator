@@ -8,6 +8,7 @@ This is a monorepo for the SDF manipulator (work title) Unity Package. It implem
 - [Gallery](#gallery)
 - [Installing the package](#installing-the-package)
 - [Development](#development)
+- [Releasing](#releasing)
 - [Documentation](#documentation)
 - [Notes for contributors](#notes-for-contributors)
 
@@ -71,6 +72,21 @@ are untested. The package ships an **Examples** sample; see the [documentation](
    # the package sample matches Assets/Examples
    tools/sync-samples.sh --check
    ```
+
+## Releasing
+
+CI (`.github/workflows/ci.yml`) checks the package sample and the generators on every push and PR. Its Unity job needs
+the `UNITY_LICENSE`, `UNITY_EMAIL` and `UNITY_PASSWORD` repository secrets ([GameCI activation](https://game.ci/docs/github/activation)).
+
+1. Set `version` in `packages/me.tooster.sdf/package.json` and date its entry in the package's `CHANGELOG.md`
+   (`## [X.Y.Z] - YYYY-MM-DD`).
+2. Merge to `master`, tag that commit `vX.Y.Z` and push the tag.
+3. `.github/workflows/release.yml` checks the version, changelog and sample, then publishes:
+    - a GitHub release with the packed `me.tooster.sdf-X.Y.Z.tgz` and the changelog entry as notes,
+    - the `upm` branch (the package at the repository root) and a `upm/vX.Y.Z` tag on it.
+
+Users can then install `https://github.com/T3sT3ro/SdfManipulator.git#upm/vX.Y.Z`, or
+`https://github.com/T3sT3ro/SdfManipulator.git?path=/packages/me.tooster.sdf#vX.Y.Z`.
 
 ## Documentation
 

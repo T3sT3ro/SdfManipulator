@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  samples:
+    name: Package sample in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: tools/sync-samples.sh --check
+
+  generators:
+    name: Syntax generators build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      # Release builds copy Generators.dll into the package; send it to a scratch folder instead.
+      # GeneratorTest compiles the package's AST sources against the generator, so this also checks generated code.
+      - run: dotnet build tools/SyntaxGenerators/SyntaxGenerators.sln -c Release -p:UnityPackageAstDir="$RUNNER_TEMP/ast/"
+
+  unity:
+    name: Unity tests and checks
+    runs-on: ubuntu-latest
+    # Needs the repository secrets UNITY_LICENSE, UNITY_EMAIL and UNITY_PASSWORD: https://game.ci/docs/github/activation
+    # Without them the job only prints a notice, so CI stays green until they are added.
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    steps:
+      - name: Skip without Unity license secrets
+        if: env.UNITY_LICENSE == ''
+        run: echo "::notice::UNITY_LICENSE secret is not set; skipping Unity tests and checks."
+      - uses: actions/checkout@v4
+        if: env.UNITY_LICENSE != ''
+      - uses: actions/cache@v4
+        if: env.UNITY_LICENSE != ''
+        with:
+          path: projects/SdfManipulator/Library
+          key: Library-${{ hashFiles('projects/SdfManipulator/Packages/packages-lock.json', 'projects/SdfManipulator/ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: Library-
+      - name: EditMode tests
+        if: env.UNITY_LICENSE != ''
+        uses: game-ci/unity-test-runner@v4
+        with:
+          projectPath: projects/SdfManipulator
+          unityVersion: 6000.6.8f1
+          testMode: editmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Player scripts compile, shaders compile
+        if: env.UNITY_LICENSE != ''
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: projects/SdfManipulator
+          unityVersion: 6000.6.8f1
+          targetPlatform: StandaloneLinux64
+          buildMethod: SdfManipulator.DevTools.CiChecks.Run

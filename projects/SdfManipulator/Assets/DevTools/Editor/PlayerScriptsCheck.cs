@@ -15,6 +15,13 @@ namespace SdfManipulator.DevTools {
 
         [MenuItem("Tools/SDF Dev/Compile Player Scripts")]
         public static void Run() {
+            var ok = Check();
+            if (Application.isBatchMode)
+                EditorApplication.Exit(ok ? 0 : 1);
+        }
+
+        /// <returns>true when every package assembly compiled for the player</returns>
+        public static bool Check() {
             var settings = new ScriptCompilationSettings
             {
                 target = BuildTarget.StandaloneLinux64,
@@ -32,9 +39,7 @@ namespace SdfManipulator.DevTools {
                 Debug.Log($"[PlayerScriptsCheck] OK: compiled {string.Join(", ", expected)}");
             else
                 Debug.LogError($"[PlayerScriptsCheck] FAILED: not compiled for the player: {string.Join(", ", missing)}");
-
-            if (Application.isBatchMode)
-                EditorApplication.Exit(missing.Count == 0 ? 0 : 1);
+            return missing.Count == 0;
         }
     }
 }
