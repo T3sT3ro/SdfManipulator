@@ -34,6 +34,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
         }
 
         [MenuItem("GameObject/SDF/Primitives/Box")]
-        public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfBoxController>("box");
+        public static void Instantiate() => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfBoxController>("box");
     }
 }

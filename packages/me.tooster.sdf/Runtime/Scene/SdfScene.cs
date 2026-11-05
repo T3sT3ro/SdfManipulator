@@ -8,10 +8,12 @@ using System.Linq;
 using me.tooster.sdf.Editor.Controllers.Generators;
 using me.tooster.sdf.Util;
 using Unity.Properties;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Profiling;
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.SceneManagement;
+#endif
 namespace me.tooster.sdf.Editor.Controllers.SDF {
     /// <summary>
     ///     SdfSceneController is a game object that handles displaying and controling SdfScene asset.
@@ -63,25 +65,31 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             if (RequiresRegeneration) {
                 RequiresRegeneration = false;
                 RevalidateScene();
+#if UNITY_EDITOR
                 // assure that regeneration is done only in the prefab stage
                 if (IsEditingContextOpen(out var prefabStage))
                     GenerateSceneAssets();
+#endif
             }
             UpdateShaderUniforms(forceUpdateAll: requiresForceUpdate);
         }
 
         void OnEnable() {
-            AssemblyReloadEvents.afterAssemblyReload += MarkDirty;
             // if (!RequiresUpdate)
             RequiresUpdate = true;
+#if UNITY_EDITOR
+            AssemblyReloadEvents.afterAssemblyReload += MarkDirty;
             PrefabStage.prefabSaved += OnPrefabSaved;
+#endif
         }
 
 
         void OnDisable() {
-            AssemblyReloadEvents.afterAssemblyReload -= MarkDirty;
             RequiresUpdate = true;
+#if UNITY_EDITOR
+            AssemblyReloadEvents.afterAssemblyReload -= MarkDirty;
             PrefabStage.prefabSaved -= OnPrefabSaved;
+#endif
         }
 
 
@@ -128,10 +136,12 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             RequiresUpdate = true;
         }
 
+#if UNITY_EDITOR
         void OnPrefabSaved(GameObject go) { MarkDirty(); }
 
         bool IsEditingContextOpen(out PrefabStage prefabStageEditingContext)
             => (prefabStageEditingContext = PrefabStageUtility.GetCurrentPrefabStage())?.prefabContentsRoot.gameObject == gameObject;
+#endif
 
         internal void RevalidateScene() {
             if (this == null)
@@ -182,11 +192,13 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
         }
 
         void UpdateProperty(PropertyData pd) {
+#if UNITY_EDITOR
             var currentPrefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             // Trigger updates only from prefab instance outside of prefab stage or prefab root inside prefab stage.
             // Otherwise an instance of a prefab in scene would leak to prefab edited in context
             if (currentPrefabStage != null && currentPrefabStage.prefabContentsRoot != gameObject)
                 return;
+#endif
 
             if (controlledMaterial == null)
                 throw new Exception("SdfScene is missing controlled material to update a property!");
@@ -227,12 +239,16 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         void QueuePropertyUpdate(PropertyData propertyData) {
             sceneData.queuedPropertyUdates.Add(propertyData);
+#if UNITY_EDITOR
             EditorApplication.QueuePlayerLoopUpdate(); // needed for smooth experience in editor
+#endif
         }
 
         void QueuePropertyUpdates(IEnumerable<PropertyData> properties) {
             sceneData.queuedPropertyUdates.UnionWith(properties);
+#if UNITY_EDITOR
             EditorApplication.QueuePlayerLoopUpdate(); // needed for smooth experience in editor
+#endif
         }
 
         internal string AssembleShaderSource() {

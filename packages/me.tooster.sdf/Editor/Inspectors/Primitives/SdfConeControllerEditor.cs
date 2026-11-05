@@ -59,6 +59,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
 
 
         [MenuItem("GameObject/SDF/Primitives/Cone")]
-        public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfConeController>("cone");
+        public static void Instantiate() => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfConeController>("cone");
     }
 }

@@ -4,8 +4,10 @@ using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.Editor.Controllers.Data;
 using me.tooster.sdf.Util;
 using Unity.Properties;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
 using Type = System.Type;
 namespace me.tooster.sdf.Editor.Controllers.SDF {
@@ -53,7 +55,11 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
         }
 
-        void Awake() { TransformUtils.SetConstrainProportions(transform, true); }
+        void Awake() {
+#if UNITY_EDITOR
+            TransformUtils.SetConstrainProportions(transform, true); // inspector-only: lock proportional scaling
+#endif
+        }
 
         protected virtual void Update() {
             if (!transform.hasChanged)
@@ -68,6 +74,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
 
         void OnDrawGizmos() => Gizmos.DrawIcon(transform.position, SdfPaths.Icons.Sdf, true);
 
+#if UNITY_EDITOR
         protected override void OnValidate() {
             base.OnValidate();
             transform.hasChanged = true;
@@ -85,6 +92,7 @@ namespace me.tooster.sdf.Editor.Controllers.SDF {
             }
             // ReSharper restore CompareOfFloatsByEqualityOperator
         }
+#endif
 
 
         public VectorData Apply(VectorData input, Processor processor) {

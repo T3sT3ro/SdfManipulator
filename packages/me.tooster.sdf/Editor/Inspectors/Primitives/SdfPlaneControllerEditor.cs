@@ -30,6 +30,6 @@ namespace me.tooster.sdf.Editor.Controllers.Editors.PrimitiveControllers {
         }
 
         [MenuItem("GameObject/SDF/Primitives/Plane")]
-        public static void Instantiate() => SdfPrimitiveController.InstantiatePrimitive<SdfPlaneController>("plane");
+        public static void Instantiate() => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfPlaneController>("plane");
     }
 }
