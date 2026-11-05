@@ -46,7 +46,7 @@ Material:
     - SDF_1_0_1_0__root_GameObject_GameObject_torus__2_RingRadius: 0.25
     - SDF_1_0_1_0__root_GameObject_GameObject_torus__3_Thickness: 0.12
     - SDF_1_0_1_0__root_allObjects_toroid_torus__2_Cap: 2.200784
-    - SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius: 0.49804693
+    - SDF_1_0_1_0__root_allObjects_toroid_torus__2_MainRadius: 0.48908752
     - SDF_1_0_1_0__root_allObjects_toroid_torus__2_RingRadius: 0.25
     - SDF_1_0_1_0__root_allObjects_toroid_torus__3_Thickness: 0.12
     - SDF_1_0_1_0__root_combine_cutout_box__1___3_Rounding: 0.11
@@ -175,3 +175,4 @@ Material:
     - SDF_1_1__root_cutoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
     - SDF_2__custoff__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
