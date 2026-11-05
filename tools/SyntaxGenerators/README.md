@@ -1,7 +1,9 @@
 # What?
 
-This project implements source generators for AST nodes. Built dll is then copied to the appropriate place for the
-Package to use.
+This project implements source generators for AST nodes. A Release build
+(`dotnet build -c Release SyntaxGenerators/SyntaxGenerators.csproj`) copies `Generators.dll` into
+`packages/me.tooster.sdf/Runtime/AST/` for the package to use. `GeneratorTest` compiles the package's AST sources
+against the generator, so a successful build of the solution checks the generated code.
 
 # How does it work?
 

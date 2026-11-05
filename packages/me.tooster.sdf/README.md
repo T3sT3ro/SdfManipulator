@@ -24,3 +24,21 @@ otherwise difficult in regular rendering include:
   of design was the Roslyn's Syntax API.
 - Generate stand-alone shaders, but also shader partials, that can be used in other packages (e.g. compatible with
   ShaderGraph) and other software (HLSL partial files ) 
+
+## Installation
+
+The package is pre-release and has no tagged versions yet. Open *Window > Package Manager*, choose
+*+ > Add package from git URL…* and enter:
+
+```
+https://github.com/T3sT3ro/SdfManipulator.git?path=/packages/me.tooster.sdf
+```
+
+## Requirements
+
+- Developed and tested with Unity 6.6 (`6000.6.8f1`); other versions are untested. Earlier, POC version of this project
+  tested against `2022.3.32f1`, see `archive/POC-2022.3.32f1` tag.
+- Generated shaders target the Built-in Render Pipeline (forward rendering).
+
+See the [repository README](https://github.com/T3sT3ro/SdfManipulator#readme) for usage, concepts and known
+limitations.

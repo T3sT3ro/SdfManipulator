@@ -1,27 +1,26 @@
-# Overview
+# SDF Manipulator
 
-This is a monorepo for the SDF manipulator (work title) Unity Package. It implements a visual editor for SDF scenes using easy to use gizmos and composable primitieves. The tool runs in realtime in the editor and generates ready to use HLSL shaders drawing the SDF scenes.
-
-For now, this project contains:
-
-- A package with vast collection of SDF primitives, operators and useful HLSL functions used to construct raymarching
-  shaders.
-- Several test assets in the main `Assets/` directory, of which `Prefabs/` holds main test scenes demonstrating
-  usages. There are also several scenes showcasing the usage of instantiated SDF scenes.
-- the tool itself as an embedded package inside `Packages/me.tooster.sdf/`, containing definitions of primitives, operators, their visual controllers, shader generators and an embedded HLSL syntax tree API for assembling shader code using ASTs.
-- A custom API based on source generators for programaticaly working with ShaderLab and HLSL languages. It allows to build and transform syntax trees in a concise way. Also safer than a basic string concatenation. Not optimized yet, requires refactors and simplification (don't judge me on the code quality now, :P), but it implements a big part of the aforementioned languages. Located in https://github.com/T3sT3ro/SdfManipulator/tree/master/Packages/me.tooster.sdf/SyntaxGenerators~ and independent of any Unity API iirc. It's modeled after the Roslyn's Syntax API.
-- Some unused or experimental code meant to be organized and cleaned later.
+This is a monorepo for the SDF manipulator (work title) Unity Package. It implements a visual editor for SDF scenes using easy to use gizmos and composable primitives. The tool runs in realtime in the editor and generates ready to use HLSL shaders drawing the SDF scenes.
 
 ## Table of Contents
 
-- [Overview](#overview)
-  - [Table of Contents](#table-of-contents)
-  - [Gallery](#gallery)
-  - [Installation:](#installation)
-  - [Usage:](#usage)
-  - [TOP-LEVEL concepts:](#top-level-concepts)
-  - [Used packages](#used-packages)
-  - [Limitations, known issues](#limitations-known-issues)
+- [Repository layout](#repository-layout)
+- [Gallery](#gallery)
+- [Installing the package](#installing-the-package)
+- [Development](#development)
+- [Usage:](#usage)
+- [TOP-LEVEL concepts:](#top-level-concepts)
+- [Used packages](#used-packages)
+- [Limitations, known issues](#limitations-known-issues)
+
+## Repository layout
+
+| Path | Contents |
+|---|---|
+| [`packages/me.tooster.sdf/`](packages/me.tooster.sdf) | The Unity package: SDF primitives and operators, their visual controllers, shader generators, a collection of HLSL functions for raymarching shaders, and an HLSL/ShaderLab syntax tree API for assembling shader code. |
+| [`projects/SdfManipulator/`](projects/SdfManipulator) | Unity project for developing and demoing the package; it references the package as a local package. `Assets/Prefabs/` holds the main test scenes, and other scenes show instantiated SDF scenes. It still contains some unused or experimental assets to be organized later. |
+| [`tools/SyntaxGenerators/`](tools/SyntaxGenerators) | Roslyn source generators behind the syntax tree API, independent of Unity. The API is modeled after Roslyn's Syntax API and builds and transforms ShaderLab and HLSL syntax trees, which is safer than string concatenation. Not optimized yet and in need of refactoring (don't judge me on the code quality now, :P), but it covers a big part of both languages. |
+| [`docs/`](docs) | Design notes, diagrams and RenderDoc capture settings. |
 
 ## Gallery
 
@@ -38,16 +37,29 @@ https://github.com/user-attachments/assets/f52581a2-1cf7-49b1-a8d6-941ec3a6ccc7
 ![Standard CSG example with Lambert shading](https://github.com/user-attachments/assets/d54df9d2-de01-4790-89a5-39de7e10522f)
 ![SDF scene with debug overlays](https://github.com/user-attachments/assets/972dc458-562c-47c1-a7e5-cd9f7345de5c)
 
-## Installation:
+## Installing the package
 
-1. `git clone` the repository
-2. open in Unity (!) `2022.3.32f1 LTS` (!) — this version is important. Earlier versions triggered some editor bugs.
-   Later
-   version (2023.2....) does some changes to rendering that makes rendering and lighting weird (temporal GI?)
-    - preferably start unity with vulkan, because it provides superior rendering performance. OpenGL has serious
-      performance issues on linux. To start with vulkan use `-force-vulkan -force-gfx-mt` in extra command lines passed
-      to Unity (can be
-      set inside unity hub)
+The package is pre-release and has no tagged versions yet. To try it in your own project, open
+*Window > Package Manager*, choose *+ > Add package from git URL…* and enter:
+
+```
+https://github.com/T3sT3ro/SdfManipulator.git?path=/packages/me.tooster.sdf
+```
+
+It is developed and tested with Unity 6.6 (`6000.6.8f1`) and the Built-in Render Pipeline. Other versions and pipelines
+are untested.
+
+## Development
+
+1. `git clone` the repository.
+2. In Unity Hub, add `projects/SdfManipulator` and open it with Unity `6000.6.8f1`.
+    - Preferably start Unity with Vulkan, because it provides superior rendering performance. OpenGL has serious
+      performance issues on Linux. To start with Vulkan, pass `-force-vulkan -force-gfx-mt` as extra command line
+      arguments (can be set inside Unity Hub).
+3. The package appears under *Packages* in the Project window; its files live in `packages/me.tooster.sdf/`.
+4. After changing the source generators, rebuild them with
+   `dotnet build -c Release tools/SyntaxGenerators/SyntaxGenerators/SyntaxGenerators.csproj`. The Release build
+   copies `Generators.dll` into `packages/me.tooster.sdf/Runtime/AST/`.
 
 ## Usage:
 
@@ -78,7 +90,7 @@ https://github.com/user-attachments/assets/f52581a2-1cf7-49b1-a8d6-941ec3a6ccc7
 
 ## TOP-LEVEL concepts:
 
-- the paths below refer to paths inside `Packages/me.tooster.sdf/`
+- the paths below refer to paths inside `packages/me.tooster.sdf/`
 - "Controllers" (in the package's `Editor/Controllers` directory) have 2 purposes:
     - export parts of data required to build AST (the "editor" part for working with scenes)
     - control the scene data via uniforms and whatnot (the "runtime" part)
@@ -102,13 +114,13 @@ https://github.com/user-attachments/assets/f52581a2-1cf7-49b1-a8d6-941ec3a6ccc7
 - "Über shader" — the shader that started it all and has a bunch of code (also legacy code) ready to be ported to
   individual controllers or shader templates/partials. For some reason it doesn't render on vulkan at the time of
   writing (although it sometimes renders in the material preview???). It worked flawlessly on OpenGL on linux though.
-- "AST library" - the `Runtime/` and `SyntaxGenerators/` part. The `Runtime/AST` holds classes used to work with syntax
-  trees for hlsl and shaderlab.
+- "AST library" - the package's `Runtime/AST` and the repository's `tools/SyntaxGenerators/`. The `Runtime/AST` holds
+  classes used to work with syntax trees for hlsl and shaderlab.
     - The `Syntax` holds common syntactic forms or data structures like AST nodes. The `Hlsl` and `Shaderlab` dirs hold
       C# classes for ASTs of those languages.
-    - The `Generators.dll` is a compiled binary copied
-      from `SyntaxGenerators/SyntaxGenerators/bin/Debug/netstandard2.0/Generators.dll`.
-    - The `SyntaxGenerators` defines a sub-project (separate and independent of unity) for a syntax generator used to
+    - The `Generators.dll` is a compiled binary built from `tools/SyntaxGenerators`; a Release build copies it into
+      `Runtime/AST/`.
+    - `tools/SyntaxGenerators` is a separate .NET solution (independent of Unity) for a syntax generator used to
       generate required partial classes for AST classes. This subproject uses Roslyn heavily.
 - `IsExternalInitShim` - this is a separate asmdef that can be easily included to add support for records and `init`
   only properties in the current C# version used by unity. In the future version of Unity with more comprehensive support for records/struct records, this shim won't be needed anymore.
