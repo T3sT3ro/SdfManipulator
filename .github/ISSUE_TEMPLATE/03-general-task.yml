@@ -1,0 +1,18 @@
+name: "📝 General task"
+description: "Report a task, technical debt, or non-bug issue."
+labels: ["status: needs-triage", "type: task"]
+projects: ["T3sT3ro/5"]
+body:
+  - type: textarea
+    id: task-description
+    attributes:
+      label: "Task Description"
+      placeholder: "Describe the task, refactor, or chore."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Additional Context"
+      placeholder: "Related issues, links, or extra details."

@@ -1,0 +1,24 @@
+name: "✨ Feature Request"
+description: "Request a new feature or enhancement."
+labels: ["status: needs-triage", "type: feature"]
+projects: ["T3sT3ro/5"]
+body:
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: "Feature Description"
+      placeholder: "What do you want to add or improve, and why?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution"
+      placeholder: "Describe how you envision this working."
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Additional Context"
+      placeholder: "Mockups, links, references, or extra details."

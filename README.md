@@ -95,6 +95,7 @@ Usage, concepts and known limitations are in the
 
 ## Notes for contributors
 
+- Issues, labels and the project board follow [docs/project-management.md](docs/project-management.md).
 - `projects/SdfManipulator/Assets/Sandbox/Shaders/Raytracer.shader` is the "Über shader": the shader that started it
   all and has a bunch of code (also legacy code) ready to be ported to individual controllers or shader
   templates/partials. For some reason it doesn't render on vulkan at the time of writing (although it sometimes renders
