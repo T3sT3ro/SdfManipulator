@@ -1714,7 +1714,7 @@ Shader:
       10124:
         serializedVersion: 3
         m_Code: "#define KEYWORD_TYPE_FLAG_SPECIALIZED_VARIANTS (1 << 0)\n#define KEYWORD_TYPE_FLAG_RUNTIME_BRANCHING (1 << 1)\n#line 10 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n\n#define UNITY_INSTANCED_LOD_FADE\n#define UNITY_INSTANCED_SH\n#define UNITY_INSTANCED_LIGHTMAPSTS\n#define UNITY_INSTANCED_RENDERER_BOUNDS\n#line 10 \"\"\n#ifdef DUMMY_PREPROCESSOR_TO_WORK_AROUND_HLSL_COMPILER_LINE_HANDLING\n#endif\n/* UNITY: Original start of shader */\n            #pragma vertex vert\n            #pragma fragment frag\n            #include \"UnityCG.cginc\"\n\n            float4 vert(in float4 pos : POSITION, out float4 screenPos : TEXCOORD1) : SV_POSITION {\n                float4 clipPos = UnityObjectToClipPos(pos);\n                screenPos = ComputeScreenPos(clipPos);\n                return clipPos;\n            }\n\n            fixed4 frag(in float4 screenPos : TEXCOORD1) : SV_Target {\n                screenPos.xy = trunc(screenPos.xy / screenPos.w * _ScreenParams.xy / 5);\n\n                clip((screenPos.x + screenPos.y) % 2 == 0 ? -1 : 0);\n                return fixed4(1.0, .2, 0.0, 1.0);\n            }\n            "
-        m_AssetPath: Packages/me.tooster.sdf/Shaders
+        m_AssetPath: Packages/me.tooster.sdf/Editor/Resources/Shaders
         m_AssetName: SdfFallback.shader
         m_PlatformMask: 4294967295
         m_HardwareTierVariantsMask: 0
@@ -1799,7 +1799,7 @@ Shader:
           Hash: 31b82487eb050e59adeab8ffea607ad2
         m_CodeHash:
           serializedVersion: 2
-          Hash: 6a4285b197494cb6ec236adee72d65ab
+          Hash: ce58506866d4314c6637d726429a020f
         m_FromOther: 0
         m_ForceSyncCompilation: 0
         m_PerAPICompilerToolchain: 0000000000000000000000000000000000000000000000000000000000y
