@@ -19,159 +19,86 @@ hammer icon in rider), unmark the linked unity project and leave only SourceGene
 
 # TODO
 
-- basic raymarch domain
-- ~~global option~~ instead of a domain, simply use a parent transform as a scene root. Should a root be positioned
-inside the "portal" (current mesh domain) or should the portal be positioned inside the SDF controller? If so,
-then a "Portal" component could be added to narrow shader display to a mesh only.
-- gizmos/handles can be drawn using SDFs:
-- Elongate using semi-transparent box with draggable sides. Render face using color of unit vector for corresponding
-axis `(1,0,0)`. Get pixel color of selected object
-- Round using 2D circle
-- twist using a shifted twisting infinite cylinder
-- bend using torus
-- <kbd>CTRL</kbd> for discrete steps, <kbd>SHIFT</kbd> for finer control
-- [Handles reference](https://docs.unity3d.com/ScriptReference/Handles.html)
-- passes:
-[gradients reference](https://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients)
-- iteration count
-- depth
-- [normal debug](https://www.falloutsoftware.com/tutorials/gl/normal-map.html)
-- [example on shadertoy](https://www.shadertoy.com/view/XsfXDr)
-- concavity
-- occlusion (subsurf)
-- flat material
-- displacement
-- clock cycles
-- [BVH](https://iquilezles.org/www/articles/sdfbounding/sdfbounding.htm)
-- render modes:
-- smooth (default)
-- splats (circles/textures)
-- AO approximation
-- SDF nodes:
-- [ ] all primitives
-- [ ] blend operators
-- [ ] domain operators
-- [ ] dye operators (final dye pass that takes an already created SDF and combines it with final dye SDFs (that only
-evaluate once at the end), without marching them)
+The open points of this list moved to GitHub issues for triage: they carry the `status: needs-triage` label and sit in
+the Backlog of the [project board](https://github.com/users/T3sT3ro/projects/5). The original list, with all its
+references, is in [the version before the move](https://github.com/T3sT3ro/SdfManipulator/blob/9d0ca4b/docs/NOTES.md#L20-L174).
+
+Done:
+
+- [x] basic raymarch domain
 - [x] Tri-planar texture mapping (sample by normal + blend on edge)
-- [lengthy tutorial](https://catlikecoding.com/unity/tutorials/advanced-rendering/triplanar-mapping/)
-- [ ] maybe bi-planar projection as well, based on IQ's notes
-- [correct tri-plannar mapping with correct normals](https://www.youtube.com/watch?v=Cq5H59G-DHI)
 - [x] depth to max ray distance
-- [legacy unity but explained depth raymarching](https://adrianb.io/2016/10/01/raymarching.html)
-- [forum thread](https://forum.unity.com/threads/raymarcher-with-depth-buffer.877936/)
-- [japanese tutorial on uRayMarchToolkit + alpha + depth](https://tips.hecomi.com/entry/2018/12/31/211448)
 - [x] ortho+perspective generalized ray origin and direction
-- [stack question asking for the same](https://stackoverflow.com/questions/2354821/raycasting-how-to-properly-apply-a-projection-matrix)
-- [Post with graphic about coordinates at different stages of shader](https://forum.unity.com/threads/what-does-the-function-computescreenpos-in-unitycg-cginc-do.294470/)
 - [x] write depth of pixel -- to properly mix many domains
-- [x] fix depth calculation in global origin mode
-- [ ] display 3D texture holding SDF or voxel data
-- [X] local scale not affecting rays
-- [ ] fix normals
-- [X] correct ZTest when inside of a domain
-- [X] tri-planar texture swizzle and mapping
-- [X] limit ray by doing depth prepass over backfaces
-- prepass has unexpected (but logical) behavior while multiple domains overlap
-- [ ] Runtime attribute that would transform inputs in editor to toggles/properties etc, but make them constant after
-compilation
-- [ ] Pixelize operator - something like return clamped distance
-- [ ] Check out `noperspective` for generating ray directions out of a vertices in vertex shader (instead of fragment
-shader). [Check here for reference](https://stackoverflow.com/questions/59786805/wobble-in-volumetric-fixed-step-raymarching#59786805)
-- [ ] Fiz Z-test keyword based
-on [this response on unity discord](https://discord.com/channels/489222168727519232/497874081329184799/1007638427136700507) -
-basically [use this](https://docs.unity3d.com/Manual/SL-Stencil.html) i.e. `UnityEngine.Rendering.CompareFunction`
-- [ ] support dynamic node visitors
-- [ ] fallback evaluators for nodes that are not implemented
-- [ ] allow users to define procedural textures
-- [ ] debug and release variants of source code generation (for in debug include number of steps made by the shader,
-while strip it from release)
-- [ ] in-editor camera effect shader (without domain) based
-on [this tutorial](https://www.youtube.com/watch?v=iZ6ARyKnD-k&t=354s)
-- [ ] graph -> dependency tree (with topological sort) -> AST -> code generation
-- [ ] think about `required` keyword for records, the `init` properties, primary constructors `record class`
-vs `record struct` (C#10) and `readonly record`
-- `required`, albeit interesting for constructing syntactically correct trees, prevent from a wide range of
-lazy-initialized nodes constructed iteratively.
-- and C#11 only...
-- [ ] add `SyntaxList` record that implements `IReadOnlyList` and is used instead of IReadOnlyList anywhere in syntax,
-to allow simpler construction of children (without `Concat`, `Append` etc.)
-- [ ] support `with` syntax for node creation and creating other nodes from already existing nodes
-- [ ] add replace method to graph that handles replacing nodes and reconnecting links (traverses to parents and rebuilds
-them)
-- [ ] apply serialization
-- [ ] depth prepass for ray origin and ray
-- maybe do it so that ray starts on face when outside of mesh (isFrontFacing is true) but start on camera otherwise
-- [ ] in the graph, pass along a vector space metadata, and warn when two different vector spaces are mixed
-- [ ] [create AssetImporter](https://docs.unity3d.com/Manual/ScriptedImporters.html)
-- [ ] fixup init accessors for the syntax packages
-- [ ] sample/ray jittering to avoid banding and similar artifacts
-- [some info here](https://www.scratchapixel.com/lessons/3d-basic-rendering/volume-rendering-for-developers/ray-marching-get-it-right.html)
-- [ ] generate red factories for syntax etc, based
-on [SourceWriter.cs](https://github.com/dotnet/roslyn/blob/34268d1bb9370c7b01c742303a895a99daf10d6a/src/Tools/Source/CompilerGeneratorTools/Source/CSharpSyntaxGenerator/SourceWriter.cs#L1423)
-- consider containing private fields in the syntax class and generate properties from them which add get and init
-accessors, where init assigns th parent
+    - [x] fix depth calculation in global origin mode
+- [x] local scale not affecting rays
+- [x] correct ZTest when inside of a domain
+- [x] tri-planar texture swizzle and mapping
+- [x] limit ray by doing depth prepass over backfaces
+- [x] `noperspective` ray directions generated in the vertex shader (behind `V2F_RAYS` in `raymarching.hlsl`)
 - [x] add `<SyntaxElement>.MapWith(Visitor v)` which uses dynamic dispatch to update fields recursively
-- [ ] test it
-- [ ] add common language syntaxes like "InjectedLanguage", `Expression`, `Statement`, `Literal`
-- [ ] remove abstract MapWith from syntax and move the logic solely to abstract visitors, utilize double dispatch
-- [ ] unit and vector tagging in shaders - so that a world-space vector isn't confused with model-space vector
-- [ ] use a simple tree model instead of a graph model to generate a scene. This way there is no need for any graph
-editor and whatnot, only a game object hierarchy
-- [ ] display focused SDF (even if it's in subtract mode)
-- [ ] calculate estimated cost of a shader as a heuristic of basic operations * their occurrences. Parser could be
-needed for that
-- [ ] thread group debug view (for debugging number of steps per thread group)
-- [ ] fullscreen scene view rendering instead of a domain. Use domain if the SdfScene has a mesh renderer only. Learn
-from:
-- [This video](https://www.youtube.com/watch?v=2T2FqvtXqLw)
-- [and his code repo where he uses blit shader for camera here](https://github.com/TheAllenChou/unity-ray-marching/blob/master/unity-ray-marching/Assets/Script/PostProcessingBase.cs)
-- [ ] implement conemarching:
-- [video with demonstration of fractals rendered with it](https://www.youtube.com/watch?v=qUBA8Xotc4o)
-- [an article mentioning conemarching and how it's made](https://medium.com/@bananaft/my-journey-into-fractals-d25ebc6c4dc2)
-- [a presentation of cone marching](http://www.fulcrum-demo.org/wp-content/uploads/2012/04/Cone_Marching_Mandelbox_by_Seven_Fulcrum_LongVersion.pdf)
-- [ ] fix an unsafe visitor cast inside generated Accept methods of concrete syntax nodes
-- [ ] use zipper instead of anchors and traversing logic
-- If zipper were to be used, some kind of child labels would be needed to avoid linear children traversal
-- [ ] use edge labels/indices for children
-- It would allow for easier checking which branch is a syntax node in instead of linearly searching children
-- traversing forward and backward logic would be easier even without a zipper
-- [ ] Create sub-shader assets with definitions of shader scene, required properties, includes etc. It would allow for
-including the generated scene definition in other shaders, because it would define functions
-like `SdfResult SdfScene(float3 p)`. It could be even used in shadergraph if used properly
-- [ ] think about using TreeSitter as a parsing + AST library
-- [ ] Contain the raymarching inside a domain by doing backface prepass (for ray limit) and regular pass from the front
-faces. This simple implementation can work well for convex shapes. for concave shapes (e.g. donut
-domain `-->|xxx| |xxx|` where `x` is the inside of the same mesh) some additional work has to be done to avoid ray
-marching through "empty space". Possibly multipass depth-peeling can be used for this, in a similar fashion it's used
-for order-independent transparency.
-Possibly [some new technique than depth peeling can be used as well](https://on-demand.gputechconf.com/gtc/2014/presentations/S4385-order-independent-transparency-opengl.pdf)
-or a single (two?) pass with
-an [A-buffer (not sure if this is the proper link)](https://interplayoflight.wordpress.com/2022/06/25/order-independent-transparency-part-1/)
-or [k+ buffer](http://www.cgrg.cs.uoi.gr/wp-content/uploads/bezier/publications/abasilak-ifudos-i3d2014/k-buffer.pdf)
-- [ ] consider using [Unity Properties](https://docs.unity3d.com/Manual/property-visitors-PropertyVisitor.html) with
-property bags and property visitors for controllers/nodes
-- [ ] shared properties, so that one driver uniform can power multiple
-- [ ] Scene picking. For reference try the discord thread I started,
-decompiled `HandleUtility.PickObject`, https://docs.unity3d.com/ScriptReference/HandleUtility-pickGameObjectCustomPasses.html,
-ShaderGraph's scene picking and object ID defines and the following
-thread: https://forum.unity.com/threads/selection-outline-feature-and-selection-outline-shader-for-multi-selection.1022569/
-- [Github shadergraph depth only pass for picking and selection](https://github.com/Unity-Technologies/Graphics/blob/c8df1d81db96da3d951b102d792852e6712a1a10/Packages/com.unity.shadergraph/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/Includes/DepthOnlyPass.hlsl#L29)
-- files to reference:
-- `Library/PackageCache/com.unity.shadergraph@14.0.10/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/Includes/DepthOnlyPass.hlsl`
-- `Library/PackageCache/com.unity.shadergraph@14.0.10/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/Targets/BuiltInTarget.cs`
-- seems like [clayxels](https://andrea-intg.itch.io/clayxels) support scene picking??? AND it's open source?! (3rd
-gif from the top on the sidebar)
-- [ ] URP and HDRP
-support: https://blog.unity.com/engine-platform/migrating-built-in-shaders-to-the-universal-render-pipeline
-- [ ] material preview (see `MaterialEditor` class for `OnPreviewGUI`)
-- [ ] DOM-like model and diffing for improved architecture and data flow
-- [ ] fortify the AST codebase to prevent nulls, only use structs/record structs (not supported in unity for now), fewer
-allocations (stack managed data), better immutable structures
-- [ ] better syntax generators
-- [ ] line/symbol numbers for easier debugging
-- [ ] integrate with tokenizer and parser
-- [ ] express modifiers with requirements as monads
+- [x] use a simple tree model instead of a graph model to generate a scene (the GameObject hierarchy of controllers)
+- [x] use [Unity Properties](https://docs.unity3d.com/Manual/property-visitors-PropertyVisitor.html) with property bags
+  and property visitors for controllers
+
+Moved to issues:
+
+- [#4](https://github.com/T3sT3ro/SdfManipulator/issues/4) Draw controller gizmos and handles with SDFs
+- [#5](https://github.com/T3sT3ro/SdfManipulator/issues/5) Debug render passes
+- [#6](https://github.com/T3sT3ro/SdfManipulator/issues/6) Bounding volume hierarchy for SDF scenes
+- [#7](https://github.com/T3sT3ro/SdfManipulator/issues/7) Render modes: splats and AO approximation
+- [#8](https://github.com/T3sT3ro/SdfManipulator/issues/8) Complete the primitive and operator library
+- [#9](https://github.com/T3sT3ro/SdfManipulator/issues/9) Dye operators
+- [#10](https://github.com/T3sT3ro/SdfManipulator/issues/10) Bi-planar texture projection
+- [#11](https://github.com/T3sT3ro/SdfManipulator/issues/11) Display 3D textures holding SDF or voxel data
+- [#12](https://github.com/T3sT3ro/SdfManipulator/issues/12) Fix normals
+- [#13](https://github.com/T3sT3ro/SdfManipulator/issues/13) Depth prepass misbehaves when domains overlap
+- [#14](https://github.com/T3sT3ro/SdfManipulator/issues/14) Editor-tweakable inputs that compile to constants
+- [#15](https://github.com/T3sT3ro/SdfManipulator/issues/15) Pixelize operator
+- [#16](https://github.com/T3sT3ro/SdfManipulator/issues/16) Keyword-based Z-test
+- [#17](https://github.com/T3sT3ro/SdfManipulator/issues/17) Dynamic node visitors
+- [#18](https://github.com/T3sT3ro/SdfManipulator/issues/18) Fallback evaluators for unimplemented nodes
+- [#19](https://github.com/T3sT3ro/SdfManipulator/issues/19) User-defined procedural textures
+- [#20](https://github.com/T3sT3ro/SdfManipulator/issues/20) Debug and release variants of generated shaders
+- [#21](https://github.com/T3sT3ro/SdfManipulator/issues/21) In-editor camera effect shader without a domain
+- [#22](https://github.com/T3sT3ro/SdfManipulator/issues/22) Graph to dependency tree to AST code generation pipeline
+- [#23](https://github.com/T3sT3ro/SdfManipulator/issues/23) Use required members, init properties and record structs in syntax nodes
+- [#24](https://github.com/T3sT3ro/SdfManipulator/issues/24) SyntaxList record for syntax children
+- [#25](https://github.com/T3sT3ro/SdfManipulator/issues/25) Create syntax nodes from existing ones with `with`
+- [#26](https://github.com/T3sT3ro/SdfManipulator/issues/26) Replace nodes and reconnect their parents
+- [#27](https://github.com/T3sT3ro/SdfManipulator/issues/27) Apply serialization
+- [#28](https://github.com/T3sT3ro/SdfManipulator/issues/28) Depth prepass for the ray origin
+- [#29](https://github.com/T3sT3ro/SdfManipulator/issues/29) Tag vectors with their space to catch mixed spaces
+- [#30](https://github.com/T3sT3ro/SdfManipulator/issues/30) Scripted importer for SDF assets
+- [#31](https://github.com/T3sT3ro/SdfManipulator/issues/31) Fix init accessors in the syntax packages
+- [#32](https://github.com/T3sT3ro/SdfManipulator/issues/32) Ray jittering against banding
+- [#33](https://github.com/T3sT3ro/SdfManipulator/issues/33) Generate red factories for syntax nodes
+- [#34](https://github.com/T3sT3ro/SdfManipulator/issues/34) Test MapWith
+- [#35](https://github.com/T3sT3ro/SdfManipulator/issues/35) Common syntaxes shared across languages
+- [#36](https://github.com/T3sT3ro/SdfManipulator/issues/36) Move MapWith logic into visitors
+- [#37](https://github.com/T3sT3ro/SdfManipulator/issues/37) Display the focused SDF, even in subtract mode
+- [#38](https://github.com/T3sT3ro/SdfManipulator/issues/38) Estimate shader cost
+- [#39](https://github.com/T3sT3ro/SdfManipulator/issues/39) Thread group debug view
+- [#40](https://github.com/T3sT3ro/SdfManipulator/issues/40) Fullscreen scene view rendering instead of a domain
+- [#41](https://github.com/T3sT3ro/SdfManipulator/issues/41) Cone marching
+- [#42](https://github.com/T3sT3ro/SdfManipulator/issues/42) Unsafe visitor cast in generated Accept methods
+- [#43](https://github.com/T3sT3ro/SdfManipulator/issues/43) Use zippers instead of anchors for traversal
+- [#44](https://github.com/T3sT3ro/SdfManipulator/issues/44) Edge labels or indices for syntax children
+- [#45](https://github.com/T3sT3ro/SdfManipulator/issues/45) Sub-shader assets with scene definitions
+- [#46](https://github.com/T3sT3ro/SdfManipulator/issues/46) Evaluate Tree-sitter for parsing and syntax trees
+- [#47](https://github.com/T3sT3ro/SdfManipulator/issues/47) Contain raymarching inside concave domains
+- [#48](https://github.com/T3sT3ro/SdfManipulator/issues/48) Shared properties driving multiple controllers
+- [#49](https://github.com/T3sT3ro/SdfManipulator/issues/49) Scene picking for SDF objects
+- [#50](https://github.com/T3sT3ro/SdfManipulator/issues/50) URP and HDRP support
+- [#51](https://github.com/T3sT3ro/SdfManipulator/issues/51) Material preview
+- [#52](https://github.com/T3sT3ro/SdfManipulator/issues/52) DOM-like model with diffing
+- [#53](https://github.com/T3sT3ro/SdfManipulator/issues/53) Harden the AST against nulls and allocations
+- [#54](https://github.com/T3sT3ro/SdfManipulator/issues/54) Improve the syntax generators
+- [#55](https://github.com/T3sT3ro/SdfManipulator/issues/55) Line and symbol numbers for debugging generated code
+- [#56](https://github.com/T3sT3ro/SdfManipulator/issues/56) Integrate a tokenizer and parser
+- [#57](https://github.com/T3sT3ro/SdfManipulator/issues/57) Express modifiers with requirements as monads
+- [#58](https://github.com/T3sT3ro/SdfManipulator/issues/58) Renaming an object doesn't regenerate the shader
+- [#59](https://github.com/T3sT3ro/SdfManipulator/issues/59) Verify regeneration when controller components are added, removed or reordered
 
 ## actions interactivity roadmap
 
@@ -186,10 +113,10 @@ Status "done?" means it has been done but as a side effect of other change and s
 | create primitive              | regenerate     | done       |                                                                            |
 | delete primitive              | regenerate     | done       |                                                                            |
 | reorder children              | regenerate[^1] | done       | via OnTransformParentChanged                                               |
-| object rename                 | regenerate     | bugged[^5] | no "rename" hook, possibly requires active regeneration. Triggers on save. |
-| component added to stack      | revalidate[^2] | done?[^3]  | [^4]no "componentAdded" hook in editor                                     |
-| component removed from stack  | revalidate[^2] | done?[^3]  | [^4]no "componentRemoved" hook                                             |
-| components reordered          | revalidate[^2] | done?[^3]  | [^4]no "componentOrderChanged" hook                                        |
+| object rename                 | regenerate     | bugged[^5] | no "rename" hook, possibly requires active regeneration. Triggers on save. [#58](https://github.com/T3sT3ro/SdfManipulator/issues/58) |
+| component added to stack      | revalidate[^2] | done?[^3]  | [^4]no "componentAdded" hook in editor [#59](https://github.com/T3sT3ro/SdfManipulator/issues/59) |
+| component removed from stack  | revalidate[^2] | done?[^3]  | [^4]no "componentRemoved" hook [#59](https://github.com/T3sT3ro/SdfManipulator/issues/59) |
+| components reordered          | revalidate[^2] | done?[^3]  | [^4]no "componentOrderChanged" hook [#59](https://github.com/T3sT3ro/SdfManipulator/issues/59) |
 | observable property changed   | update         | present    |                                                                            |
 | domain reload in prefab scene | revalidate[^2] | done       | via domain reload static even hook or something                            |
 
