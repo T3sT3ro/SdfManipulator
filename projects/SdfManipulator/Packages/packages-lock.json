@@ -35,6 +35,12 @@
       "source": "builtin",
       "dependencies": {}
     },
+    "com.unity.graphtoolkit": {
+      "version": "0.5.0-exp.1",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.ide.rider": {
       "version": "3.1.0",
       "depth": 0,

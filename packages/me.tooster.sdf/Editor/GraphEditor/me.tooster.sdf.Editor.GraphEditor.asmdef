@@ -1,0 +1,11 @@
+{
+  "name": "me.tooster.sdf.Editor.GraphEditor",
+  "rootNamespace": "me.tooster.sdf.Editor.GraphEditor",
+  "references": [
+    "GUID:70ef9a24f4cfc4aec911c1414e3f90ad",
+    "GUID:d1e08c06f8f9473888c892637c83c913"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}
