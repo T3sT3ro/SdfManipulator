@@ -22,6 +22,7 @@ namespace sdf { namespace operators {
     // result is returned in x and blending factor in y 
     // from inigo quilez: https://iquilezles.org/articles/smin/
     float smin(in float a, in float b, in float k, out float blend_factor) {
+        k = max(k, 1e-5); // k = 0 would divide 0 by 0
         float h = max(k - abs(a - b), 0.0) / k;
         float m = h * h * 0.5;
         float s = m * k * (1.0 / 2.0);
@@ -74,7 +75,8 @@ namespace sdf { namespace operators {
         SdfResult result;
         float     f;
         result.distance = smin(a.distance, b.distance, k, f);
-        result.normal = normalize(lerp(a.normal, b.normal, f));
+        float3 normal = lerp(a.normal, b.normal, f);
+        result.normal = dot(normal, normal) > 0 ? normalize(normal) : a.normal; // opposite normals can cancel out
         result.id = f <= 0.5 ? a.id : b.id;
         result.material = lerpMaterials(a.material, b.material, f);
         result.p = a.p; // due to this, remove `p` from `SdfResult`
@@ -181,7 +183,7 @@ namespace sdf { namespace operators {
         ang -= ang / sqrt(1.0 + ang * ang) * (1.0 - k);
 
         // Convert back to cartesian coordinates
-        float2 rotated = float2(sin(ang), cos(ang)) * len;
+        float2 rotated = float2(cos(ang), sin(ang)) * len;
 
         // Return the transformed vector with the rotated xy components and unchanged z component
         return float3(rotated.x, rotated.y, p.z);

@@ -53,6 +53,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   shader.
 - The *Regenerate shader* (formerly *Regenerate material*) and *Remove sub-assets* context menus of `SdfScene` never
   ran, and *Remove sub-assets* deleted a sub-asset when you clicked No.
+- Shader library: shadow rays started a whole unit away from the surface; smooth union returned NaN for a blend factor
+  of 0; orthographic depth was mirrored on platforms with reversed Z (D3D, Vulkan, Metal); the kink variant of the
+  bend operator swapped the x and y axes.
 
 ### Removed
 

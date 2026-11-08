@@ -141,10 +141,10 @@ fixed4 sdfShade(SdfResult sdf, Ray3D ray) {
 
     Material mat = SdfMaterial(sdf);
     Ray3D    toLight = (Ray3D)0;
-    toLight.ro = sdf.p;
-
-    toLight.rd = normalize(UnityWorldSpaceLightDir(mul(sdf.p, unity_WorldToObject)));
-    toLight.ro += toLight.rd + 2 * _EPSILON_RAY;
+    // rays are marched in world space, so sdf.p and sdf.normal are world space too
+    toLight.rd = normalize(UnityWorldSpaceLightDir(sdf.p));
+    // start just above the surface, so the shadow ray doesn't hit the surface it starts from
+    toLight.ro = sdf.p + sdf.normal * 2 * _EPSILON_RAY;
     toLight.maxDistance = _MAX_DISTANCE;
     mat.albedo = noise::randomColor(sdf.id.w) * (mat.occlusion);
 

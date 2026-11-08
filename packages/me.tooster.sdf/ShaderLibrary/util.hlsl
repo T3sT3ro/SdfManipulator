@@ -111,9 +111,15 @@ float square(float rise, float fall, float t) {
 // from https://forum.unity.com/threads/depth-buffer-with-orthographic-camera.355878/
 // from https://forum.unity.com/threads/getting-scene-depth-z-buffer-of-the-orthographic-camera.601825/#post-4966334
 
+// Raw orthographic depth is linear: 0 at the near plane and 1 at the far plane, or the other way round with UNITY_REVERSED_Z.
 float CorrectDepth(float rawDepth) {
     float persp = LinearEyeDepth(rawDepth);
-    float ortho = (_ProjectionParams.z - _ProjectionParams.y) * rawDepth + _ProjectionParams.y;
+    #if defined(UNITY_REVERSED_Z)
+    float orthoDepth = 1.0 - rawDepth;
+    #else
+    float orthoDepth = rawDepth;
+    #endif
+    float ortho = (_ProjectionParams.z - _ProjectionParams.y) * orthoDepth + _ProjectionParams.y;
     return lerp(persp, ortho, unity_OrthoParams.w);
 }
 
@@ -121,5 +127,8 @@ float CorrectDepth(float rawDepth) {
 float EncodeCorrectDepth(float eyeDepth) {
     float persp = (1.0 / eyeDepth - _ZBufferParams.w) / _ZBufferParams.z;
     float ortho = (eyeDepth - _ProjectionParams.y) / (_ProjectionParams.z - _ProjectionParams.y);
+    #if defined(UNITY_REVERSED_Z)
+    ortho = 1.0 - ortho;
+    #endif
     return lerp(persp, ortho, unity_OrthoParams.w);
 }
