@@ -46,6 +46,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `NullReferenceException` and no uniform was set.
 - A scene without a controlled material threw an exception every frame; it now only shows the diagnostic. A Combine
   without children made generation fail; it now produces empty space.
+- Scenes created with *Assets > Create > SDF > Scene Asset* could never regenerate their shader: they were copies of
+  the template, which renders an embedded shader and has no target shader. A new scene now gets its own `.shader` and
+  `.mat` files next to the prefab, wired to the scene and its renderer.
 
 ### Removed
 

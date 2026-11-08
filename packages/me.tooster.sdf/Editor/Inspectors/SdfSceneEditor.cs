@@ -154,14 +154,8 @@ namespace me.tooster.sdf.Editor.Inspectors {
 
         // based on ShaderGraph's `CreateShaderGraph`
         class CreateSceneAction : AssetCreationEndAction {
-            static void createSdfSceneAsset(string path) {
-                AssetDatabase.CopyAsset(SdfPaths.Templates.HelloSdfPrefab, path);
-            }
-
-            public override void Action(EntityId entityId, string pathName, string resourceFile) {
-                createSdfSceneAsset(pathName);
-                AssetDatabase.Refresh();
-            }
+            public override void Action(EntityId entityId, string pathName, string resourceFile)
+                => ProjectWindowUtil.ShowCreatedAsset(SdfSceneCreation.CreateScene(pathName));
         }
     }
 }

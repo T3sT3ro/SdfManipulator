@@ -110,7 +110,7 @@ namespace me.tooster.sdf {
                 diagnostics.Add(Diagnostic.Error("No shader preset set. The generation won't proceed."));
 
             if (targetShader == null)
-                diagnostics.Add(Diagnostic.Info("No target shader set. Any changes will be applied directly to the material."));
+                diagnostics.Add(Diagnostic.Warn("No target shader set, so structural changes won't regenerate the shader."));
 
             if (TryGetComponent<Renderer>(out var r) && r.sharedMaterial != controlledMaterial)
                 diagnostics.Add(Diagnostic.Warn("Material on SdfScene renderer is not the controlled material."));
