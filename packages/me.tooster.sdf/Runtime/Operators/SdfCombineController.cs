@@ -93,9 +93,6 @@ namespace me.tooster.sdf.Operators {
         }
 
         public override SdfData Apply(VectorData input, Processor processor) {
-            if (children.Length == 0)
-                throw new ArgumentException("SdfCombineController must have at least one child");
-
             processor.HandleRequirement(new IncludeRequirement(this, SdfPaths.ShaderLibrary.Operators));
 
             var combinatorFunction = Operation switch
@@ -107,15 +104,29 @@ namespace me.tooster.sdf.Operators {
             };
 
             var result = (Identifier)"result";
-            // SdfResult result = <children[0]>(<input>);
-            var body = new List<Statement<hlsl>>
-            {
-                Extensions.Var(
-                    SdfData.sdfReturnType,
-                    result.id.Text,
-                    ((SdfData)children[0].Apply(input, processor)).evaluationExpression
-                ),
-            };
+            var body = new List<Statement<hlsl>>();
+            if (children.Length == 0) {
+                // A combination without children is empty space, which is the normal state right after adding one.
+                // SdfResult result = (SdfResult)0; result.distance = _MAX_DISTANCE;
+                processor.HandleRequirement(SdfData.includeRaymarchingRequirement(this));
+                body.Add(
+                    Extensions.Var(
+                        SdfData.sdfReturnType,
+                        result.id.Text,
+                        new Cast { type = SdfData.sdfReturnType, expression = (LiteralExpression)0 }
+                    )
+                );
+                body.Add(Extensions.Assignment($"result.{SdfData.sdfResultDistanceMemberName}", (Identifier)"_MAX_DISTANCE"));
+            } else {
+                // SdfResult result = <children[0]>(<input>);
+                body.Add(
+                    Extensions.Var(
+                        SdfData.sdfReturnType,
+                        result.id.Text,
+                        ((SdfData)children[0].Apply(input, processor)).evaluationExpression
+                    )
+                );
+            }
 
             // arguments[1] is mutating slot for successive sdfResults 
             var arguments = Operation == SMOOTH_UNION

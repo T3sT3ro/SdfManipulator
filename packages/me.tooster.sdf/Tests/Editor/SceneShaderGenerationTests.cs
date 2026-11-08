@@ -85,6 +85,33 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(elongated.name, Is.EqualTo("elongated sphere"));
         }
 
+        [Test]
+        public void Generation_EmptyCombineCompiles() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);
+
+            var empty = new GameObject("empty combine");
+            empty.transform.SetParent(combine.transform, false);
+            var emptyCombine = empty.AddComponent<SdfCombineController>();
+            combine.children = combine.children.Append(emptyCombine).ToArray();
+
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            StringAssert.Contains("result.distance = _MAX_DISTANCE;", source);
+            shader = ShaderUtil.CreateShaderAsset(source);
+            Assert.That(CompileErrors(shader, source), Is.Empty);
+        }
+
+        [Test]
+        public void UniformUpdate_WithoutMaterialDoesNotThrow() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.controlledMaterial = null;
+            scene.RevalidateScene();
+
+            Assert.DoesNotThrow(() => scene.UpdateShaderUniforms(forceUpdateAll: true));
+        }
+
         static List<string> CompileErrors(Shader shader, string source) {
             var lines = source.Split('\n');
             var errors = ShaderUtil.GetShaderMessages(shader)

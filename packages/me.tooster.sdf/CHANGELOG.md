@@ -42,6 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   writes to standalone `.shader` files and logs an error otherwise.
 - Generating a scene renamed every object with an elongate operator to `q`. The affected example objects got their
   names back.
+- SDF scenes didn't work in player builds: the scene data was never built outside the editor, so every frame threw a
+  `NullReferenceException` and no uniform was set.
+- A scene without a controlled material threw an exception every frame; it now only shows the diagnostic. A Combine
+  without children made generation fail; it now produces empty space.
 
 ### Removed
 

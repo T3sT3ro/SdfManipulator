@@ -75,8 +75,12 @@ namespace me.tooster.sdf {
         }
 
         void OnEnable() {
-            // if (!RequiresUpdate)
             RequiresUpdate = true;
+            // In the editor OnValidate builds the scene data first. A player has no OnValidate, so build it here.
+            if (sceneData == null)
+                RevalidateScene();
+            if (controlledMaterial == null && Application.isPlaying)
+                Debug.LogWarning($"SdfScene '{name}' has no controlled material, so its shader uniforms won't update.", this);
 #if UNITY_EDITOR
             AssemblyReloadEvents.afterAssemblyReload += MarkDirty;
             PrefabStage.prefabSaved += OnPrefabSaved;
@@ -201,7 +205,7 @@ namespace me.tooster.sdf {
 #endif
 
             if (controlledMaterial == null)
-                throw new Exception("SdfScene is missing controlled material to update a property!");
+                return; // OnValidate reports the missing material as a diagnostic
 
             // make sure the controller hasn't been destroyed
             if (pd.controller is { } controller && controller != null)
@@ -216,15 +220,26 @@ namespace me.tooster.sdf {
         }
 
         void HandlePropertyChange(object sender, PropertyChangedEventArgs eventArgs) {
-            QueuePropertyUpdate(sceneData.controllers[(Controller)sender].properties[new PropertyPath(eventArgs.PropertyName)]);
+            // controllers added after the last revalidation and properties that aren't uniforms have no entry
+            if (sceneData == null
+             || sender is not Controller controller
+             || !sceneData.controllers.TryGetValue(controller, out var controllerData)
+             || !controllerData.properties.pathLookup.TryGetValue(new PropertyPath(eventArgs.PropertyName), out var propertyData))
+                return;
+            QueuePropertyUpdate(propertyData);
         }
 
         internal void UpdateShaderUniforms(bool forceUpdateAll = false) {
+            // the first update after enabling has to set every uniform, so the material matches the scene
+            forceUpdateAll |= RequiresUpdate;
             RequiresUpdate = false;
 
 #if UNITY_EDITOR
             forceUpdateAll = true; // TODO: this is a temporary solution, but causes poor performance
 #endif
+
+            if (sceneData == null || controlledMaterial == null)
+                return;
 
             if (forceUpdateAll)
                 QueuePropertyUpdates(sceneData.Properties);
