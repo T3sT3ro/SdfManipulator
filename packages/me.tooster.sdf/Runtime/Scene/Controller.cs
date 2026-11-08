@@ -25,14 +25,18 @@ namespace me.tooster.sdf {
 
         protected virtual void OnEnable() { sdfScene = GetComponentInParent<SdfScene>(); }
 
-        void OnDestroy() { StructureChanged?.Invoke(this); }
+        void OnDestroy() {
+            MarkForRegeneration(sdfScene);
+            StructureChanged?.Invoke(this);
+        }
 
         void OnTransformParentChanged() {
+            // both the scene that the controller left and the scene that it joined have to regenerate
+            var previousScene = sdfScene;
             sdfScene = GetComponentInParent<SdfScene>(true);
-            OnStructureChanged(); // notify currently subscribed parent
-            if (transform.GetComponentInParent<Controller>() is { } parentController)
-                StructureChanged = parentController.StructureChanged; // clear all previous listeners as well
-            StructureChanged?.Invoke(this);
+            if (previousScene != sdfScene)
+                MarkForRegeneration(previousScene);
+            OnStructureChanged();
         }
 
         protected virtual void OnValidate() { sdfScene = GetComponentInParent<SdfScene>(); }
@@ -44,7 +48,21 @@ namespace me.tooster.sdf {
         public event PropertyChangedEventHandler?  PropertyChanged;
         public event StructureChangedEventHandler? StructureChanged;
 
-        public void OnStructureChanged(Controller? sender = null) => StructureChanged?.Invoke(sender == null ? this : sender);
+        /// <summary>
+        ///     Marks the scene that contains this controller for regeneration, then notifies <see cref="StructureChanged" />
+        ///     listeners. Controllers notify their scene directly. They used to forward the event through their parents and
+        ///     copy subscriber lists on re-parenting, which could subscribe a controller to its own event and recurse until
+        ///     the stack overflowed.
+        /// </summary>
+        public void OnStructureChanged() {
+            MarkForRegeneration(SdfScene);
+            StructureChanged?.Invoke(this);
+        }
+
+        static void MarkForRegeneration(SdfScene? scene) {
+            if (scene != null)
+                scene.RequiresRegeneration = true;
+        }
 
         public void OnPropertyChanged([CallerMemberName] string? propertyName = null, Controller? sender = null) {
             PropertyChanged?.Invoke(sender == null ? this : sender, new PropertyChangedEventArgs(propertyName));
@@ -62,6 +80,8 @@ namespace me.tooster.sdf {
         }
 
         public override string ToString()
-            => SdfScene.sceneData.controllers.TryGetValue(this, out var c) ? $"{c.identifier} ({base.ToString()})" : base.ToString();
+            => SdfScene is { sceneData: { } sceneData } && sceneData.controllers.TryGetValue(this, out var c)
+                ? $"{c.identifier} ({base.ToString()})"
+                : base.ToString();
     }
 }

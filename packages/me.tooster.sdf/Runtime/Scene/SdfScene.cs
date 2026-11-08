@@ -76,9 +76,8 @@ namespace me.tooster.sdf {
 
         void OnEnable() {
             RequiresUpdate = true;
-            // In the editor OnValidate builds the scene data first. A player has no OnValidate, so build it here.
-            if (sceneData == null)
-                RevalidateScene();
+            // A player has no OnValidate, and OnDisable unsubscribes from the controllers, so rebuild the scene data here.
+            RevalidateScene();
             if (controlledMaterial == null && Application.isPlaying)
                 Debug.LogWarning($"SdfScene '{name}' has no controlled material, so its shader uniforms won't update.", this);
 #if UNITY_EDITOR
@@ -90,6 +89,7 @@ namespace me.tooster.sdf {
 
         void OnDisable() {
             RequiresUpdate = true;
+            UnsubscribeFromControllers();
 #if UNITY_EDITOR
             AssemblyReloadEvents.afterAssemblyReload -= MarkDirty;
             PrefabStage.prefabSaved -= OnPrefabSaved;
@@ -156,11 +156,10 @@ namespace me.tooster.sdf {
 
             var controllerData = new Dictionary<Controller, ControllerData>();
 
+            // controllers that moved to another scene must stop updating this one
+            UnsubscribeFromControllers();
             foreach (var controller in GetComponentsInChildren<Controller>()) {
-                controller.StructureChanged -= HandleStructuralChange; // prevent same callback registering twice
-                controller.StructureChanged += HandleStructuralChange;
-
-                controller.PropertyChanged -= HandlePropertyChange;
+                controller.PropertyChanged -= HandlePropertyChange; // in case an earlier revalidation failed halfway
                 controller.PropertyChanged += HandlePropertyChange;
 
                 var controllerId = generateControllerIdentifier(controller);
@@ -212,11 +211,14 @@ namespace me.tooster.sdf {
                 PropertyContainer.Accept(shaderPropertyUpdatingVisitor, ref controller, pd.path);
         }
 
-        void HandleStructuralChange(Controller source) {
-            RequiresRegeneration = true;
-            // RefreshSceneData();
-            // GenerateSceneAssets();
-            // UpdateShaderUniforms();
+        void UnsubscribeFromControllers() {
+            if (sceneData?.controllers == null)
+                return;
+
+            foreach (var controller in sceneData.controllers.Keys) {
+                if (controller != null)
+                    controller.PropertyChanged -= HandlePropertyChange;
+            }
         }
 
         void HandlePropertyChange(object sender, PropertyChangedEventArgs eventArgs) {

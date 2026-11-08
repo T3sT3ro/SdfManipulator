@@ -56,6 +56,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shader library: shadow rays started a whole unit away from the surface; smooth union returned NaN for a blend factor
   of 0; orthographic depth was mirrored on platforms with reversed Z (D3D, Vulkan, Metal); the kink variant of the
   bend operator swapped the x and y axes.
+- Moving an object with several controllers to another parent, for example moving one SDF scene into another,
+  overflowed the stack. Controllers copied their parent's event subscribers and could end up subscribed to their own
+  event. Controllers now notify their scene directly, and a scene stops listening to controllers that moved away.
+- `Controller.ToString()` threw for a controller outside an SDF scene.
+- `#define` printed its argument list before the name (`#define () FOO`), so any define in a shader preset broke the
+  shader.
 
 ### Removed
 

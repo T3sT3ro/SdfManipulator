@@ -68,10 +68,6 @@ namespace me.tooster.sdf.Operators {
         protected override void OnValidate() {
             base.OnValidate();
             refreshChildren();
-            foreach (var child in children) {
-                child.StructureChanged -= OnStructureChanged;
-                child.StructureChanged += OnStructureChanged;
-            }
         }
 
         static IEnumerable<T> GetFirstNestedComponents<T>(Transform root) {

@@ -27,10 +27,6 @@ namespace me.tooster.sdf {
         protected override void OnValidate() {
             base.OnValidate();
             sdfModifiers = sdfModifiers.Where(m => m != null).ToArray();
-            foreach (var child in sdfModifiers) {
-                child.StructureChanged -= OnStructureChanged;
-                child.StructureChanged += OnStructureChanged;
-            }
         }
 
         public virtual SdfData Apply(VectorData input, Processor processor) {
