@@ -40,6 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   included with a plain `#include`. Generated shaders now use `#include_with_pragmas`; regenerate existing scenes.
 - Regeneration could overwrite a prefab with shader source when the target shader was a prefab sub-asset. It now only
   writes to standalone `.shader` files and logs an error otherwise.
+- Generating a scene renamed every object with an elongate operator to `q`. The affected example objects got their
+  names back.
 
 ### Removed
 

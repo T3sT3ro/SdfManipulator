@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using me.tooster.sdf.Generators;
+using me.tooster.sdf.Operators;
+using me.tooster.sdf.Primitives;
 using me.tooster.sdf.Util;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.TestTools;
 
 namespace me.tooster.sdf.Tests.Editor {
     /// <summary>
@@ -56,6 +59,30 @@ namespace me.tooster.sdf.Tests.Editor {
 
             foreach (var keyword in new[] { "_DRAWMODE_NORMAL", "_SHOW_WORLD_GRID", "_ZWRITE_ON" })
                 Assert.That(shader.keywordSpace.FindKeyword(keyword).isValid, Is.True, $"keyword {keyword} isn't declared");
+        }
+
+        [Test]
+        public void Generation_KeepsElongatedObjectName() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);
+
+            var elongated = new GameObject("elongated sphere");
+            elongated.transform.SetParent(combine.transform, false);
+            var sphere = elongated.AddComponent<SdfSphereController>();
+            // OnValidate runs on AddComponent, before the target can be assigned
+            LogAssert.Expect(LogType.Error, "sdf elongate requires an sdf controller as a target!");
+            var elongate = elongated.AddComponent<SdfElongateController>();
+            elongate.sdfPrimitive = sphere;
+            var sdf = elongated.AddComponent<SdfController>();
+            sdf.sdfModifiers = new Controller[] { elongate };
+            // OnTransformChildrenChanged isn't sent synchronously, so register the child by hand
+            combine.children = combine.children.Append(sdf).ToArray();
+
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            StringAssert.Contains("q = abs(", source, "the elongate operator isn't part of the generated shader");
+            Assert.That(elongated.name, Is.EqualTo("elongated sphere"));
         }
 
         static List<string> CompileErrors(Shader shader, string source) {

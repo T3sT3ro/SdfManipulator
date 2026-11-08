@@ -373,7 +373,7 @@ GameObject:
   - component: {fileID: 353536146897320022}
   - component: {fileID: 9122925941554526213}
   m_Layer: 0
-  m_Name: q
+  m_Name: face
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -496,7 +496,7 @@ GameObject:
   - component: {fileID: 515662714036896986}
   - component: {fileID: 4940923768998280114}
   m_Layer: 0
-  m_Name: q
+  m_Name: left ear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1034,7 +1034,7 @@ GameObject:
   - component: {fileID: 500223712220478607}
   - component: {fileID: 8646651231684711132}
   m_Layer: 0
-  m_Name: q
+  m_Name: right ear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

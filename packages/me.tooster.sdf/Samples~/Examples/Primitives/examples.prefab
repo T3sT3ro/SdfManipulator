@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 5091003363104879462}
   - component: {fileID: 6899630269786361001}
   m_Layer: 0
-  m_Name: q
+  m_Name: elongated sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

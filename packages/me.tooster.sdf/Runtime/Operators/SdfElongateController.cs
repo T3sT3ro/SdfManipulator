@@ -66,7 +66,7 @@ namespace me.tooster.sdf.Operators {
                     // float3 q = abs(p) - h
                     Extensions.Var(
                         qData.typeSyntax,
-                        name = qDataName,
+                        qDataName,
                         new Binary
                         {
                             left = Extensions.FunctionCall("abs", SdfData.pData.evaluationExpression),
