@@ -527,23 +527,40 @@ namespace me.tooster.sdf {
             return path;
         }
 
-        // a context menu for regenerating material sub asset
-        [ContextMenu("Regenerate material")]
-        void RegenerateMaterial(MenuCommand menuCommand) { GenerateSceneAssets(); }
+        // Unity calls context menu methods without arguments, so they can't take a MenuCommand
+        [ContextMenu("Regenerate shader")]
+        void RegenerateShaderMenu() {
+            if (!IsEditingContextOpen(out _)) {
+                Debug.LogWarning("Open the SDF scene prefab in Prefab Mode to regenerate its shader.", this);
+                return;
+            }
+            RevalidateScene();
+            GenerateSceneAssets();
+        }
 
         [ContextMenu("Remove sub-assets")]
-        void RemoveSubAssets(MenuCommand menuCommand) {
-            foreach (var subAsset in AssetDatabase.LoadAllAssetRepresentationsAtPath(AssetDatabase.GetAssetPath(gameObject))) {
+        void RemoveSubAssets() {
+            // in Prefab Mode the edited objects aren't the asset, so GetAssetPath returns an empty path
+            var path = IsEditingContextOpen(out var prefabStage) ? prefabStage.assetPath : AssetDatabase.GetAssetPath(gameObject);
+            if (string.IsNullOrEmpty(path)) {
+                Debug.LogWarning("Open the SDF scene prefab in Prefab Mode, or select the prefab asset, to remove its sub-assets.", this);
+                return;
+            }
+
+            var removed = false;
+            foreach (var subAsset in AssetDatabase.LoadAllAssetRepresentationsAtPath(path)) {
                 if (!EditorUtility.DisplayDialog(
                         "Remove sub-asset",
-                        $"Are you sure you want to delete sub asset {subAsset.name} ({subAsset.GetType()})? Existing references to these materials will break!",
-                        "Yes",
-                        "No"
+                        $"Delete the sub-asset {subAsset.name} ({subAsset.GetType().Name}) from {path}? Existing references to it will break!",
+                        "Delete",
+                        "Keep"
                     ))
-                    AssetDatabase.RemoveObjectFromAsset(subAsset);
+                    continue;
+                AssetDatabase.RemoveObjectFromAsset(subAsset);
+                removed = true;
             }
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            if (removed)
+                AssetDatabase.SaveAssets();
         }
 
 #endif

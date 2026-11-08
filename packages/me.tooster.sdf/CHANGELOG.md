@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `.mat` files next to the prefab, wired to the scene and its renderer.
 - `#define` printed its argument list before the name (`#define () FOO`), so any define in a shader preset broke the
   shader.
+- The *Regenerate shader* (formerly *Regenerate material*) and *Remove sub-assets* context menus of `SdfScene` never
+  ran, and *Remove sub-assets* deleted a sub-asset when you clicked No.
 
 ### Removed
 
