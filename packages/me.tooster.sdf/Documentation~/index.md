@@ -70,7 +70,9 @@ Paths are relative to the package root.
 - **Inspectors** (`Editor/Inspectors`) handle the inspector UI and scene gizmos for controllers.
 - **`SdfScene`**: the root component of an SDF scene, attached to the prefab root. It stores references to a material
   and a shader.
-    - In the editor, it regenerates the shader asset and coordinates all controllers under it.
+    - In the editor, it regenerates the shader asset and coordinates all controllers under it. The shader asset must
+      be a standalone `.shader` file. *Tools > SDF > Regenerate All Scene Shaders* regenerates every scene prefab in
+      the project without opening it, for example after a package update changed the generated code.
     - At runtime, it listens to property change events emitted by controllers and updates the controlled material.
 - **Shader presets** (`Runtime/Generators`): for now just `BIRPShaderPreset`, a shader generation preset tailored for
   the built-in forward rendering pipeline. Essentially a stateful factory for shader generators; think of it as a

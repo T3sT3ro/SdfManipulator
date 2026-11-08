@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package documentation in `Documentation~/index.md`.
 - Editor tests: shader generation from the scene template must produce a shader that compiles; the HLSL syntax tests
   run again.
+- *Tools > SDF > Regenerate All Scene Shaders* regenerates the shader of every SDF scene prefab without opening it.
 
 ### Changed
 
@@ -27,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The HLSL library moved from `Editor/Resources/Includes` to `ShaderLibrary/`, and the fallback shader to `Shaders/`.
   SDF scenes made with earlier versions store the old include paths; update them or regenerate the scene.
 - Minimum Unity version is 6000.6.
+- Generated shaders no longer contain a timestamp, and regeneration skips the write when the shader didn't change. It
+  imports only the shader file instead of refreshing the whole AssetDatabase.
 
 ### Fixed
 
@@ -35,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   their contents (e.g. vector property defaults).
 - Draw modes, the world grid and the ZWrite toggle did nothing, because the shader library's keyword pragmas were
   included with a plain `#include`. Generated shaders now use `#include_with_pragmas`; regenerate existing scenes.
+- Regeneration could overwrite a prefab with shader source when the target shader was a prefab sub-asset. It now only
+  writes to standalone `.shader` files and logs an error otherwise.
 
 ### Removed
 

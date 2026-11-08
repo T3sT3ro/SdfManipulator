@@ -255,7 +255,6 @@ namespace me.tooster.sdf {
             if (shaderPreset == null)
                 throw new ShaderGenerationException("No shader preset attached, generation won't proceed!");
             return $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
-// Last modification: {DateTime.Now}
 
 {shaderPreset.MainShaderForScene(this)}
 ";
@@ -464,28 +463,53 @@ namespace me.tooster.sdf {
             if (!IsEditingContextOpen(out var prefabStage))
                 return;
 
-            Profiler.BeginSample("shader text generation");
-            var shaderSource = AssembleShaderSource();
-            Profiler.EndSample();
-
-            if (targetShader != null) {
-                var path = AssetDatabase.GetAssetPath(targetShader);
-                if (File.Exists(path)) {
-                    File.WriteAllText(path, shaderSource);
-                    AssetDatabase.SaveAssetIfDirty(targetShader);
-                }
+            if (targetShader != null && TargetShaderPath == null) {
+                Debug.LogError(
+                    $"SdfScene '{name}': target shader '{targetShader.name}' isn't a standalone .shader file, so it can't be regenerated.",
+                    this
+                );
+                return;
             }
 
-            // if (targetMaterial != null) {
-            //     var path = AssetDatabase.GetAssetPath(targetMaterial);
-            //     if (File.Exists(path)) {
-            //         // targetMaterial.shader = ShaderUtil.CreateShaderAsset(shaderSource);
-            //         AssetDatabase.SaveAssetIfDirty(targetMaterial);
-            //     }
-            // }
+            Profiler.BeginSample("shader text generation");
+            var writtenPath = WriteTargetShader();
+            Profiler.EndSample();
 
-            // needed because we write to shader asset file directly
-            AssetDatabase.Refresh();
+            // the file was written behind the AssetDatabase's back; import it outside of the player loop
+            if (writtenPath != null)
+                EditorApplication.delayCall += () => AssetDatabase.ImportAsset(writtenPath);
+        }
+
+        /// <summary>
+        ///     Path of the standalone <c>.shader</c> file that <see cref="targetShader" /> points to, or null when there is
+        ///     no target or the target is a sub-asset (for example a shader embedded in a prefab).
+        /// </summary>
+        internal string? TargetShaderPath {
+            get {
+                if (targetShader == null || !AssetDatabase.IsMainAsset(targetShader))
+                    return null;
+                var path = AssetDatabase.GetAssetPath(targetShader);
+                return path.EndsWith(".shader", StringComparison.OrdinalIgnoreCase) ? path : null;
+            }
+        }
+
+        /// <summary>
+        ///     Writes the generated shader source to <see cref="TargetShaderPath" />, unless the file already contains it.
+        ///     The caller has to import the written file.
+        /// </summary>
+        /// <returns>the path of the written file, or null when nothing was written</returns>
+        /// <exception cref="ShaderGenerationException"></exception>
+        internal string? WriteTargetShader() {
+            var path = TargetShaderPath;
+            if (path == null)
+                return null;
+
+            var shaderSource = AssembleShaderSource();
+            if (File.Exists(path) && File.ReadAllText(path) == shaderSource)
+                return null;
+
+            File.WriteAllText(path, shaderSource);
+            return path;
         }
 
         // a context menu for regenerating material sub asset
