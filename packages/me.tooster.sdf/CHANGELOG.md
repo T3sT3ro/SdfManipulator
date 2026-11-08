@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Player builds failed to compile because runtime code used editor-only APIs.
 - Generated ShaderLab was invalid: after a code reformat, argument and initializer lists printed their brackets after
   their contents (e.g. vector property defaults).
+- Draw modes, the world grid and the ZWrite toggle did nothing, because the shader library's keyword pragmas were
+  included with a plain `#include`. Generated shaders now use `#include_with_pragmas`; regenerate existing scenes.
 
 ### Removed
 

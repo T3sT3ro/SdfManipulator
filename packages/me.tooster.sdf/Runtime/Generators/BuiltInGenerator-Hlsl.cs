@@ -27,7 +27,7 @@ namespace me.tooster.sdf.Generators {
                 yield return new Define { id = define }.ToStructuredTrivia();
 
             foreach (var include in includeFiles.Distinct())
-                yield return new Include { filepath = include }.ToStructuredTrivia();
+                yield return new Include { includeKeyword = new IncludeWithPragmasKeyword(), filepath = include }.ToStructuredTrivia();
 
             // pragmas can be used to select used shader functions
             foreach (var pragma in pragmas.Distinct())

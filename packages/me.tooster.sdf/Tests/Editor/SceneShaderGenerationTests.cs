@@ -41,10 +41,21 @@ namespace me.tooster.sdf.Tests.Editor {
             scene.RevalidateScene();
             var source = scene.AssembleShaderSource();
 
-            StringAssert.Contains($"#include \"{SdfPaths.ShaderLibrary.Raymarching}\"", source);
+            // library includes declare keywords with #pragma, which Unity only honors through #include_with_pragmas
+            StringAssert.Contains($"#include_with_pragmas \"{SdfPaths.ShaderLibrary.Raymarching}\"", source);
 
             shader = ShaderUtil.CreateShaderAsset(source);
             Assert.That(CompileErrors(shader, source), Is.Empty);
+        }
+
+        [Test]
+        public void TemplateScene_ShaderDeclaresLibraryKeywords() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
+
+            foreach (var keyword in new[] { "_DRAWMODE_NORMAL", "_SHOW_WORLD_GRID", "_ZWRITE_ON" })
+                Assert.That(shader.keywordSpace.FindKeyword(keyword).isValid, Is.True, $"keyword {keyword} isn't declared");
         }
 
         static List<string> CompileErrors(Shader shader, string source) {
