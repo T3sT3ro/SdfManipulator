@@ -69,7 +69,8 @@ namespace me.tooster.sdf.AST.Hlsl {
             switch (nextToken) {
                 case { Node: CloseParenToken or SemicolonToken or ColonColonToken or CommaToken or EndOfDirectiveToken }:
                 case { Node: DotToken, Parent: { Node: Member } }:
-                case { Node: OpenParenToken op, Parent: { Node: IArgumentList argList, Parent: { Node: Call or FunctionDefinition } } }
+                // a function-like macro needs the parenthesis right after its name, or it becomes an object-like macro
+                case { Node: OpenParenToken op, Parent: { Node: IArgumentList argList, Parent: { Node: Call or FunctionDefinition or Define } } }
                     when ReferenceEquals(argList.openParenToken, op): return false;
             }
 

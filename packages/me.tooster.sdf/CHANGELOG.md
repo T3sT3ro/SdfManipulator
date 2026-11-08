@@ -49,6 +49,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Scenes created with *Assets > Create > SDF > Scene Asset* could never regenerate their shader: they were copies of
   the template, which renders an embedded shader and has no target shader. A new scene now gets its own `.shader` and
   `.mat` files next to the prefab, wired to the scene and its renderer.
+- `#define` printed its argument list before the name (`#define () FOO`), so any define in a shader preset broke the
+  shader.
 
 ### Removed
 
