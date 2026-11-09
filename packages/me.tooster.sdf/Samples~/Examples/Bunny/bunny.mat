@@ -8,13 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: bunny
-  m_Shader: {fileID: 4800000, guid: 83bbbbe46d7d4d95bba0d9dd09be7f19, type: 3}
+  m_Shader: {fileID: -2125499959289486227, guid: 27af8c48d1a9e46709318da1c91d96c2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_ValidKeywords:
   - _DRAWMODE_SKYBOX
   - _ZWRITE_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -63,15 +63,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - SDF_1_0_0_0__root_head_root_ears_left_ear__2_Height: 0.68095875
+    - SDF_1_0_0_0__root_head_root_ears_left_ear__2_Radius: 0.116658434
+    - SDF_1_0_0_0__root_head_root_ears_left_ear__2_Rounding: 0.07
     - SDF_1_0_0_0__root_head_root_ears_q__2_Height: 0.68095875
     - SDF_1_0_0_0__root_head_root_ears_q__2_Radius: 0.116658434
     - SDF_1_0_0_0__root_head_root_ears_q__2_Rounding: 0.07
     - SDF_1_0_0_1__root_head_root_ears_q__2_Height: 0.5095044
     - SDF_1_0_0_1__root_head_root_ears_q__2_Radius: 0.078961276
     - SDF_1_0_0_1__root_head_root_ears_q__2_Rounding: -0.17
+    - SDF_1_0_0_1__root_head_root_ears_right_ear__2_Height: 0.5095044
+    - SDF_1_0_0_1__root_head_root_ears_right_ear__2_Radius: 0.078961276
+    - SDF_1_0_0_1__root_head_root_ears_right_ear__2_Rounding: -0.17
     - SDF_1_0_0_2__root_head_root_ears_ear_base_L__2_Radius: 0.08188343
     - SDF_1_0_0_3__root_head_root_ears_ear_base_R__2_Radius: 0.048229314
     - SDF_1_0_0__root_head_root_ears__1_BlendFactor: 0.73
+    - SDF_1_0_1_0__root_head_root_head_face__2_Radius: 0.65
     - SDF_1_0_1_0__root_head_root_head_q__2_Radius: 0.65
     - SDF_1_0_1_1__root_head_root_head_eyeL__2_Cap: 1.2084494
     - SDF_1_0_1_1__root_head_root_head_eyeL__2_MainRadius: 0.18546847
@@ -130,8 +137,11 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
+    - SDF_1_0_0_0__root_head_root_ears_left_ear__3_Length: {r: 0.02, g: 0, b: 0, a: 0}
     - SDF_1_0_0_0__root_head_root_ears_q__3_Length: {r: 0.02, g: 0, b: 0, a: 0}
     - SDF_1_0_0_1__root_head_root_ears_q__3_Length: {r: 0.08, g: 0.07, b: 0, a: 0}
+    - SDF_1_0_0_1__root_head_root_ears_right_ear__3_Length: {r: 0.08, g: 0.07, b: 0, a: 0}
+    - SDF_1_0_1_0__root_head_root_head_face__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
     - SDF_1_0_1_0__root_head_root_head_q__3_Length: {r: 0.12, g: 0, b: 0, a: 0}
     - SDF_1_2__root_box__2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

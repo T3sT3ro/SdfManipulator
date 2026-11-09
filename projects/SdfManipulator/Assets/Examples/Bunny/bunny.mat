@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: bunny
-  m_Shader: {fileID: 4800000, guid: 83bbbbe46d7d4d95bba0d9dd09be7f19, type: 3}
+  m_Shader: {fileID: -2125499959289486227, guid: 27af8c48d1a9e46709318da1c91d96c2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: independent SDF material
-  m_Shader: {fileID: 9049197093735229171, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
+  m_Shader: {fileID: -2125499959289486227, guid: a7170b4ebc8a5624bb8ac09b940af9fa, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -82,12 +82,14 @@ Material:
     - SDF_1_5_0__root_peg_cylinder__2_Height: 1.442987
     - SDF_1_5_0__root_peg_cylinder__2_Radius: 0.558908
     - SDF_1_5_0__root_peg_cylinder__2_Rounding: 0.11
+    - SDF_1_5_1__root_peg_cutout__2_Cap: 1.313056
     - SDF_1_5_1__root_peg_cutout__2_MainRadius: 0.859511
     - SDF_1_5_1__root_peg_cutout__2_RingRadius: 0.461763
     - SDF_1_5__root_peg__1_BlendFactor: 1
     - SDF_1_6_0__root_infinite_cylinder_cylinder__2_Height: 1.426067
     - SDF_1_6_0__root_infinite_cylinder_cylinder__2_Radius: 0.73139
     - SDF_1_6_0__root_infinite_cylinder_cylinder__2_Rounding: 0
+    - SDF_1_6_1__root_infinite_cylinder_cutout__2_Cap: 0.785398
     - SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius: 0.859511
     - SDF_1_6_1__root_infinite_cylinder_cutout__2_RingRadius: 0.233685
     - SDF_1_6__root_infinite_cylinder__1_BlendFactor: 1
@@ -137,3 +139,4 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - sdfScene__box_2_boxsize: {r: 0.25, g: 0.25, b: 0.25, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
