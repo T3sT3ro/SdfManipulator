@@ -68,11 +68,15 @@ Paths are relative to the package root.
     - export the parts of data required to build the syntax tree (the editor part, for working with scenes)
     - control the scene data via uniforms and the like (the runtime part)
 - **Inspectors** (`Editor/Inspectors`) handle the inspector UI and scene gizmos for controllers.
-- **`SdfScene`**: the root component of an SDF scene, attached to the prefab root. It stores references to a material
-  and a shader.
-    - In the editor, it regenerates the shader asset and coordinates all controllers under it. The shader asset must
-      be a standalone `.shader` file. *Tools > SDF > Regenerate All Scene Shaders* regenerates every scene prefab in
-      the project without opening it, for example after a package update changed the generated code.
+- **`SdfScene`**: the root component of an SDF scene, attached to the prefab root.
+    - Importing the prefab generates the scene's shader and a default material and adds them to the prefab as
+      sub-assets, the way Shader Graph adds them to a graph. They live in the import result, not in the prefab file,
+      so regeneration doesn't change the file. Renderers without a material use the default material. To change
+      material settings such as the draw mode, create a material asset that uses the generated shader and assign it to
+      the renderer.
+    - In Prefab Mode, structural changes update the shader in memory right away, and saving the prefab regenerates it.
+      *Tools > SDF > Regenerate All Scene Shaders* reimports every scene prefab, and *Tools > SDF > Migrate Scenes to
+      Generated Sub-Assets* converts scenes that store a standalone `.shader` or an embedded shader and material.
     - At runtime, it listens to property change events emitted by controllers and updates the controlled material.
 - **Shader presets** (`Runtime/Generators`): for now just `BIRPShaderPreset`, a shader generation preset tailored for
   the built-in forward rendering pipeline. Essentially a stateful factory for shader generators; think of it as a
@@ -117,8 +121,7 @@ Paths are relative to the package root.
   use.
 - The syntax tree API only implements the subset of the HLSL and ShaderLab grammars it needs so far. It should be easy
   to extend thanks to the source generators, which build the required classes automatically.
-- SDF scenes are implemented with prefabs and shader assets. Prefabs with sub-assets caused needless reimports on
-  every save (and thus regenerations). Custom asset types, importers and postprocessors were tried too, but Unity's API
-  for them is limited, hard to use and poorly documented. A better format may come later; for now prefabs suffice,
-  with the added benefit of providing "a controllable skeleton" for SDF scenes.
+- SDF scenes are implemented with prefabs, which provide "a controllable skeleton" for them. An earlier version stored
+  the shader and material inside the prefab file, which caused needless reimports on every save and large diffs. Now
+  an asset postprocessor generates them as sub-assets of the prefab's import result instead.
 - Performance with OpenGL on Linux is so-so. Use the editor in Vulkan mode to work with SDFs interactively.

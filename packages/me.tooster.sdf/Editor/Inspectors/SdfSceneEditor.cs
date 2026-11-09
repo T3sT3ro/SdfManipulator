@@ -94,7 +94,15 @@ namespace me.tooster.sdf.Editor.Inspectors {
             var sdfScene = (SdfScene)target;
 
             sdfScene.RevalidateScene();
-            sdfScene.GenerateSceneAssets();
+            if (PrefabStageUtility.GetPrefabStage(sdfScene.gameObject) != null) {
+                sdfScene.GenerateSceneAssets(); // live preview of the unsaved prefab
+            } else {
+                var prefabPath = AssetDatabase.GetAssetPath(sdfScene.gameObject) is { Length: > 0 } assetPath
+                    ? assetPath
+                    : PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(sdfScene.gameObject);
+                if (!string.IsNullOrEmpty(prefabPath))
+                    SdfSceneShaders.Regenerate(prefabPath);
+            }
             sdfScene.UpdateShaderUniforms(true);
         }
 

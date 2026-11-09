@@ -26,16 +26,17 @@ namespace me.tooster.sdf {
     [Icon(SdfPaths.Icons.SdfScene)]
     public class SdfScene : MonoBehaviour { // TODO: inherit from Component to disallow enabling/disabling
 
-        public Material? controlledMaterial; // similarity: https://docs.unity3d.com/ScriptReference/HideFlags.html
-
+        [Tooltip("The material that receives the scene's uniforms. The prefab import sets it to the material of the scene's renderer.")]
+        public Material? controlledMaterial;
 
         public SdfController? sdfSceneRoot;
 
+        // Set only in the prefab's import result, where they point to the shader and the default material that the import
+        // generated as sub-assets of the prefab. A prefab file can't reference its own generated sub-assets, so in the
+        // file they are always empty.
+        [SerializeField] [HideInInspector] internal Shader?   generatedShader;
+        [SerializeField] [HideInInspector] internal Material? generatedMaterial;
 
-        [Tooltip("A target shader asset to regenerate")]
-        public Shader? targetShader;
-        [Tooltip("A target material to regenerate shader with")]
-        public Material? targetMaterial; // Todo: Materials[], plural, support control of many, maybe?
         [Tooltip("Preset to use for shader generation")]
         [SerializeReference] public ShaderPreset? shaderPreset;
 
@@ -81,6 +82,10 @@ namespace me.tooster.sdf {
             if (controlledMaterial == null && Application.isPlaying)
                 Debug.LogWarning($"SdfScene '{name}' has no controlled material, so its shader uniforms won't update.", this);
 #if UNITY_EDITOR
+            // Prefab Mode loads the prefab file, which can't reference the generated sub-assets, so take them from the import
+            // result. Reading prefabContentsRoot isn't allowed in OnEnable, so check that this is the root of the stage.
+            if (PrefabStageUtility.GetPrefabStage(gameObject) is { } stage && transform.parent == null)
+                UseGeneratedAssetsOf(stage.assetPath);
             AssemblyReloadEvents.afterAssemblyReload += MarkDirty;
             PrefabStage.prefabSaved += OnPrefabSaved;
 #endif
@@ -103,14 +108,8 @@ namespace me.tooster.sdf {
 
             RevalidateScene(); // fixme: Revalidate triggered without regenerate will cause difference between shader content and scene data
 
-            if (controlledMaterial == null)
-                diagnostics.Add(Diagnostic.Error("Without controlled material the SDF scene won't be interactive."));
-
             if (shaderPreset == null)
                 diagnostics.Add(Diagnostic.Error("No shader preset set. The generation won't proceed."));
-
-            if (targetShader == null)
-                diagnostics.Add(Diagnostic.Warn("No target shader set, so structural changes won't regenerate the shader."));
 
             if (TryGetComponent<Renderer>(out var r) && r.sharedMaterial != controlledMaterial)
                 diagnostics.Add(Diagnostic.Warn("Material on SdfScene renderer is not the controlled material."));
@@ -140,8 +139,36 @@ namespace me.tooster.sdf {
             RequiresUpdate = true;
         }
 
+        /// <summary>
+        ///     Points the scene and its renderers at the generated shader and default material. A renderer keeps its
+        ///     material when it has one, for example a material asset that uses the generated shader with custom settings.
+        ///     Renderers without a material get the default material. The material of the first renderer becomes the
+        ///     controlled material.
+        /// </summary>
+        internal void UseGeneratedAssets(Shader shader, Material material) {
+            generatedShader = shader;
+            generatedMaterial = material;
+            controlledMaterial = null;
+            foreach (var r in GetComponentsInChildren<Renderer>(true)) {
+                if (r.sharedMaterial == null)
+                    r.sharedMaterial = material;
+                if (controlledMaterial == null)
+                    controlledMaterial = r.sharedMaterial;
+            }
+            if (controlledMaterial == null)
+                controlledMaterial = material;
+        }
+
 #if UNITY_EDITOR
         void OnPrefabSaved(GameObject go) { MarkDirty(); }
+
+        /// <summary>Uses the generated assets from the import result of the prefab at <paramref name="prefabPath" />.</summary>
+        internal void UseGeneratedAssetsOf(string prefabPath) {
+            var imported = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            var importedScene = imported != null ? imported.GetComponentInChildren<SdfScene>(true) : null;
+            if (importedScene is { generatedShader: { } shader, generatedMaterial: { } material })
+                UseGeneratedAssets(shader, material);
+        }
 
         bool IsEditingContextOpen(out PrefabStage prefabStageEditingContext)
             => (prefabStageEditingContext = PrefabStageUtility.GetCurrentPrefabStage())?.prefabContentsRoot.gameObject == gameObject;
@@ -467,67 +494,26 @@ namespace me.tooster.sdf {
 #if UNITY_EDITOR
 
         /// <summary>
-        ///     Generates the Shader and Material as sub-assets of the prefab, if inside the prefab stage.
-        ///     Outside of prefab stage, this function doesn't trigger and print a warning instead.
-        ///     The intent behind that is that shaders are compiled, so there is 1 to 1 mapping between prefab scene and generated
-        ///     shader.
-        ///     Any instance with changed structure would require another shader asset, or otherwise would conflict with the
-        ///     prefab's shader.
+        ///     Updates the generated shader in memory from the current state of the scene, so structural changes show up in
+        ///     Prefab Mode before the prefab is saved. Saving the prefab reimports it, which generates the same shader from
+        ///     the saved file. Does nothing outside Prefab Mode: the shader belongs to the prefab, so an instance with a
+        ///     different structure can't change it.
         /// </summary>
         /// <exception cref="ShaderGenerationException"></exception>
         internal void GenerateSceneAssets() {
-            // We allow editing and regenerating shaders only in prefab stage
-            if (!IsEditingContextOpen(out var prefabStage))
+            if (!IsEditingContextOpen(out _) || generatedShader == null)
                 return;
-
-            if (targetShader != null && TargetShaderPath == null) {
-                Debug.LogError(
-                    $"SdfScene '{name}': target shader '{targetShader.name}' isn't a standalone .shader file, so it can't be regenerated.",
-                    this
-                );
-                return;
-            }
 
             Profiler.BeginSample("shader text generation");
-            var writtenPath = WriteTargetShader();
-            Profiler.EndSample();
-
-            // the file was written behind the AssetDatabase's back; import it outside of the player loop
-            if (writtenPath != null)
-                EditorApplication.delayCall += () => AssetDatabase.ImportAsset(writtenPath);
-        }
-
-        /// <summary>
-        ///     Path of the standalone <c>.shader</c> file that <see cref="targetShader" /> points to, or null when there is
-        ///     no target or the target is a sub-asset (for example a shader embedded in a prefab).
-        /// </summary>
-        internal string? TargetShaderPath {
-            get {
-                if (targetShader == null || !AssetDatabase.IsMainAsset(targetShader))
-                    return null;
-                var path = AssetDatabase.GetAssetPath(targetShader);
-                return path.EndsWith(".shader", StringComparison.OrdinalIgnoreCase) ? path : null;
-            }
-        }
-
-        /// <summary>
-        ///     Writes the generated shader source to <see cref="TargetShaderPath" />, unless the file already contains it.
-        ///     The caller has to import the written file.
-        /// </summary>
-        /// <returns>the path of the written file, or null when nothing was written</returns>
-        /// <exception cref="ShaderGenerationException"></exception>
-        internal string? WriteTargetShader() {
-            var path = TargetShaderPath;
-            if (path == null)
-                return null;
-
             var shaderSource = AssembleShaderSource();
-            if (File.Exists(path) && File.ReadAllText(path) == shaderSource)
-                return null;
-
-            File.WriteAllText(path, shaderSource);
-            return path;
+            Profiler.EndSample();
+            ShaderUtil.UpdateShaderAsset(generatedShader, shaderSource, false);
         }
+
+        /// <returns>true if <paramref name="subAsset" /> is stored in the asset file, and not generated by the import</returns>
+        internal static bool IsStoredInFile(UnityEngine.Object subAsset, string path)
+            => AssetDatabase.TryGetGUIDAndLocalFileIdentifier(subAsset, out _, out long localId)
+             && File.ReadAllText(path).Contains($" &{localId}\n");
 
         // Unity calls context menu methods without arguments, so they can't take a MenuCommand
         [ContextMenu("Regenerate shader")]
@@ -550,7 +536,8 @@ namespace me.tooster.sdf {
             }
 
             var removed = false;
-            foreach (var subAsset in AssetDatabase.LoadAllAssetRepresentationsAtPath(path)) {
+            // generated sub-assets aren't stored in the file; the next import would recreate them anyway
+            foreach (var subAsset in AssetDatabase.LoadAllAssetRepresentationsAtPath(path).Where(a => IsStoredInFile(a, path))) {
                 if (!EditorUtility.DisplayDialog(
                         "Remove sub-asset",
                         $"Delete the sub-asset {subAsset.name} ({subAsset.GetType().Name}) from {path}? Existing references to it will break!",

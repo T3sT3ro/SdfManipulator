@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using me.tooster.sdf.Editor;
 using NUnit.Framework;
@@ -6,8 +7,7 @@ using UnityEngine;
 
 namespace me.tooster.sdf.Tests.Editor {
     /// <summary>
-    ///     Creates a scene the way <i>Assets &gt; Create &gt; SDF &gt; Scene Asset</i> does and checks that it can
-    ///     regenerate its own shader.
+    ///     Creates a scene the way <i>Assets &gt; Create &gt; SDF &gt; Scene Asset</i> does.
     /// </summary>
     public class SceneCreationTests {
         const string Folder = "Assets/SdfSceneCreationTests";
@@ -22,21 +22,16 @@ namespace me.tooster.sdf.Tests.Editor {
         public void DeleteFolder() => AssetDatabase.DeleteAsset(Folder);
 
         [Test]
-        public void CreateScene_WiresOwnShaderAndMaterialFiles() {
-            var prefabPath = $"{Folder}/new scene.prefab";
-            var prefab = SdfSceneCreation.CreateScene(prefabPath);
+        public void CreateScene_UsesItsOwnGeneratedAssets() {
+            var prefab = SdfSceneCreation.CreateScene($"{Folder}/new scene.prefab");
+            var path = AssetDatabase.GetAssetPath(prefab);
             var scene = prefab.GetComponentInChildren<SdfScene>(true);
 
-            Assert.That(AssetDatabase.GetAssetPath(scene.targetShader), Is.EqualTo($"{Folder}/new scene.shader"));
-            Assert.That(scene.TargetShaderPath, Is.Not.Null, "the target shader can't be regenerated");
-            Assert.That(AssetDatabase.GetAssetPath(scene.controlledMaterial), Is.EqualTo($"{Folder}/new scene.mat"));
-            Assert.That(scene.controlledMaterial.shader, Is.EqualTo(scene.targetShader));
-
-            var renderers = prefab.GetComponentsInChildren<Renderer>(true);
-            Assert.That(renderers, Is.Not.Empty);
-            Assert.That(renderers.Select(r => r.sharedMaterial), Has.All.EqualTo(scene.controlledMaterial));
-
-            Assert.That(AssetDatabase.LoadAllAssetRepresentationsAtPath(prefabPath), Is.Empty, "the prefab has sub-assets");
+            Assert.That(prefab.name, Is.EqualTo("new scene"));
+            Assert.That(AssetDatabase.GetAssetPath(scene.generatedShader), Is.EqualTo(path), "the shader isn't a sub-asset of the scene");
+            Assert.That(AssetDatabase.GetAssetPath(scene.controlledMaterial), Is.EqualTo(path), "the material isn't a sub-asset of the scene");
+            Assert.That(scene.GetComponentsInChildren<Renderer>(true).Select(r => r.sharedMaterial), Has.All.EqualTo(scene.controlledMaterial));
+            Assert.That(Directory.GetFiles(Folder).Where(f => !f.EndsWith(".meta")), Is.EquivalentTo(new[] { $"{Folder}/new scene.prefab" }));
         }
     }
 }
