@@ -29,10 +29,11 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax.Commands {
 
         /// (src factor rgb) (dst factor rgb), (src factor alpha) (dst factor alpha)
         [SyntaxNode] public partial record RgbaFactorArguments : BlendArguments {
+            // Declaration order is syntax order: the source generator emits children in this order.
             public CommandArgument srcRgbFactor   { get; init; }
-            public CommandArgument srcAlphaFactor { get; init; }
-            public CommaToken      commaToken     { get; init; } = new();
             public CommandArgument dstRgbFactor   { get; init; }
+            public CommaToken      commaToken     { get; init; } = new();
+            public CommandArgument srcAlphaFactor { get; init; }
             public CommandArgument dstAlphaFactor { get; init; }
         }
     }
