@@ -20,8 +20,8 @@ namespace me.tooster.sdf.Editor {
         public override uint GetVersion() => 1;
 
         void OnPostprocessPrefab(GameObject root) {
-            var scene = root.GetComponentInChildren<SdfScene>(true);
-            if (scene == null)
+            // A scene in a nested prefab belongs to that prefab, which generates its own shader.
+            if (!root.TryGetComponent<SdfScene>(out var scene))
                 return;
 
             // regenerate when the generator code or the shader library changes
@@ -67,7 +67,7 @@ namespace me.tooster.sdf.Editor {
         }
 
         static void UseGeneratedAssets(GameObject root, string prefabPath) {
-            foreach (var scene in root.GetComponentsInChildren<SdfScene>(true))
+            if (root.TryGetComponent<SdfScene>(out var scene))
                 scene.UseGeneratedAssetsOf(prefabPath);
         }
     }

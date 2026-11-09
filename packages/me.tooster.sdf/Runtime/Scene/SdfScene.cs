@@ -86,8 +86,6 @@ namespace me.tooster.sdf {
             // result. Reading prefabContentsRoot isn't allowed in OnEnable, so check that this is the root of the stage.
             if (PrefabStageUtility.GetPrefabStage(gameObject) is { } stage && transform.parent == null)
                 UseGeneratedAssetsOf(stage.assetPath);
-            AssemblyReloadEvents.afterAssemblyReload += MarkDirty;
-            PrefabStage.prefabSaved += OnPrefabSaved;
 #endif
         }
 
@@ -95,10 +93,6 @@ namespace me.tooster.sdf {
         void OnDisable() {
             RequiresUpdate = true;
             UnsubscribeFromControllers();
-#if UNITY_EDITOR
-            AssemblyReloadEvents.afterAssemblyReload -= MarkDirty;
-            PrefabStage.prefabSaved -= OnPrefabSaved;
-#endif
         }
 
 
@@ -134,11 +128,6 @@ namespace me.tooster.sdf {
             RequiresUpdate = true;
         }
 
-        void MarkDirty() {
-            RequiresRegeneration = true;
-            RequiresUpdate = true;
-        }
-
         /// <summary>
         ///     Points the scene and its renderers at the generated shader and default material. A renderer keeps its
         ///     material when it has one, for example a material asset that uses the generated shader with custom settings.
@@ -160,8 +149,6 @@ namespace me.tooster.sdf {
         }
 
 #if UNITY_EDITOR
-        void OnPrefabSaved(GameObject go) { MarkDirty(); }
-
         /// <summary>Uses the generated assets from the import result of the prefab at <paramref name="prefabPath" />.</summary>
         internal void UseGeneratedAssetsOf(string prefabPath) {
             var imported = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);

@@ -76,6 +76,23 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void Import_IgnoresSceneInNestedPrefab() {
+            var scenePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+            var outerPath = $"{Folder}/outer.prefab";
+            var outer = new GameObject("outer");
+            try {
+                PrefabUtility.InstantiatePrefab(scenePrefab, outer.transform);
+                PrefabUtility.SaveAsPrefabAsset(outer, outerPath);
+            } finally {
+                Object.DestroyImmediate(outer);
+            }
+
+            Assert.That(AssetDatabase.LoadAllAssetRepresentationsAtPath(outerPath).OfType<Shader>(), Is.Empty, "the outer prefab generated a shader");
+            var nested = AssetDatabase.LoadAssetAtPath<GameObject>(outerPath).GetComponentInChildren<SdfScene>(true);
+            Assert.That(nested.controlledMaterial, Is.EqualTo(scenePrefab.GetComponent<SdfScene>().controlledMaterial));
+        }
+
+        [Test]
         public void Reimport_KeepsGeneratedObjects() {
             var before = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath).GetComponentInChildren<SdfScene>(true);
             var (shader, material) = (before.generatedShader, before.generatedMaterial);
