@@ -21,8 +21,8 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
 
         #region specializations
 
-        /// Returns number of syntax nodes in this separated list
-        public override int Count => FullList.Count >> 1;
+        /// Returns number of syntax nodes in this separated list: n nodes have n - 1 separators between them
+        public override int Count => (FullList.Count + 1) >> 1;
 
         public new TSyntax this[int index] => (TSyntax)base[index << 1];
 
@@ -32,7 +32,7 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
         /// A, B, C, D -> slice(1, 2) -> B, C
         /// start and length relate to syntax nodes, not tokens
         public SeparatedList<Lang, TSyntax> Slice<TTok>(int start, int length) where TTok : Token<Lang>
-            => new(FullList.OfType<TSyntax>().Skip(start << 1).Take((length << 1) - 1));
+            => new(FullList.Skip(start << 1).Take((length << 1) - 1));
 
         #endregion
 

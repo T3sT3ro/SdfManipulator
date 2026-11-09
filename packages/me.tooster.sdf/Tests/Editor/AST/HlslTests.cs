@@ -1,3 +1,4 @@
+using System.Linq;
 using me.tooster.sdf.AST.Hlsl;
 using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
@@ -27,6 +28,30 @@ namespace me.tooster.sdf.Tests.Editor.AST {
             };
 
             Assert.AreEqual(expected, HlslFormatter.Format(define)!.ToString().Trim());
+        }
+
+        [TestCase(new[] { "a" }, 0)]
+        [TestCase(new[] { "a", "b" }, 1)]
+        [TestCase(new[] { "a", "b", "c" }, 2)]
+        public static void SeparatedList_CountsNodes(string[] identifiers, int expected) {
+            ArgumentList<Identifier> args = identifiers.Select(i => (Identifier)i).ToArray();
+            var list = args.arguments;
+
+            Assert.AreEqual(identifiers.Length, list.Count);
+            Assert.AreEqual(expected, list.SeparatorCount);
+        }
+
+        [TestCase(0, 2, "a,b")]
+        [TestCase(1, 2, "b,c")]
+        [TestCase(2, 1, "c")]
+        [TestCase(1, 0, "")]
+        public static void SeparatedList_SlicesNodesWithSeparators(int start, int length, string expected) {
+            ArgumentList<Identifier> args = new Identifier[] { "a", "b", "c" };
+
+            var slice = args.arguments.Slice<CommaToken>(start, length);
+
+            Assert.AreEqual(expected, slice.ToString().Replace(" ", ""));
+            Assert.AreEqual(length, slice.Count);
         }
 
         [Test]
