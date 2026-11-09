@@ -481,8 +481,8 @@ MonoBehaviour:
   shaderPreset:
     rid: 2082630382636761137
   diagnostics:
-  - severity: 2
-    message: No target shader set. Any changes will be applied directly to the material.
+  - severity: 1
+    message: No target shader set, so structural changes won't regenerate the shader.
   references:
     version: 2
     RefIds:
@@ -1938,6 +1938,153 @@ Shader:
     file: 
     compilerPlatform: 26
     line: 239
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0__root_combine_nose__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0__root_combine_nose__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_combine_face_eye__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_combine_face_eye__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_combine_face_skull__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_combine_face_skull__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1__root_torso__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1__root_torso__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_limbs_uper_arm__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_limbs_uper_arm__2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_limbs_torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_limbs_torus__2_Cap" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_limbs_torus__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_limbs_torus__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2__root_limbs_torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2__root_limbs_torus__2_Cap" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2__root_limbs_torus__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2__root_limbs_torus__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1__root__1_BlendFactor" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: repro WOMP scene (generated)
+    compilerPlatform: 15
+    line: -1
     warning: 1
     runtimeError: 0
   - message: '"SDF_1_0_0__root_combine_nose__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'

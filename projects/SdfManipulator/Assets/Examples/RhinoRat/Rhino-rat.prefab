@@ -1511,8 +1511,8 @@ MonoBehaviour:
   shaderPreset:
     rid: 2082630382636761135
   diagnostics:
-  - severity: 2
-    message: No target shader set. Any changes will be applied directly to the material.
+  - severity: 1
+    message: No target shader set, so structural changes won't regenerate the shader.
   references:
     version: 2
     RefIds:
@@ -2727,6 +2727,342 @@ Shader:
     file: 
     compilerPlatform: 26
     line: 265
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0__root_torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0__root_torus__2_Cap" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0__root_torus__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0__root_torus__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_0__root_combine_sphere__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_0__root_combine_sphere__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_combine_torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_combine_torus__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_combine_torus__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_combine__1__sphere__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_combine__1__sphere__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_combine__1__torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_combine__1__torus__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_combine__1__torus__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_0__root_combine_combine_leg__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_0__root_combine_combine_leg__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_0__root_combine_combine_leg__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_0__root_combine_combine_leg__2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_1__root_combine_combine_leg__2___1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_1__root_combine_combine_leg__2___2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_1__root_combine_combine_leg__2___2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_1__root_combine_combine_leg__2___2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_2__root_combine_combine_leg__1___1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_2__root_combine_combine_leg__1___2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_2__root_combine_combine_leg__1___2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_2__root_combine_combine_leg__1___2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_3__root_combine_combine_leg__3___1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_3__root_combine_combine_leg__3___2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_3__root_combine_combine_leg__3___2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_3__root_combine_combine_leg__3___2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_4__root_combine_combine_box__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_4__root_combine_combine_box__2_BoxExtents" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_5__root_combine_combine_cylinder__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_5__root_combine_combine_cylinder__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_5__root_combine_combine_cylinder__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_6__root_combine_combine_box__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_6__root_combine_combine_box__2_BoxExtents" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_7__root_combine_combine_torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_7__root_combine_combine_torus__2_Cap" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_7__root_combine_combine_torus__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_7__root_combine_combine_torus__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_8__root_combine_combine_cylinder__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_8__root_combine_combine_cylinder__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_8__root_combine_combine_cylinder__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_8__root_combine_combine_cylinder__2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_9__root_combine_combine_box__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0_9__root_combine_combine_box__2_BoxExtents" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0__root_combine_combine__1_BlendFactor" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Rhino-rat (generated)
+    compilerPlatform: 15
+    line: -1
     warning: 1
     runtimeError: 0
   - message: '"SDF_1_0__root_torus__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'

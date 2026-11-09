@@ -3486,6 +3486,335 @@ Shader:
   - message: '"SDF_1_0__root_ground__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0__root_ground__2_BoxExtents" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_0__root_shroom_1_leg__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_0__root_shroom_1_leg__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_shroom_1_cap__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_shroom_1_cap__2_Angle" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_1_1__root_shroom_1_cap__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_shroom2_leg__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_0__root_shroom2_leg__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_shroom2_cone__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_shroom2_cone__2_Angle" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_1__root_shroom2_cone__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2__root_shroom2_cap__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_2_2__root_shroom2_cap__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0__root_pill_sphere__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_0__root_pill_sphere__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_1__root_pill_sphere__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_3_1__root_pill_sphere__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_0__root_screw_body__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_0__root_screw_body__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_0__root_screw_body__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_0__root_screw_head_ball__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_0__root_screw_head_ball__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1__root_screw_head_cut_1__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_1__root_screw_head_cut_1__2_BoxExtents" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_2__root_screw_head_cut_2__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_4_1_2__root_screw_head_cut_2__2_BoxExtents" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_0__root_peg_cylinder__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_0__root_peg_cylinder__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_0__root_peg_cylinder__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_0__root_peg_cylinder__2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_peg_cutout__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_peg_cutout__2_Cap" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_peg_cutout__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_5_1__root_peg_cutout__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_0__root_infinite_cylinder_cylinder__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_0__root_infinite_cylinder_cylinder__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_1__root_infinite_cylinder_cutout__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_1__root_infinite_cylinder_cutout__2_MainRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_6_1__root_infinite_cylinder_cutout__2_RingRadius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_0__root_two_cones_cone__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_0__root_two_cones_cone__2_Angle" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_0__root_two_cones_cone__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_1__root_two_cones_cone__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_1__root_two_cones_cone__2_Angle" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_7_1__root_two_cones_cone__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1__root__1_BlendFactor" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0__root_ground__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Box SDF Scene (generated)
     compilerPlatform: 18
     line: -1
     warning: 1

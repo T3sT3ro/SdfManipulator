@@ -1604,6 +1604,111 @@ Shader:
   - message: '"SDF_1_0_0_0__root_combine_dice_box__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
     messageDetails: 
     file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_0__root_combine_dice_box__2_BoxExtents" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_1__root_combine_dice_sphere__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_1__root_combine_dice_sphere__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_combine_cross_cylinder__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_combine_cross_cylinder__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_combine_cross_cylinder__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_combine_cross_cylinder__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_combine_cross_cylinder__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_1__root_combine_cross_cylinder__2_Rounding" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_2__root_combine_cross_cylinder__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_2__root_combine_cross_cylinder__2_Height" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_1_2__root_combine_cross_cylinder__2_Radius" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
+    compilerPlatform: 15
+    line: -1
+    warning: 1
+    runtimeError: 0
+  - message: '"SDF_1_0_0_0__root_combine_dice_box__1_SpaceTransform" contains consecutive underscores ("__"), such names are reserved and might result in undefined behaviour'
+    messageDetails: 
+    file: Hello SDF (generated)
     compilerPlatform: 18
     line: -1
     warning: 1
