@@ -60,8 +60,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   overflowed the stack. Controllers copied their parent's event subscribers and could end up subscribed to their own
   event. Controllers now notify their scene directly, and a scene stops listening to controllers that moved away.
 - `Controller.ToString()` threw for a controller outside an SDF scene.
-- `#define` printed its argument list before the name (`#define () FOO`), so any define in a shader preset broke the
-  shader.
+- `SeparatedList.Count` returned one less than the number of nodes for an odd-length list, and `Slice` dropped the
+  separators and skipped the wrong nodes.
+- ShaderLab `Blend` with separate RGB and alpha factors printed them in the wrong order.
 
 ### Removed
 
