@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: d702ae22
 --- !u!114 &8817382433033363048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,6 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d59b510f6b34c8aba43906bbbc1ca4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 967f38b3
   variant: 0
   bendFactor: -0.64
 --- !u!114 &6529700756650775987
@@ -73,6 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2563b0581842e4ac5660d9df7ba835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 7c24174e
   height: 1.0431936
   radius: 0.63112974
   rounding: 0.25
@@ -89,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: ac349b82
   inverted: 0
   sdfModifiers:
   - {fileID: 5171449688801912680}
@@ -230,14 +234,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ed26e558d94e30b2d87bed778a01dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 26cd407f
   inverted: 0
   sdfModifiers: []
   operation: 1
   blendFactor: 0.3
   singleId: 0
-  children:
-  - {fileID: 2512574452604008374}
-  - {fileID: 5841691969529003525}
 --- !u!1 &1703028860602430373
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,6 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: be8f3f50
 --- !u!114 &197798378831618137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 67bff407
   boxExtents: {x: 6.891491, y: 0.87390125, z: 3.7631674}
 --- !u!114 &5841691969529003525
 MonoBehaviour:
@@ -309,6 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 3b07ade0
   inverted: 1
   sdfModifiers:
   - {fileID: 7128357919998208801}
@@ -359,14 +364,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ed26e558d94e30b2d87bed778a01dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 00a0d911
   inverted: 0
   sdfModifiers: []
   operation: 1
   blendFactor: 1
   singleId: 0
-  children:
-  - {fileID: 306104063086917264}
-  - {fileID: 468980860546971771}
 --- !u!1 &3113208251461506827
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,6 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 5a09f5df
 --- !u!114 &4296607876378638106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: b055e8eb
   radius: 0.42742428
 --- !u!114 &5091003363104879462
 MonoBehaviour:
@@ -439,6 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9971b14fd68403285bb5d35a9d0a169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: cdd6349d
   length: {x: 0.64, y: -0.1, z: 0.54}
   sdfPrimitive: {fileID: 4296607876378638106}
 --- !u!114 &6899630269786361001
@@ -453,6 +459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: e2d7a620
   inverted: 0
   sdfModifiers:
   - {fileID: 4013375983109225475}
@@ -503,6 +510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: fe4cf8a4
 --- !u!114 &9052084508724797049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -515,6 +523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c73fb010ac4729847fb5223dc18512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: ddde1592
   angle: 0.543944
   height: 1.2673638
   coneOrigin: 0
@@ -530,6 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: f3c27c73
   inverted: 0
   sdfModifiers:
   - {fileID: 535445103664592465}
@@ -581,6 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: b2f68cad
 --- !u!114 &5568248851304499556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,6 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 6ed68092
   variant: 1
   mainRadius: 0.630713
   ringRadius: 0.25
@@ -609,6 +621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d59b510f6b34c8aba43906bbbc1ca4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 9d7c6b1e
   variant: 1
   bendFactor: 1
 --- !u!114 &858736482330734670
@@ -623,6 +636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 4bdca6f2
   inverted: 0
   sdfModifiers:
   - {fileID: 2600727523156923817}
@@ -674,6 +688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 57cd9024
 --- !u!114 &9192884039193135461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,6 +701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 3803e162
   radius: 0.9950453
 --- !u!114 &468980860546971771
 MonoBehaviour:
@@ -699,6 +715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: e441391d
   inverted: 0
   sdfModifiers:
   - {fileID: 5338349887958149039}
@@ -750,6 +767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: af2b12f0
 --- !u!114 &8961985592840649116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,6 +780,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e08e8647a4400a920dff0719109a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: bac8e849
   boxExtents: {x: 0.25, y: 0.25, z: 0.25}
 --- !u!114 &4118769173362321343
 MonoBehaviour:
@@ -775,6 +794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ccc065056454d00bfa1309e4e07eb77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 9d9ac6b8
   variant: 1
   thickness: 0.32
   layers: 5
@@ -790,6 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: d7d46390
   inverted: 0
   sdfModifiers:
   - {fileID: 5271409024312101400}
@@ -841,6 +862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 09cb0326
 --- !u!114 &221301176864512887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -853,6 +875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2563b0581842e4ac5660d9df7ba835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: f1c0269e
   height: 0.24028566
   radius: 0.75
   rounding: 0.25
@@ -869,6 +892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 3b64e310
   inverted: 0
   sdfModifiers:
   - {fileID: 808739688250612942}
@@ -925,20 +949,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ed26e558d94e30b2d87bed778a01dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: aaab8f88
   inverted: 0
   sdfModifiers: []
   operation: 0
   blendFactor: 0.55
   singleId: 0
-  children:
-  - {fileID: 597672031700351248}
-  - {fileID: 6668809761950411001}
-  - {fileID: 7350729766917701545}
-  - {fileID: 8189918967043093638}
-  - {fileID: 6899630269786361001}
-  - {fileID: 7751388247970373751}
-  - {fileID: 3556409826913651564}
-  - {fileID: 858736482330734670}
 --- !u!1 &8187159479354006610
 GameObject:
   m_ObjectHideFlags: 0
@@ -985,7 +1001,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d2fa28bedd4a74a79b0b5235977da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlledMaterial: {fileID: 2100000, guid: f95d9b670904e4682b87e24bcecc7109, type: 2}
   sdfSceneRoot: {fileID: 7154973885652460484}
   generatedShader: {fileID: 0}
   generatedMaterial: {fileID: 0}
@@ -1055,6 +1070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: db265cbc
 --- !u!114 &5938041641386494490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1067,6 +1083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e28f87c25e145c088bda494d5bb0e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 1bf66ace
   radius: 0.75
 --- !u!114 &8189918967043093638
 MonoBehaviour:
@@ -1080,6 +1097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 46b50828
   inverted: 0
   sdfModifiers:
   - {fileID: 4009831705253776336}
@@ -1131,6 +1149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a2e6ffe27be451c83de99090ab44d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 6dba2181
 --- !u!114 &7492590097188014307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1143,6 +1162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c81ac00e2214b8a8b065cd8c26751bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 7acd3b33
   variant: 0
   mainRadius: 0.49804693
   ringRadius: 0.25
@@ -1159,6 +1179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ccc065056454d00bfa1309e4e07eb77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 2a8e30dc
   variant: 1
   thickness: 0.12
   layers: 3
@@ -1174,6 +1195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c087d0e88fc3bf4917487dd6875b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 3776147e
   inverted: 0
   sdfModifiers:
   - {fileID: 5878441262915003613}
