@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - *Tools > SDF > Regenerate All Scene Shaders* reimports every SDF scene prefab.
 - *Tools > SDF > Migrate Scenes to Generated Sub-Assets* converts scenes that store a standalone `.shader` or an
   embedded shader and material. Material assets that used the old shader switch to the generated one.
+- Printing tests for every HLSL and ShaderLab syntax node, and a test that fails when a node type has none. Tests check
+  that walkers and mappers visit every token in syntax order.
+- `Walker.Walk` and `Mapper.Map` run a visitor over a tree.
 
 ### Changed
 
@@ -66,6 +69,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `SeparatedList.Count` returned one less than the number of nodes for an odd-length list, and `Slice` dropped the
   separators and skipped the wrong nodes.
 - ShaderLab `Blend` with separate RGB and alpha factors printed them in the wrong order.
+- Token text: booleans printed as `True` and `False`, and system-value semantics had a "Semantic" suffix
+  (`SV_TargetSemantic0`). Float literals were rounded to 6 decimals, so values below 0.000001 printed as `0.0`; they
+  now print the shortest decimal that reads back as the same float, and NaN and infinity throw. A minus before a
+  negative number printed `--`, which HLSL reads as a decrement.
+- HLSL `switch` printed no braces, keyword or parentheses, `typedef` had no `;`, a parameter's default value had no
+  `=`, and a call without arguments had no parentheses.
+- `Walker` recursed forever and never visited statements and expressions. Tokens got the anchor of their grandparent,
+  and nodes reached through a base type or a list were anchored to themselves.
+- The generated mapper visited a node's own children before the ones of its base type, e.g. `--` before `i` in `i--`.
+- HLSL formatter: a directive before a token in the middle of a tree ended up on the previous line, every `[` indented
+  the rest of the file, the blank line before functions was never added, and matrix rows were indented by two levels.
+  Formatted HLSL is also more conventional: `++i`, `a[0]`, `f(x);` in declarations, `} else`, `} while (x);`, `for`
+  headers on one line and indented `case` labels. A ShaderLab texture default prints as `"white" {}`.
 
 ### Removed
 
