@@ -7,6 +7,9 @@ namespace me.tooster.sdf.AST {
         protected Mapper(bool descendIntoTrivia = default) => this.descendIntoTrivia = descendIntoTrivia;
         protected bool descendIntoTrivia { get; init; }
 
+        /// Maps <paramref name="root" /> and its descendants. Returns the same node if nothing changed, or null to remove it.
+        public Tree<Lang>.Node? Map(Tree<Lang>.Node root) => root.Accept(this, null);
+
         public virtual Tree<Lang>.Node? Visit(Anchor<Token<Lang>> a) {
             var token = a.Node;
             var leading = token.LeadingTriviaList;
@@ -87,7 +90,7 @@ namespace me.tooster.sdf.AST {
                 if (element is null)
                     continue; // this happening is indication of a bad practice but it may happen nevertheless
 
-                var newElement = element.Accept(this, Anchor.New(element, a)) as TElement;
+                var newElement = element.Accept(this, a) as TElement;
                 if (newElement is not null) // omit nulls
                     newList.Add(newElement);
                 changed |= !ReferenceEquals(element, newElement);

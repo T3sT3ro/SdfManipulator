@@ -31,14 +31,15 @@ namespace me.tooster.sdf.AST.Generators {
         public static IEnumerable<IPropertySymbol> OwnProperties(this ITypeSymbol recordSymbol, string? name = null) =>
             (name is null ? recordSymbol.GetMembers() : recordSymbol.GetMembers(name)).OfType<IPropertySymbol>();
 
+        /// Returns the properties of the base types, starting from the root of the hierarchy, which is syntax order.
         public static IEnumerable<IPropertySymbol> InheritedProperties(this ITypeSymbol recordSymbol, string? name = null) {
-            var parent = recordSymbol.BaseType;
-            while (parent != null) {
-                foreach (var property in (name is null ? parent.GetMembers() : parent.GetMembers(name)).OfType<IPropertySymbol>())
-                    yield return property;
+            var baseTypes = new List<ITypeSymbol>();
+            for (var parent = recordSymbol.BaseType; parent != null; parent = parent.BaseType)
+                baseTypes.Add(parent);
 
-                parent = parent.BaseType;
-            }
+            for (var i = baseTypes.Count - 1; i >= 0; i--)
+                foreach (var property in (name is null ? baseTypes[i].GetMembers() : baseTypes[i].GetMembers(name)).OfType<IPropertySymbol>())
+                    yield return property;
         }
 
         /// Returns true if record property is a AST-generator compatible.

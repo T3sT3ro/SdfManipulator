@@ -26,7 +26,7 @@ namespace me.tooster.sdf.AST.Hlsl {
             if (node is null)
                 return null;
             var formatter = new HlslFormatter(state);
-            return node.Accept(formatter, Anchor.New(node)) as T;
+            return node.Accept(formatter, null) as T;
         }
 
         static int getIndentChange<T>(Anchor<T> a) where T : Token<hlsl>

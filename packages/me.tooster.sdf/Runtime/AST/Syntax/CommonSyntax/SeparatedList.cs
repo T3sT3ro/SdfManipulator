@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,12 @@ namespace me.tooster.sdf.AST.Syntax.CommonSyntax {
             this(listWithSeparators.AsEnumerable()) { }
 
         public override string ToString() => WriteTo(new StringBuilder()).ToString();
+
+        // without these, visitors would visit a separated list as a plain SyntaxOrTokenList
+        internal override void Accept(Visitor<Lang> visitor, Anchor? parent) => visitor.Visit(Anchor.New(this, parent));
+
+        internal override TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent) where TR : default
+            => visitor.Visit(Anchor.New(this, parent));
 
         public static implicit operator SeparatedList<Lang, TSyntax>(TSyntax singleton) => new(new SyntaxOrToken<Lang>[] { singleton });
 

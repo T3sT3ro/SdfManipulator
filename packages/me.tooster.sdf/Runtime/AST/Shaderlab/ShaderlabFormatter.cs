@@ -21,7 +21,7 @@ namespace me.tooster.sdf.AST.Shaderlab {
         // Normalizes the syntax, e.g. whitespaces, newlines etc.
         public static T? Format<T>(T node, FormatterState? state = null) where T : Tree<shaderlab>.Node {
             var formatter = new ShaderlabFormatter(state);
-            return node.Accept(formatter, Anchor.New(node)) as T;
+            return node.Accept(formatter, null) as T;
         }
 
         protected int getIndentChange<T>(Anchor<T> a) where T : Token<shaderlab>

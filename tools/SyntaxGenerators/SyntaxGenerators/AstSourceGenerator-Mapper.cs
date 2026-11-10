@@ -39,14 +39,14 @@ namespace me.tooster.sdf.AST.Generators {
 
 
             var syntaxVisitMethods = ss.Syntaxes.Select(record => {
-                var parameterName = "a";
                 var paramTypeName = record.getFullyQualifiedTypeNameWithGenerics(ss.LangName, out var tp);
                 var parameterType = IdentifierName($"Anchor<{paramTypeName}>");
                 TypeSyntax returnType = IdentifierName(Identifier($"Tree<{ss.LangName.ToLower()}>.Node?"));
 
-                var ownProperties = Utils.OwnProperties(record).Where(Utils.isPropertyCompatible).ToList();
+                // visit children in syntax order, the same order as ChildNodesAndTokens
+                var ownProperties = Utils.OwnProperties(record).Where(Utils.isPropertyCompatible);
                 var inheritedProperties = Utils.InheritedProperties(record).Where(Utils.isPropertyCompatible);
-                var inheritedAndOwnProperties = ownProperties.Concat(inheritedProperties).ToList();
+                var inheritedAndOwnProperties = OrderLikeChildNodesAndTokens(record, inheritedProperties.Concat(ownProperties).ToList());
 
                 var methodDeclaration = (MethodDeclarationSyntax)ParseMemberDeclaration(
                     $"public virtual Tree<{ss.LangName.ToLower()}>.Node? Visit(Anchor<{record}> a) {{}}"
@@ -64,13 +64,36 @@ namespace me.tooster.sdf.AST.Generators {
                 }
 
                 methodDeclaration = methodDeclaration.WithBody(record.IsAbstract
-                    ? Block(ParseStatement("return a.Node.Accept(this, a);"))
+                    // dispatch to the concrete type; Accept takes the anchor of the parent, not of the node itself
+                    ? Block(ParseStatement("return a.Node.Accept(this, a.Parent);"))
                     : Block(mapperVisitOverride(inheritedAndOwnProperties, ss.LangName)));
 
                 return methodDeclaration;
             }).Where(x => x is not null);
 
             return visitor.AddMembers(syntaxVisitMethods.ToArray()).WithAttributeLists(generatedAttributeSyntax);
+        }
+
+        /// <summary>
+        ///     Base members come first, which is syntax order unless the record declares its own ChildNodesAndTokens: a
+        ///     preprocessor directive starts with the <c>#</c> of its base, but ends with the end of directive of its base.
+        ///     In that case the order of the properties in the handwritten ChildNodesAndTokens wins.
+        /// </summary>
+        static List<IPropertySymbol> OrderLikeChildNodesAndTokens(ITypeSymbol record, List<IPropertySymbol> properties) {
+            var names = record.GetMembers("ChildNodesAndTokens")
+                .SelectMany(m => m.DeclaringSyntaxReferences)
+                .SelectMany(r => r.GetSyntax().DescendantNodes().OfType<IdentifierNameSyntax>())
+                .Select(id => id.Identifier.ValueText)
+                .ToList();
+            if (names.Count == 0)
+                return properties;
+
+            int position(IPropertySymbol p) {
+                var index = names.IndexOf(p.Name);
+                return index < 0 ? int.MaxValue : index;
+            }
+
+            return properties.Select((p, i) => (p, i)).OrderBy(t => position(t.p)).ThenBy(t => t.i).Select(t => t.p).ToList();
         }
 
         static IEnumerable<StatementSyntax> mapperVisitOverride(List<IPropertySymbol> props, string langName) {

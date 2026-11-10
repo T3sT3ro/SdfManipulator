@@ -20,8 +20,12 @@ namespace me.tooster.sdf.AST.Syntax {
             /// <returns></returns>
             public override string ToString() => WriteTo(new StringBuilder()).ToString();
 
+            /// <summary>Dispatches the visitor to this node.</summary>
+            /// <param name="parent">The anchor of this node's parent, or null for the root of a tree.</param>
             internal abstract void Accept(Visitor<Lang> visitor, Anchor? parent);
-            internal abstract TR?  Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent);
+
+            /// <inheritdoc cref="Accept(Visitor{Lang}, Anchor?)" />
+            internal abstract TR? Accept<TR>(Visitor<Lang, TR> visitor, Anchor? parent);
         }
     }
 }
