@@ -58,7 +58,7 @@ namespace me.tooster.sdf {
 
         void Awake() {
             RequiresUpdate = true;
-            shaderPreset ??= (ShaderPreset)Activator.CreateInstance(ShaderPreset.DetectedShaderPresets[0]);
+            shaderPreset ??= new BIRPShaderPreset();
         }
 
         void LateUpdate() {

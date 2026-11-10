@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 namespace me.tooster.sdf.Generators {
     /// <summary>
     ///     A raymarching shader factory is serialized as a field in the SdfScene. It can persist data and influence the shape
@@ -7,15 +6,6 @@ namespace me.tooster.sdf.Generators {
     /// </summary>
     [Serializable]
     public abstract class ShaderPreset {
-        /// <summary>
-        ///     Returns detected (on domain reload) concrete classes with parameterless constructor inheriting after ShadePreset
-        /// </summary>
-        public static Type[] DetectedShaderPresets { get; } = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(domainAssembly => domainAssembly.GetTypes())
-            .Where(type => type.IsSubclassOf(typeof(ShaderPreset))
-             && !type.IsAbstract
-             && type.GetConstructor(new Type[] { }) != null
-            ).ToArray();
         /// <summary>Instantiates a new stateful processor for parsing scene data and building the shader</summary>
         /// <param name="scene">scene for the processor to operate on</param>
         /// <returns>a processor for the given scene</returns>

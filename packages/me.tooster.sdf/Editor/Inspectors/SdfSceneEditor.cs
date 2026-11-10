@@ -67,11 +67,12 @@ namespace me.tooster.sdf.Editor.Inspectors {
                 _ => sdfScene.RequiresRegeneration = true
             );
 
-            // Create a dropdown based on detected ShaderPresets. Changing the dropdown should assign the preset on the SdfScene to a new
-            // ShaderPreset instance. The SdfScene should then regenerate the shader based on the new ShaderPreset.
+            // The dropdown shows the type of the current preset. Picking another type replaces the preset with a new instance
+            // of that type, which regenerates the shader; picking the current type keeps the preset and its settings.
+            var presetTypes = ShaderPresetTypes();
             var presetDropdown = root.Q<DropdownField>("preset");
-            presetDropdown.choices = ShaderPreset.DetectedShaderPresets.Select(t => $"{t.Name} ({t})").ToList();
-            presetDropdown.index = 0;
+            presetDropdown.choices = presetTypes.Select(t => $"{t.Name} ({t})").ToList();
+            presetDropdown.index = Array.IndexOf(presetTypes, sdfScene.shaderPreset?.GetType());
 
             presetDropdown.RegisterCallback<ChangeEvent<string>>(e => assignPreset(presetDropdown.index));
 
@@ -79,11 +80,19 @@ namespace me.tooster.sdf.Editor.Inspectors {
             return root;
 
             void assignPreset(int presetIndex) {
-                shaderPresetSerializedProperty.managedReferenceValue =
-                    ShaderPreset.InstantiatePreset(ShaderPreset.DetectedShaderPresets[presetIndex]);
+                if (presetIndex < 0 || sdfScene.shaderPreset?.GetType() == presetTypes[presetIndex])
+                    return;
+                shaderPresetSerializedProperty.managedReferenceValue = ShaderPreset.InstantiatePreset(presetTypes[presetIndex]);
                 serializedObject.ApplyModifiedProperties();
             }
         }
+
+        /// Concrete shader presets with a parameterless constructor, from the editor's type cache.
+        static Type[] ShaderPresetTypes()
+            => TypeCache.GetTypesDerivedFrom<ShaderPreset>()
+                .Where(t => !t.IsAbstract && t.GetConstructor(Type.EmptyTypes) != null)
+                .OrderBy(t => t.FullName)
+                .ToArray();
 
         /*
         [UnityEditor.Callbacks.DidReloadScripts]
