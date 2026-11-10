@@ -282,13 +282,28 @@ namespace me.tooster.sdf {
 #endif
         }
 
-        internal string AssembleShaderSource() {
+        /// <summary>The name of the shader that the last generation produced, see <see cref="GeneratedShaderName" />.</summary>
+        public string ShaderName { get; private set; } = "";
+
+        /// <param name="prefabGuid">The GUID of the scene's prefab, which makes the shader name unique.</param>
+        internal string AssembleShaderSource(string? prefabGuid = null) {
             if (shaderPreset == null)
                 throw new ShaderGenerationException("No shader preset attached, generation won't proceed!");
+            ShaderName = GeneratedShaderName(name, prefabGuid);
             return $@"// GENERATED SHADER CONTENT. ANY MODIFICATIONS WILL BE OVERWRITTEN.
 
 {shaderPreset.MainShaderForScene(this)}
 ";
+        }
+
+        /// <summary>
+        ///     Returns <c>SDF/&lt;scene name&gt; &lt;first 8 characters of the prefab GUID&gt;</c>, so scenes with the same name
+        ///     get different shaders. A slash in the name would add a submenu to the shader menu, and ShaderLab strings can't
+        ///     escape a quote, so slashes become dashes and double quotes become single quotes.
+        /// </summary>
+        internal static string GeneratedShaderName(string sceneName, string? prefabGuid) {
+            var escaped = new string(sceneName.Select(c => c switch { '/' or '\\' => '-', '"' => '\'', '\n' or '\r' => ' ', _ => c }).ToArray()).Trim();
+            return string.IsNullOrEmpty(prefabGuid) ? $"SDF/{escaped}" : $"SDF/{escaped} {prefabGuid!.Substring(0, Math.Min(8, prefabGuid.Length))}";
         }
         // ensure empty line at the bottom
         /* Used to register a controller under the scene */
@@ -488,11 +503,11 @@ namespace me.tooster.sdf {
         /// </summary>
         /// <exception cref="ShaderGenerationException"></exception>
         internal void GenerateSceneAssets() {
-            if (!IsEditingContextOpen(out _) || generatedShader == null)
+            if (!IsEditingContextOpen(out var stage) || generatedShader == null)
                 return;
 
             Profiler.BeginSample("shader text generation");
-            var shaderSource = AssembleShaderSource();
+            var shaderSource = AssembleShaderSource(AssetDatabase.AssetPathToGUID(stage.assetPath));
             Profiler.EndSample();
             ShaderUtil.UpdateShaderAsset(generatedShader, shaderSource, false);
         }

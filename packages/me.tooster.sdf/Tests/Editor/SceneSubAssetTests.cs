@@ -47,6 +47,19 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void Import_NamesShaderAfterPrefabAndItsGuid() {
+            var shader = AssetDatabase.LoadAllAssetRepresentationsAtPath(prefabPath).OfType<Shader>().Single();
+
+            Assert.That(shader.name, Is.EqualTo($"SDF/sub-asset scene {AssetDatabase.AssetPathToGUID(prefabPath).Substring(0, 8)}"));
+        }
+
+        [TestCase("box", null, "SDF/box")]
+        [TestCase("box", "0123456789abcdef", "SDF/box 01234567")]
+        [TestCase("a/b\\c \"d\"", "0123456789abcdef", "SDF/a-b-c 'd' 01234567")]
+        public void GeneratedShaderName_IsUniqueAndValidShaderlab(string sceneName, string prefabGuid, string expected)
+            => Assert.That(SdfScene.GeneratedShaderName(sceneName, prefabGuid), Is.EqualTo(expected));
+
+        [Test]
         public void Import_KeepsPrefabFileFreeOfGeneratedAssets() {
             var text = File.ReadAllText(prefabPath);
             StringAssert.DoesNotContain("--- !u!48 ", text, "the prefab file contains a shader");

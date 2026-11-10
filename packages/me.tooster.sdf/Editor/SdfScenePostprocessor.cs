@@ -32,7 +32,7 @@ namespace me.tooster.sdf.Editor {
             string source;
             try {
                 scene.RevalidateScene();
-                source = scene.AssembleShaderSource();
+                source = scene.AssembleShaderSource(AssetDatabase.AssetPathToGUID(context.assetPath));
             } catch (Exception e) {
                 context.LogImportError($"Generating the shader of SDF scene '{root.name}' failed: {e}");
                 return;

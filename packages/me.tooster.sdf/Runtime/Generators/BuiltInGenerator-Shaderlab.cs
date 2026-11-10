@@ -22,7 +22,7 @@ namespace me.tooster.sdf.Generators {
         Shader shader()
             => new()
             {
-                name = scene.name + " (generated)",
+                name = scene.ShaderName,
                 materialProperties = MaterialProperties(),
                 shaderStatements = new ShaderStatement[]
                 {
