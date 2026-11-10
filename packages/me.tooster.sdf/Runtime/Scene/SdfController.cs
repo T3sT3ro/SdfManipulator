@@ -6,10 +6,14 @@ using me.tooster.sdf.AST.Hlsl.Syntax;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions;
 using me.tooster.sdf.AST.Hlsl.Syntax.Expressions.Operators;
 using me.tooster.sdf.AST.Hlsl.Syntax.Statements;
+using me.tooster.sdf.AST.Syntax;
+using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using me.tooster.sdf.Data;
 using Unity.Properties;
 using UnityEngine;
 using Type = System.Type;
+using hlsl = me.tooster.sdf.AST.hlsl;
+using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
 namespace me.tooster.sdf {
     [GeneratePropertyBag]
     public partial class SdfController : Controller, IModifier<VectorData, SdfData> {
@@ -44,7 +48,7 @@ namespace me.tooster.sdf {
             processor.HandleRequirement(
                 new FunctionDefinitionRequirement(
                     this,
-                    createSdfFunction(
+                    WithHierarchyComment(createSdfFunction(
                         (Identifier)sdfFunctionName,
                         new[]
                         {
@@ -73,7 +77,7 @@ namespace me.tooster.sdf {
                             // return result;
                             (Return)new Identifier { id = "result" },
                         }
-                    )
+                    ))
                 )
             );
 
@@ -85,6 +89,13 @@ namespace me.tooster.sdf {
         // redirect to IModifier<..>
         public override Type GetInputType()  => typeof(VectorData);
         public override Type GetOutputType() => typeof(SdfData);
+
+        /// <summary>
+        ///     Puts the controller's place in the hierarchy in a comment above <paramref name="function" />, because function
+        ///     names are built from identifiers, not from object names.
+        /// </summary>
+        protected FunctionDefinition WithHierarchyComment(FunctionDefinition function)
+            => function.WithLeadingTrivia<FunctionDefinition, hlsl>(new Comment<hlsl>.Block<hlsl> { Text = HierarchyPath.Replace("*/", "* /") });
 
         public static FunctionDefinition createSdfFunction(Identifier identifier, Block functionBody)
             => new()

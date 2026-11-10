@@ -10,7 +10,8 @@ using UnityEngine;
 namespace me.tooster.sdf.Editor {
     /// <summary>
     ///     Migrates SDF scenes from the earlier layouts, a standalone <c>.shader</c> file or a shader and material embedded
-    ///     in the prefab file, to the generated sub-assets of <see cref="SdfScenePostprocessor" />.
+    ///     in the prefab file, to the generated sub-assets of <see cref="SdfScenePostprocessor" />, and gives their
+    ///     controllers identifiers.
     /// </summary>
     public static class SdfSceneMigration {
         static readonly Regex TargetShaderReference = new(@"targetShader: \{fileID: -?\d+, guid: (\w+), type: \d\}");
@@ -19,12 +20,13 @@ namespace me.tooster.sdf.Editor {
         ///     For every SDF scene prefab in the project's Assets folder and in the package:
         ///     <list type="number">
         ///         <item>removes the shaders and materials stored in the prefab file, and references to them</item>
+        ///         <item>gives every controller without an identifier a new one</item>
         ///         <item>reimports the prefab, which generates its shader and default material</item>
         ///         <item>points every material asset that used an old shader of the scene at the generated shader</item>
         ///         <item>deletes the scene's old standalone <c>.shader</c> file</item>
         ///     </list>
         /// </summary>
-        [MenuItem("Tools/SDF/Migrate Scenes to Generated Sub-Assets")]
+        [MenuItem("Tools/SDF/Migrate Scenes")]
         public static void MigrateAll() {
             var prefabs = SdfSceneShaders.FindScenePrefabs("Assets", SdfPaths.PackageRoot);
 
@@ -67,7 +69,7 @@ namespace me.tooster.sdf.Editor {
                 AssetDatabase.DeleteAsset(file);
                 Debug.Log($"Deleted the old shader {file}");
             }
-            Debug.Log($"Migrated {prefabs.Length} SDF scene prefab(s) to generated sub-assets.");
+            Debug.Log($"Migrated {prefabs.Length} SDF scene prefab(s).");
         }
 
         static void MigratePrefab(string prefab) {
@@ -78,7 +80,10 @@ namespace me.tooster.sdf.Editor {
                 foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
                     if (renderer.sharedMaterial != null && stored.Contains(renderer.sharedMaterial))
                         renderer.sharedMaterial = null;
-                root.GetComponentInChildren<SdfScene>(true).controlledMaterial = null;
+                var scene = root.GetComponentInChildren<SdfScene>(true);
+                scene.controlledMaterial = null;
+                // the loaded contents are in a preview scene, where revalidating assigns missing controller identifiers
+                scene.RevalidateScene();
                 PrefabUtility.SaveAsPrefabAsset(root, prefab);
             } finally {
                 PrefabUtility.UnloadPrefabContents(root);

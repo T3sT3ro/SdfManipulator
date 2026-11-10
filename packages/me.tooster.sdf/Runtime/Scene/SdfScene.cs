@@ -169,14 +169,17 @@ namespace me.tooster.sdf {
                 sdfSceneRoot = GetComponentInChildren<SdfController>();
 
             var controllerData = new Dictionary<Controller, ControllerData>();
+            var usedIds = new HashSet<string>();
 
             // controllers that moved to another scene must stop updating this one
             UnsubscribeFromControllers();
-            foreach (var controller in GetComponentsInChildren<Controller>()) {
+            var controllers = GetComponentsInChildren<Controller>();
+            for (var index = 0; index < controllers.Length; index++) {
+                var controller = controllers[index];
                 controller.PropertyChanged -= HandlePropertyChange; // in case an earlier revalidation failed halfway
                 controller.PropertyChanged += HandlePropertyChange;
 
-                var controllerId = generateControllerIdentifier(controller);
+                var controllerId = ControllerIdentifier(controller, index, usedIds);
 
                 PropertyContainer.Accept(shaderPropertyCollector, controller);
 
@@ -317,22 +320,32 @@ namespace me.tooster.sdf {
         public IEnumerable<Transform> GetControllerSceneAncestors(Controller controller)
             => controller.transform.AncestorsAndSelf().TakeWhile(t => t != transform);
 
-        /* TODO: calculate appropriate controller paths on the RebuildSceneData step to assure identifiers are unique and shortest possible
-         For example let a hierarchy of Root.Character.{Leg(box),Arm(box)} instead of
-         - Root_Character_Leg__size -> Leg_size
-         - Root_Character_Arm__size -> Arm_size
-        */
-        string generateControllerIdentifier(Controller controller) {
-            var pathFromParent = GetControllerSceneAncestors(controller).Reverse().ToArray();
-            var indexedPath = pathFromParent.Select(t => t.GetSiblingIndex().ToString("X")).JoinToString("_");
-            return
-                @$"SDF_{indexedPath}__{
-                    pathFromParent
-                        .Select(t => $"{t.name}")
-                        .Select(Extensions.sanitizeToIdentifierString)
-                        .JoinToString("_")
-                }__{controller.GetComponentIndex().ToString()}";
+        /// <summary>
+        ///     Returns <c>SDF_&lt;id&gt;</c>, built from the controller's <see cref="Controller.Id" />, so renaming or moving
+        ///     objects doesn't rename uniforms and functions.
+        ///     <para>
+        ///         In the editor, a controller in an open scene, e.g. in Prefab Mode, gets a new identifier if it has none or
+        ///         if an earlier controller uses the same one, e.g. after duplicating an object. The new identifier is saved
+        ///         with the prefab. The prefab import, prefab assets and prefab instances never change identifiers: they have
+        ///         to agree with the saved file. There, a controller without a unique identifier gets one from its position in
+        ///         the scene, which is the same for every load of the same file.
+        ///     </para>
+        /// </summary>
+        string ControllerIdentifier(Controller controller, int index, ISet<string> usedIds) {
+#if UNITY_EDITOR
+            if ((string.IsNullOrEmpty(controller.Id) || usedIds.Contains(controller.Id)) && CanAssignIds(controller)) {
+                do controller.AssignNewId();
+                while (usedIds.Contains(controller.Id));
+            }
+#endif
+            return !string.IsNullOrEmpty(controller.Id) && usedIds.Add(controller.Id) ? $"SDF_{controller.Id}" : $"SDF_x{index}";
         }
+
+#if UNITY_EDITOR
+        // objects of a prefab asset or of its import result aren't in a scene
+        static bool CanAssignIds(Controller controller)
+            => !Application.isPlaying && controller.gameObject.scene.IsValid() && !PrefabUtility.IsPartOfPrefabInstance(controller);
+#endif
 
 
 

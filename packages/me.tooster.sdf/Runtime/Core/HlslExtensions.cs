@@ -73,7 +73,8 @@ namespace me.tooster.sdf {
                 id = functionDefinition.id,
                 paramList = functionDefinition.paramList,
                 returnSemantic = functionDefinition.returnSemantic,
-                returnType = functionDefinition.returnType,
+                // without the comments above the definition
+                returnType = functionDefinition.returnType.WithLeadingTriviaList<Type, hlsl>(null),
             };
     }
 }

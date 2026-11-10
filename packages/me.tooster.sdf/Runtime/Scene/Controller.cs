@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using me.tooster.sdf.Data;
 using me.tooster.sdf.Util;
@@ -18,6 +19,25 @@ namespace me.tooster.sdf {
         public delegate void StructureChangedEventHandler(Controller sender);
 
         SdfScene? sdfScene;
+
+        [SerializeField] [HideInInspector] string id = "";
+
+        /// <summary>
+        ///     A short identifier that is assigned once and stays the same when the object is renamed or moved. Generated
+        ///     uniform and function names are built from it, see <see cref="SdfScene.RevalidateScene" />.
+        /// </summary>
+        public string Id => id;
+
+        /// The names of the objects from the scene down to this controller, for comments and display names.
+        public string HierarchyPath => SdfScene == null ? name : string.Join("/", SdfScene.GetControllerSceneAncestors(this).Reverse().Select(t => t.name));
+
+#if UNITY_EDITOR
+        /// Assigns a new random identifier, which is saved with the prefab.
+        internal void AssignNewId() {
+            id = Guid.NewGuid().ToString("N").Substring(0, 8);
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
 
         public SdfScene SdfScene => sdfScene == null ? sdfScene = GetComponentInParent<SdfScene>(true) : sdfScene;
 

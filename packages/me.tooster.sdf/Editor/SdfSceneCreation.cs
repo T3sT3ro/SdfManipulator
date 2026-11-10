@@ -24,6 +24,9 @@ namespace me.tooster.sdf.Editor {
                 scene.controlledMaterial = null;
                 foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
                     renderer.sharedMaterial = null;
+                // the new scene's controllers get their own identifiers, which are saved with it
+                foreach (var controller in root.GetComponentsInChildren<Controller>(true))
+                    controller.AssignNewId();
 
                 return PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
             } finally {
