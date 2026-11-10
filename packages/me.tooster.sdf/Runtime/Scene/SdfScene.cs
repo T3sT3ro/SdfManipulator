@@ -9,7 +9,7 @@ using me.tooster.sdf.Generators;
 using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEngine;
-using UnityEngine.Profiling;
+using Unity.Profiling;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -505,13 +505,15 @@ namespace me.tooster.sdf {
         ///     different structure can't change it.
         /// </summary>
         /// <exception cref="ShaderGenerationException"></exception>
+        static readonly ProfilerMarker GenerateShaderMarker = new("SdfScene.GenerateShaderSource");
+
         internal void GenerateSceneAssets() {
             if (!IsEditingContextOpen(out var stage) || generatedShader == null)
                 return;
 
-            Profiler.BeginSample("shader text generation");
-            var shaderSource = AssembleShaderSource(AssetDatabase.AssetPathToGUID(stage.assetPath));
-            Profiler.EndSample();
+            string shaderSource;
+            using (GenerateShaderMarker.Auto())
+                shaderSource = AssembleShaderSource(AssetDatabase.AssetPathToGUID(stage.assetPath));
             ShaderUtil.UpdateShaderAsset(generatedShader, shaderSource, false);
         }
 
