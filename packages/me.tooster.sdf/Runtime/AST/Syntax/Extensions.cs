@@ -1,11 +1,42 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using me.tooster.sdf.AST.Shaderlab;
 namespace me.tooster.sdf.AST.Syntax {
     public static class Extensions {
+        /// <summary>
+        ///     Formats <paramref name="value" /> as a decimal number with a decimal point and without an exponent, e.g.
+        ///     <c>1.0</c>, <c>-0.5</c> or <c>0.0000001</c>. It uses the shortest digits that read back as the same float.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">for NaN and infinity, which shader languages have no literal for</exception>
+        public static string ToDecimalLiteralText(this float value) {
+            if (float.IsNaN(value) || float.IsInfinity(value))
+                throw new ArgumentOutOfRangeException(nameof(value), value, "A shader literal can't represent NaN or infinity.");
+
+            var roundTrip = value.ToString("R", CultureInfo.InvariantCulture); // e.g. "1.5", "-1.5E-07" or "3.402823E+38"
+            var negative = roundTrip.StartsWith("-", StringComparison.Ordinal);
+            var unsigned = negative ? roundTrip.Substring(1) : roundTrip;
+
+            var exponentIndex = unsigned.IndexOfAny(new[] { 'E', 'e' });
+            var mantissa = exponentIndex < 0 ? unsigned : unsigned.Substring(0, exponentIndex);
+            var exponent = exponentIndex < 0 ? 0 : int.Parse(unsigned.Substring(exponentIndex + 1), NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture);
+
+            var pointIndex = mantissa.IndexOf('.');
+            var digits = pointIndex < 0 ? mantissa : mantissa.Remove(pointIndex, 1);
+            var integerDigitCount = (pointIndex < 0 ? mantissa.Length : pointIndex) + exponent;
+
+            var text = integerDigitCount <= 0
+                ? "0." + new string('0', -integerDigitCount) + digits
+                : integerDigitCount >= digits.Length
+                    ? digits + new string('0', integerDigitCount - digits.Length) + ".0"
+                    : digits.Substring(0, integerDigitCount) + "." + digits.Substring(integerDigitCount);
+
+            return negative ? "-" + text : text;
+        }
+
         // empty whitespace is redundant
         public static readonly Regex WhitespaceRegex = new(@"\s+", RegexOptions.Compiled);
         /// Appends an item to an enumerable if it is not null.

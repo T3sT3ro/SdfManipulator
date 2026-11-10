@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
+using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 namespace me.tooster.sdf.AST.Hlsl.Syntax {
 // @formatter off
@@ -201,40 +202,40 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
     // System Value Semantics — since DX10
     // for more info see: https://www.gamedev.net/forums/topic/579610-hlsl-semantics-position-vs-sv_position/4691624/
     [TokenNode] public partial record SvClipDistanceSemantic : IndexedSemantic {
-        protected override string Name => "SV_ClipDistanceSemantic";
+        protected override string Name => "SV_ClipDistance";
     }
     [TokenNode] public partial record SvCullDistanceSemantic : IndexedSemantic {
-        protected override string Name => "SV_CullDistanceSemantic";
+        protected override string Name => "SV_CullDistance";
     }
     // where 0 <= n <= 7
     [TokenNode] public partial record SvTargetSemantic : IndexedSemantic {
-        protected override string Name => "SV_TargetSemantic";
+        protected override string Name => "SV_Target";
     }
 
-    [TokenNode("SV_CoverageSemantic")] public partial record SvCoverageSemantic : SemanticToken;
-    [TokenNode("SV_DepthSemantic")] public partial record SvDepthSemantic : SemanticToken;
-    [TokenNode("SV_DepthGreaterEqualSemantic")] public partial record SvDepthGreaterEqualSemantic : SemanticToken;
-    [TokenNode("SV_DepthLessEqualSemantic")] public partial record SvDepthLessEqualSemantic : SemanticToken;
-    [TokenNode("SV_DispatchThreadIDSemantic")] public partial record SvDispatchThreadIDSemantic : SemanticToken;
-    [TokenNode("SV_DomainLocationSemantic")] public partial record SvDomainLocationSemantic : SemanticToken;
-    [TokenNode("SV_GroupIDSemantic")] public partial record SvGroupIDSemantic : SemanticToken;
-    [TokenNode("SV_GroupIndexSemantic")] public partial record SvGroupIndexSemantic : SemanticToken;
-    [TokenNode("SV_GroupThreadIDSemantic")] public partial record SvGroupThreadIDSemantic : SemanticToken;
-    [TokenNode("SV_GSInstanceIDSemantic")] public partial record SvGSInstanceIDSemantic : SemanticToken;
-    [TokenNode("SV_InnerCoverageSemantic")] public partial record SvInnerCoverageSemantic : SemanticToken;
-    [TokenNode("SV_InsideTessFactorSemantic")] public partial record SvInsideTessFactorSemantic : SemanticToken;
-    [TokenNode("SV_InstanceIDSemantic")] public partial record SvInstanceIDSemantic : SemanticToken;
-    [TokenNode("SV_IsFrontFaceSemantic")] public partial record SvIsFrontFaceSemantic : SemanticToken;
-    [TokenNode("SV_OutputControlPointIDSemantic")] public partial record SvOutputControlPointIDSemantic : SemanticToken;
-    [TokenNode("SV_PositionSemantic")] public partial record SvPositionSemantic : SemanticToken;
-    [TokenNode("SV_PrimitiveIDSemantic")] public partial record SvPrimitiveIDSemantic : SemanticToken;
-    [TokenNode("SV_RenderTargetArrayIndexSemantic")] public partial record SvRenderTargetArrayIndexSemantic : SemanticToken;
-    [TokenNode("SV_SampleIndexSemantic")] public partial record SvSampleIndexSemantic : SemanticToken;
-    [TokenNode("SV_StencilRefSemantic")] public partial record SvStencilRefSemantic : SemanticToken;
-    [TokenNode("SV_TessFactorSemantic")] public partial record SvTessFactorSemantic : SemanticToken;
-    [TokenNode("SV_VertexIDSemantic")] public partial record SvVertexIDSemantic : SemanticToken;
-    [TokenNode("SV_ViewportArrayIndexSemantic")] public partial record SvViewportArrayIndexSemantic : SemanticToken;
-    [TokenNode("SV_ShadingRateSemantic")] public partial record SvShadingRateSemantic : SemanticToken;
+    [TokenNode("SV_Coverage")] public partial record SvCoverageSemantic : SemanticToken;
+    [TokenNode("SV_Depth")] public partial record SvDepthSemantic : SemanticToken;
+    [TokenNode("SV_DepthGreaterEqual")] public partial record SvDepthGreaterEqualSemantic : SemanticToken;
+    [TokenNode("SV_DepthLessEqual")] public partial record SvDepthLessEqualSemantic : SemanticToken;
+    [TokenNode("SV_DispatchThreadID")] public partial record SvDispatchThreadIDSemantic : SemanticToken;
+    [TokenNode("SV_DomainLocation")] public partial record SvDomainLocationSemantic : SemanticToken;
+    [TokenNode("SV_GroupID")] public partial record SvGroupIDSemantic : SemanticToken;
+    [TokenNode("SV_GroupIndex")] public partial record SvGroupIndexSemantic : SemanticToken;
+    [TokenNode("SV_GroupThreadID")] public partial record SvGroupThreadIDSemantic : SemanticToken;
+    [TokenNode("SV_GSInstanceID")] public partial record SvGSInstanceIDSemantic : SemanticToken;
+    [TokenNode("SV_InnerCoverage")] public partial record SvInnerCoverageSemantic : SemanticToken;
+    [TokenNode("SV_InsideTessFactor")] public partial record SvInsideTessFactorSemantic : SemanticToken;
+    [TokenNode("SV_InstanceID")] public partial record SvInstanceIDSemantic : SemanticToken;
+    [TokenNode("SV_IsFrontFace")] public partial record SvIsFrontFaceSemantic : SemanticToken;
+    [TokenNode("SV_OutputControlPointID")] public partial record SvOutputControlPointIDSemantic : SemanticToken;
+    [TokenNode("SV_Position")] public partial record SvPositionSemantic : SemanticToken;
+    [TokenNode("SV_PrimitiveID")] public partial record SvPrimitiveIDSemantic : SemanticToken;
+    [TokenNode("SV_RenderTargetArrayIndex")] public partial record SvRenderTargetArrayIndexSemantic : SemanticToken;
+    [TokenNode("SV_SampleIndex")] public partial record SvSampleIndexSemantic : SemanticToken;
+    [TokenNode("SV_StencilRef")] public partial record SvStencilRefSemantic : SemanticToken;
+    [TokenNode("SV_TessFactor")] public partial record SvTessFactorSemantic : SemanticToken;
+    [TokenNode("SV_VertexID")] public partial record SvVertexIDSemantic : SemanticToken;
+    [TokenNode("SV_ViewportArrayIndex")] public partial record SvViewportArrayIndexSemantic : SemanticToken;
+    [TokenNode("SV_ShadingRate")] public partial record SvShadingRateSemantic : SemanticToken;
 
     // @formatter on
 
@@ -287,7 +288,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         protected override Regex Pattern => pattern;
 
         public static implicit operator FloatLiteral(float value)
-            => new() { TextUnsafe = value.ToString("0.0#####", CultureInfo.InvariantCulture) };
+            => new() { TextUnsafe = value.ToDecimalLiteralText() };
     }
 
 
@@ -307,7 +308,7 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
 
         protected override Regex Pattern => pattern;
 
-        public static implicit operator BooleanLiteral(bool value) => new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
+        public static implicit operator BooleanLiteral(bool value) => new() { TextUnsafe = value ? "true" : "false" };
     }
 
 

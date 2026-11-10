@@ -213,7 +213,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
 
         protected override Regex Pattern => pattern;
 
-        public static implicit operator BooleanLiteral(bool value) => new() { TextUnsafe = value ? bool.TrueString : bool.FalseString };
+        public static implicit operator BooleanLiteral(bool value) => new() { TextUnsafe = value ? "true" : "false" };
     }
 
 
@@ -228,7 +228,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
         protected override Regex Pattern => pattern;
 
         public static implicit operator FloatLiteral(float value)
-            => new() { TextUnsafe = value.ToString("0.0#####", CultureInfo.InvariantCulture) };
+            => new() { TextUnsafe = value.ToDecimalLiteralText() };
     }
 
 
