@@ -44,6 +44,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   dependency) and after a change to the shader library.
 - Uniforms are set on each renderer with a `MaterialPropertyBlock` instead of in the material, and only the ones that
   changed. Instances of a scene prefab can have different values, and material assets no longer change while you edit.
+- Generated shaders have no material properties for controller values and declare their uniforms without values, so
+  changing a value or moving an object no longer changes the shader and recompiles it on save. Materials only hold
+  the rendering settings, such as the draw mode. A renderer that no `SdfScene` updates, e.g. in a prefab preview,
+  renders with all controller uniforms set to 0.
 - Generated uniform and function names are built from an identifier that each controller gets once, e.g.
   `SDF_3f9a1c2b_Radius`. Renaming or moving objects no longer renames them, and no name contains `__`, which HLSL
   reserves. A comment above each generated function shows the object's place in the hierarchy. Run *Tools > SDF >

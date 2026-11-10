@@ -11,7 +11,6 @@ using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using me.tooster.sdf.Data;
 using Unity.Properties;
-using UnityEngine;
 using FunctionDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.FunctionDefinition;
 using Parameter = me.tooster.sdf.AST.Hlsl.Syntax.Parameter;
 using VariableDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.VariableDefinition;
@@ -55,6 +54,10 @@ namespace me.tooster.sdf.Generators {
             );
         }
 
+        /// <summary>
+        ///     Declares a uniform for each controller property, without a value: <see cref="SdfScene" /> sets the values on
+        ///     its renderers, so changing a value doesn't change the shader (#114).
+        /// </summary>
         IEnumerable<VariableDefinition> generateHlslGlobals()
             => scene.sceneData.Properties.Select(pd => {
                     try {
@@ -64,16 +67,7 @@ namespace me.tooster.sdf.Generators {
                             declarator = new VariableDeclarator
                             {
                                 type = declaredPropertyType.hlslTypeToken(),
-                                variables = new VariableDeclarator.Definition
-                                {
-                                    id = pd.identifier,
-                                    initializer = declaredPropertyType != typeof(Matrix4x4)
-                                        ? null
-                                        : PropertyContainer.GetValue<Controller, Matrix4x4>(
-                                            pd.controller,
-                                            pd.path
-                                        ).ToPrettyMatrixInitializerList(),
-                                },
+                                variables = new VariableDeclarator.Definition { id = pd.identifier },
                             },
                         };
                     } catch (ArgumentOutOfRangeException e) {

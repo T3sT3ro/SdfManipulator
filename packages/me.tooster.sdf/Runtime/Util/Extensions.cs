@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Unity.Properties;
 using UnityEngine;
 namespace me.tooster.sdf.Util {
     public static class Extensions {
@@ -11,17 +10,6 @@ namespace me.tooster.sdf.Util {
         ///     Inverts a scale vector by dividing 1 by each component
         /// </summary>
         public static Vector3 Invert(this Vector3 vec) => new(1 / vec.x, 1 / vec.y, 1 / vec.z);
-
-        public static bool IsPropertyShaderlabCompatible(this IProperty p) {
-            var t = p.DeclaredValueType();
-            return
-                t == typeof(int) || t == typeof(float)
-             || t == typeof(Vector2) || t == typeof(Vector3) || t == typeof(Vector4)
-             || t == typeof(Color)
-             || t == typeof(Vector2Int) || t == typeof(Vector3Int)
-             || t == typeof(Texture2D) || t == typeof(Texture2DArray) || t == typeof(Texture3D)
-             || t == typeof(Cubemap) || t == typeof(CubemapArray);
-        }
 
         public static IEnumerable<Transform> Ancestors(this Transform t) {
             while (t.parent != null) {

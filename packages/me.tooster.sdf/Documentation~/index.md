@@ -82,8 +82,10 @@ Paths are relative to the package root.
       built from it (`SDF_3f9a1c2b_Radius`), so renaming or moving objects doesn't change them. A comment above each
       generated function shows the object's place in the hierarchy.
     - It listens to property change events emitted by controllers and sets the changed uniforms on its renderers with
-      a `MaterialPropertyBlock`. The material keeps the defaults from the generated shader, so instances of the same
-      prefab can have different values.
+      a `MaterialPropertyBlock`, so instances of the same prefab can have different values. The generated shader
+      declares the uniforms without values and has no material properties for them, so changing a value doesn't change
+      the shader. The material only holds the rendering settings. A renderer that no `SdfScene` updates, e.g. in a
+      prefab preview, renders with all controller uniforms set to 0.
 - **Shader presets** (`Runtime/Generators`): for now just `BIRPShaderPreset`, a shader generation preset tailored for
   the built-in forward rendering pipeline. Essentially a stateful factory for shader generators; think of it as a
   "cooking school" for creating chefs.

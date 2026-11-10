@@ -129,17 +129,19 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(scene.generatedShader, Is.EqualTo(imported.generatedShader));
             Assert.That(scene.GetComponentsInChildren<Renderer>(true).Select(r => r.sharedMaterial), Has.All.EqualTo(imported.generatedMaterial));
 
-            var propertiesBefore = ShaderUtil.GetPropertyCount(scene.generatedShader);
             var combine = scene.GetComponentInChildren<SdfCombineController>(true);
             var added = new GameObject("added sphere");
             added.transform.SetParent(combine.transform, false);
             var sdf = added.AddComponent<SdfController>();
-            sdf.sdfModifiers = new Controller[] { added.AddComponent<SdfSphereController>() };
+            var sphere = added.AddComponent<SdfSphereController>();
+            sdf.sdfModifiers = new Controller[] { sphere };
 
             scene.RevalidateScene();
             scene.GenerateSceneAssets();
 
-            Assert.That(ShaderUtil.GetPropertyCount(scene.generatedShader), Is.GreaterThan(propertiesBefore), "the shader didn't get the new sphere's uniform");
+            var radius = scene.sceneData.controllers[sphere].properties[new Unity.Properties.PropertyPath(nameof(SdfSphereController.Radius))].identifier;
+            // the pass source includes the HLSLINCLUDE block, which declares the uniforms
+            StringAssert.Contains(radius, ShaderUtil.GetShaderData(scene.generatedShader).GetSubshader(0).GetPass(0).SourceCode, "the shader didn't get the new sphere's uniform");
             Assert.That(ShaderUtil.ShaderHasError(scene.generatedShader), Is.False);
         }
 

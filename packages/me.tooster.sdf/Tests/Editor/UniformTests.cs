@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 namespace me.tooster.sdf.Tests.Editor {
-    /// <summary>Uniforms go to each renderer of a scene through a property block, not into the material.</summary>
+    /// <summary>Uniforms go to each renderer of a scene through a property block. The material has no properties for them.</summary>
     public class UniformTests {
         GameObject root;
         SdfScene   scene;
@@ -30,21 +30,22 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
-        public void Update_SetsUniformsOnTheRendererAndLeavesTheMaterial() {
+        public void ForcedUpdate_SetsUniformsOnTheRenderer() {
             var sphere = root.GetComponentInChildren<SdfSphereController>(true);
+            sphere.Radius += 0.25f;
+
+            scene.UpdateShaderUniforms(forceUpdateAll: true);
+
+            Assert.That(RadiusInPropertyBlock(sphere), Is.EqualTo(sphere.Radius));
+        }
+
+        [Test]
+        public void GeneratedShader_HasNoMaterialPropertiesForControllers() {
             var shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
-            var material = new Material(shader);
             try {
-                scene.GetComponentInChildren<Renderer>(true).sharedMaterial = material;
-                var generatedRadius = sphere.Radius;
-                sphere.Radius = generatedRadius + 0.25f;
-
-                scene.UpdateShaderUniforms(forceUpdateAll: true);
-
-                Assert.That(RadiusInPropertyBlock(sphere), Is.EqualTo(sphere.Radius));
-                Assert.That(material.GetFloat(RadiusId(sphere)), Is.EqualTo(generatedRadius).Within(1e-6), "the uniform was written into the material");
+                foreach (var property in scene.sceneData.Properties)
+                    Assert.That(shader.FindPropertyIndex(property.identifier), Is.EqualTo(-1), $"{property.identifier} is a material property");
             } finally {
-                Object.DestroyImmediate(material);
                 Object.DestroyImmediate(shader);
             }
         }

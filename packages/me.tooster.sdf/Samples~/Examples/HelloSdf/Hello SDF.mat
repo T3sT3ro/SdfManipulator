@@ -64,23 +64,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - SDF_1_0_0_1__root_combine_dice_sphere__2_Radius: 0.8
-    - SDF_1_0_0__root_combine_dice__1_BlendFactor: 1
-    - SDF_1_0_1_0__root_combine_cross_cylinder__2_Height: 0.9889344
-    - SDF_1_0_1_0__root_combine_cross_cylinder__2_Radius: 0.4
-    - SDF_1_0_1_0__root_combine_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_0_1_1__root_combine_cross_cylinder__2_Height: 1
-    - SDF_1_0_1_1__root_combine_cross_cylinder__2_Radius: 0.40236157
-    - SDF_1_0_1_1__root_combine_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_0_1_2__root_combine_cross_cylinder__2_Height: 1
-    - SDF_1_0_1_2__root_combine_cross_cylinder__2_Radius: 0.4
-    - SDF_1_0_1_2__root_combine_cross_cylinder__2_Rounding: 0.25
-    - SDF_1_0_1__root_combine_cross__1_BlendFactor: 1
-    - SDF_1_0__root_combine__1_BlendFactor: 1
-    - SDF_1_1__root_torus__2_Cap: 0.7853982
-    - SDF_1_1__root_torus__2_MainRadius: 1.0005604
-    - SDF_1_1__root_torus__2_RingRadius: 0.20878479
-    - SDF_1__root__1_BlendFactor: 0.3
     - _AO_FALLOFF: 2.5
     - _AO_MAX_DISTANCE: 1
     - _AO_STEPS: 6
@@ -110,7 +93,6 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
-    - SDF_1_0_0_0__root_combine_dice_box__2_BoxExtents: {r: 0.6, g: 0.6, b: 0.60162544, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

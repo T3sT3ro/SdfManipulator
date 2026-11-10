@@ -26,17 +26,6 @@ namespace me.tooster.sdf {
                 _ => throw new ArgumentOutOfRangeException(nameof(t), $"Can't express type in hlsl: {t?.FullName}"),
             };
 
-        public static TypeKeyword shaderlabTypeKeyword(this Type t)
-            => t switch
-            {
-                not null when t == typeof(int)                        => new IntegerKeyword(),
-                not null when t == typeof(float) || t == typeof(bool) => new AST.Shaderlab.Syntax.FloatKeyword(),
-                not null when t == typeof(Vector2) || t == typeof(Vector3) || t == typeof(Vector4)
-                 || t == typeof(Vector2Int) || t == typeof(Vector3Int) => new VectorKeyword(),
-                _ => throw new ArgumentOutOfRangeException($"Can't express type in shaderlab: {t?.FullName}"),
-            };
-
-
         #region attribute helpers
 
         static readonly Regex attributeHeaderSanitizeRegex = new("[^a-zA-Z0-9_ ]", RegexOptions.Compiled);

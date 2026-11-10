@@ -7,9 +7,6 @@ using me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific;
 using me.tooster.sdf.AST.Shaderlab.Syntax.SubShaderSpecific;
 using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
-using me.tooster.sdf.AST.Syntax.CommonTrivia;
-using me.tooster.sdf.Util;
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Rendering;
 using PropertySyntax = me.tooster.sdf.AST.Shaderlab.Syntax.ShaderSpecific.Property;
@@ -34,33 +31,11 @@ namespace me.tooster.sdf.Generators {
             };
 
         /// <summary>
-        ///     generates a material properties block from collected properties
+        ///     The material properties, which are the rendering settings of the scene. Controller values aren't material
+        ///     properties: <see cref="SdfScene" /> sets them on its renderers with a <see cref="MaterialPropertyBlock" />, and
+        ///     keeping them out of the shader means that changing a value doesn't change the shader (#114).
         /// </summary>
-        /// <exception cref="System.ArgumentOutOfRangeException">property type is not supported</exception>
-        MaterialProperties MaterialProperties() {
-            return new MaterialProperties
-            {
-                properties = GlobalShaderProperties
-                    .Concat(
-                        scene.sceneData.Properties
-                            .Where(p => PropertyContainer.GetProperty(p.controller, p.path).IsPropertyShaderlabCompatible())
-                            .GroupBy(pd => pd.controller)
-                            .SelectMany(group => group.Select(generatePropertySyntax)
-                                .Select((ps, i) => i > 0
-                                    ? ps
-                                    : ps with
-                                    {
-                                        attributes = SyntaxUnityExtensions.headerAttribute(
-                                            scene.GetControllerSceneAncestors(group.Key).Reverse().Select(c => c.name)
-                                                .JoinToString("/")
-                                        ).WithLeadingTrivia(new NewLine<shaderlab>(), new NewLine<shaderlab>()),
-                                    }
-                                )
-                            )
-                    )
-                    .ToList(),
-            };
-        }
+        static MaterialProperties MaterialProperties() => new() { properties = GlobalShaderProperties.ToList() };
 
         static IEnumerable<PropertySyntax> GlobalShaderProperties {
             get {
@@ -181,42 +156,6 @@ namespace me.tooster.sdf.Generators {
                     },
                 };
             }
-        }
-
-        PropertySyntax generatePropertySyntax(SdfScene.PropertyData pd) {
-            var t = pd.property.DeclaredValueType();
-
-            var shaderlabType = t.shaderlabTypeKeyword();
-            Property.Initializer shaderlabInitializer = t switch
-            {
-                not null when t == typeof(int) => new Property.Number<IntLiteral>
-                    { numberLiteral = PropertyContainer.GetValue<Controller, int>(pd.controller, pd.path) },
-                not null when t == typeof(float) => new Property.Number<FloatLiteral>
-                    { numberLiteral = PropertyContainer.GetValue<Controller, float>(pd.controller, pd.path) },
-                not null when t == typeof(Vector2) => new Property.Vector
-                    { arguments = PropertyContainer.GetValue<Controller, Vector2>(pd.controller, pd.path).VectorArgumentList() },
-                not null when t == typeof(Vector3) => new Property.Vector
-                    { arguments = PropertyContainer.GetValue<Controller, Vector3>(pd.controller, pd.path).VectorArgumentList() },
-                not null when t == typeof(Vector4) => new Property.Vector
-                    { arguments = PropertyContainer.GetValue<Controller, Vector4>(pd.controller, pd.path).VectorArgumentList() },
-                not null when t == typeof(Vector2Int) => new Property.Vector
-                    { arguments = PropertyContainer.GetValue<Controller, Vector2Int>(pd.controller, pd.path).VectorArgumentList() },
-                not null when t == typeof(Vector3Int) => new Property.Vector
-                    { arguments = PropertyContainer.GetValue<Controller, Vector3Int>(pd.controller, pd.path).VectorArgumentList() },
-                _ => throw new ShaderGenerationException($"Can't generate initializer for shaderlab property {pd}"),
-            };
-
-
-            return new PropertySyntax
-                {
-                    propertyType = shaderlabType,
-                    initializer = shaderlabInitializer,
-                } with
-                {
-                    id = pd.identifier,
-                    displayName = PropertyContainer.GetProperty(pd.controller, pd.path)
-                        .GetAttribute<ShaderPropertyAttribute>().Description,
-                };
         }
 
         TagsBlock TagsBlock => new()

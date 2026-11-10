@@ -101,6 +101,19 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void Generation_DoesNotDependOnUniformValues() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            templateRoot.GetComponentInChildren<SdfSphereController>(true).Radius += 0.25f;
+            templateRoot.GetComponentInChildren<TransformController>(true).transform.position += Vector3.one;
+            scene.RevalidateScene();
+
+            Assert.That(scene.AssembleShaderSource(), Is.EqualTo(source), "a value that only sets a uniform changed the shader");
+        }
+
+        [Test]
         public void UniformUpdate_WithoutRendererDoesNotThrow() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             foreach (var renderer in templateRoot.GetComponentsInChildren<Renderer>(true))
