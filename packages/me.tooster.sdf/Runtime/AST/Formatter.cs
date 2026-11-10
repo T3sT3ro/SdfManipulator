@@ -48,15 +48,23 @@ namespace me.tooster.sdf.AST {
          * - and the last trivia in the file is also attached to the last token
          * <remarks>good tool for checking the resulting AST of C# and basing normalized syntax on that: https://sharplab.io/</remarks>
          */
-        public Token<Lang> NormalizeWhitespace<T>(Anchor<T> a) where T : Token<Lang> {
-            var token = a.Node;
+        /// <param name="a">The anchor of the token in the tree that is formatted, used to find the neighboring tokens.</param>
+        /// <param name="token">
+        ///     The token to normalize, if it differs from the node of <paramref name="a" />, e.g. after its trivia was
+        ///     formatted. A new token isn't part of the tree, so the anchor must point at the original one.
+        /// </param>
+        public Token<Lang> NormalizeWhitespace<T>(Anchor<T> a, Token<Lang>? token = null) where T : Token<Lang> {
+            token ??= a.Node;
+            // an opening bracket stays at the current level and indents what follows it; a closing one is outdented
             var indentChange = getIndentChange(a);
-            State.IndentLevel += indentChange;
+            if (indentChange < 0)
+                State.IndentLevel += indentChange;
 
             var previousToken = a.NextToken(Navigation.Side.LEFT);
             var leading = token.LeadingTriviaList;
 
-            var breakAfterPrevious = previousToken is not null && breakLineAfter(previousToken, out var newLineCount);
+            var newLineCount = 1;
+            var breakAfterPrevious = previousToken is not null && breakLineAfter(previousToken, out newLineCount);
             var whitespaceAfterPrevious = previousToken is not null && whitespaceAfter(previousToken);
 
             Trivia<Lang> startingTrivia = null;
@@ -95,8 +103,14 @@ namespace me.tooster.sdf.AST {
                 while (i < leading.Count && leading[i] is Whitespace<Lang>)
                     i++;
 
-                if (startingTrivia is NewLine<Lang>)
+                if (startingTrivia is NewLine<Lang>) {
+                    // blank lines have no indentation
+                    for (var n = 1; n < newLineCount && consecutiveNewlines < State.MaxConsecutiveNewlines - 1; n++) {
+                        newLeading.Add(new NewLine<Lang>());
+                        consecutiveNewlines++;
+                    }
                     addNewLineAndIndent(newLeading, ref consecutiveNewlines, startingTrivia);
+                }
                 else if (startingTrivia is Whitespace<Lang>)
                     newLeading.Add(startingTrivia);
 
@@ -116,6 +130,9 @@ namespace me.tooster.sdf.AST {
                 }
                 leading = new TriviaList<Lang>(newLeading);
             }
+
+            if (indentChange > 0)
+                State.IndentLevel += indentChange;
 
             return token with { LeadingTriviaList = leading /*, TrailingTriviaList = trailing.AsTriviaList()*/ };
 

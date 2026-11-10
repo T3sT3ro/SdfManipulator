@@ -32,9 +32,15 @@ namespace me.tooster.sdf.AST.Hlsl {
         static int getIndentChange<T>(Anchor<T> a) where T : Token<hlsl>
             => a switch
             {
-                { Node: OpenBraceToken or OpenParenToken or OpenBracketToken }  => +1,
-                { Node: CloseBraceToken or CloseParenToken or CloseBraceToken } => -1,
-                _                                                               => 0,
+                // a case label indents its statements up to the next label, or up to the end of the switch
+                { Node: ColonToken, Parent: { Node: Switch.Case or Switch.DefaultCase } } => +1,
+                { Node: CaseKeyword or DefaultKeyword }
+                    when a.NextToken(Navigation.Side.LEFT) is not { Node: OpenBraceToken, Parent: { Node: Switch } } => -1,
+                { Node: CloseBraceToken, Parent: { Node: Switch s } } => s.cases.Count > 0 || s.defaultCase is not null ? -2 : -1,
+
+                { Node: OpenBraceToken or OpenParenToken or OpenBracketToken }    => +1,
+                { Node: CloseBraceToken or CloseParenToken or CloseBracketToken } => -1,
+                _                                                                 => 0,
             };
 
         static bool breakLineAfter<T>(Anchor<T> a, out int newLineCount) where T : Token<hlsl> {
@@ -42,35 +48,58 @@ namespace me.tooster.sdf.AST.Hlsl {
             if (a is { Parent: { Node: IBracedList, Parent: { Node: not Block } }, Node: OpenBraceToken or CloseBraceToken })
                 return false;
 
-            if (a is { Node: SemicolonToken or CloseBraceToken or OpenBraceToken })
-                return true;
-
             var nextToken = a.NextToken();
-            switch (nextToken) {
-                case { Node: EndOfDirectiveToken }: return false;
-                case { Node: CloseBraceToken }:     return nextToken is not { Parent: { Node: IBracedList } };
-                case { Node: { } t }
-                    when Navigation.ParentsWithTokenOnEdge(nextToken).Any(a => a is { Node: FunctionDefinition }): return true;
-                default: return false;
+
+            // a blank line before a function definition, unless it's the first statement of a block
+            if (a is not { Node: OpenBraceToken } && nextToken is not null
+             && Navigation.ParentsWithTokenOnEdge(nextToken).Any(p => p is { Node: FunctionDefinition })) {
+                newLineCount = 2;
+                return true;
             }
+
+            switch (a) {
+                case { Node: ColonToken, Parent: { Node: Switch.Case or Switch.DefaultCase } }: return true;
+                // for (int i = 0; i < 4; i++)
+                case { Node: SemicolonToken, Parent: { Node: For } }: return false;
+                // "} else", "} while (x);" and "};"
+                case { Node: CloseBraceToken } when nextToken is { Node: ElseKeyword or SemicolonToken }
+                                                              or { Node: WhileKeyword, Parent: { Node: DoWhile } }: return false;
+                case { Node: SemicolonToken or CloseBraceToken or OpenBraceToken }: return true;
+            }
+
+            return nextToken switch
+            {
+                { Node: EndOfDirectiveToken } => false,
+                { Node: CloseBraceToken }     => nextToken is not { Parent: { Node: IBracedList } },
+                _                             => false,
+            };
         }
 
         static bool whitespaceAfter<T>(Anchor<T> a) where T : Token<hlsl> {
             switch (a) {
                 case { Node  : OpenParenToken or OpenBracketToken or ColonColonToken }
                     or { Node: HashToken, Parent: { Node: PreprocessorSyntax } }:
-                case { Node: DotToken, Parent: { Node: Member } }: return false;
+                case { Node: DotToken, Parent: { Node: Member } }:
+                // ++i
+                case { Node: AffixOperatorToken, Parent: { Node: Affix.Pre } }: return false;
             }
 
-            if (a.Parent is { Node: Unary u } && ReferenceEquals(a.Node, u.operatorToken))
-                return false;
-
             var nextToken = a.NextToken();
+
+            // "-x", but "- -x" and "- -1.0", which would otherwise read as the decrement "--"
+            if (a.Parent is { Node: Unary u } && ReferenceEquals(a.Node, u.operatorToken))
+                return a.Node.Text is "-" or "+" && nextToken is not null && nextToken.Node.Text.StartsWith(a.Node.Text);
+
             switch (nextToken) {
                 case { Node: CloseParenToken or SemicolonToken or ColonColonToken or CommaToken or EndOfDirectiveToken }:
                 case { Node: DotToken, Parent: { Node: Member } }:
+                // i++, a[0], float a[4] and "case 1:"
+                case { Node: AffixOperatorToken, Parent: { Node: Affix.Post } }:
+                case { Node: CloseBracketToken }:
+                case { Node: OpenBracketToken, Parent: { Node: Indexer or ArrayRank } }:
+                case { Node: ColonToken, Parent: { Node: Switch.Case or Switch.DefaultCase } }:
                 // a function-like macro needs the parenthesis right after its name, or it becomes an object-like macro
-                case { Node: OpenParenToken op, Parent: { Node: IArgumentList argList, Parent: { Node: Call or FunctionDefinition or Define } } }
+                case { Node: OpenParenToken op, Parent: { Node: IArgumentList argList, Parent: { Node: Call or FunctionDefinition or FunctionDeclaration or Define } } }
                     when ReferenceEquals(argList.openParenToken, op): return false;
             }
 
@@ -81,14 +110,8 @@ namespace me.tooster.sdf.AST.Hlsl {
             if (base.Visit(a) is not Token<hlsl> token)
                 return null;
 
-            var fmt = (IFormatter<hlsl>)this;
-
-            // empty line before function, unless it's the first statement of enclosing structure
-            if (a.Parent is Anchor<SyntaxOrToken<hlsl>> { Node: FunctionDefinition } sa && ReferenceEquals(token, sa.FirstToken()?.Node)
-             && a.NextToken(Navigation.Side.LEFT) is not { Node: OpenBraceToken })
-                a = Anchor.New(token with { LeadingTriviaList = token.LeadingTriviaList.Splice(0, 0, new NewLine<hlsl>()) }, a.Parent);
-
-            return fmt.NormalizeWhitespace(Anchor.New(token, a.Parent));
+            // navigate with the original anchor: after formatting its trivia, the token is a new instance outside the tree
+            return ((IFormatter<hlsl>)this).NormalizeWhitespace(a, token);
         }
     }
 }

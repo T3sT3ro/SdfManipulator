@@ -39,6 +39,8 @@ namespace me.tooster.sdf.AST.Shaderlab {
         static bool breakLineAfter<T>(Anchor<T> a, out int newLineCount) where T : Token<shaderlab> {
             newLineCount = 1;
             switch (a) {
+                // a texture property's default value: "white" {}
+                case { Node: OpenBraceToken, Parent: { Node: Property.Texture } }: return false;
                 case { Node: OpenBraceToken or CloseBraceToken or HlslProgramKeyword or HlslIncludeKeyword or EndHlslKeyword }:
                 case { Node: InjectedLanguageEndToken<shaderlab> }:
                 case { Node: QuotedStringLiteral, Parent: { Node: CommandArgument } }:
@@ -82,7 +84,8 @@ namespace me.tooster.sdf.AST.Shaderlab {
             if (base.Visit(a) is not Token<shaderlab> token)
                 return null;
 
-            return ((IFormatter<shaderlab>)this).NormalizeWhitespace(Anchor.New(token, a.Parent));
+            // navigate with the original anchor: after formatting its trivia, the token is a new instance outside the tree
+            return ((IFormatter<shaderlab>)this).NormalizeWhitespace(a, token);
         }
 
         public override Tree<shaderlab>.Node? Visit(Anchor<SimpleTrivia<shaderlab>> a) {
@@ -100,9 +103,11 @@ namespace me.tooster.sdf.AST.Shaderlab {
                 switch (trivia) {
                     // TODO: use the obsolete ReflectiveShaderlabFormatter logic here
                     // TODO: visit children trivia when needed
-                    case NewLine when newTriviaList[^1] is NewLine: continue;
+                    case NewLine when newTriviaList.Count > 0 && newTriviaList[^1] is NewLine:
+                        changed = true;
+                        continue;
                     // merge consecutive whitespaces
-                    case Whitespace current when newTriviaList[^1] is Whitespace last:
+                    case Whitespace current when newTriviaList.Count > 0 && newTriviaList[^1] is Whitespace last:
                         newTriviaList[^1] = new Whitespace { Text = last.Text + current.Text };
                         changed = true;
                         break;
