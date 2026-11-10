@@ -74,10 +74,16 @@ Paths are relative to the package root.
       so regeneration doesn't change the file. Renderers without a material use the default material. To change
       material settings such as the draw mode, create a material asset that uses the generated shader and assign it to
       the renderer.
-    - In Prefab Mode, structural changes update the shader in memory right away, and saving the prefab regenerates it.
-      *Tools > SDF > Regenerate All Scene Shaders* reimports every scene prefab, and *Tools > SDF > Migrate Scenes to
-      Generated Sub-Assets* converts scenes that store a standalone `.shader` or an embedded shader and material.
-    - At runtime, it listens to property change events emitted by controllers and updates the controlled material.
+    - In Prefab Mode, structural changes, undo and redo update the shader in memory right away, and saving the prefab
+      regenerates it. *Tools > SDF > Regenerate All Scene Shaders* reimports every scene prefab. *Tools > SDF > Migrate
+      Scenes* converts scenes that store a standalone `.shader` or an embedded shader and material, and gives
+      controllers that have none an identifier.
+    - Each controller has an identifier that it gets once, e.g. `3f9a1c2b`. Generated uniform and function names are
+      built from it (`SDF_3f9a1c2b_Radius`), so renaming or moving objects doesn't change them. A comment above each
+      generated function shows the object's place in the hierarchy.
+    - It listens to property change events emitted by controllers and sets the changed uniforms on its renderers with
+      a `MaterialPropertyBlock`. The material keeps the defaults from the generated shader, so instances of the same
+      prefab can have different values.
 - **Shader presets** (`Runtime/Generators`): for now just `BIRPShaderPreset`, a shader generation preset tailored for
   the built-in forward rendering pipeline. Essentially a stateful factory for shader generators; think of it as a
   "cooking school" for creating chefs.

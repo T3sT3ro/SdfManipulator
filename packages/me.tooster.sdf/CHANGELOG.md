@@ -17,11 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Graph does for a graph. Nothing generated is stored in the prefab file. In Prefab Mode, structural changes update the
   shader in memory before the prefab is saved.
 - *Tools > SDF > Regenerate All Scene Shaders* reimports every SDF scene prefab.
-- *Tools > SDF > Migrate Scenes to Generated Sub-Assets* converts scenes that store a standalone `.shader` or an
-  embedded shader and material. Material assets that used the old shader switch to the generated one.
+- *Tools > SDF > Migrate Scenes* converts scenes that store a standalone `.shader` or an embedded shader and material,
+  and gives controllers that have none an identifier. Material assets that used the old shader switch to the generated
+  one.
 - Printing tests for every HLSL and ShaderLab syntax node, and a test that fails when a node type has none. Tests check
   that walkers and mappers visit every token in syntax order.
 - `Walker.Walk` and `Mapper.Map` run a visitor over a tree.
+- In Prefab Mode, the shader also regenerates after undo and redo, and after components or objects are added,
+  removed, reordered or moved.
 
 ### Changed
 
@@ -39,6 +42,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Generated shaders no longer contain a timestamp, so the same scene always generates the same shader.
 - Scenes regenerate when their prefab is imported: on save, after a change to the generator code (a custom asset
   dependency) and after a change to the shader library.
+- Uniforms are set on each renderer with a `MaterialPropertyBlock` instead of in the material, and only the ones that
+  changed. Instances of a scene prefab can have different values, and material assets no longer change while you edit.
+- Generated uniform and function names are built from an identifier that each controller gets once, e.g.
+  `SDF_3f9a1c2b_Radius`. Renaming or moving objects no longer renames them, and no name contains `__`, which HLSL
+  reserves. A comment above each generated function shows the object's place in the hierarchy. Run *Tools > SDF >
+  Migrate Scenes* to give the controllers of existing scenes identifiers.
+- Generated shaders are named `SDF/<prefab name> <first 8 characters of the prefab GUID>`, so scenes with the same name
+  get different shaders. Slashes and double quotes in the name are replaced.
+- The shader preset dropdown shows the scene's preset, and picking its type again keeps the preset's settings. The
+  editor finds presets with `TypeCache`.
 
 ### Fixed
 
@@ -86,6 +99,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - `SdfScene.targetShader` and `SdfScene.targetMaterial`. The generated shader is a sub-asset of the scene prefab.
+- `SdfScene.controlledMaterial`. Uniforms go to the scene's renderers.
+- `ShaderPreset.DetectedShaderPresets`, which scanned every loaded assembly. An assembly that failed to load made
+  `SdfScene` fail to initialize.
+- The serialized `SdfCombineController.children`. It was derived from the hierarchy and rewritten on load, which
+  modified prefabs and created overrides. `Children` reads the hierarchy instead.
 
 - The syntax generator sources are no longer shipped inside the package; they live in the repository's
   `tools/SyntaxGenerators`.
