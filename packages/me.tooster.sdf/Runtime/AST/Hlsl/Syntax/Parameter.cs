@@ -11,6 +11,6 @@ namespace me.tooster.sdf.AST.Hlsl.Syntax {
         public Type              type        { get; init; }
         public Identifier        id          { get; init; }
         public Semantic?         semantic    { get; init; }
-        public Expression<hlsl>? initializer { get; init; }
+        public Initializer?      initializer { get; init; }
     }
 }
