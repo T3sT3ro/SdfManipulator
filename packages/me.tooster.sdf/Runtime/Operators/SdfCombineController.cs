@@ -34,7 +34,15 @@ namespace me.tooster.sdf.Operators {
         [Tooltip("Generate one ID for the combination")]
         [SerializeField] [DontCreateProperty] bool singleId;
 
-        public Controller[] children = Array.Empty<Controller>();
+        /// <summary>
+        ///     The nearest descendants that produce an SDF, in hierarchy order. They're derived from the hierarchy on each
+        ///     call: a serialized copy dirtied prefabs on load, and the prefab import doesn't call OnEnable to refresh it.
+        /// </summary>
+        public IReadOnlyList<Controller> Children
+            => GetFirstNestedComponents<IModifier<VectorData, SdfData>>(transform)
+                .OfType<Controller>()
+                .Where(c => c != null) // checks if child was destroyed
+                .ToList();
 
         [CreateProperty] [ShaderStructural]
         public CombinationOperation Operation {
@@ -55,20 +63,7 @@ namespace me.tooster.sdf.Operators {
             set => SetField(ref singleId, value, true);
         }
 
-        protected override void OnEnable() {
-            base.OnEnable();
-            refreshChildren();
-        }
-
-        void OnTransformChildrenChanged() {
-            refreshChildren();
-            OnStructureChanged();
-        }
-
-        protected override void OnValidate() {
-            base.OnValidate();
-            refreshChildren();
-        }
+        void OnTransformChildrenChanged() => OnStructureChanged();
 
         static IEnumerable<T> GetFirstNestedComponents<T>(Transform root) {
             foreach (Transform child in root) {
@@ -79,13 +74,6 @@ namespace me.tooster.sdf.Operators {
                         yield return c;
                 }
             }
-        }
-
-        void refreshChildren() {
-            children = GetFirstNestedComponents<IModifier<VectorData, SdfData>>(transform)
-                .OfType<Controller>()
-                .Where(c => c != null) // checks if child was destroyed
-                .ToArray();
         }
 
         public override SdfData Apply(VectorData input, Processor processor) {
@@ -99,9 +87,10 @@ namespace me.tooster.sdf.Operators {
                 _            => throw new ArgumentOutOfRangeException(),
             };
 
+            var children = Children;
             var result = (Identifier)"result";
             var body = new List<Statement<hlsl>>();
-            if (children.Length == 0) {
+            if (children.Count == 0) {
                 // A combination without children is empty space, which is the normal state right after adding one.
                 // SdfResult result = (SdfResult)0; result.distance = _MAX_DISTANCE;
                 processor.HandleRequirement(SdfData.includeRaymarchingRequirement(this));

@@ -122,7 +122,6 @@ namespace me.tooster.sdf.Tests.Editor {
             added.transform.SetParent(combine.transform, false);
             var sdf = added.AddComponent<SdfController>();
             sdf.sdfModifiers = new Controller[] { added.AddComponent<SdfSphereController>() };
-            combine.children = combine.children.Append(sdf).ToArray();
 
             scene.RevalidateScene();
             scene.GenerateSceneAssets();

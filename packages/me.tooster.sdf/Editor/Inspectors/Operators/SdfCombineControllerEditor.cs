@@ -10,7 +10,7 @@ namespace me.tooster.sdf.Editor.Inspectors.Operators {
             base.OnSceneGUI();
             var controller = (SdfCombineController)target;
             using var scope = new EditorGUI.ChangeCheckScope();
-            foreach (var child in controller.children.OfType<SdfController>()) {
+            foreach (var child in controller.Children.OfType<SdfController>()) {
                 if (child is not Component { transform: { position: var childPos } })
                     continue;
                 Handles.color = GetGizmoColor(controller);

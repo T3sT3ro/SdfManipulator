@@ -75,8 +75,6 @@ namespace me.tooster.sdf.Tests.Editor {
             elongate.sdfPrimitive = sphere;
             var sdf = elongated.AddComponent<SdfController>();
             sdf.sdfModifiers = new Controller[] { elongate };
-            // OnTransformChildrenChanged isn't sent synchronously, so register the child by hand
-            combine.children = combine.children.Append(sdf).ToArray();
 
             scene.RevalidateScene();
             var source = scene.AssembleShaderSource();
@@ -93,7 +91,6 @@ namespace me.tooster.sdf.Tests.Editor {
             var empty = new GameObject("empty combine");
             empty.transform.SetParent(combine.transform, false);
             var emptyCombine = empty.AddComponent<SdfCombineController>();
-            combine.children = combine.children.Append(emptyCombine).ToArray();
 
             scene.RevalidateScene();
             var source = scene.AssembleShaderSource();
