@@ -42,7 +42,6 @@ namespace me.tooster.sdf.Tests.Editor {
             var scene = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath).GetComponentInChildren<SdfScene>(true);
             Assert.That(scene.generatedShader, Is.EqualTo(shader));
             Assert.That(scene.generatedMaterial, Is.EqualTo(material));
-            Assert.That(scene.controlledMaterial, Is.EqualTo(material));
             Assert.That(scene.GetComponentsInChildren<Renderer>(true).Select(r => r.sharedMaterial), Has.All.EqualTo(material));
         }
 
@@ -83,7 +82,6 @@ namespace me.tooster.sdf.Tests.Editor {
             }
 
             var scene = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath).GetComponentInChildren<SdfScene>(true);
-            Assert.That(scene.controlledMaterial, Is.EqualTo(custom));
             Assert.That(scene.GetComponentsInChildren<Renderer>(true).Select(r => r.sharedMaterial), Has.All.EqualTo(custom));
             Assert.That(custom.shader, Is.EqualTo(scene.generatedShader), "the custom material lost the generated shader");
         }
@@ -102,7 +100,7 @@ namespace me.tooster.sdf.Tests.Editor {
 
             Assert.That(AssetDatabase.LoadAllAssetRepresentationsAtPath(outerPath).OfType<Shader>(), Is.Empty, "the outer prefab generated a shader");
             var nested = AssetDatabase.LoadAssetAtPath<GameObject>(outerPath).GetComponentInChildren<SdfScene>(true);
-            Assert.That(nested.controlledMaterial, Is.EqualTo(scenePrefab.GetComponent<SdfScene>().controlledMaterial));
+            Assert.That(nested.generatedShader, Is.EqualTo(scenePrefab.GetComponent<SdfScene>().generatedShader), "the nested scene doesn't use its own prefab's shader");
         }
 
         [Test]
@@ -126,7 +124,6 @@ namespace me.tooster.sdf.Tests.Editor {
             var scene = stage.prefabContentsRoot.GetComponentInChildren<SdfScene>(true);
             var imported = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath).GetComponentInChildren<SdfScene>(true);
             Assert.That(scene.generatedShader, Is.EqualTo(imported.generatedShader));
-            Assert.That(scene.controlledMaterial, Is.EqualTo(imported.generatedMaterial));
             Assert.That(scene.GetComponentsInChildren<Renderer>(true).Select(r => r.sharedMaterial), Has.All.EqualTo(imported.generatedMaterial));
 
             var propertiesBefore = ShaderUtil.GetPropertyCount(scene.generatedShader);

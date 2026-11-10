@@ -19,9 +19,7 @@ namespace me.tooster.sdf.Editor {
             var root = PrefabUtility.LoadPrefabContents(SdfPaths.Templates.HelloSdfPrefab);
             try {
                 root.name = System.IO.Path.GetFileNameWithoutExtension(prefabPath);
-                var scene = root.GetComponentInChildren<SdfScene>(true);
-                // anything the template references belongs to the template; the import assigns the new scene's own assets
-                scene.controlledMaterial = null;
+                // the template's materials belong to the template; the import assigns the new scene's own assets
                 foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
                     renderer.sharedMaterial = null;
                 // the new scene's controllers get their own identifiers, which are saved with it

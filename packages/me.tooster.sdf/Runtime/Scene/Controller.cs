@@ -59,7 +59,18 @@ namespace me.tooster.sdf {
             OnStructureChanged();
         }
 
-        protected virtual void OnValidate() { sdfScene = GetComponentInParent<SdfScene>(); }
+        /// <summary>
+        ///     Unity calls this after any change to the serialized data, also for changes that bypass the property setters,
+        ///     e.g. an undo. Setting all uniforms on the next update keeps the rendering in sync with the data.
+        /// </summary>
+        protected virtual void OnValidate() {
+            sdfScene = GetComponentInParent<SdfScene>();
+            if (sdfScene != null)
+                sdfScene.RequiresUpdate = true;
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+#endif
+        }
 
         public abstract IData Apply(IData input, Processor processor);
         public abstract Type  GetInputType();

@@ -26,9 +26,6 @@ namespace me.tooster.sdf {
     [Icon(SdfPaths.Icons.SdfScene)]
     public class SdfScene : MonoBehaviour { // TODO: inherit from Component to disallow enabling/disabling
 
-        [Tooltip("The material that receives the scene's uniforms. The prefab import sets it to the material of the scene's renderer.")]
-        public Material? controlledMaterial;
-
         public SdfController? sdfSceneRoot;
 
         // Set only in the prefab's import result, where they point to the shader and the default material that the import
@@ -47,6 +44,11 @@ namespace me.tooster.sdf {
 
         readonly ShaderPropertyCollector shaderPropertyCollector = new();
         ShaderPropertyUpdatingVisitor?   _shaderPropertyUpdatingVisitor;
+
+        // Uniforms go to each renderer through a property block. Writing them into the material changed the material asset
+        // all the time, and made every instance of the prefab share the values of the last one that wrote them.
+        MaterialPropertyBlock? propertyBlock;
+        Renderer[]             renderers = Array.Empty<Renderer>();
 
         ShaderPropertyUpdatingVisitor shaderPropertyUpdatingVisitor {
             get { return _shaderPropertyUpdatingVisitor ??= new ShaderPropertyUpdatingVisitor(this); }
@@ -79,8 +81,8 @@ namespace me.tooster.sdf {
             RequiresUpdate = true;
             // A player has no OnValidate, and OnDisable unsubscribes from the controllers, so rebuild the scene data here.
             RevalidateScene();
-            if (controlledMaterial == null && Application.isPlaying)
-                Debug.LogWarning($"SdfScene '{name}' has no controlled material, so its shader uniforms won't update.", this);
+            if (renderers.Length == 0 && Application.isPlaying)
+                Debug.LogWarning($"SdfScene '{name}' has no renderer, so nothing draws it.", this);
 #if UNITY_EDITOR
             // Prefab Mode loads the prefab file, which can't reference the generated sub-assets, so take them from the import
             // result. Reading prefabContentsRoot isn't allowed in OnEnable, so check that this is the root of the stage.
@@ -105,8 +107,8 @@ namespace me.tooster.sdf {
             if (shaderPreset == null)
                 diagnostics.Add(Diagnostic.Error("No shader preset set. The generation won't proceed."));
 
-            if (TryGetComponent<Renderer>(out var r) && r.sharedMaterial != controlledMaterial)
-                diagnostics.Add(Diagnostic.Warn("Material on SdfScene renderer is not the controlled material."));
+            if (renderers.Length == 0)
+                diagnostics.Add(Diagnostic.Warn("No renderer draws the SdfScene."));
 
             if (sdfSceneRoot is not { transform: { parent: not null } })
                 diagnostics.Add(Diagnostic.Warn("SdfScene root is not a child of SdfScene."));
@@ -131,21 +133,14 @@ namespace me.tooster.sdf {
         /// <summary>
         ///     Points the scene and its renderers at the generated shader and default material. A renderer keeps its
         ///     material when it has one, for example a material asset that uses the generated shader with custom settings.
-        ///     Renderers without a material get the default material. The material of the first renderer becomes the
-        ///     controlled material.
+        ///     Renderers without a material get the default material.
         /// </summary>
         internal void UseGeneratedAssets(Shader shader, Material material) {
             generatedShader = shader;
             generatedMaterial = material;
-            controlledMaterial = null;
-            foreach (var r in GetComponentsInChildren<Renderer>(true)) {
+            foreach (var r in GetComponentsInChildren<Renderer>(true))
                 if (r.sharedMaterial == null)
                     r.sharedMaterial = material;
-                if (controlledMaterial == null)
-                    controlledMaterial = r.sharedMaterial;
-            }
-            if (controlledMaterial == null)
-                controlledMaterial = material;
         }
 
 #if UNITY_EDITOR
@@ -167,6 +162,15 @@ namespace me.tooster.sdf {
 
             if (sdfSceneRoot == null)
                 sdfSceneRoot = GetComponentInChildren<SdfController>();
+
+            // the renderers of a nested scene draw that scene
+            renderers = GetComponentsInChildren<Renderer>(true).Where(r => r.GetComponentInParent<SdfScene>(true) == this).ToArray();
+            // uniforms may have new names, so set all of them on the next update
+            propertyBlock?.Clear();
+            RequiresUpdate = true;
+#if UNITY_EDITOR
+            EditorApplication.QueuePlayerLoopUpdate(); // in edit mode, LateUpdate only runs when something asks for it
+#endif
 
             var controllerData = new Dictionary<Controller, ControllerData>();
             var usedIds = new HashSet<string>();
@@ -212,17 +216,6 @@ namespace me.tooster.sdf {
         }
 
         void UpdateProperty(PropertyData pd) {
-#if UNITY_EDITOR
-            var currentPrefabStage = PrefabStageUtility.GetCurrentPrefabStage();
-            // Trigger updates only from prefab instance outside of prefab stage or prefab root inside prefab stage.
-            // Otherwise an instance of a prefab in scene would leak to prefab edited in context
-            if (currentPrefabStage != null && currentPrefabStage.prefabContentsRoot != gameObject)
-                return;
-#endif
-
-            if (controlledMaterial == null)
-                return; // OnValidate reports the missing material as a diagnostic
-
             // make sure the controller hasn't been destroyed
             if (pd.controller is { } controller && controller != null)
                 PropertyContainer.Accept(shaderPropertyUpdatingVisitor, ref controller, pd.path);
@@ -248,38 +241,35 @@ namespace me.tooster.sdf {
             QueuePropertyUpdate(propertyData);
         }
 
+        /// <summary>
+        ///     Sets the uniforms whose properties changed since the last update on the scene's renderers. Controllers report
+        ///     changes, including the transforms that moved. Enabling the scene, revalidating it and any change to a
+        ///     controller's serialized data (e.g. an undo) set every uniform.
+        /// </summary>
         internal void UpdateShaderUniforms(bool forceUpdateAll = false) {
-            // the first update after enabling has to set every uniform, so the material matches the scene
             forceUpdateAll |= RequiresUpdate;
             RequiresUpdate = false;
 
-#if UNITY_EDITOR
-            forceUpdateAll = true; // TODO: this is a temporary solution, but causes poor performance
-#endif
-
-            if (sceneData == null || controlledMaterial == null)
+            if (sceneData == null || renderers.Length == 0)
                 return;
 
             if (forceUpdateAll)
-                QueuePropertyUpdates(sceneData.Properties);
+                sceneData.queuedPropertyUdates.UnionWith(sceneData.Properties);
             if (sceneData.queuedPropertyUdates.Count <= 0)
                 return;
 
+            propertyBlock ??= new MaterialPropertyBlock();
             foreach (var p in sceneData.queuedPropertyUdates)
                 UpdateProperty(p);
-
             sceneData.queuedPropertyUdates.Clear();
+
+            foreach (var r in renderers)
+                if (r != null)
+                    r.SetPropertyBlock(propertyBlock);
         }
 
         void QueuePropertyUpdate(PropertyData propertyData) {
             sceneData.queuedPropertyUdates.Add(propertyData);
-#if UNITY_EDITOR
-            EditorApplication.QueuePlayerLoopUpdate(); // needed for smooth experience in editor
-#endif
-        }
-
-        void QueuePropertyUpdates(IEnumerable<PropertyData> properties) {
-            sceneData.queuedPropertyUdates.UnionWith(properties);
 #if UNITY_EDITOR
             EditorApplication.QueuePlayerLoopUpdate(); // needed for smooth experience in editor
 #endif
@@ -385,39 +375,39 @@ namespace me.tooster.sdf {
             }
 
             public void Visit<TContainer>(in VisitContext<TContainer, Matrix4x4> context, ref TContainer container, ref Matrix4x4 value)
-                => scene.controlledMaterial!.SetMatrix(GetShaderId(container, context.Property), value);
+                => scene.propertyBlock!.SetMatrix(GetShaderId(container, context.Property), value);
 
             public void Visit<TContainer>(in VisitContext<TContainer, Vector2> context, ref TContainer container, ref Vector2 value)
-                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), value);
+                => scene.propertyBlock!.SetVector(GetShaderId(container, context.Property), value);
 
             public void Visit<TContainer>(
                 in VisitContext<TContainer, Vector2Int> context,
                 ref TContainer container,
                 ref Vector2Int value
             )
-                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), (Vector2)value);
+                => scene.propertyBlock!.SetVector(GetShaderId(container, context.Property), (Vector2)value);
 
             public void Visit<TContainer>(in VisitContext<TContainer, Vector3> context, ref TContainer container, ref Vector3 value)
-                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), value);
+                => scene.propertyBlock!.SetVector(GetShaderId(container, context.Property), value);
 
             public void Visit<TContainer>(
                 in VisitContext<TContainer, Vector3Int> context,
                 ref TContainer container,
                 ref Vector3Int value
             )
-                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), (Vector3)value);
+                => scene.propertyBlock!.SetVector(GetShaderId(container, context.Property), (Vector3)value);
 
             public void Visit<TContainer>(in VisitContext<TContainer, Vector4> context, ref TContainer container, ref Vector4 value)
-                => scene.controlledMaterial!.SetVector(GetShaderId(container, context.Property), value);
+                => scene.propertyBlock!.SetVector(GetShaderId(container, context.Property), value);
 
             public void Visit<TContainer>(in VisitContext<TContainer, bool> context, ref TContainer container, ref bool value)
-                => scene.controlledMaterial!.SetFloat(GetShaderId(container, context.Property), value ? 1 : 0);
+                => scene.propertyBlock!.SetFloat(GetShaderId(container, context.Property), value ? 1 : 0);
 
             public void Visit<TContainer>(in VisitContext<TContainer, float> context, ref TContainer container, ref float value)
-                => scene.controlledMaterial!.SetFloat(GetShaderId(container, context.Property), value);
+                => scene.propertyBlock!.SetFloat(GetShaderId(container, context.Property), value);
 
             public void Visit<TContainer>(in VisitContext<TContainer, int> context, ref TContainer container, ref int value)
-                => scene.controlledMaterial!.SetInteger(GetShaderId(container, context.Property), value);
+                => scene.propertyBlock!.SetInteger(GetShaderId(container, context.Property), value);
 
             int GetShaderId<TContainer>(TContainer controller, IProperty property)
                 => scene.sceneData

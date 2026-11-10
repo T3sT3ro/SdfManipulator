@@ -81,7 +81,6 @@ namespace me.tooster.sdf.Editor {
                     if (renderer.sharedMaterial != null && stored.Contains(renderer.sharedMaterial))
                         renderer.sharedMaterial = null;
                 var scene = root.GetComponentInChildren<SdfScene>(true);
-                scene.controlledMaterial = null;
                 // the loaded contents are in a preview scene, where revalidating assigns missing controller identifiers
                 scene.RevalidateScene();
                 PrefabUtility.SaveAsPrefabAsset(root, prefab);

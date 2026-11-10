@@ -29,8 +29,8 @@ namespace me.tooster.sdf.Tests.Editor {
 
             Assert.That(prefab.name, Is.EqualTo("new scene"));
             Assert.That(AssetDatabase.GetAssetPath(scene.generatedShader), Is.EqualTo(path), "the shader isn't a sub-asset of the scene");
-            Assert.That(AssetDatabase.GetAssetPath(scene.controlledMaterial), Is.EqualTo(path), "the material isn't a sub-asset of the scene");
-            Assert.That(scene.GetComponentsInChildren<Renderer>(true).Select(r => r.sharedMaterial), Has.All.EqualTo(scene.controlledMaterial));
+            Assert.That(AssetDatabase.GetAssetPath(scene.generatedMaterial), Is.EqualTo(path), "the material isn't a sub-asset of the scene");
+            Assert.That(scene.GetComponentsInChildren<Renderer>(true).Select(r => r.sharedMaterial), Has.All.EqualTo(scene.generatedMaterial));
             Assert.That(Directory.GetFiles(Folder).Where(f => !f.EndsWith(".meta")), Is.EquivalentTo(new[] { $"{Folder}/new scene.prefab" }));
         }
     }

@@ -101,9 +101,10 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
-        public void UniformUpdate_WithoutMaterialDoesNotThrow() {
+        public void UniformUpdate_WithoutRendererDoesNotThrow() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
-            scene.controlledMaterial = null;
+            foreach (var renderer in templateRoot.GetComponentsInChildren<Renderer>(true))
+                Object.DestroyImmediate(renderer);
             scene.RevalidateScene();
 
             Assert.DoesNotThrow(() => scene.UpdateShaderUniforms(forceUpdateAll: true));
