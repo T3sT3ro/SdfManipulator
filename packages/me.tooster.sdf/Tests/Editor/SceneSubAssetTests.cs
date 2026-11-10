@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using System.Linq;
 using me.tooster.sdf.Editor;
@@ -27,6 +28,8 @@ namespace me.tooster.sdf.Tests.Editor {
 
         [TearDown]
         public void DeleteScene() {
+            // leaving a modified prefab stage would ask whether to save it
+            PrefabStageUtility.GetCurrentPrefabStage()?.ClearDirtiness();
             StageUtility.GoToMainStage();
             AssetDatabase.DeleteAsset(Folder);
         }
@@ -138,6 +141,21 @@ namespace me.tooster.sdf.Tests.Editor {
 
             Assert.That(ShaderUtil.GetPropertyCount(scene.generatedShader), Is.GreaterThan(propertiesBefore), "the shader didn't get the new sphere's uniform");
             Assert.That(ShaderUtil.ShaderHasError(scene.generatedShader), Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator PrefabMode_RegeneratesAfterAComponentIsAdded() {
+            var stage = PrefabStageUtility.OpenPrefab(prefabPath);
+            var scene = stage.prefabContentsRoot.GetComponentInChildren<SdfScene>(true);
+            yield return null;
+            scene.RequiresRegeneration = false;
+
+            // adding a component to an existing object triggers none of the controllers' own hooks
+            var sphere = Undo.AddComponent<SdfSphereController>(scene.GetComponentInChildren<SdfCombineController>(true).gameObject);
+            for (var frame = 0; frame < 10 && !scene.RequiresRegeneration && !scene.sceneData.controllers.ContainsKey(sphere); frame++)
+                yield return null;
+
+            Assert.That(scene.RequiresRegeneration || scene.sceneData.controllers.ContainsKey(sphere), "the scene didn't regenerate");
         }
     }
 }
