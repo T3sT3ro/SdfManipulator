@@ -83,6 +83,34 @@ namespace sdf { namespace operators {
         return result;
     }
 
+    /**
+     * 
+     * @param a first SDF's result
+     * @param b second SDF's result
+     * @param k blending factor
+     * @return Sdf 
+     */
+    SdfResult unionSmoothExp(SdfResult a, SdfResult b, float k) {
+        SdfResult result;
+        // weights of each function
+        float     wA = exp(-a.distance / k);
+        float     wB = exp(-b.distance / k);
+        float     sumW = wA + wB;
+
+        SdfResult res;
+
+        /// For N samples this would generalize to on log over sum
+        res.distance = -k * log(sumW);
+        res.p = (a.p * wA + b.p * wB) / sumW; // position interpolated by weights for distorted domain
+        res.normal = normalize((a.normal * wA + b.normal * wB) / sumW);
+        res.material = lerpMaterials(a.material, b.material, wB / sumW);
+
+
+        res.id = wA > wB ? a.id : b.id;
+
+        return res;
+    }
+
     float round_sdf(in float distance, float R) {
         return distance - R;
     }

@@ -19,9 +19,10 @@ namespace me.tooster.sdf.Operators {
     [GeneratePropertyBag]
     public partial class SdfCombineController : SdfController {
         public enum CombinationOperation {
-            [InspectorName("Simple union")] SIMPLE_UNION = 0,
-            [InspectorName("Intersection")] INTERSECTION = 1,
-            [InspectorName("Smooth union")] SMOOTH_UNION = 2,
+            [InspectorName("Simple union")]     SIMPLE_UNION     = 0,
+            [InspectorName("Intersection")]     INTERSECTION     = 1,
+            [InspectorName("Smooth union")]     SMOOTH_UNION     = 2,
+            [InspectorName("Smooth Exp union")] SMOOTH_EXP_UNION = 3,
         }
 
 
@@ -38,11 +39,10 @@ namespace me.tooster.sdf.Operators {
         ///     The nearest descendants that produce an SDF, in hierarchy order. They're derived from the hierarchy on each
         ///     call: a serialized copy dirtied prefabs on load, and the prefab import doesn't call OnEnable to refresh it.
         /// </summary>
-        public IReadOnlyList<Controller> Children
-            => GetFirstNestedComponents<IModifier<VectorData, SdfData>>(transform)
-                .OfType<Controller>()
-                .Where(c => c != null) // checks if child was destroyed
-                .ToList();
+        public IReadOnlyList<Controller> Children => GetFirstNestedComponents<IModifier<VectorData, SdfData>>(transform)
+            .OfType<Controller>()
+            .Where(c => c != null) // checks if child was destroyed
+            .ToList();
 
         [CreateProperty] [ShaderStructural]
         public CombinationOperation Operation {
@@ -51,7 +51,7 @@ namespace me.tooster.sdf.Operators {
         }
 
         [CreateProperty] [ShaderProperty(Description = "Blend factor")]
-        [VisibleWhen(nameof(operation), (int)SMOOTH_UNION)]
+        [VisibleWhen(nameof(operation), new[] { (int)SMOOTH_UNION, (int)SMOOTH_EXP_UNION })]
         public float BlendFactor {
             get => blendFactor;
             set => SetField(ref blendFactor, value, false);
@@ -81,10 +81,11 @@ namespace me.tooster.sdf.Operators {
 
             var combinatorFunction = Operation switch
             {
-                SIMPLE_UNION => "sdf::operators::unionSimple",
-                INTERSECTION => "sdf::operators::intersectSimple",
-                SMOOTH_UNION => "sdf::operators::unionSmooth",
-                _            => throw new ArgumentOutOfRangeException(),
+                SIMPLE_UNION     => "sdf::operators::unionSimple",
+                INTERSECTION     => "sdf::operators::intersectSimple",
+                SMOOTH_UNION     => "sdf::operators::unionSmooth",
+                SMOOTH_EXP_UNION => "sdf::operators::unionSmoothExp",
+                _                => throw new ArgumentOutOfRangeException(),
             };
 
             var children = Children;
@@ -114,9 +115,12 @@ namespace me.tooster.sdf.Operators {
             }
 
             // arguments[1] is mutating slot for successive sdfResults 
-            var arguments = Operation == SMOOTH_UNION
-                ? new Expression<hlsl>[] { result, null, (Identifier)this[blendFactorProperty].identifier }
-                : new Expression<hlsl>[] { result, null };
+            var arguments = Operation switch
+            {
+                SMOOTH_UNION or SMOOTH_EXP_UNION
+                    => new Expression<hlsl>[] { result, null, (Identifier)this[blendFactorProperty].identifier },
+                _ => new Expression<hlsl>[] { result, null },
+            };
 
             foreach (var sdfChild in children.Skip(1)) {
                 arguments[1] = ((SdfData)sdfChild.Apply(input, processor)).evaluationExpression;
@@ -154,7 +158,9 @@ namespace me.tooster.sdf.Operators {
             body.Add(new Return { expression = new Identifier { id = result.id.Text } });
 
             var combineFunctionName = SdfScene.sceneData.controllers[this].identifier;
-            processor.HandleRequirement(new FunctionDefinitionRequirement(this, WithHierarchyComment(createSdfFunction(combineFunctionName, body))));
+            processor.HandleRequirement(
+                new FunctionDefinitionRequirement(this, WithHierarchyComment(createSdfFunction(combineFunctionName, body)))
+            );
 
             return new SdfData
             {
