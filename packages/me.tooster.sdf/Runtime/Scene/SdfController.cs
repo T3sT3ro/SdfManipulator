@@ -19,7 +19,7 @@ namespace me.tooster.sdf {
     public partial class SdfController : Controller, IModifier<VectorData, SdfData> {
         [SerializeField] [DontCreateProperty] bool inverted;
 
-        public Controller[] sdfModifiers = Array.Empty<Controller>();
+        [ShaderStructural] public Controller[] sdfModifiers = Array.Empty<Controller>();
 
         /// Should the sdf be inverted, i.e. "inside out"?
         [CreateProperty] [ShaderStructural]
@@ -29,8 +29,9 @@ namespace me.tooster.sdf {
         }
 
         protected override void OnValidate() {
-            base.OnValidate();
+            // before the base method compares the structural values, so removing empty entries isn't a change of its own
             sdfModifiers = sdfModifiers.Where(m => m != null).ToArray();
+            base.OnValidate();
         }
 
         public virtual SdfData Apply(VectorData input, Processor processor) {

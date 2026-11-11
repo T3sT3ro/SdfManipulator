@@ -10,10 +10,12 @@ namespace me.tooster.sdf {
 
 
 
-    /**
-     * Structural properties change the structure of the shader AST and require regeneration of the shader code.
-     */
-    [AttributeUsage(AttributeTargets.Property)]
+    /// <summary>
+    ///     Structural properties change the structure of the shader AST and require regeneration of the shader code.
+    ///     A field without a property, e.g. a list of other controllers, can carry it too. See
+    ///     <see cref="Controller" />.OnValidate, which compares the values of all structural properties after each change.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class ShaderStructuralAttribute : Attribute { }
 
 

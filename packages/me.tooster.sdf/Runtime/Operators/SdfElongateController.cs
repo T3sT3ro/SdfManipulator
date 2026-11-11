@@ -28,7 +28,7 @@ namespace me.tooster.sdf.Operators {
         [SerializeField] [DontCreateProperty]
         Vector3 length;
 
-        public Controller sdfPrimitive;
+        [ShaderStructural] public Controller sdfPrimitive;
 
         [CreateProperty]
         [ShaderProperty(Description = "Elongation")]

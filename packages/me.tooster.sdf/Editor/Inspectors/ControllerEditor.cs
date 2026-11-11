@@ -7,25 +7,17 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 namespace me.tooster.sdf.Editor.Inspectors {
-    /**
-     * A base controller editor which binds serialized fields to events for triggering uniform updates and shader
-     * regenerations.
-     * Prerequisites for Controller to make the editor work as intended:
-     * <list type="bullet">
-     *     <item>
-     *         controller has serialized fields and reactive properties (i.e. ones that trigget SetField and
-     *         OnPropertyChanged)
-     *     </item>
-     *     <item>
-     *         the serialized field and the reactive property have the same name, but the property is capitalized e.g. field
-     *         'size' and property 'Size'
-     *     </item>
-     *     <item>
-     *         properties are annotated with either [ShaderProperty] (for uniforms or [ShaderStructural] (for regenerating
-     *         with new definitions)
-     *     </item>
-     * </list>
-     */
+    /// <summary>
+    ///     The inspector of all controllers: the default inspector, with structural fields marked and disabled outside
+    ///     Prefab Mode, and fields that <see cref="VisibleWhenAttribute" /> hides.
+    /// </summary>
+    /// <remarks>
+    ///     Changes don't go through this inspector. <see cref="Controller" />.OnValidate sets the uniforms and detects
+    ///     structural changes for edits from any source, including undo and editing several objects at once. To find the
+    ///     attributes of a serialized field, the inspector looks for a property with the same name, then for one with the
+    ///     name capitalized, e.g. the field <c>radius</c> and the property <c>Radius</c>. A field without such a property
+    ///     still works, but the inspector doesn't mark it.
+    /// </remarks>
     [CustomEditor(typeof(Controller), true)]
     [CanEditMultipleObjects]
     public class ControllerEditor : UnityEditor.Editor {
@@ -48,25 +40,13 @@ namespace me.tooster.sdf.Editor.Inspectors {
             InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
 
             defaultInspector.Query<PropertyField>().ForEach(propertyField => {
-                    // this is bound to a field
-                    var propertyPath = propertyField.bindingPath;
-                    // implicit assumption: a controller has a reactive property with the same name, but capitalized. That property triggers events
-                    var capitalizedProperty = propertyPath.Substring(0, 1).ToUpper() + propertyPath.Substring(1);
-
-                    if (!PropertyContainer.TryGetProperty(controller, new PropertyPath(capitalizedProperty), out var p))
+                    if (!TryGetPropertyOfField(controller, propertyField.bindingPath, out var p))
                         return;
 
-                    if (p.GetAttribute<ShaderPropertyAttribute>() is not null) {
-                        // A runtime proeprty can be updated at any time
-                        propertyField.RegisterValueChangeCallback(_ => controller.OnPropertyChanged(capitalizedProperty));
+                    if (p.GetAttribute<ShaderPropertyAttribute>() is not null)
                         propertyField.AddToClassList("shader-property");
-                    }
 
-                    // TrackPropertyValue is here required, because the change event is triggered when inspector opens for regular property field
-                    // this caused regenerations every time the selected object changed 
                     if (p.GetAttribute<ShaderStructuralAttribute>() is not null) {
-                        propertyField.TrackPropertyValue(serializedObject.FindProperty(propertyPath), _ => controller.OnStructureChanged());
-                        // add 'structural' USS class to property field
                         propertyField.AddToClassList("shader-structural");
                         propertyField.tooltip = propertyField.tooltip is null or ""
                             ? STRUCTURAL_TOOLTIP
@@ -99,6 +79,14 @@ namespace me.tooster.sdf.Editor.Inspectors {
                 }
             );
             return root;
+        }
+
+        /// Finds the property that holds the attributes of a serialized field: the field itself, or a property with the name capitalized.
+        static bool TryGetPropertyOfField(Controller controller, string fieldName, out IProperty property) {
+            property = null;
+            return !string.IsNullOrEmpty(fieldName)
+             && (PropertyContainer.TryGetProperty(controller, new PropertyPath(fieldName), out property)
+                 || PropertyContainer.TryGetProperty(controller, new PropertyPath(char.ToUpperInvariant(fieldName[0]) + fieldName.Substring(1)), out property));
         }
 
         public static void InstantiateController<TController>(string name) where TController : Controller, new() {

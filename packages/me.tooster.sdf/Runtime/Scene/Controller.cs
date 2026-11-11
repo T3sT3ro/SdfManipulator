@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -43,7 +44,12 @@ namespace me.tooster.sdf {
 
         public SdfScene.PropertyData this[PropertyPath p] => SdfScene.sceneData.controllers[this].properties[p];
 
-        protected virtual void OnEnable() { sdfScene = GetComponentInParent<SdfScene>(); }
+        protected virtual void OnEnable() {
+            sdfScene = GetComponentInParent<SdfScene>();
+#if UNITY_EDITOR
+            structuralValues ??= StructuralValues();
+#endif
+        }
 
         void OnDestroy() {
             MarkForRegeneration(sdfScene);
@@ -60,17 +66,61 @@ namespace me.tooster.sdf {
         }
 
         /// <summary>
-        ///     Unity calls this after any change to the serialized data, also for changes that bypass the property setters,
-        ///     e.g. an undo. Setting all uniforms on the next update keeps the rendering in sync with the data.
+        ///     Unity calls this after any change to the serialized data, also for changes that bypass the property setters:
+        ///     the inspector, undo, and editing several objects at once. Setting all uniforms on the next update keeps the
+        ///     rendering in sync with the data, and a changed structural value regenerates the shader.
         /// </summary>
         protected virtual void OnValidate() {
             sdfScene = GetComponentInParent<SdfScene>();
             if (sdfScene != null)
                 sdfScene.RequiresUpdate = true;
 #if UNITY_EDITOR
+            DetectStructuralChange();
             UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
 #endif
         }
+
+#if UNITY_EDITOR
+        /// The values of the structural properties after the last change that this controller knows about.
+        List<object?>? structuralValues;
+
+        /// <summary>
+        ///     Marks the scene for regeneration if a value of a <see cref="ShaderStructuralAttribute" /> property changed since
+        ///     the last call or the last <see cref="OnStructureChanged" />. The first call after loading only takes a snapshot.
+        /// </summary>
+        void DetectStructuralChange() {
+            var values = StructuralValues();
+            if (structuralValues != null && !values.SequenceEqual(structuralValues))
+                MarkForRegeneration(SdfScene);
+            structuralValues = values;
+        }
+
+        List<object?> StructuralValues() {
+            var collector = new StructuralValueCollector();
+            PropertyContainer.Accept(collector, this);
+            return collector.values;
+        }
+
+        /// Collects the values of structural properties. A collection adds its elements and then an end marker.
+        class StructuralValueCollector : PropertyVisitor {
+            static readonly object endOfCollection = new();
+
+            public readonly List<object?> values = new();
+
+            // doesn't call the base method, which would also visit the properties of the values
+            protected override void VisitProperty<TContainer, TValue>(Property<TContainer, TValue> property, ref TContainer container, ref TValue value) {
+                if (!property.HasAttribute<ShaderStructuralAttribute>())
+                    return;
+                if (value is IEnumerable items and not string) {
+                    foreach (var item in items)
+                        values.Add(item);
+                    values.Add(endOfCollection);
+                } else {
+                    values.Add(value);
+                }
+            }
+        }
+#endif
 
         public abstract IData Apply(IData input, Processor processor);
         public abstract Type  GetInputType();
@@ -87,6 +137,10 @@ namespace me.tooster.sdf {
         /// </summary>
         public void OnStructureChanged() {
             MarkForRegeneration(SdfScene);
+#if UNITY_EDITOR
+            // the scene already knows about this change, so OnValidate shouldn't report it again
+            structuralValues = StructuralValues();
+#endif
             StructureChanged?.Invoke(this);
         }
 

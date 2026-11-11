@@ -56,6 +56,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   get different shaders. Slashes and double quotes in the name are replaced.
 - The shader preset dropdown shows the scene's preset, and picking its type again keeps the preset's settings. The
   editor finds presets with `TypeCache`.
+- Controllers detect structural changes in `OnValidate` by comparing the values of their `[ShaderStructural]`
+  properties, so edits that bypass the property setters regenerate the shader: the default inspector, undo, and
+  editing several objects at once. The inspector no longer notifies controllers itself and no longer relies on a
+  property with the capitalized name of each field to do so. The modifier list of an SDF controller and the target of
+  an elongation are structural.
 - Inspector layouts live in `Editor/UI` and load by their package path instead of from `Resources`, where their names
   could collide with files of other packages.
 - The rendering settings that commands read or that select keywords (`_Cull`, `_ZTest`, `_DrawMode`) are `Float`

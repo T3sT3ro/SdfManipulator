@@ -46,11 +46,15 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
 
 Refer to the existing controllers in `Runtime/Primitives` and `Runtime/Operators`.
 
-- For now (due to engine limitations) a controller property must be defined as a field annotated with
-  `[DontCreateProperty]` in `camelCase`, plus a property annotated with `[CreateProperty]` and `[ShaderProperty]` or
-  `[ShaderStructural]` that returns and sets it (and invokes the appropriate events). The property must have the same
-  name as the field, only in `PascalCase`, e.g. field `someRadius` and property `SomeRadius`. Without it, the default
-  inspector won't generate and bind the property, and you'd have to write an editor by hand.
+- A controller property is a serialized field annotated with `[DontCreateProperty]`, plus a property annotated with
+  `[CreateProperty]` and `[ShaderProperty]` or `[ShaderStructural]` that returns and sets it with `SetField`, which
+  notifies the scene. The default inspector edits the field. Give the property the field's name in `PascalCase`, e.g.
+  field `someRadius` and property `SomeRadius`: the inspector finds the attributes of a field this way, to mark
+  structural fields and to apply `[VisibleWhen]`.
+- Edits that bypass the property setters, e.g. in the inspector or by undo, reach the scene through `OnValidate`: it
+  sets all uniforms and compares the values of the `[ShaderStructural]` properties to decide whether to regenerate the
+  shader. A field without a property that changes the structure, e.g. a list of other controllers, can carry
+  `[ShaderStructural]` itself.
 - A controller returns an `IData` implementation used to build the syntax tree. `IData` forms a kind of contract: two
   separate components can expect an `SdfData` to have a certain shape and hold certain data. For example, `SdfData`
   includes an `evaluationExpression` that can be assumed to hold an expression of type `(float3) -> SdfResult`, and a

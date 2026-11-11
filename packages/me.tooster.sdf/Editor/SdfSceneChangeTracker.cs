@@ -10,10 +10,8 @@ namespace me.tooster.sdf.Editor {
     ///     and re-parented objects. Outside Prefab Mode, the structure of a scene only changes when its prefab is imported.
     /// </summary>
     /// <remarks>
-    ///     Changes to properties aren't handled here, because most of them only change uniforms: controllers report those,
-    ///     and <see cref="Controller" />.OnValidate sets all uniforms after any change to serialized data. A structural
-    ///     field changed without its property setter, e.g. a list of modifiers in the default inspector, regenerates on
-    ///     save. Telling these changes apart needs the structural fingerprint of #84.
+    ///     Changes to properties aren't handled here. <see cref="Controller" />.OnValidate runs after any change to
+    ///     serialized data: it sets all uniforms and regenerates when the value of a structural property changed.
     /// </remarks>
     [InitializeOnLoad]
     static class SdfSceneChangeTracker {
