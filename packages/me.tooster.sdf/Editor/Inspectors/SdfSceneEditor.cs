@@ -21,7 +21,7 @@ namespace me.tooster.sdf.Editor.Inspectors {
 
 
             var root = new VisualElement();
-            var editor = Resources.Load<VisualTreeAsset>("UI/sdf_scene_editor").Instantiate();
+            var editor = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(SdfPaths.UI.SdfSceneEditor).Instantiate();
             root.Add(editor);
 
             root.Q<Button>("rebuild").RegisterCallback<ClickEvent>(e => RebuildShader());

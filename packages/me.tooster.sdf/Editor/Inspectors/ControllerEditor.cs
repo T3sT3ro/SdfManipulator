@@ -1,4 +1,5 @@
 using System.Linq;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -28,8 +29,7 @@ namespace me.tooster.sdf.Editor.Inspectors {
     [CustomEditor(typeof(Controller), true)]
     [CanEditMultipleObjects]
     public class ControllerEditor : UnityEditor.Editor {
-        const string UI_CONTROLLER_EDITOR_RESOURCE = "UI/controller_editor";
-        const string STRUCTURAL_TOOLTIP            = "Structural property regenerating a shader. Editable only in a prefab stage.";
+        const string STRUCTURAL_TOOLTIP = "Structural property regenerating a shader. Editable only in a prefab stage.";
 
         public override VisualElement CreateInspectorGUI() {
             var controller = (Controller)target;
@@ -37,7 +37,7 @@ namespace me.tooster.sdf.Editor.Inspectors {
 
             var root = new VisualElement { name = "root" };
 
-            var editor = Resources.Load<VisualTreeAsset>(UI_CONTROLLER_EDITOR_RESOURCE).Instantiate();
+            var editor = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(SdfPaths.UI.ControllerEditor).Instantiate();
             root.Add(editor);
 
 

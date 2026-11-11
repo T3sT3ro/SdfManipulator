@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
          xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements"
-         noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Packages/me.tooster.sdf/Editor/Resources/UI/shared_editor_style.uss?fileID=7433441132597879392&amp;guid=195e287ed625c3735969def44b0eb223&amp;type=3#shared_editor_style"/>
+         noNamespaceSchemaLocation="../../../../projects/SdfManipulator/UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/me.tooster.sdf/Editor/UI/shared_editor_style.uss?fileID=7433441132597879392&amp;guid=195e287ed625c3735969def44b0eb223&amp;type=3#shared_editor_style"/>
     <ui:GroupBox name="buttons">
         <ui:Button text="Rebuild Shader" parse-escape-sequences="true" display-tooltip-when-elided="true" name="rebuild"
                    enable-rich-text="true"/>
@@ -15,19 +15,9 @@
     <ui:GroupBox name="cotrol" text="Control"
                  style="padding-top: 12px; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(135, 206, 250); border-right-color: rgb(135, 206, 250); border-top-color: rgb(135, 206, 250); border-bottom-color: rgb(135, 206, 250); border-left-width: 4px; padding-left: 15px;">
         <uie:PropertyField name="sceneRoot" binding-path="sdfSceneRoot"/>
-        <uie:PropertyField name="controlledMaterial" binding-path="controlledMaterial"/>
-        <uie:PropertyField name="controlledShader" binding-path="controlledShader"/>
     </ui:GroupBox>
     <ui:VisualElement name="warning" style="flex-grow: 1; margin-top: 6px;"/>
     <ui:VisualElement name="prefabStageGroup" style="flex-grow: 1;">
-        <ui:GroupBox name="assets" text="Assets"
-                     style="border-left-color: rgb(98, 188, 66); border-right-color: rgb(98, 188, 66); border-top-color: rgb(98, 188, 66); border-bottom-color: rgb(98, 188, 66); border-left-width: 4px; padding-left: 15px; padding-top: 12px;">
-            <uie:PropertyField name="targetShader" binding-path="targetShader"
-                               tooltip="WARNING! The shader file will be overwritten" label="Target shader aset path"/>
-            <uie:PropertyField name="targetShader" binding-path="targetMaterial"
-                               tooltip="WARNING! The shader file will be overwritten"
-                               label="Target material asset path"/>
-        </ui:GroupBox>
         <ui:GroupBox name="generation" text="Generation" class="section-title"
                      style="border-top-color: rgb(255, 165, 0); border-bottom-color: rgb(255, 165, 0); border-left-color: rgb(255, 165, 0); border-right-color: rgb(255, 165, 0); padding-top: 12px; border-left-width: 4px; padding-left: 15px;">
             <ui:DropdownField label="Generator preset" name="preset" class="unity-base-field__aligned"/>

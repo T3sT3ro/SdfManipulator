@@ -56,6 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   get different shaders. Slashes and double quotes in the name are replaced.
 - The shader preset dropdown shows the scene's preset, and picking its type again keeps the preset's settings. The
   editor finds presets with `TypeCache`.
+- Inspector layouts live in `Editor/UI` and load by their package path instead of from `Resources`, where their names
+  could collide with files of other packages.
 - The rendering settings that commands read or that select keywords (`_Cull`, `_ZTest`, `_DrawMode`) are `Float`
   material properties, and the step counts (`_MAX_STEPS`, `_AO_STEPS`) are `Integer` properties with `int` uniforms,
   instead of the legacy `Int` type. Materials made with earlier versions keep their step counts in the float values,
@@ -63,6 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The `SdfScene` inspector showed fields for the controlled material and the target shader and material paths, which
+  no longer exist.
 - Player builds failed to compile because runtime code used editor-only APIs.
 - Generated ShaderLab was invalid: after a code reformat, argument and initializer lists printed their brackets after
   their contents (e.g. vector property defaults).

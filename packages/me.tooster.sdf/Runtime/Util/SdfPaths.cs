@@ -32,5 +32,12 @@ namespace me.tooster.sdf.Util {
         public static class Templates {
             public const string HelloSdfPrefab = PackageRoot + "/Editor/Templates/Hello SDF.prefab";
         }
+
+        /// <summary>Inspector layouts. Loading them by path instead of from Resources avoids name collisions with other packages.</summary>
+        public static class UI {
+            public const string Root             = PackageRoot + "/Editor/UI";
+            public const string ControllerEditor = Root + "/controller_editor.uxml";
+            public const string SdfSceneEditor   = Root + "/sdf_scene_editor.uxml";
+        }
     }
 }
