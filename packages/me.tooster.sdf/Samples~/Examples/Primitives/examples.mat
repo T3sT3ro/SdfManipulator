@@ -8,13 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: examples
-  m_Shader: {fileID: 4800000, guid: 2cf3757fc67cf5e588f33f5c12f4775f, type: 3}
+  m_Shader: {fileID: -2125499959289486227, guid: efde1fecbe8d77949a3bbb1b3da3b2b9, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_ValidKeywords:
   - _DRAWMODE_MATERIAL
   - _ZWRITE_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -73,6 +73,7 @@ Material:
     - SDF_1_0_4__root_allObjects_cylinder__3_Height: 1.0431936
     - SDF_1_0_4__root_allObjects_cylinder__3_Radius: 0.63112974
     - SDF_1_0_4__root_allObjects_cylinder__3_Rounding: 0.25
+    - SDF_1_0_4__root_allObjects_elongated_sphere__2_Radius: 0.42742428
     - SDF_1_0_4__root_allObjects_q__2_BendFactor: -0.7
     - SDF_1_0_4__root_allObjects_q__2_Radius: 0.42742428
     - SDF_1_0_4__root_allObjects_q__3_Radius: 0.75
@@ -162,6 +163,7 @@ Material:
     - SDF_1_0_1_0__root_combine_cutout_box__1___2_BoxExtents: {r: 0.25, g: 0.25, b: 0.25, a: 0}
     - SDF_1_0_1_1__root_combine_cutout_minus__2_BoxExtents: {r: 2.0691597, g: 1.312932, b: 2.9708533, a: 0}
     - SDF_1_0_2__root_GameObject_box__2_BoxExtents: {r: 6.891491, g: 0.87390125, b: 3.7631674, a: 0}
+    - SDF_1_0_4__root_allObjects_elongated_sphere__3_Length: {r: 0.64, g: -0.1, b: 0.54, a: 0}
     - SDF_1_0_4__root_allObjects_q__3_Length: {r: 0.64, g: -0.1, b: 0.54, a: 0}
     - SDF_1_0_4__root_allObjects_q__4_Length: {r: 0.64, g: -0.34, b: 0.54, a: 0}
     - SDF_1_0_4__root_allObjects_sphere__1___3_Length: {r: 0.64, g: -0.34, b: 0.54, a: 0}

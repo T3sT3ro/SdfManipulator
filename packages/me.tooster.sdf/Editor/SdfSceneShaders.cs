@@ -5,56 +5,33 @@ using UnityEngine;
 
 namespace me.tooster.sdf.Editor {
     /// <summary>
-    ///     Regenerates the shaders of SDF scene prefabs without opening them in the prefab stage, for example after a
-    ///     package update changed the generated code.
+    ///     Regenerates the shaders of SDF scene prefabs without opening them in Prefab Mode. The shaders are generated
+    ///     when a prefab is imported, so regenerating means reimporting the prefab.
     /// </summary>
     public static class SdfSceneShaders {
         /// <summary>
-        ///     Regenerates the target shader of every SDF scene prefab in the project's Assets folder.
+        ///     Reimports every SDF scene prefab in the project's Assets folder.
         /// </summary>
         [MenuItem("Tools/SDF/Regenerate All Scene Shaders")]
         public static void RegenerateAll() {
-            var prefabPaths = AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" })
-                .Select(AssetDatabase.GUIDToAssetPath)
-                .Where(path => AssetDatabase.LoadAssetAtPath<GameObject>(path).GetComponentInChildren<SdfScene>(true) != null)
-                .OrderBy(path => path)
-                .ToList();
-
-            var written = 0;
+            var prefabPaths = FindScenePrefabs("Assets");
             foreach (var path in prefabPaths)
-                if (Regenerate(path))
-                    written++;
-
-            Debug.Log($"Regenerated SDF scene shaders: {written} of {prefabPaths.Count} scene prefab(s) changed.");
+                Regenerate(path);
+            Debug.Log($"Regenerated the shaders of {prefabPaths.Length} SDF scene prefab(s).");
         }
 
         /// <summary>
-        ///     Regenerates the target shader of the SDF scene in the prefab at <paramref name="prefabPath" />. The prefab
-        ///     itself isn't modified.
+        ///     Reimports the SDF scene prefab at <paramref name="prefabPath" />, which regenerates its shader and default
+        ///     material.
         /// </summary>
-        /// <returns>true if the shader file changed</returns>
-        public static bool Regenerate(string prefabPath) {
-            var root = PrefabUtility.LoadPrefabContents(prefabPath);
-            try {
-                var scene = root.GetComponentInChildren<SdfScene>(true);
-                if (scene == null)
-                    return false;
+        public static void Regenerate(string prefabPath) => AssetDatabase.ImportAsset(prefabPath, ImportAssetOptions.ForceUpdate);
 
-                if (scene.TargetShaderPath == null) {
-                    Debug.LogWarning($"Skipped {prefabPath}: its SDF scene has no standalone .shader file as the target shader.");
-                    return false;
-                }
-
-                scene.RevalidateScene();
-                var writtenPath = scene.WriteTargetShader();
-                if (writtenPath == null)
-                    return false;
-
-                AssetDatabase.ImportAsset(writtenPath);
-                return true;
-            } finally {
-                PrefabUtility.UnloadPrefabContents(root);
-            }
-        }
+        internal static string[] FindScenePrefabs(params string[] folders)
+            => AssetDatabase.FindAssets("t:Prefab", folders)
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => AssetDatabase.LoadAssetAtPath<GameObject>(path).GetComponentInChildren<SdfScene>(true) != null)
+                .Distinct()
+                .OrderBy(path => path)
+                .ToArray();
     }
 }

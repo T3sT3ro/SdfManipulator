@@ -13,7 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Package documentation in `Documentation~/index.md`.
 - Editor tests: shader generation from the scene template must produce a shader that compiles; the HLSL syntax tests
   run again.
-- *Tools > SDF > Regenerate All Scene Shaders* regenerates the shader of every SDF scene prefab without opening it.
+- Importing an SDF scene prefab generates its shader and a default material as sub-assets of the prefab, like Shader
+  Graph does for a graph. Nothing generated is stored in the prefab file. In Prefab Mode, structural changes update the
+  shader in memory before the prefab is saved.
+- *Tools > SDF > Regenerate All Scene Shaders* reimports every SDF scene prefab.
+- *Tools > SDF > Migrate Scenes to Generated Sub-Assets* converts scenes that store a standalone `.shader` or an
+  embedded shader and material. Material assets that used the old shader switch to the generated one.
 
 ### Changed
 
@@ -28,8 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The HLSL library moved from `Editor/Resources/Includes` to `ShaderLibrary/`, and the fallback shader to `Shaders/`.
   SDF scenes made with earlier versions store the old include paths; update them or regenerate the scene.
 - Minimum Unity version is 6000.6.
-- Generated shaders no longer contain a timestamp, and regeneration skips the write when the shader didn't change. It
-  imports only the shader file instead of refreshing the whole AssetDatabase.
+- Generated shaders no longer contain a timestamp, so the same scene always generates the same shader.
+- Scenes regenerate when their prefab is imported: on save, after a change to the generator code (a custom asset
+  dependency) and after a change to the shader library.
 
 ### Fixed
 
@@ -38,8 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   their contents (e.g. vector property defaults).
 - Draw modes, the world grid and the ZWrite toggle did nothing, because the shader library's keyword pragmas were
   included with a plain `#include`. Generated shaders now use `#include_with_pragmas`; regenerate existing scenes.
-- Regeneration could overwrite a prefab with shader source when the target shader was a prefab sub-asset. It now only
-  writes to standalone `.shader` files and logs an error otherwise.
 - Generating a scene renamed every object with an elongate operator to `q`. The affected example objects got their
   names back.
 - SDF scenes didn't work in player builds: the scene data was never built outside the editor, so every frame threw a
@@ -47,8 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A scene without a controlled material threw an exception every frame; it now only shows the diagnostic. A Combine
   without children made generation fail; it now produces empty space.
 - Scenes created with *Assets > Create > SDF > Scene Asset* could never regenerate their shader: they were copies of
-  the template, which renders an embedded shader and has no target shader. A new scene now gets its own `.shader` and
-  `.mat` files next to the prefab, wired to the scene and its renderer.
+  the template, which renders an embedded shader. A new scene now generates its own shader and default material.
 - `#define` printed its argument list before the name (`#define () FOO`), so any define in a shader preset broke the
   shader.
 - The *Regenerate shader* (formerly *Regenerate material*) and *Remove sub-assets* context menus of `SdfScene` never
@@ -65,6 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ShaderLab `Blend` with separate RGB and alpha factors printed them in the wrong order.
 
 ### Removed
+
+- `SdfScene.targetShader` and `SdfScene.targetMaterial`. The generated shader is a sub-asset of the scene prefab.
 
 - The syntax generator sources are no longer shipped inside the package; they live in the repository's
   `tools/SyntaxGenerators`.
