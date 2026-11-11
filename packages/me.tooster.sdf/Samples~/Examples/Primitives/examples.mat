@@ -25,17 +25,17 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs: []
-    m_Ints: []
+    m_Ints:
+    - _AO_STEPS: 6
+    - _MAX_STEPS: 200
     m_Floats:
     - _AO_FALLOFF: 2.5
     - _AO_MAX_DISTANCE: 1
-    - _AO_STEPS: 6
     - _Cull: 0
     - _DrawMode: 0
     - _EPSILON_NORMAL: 0.001
     - _EPSILON_RAY: 0.0001
     - _MAX_DISTANCE: 200
-    - _MAX_STEPS: 200
     - _RAY_ORIGIN_BIAS: 0
     - _SHOW_WORLD_GRID: 0
     - _ZTest: 4

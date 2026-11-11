@@ -157,11 +157,9 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
 
     // types: https://docs.unity3d.com/Manual/SL-Properties.html
     [TokenNode] public abstract partial record TypeKeyword : Token<shaderlab>;
-    // Integer sometimes didn't work for some reason, for example in calculated arguments to commands, while Int worked.
+    // A real integer, for int uniforms. Properties that commands read, e.g. `Cull [_Cull]`, are Float in Unity's own shaders.
     [TokenNode("Integer")] public partial record IntegerKeyword : TypeKeyword;
-    [Obsolete(
-        "Int is a legacy keyword, use Integer instead. Remark: sometimes lgacy Int worked (e.g. claculated arguments) while Integer didn't."
-    )]
+    [Obsolete("Int is a legacy keyword for a property that stores a float. Use Float for values that commands read and Integer for int uniforms.")]
     [TokenNode("Int")] public partial record IntKeyword : TypeKeyword;
     [TokenNode("Float")] public partial record FloatKeyword : TypeKeyword;
     [TokenNode("Range")] public partial record RangeKeyword : TypeKeyword;

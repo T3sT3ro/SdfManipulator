@@ -62,11 +62,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: []
+    m_Ints:
+    - _AO_STEPS: 6
+    - _MAX_STEPS: 200
     m_Floats:
     - _AO_FALLOFF: 2.5
     - _AO_MAX_DISTANCE: 1
-    - _AO_STEPS: 6
     - _BumpScale: 1
     - _Cull: 0
     - _Cutoff: 0.5
@@ -79,7 +80,6 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _MAX_DISTANCE: 200
-    - _MAX_STEPS: 200
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1

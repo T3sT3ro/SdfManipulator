@@ -50,7 +50,7 @@ float     classicAmbientOcclusion(float3 p, float3 n, float maxDist, float fallo
 #ifndef EXPLICIT_RAYMARCHING_PARAMETERS
 float _EPSILON_RAY = 0.00001;
 float _EPSILON_NORMAL = 0.0001;
-float _MAX_STEPS = 500;
+int   _MAX_STEPS = 500;
 float _MAX_DISTANCE = 10000;
 float _RAY_ORIGIN_BIAS = 0;
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
@@ -246,7 +246,7 @@ fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D
     #elif _DRAWMODE_NORMAL
     color = sdf::debug::visualizeNormal(sdf.normal);
     #elif _DRAWMODE_STEPS
-    color = sdf::debug::visualizeOverhead(ray.steps / _MAX_STEPS);
+    color = sdf::debug::visualizeOverhead(ray.steps / (float)_MAX_STEPS);
     #elif _DRAWMODE_DEPTH
     float eyeDepth = -UnityWorldToViewPos(sdf.p).z;
     color = fixed4((float3)eyeDepth / 5., 1);

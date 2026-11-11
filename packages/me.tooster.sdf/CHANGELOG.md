@@ -56,6 +56,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   get different shaders. Slashes and double quotes in the name are replaced.
 - The shader preset dropdown shows the scene's preset, and picking its type again keeps the preset's settings. The
   editor finds presets with `TypeCache`.
+- The rendering settings that commands read or that select keywords (`_Cull`, `_ZTest`, `_DrawMode`) are `Float`
+  material properties, and the step counts (`_MAX_STEPS`, `_AO_STEPS`) are `Integer` properties with `int` uniforms,
+  instead of the legacy `Int` type. Materials made with earlier versions keep their step counts in the float values,
+  so set them again.
 
 ### Fixed
 

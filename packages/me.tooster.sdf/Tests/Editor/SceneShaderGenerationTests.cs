@@ -61,6 +61,22 @@ namespace me.tooster.sdf.Tests.Editor {
                 Assert.That(shader.keywordSpace.FindKeyword(keyword).isValid, Is.True, $"keyword {keyword} isn't declared");
         }
 
+        // commands and keyword drawers read Float properties, and the legacy Int type also reports Float
+        [TestCase("_Cull", ShaderPropertyType.Float)]
+        [TestCase("_ZTest", ShaderPropertyType.Float)]
+        [TestCase("_DrawMode", ShaderPropertyType.Float)]
+        [TestCase("_MAX_STEPS", ShaderPropertyType.Int)]
+        [TestCase("_AO_STEPS", ShaderPropertyType.Int)]
+        public void TemplateScene_RenderingSettingHasType(string property, ShaderPropertyType type) {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
+
+            var index = shader.FindPropertyIndex(property);
+            Assert.That(index, Is.Not.EqualTo(-1), $"{property} isn't a material property");
+            Assert.That(shader.GetPropertyType(index), Is.EqualTo(type));
+        }
+
         [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);

@@ -37,14 +37,19 @@ namespace me.tooster.sdf.Generators {
         /// </summary>
         static MaterialProperties MaterialProperties() => new() { properties = GlobalShaderProperties.ToList() };
 
+        /// <summary>
+        ///     The rendering settings. Properties that commands read (<c>Cull [_Cull]</c>) or that select keywords are
+        ///     <c>Float</c>, as in Unity's own shaders, and integer uniforms are <c>Integer</c>. The legacy <c>Int</c> type
+        ///     stores a float.
+        /// </summary>
         static IEnumerable<PropertySyntax> GlobalShaderProperties {
             get {
                 return new[]
                 {
-                    // [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Int) = 0
+                    // [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 0
                     new PropertySyntax
                     {
-                        id = "_Cull", displayName = "Cull", propertyType = new IntKeyword(),
+                        id = "_Cull", displayName = "Cull", propertyType = new FloatKeyword(),
                         initializer = new Property.Number<IntLiteral> { numberLiteral = (int)CullMode.Off },
                         attributes = new[]
                         {
@@ -68,18 +73,18 @@ namespace me.tooster.sdf.Generators {
                             ),
                         },
                     },
-                    // [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Int) = 1
+                    // [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest ("ZTest", Float) = 4
                     new PropertySyntax
                     {
-                        id = "_ZTest", displayName = "ZTest", propertyType = new IntKeyword(),
+                        id = "_ZTest", displayName = "ZTest", propertyType = new FloatKeyword(),
                         initializer = new Property.Number<IntLiteral>
                             { numberLiteral = (int)CompareFunction.LessEqual },
                         attributes = SyntaxUnityExtensions.enumAttribute<CompareFunction>(),
                     },
-                    // [KeywordEnum(Material, Albedo, Skybox, Normal, Steps, Depth)] _DrawMode("Draw mode", Int) = 0
+                    // [KeywordEnum(Material, Albedo, Skybox, Normal, Steps, Depth)] _DrawMode ("Draw mode", Float) = 0
                     new PropertySyntax
                     {
-                        id = "_DrawMode", displayName = "Draw mode", propertyType = new IntKeyword(),
+                        id = "_DrawMode", displayName = "Draw mode", propertyType = new FloatKeyword(),
                         initializer = new Property.Number<IntLiteral> { numberLiteral = 0 },
                         attributes = new[]
                         {
@@ -118,10 +123,10 @@ namespace me.tooster.sdf.Generators {
                         id = "_EPSILON_NORMAL", displayName = "epsilon for calculating normal", propertyType = new FloatKeyword(),
                         initializer = new Property.Number<FloatLiteral> { numberLiteral = 0.001f },
                     },
-                    // _MAX_STEPS ("max raymarching steps", Int) = 200
+                    // _MAX_STEPS ("max raymarching steps", Integer) = 200
                     new PropertySyntax
                     {
-                        id = "_MAX_STEPS", displayName = "max raymarching steps", propertyType = new IntKeyword(),
+                        id = "_MAX_STEPS", displayName = "max raymarching steps", propertyType = new IntegerKeyword(),
                         initializer = new Property.Number<IntLiteral> { numberLiteral = 200 },
                     },
                     // _MAX_DISTANCE ("marx raymarching distance", Float) = 200.0
@@ -139,7 +144,7 @@ namespace me.tooster.sdf.Generators {
                     // _AO_STEPS ("Ambient Occlusion Steps", Integer) = 6;
                     new PropertySyntax
                     {
-                        id = "_AO_STEPS", displayName = "Ambient Occlusion Steps", propertyType = new IntKeyword(),
+                        id = "_AO_STEPS", displayName = "Ambient Occlusion Steps", propertyType = new IntegerKeyword(),
                         initializer = new Property.Number<IntLiteral> { numberLiteral = 6 },
                     },
                     // _AO_MAX_DISTANCE ("Ambient Occlusion Max Distance") = 1;
