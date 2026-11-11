@@ -443,6 +443,8 @@ look into that when trying to move to ray generation in vertex shader
 - [Another one on perspective correct interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes.html)
 - [A blender addon for SDFs and node graph](https://www.youtube.com/watch?v=72crCbY7ZLk) - [market link](https://blendermarket.com/products/sdfnodebox)
 - [Clavicula - an app/modeler with SDFs, closed source but free and with amazing UX](https://clavicula.link/)
+- [Rascal — framework for parsing, generating and transforming syntax of DSLs, types](https://www.rascal-mpl.org/)
+- [Spoofax — open source language designing workbench for DSLs — generating syntax, transforming, scoping, typing](https://spoofax.dev/)
 
 Additionally: [Depth interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/visibility-problem-depth-buffer-depth-interpolation.html)
 - [depth interpolation or something in NDC](http://simonstechblog.blogspot.com/2012/04/)
