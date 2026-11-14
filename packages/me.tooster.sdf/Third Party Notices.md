@@ -22,7 +22,8 @@ This package contains code and assets derived from or inspired by the following 
 - Source: https://github.com/hecomi/uRaymarching
 - License: MIT (https://github.com/hecomi/uRaymarching)
 - Copyright: hecomi
-- Use: helpers in `ShaderLibrary/camera.hlsl` are based on uRaymarching.
+- Use: the forward base lighting in `ShaderLibrary/builtInShading.hlsl` follows the structure of uRaymarching's
+  `ForwardBaseStandard.cginc`, and helpers in `ShaderLibrary/camera.hlsl` are based on uRaymarching.
 
 ## Shader Graph
 

@@ -186,12 +186,13 @@ namespace me.tooster.sdf.Generators {
                     SubShaderTags,
                     new HlslInclude { hlsl = new InjectedLanguage<shaderlab, hlsl>(CommonHlslInclude()) },
                     ForwardBasePass(),
+                    ForwardAddPass(),
                 },
             };
 
         static CalculatedArgument MaterialProperty(string id) => new() { id = id };
 
-        /// <summary>The main directional light and the debug draw modes.</summary>
+        /// <summary>The main directional light, ambient light, reflections and the debug draw modes.</summary>
         Pass ForwardBasePass()
             => new()
             {
@@ -212,10 +213,46 @@ namespace me.tooster.sdf.Generators {
                                 },
                             }
                             : null,
-                        PassProgram(pragmas),
+                        PassProgram(
+                            new[]
+                            {
+                                // SDF surfaces have no lightmap coordinates, and the light input that a raymarched hit
+                                // builds can't hold lightmap and shadow mask coordinates
+                                "multi_compile_fwdbase nolightmap nodynlightmap nodirlightmap",
+                                "skip_variants SHADOWS_SHADOWMASK",
+                                "multi_compile_fog",
+                            }.Concat(pragmas)
+                        ),
                     }.FilterNotNull()
                     .ToList(),
             };
+
+        /// <summary>One pass for each additional pixel light, added to the forward base pass.</summary>
+        Pass ForwardAddPass()
+            => new()
+            {
+                statements = new List<SubShaderOrPassStatement>
+                {
+                    new Pass.Name { name = "FORWARD_DELTA" },
+                    Tags(("LightMode", "ForwardAdd")),
+                    new ZTest { operation = MaterialProperty("_ZTest") },
+                    new Cull { state = MaterialProperty("_Cull") },
+                    new ZWrite { state = new OffKeyword() },
+                    new Blend
+                    {
+                        blendArguments = new Blend.SrcDstArguments { srcFactorArg = new OneKeyword(), dstFactorArg = new OneKeyword() },
+                    },
+                    PassProgram(
+                        "multi_compile_fwdadd_fullshadows",
+                        "skip_variants SHADOWS_SHADOWMASK",
+                        "multi_compile_fog",
+                        "vertex forwardAddVertex",
+                        "fragment forwardAddFragment"
+                    ),
+                },
+            };
+
+        HlslProgram PassProgram(params string[] passPragmas) => PassProgram(passPragmas.AsEnumerable());
 
         HlslProgram PassProgram(IEnumerable<string> passPragmas)
             => new() { hlsl = new InjectedLanguage<shaderlab, hlsl>(PassHlslTree(passPragmas)) };

@@ -99,8 +99,10 @@ Paths are relative to the package root.
 - **Shader library** (`ShaderLibrary/`): HLSL include files with easy to edit parts that controllers use.
     - `operators.hlsl` defines common SDF operators, for example `union` or `intersection`.
     - `primitives.hlsl` defines SDF primitive functions like `torus` or `sphere`.
-    - `raymarching.hlsl` defines structs commonly used by SDFs, like `SdfResult`, and ready to use functions, like the
-      vertex and fragment functions that do the actual raymarching.
+    - `raymarching.hlsl` defines structs commonly used by SDFs, like `SdfResult`, and the functions that march rays
+      and compute normals and occlusion.
+    - `builtInShading.hlsl` defines the forward passes of the built-in pipeline: forward base and forward add. Each
+      fragment builds its ray from the view and projection matrices.
     - and more, for easier shader composition.
 - **AST library** (`Runtime/AST`): classes for working with HLSL and ShaderLab syntax trees, modeled after Roslyn's
   Syntax API.
@@ -123,12 +125,13 @@ Paths are relative to the package root.
 - Because of how Unity processes and recompiles shaders and assets, some changes may cause needless shader
   regenerations and recompilations, while others may need a manual refresh to fully regenerate. This is being worked
   on.
-- The default generators only implement basic fake Lambert, debug and unshaded drawing. You can customize generated
-  shaders by extending the existing generators and implementing your own shading.
+- The built-in generator shades with the lighting of the Standard shader, but objects can't have materials yet: each
+  one gets a color from its ID. You can customize generated shaders by extending the existing generators and
+  implementing your own shading.
 - Some UI elements are still being improved; limitations of the Unity editor API make this ongoing work.
-- Generated shaders aren't tested for VR or for render pipelines other than forward Built-in. Support for a shadow
-  caster pass, culling, depth etc. is being worked on, and you can add it yourself by extending the existing
-  generators.
+- Generated shaders aren't tested for VR, for deferred rendering or for render pipelines other than forward
+  Built-in. Lightmaps and shadow masks don't apply to SDF scenes. Support for a shadow caster pass is being worked on,
+  and you can add it yourself by extending the existing generators.
 - The HLSL syntax tree API is in its early stages, and a smooth developer experience was preferred over performance.
   This shouldn't matter now: generation isn't frequent, and syntax tree operations aren't a bottleneck in realistic
   use.

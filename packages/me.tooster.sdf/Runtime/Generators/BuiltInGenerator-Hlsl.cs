@@ -10,6 +10,7 @@ using me.tooster.sdf.AST.Syntax;
 using me.tooster.sdf.AST.Syntax.CommonSyntax;
 using me.tooster.sdf.AST.Syntax.CommonTrivia;
 using me.tooster.sdf.Data;
+using me.tooster.sdf.Util;
 using Unity.Properties;
 using FunctionDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.FunctionDefinition;
 using Parameter = me.tooster.sdf.AST.Hlsl.Syntax.Parameter;
@@ -25,7 +26,8 @@ namespace me.tooster.sdf.Generators {
             foreach (var define in defines)
                 yield return new Define { id = define }.ToStructuredTrivia();
 
-            foreach (var include in includeFiles.Distinct())
+            // the passes need their entry points, also when a preset doesn't list the file
+            foreach (var include in includeFiles.Append(SdfPaths.ShaderLibrary.BuiltInShading).Distinct())
                 yield return new Include { includeKeyword = new IncludeWithPragmasKeyword(), filepath = include }.ToStructuredTrivia();
 
             yield return new NewLine<hlsl>();

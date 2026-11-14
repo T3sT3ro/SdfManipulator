@@ -18,6 +18,10 @@ namespace me.tooster.sdf.Generators {
             "fragment fragmentShader",
         };
         public string[] defines = { };
+        /// <summary>
+        ///     Files that every pass includes. The generator also includes <see cref="SdfPaths.ShaderLibrary.BuiltInShading" />,
+        ///     which defines the passes.
+        /// </summary>
         public string[] includes =
         {
             SdfPaths.ShaderLibrary.Raymarching,
@@ -25,7 +29,7 @@ namespace me.tooster.sdf.Generators {
             SdfPaths.ShaderLibrary.Operators,
             SdfPaths.ShaderLibrary.Matrix,
             SdfPaths.ShaderLibrary.Primitives,
-            SdfPaths.ShaderLibrary.DebugBaseShading,
+            SdfPaths.ShaderLibrary.BuiltInShading,
         };
 
         protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene)

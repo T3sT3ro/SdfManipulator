@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Walker.Walk` and `Mapper.Map` run a visitor over a tree.
 - In Prefab Mode, the shader also regenerates after undo and redo, and after components or objects are added,
   removed, reordered or moved.
+- Generated shaders have a forward add pass for each additional pixel light. Light attenuation is computed at the
+  raymarched hit instead of at the domain mesh.
 
 ### Changed
 
@@ -72,6 +74,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The scene functions are defined once, in an include block that all passes share, and the pragmas of a shader
   preset select the entry points of the forward base pass. Generated shaders disable batching, which would move the
   vertices of the domain mesh into world space.
+- The *Material* draw mode uses the lighting of the Standard shader (`UnityPBSLighting.cginc`) with ambient light,
+  reflection probes and fog, instead of a Lambert term and a shadow ray toward the main light. Each object still gets
+  a color from its ID. The forward passes are in `ShaderLibrary/builtInShading.hlsl`; `debugBaseShading.hlsl`
+  includes it, for presets that list the old file.
 
 ### Fixed
 

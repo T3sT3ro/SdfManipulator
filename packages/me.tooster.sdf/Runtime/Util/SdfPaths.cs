@@ -13,13 +13,15 @@ namespace me.tooster.sdf.Util {
 
         /// <summary>HLSL include files used by generated shaders.</summary>
         public static class ShaderLibrary {
-            public const string Root               = PackageRoot + "/ShaderLibrary";
-            public const string DebugBaseShading   = Root + "/debugBaseShading.hlsl";
-            public const string Matrix             = Root + "/matrix.hlsl";
-            public const string Operators          = Root + "/operators.hlsl";
-            public const string Primitives         = Root + "/primitives.hlsl";
-            public const string Raymarching        = Root + "/raymarching.hlsl";
-            public const string Util               = Root + "/util.hlsl";
+            public const string Root           = PackageRoot + "/ShaderLibrary";
+            public const string BuiltInShading = Root + "/builtInShading.hlsl";
+            /// <summary>Includes <see cref="BuiltInShading" />. Kept because the presets of existing scenes list it.</summary>
+            public const string DebugBaseShading = Root + "/debugBaseShading.hlsl";
+            public const string Matrix           = Root + "/matrix.hlsl";
+            public const string Operators        = Root + "/operators.hlsl";
+            public const string Primitives       = Root + "/primitives.hlsl";
+            public const string Raymarching      = Root + "/raymarching.hlsl";
+            public const string Util             = Root + "/util.hlsl";
         }
 
         public static class Icons {

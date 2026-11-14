@@ -83,7 +83,7 @@ namespace me.tooster.sdf.Tests.Editor {
             scene.RevalidateScene();
             shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
 
-            Assert.That(LightModes(shader), Is.EqualTo(new[] { "ForwardBase" }).IgnoreCase);
+            Assert.That(LightModes(shader), Is.EqualTo(new[] { "ForwardBase", "ForwardAdd" }).IgnoreCase);
         }
 
         [Test]
@@ -93,8 +93,41 @@ namespace me.tooster.sdf.Tests.Editor {
             var source = scene.AssembleShaderSource();
 
             Assert.That(Occurrences(source, "#pragma vertex vertexShader"), Is.EqualTo(1));
+            Assert.That(Occurrences(source, "#pragma vertex forwardAddVertex"), Is.EqualTo(1));
             // the scene functions are defined once, in the block that the passes share
             Assert.That(Occurrences(source, "SdfResult sdfScene(float3 p) {"), Is.EqualTo(1));
+        }
+
+        // keywords that the light and shadow settings of a scene enable, which the variants without keywords don't cover
+        static readonly object[] LightingVariants =
+        {
+            new object[] { "ForwardBase", new[] { "DIRECTIONAL", "SHADOWS_SCREEN", "LIGHTPROBE_SH", "FOG_EXP2" } },
+            new object[] { "ForwardBase", new[] { "DIRECTIONAL", "LIGHTPROBE_SH", "VERTEXLIGHT_ON" } },
+            new object[] { "ForwardAdd", new[] { "POINT", "SHADOWS_CUBE", "SHADOWS_SOFT", "FOG_LINEAR" } },
+            new object[] { "ForwardAdd", new[] { "SPOT", "SHADOWS_DEPTH" } },
+            new object[] { "ForwardAdd", new[] { "POINT_COOKIE" } },
+            new object[] { "ForwardAdd", new[] { "DIRECTIONAL_COOKIE", "SHADOWS_SCREEN" } },
+        };
+
+        [TestCaseSource(nameof(LightingVariants))]
+        public void TemplateScene_PassCompilesWithLightingKeywords(string lightMode, string[] keywords) {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
+
+            var passIndex = LightModes(shader).FindIndex(mode => string.Equals(mode, lightMode, System.StringComparison.OrdinalIgnoreCase));
+            Assert.That(passIndex, Is.Not.EqualTo(-1), $"no {lightMode} pass");
+            var pass = ShaderUtil.GetShaderData(shader).GetSubshader(0).GetPass(passIndex);
+            var errors = new List<string>();
+            // OpenGL has no reversed depth, so it covers the other near plane value
+            foreach (var platform in new[] { ShaderCompilerPlatform.Vulkan, ShaderCompilerPlatform.OpenGLCore })
+            foreach (var stage in new[] { ShaderType.Vertex, ShaderType.Fragment })
+                errors.AddRange(
+                    pass.CompileVariant(stage, keywords, platform, BuildTarget.StandaloneLinux64)
+                        .Messages.Where(message => message.severity == ShaderCompilerMessageSeverity.Error)
+                        .Select(message => $"{platform} {stage}: {message.file}:{message.line}: {message.message}")
+                );
+            Assert.That(errors, Is.Empty);
         }
 
         [Test]
