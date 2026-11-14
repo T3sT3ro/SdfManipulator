@@ -14,7 +14,7 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
             var controller = (SdfBoxController)target;
             var tr = controller.transform;
 
-            using var drawingScope = new Handles.DrawingScope(Matrix4x4.TRS(tr.position, tr.rotation, Vector3.one));
+            using var drawingScope = new Handles.DrawingScope(tr.localToWorldMatrix);
             using var extentsCheck = new EditorGUI.ChangeCheckScope();
             boxHandle.center = Vector3.zero;
             boxHandle.size = controller.BoxExtents * 2;

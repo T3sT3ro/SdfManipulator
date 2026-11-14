@@ -12,13 +12,13 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
             var controller = (SdfCylinderController)target;
 
 
+            // the SDF is evaluated in the object's space, including its scale
+            using var drawingScope = new Handles.DrawingScope(controller.transform.localToWorldMatrix);
             using var scope = new EditorGUI.ChangeCheckScope();
 
             boxBoundsHandle.center = Vector3.zero;
             boxBoundsHandle.size = new Vector3(controller.Radius * 2, controller.Height * 2);
             boxBoundsHandle.axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Z;
-
-            Handles.matrix = Matrix4x4.TRS(controller.transform.position, controller.transform.rotation, Vector3.one);
 
             boxBoundsHandle.DrawHandle();
 

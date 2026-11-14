@@ -17,7 +17,7 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
             var controller = (SdfTorusController)target;
             // approach from https://docs.unity3d.com/ScriptReference/IMGUI.Controls.ArcHandle.html
 
-            using (new Handles.DrawingScope(Matrix4x4.TRS(controller.transform.position, controller.transform.rotation, Vector3.one))) {
+            using (new Handles.DrawingScope(controller.transform.localToWorldMatrix)) {
                 using (var mainRadiusCheck = new EditorGUI.ChangeCheckScope()) {
                     mainRadiusHandle.radius = controller.MainRadius;
                     mainRadiusHandle.axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y;

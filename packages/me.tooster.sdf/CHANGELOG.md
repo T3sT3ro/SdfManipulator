@@ -103,6 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Mode into the prefab instead of the main scene, and the creation of operators can be undone (#77).
 - Undo didn't revert dragging the scene handles of primitives, because the handles changed the controller before
   undo recorded it (#76).
+- Scene handles ignored the scale of the object and its parents, so they didn't match the rendered shape (#75).
 - `[VisibleWhen]` compared enum values with their position in the enum's declaration (#80).
 - The `SdfScene` inspector showed fields for the controlled material and the target shader and material paths, which
   no longer exist.

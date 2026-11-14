@@ -12,8 +12,7 @@ namespace me.tooster.sdf.Editor.Inspectors.Operators {
             var controller = (SdfElongateController)target;
 
             // Draw a dotted gizmo box of sizes
-            Handles.matrix = Matrix4x4.TRS(controller.transform.position, controller.transform.rotation, Vector3.one);
-            Handles.color = gizmoColor;
+            using var drawingScope = new Handles.DrawingScope(gizmoColor, controller.transform.localToWorldMatrix);
             var l = controller.Length;
             Handles.DrawWireCube(Vector3.zero, l);
             Handles.Label(-l / 2, $"Elongate ({l.x}, {l.y}, {l.z})");

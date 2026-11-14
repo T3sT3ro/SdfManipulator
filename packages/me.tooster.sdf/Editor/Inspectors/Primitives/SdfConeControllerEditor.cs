@@ -12,8 +12,7 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
             var controller = (SdfConeController)target;
 
 
-            using var drawingScope =
-                new Handles.DrawingScope(Matrix4x4.TRS(controller.transform.position, controller.transform.rotation, Vector3.one));
+            using var drawingScope = new Handles.DrawingScope(controller.transform.localToWorldMatrix);
             using var scope = new EditorGUI.ChangeCheckScope();
 
             radiusHandle.radius = controller.Height * Mathf.Tan(controller.Angle);

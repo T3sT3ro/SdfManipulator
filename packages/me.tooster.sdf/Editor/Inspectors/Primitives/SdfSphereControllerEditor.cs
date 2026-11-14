@@ -12,7 +12,7 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
             var controller = (SdfSphereController)target;
             var tr = controller.transform;
 
-            using (new Handles.DrawingScope(Matrix4x4.TRS(tr.position, tr.rotation, Vector3.one))) {
+            using (new Handles.DrawingScope(tr.localToWorldMatrix)) {
                 using (var radiusCheck = new EditorGUI.ChangeCheckScope()) {
                     radiusHandle.center = Vector3.zero;
                     radiusHandle.radius = controller.Radius;
