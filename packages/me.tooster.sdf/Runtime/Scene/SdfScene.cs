@@ -60,6 +60,8 @@ namespace me.tooster.sdf {
         /// <summary>The renderers that draw this scene, without the ones of nested scenes.</summary>
         internal IReadOnlyList<Renderer> Renderers => renderers;
 
+        internal static readonly int worldToSceneId = Shader.PropertyToID("_SdfWorldToScene");
+
         public SceneData sceneData            { get; private set; } = null!;
         public bool      RequiresRegeneration { get; set; }
         public bool      RequiresUpdate       { get; set; }
@@ -281,12 +283,15 @@ namespace me.tooster.sdf {
 
             if (forceUpdateAll)
                 sceneData.queuedPropertyUdates.UnionWith(sceneData.Properties);
-            if (!forceUpdateAll && sceneData.queuedPropertyUdates.Count <= 0)
+            if (!forceUpdateAll && sceneData.queuedPropertyUdates.Count <= 0 && !transform.hasChanged)
                 return;
 
             propertyBlock ??= new MaterialPropertyBlock();
             if (forceUpdateAll)
                 rendering.ApplyTo(propertyBlock);
+            // the controllers' transforms are relative to the root, so moving the scene only changes this matrix
+            propertyBlock.SetMatrix(worldToSceneId, transform.worldToLocalMatrix);
+            transform.hasChanged = false;
             foreach (var p in sceneData.queuedPropertyUdates)
                 UpdateProperty(p);
             sceneData.queuedPropertyUdates.Clear();

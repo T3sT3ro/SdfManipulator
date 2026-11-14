@@ -65,6 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Generated shaders no longer contain a timestamp, so the same scene always generates the same shader.
 - Scenes regenerate when their prefab is imported: on save, after a change to the generator code (a custom asset
   dependency) and after a change to the shader library.
+- The transforms of controllers are relative to the scene's root, and each renderer gets one matrix from world space to
+  the root's space. Moving a scene only changes that matrix instead of the uniforms of all its controllers.
 - Uniforms are set on each renderer with a `MaterialPropertyBlock` instead of in the material, and only the ones that
   changed. Instances of a scene prefab can have different values, and material assets no longer change while you edit.
 - Generated shaders have no material properties for controller values and declare their uniforms without values, so

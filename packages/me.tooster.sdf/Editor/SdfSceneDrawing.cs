@@ -50,6 +50,7 @@ namespace me.tooster.sdf.Editor {
                     material.SetVector(property.shaderId, block.GetVector(property.shaderId));
             }
             scene.rendering.ApplyTo(material);
+            material.SetMatrix(SdfScene.worldToSceneId, scene.transform.worldToLocalMatrix);
             return material;
         }
 

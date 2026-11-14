@@ -125,12 +125,20 @@ namespace me.tooster.sdf.Generators {
                 {
                     statements = new Statement<hlsl>[]
                     {
+                        SceneSpaceAssignment(),
                         new Switch { selector = (Identifier)"id", cases = cases },
                         new Return { expression = AST.Hlsl.Extensions.FunctionCall("emptySdfResult") },
                     },
                 },
             };
         }
+
+        /// <summary>
+        ///     <c>p = worldToScene(p);</c>: the scene functions take world-space points, and the controllers' transforms
+        ///     are relative to the scene's root.
+        /// </summary>
+        static Statement<hlsl> SceneSpaceAssignment()
+            => AST.Hlsl.Extensions.Assignment(SdfData.pParamName, AST.Hlsl.Extensions.FunctionCall("worldToScene", (Identifier)SdfData.pParamName));
 
         FunctionDefinition sceneFunctionDefinition()
             => new()
@@ -140,7 +148,12 @@ namespace me.tooster.sdf.Generators {
                 paramList = new Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
                 body = new Block
                 {
-                    statements = new Return { expression = scene.sdfSceneRoot.Apply(SdfData.pData, this).evaluationExpression },
+                    statements = new Statement<hlsl>[]
+                    {
+                        // p = worldToScene(p);
+                        SceneSpaceAssignment(),
+                        new Return { expression = scene.sdfSceneRoot.Apply(SdfData.pData, this).evaluationExpression },
+                    },
                 },
             };
     }

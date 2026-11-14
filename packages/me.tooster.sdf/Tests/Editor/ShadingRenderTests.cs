@@ -305,6 +305,26 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(Levels(true), Is.GreaterThan(Levels(false)), "jitter doesn't add gray levels to the occlusion");
         }
 
+        [Test]
+        public void MovingTheScene_OnlyChangesItsOwnMatrix() {
+            world.ground.SetActive(false);
+            var transformController = world.root.GetComponentInChildren<TransformController>(true);
+            var spaceTransform = transformController.SpaceTransform;
+            float CentroidX(Color32[] image)
+                => (float)image.Select((c, i) => (c, x: i % RenderTestScene.Size)).Where(p => p.c.r + p.c.g + p.c.b > 0).Average(p => p.x);
+            var before = CentroidX(world.Render());
+
+            world.root.transform.position += world.camera.transform.right * 0.5f;
+            // the scene's own update, without updates of its controllers
+            world.scene.UpdateShaderUniforms();
+            var after = CentroidX(world.Render());
+
+            for (var column = 0; column < 4; column++)
+                Assert.That(Vector4.Distance(transformController.SpaceTransform.GetColumn(column), spaceTransform.GetColumn(column)), Is.LessThan(1e-4f),
+                    "moving the scene changes the transform of a controller");
+            Assert.That(after - before, Is.GreaterThan(3), "the SDF doesn't move with the scene");
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

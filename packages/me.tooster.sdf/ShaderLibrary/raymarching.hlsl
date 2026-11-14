@@ -32,6 +32,7 @@ int   _MAX_STEPS = 500;
 float _MAX_DISTANCE = 10000;
 float _RAY_ORIGIN_BIAS = 0;
 float _CLIP_TO_DOMAIN_BOX; ///< nonzero to march only inside the box of the domain mesh, see rayBoxIntersection
+float4x4 _SdfWorldToScene; ///< world space to the space of the scene's root, where the controllers' transforms apply
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #endif
 
@@ -63,6 +64,13 @@ float _SHOW_WORLD_GRID; ///< nonzero to overlay a grid in world space
 #endif
 
 # pragma region raymarching functions
+
+/// Returns \p p in the space of the scene's root, where the transforms of the controllers apply. A renderer that no
+/// SdfScene updates has no matrix and keeps world space, which matches a scene whose root is at the origin, e.g. in a
+/// prefab preview.
+float3 worldToScene(float3 p) {
+    return _SdfWorldToScene._m33 == 0 ? p : mul(_SdfWorldToScene, float4(p, 1)).xyz;
+}
 
 /// Returns the result of empty space: no object, and the largest distance that a ray marches
 SdfResult emptySdfResult() {

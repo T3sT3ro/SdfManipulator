@@ -19,8 +19,13 @@ namespace me.tooster.sdf {
     public partial class TransformController : Controller, IModifier<VectorData, VectorData> {
         static readonly PropertyPath spaceTransformProperty = new(nameof(SpaceTransform));
 
+        /// <summary>
+        ///     Maps the space of the scene's root to the space of this object. Relative to the root, so moving the whole
+        ///     scene only changes the scene's own matrix, not the uniforms of its controllers.
+        /// </summary>
         [CreateProperty] [ShaderProperty(Description = "Space Transform")]
-        public virtual Matrix4x4 SpaceTransform => transform.localToWorldMatrix.inverse;
+        public virtual Matrix4x4 SpaceTransform
+            => SdfScene != null ? transform.worldToLocalMatrix * SdfScene.transform.localToWorldMatrix : transform.worldToLocalMatrix;
 
         [CreateProperty]
         public Vector3 LocalPosition {
