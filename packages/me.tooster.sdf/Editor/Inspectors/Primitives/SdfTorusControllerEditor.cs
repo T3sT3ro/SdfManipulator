@@ -77,6 +77,6 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
 
 
         [MenuItem("GameObject/SDF/Primitives/Torus")]
-        public static void Instantiate() => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfTorusController>("torus");
+        static void Instantiate(MenuCommand command) => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfTorusController>("torus", command);
     }
 }

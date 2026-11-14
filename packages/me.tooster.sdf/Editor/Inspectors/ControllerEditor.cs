@@ -96,15 +96,30 @@ namespace me.tooster.sdf.Editor.Inspectors {
                  || PropertyContainer.TryGetProperty(controller, new PropertyPath(char.ToUpperInvariant(fieldName[0]) + fieldName.Substring(1)), out property));
         }
 
-        public static void InstantiateController<TController>(string name) where TController : Controller, new() {
-            var target = Selection.activeGameObject;
+        /// <summary>
+        ///     Creates an object with <typeparamref name="TController" />, e.g. for the <i>GameObject &gt; SDF</i> menu.
+        /// </summary>
+        public static GameObject InstantiateController<TController>(string name, MenuCommand command = null) where TController : Controller
+            => CreateSdfObject(name, command, go => go.AddComponent<TController>());
 
-            var sdf = new GameObject(name);
-            ObjectNames.SetNameSmart(sdf, name);
-            if (target)
-                sdf.transform.SetParent(Selection.activeTransform);
-            sdf.transform.localPosition = Vector3.zero;
-            sdf.AddComponent<TController>();
+        /// <summary>
+        ///     Creates an object for the <i>GameObject &gt; SDF</i> menu: under the right-clicked object, otherwise under the
+        ///     selected object, otherwise in the current stage, so Prefab Mode gets it instead of the main scene. The creation
+        ///     can be undone, and the new object is selected.
+        /// </summary>
+        internal static GameObject CreateSdfObject(string name, MenuCommand command, System.Action<GameObject> addComponents) {
+            var go = new GameObject(name);
+            addComponents(go);
+            var parent = command?.context as GameObject ?? Selection.activeGameObject;
+            if (parent != null)
+                GameObjectUtility.SetParentAndAlign(go, parent);
+            else
+                StageUtility.PlaceGameObjectInCurrentStage(go);
+            GameObjectUtility.EnsureUniqueNameForSibling(go);
+            Undo.RegisterCreatedObjectUndo(go, $"Create {name}");
+            Undo.SetCurrentGroupName($"Create {name}");
+            Selection.activeObject = go;
+            return go;
         }
     }
 }

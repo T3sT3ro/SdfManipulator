@@ -37,6 +37,6 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
 
 
         [MenuItem("GameObject/SDF/Primitives/Sphere")]
-        public static void Instantiate() => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfSphereController>("sphere");
+        static void Instantiate(MenuCommand command) => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfSphereController>("sphere", command);
     }
 }

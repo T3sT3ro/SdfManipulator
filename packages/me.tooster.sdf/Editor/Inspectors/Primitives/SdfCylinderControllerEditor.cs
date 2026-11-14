@@ -44,6 +44,6 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
         }
 
         [MenuItem("GameObject/SDF/Primitives/Cylinder")]
-        public static void Instantiate() => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfCylinderController>("cylinder");
+        static void Instantiate(MenuCommand command) => SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfCylinderController>("cylinder", command);
     }
 }

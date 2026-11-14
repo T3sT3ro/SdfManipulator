@@ -34,6 +34,6 @@ namespace me.tooster.sdf.Editor.Inspectors.Operators {
 
 
         [MenuItem("GameObject/SDF/Operators/Combine", priority = 200)]
-        public static void Instantiate() => InstantiateController<SdfCombineController>("combine");
+        static void Instantiate(MenuCommand command) => InstantiateController<SdfCombineController>("combine", command);
     }
 }

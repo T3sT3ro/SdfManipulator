@@ -17,33 +17,17 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
             return Color.white;
         }
 
-        public static void InstantiatePrimitive<TController>(string name) where TController : SdfPrimitiveController, new() {
-            Undo.IncrementCurrentGroup();
-
-            var sdf = new GameObject(name);
-
-            Undo.RegisterCreatedObjectUndo(sdf, $"Create {name}");
-
-            ObjectNames.SetNameSmart(sdf, name);
-            var target = Selection.activeGameObject;
-
-            var transformController = sdf.AddComponent<TransformController>();
-            var primitiveSdfController = sdf.AddComponent<TController>();
-            var sdfObjectController = sdf.AddComponent<SdfController>();
-
-            sdfObjectController.sdfModifiers = new Controller[] { transformController, primitiveSdfController };
-
-            // call this after adding components to properly filter in OnTransformChildrenChange
-            if (target)
-                sdf.transform.SetParent(Selection.activeTransform);
-            sdf.transform.localPosition = Vector3.zero;
-
-            Undo.RegisterCompleteObjectUndo(sdf, $"Create {name}");
-
-            Selection.activeGameObject = sdf;
-
-            Undo.SetCurrentGroupName($"Create a primitive SDF {name}");
-        }
+        /// <summary>Creates an SDF object with a transform, the primitive <typeparamref name="TController" /> and an SDF controller.</summary>
+        public static GameObject InstantiatePrimitive<TController>(string name, MenuCommand command = null) where TController : SdfPrimitiveController
+            => CreateSdfObject(
+                name,
+                command,
+                go => {
+                    var transformController = go.AddComponent<TransformController>();
+                    var primitive = go.AddComponent<TController>();
+                    go.AddComponent<SdfController>().sdfModifiers = new Controller[] { transformController, primitive };
+                }
+            );
 
         public override VisualElement CreateInspectorGUI() {
             var root = base.CreateInspectorGUI();
