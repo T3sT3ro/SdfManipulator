@@ -25,6 +25,8 @@ namespace me.tooster.sdf.Tests.Editor {
         public readonly Camera     camera;
 
         readonly RenderTexture target;
+        // holds raw values: an sRGB target would convert picking indices, which are encoded as colors
+        readonly RenderTexture linearTarget;
         readonly Texture2D     readback;
         readonly ShadowQuality savedShadows;
         readonly float         savedShadowDistance;
@@ -62,6 +64,7 @@ namespace me.tooster.sdf.Tests.Editor {
             light.transform.rotation = Quaternion.Euler(70, 180, 0);
 
             target = new RenderTexture(Size, Size, 24, RenderTextureFormat.ARGB32);
+            linearTarget = new RenderTexture(Size, Size, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
             readback = new Texture2D(Size, Size, TextureFormat.RGBA32, false);
             camera = new GameObject("camera").AddComponent<Camera>();
             camera.transform.position = new Vector3(0, 5, -7);
@@ -82,7 +85,7 @@ namespace me.tooster.sdf.Tests.Editor {
         /// <summary>Renders the camera's view.</summary>
         public Color32[] Render() {
             camera.Render();
-            return ReadTarget();
+            return ReadTarget(target);
         }
 
         /// <summary>
@@ -103,12 +106,32 @@ namespace me.tooster.sdf.Tests.Editor {
             }
             Graphics.ExecuteCommandBuffer(commands);
             commands.Release();
-            return ReadTarget();
+            return ReadTarget(target);
         }
 
-        Color32[] ReadTarget() {
+        /// <summary>
+        ///     Runs <paramref name="draw" /> with the target active and cleared and the camera's view and projection loaded,
+        ///     the way the scene view prepares immediate drawing while it picks objects.
+        /// </summary>
+        public Color32[] RenderImmediate(Action draw) {
             var previous = RenderTexture.active;
-            RenderTexture.active = target;
+            RenderTexture.active = linearTarget;
+            GL.Clear(true, true, Color.clear);
+            GL.PushMatrix();
+            GL.LoadProjectionMatrix(camera.projectionMatrix);
+            GL.modelview = camera.worldToCameraMatrix;
+            try {
+                draw();
+            } finally {
+                GL.PopMatrix();
+                RenderTexture.active = previous;
+            }
+            return ReadTarget(linearTarget);
+        }
+
+        Color32[] ReadTarget(RenderTexture source) {
+            var previous = RenderTexture.active;
+            RenderTexture.active = source;
             readback.ReadPixels(new Rect(0, 0, Size, Size), 0, 0);
             readback.Apply();
             RenderTexture.active = previous;
@@ -119,7 +142,7 @@ namespace me.tooster.sdf.Tests.Editor {
             QualitySettings.shadows = savedShadows;
             QualitySettings.shadowDistance = savedShadowDistance;
             ShaderUtil.allowAsyncCompilation = savedAsyncCompilation;
-            foreach (var o in new Object[] { camera.gameObject, light.gameObject, ground, target, readback, material, shader })
+            foreach (var o in new Object[] { camera.gameObject, light.gameObject, ground, target, linearTarget, readback, material, shader })
                 Object.DestroyImmediate(o);
             PrefabUtility.UnloadPrefabContents(root);
         }

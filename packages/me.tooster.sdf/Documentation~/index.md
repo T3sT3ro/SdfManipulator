@@ -44,6 +44,8 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
 - Each SDF object has a *Material* section with the properties of the Standard shader: albedo, metallic, smoothness
   and emission. Where objects blend, e.g. in a smooth union, their materials blend too. A combination with *Override
   Material* uses its own material instead.
+- In the scene view, click an SDF surface to select the scene, and click it again to select the object under the
+  cursor.
 
 ## Writing your own controllers
 
@@ -107,7 +109,9 @@ Paths are relative to the package root.
     - `builtInShading.hlsl` defines the passes of the built-in pipeline: forward base, forward add and shadow caster.
       Each fragment builds its ray from the view and projection matrices, so the shadow caster pass renders shadow
       maps and the camera depth texture with the same code.
-    - `scenePicking.hlsl` defines the passes with which the scene view outlines and picks objects.
+    - `scenePicking.hlsl` defines the passes with which the scene view outlines and picks objects, and the object
+      picking pass, which `Editor/SdfScenePicking.cs` draws while the scene view picks, so that a click finds the
+      object under the cursor instead of the whole scene.
     - and more, for easier shader composition.
 - **AST library** (`Runtime/AST`): classes for working with HLSL and ShaderLab syntax trees, modeled after Roslyn's
   Syntax API.

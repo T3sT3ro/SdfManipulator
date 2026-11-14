@@ -190,6 +190,7 @@ namespace me.tooster.sdf.Generators {
                     ShadowCasterPass(),
                     SceneSelectionPass(),
                     PickingPass(),
+                    ObjectPickingPass(),
                 },
             };
 
@@ -297,6 +298,22 @@ namespace me.tooster.sdf.Generators {
                     Tags(("LightMode", "Picking")),
                     new Cull { state = new OffKeyword() },
                     PassProgram("vertex pickingVertex", "fragment pickingFragment"),
+                },
+            };
+
+        /// <summary>
+        ///     Writes a picking index for each object, with which the scene view selects the object under the cursor
+        ///     instead of the whole scene. Unity doesn't draw this pass by itself: the editor draws it while it picks.
+        /// </summary>
+        Pass ObjectPickingPass()
+            => new()
+            {
+                statements = new List<SubShaderOrPassStatement>
+                {
+                    new Pass.Name { name = "SdfObjectPicking" },
+                    Tags(("LightMode", "SdfObjectPicking")),
+                    new Cull { state = new OffKeyword() },
+                    PassProgram("vertex objectPickingVertex", "fragment objectPickingFragment"),
                 },
             };
 

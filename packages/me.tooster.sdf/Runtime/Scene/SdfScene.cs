@@ -54,6 +54,9 @@ namespace me.tooster.sdf {
             get { return _shaderPropertyUpdatingVisitor ??= new ShaderPropertyUpdatingVisitor(this); }
         }
 
+        /// <summary>The renderers that draw this scene, without the ones of nested scenes.</summary>
+        internal IReadOnlyList<Renderer> Renderers => renderers;
+
         public SceneData sceneData            { get; private set; } = null!;
         public bool      RequiresRegeneration { get; set; }
         public bool      RequiresUpdate       { get; set; }

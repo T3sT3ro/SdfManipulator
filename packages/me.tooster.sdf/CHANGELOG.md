@@ -34,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A combination can override the materials of its children with its own (*Override Material*).
 - Generated shaders have scene selection and picking passes, so the scene view outlines a selected scene along its
   SDF surfaces and picks it only where its rays hit, instead of anywhere on its domain mesh.
+- Clicking an SDF surface in the scene view picks the object that the ray hit. The first click selects the scene,
+  which is a selection base, and the next click the object. Objects with picking disabled are skipped.
 
 ### Changed
 
