@@ -18,45 +18,36 @@ float _AO_MAX_DISTANCE = 1;
 float _AO_FALLOFF = 2.5;
 #endif
 
+/// Output of the vertex shader
+struct SdfVertexOutput {
+    float4 pos : SV_POSITION;
+    /// A copy of the clip-space position, which the fragment receives with perspective-correct interpolation and turns
+    /// into its ray. SV_POSITION can't be used for this: the fragment receives it in pixels.
+    float4 clipPos : TEXCOORD0;
+};
+
 #pragma region forward declarations
 /// A function for shading the SdfResult
 fixed4   sdfShade(SdfResult sdf, Ray3D ray);
 /// A function for determining a material at a given point
 Material SdfMaterial(SdfResult sdf);
 
-v2f vertexShader(in appdata_base v_in);
-f2p fragmentShader(in v2f frag_in, bool facing : SV_IsFrontFace);
+SdfVertexOutput vertexShader(in appdata_base v_in);
+f2p             fragmentShader(in SdfVertexOutput frag_in);
 #pragma endregion
 
 #pragma region vertex and fragment
 
-/// standard vertex shader with additional parameters for raymarching
-v2f vertexShader(in appdata_base v_in) {
-    v2f o = (v2f)0;
-    o.vertex = UnityObjectToClipPos(v_in.vertex); // clip space, from (-w,-w,0) to (w, w, w)
-    o.screenPos = ComputeScreenPos(o.vertex); // from 0,0 to 1,1
-    // o.uv = v.texcoord; // TRANSFORM_TEX(v.texcoord, _BoxmapTex);
-    o.hitpos = v_in.vertex;
-
-    // COMPUTE_EYEDEPTH uses implicitly defined v.vertex.z... so to use `screenPos.z` instead of `o.vertex.z` name, we have to inline it ourselves:
-    o.screenPos.z = -UnityObjectToViewPos(o.vertex).z;
-    #ifdef V2F_RAYS
-    o.rdWsUnnormalized = cameraVsRayFromClipPos(o.screenPos, o.roWs);
-    #endif
+SdfVertexOutput vertexShader(in appdata_base v_in) {
+    SdfVertexOutput o;
+    o.pos = UnityObjectToClipPos(v_in.vertex);
+    o.clipPos = o.pos;
     return o;
 }
 
-f2p fragmentShader(in v2f frag_in, bool facing : SV_IsFrontFace) {
-    // float3 clipPos = frag_in.screenPos.xyz / frag_in.screenPos.w; // 0,0 to 1,1 on screen
-    Ray3D ray = (Ray3D)0;
-
-    #ifdef V2F_RAYS
-    ray.rd = normalize(frag_in.rdWsUnnormalized);
-    ray.ro = frag_in.roWs + ray.rd * _RAY_ORIGIN_BIAS;
-    #else
-    ray.rd = cameraRayFromClipPos(frag_in.screenPos, ray.ro);
-    #endif
-
+f2p fragmentShader(in SdfVertexOutput frag_in) {
+    Ray3D ray = viewRayFromClipPos(frag_in.clipPos);
+    ray.ro += ray.rd * _RAY_ORIGIN_BIAS;
     ray.maxDistance = _MAX_DISTANCE; // FIXME: parametrize this
     SdfResult sdf = raymarch(ray, _MAX_STEPS, _EPSILON_RAY);
 

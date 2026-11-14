@@ -21,11 +21,8 @@ namespace me.tooster.sdf.Generators {
             SdfPaths.ShaderLibrary.Operators,
             SdfPaths.ShaderLibrary.Matrix,
             SdfPaths.ShaderLibrary.Primitives,
-            // SdfPaths.ShaderLibrary.BuiltInForwardBase,
             SdfPaths.ShaderLibrary.DebugBaseShading,
         };
-
-        // SdfPaths.ShaderLibrary.BuiltInForwardBase,
 
         protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene)
             => new BuiltInGenerator(scene, pragmas, defines, includes);

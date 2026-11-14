@@ -1,8 +1,5 @@
 #pragma once
 
-/// calculate rays in the vertex shader
-#define V2F_RAYS
-
 #include "AutoLight.cginc"
 #include "Lighting.cginc"
 #include "UnityCG.cginc"
@@ -13,26 +10,6 @@
 #include "debug.hlsl"
 #include "noise.hlsl"
 #include "types.hlsl"
-#include "types.hlsl"
-
-/// data passed from vertex to fragment shader
-struct v2f {
-    /// clip space vertex pos. Space in vertex shader: (-w, -w, 0)->(w,w,w). In fragment (after hardware perspective divide) is (-1, -1, 0*) to (1,1,1*). Z value depends on platform.
-    float4 vertex : SV_POSITION;
-    float4 screenPos: TEXCOORD1; ///< clip-pos vertex position. This is not perspective divided, so that `w` is not lost beetween stages
-    float3 hitpos : TEXCOORD2; ///< hit position in model space TODO: remove
-
-    #ifdef V2F_RAYS
-    /** \brief unnormalized ray direction in world space. \code noperspective \endcode is needed to prevent warping of direction vectors
-     * \remark <a href="https://www.geogebra.org/calculator/fppufpcf">needed for proper interpolation</a>
-     * \remark <a href="https://mathweb.ucsd.edu/~sbuss/MathCG2/OpenGLsoft/NoPerspective/docNoPerspective.html">how perpective divition works: opengl</a>
-     * \remark <a href="https://docs.vulkan.org/spec/latest/chapters/primsrast.html#primsrast-polygons-basic:~:text=c%2C%20respectively.-,Perspective%20interpolation,-for%20a%20triangle">how perpective divition works: vulkan</a>
-     */
-    noperspective float3 rdWsUnnormalized : TEXCOORD3;
-    /// ray origin in world space. \code noperspective \endcode is needed to prevent warping and bad artifacts inside domain
-    noperspective float3 roWs : TEXCOORD4; ///< ray origin in world space
-    #endif
-};
 
 #pragma region Forward declarations
 

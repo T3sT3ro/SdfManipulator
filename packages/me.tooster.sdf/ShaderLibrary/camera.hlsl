@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UnityCG.cginc"
+#include "types.hlsl"
 
 // matrix layout from image
 // helpers based on https://github.com/hecomi/uRaymarching/blob/master/Assets/uRaymarching/Runtime/Shaders/Include/Legacy/Camera.cginc
@@ -30,43 +31,37 @@ float  CameraIsOrtho() { return unity_OrthoParams.w; }
 /// returns camera aspect ration (width / height)
 float  AspectRatio() { return _ScreenParams.x / _ScreenParams.y; }
 
-/// generates camera ray direction for a given clip pos
-/// based on my question and answer to it:
-/// https://computergraphics.stackexchange.com/questions/13666/how-to-calculate-ray-origin-and-ray-direction-in-vertex-shader-working-universal
-float3 cameraRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
-    clipPos.xy /= clipPos.w; // perspective divide
-    clipPos.xy = (clipPos.xy - 0.5) * 2; // transform to origin 0,0 at center and extents of ±1
-    clipPos.x *= AspectRatio(); // clipPos becomes x: [-aspectRatio, aspectRatio] and y: [-1, 1]
-    // The ray is constructed from a flat (z=0) ray on the near clip plane, and the camera forward vector, i.e. it forms a triangle
-
-    float focalLength = CameraFocalLength();
-    if (CameraIsOrtho()) {
-        // without focal length divide zoom won't work;
-        float3 toNearPlane = (CameraWsForward() * CameraNearClipPlane() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) /
-            focalLength;
-        rayOrigin = CameraWsPosition() + toNearPlane;
-        return CameraWsForward();
+/**
+ * \brief Returns the world-space ray through a fragment for the current view and projection matrices. The ray starts on
+ * the near plane.
+ * \param clipPos the clip-space position of the fragment, interpolated from the vertex shader output with perspective
+ * correction. Its perspective divide gives the normalized device coordinates of the fragment, also for triangles that
+ * cross the camera plane, which per-vertex rays get wrong.
+ * \remark It only reads \c UNITY_MATRIX_V and \c UNITY_MATRIX_P, so it works in every pass: in a shadow caster pass
+ * they belong to the light, and while the scene view picks objects they cover the picked region. Camera values such as
+ * \c _WorldSpaceCameraPos and \c unity_OrthoParams keep the values of the camera there.
+ */
+Ray3D viewRayFromClipPos(float4 clipPos) {
+    float2   ndc = clipPos.xy / clipPos.w;
+    float4x4 p = UNITY_MATRIX_P;
+    float3   originVs, directionVs;
+    // the last row of a perspective projection is (0, 0, -1, 0), and of an orthographic one (0, 0, 0, 1)
+    if (p._m33 == 1.0) {
+        float nearZ = (UNITY_NEAR_CLIP_VALUE - p._m23) / p._m22;
+        originVs = float3((ndc.x - p._m03) / p._m00, (ndc.y - p._m13) / p._m11, nearZ);
+        directionVs = float3(0, 0, -1);
+    } else {
+        float nearZ = -p._m23 / (p._m22 + UNITY_NEAR_CLIP_VALUE);
+        directionVs = float3((ndc.x + p._m02) / p._m00, (ndc.y + p._m12) / p._m11, -1); // the point at view depth 1
+        originVs = directionVs * -nearZ;
     }
-    float3 toNearPlane = CameraWsForward() * focalLength + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y;
-    rayOrigin = CameraWsPosition() + toNearPlane * CameraNearClipPlane();
-    return normalize(toNearPlane);
-}
 
-float3 cameraVsRayFromClipPos(float4 clipPos, out float3 rayOrigin) {
-    clipPos.xy /= clipPos.w; // perspective divide
-    clipPos.xy = (clipPos.xy - 0.5) * 2; // transform to origin 0,0 at center and extents of ±1
-    clipPos.x *= AspectRatio(); // clipPos becomes x: [-aspectRatio, aspectRatio] and y: [-1, 1]
-    // The ray is constructed from a flat (z=0) ray on the near clip plane, and the camera forward vector, i.e. it forms a triangle
+    // the rotation part of a view matrix is orthonormal, so its transpose inverts it
+    float3x3 viewToWorld = transpose((float3x3)UNITY_MATRIX_V);
+    float3   eyeWs = -mul(viewToWorld, UNITY_MATRIX_V._m03_m13_m23);
 
-    float focalLength = CameraFocalLength();
-    if (CameraIsOrtho()) {
-        // without focal length divide zoom won't work;
-        float3 toNearPlane = (CameraWsForward() * CameraNearClipPlane() + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y) /
-            focalLength;
-        rayOrigin = CameraWsPosition() + toNearPlane;
-        return CameraWsForward();
-    }
-    float3 toNearPlane = CameraWsForward() * focalLength + CameraWsRight() * clipPos.x + CameraWsUp() * clipPos.y;
-    rayOrigin = CameraWsPosition() + toNearPlane * CameraNearClipPlane();
-    return toNearPlane;
+    Ray3D ray = (Ray3D)0;
+    ray.ro = eyeWs + mul(viewToWorld, originVs);
+    ray.rd = normalize(mul(viewToWorld, directionVs));
+    return ray;
 }

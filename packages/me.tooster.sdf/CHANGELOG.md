@@ -68,12 +68,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   instead of the legacy `Int` type. Materials made with earlier versions keep their step counts in the float values,
   so set them again.
 - ShaderLab `Pass` blocks can hold tags and commands, and `On` is a command argument, e.g. `ZWrite On`.
+- Each fragment builds its ray from the view and projection matrices, instead of each vertex from camera parameters.
 
 ### Fixed
 
 - The `SdfScene` inspector showed fields for the controlled material and the target shader and material paths, which
   no longer exist.
 - Player builds failed to compile because runtime code used editor-only APIs.
+- Rays started at the focal length times the near distance from the camera instead of on the near plane, so geometry
+  closer than that was cut flat (#97). Triangles of the domain mesh that cross the camera plane, e.g. with the camera
+  inside the domain, produced wrong rays (#98).
 - Generated ShaderLab was invalid: after a code reformat, argument and initializer lists printed their brackets after
   their contents (e.g. vector property defaults).
 - Draw modes, the world grid and the ZWrite toggle did nothing, because the shader library's keyword pragmas were
@@ -116,6 +120,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- `ShaderLibrary/builtInForwardBase.hlsl`, an unused and untested adaptation of uRaymarching's forward pass, with
+  `SdfPaths.ShaderLibrary.BuiltInForwardBase`; `cameraRayFromClipPos` and `cameraVsRayFromClipPos` from `camera.hlsl`;
+  the `v2f` struct and `V2F_RAYS` from `raymarching.hlsl`.
 - `SdfScene.targetShader` and `SdfScene.targetMaterial`. The generated shader is a sub-asset of the scene prefab.
 - `SdfScene.controlledMaterial`. Uniforms go to the scene's renderers.
 - `ShaderPreset.DetectedShaderPresets`, which scanned every loaded assembly. An assembly that failed to load made
