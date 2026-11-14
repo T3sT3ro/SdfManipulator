@@ -187,6 +187,23 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(subtraction, Is.LessThan(union), "the subtraction covers as much as the union");
         }
 
+        [Test]
+        public void Repeat_ShowsCopiesOfTheObject() {
+            world.ground.SetActive(false);
+            // in the template, the sphere is intersected with a box, which would cut its copies away
+            world.root.GetComponentsInChildren<SdfCombineController>(true).First(c => c.name == "dice").Operation =
+                SdfCombineController.CombinationOperation.SIMPLE_UNION;
+            world.Regenerate();
+            var single = world.Render().Count(c => c.r + c.g + c.b > 0);
+            var sphere = world.root.GetComponentInChildren<me.tooster.sdf.Primitives.SdfSphereController>(true);
+            var repeat = sphere.gameObject.AddComponent<SdfRepeatController>();
+            repeat.Period = new Vector3(1.2f, 10, 10);
+            repeat.Count = new Vector3(1, 0, 0);
+            world.Regenerate();
+
+            Assert.That(world.Render().Count(c => c.r + c.g + c.b > 0), Is.GreaterThan(single), "the copies don't show");
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

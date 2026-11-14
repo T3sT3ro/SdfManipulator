@@ -148,6 +148,11 @@ namespace sdf { namespace operators {
         return p - c * round(p / c);
     }
 
+    /// repeat in period of c units, with l copies on each side of the original on each axis
+    float3 repeatLimited(in float3 p, in float3 c, in float3 l) {
+        return p - c * clamp(round(p / c), -l, l);
+    }
+
     float3 repeatLim(in float3 p, in float3 c, in float3 l, out int3 index) {
         index = clamp(round(p / c), -l, l);
         return p - c * index;

@@ -41,6 +41,8 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
   controlled, e.g. by updating a uniform or keyword.
 - Add primitives and operators by adding components to game objects, or with *GameObject > SDF > Primitives* and
   *GameObject > SDF > Operators* in the hierarchy.
+- Add *SDF > Operators > Repeat* to an SDF object to repeat it in cells; it joins the object's SDF stack after the
+  transform.
 - Add an *SDF > Material* component to give SDF objects the properties of the Standard shader: albedo, metallic,
   smoothness and emission. A material applies to the SDF object on the same game object and to the objects below it
   that have no material of their own, so one material on the root combination colors the whole scene. Objects without

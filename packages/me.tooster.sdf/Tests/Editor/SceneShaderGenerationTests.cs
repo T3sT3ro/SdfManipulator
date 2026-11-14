@@ -222,6 +222,21 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void Repeat_JoinsTheStackAfterTheTransformAndCompiles() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            var sphere = templateRoot.GetComponentInChildren<SdfSphereController>(true);
+            var repeat = sphere.gameObject.AddComponent<SdfRepeatController>();
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            var stack = sphere.GetComponent<SdfController>().sdfModifiers;
+            Assert.That(stack, Is.EqualTo(new Controller[] { sphere.GetComponent<TransformController>(), repeat, sphere }));
+            StringAssert.Contains("sdf::operators::repeatLimited(", source);
+            shader = ShaderUtil.CreateShaderAsset(source);
+            Assert.That(CompileErrors(shader, source), Is.Empty);
+        }
+
+        [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);
