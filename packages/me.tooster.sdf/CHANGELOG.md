@@ -89,6 +89,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `SdfScene` inspector showed fields for the controlled material and the target shader and material paths, which
   no longer exist.
 - Player builds failed to compile because runtime code used editor-only APIs.
+- Object IDs were `fixed4`, which has a range of about ±2 on mobile, so IDs from 2 up collapsed into one (#99).
 - Rays started at the focal length times the near distance from the camera instead of on the near plane, so geometry
   closer than that was cut flat (#97). Triangles of the domain mesh that cross the camera plane, e.g. with the camera
   inside the domain, produced wrong rays (#98).

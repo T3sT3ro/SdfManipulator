@@ -5,7 +5,8 @@
 // #pragma exclude_renderers d3d11
 
 /// ID of a hit object represented as a 4 dimensional vector, where <c>w</c> is a unique primitive ID or -1 for no hit, and <c>xyz</c> are auxiliary data, which can be used for domain repetition
-typedef fixed4 ID;
+/// Full precision: on mobile, fixed has a range of about ±2, so IDs from 2 up would collapse into one.
+typedef float4 ID;
 #define NO_ID int4(-1, -1, -1, -1) ///< NO_ID is a special ID that indicates that no hit was found
 
 
