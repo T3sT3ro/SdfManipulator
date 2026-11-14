@@ -208,6 +208,19 @@ namespace me.tooster.sdf.Tests.Editor {
             }
         }
 
+        [TestCase(SdfCombineController.CombinationOperation.SUBTRACTION)]
+        [TestCase(SdfCombineController.CombinationOperation.SMOOTH_INTERSECTION)]
+        [TestCase(SdfCombineController.CombinationOperation.SMOOTH_SUBTRACTION)]
+        public void Generation_CombinationOperationCompiles(SdfCombineController.CombinationOperation operation) {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.GetComponentInChildren<SdfCombineController>(true).Operation = operation;
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            shader = ShaderUtil.CreateShaderAsset(source);
+            Assert.That(CompileErrors(shader, source), Is.Empty);
+        }
+
         [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);

@@ -29,6 +29,8 @@ namespace me.tooster.sdf.Editor.Inspectors.Operators {
                 SdfCombineController { Operation: SdfCombineController.CombinationOperation.SIMPLE_UNION } => Color.green,
                 SdfCombineController { Operation: SdfCombineController.CombinationOperation.INTERSECTION } => Color.yellow,
                 SdfCombineController { Operation: SdfCombineController.CombinationOperation.SMOOTH_UNION } => Color.cyan,
+                SdfCombineController { Operation: SdfCombineController.CombinationOperation.SUBTRACTION or SdfCombineController.CombinationOperation.SMOOTH_SUBTRACTION } => Color.red,
+                SdfCombineController { Operation: SdfCombineController.CombinationOperation.SMOOTH_INTERSECTION } => new Color(1, 0.6f, 0),
                 _ => base.GetGizmoColor(controller),
             };
 

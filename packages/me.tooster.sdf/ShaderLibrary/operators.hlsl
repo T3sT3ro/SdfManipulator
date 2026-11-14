@@ -71,6 +71,16 @@ namespace sdf { namespace operators {
         return result;
     }
 
+    /// \p a without \p b. Where \p b cuts \p a, the surface belongs to \p b, with its ID and material.
+    SdfResult subtractSimple(in SdfResult a, in SdfResult b) {
+        SdfResult result = a;
+        if (-b.distance > a.distance) {
+            result = b;
+            result.distance = -b.distance;
+        }
+        return result;
+    }
+
     SdfResult unionSmooth(SdfResult a, SdfResult b, float k) {
         SdfResult result;
         float     f;
@@ -109,6 +119,22 @@ namespace sdf { namespace operators {
         res.id = wA > wB ? a.id : b.id;
 
         return res;
+    }
+
+    /// The smooth maximum of the distances: a smooth union of the outsides, with the ID and material of the surface that
+    /// bounds the intersection.
+    SdfResult intersectSmooth(SdfResult a, SdfResult b, float k) {
+        a.distance = -a.distance;
+        b.distance = -b.distance;
+        SdfResult result = unionSmooth(a, b, k);
+        result.distance = -result.distance;
+        return result;
+    }
+
+    /// \p a without \p b, with a smooth edge where \p b cuts \p a
+    SdfResult subtractSmooth(SdfResult a, SdfResult b, float k) {
+        b.distance = -b.distance;
+        return intersectSmooth(a, b, k);
     }
 
     float round_sdf(in float distance, float R) {

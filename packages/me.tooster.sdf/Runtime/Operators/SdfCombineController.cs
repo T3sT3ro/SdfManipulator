@@ -23,7 +23,14 @@ namespace me.tooster.sdf.Operators {
             [InspectorName("Intersection")]     INTERSECTION     = 1,
             [InspectorName("Smooth union")]     SMOOTH_UNION     = 2,
             [InspectorName("Smooth Exp union")] SMOOTH_EXP_UNION = 3,
+            // the first child without the others
+            [InspectorName("Subtraction")]         SUBTRACTION         = 4,
+            [InspectorName("Smooth intersection")] SMOOTH_INTERSECTION = 5,
+            [InspectorName("Smooth subtraction")]  SMOOTH_SUBTRACTION  = 6,
         }
+
+        static bool IsSmooth(CombinationOperation operation)
+            => operation is SMOOTH_UNION or SMOOTH_EXP_UNION or SMOOTH_INTERSECTION or SMOOTH_SUBTRACTION;
 
 
 
@@ -51,7 +58,7 @@ namespace me.tooster.sdf.Operators {
         }
 
         [CreateProperty] [ShaderProperty(Description = "Blend factor")]
-        [VisibleWhen(nameof(operation), new[] { (int)SMOOTH_UNION, (int)SMOOTH_EXP_UNION })]
+        [VisibleWhen(nameof(operation), new[] { (int)SMOOTH_UNION, (int)SMOOTH_EXP_UNION, (int)SMOOTH_INTERSECTION, (int)SMOOTH_SUBTRACTION })]
         public float BlendFactor {
             get => blendFactor;
             set => SetField(ref blendFactor, value, false);
@@ -85,6 +92,9 @@ namespace me.tooster.sdf.Operators {
                 INTERSECTION     => "sdf::operators::intersectSimple",
                 SMOOTH_UNION     => "sdf::operators::unionSmooth",
                 SMOOTH_EXP_UNION => "sdf::operators::unionSmoothExp",
+                SUBTRACTION         => "sdf::operators::subtractSimple",
+                SMOOTH_INTERSECTION => "sdf::operators::intersectSmooth",
+                SMOOTH_SUBTRACTION  => "sdf::operators::subtractSmooth",
                 _                => throw new ArgumentOutOfRangeException(),
             };
 
@@ -115,12 +125,9 @@ namespace me.tooster.sdf.Operators {
             }
 
             // arguments[1] is mutating slot for successive sdfResults 
-            var arguments = Operation switch
-            {
-                SMOOTH_UNION or SMOOTH_EXP_UNION
-                    => new Expression<hlsl>[] { result, null, (Identifier)this[blendFactorProperty].identifier },
-                _ => new Expression<hlsl>[] { result, null },
-            };
+            var arguments = IsSmooth(Operation)
+                ? new Expression<hlsl>[] { result, null, (Identifier)this[blendFactorProperty].identifier }
+                : new Expression<hlsl>[] { result, null };
 
             foreach (var sdfChild in children.Skip(1)) {
                 arguments[1] = ((SdfData)sdfChild.Apply(input, processor)).evaluationExpression;

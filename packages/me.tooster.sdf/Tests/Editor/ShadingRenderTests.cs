@@ -171,6 +171,22 @@ namespace me.tooster.sdf.Tests.Editor {
             }
         }
 
+        [Test]
+        public void Subtraction_RemovesTheOtherChildrenFromTheFirst() {
+            world.ground.SetActive(false);
+            // in the template, "dice" combines a box and a sphere
+            var dice = world.root.GetComponentsInChildren<me.tooster.sdf.Operators.SdfCombineController>(true).First(c => c.name == "dice");
+            dice.Operation = me.tooster.sdf.Operators.SdfCombineController.CombinationOperation.SIMPLE_UNION;
+            world.Regenerate();
+            var union = world.Render().Count(c => c.r + c.g + c.b > 0);
+            dice.Operation = me.tooster.sdf.Operators.SdfCombineController.CombinationOperation.SUBTRACTION;
+            world.Regenerate();
+            var subtraction = world.Render().Count(c => c.r + c.g + c.b > 0);
+
+            Assert.That(subtraction, Is.GreaterThan(0), "nothing is left");
+            Assert.That(subtraction, Is.LessThan(union), "the subtraction covers as much as the union");
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

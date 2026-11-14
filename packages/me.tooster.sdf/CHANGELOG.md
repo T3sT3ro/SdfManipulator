@@ -87,6 +87,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   without ZWrite.
 - The render state that commands read (`_Cull`, `_ZTest`, `_ZWrite`) uses `Float` material properties, like Unity's
   own shaders, instead of the legacy `Int` type, and the step counts are `int` uniforms.
+- Combinations can subtract their other children from the first one, and intersect and subtract with a smooth edge.
+  Where a subtraction cuts a surface, the surface belongs to the cutting object, so picking it selects that object.
 - *Clip To Domain Box* in the rendering settings marches rays only inside the box of the domain mesh: they start
   where they enter the box and stop where they leave it, which skips the empty space in front of the domain, also in
   shadow maps (#111).
