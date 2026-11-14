@@ -79,8 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   preset select the entry points of the forward base pass. Generated shaders disable batching, which would move the
   vertices of the domain mesh into world space.
 - The *Material* draw mode uses the lighting of the Standard shader (`UnityPBSLighting.cginc`) with ambient light,
-  reflection probes and fog, instead of a Lambert term and a shadow ray toward the main light. Each object still gets
-  a color from its ID. The forward passes are in `ShaderLibrary/builtInShading.hlsl`; `debugBaseShading.hlsl`
+  reflection probes and fog, instead of a Lambert term and a shadow ray toward the main light. Each object is shaded
+  with its material, which the shader reads by evaluating the scene once more at the hit. The forward passes are in `ShaderLibrary/builtInShading.hlsl`; `debugBaseShading.hlsl`
   includes it, for presets that list the old file.
 
 ### Fixed

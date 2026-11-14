@@ -41,6 +41,8 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
   controlled, e.g. by updating a uniform or keyword.
 - Add primitives and operators by adding components to game objects, or with *GameObject > SDF > Primitives* and
   *GameObject > SDF > Operators* in the hierarchy.
+- Each SDF object has a *Material* section with the properties of the Standard shader: albedo, metallic, smoothness
+  and emission. Where objects blend, e.g. in a smooth union, their materials blend too.
 
 ## Writing your own controllers
 
@@ -126,9 +128,9 @@ Paths are relative to the package root.
 - Because of how Unity processes and recompiles shaders and assets, some changes may cause needless shader
   regenerations and recompilations, while others may need a manual refresh to fully regenerate. This is being worked
   on.
-- The built-in generator shades with the lighting of the Standard shader and casts and receives realtime shadows, but
-  objects can't have materials yet: each one gets a color from its ID. You can customize generated shaders by extending
-  the existing generators and implementing your own shading.
+- The built-in generator shades with the lighting of the Standard shader and casts and receives realtime shadows.
+  Objects have the albedo, metallic, smoothness and emission of the Standard material, but no textures. You can
+  customize generated shaders by extending the existing generators and implementing your own shading.
 - Some UI elements are still being improved; limitations of the Unity editor API make this ongoing work.
 - Generated shaders aren't tested for VR, for deferred rendering or for render pipelines other than forward
   Built-in. Lightmaps and shadow masks don't apply to SDF scenes.

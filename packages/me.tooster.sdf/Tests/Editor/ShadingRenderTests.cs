@@ -130,6 +130,20 @@ namespace me.tooster.sdf.Tests.Editor {
             }
         }
 
+        [Test]
+        public void SdfScene_ShadesObjectsWithTheirAlbedo() {
+            ground.SetActive(false);
+            foreach (var sdf in templateRoot.GetComponentsInChildren<SdfController>(true))
+                sdf.Albedo = Color.red;
+            templateRoot.GetComponentInChildren<SdfScene>(true).UpdateShaderUniforms(forceUpdateAll: true);
+
+            var covered = Render().Where(c => c.r + c.g + c.b > 0).ToList();
+            Assert.That(covered.Count, Is.GreaterThan(100), "the SDF isn't visible");
+            // ambient light from the sky adds some green and blue
+            Assert.That(covered.Average(c => c.r), Is.GreaterThan(2 * covered.Average(c => c.g)));
+            Assert.That(covered.Average(c => c.r), Is.GreaterThan(2 * covered.Average(c => c.b)));
+        }
+
         Color32[] Render() {
             camera.Render();
             var previous = RenderTexture.active;

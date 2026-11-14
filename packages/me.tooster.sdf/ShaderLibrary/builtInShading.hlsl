@@ -69,14 +69,12 @@ float clipSpaceDepth(float3 worldPos) {
 
 #pragma region lighting
 
-/// Default material: a color for each object ID, so objects can be told apart, and occlusion from the SDF
+/// Returns the material of the objects at the hit, blended where they meet, with occlusion from the SDF. The scene is
+/// evaluated once more at the hit: marching only reads distances and IDs, so the compiler removes the material code
+/// from the marching loop.
 Material SdfMaterial(SdfResult sdf) {
-    Material m = (Material)0;
-    m.albedo = noise::randomColor(sdf.id.w);
-    m.metallic = 0;
-    m.smoothness = 0.5;
-    m.emission = 0;
-    m.occlusion = classicAmbientOcclusion(sdf.p, sdf.normal, _AO_MAX_DISTANCE, _AO_FALLOFF, _AO_STEPS);
+    Material m = sdfScene(sdf.p).material;
+    m.occlusion *= classicAmbientOcclusion(sdf.p, sdf.normal, _AO_MAX_DISTANCE, _AO_FALLOFF, _AO_STEPS);
     return m;
 }
 
