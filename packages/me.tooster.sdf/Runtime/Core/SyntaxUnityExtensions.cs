@@ -42,6 +42,8 @@ namespace me.tooster.sdf {
 
         public static Attribute spaceAttribute()  => new() { id = "Space" };
         public static Attribute toggleAttribute() => new() { id = "Toggle" };
+        /// A toggle that sets no keyword
+        public static Attribute toggleUIAttribute() => new() { id = "ToggleUI" };
 
         public static Attribute toggleAttribute(string keyword)
             => new()

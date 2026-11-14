@@ -75,6 +75,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   an elongation are structural.
 - Inspector layouts live in `Editor/UI` and load by their package path instead of from `Resources`, where their names
   could collide with files of other packages.
+- The draw mode, the world grid and depth output are switches on uniforms instead of shader keywords, so changing
+  them compiles no shader variant. Forward passes always output the depth of the hit, which the depth test uses also
+  without ZWrite.
 - The rendering settings that commands read or that select keywords (`_Cull`, `_ZTest`, `_DrawMode`) are `Float`
   material properties, and the step counts (`_MAX_STEPS`, `_AO_STEPS`) are `Integer` properties with `int` uniforms,
   instead of the legacy `Int` type. Materials made with earlier versions keep their step counts in the float values,

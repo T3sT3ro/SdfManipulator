@@ -59,15 +59,14 @@ namespace me.tooster.sdf.Generators {
                             SyntaxUnityExtensions.enumAttribute<CullMode>(),
                         },
                     },
-                    // [Toggle][KeyEnum(Off, On)] _ZWrite ("ZWrite", Float) = 0
+                    // [ToggleUI] _ZWrite ("ZWrite", Float) = 1
                     new PropertySyntax
                     {
                         id = "_ZWrite", displayName = "ZWrite", propertyType = new FloatKeyword(),
                         initializer = new Property.Number<IntLiteral> { numberLiteral = 1 },
                         attributes = new[]
                         {
-                            SyntaxUnityExtensions.toggleAttribute(),
-                            SyntaxUnityExtensions.keyEnumAttribute("Off", "On"),
+                            SyntaxUnityExtensions.toggleUIAttribute(),
                             SyntaxUnityExtensions.tooltipAttribute(
                                 "Enable for correct blending with other geometry and backface rendering"
                             ),
@@ -81,33 +80,21 @@ namespace me.tooster.sdf.Generators {
                             { numberLiteral = (int)CompareFunction.LessEqual },
                         attributes = SyntaxUnityExtensions.enumAttribute<CompareFunction>(),
                     },
-                    // [KeywordEnum(Material, Albedo, Skybox, Normal, Steps, Depth)] _DrawMode ("Draw mode", Float) = 0
+                    // [Enum(me.tooster.sdf.DrawMode)] _DrawMode ("Draw mode", Float) = 0
                     new PropertySyntax
                     {
                         id = "_DrawMode", displayName = "Draw mode", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<IntLiteral> { numberLiteral = 0 },
-                        attributes = new[]
-                        {
-                            SyntaxUnityExtensions.keywordEnumAttribute(
-                                "Material",
-                                "Albedo",
-                                "Id",
-                                "Skybox",
-                                "Normal",
-                                "Steps",
-                                "Depth",
-                                "Occlusion"
-                            ),
-                        },
+                        initializer = new Property.Number<IntLiteral> { numberLiteral = (int)DrawMode.Material },
+                        attributes = SyntaxUnityExtensions.enumAttribute<DrawMode>(),
                     },
-                    // [Toggle(_SHOW_WORLD_GRID)] _ShowWorldGrid("Show World Grid overlay", Float) = 1
+                    // [ToggleUI] _SHOW_WORLD_GRID ("Show World Grid overlay", Float) = 0
                     new PropertySyntax
                     {
                         id = "_SHOW_WORLD_GRID", displayName = "Show World Grid overlay", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<IntLiteral> { numberLiteral = 1 },
+                        initializer = new Property.Number<IntLiteral> { numberLiteral = 0 },
                         attributes = new[]
                         {
-                            SyntaxUnityExtensions.toggleAttribute("_SHOW_WORLD_GRID"),
+                            SyntaxUnityExtensions.toggleUIAttribute(),
                             SyntaxUnityExtensions.tooltipAttribute("Show world grid overlay"),
                         },
                     },

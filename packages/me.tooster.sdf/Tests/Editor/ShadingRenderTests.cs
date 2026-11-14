@@ -72,6 +72,17 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(covered.Average(c => c.r), Is.GreaterThan(2 * covered.Average(c => c.b)));
         }
 
+        [Test]
+        public void DrawMode_SwitchesWithoutAnotherVariant() {
+            world.ground.SetActive(false);
+            var shaded = world.Render();
+            world.material.SetFloat("_DrawMode", (float)DrawMode.Normal);
+            var normals = world.Render();
+
+            var changed = shaded.Where((c, i) => Mathf.Abs(c.r - normals[i].r) + Mathf.Abs(c.g - normals[i].g) + Mathf.Abs(c.b - normals[i].b) > 30).Count();
+            Assert.That(changed, Is.GreaterThan(100), "the draw mode doesn't change the image");
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

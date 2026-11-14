@@ -18,8 +18,6 @@
 #include_with_pragmas "raymarching.hlsl"
 #include "types.hlsl"
 
-#pragma shader_feature_local _ZWRITE_ON _ZWRITE_OFF
-
 #ifndef EXPLICIT_RAYMARCHING_PARAMETERS
 int   _AO_STEPS = 6;
 float _AO_MAX_DISTANCE = 1;
@@ -191,9 +189,8 @@ half4 applyFog(half4 color, float3 worldPos, half4 fogColor) {
 
 struct SdfFragmentOutput {
     half4 color : SV_Target;
-    #ifdef _ZWRITE_ON
-    float depth : SV_Depth; ///< the depth of the hit, so that other geometry and the depth texture agree with the SDF
-    #endif
+    /// The depth of the hit, so that the depth test and depth writes agree with the SDF. Without ZWrite, it's only tested.
+    float depth : SV_Depth;
 };
 
 /// Vertex shader of the forward base pass. The name is kept for scene presets that select it with a pragma.
@@ -211,9 +208,7 @@ SdfFragmentOutput fragmentShader(SdfVertexOutput i) {
 
     SdfFragmentOutput o;
     o.color = applyFog(color, sdf.p, unity_FogColor);
-    #ifdef _ZWRITE_ON
     o.depth = clipSpaceDepth(sdf.p);
-    #endif
     return o;
 }
 
@@ -225,14 +220,13 @@ SdfFragmentOutput forwardAddFragment(SdfVertexOutput i) {
     sdf.normal = calculateSdfNormal(sdf.p, _EPSILON_NORMAL);
 
     SdfFragmentOutput o;
-    #ifdef _DRAWMODE_MATERIAL
-    o.color = applyFog(shadeForwardAdd(sdf, SdfMaterial(sdf)), sdf.p, 0);
-    #else
-    o.color = 0; // the debug draw modes show the forward base pass only
-    #endif
-    #ifdef _ZWRITE_ON
+    // the debug draw modes show the forward base pass only
+    UNITY_BRANCH
+    if ((int)_DrawMode == SDF_DRAWMODE_MATERIAL)
+        o.color = applyFog(shadeForwardAdd(sdf, SdfMaterial(sdf)), sdf.p, 0);
+    else
+        o.color = 0;
     o.depth = clipSpaceDepth(sdf.p);
-    #endif
     return o;
 }
 

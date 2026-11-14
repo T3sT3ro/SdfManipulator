@@ -33,17 +33,20 @@ float _RAY_ORIGIN_BIAS = 0;
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #endif
 
-#ifndef EXPLICIT_SHADER_FEATURES
-#pragma shader_feature_local \
-    _DRAWMODE_MATERIAL \
-    _DRAWMODE_ALBEDO \
-    _DRAWMODE_ID \
-    _DRAWMODE_SKYBOX \
-    _DRAWMODE_NORMAL \
-    _DRAWMODE_STEPS \
-    _DRAWMODE_DEPTH \
-    _DRAWMODE_OCCLUSION
-#pragma shader_feature_local __ _SHOW_WORLD_GRID
+// The debug views are switches on uniforms instead of keywords, so changing them compiles no variant, and each renderer
+// can have its own. The values match me.tooster.sdf.DrawMode.
+#define SDF_DRAWMODE_MATERIAL  0
+#define SDF_DRAWMODE_ALBEDO    1
+#define SDF_DRAWMODE_ID        2
+#define SDF_DRAWMODE_SKYBOX    3
+#define SDF_DRAWMODE_NORMAL    4
+#define SDF_DRAWMODE_STEPS     5
+#define SDF_DRAWMODE_DEPTH     6
+#define SDF_DRAWMODE_OCCLUSION 7
+
+#ifndef EXPLICIT_DEBUG_PARAMETERS
+float _DrawMode;        ///< one of the SDF_DRAWMODE_ values
+float _SHOW_WORLD_GRID; ///< nonzero to overlay a grid in world space
 #endif
 
 # pragma region raymarching functions
@@ -203,38 +206,38 @@ float classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, 
  * @param sdf sdf data of fragment
  * @param ray ray info for fragment
  * @return modified color of a fragment
- * @todo check if including this and shader features in global include file increases shader compilation time
  */
 fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D ray) {
-    #ifdef _DRAWMODE_MATERIAL
-    // dampen the color by occlusion
-    color = color;
-    #elif _DRAWMODE_ALBEDO
-    color = mat.albedo;
-    #elif _DRAWMODE_ID
-    // dampen the color by occlusion, otherwise depth perception is very bad
-    color = noise::randomColor(sdf.id.w) * (mat.occlusion); // TODO: account for xyz
-    #elif _DRAWMODE_SKYBOX
-    // sample the default reflection cubemap, using the reflection vector
-    half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, sdf.normal);
-    // decode cubemap data into actual color
-    half3 skyColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
-    color = fixed4(skyColor, 1.0);
-    #elif _DRAWMODE_NORMAL
-    color = sdf::debug::visualizeNormal(sdf.normal);
-    #elif _DRAWMODE_STEPS
-    color = sdf::debug::visualizeOverhead(ray.steps / (float)_MAX_STEPS);
-    #elif _DRAWMODE_DEPTH
-    float eyeDepth = -UnityWorldToViewPos(sdf.p).z;
-    color = fixed4((float3)eyeDepth / 5., 1);
-    #elif _DRAWMODE_OCCLUSION
-    color = mat.occlusion;
-    #endif
+    // every pixel takes the same branch, so the branches cost little
+    int drawMode = (int)_DrawMode;
+    UNITY_BRANCH
+    if (drawMode == SDF_DRAWMODE_ALBEDO) {
+        color = mat.albedo;
+    } else if (drawMode == SDF_DRAWMODE_ID) {
+        // dampen the color by occlusion, otherwise depth perception is very bad
+        color = noise::randomColor(sdf.id.w) * (mat.occlusion); // TODO: account for xyz
+    } else if (drawMode == SDF_DRAWMODE_SKYBOX) {
+        // sample the default reflection cubemap, using the reflection vector
+        half4 skyData = UNITY_SAMPLE_TEXCUBE(unity_SpecCube0, sdf.normal);
+        // decode cubemap data into actual color
+        half3 skyColor = DecodeHDR(skyData, unity_SpecCube0_HDR);
+        color = fixed4(skyColor, 1.0);
+    } else if (drawMode == SDF_DRAWMODE_NORMAL) {
+        color = sdf::debug::visualizeNormal(sdf.normal);
+    } else if (drawMode == SDF_DRAWMODE_STEPS) {
+        color = sdf::debug::visualizeOverhead(ray.steps / (float)_MAX_STEPS);
+    } else if (drawMode == SDF_DRAWMODE_DEPTH) {
+        float eyeDepth = -UnityWorldToViewPos(sdf.p).z;
+        color = fixed4((float3)eyeDepth / 5., 1);
+    } else if (drawMode == SDF_DRAWMODE_OCCLUSION) {
+        color = mat.occlusion;
+    }
 
-    #ifdef _SHOW_WORLD_GRID
-    fixed4 gridColor = sdf::debug::grid(sdf.p, 0.25, .04);
-    color.rgb = lerp(color, gridColor.rgb, gridColor.a); // mix in the grid
-    #endif
+    UNITY_BRANCH
+    if (_SHOW_WORLD_GRID != 0) {
+        fixed4 gridColor = sdf::debug::grid(sdf.p, 0.25, .04);
+        color.rgb = lerp(color, gridColor.rgb, gridColor.a); // mix in the grid
+    }
 
     return color;
 }

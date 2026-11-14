@@ -51,14 +51,15 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(CompileErrors(shader, source), Is.Empty);
         }
 
+        // switching a debug view or depth writes doesn't compile another variant
         [Test]
-        public void TemplateScene_ShaderDeclaresLibraryKeywords() {
+        public void TemplateScene_DebugViewsAreNotKeywords() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             scene.RevalidateScene();
             shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
 
             foreach (var keyword in new[] { "_DRAWMODE_NORMAL", "_SHOW_WORLD_GRID", "_ZWRITE_ON" })
-                Assert.That(shader.keywordSpace.FindKeyword(keyword).isValid, Is.True, $"keyword {keyword} isn't declared");
+                Assert.That(shader.keywordSpace.FindKeyword(keyword).isValid, Is.False, $"{keyword} is a keyword");
         }
 
         // commands and keyword drawers read Float properties, and the legacy Int type also reports Float
