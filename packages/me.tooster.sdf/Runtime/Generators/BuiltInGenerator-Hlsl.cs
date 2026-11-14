@@ -16,7 +16,7 @@ using Parameter = me.tooster.sdf.AST.Hlsl.Syntax.Parameter;
 using VariableDefinition = me.tooster.sdf.AST.Hlsl.Syntax.Statements.VariableDefinition;
 namespace me.tooster.sdf.Generators {
     public partial class BuiltInGenerator {
-        IEnumerable<Trivia<hlsl>> pragmasAndIncludes() {
+        IEnumerable<Trivia<hlsl>> includes() {
             // yield return new Pragma { tokenString = "editor_sync_compilation" }.ToStructuredTrivia();
             yield return new Pragma { tokenString = "target 5.0" }.ToStructuredTrivia();
             yield return new Include { filepath = "UnityCG.cginc" }.ToStructuredTrivia();
@@ -28,29 +28,36 @@ namespace me.tooster.sdf.Generators {
             foreach (var include in includeFiles.Distinct())
                 yield return new Include { includeKeyword = new IncludeWithPragmasKeyword(), filepath = include }.ToStructuredTrivia();
 
-            // pragmas can be used to select used shader functions
-            foreach (var pragma in pragmas.Distinct())
-                yield return new Pragma { tokenString = pragma }.ToStructuredTrivia();
-
-
             yield return new NewLine<hlsl>();
         }
 
+        /// <summary>The HLSL that every pass shares: includes, uniforms and the scene functions.</summary>
         Tree<hlsl> CommonHlslInclude() {
-            var preprocessorHeader = pragmasAndIncludes();
-            var globals = generateHlslGlobals().Cast<Statement<hlsl>>();
-
-            return new Tree<hlsl>(globals.ToSyntaxList().WithLeadingTrivia(preprocessorHeader));
-        }
-
-        Tree<hlsl> HlslTree() {
+            var globals = generateHlslGlobals().Cast<Statement<hlsl>>().ToList();
+            // generating the scene function collects the other functions as requirements, so it goes first
+            var sceneFunction = sceneFunctionDefinition();
             var forwardDeclarations = functionDefinitions.Select(f => f.ForwardDeclaration());
 
             return new Tree<hlsl>(
-                forwardDeclarations.Cast<Statement<hlsl>>()
+                globals
+                    .Concat(forwardDeclarations)
                     .Concat(functionDefinitions)
-                    .Append(sceneFunctionDefinition())
+                    .Append(sceneFunction)
                     .ToSyntaxList()
+                    .WithLeadingTrivia(includes())
+            );
+        }
+
+        /// <summary>
+        ///     The program of a pass: its pragmas, which select its entry points and keywords, followed by a declaration
+        ///     of the scene function, which the shared include block defines.
+        /// </summary>
+        Tree<hlsl> PassHlslTree(IEnumerable<string> passPragmas) {
+            var pragmaTrivia = passPragmas.Distinct()
+                .Select<string, Trivia<hlsl>>(p => new Pragma { tokenString = p }.ToStructuredTrivia())
+                .Append(new NewLine<hlsl>());
+            return new Tree<hlsl>(
+                new Statement<hlsl>[] { sceneFunctionDeclaration() }.ToSyntaxList().WithLeadingTrivia(pragmaTrivia)
             );
         }
 
@@ -75,6 +82,14 @@ namespace me.tooster.sdf.Generators {
                     }
                 }
             );
+
+        static FunctionDeclaration sceneFunctionDeclaration()
+            => new()
+            {
+                returnType = SdfData.sdfReturnType,
+                id = "sdfScene",
+                paramList = new Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
+            };
 
         FunctionDefinition sceneFunctionDefinition()
             => new()

@@ -8,6 +8,10 @@ namespace me.tooster.sdf.Generators {
     [Serializable]
     [MovedFrom(true, sourceNamespace: "me.tooster.sdf.Editor.Controllers.Generators", sourceAssembly: "me.tooster.sdf.Editor.Controllers")]
     public class BIRPShaderPreset : ShaderPreset {
+        /// <summary>
+        ///     Pragmas of the forward base pass, which select its vertex and fragment shaders. The other passes have
+        ///     their own entry points.
+        /// </summary>
         public string[] pragmas =
         {
             "vertex vertexShader",

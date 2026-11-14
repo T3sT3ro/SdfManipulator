@@ -78,6 +78,26 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void TemplateScene_ShaderHasBuiltInPipelinePasses() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
+
+            Assert.That(LightModes(shader), Is.EqualTo(new[] { "ForwardBase" }).IgnoreCase);
+        }
+
+        [Test]
+        public void TemplateScene_PresetPragmasOnlySelectTheForwardBasePass() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            Assert.That(Occurrences(source, "#pragma vertex vertexShader"), Is.EqualTo(1));
+            // the scene functions are defined once, in the block that the passes share
+            Assert.That(Occurrences(source, "SdfResult sdfScene(float3 p) {"), Is.EqualTo(1));
+        }
+
+        [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);
@@ -137,6 +157,19 @@ namespace me.tooster.sdf.Tests.Editor {
             scene.RevalidateScene();
 
             Assert.DoesNotThrow(() => scene.UpdateShaderUniforms(forceUpdateAll: true));
+        }
+
+        // Unity reports tag values in upper case
+        static List<string> LightModes(Shader shader)
+            => Enumerable.Range(0, shader.passCount)
+                .Select(pass => shader.FindPassTagValue(pass, new ShaderTagId("LightMode")).name)
+                .ToList();
+
+        static int Occurrences(string text, string value) {
+            var count = 0;
+            for (var index = text.IndexOf(value); index != -1; index = text.IndexOf(value, index + value.Length))
+                count++;
+            return count;
         }
 
         static List<string> CompileErrors(Shader shader, string source) {

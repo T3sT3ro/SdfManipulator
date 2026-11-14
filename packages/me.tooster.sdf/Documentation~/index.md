@@ -94,7 +94,8 @@ Paths are relative to the package root.
   the built-in forward rendering pipeline. Essentially a stateful factory for shader generators; think of it as a
   "cooking school" for creating chefs.
 - **Shader generators** (`Runtime/Generators`): for now just `BuiltInGenerator`, which generates shaders specialized
-  for the built-in forward rendering pipeline.
+  for the built-in forward rendering pipeline. The scene functions go into an include block that all passes share. The
+  pragmas of the preset select the entry points of the forward base pass.
 - **Shader library** (`ShaderLibrary/`): HLSL include files with easy to edit parts that controllers use.
     - `operators.hlsl` defines common SDF operators, for example `union` or `intersection`.
     - `primitives.hlsl` defines SDF primitive functions like `torus` or `sphere`.

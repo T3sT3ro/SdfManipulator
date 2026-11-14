@@ -163,59 +163,62 @@ namespace me.tooster.sdf.Generators {
             }
         }
 
-        TagsBlock TagsBlock => new()
-        {
-            tags = new[]
-            {
-                new Tag { key = "RenderType", value = transparent ? "Transparency" : "Opaque" },
-                new Tag { key = "Queue", value = transparent ? "Transparent+1" : "Geometry+1" },
-                new Tag { key = "IgnoreProjector", value = "True" },
-                new Tag { key = "LightMode", value = "ForwardBase" },
-            },
-        };
+        static TagsBlock Tags(params (string key, string value)[] tags)
+            => new() { tags = tags.Select(t => new Tag { key = t.key, value = t.value }).ToList() };
 
-        IEnumerable<SubShaderOrPassStatement> Commands => new List<Command>
-        { // TODO: use properties on raymarcher node to set these possibly? 
-            new ZTest { operation = new CalculatedArgument { id = "_ZTest" } },
-            new Cull { state = new CalculatedArgument { id = "_Cull" } },
-            new ZWrite { state = new CalculatedArgument { id = "_ZWrite" } },
-            transparent
-                ? new Blend
-                {
-                    blendArguments = new Blend.SrcDstArguments
-                    {
-                        srcFactorArg = new SrcAlphaKeyword(),
-                        dstFactorArg = new OneMinusSrcAlphaKeyword(),
-                    },
-                }
-                : null,
-        }.FilterNotNull();
+        TagsBlock SubShaderTags => Tags(
+            ("RenderType", transparent ? "Transparent" : "Opaque"),
+            ("Queue", transparent ? "Transparent+1" : "Geometry+1"),
+            ("IgnoreProjector", "True"),
+            // batching moves vertices into world space, but rays and the shadow bias need the domain's own transform
+            ("DisableBatching", "True")
+        );
 
+        /// <summary>
+        ///     The include block that every pass shares: library includes, uniforms and the scene functions. Each pass then
+        ///     only selects its entry points and keywords.
+        /// </summary>
         SubShader SubShader()
-            =>
-                // scene.sdfSceneRoot!.Apply(SdfData.pData, this); // ignore retun, only handle requirements
-                new()
-                {
-                    statements = new SyntaxList<shaderlab, SubShaderOrPassStatement>(TagsBlock)
-                        .Splice(1, 0, Commands)
-                        .Append<SubShaderOrPassStatement>(
-                            new HlslInclude
-                            {
-                                hlsl = new InjectedLanguage<shaderlab, hlsl>(CommonHlslInclude()),
-                            }
-                        )
-                        .Append(Pass())
-                        .ToList(),
-                };
-
-        Pass Pass()
             => new()
             {
-                statements = new PassStatement[]
+                statements = new List<SubShaderOrPassStatement>
                 {
-                    new HlslProgram { hlsl = new InjectedLanguage<shaderlab, hlsl>(HlslTree()) },
+                    SubShaderTags,
+                    new HlslInclude { hlsl = new InjectedLanguage<shaderlab, hlsl>(CommonHlslInclude()) },
+                    ForwardBasePass(),
                 },
             };
+
+        static CalculatedArgument MaterialProperty(string id) => new() { id = id };
+
+        /// <summary>The main directional light and the debug draw modes.</summary>
+        Pass ForwardBasePass()
+            => new()
+            {
+                statements = new List<SubShaderOrPassStatement>
+                    {
+                        new Pass.Name { name = "FORWARD" },
+                        Tags(("LightMode", "ForwardBase")),
+                        new ZTest { operation = MaterialProperty("_ZTest") },
+                        new Cull { state = MaterialProperty("_Cull") },
+                        new ZWrite { state = MaterialProperty("_ZWrite") },
+                        transparent
+                            ? new Blend
+                            {
+                                blendArguments = new Blend.SrcDstArguments
+                                {
+                                    srcFactorArg = new SrcAlphaKeyword(),
+                                    dstFactorArg = new OneMinusSrcAlphaKeyword(),
+                                },
+                            }
+                            : null,
+                        PassProgram(pragmas),
+                    }.FilterNotNull()
+                    .ToList(),
+            };
+
+        HlslProgram PassProgram(IEnumerable<string> passPragmas)
+            => new() { hlsl = new InjectedLanguage<shaderlab, hlsl>(PassHlslTree(passPragmas)) };
 
         #endregion
     }

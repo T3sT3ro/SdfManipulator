@@ -69,6 +69,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   so set them again.
 - ShaderLab `Pass` blocks can hold tags and commands, and `On` is a command argument, e.g. `ZWrite On`.
 - Each fragment builds its ray from the view and projection matrices, instead of each vertex from camera parameters.
+- The scene functions are defined once, in an include block that all passes share, and the pragmas of a shader
+  preset select the entry points of the forward base pass. Generated shaders disable batching, which would move the
+  vertices of the domain mesh into world space.
 
 ### Fixed
 
