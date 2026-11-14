@@ -16,5 +16,8 @@ namespace me.tooster.sdf {
         Occlusion = 7,
         /// red where the surface is concave, blue where it's convex
         Curvature = 8,
+        /// the most steps that a pixel in the same 2x2 quad took: the GPU runs the pixels of a quad together, so each
+        /// waits for the slowest
+        [InspectorName("Marching steps per quad")] QuadSteps = 9,
     }
 }

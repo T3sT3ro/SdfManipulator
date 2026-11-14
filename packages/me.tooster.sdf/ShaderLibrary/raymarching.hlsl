@@ -47,6 +47,7 @@ UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #define SDF_DRAWMODE_DEPTH     6
 #define SDF_DRAWMODE_OCCLUSION 7
 #define SDF_DRAWMODE_CURVATURE 8
+#define SDF_DRAWMODE_QUAD_STEPS 9
 
 #ifndef EXPLICIT_DEBUG_PARAMETERS
 float _DrawMode;        ///< one of the SDF_DRAWMODE_ values
@@ -278,7 +279,27 @@ float classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, 
  * @param ray ray info for fragment
  * @return modified color of a fragment
  */
-fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D ray) {
+/**
+ * The largest value of \p x among the 2x2 pixels that the GPU runs together with this fragment. The pixels of such a
+ * quad run in lockstep, so a quad marches as long as its slowest pixel. Only for fragment shaders, outside of branches
+ * that differ between pixels, because it reads the values of the other pixels through derivatives.
+ * @param pixel the position of the fragment in pixels (SV_Position)
+ */
+float quadMax(float x, float2 pixel) {
+    // a fine derivative is the value of the right (or lower) pixel minus the value of the left (or upper) pixel
+    float toNeighborX = (uint(pixel.x) & 1) ? -1 : 1;
+    float toNeighborY = (uint(pixel.y) & 1) ? -1 : 1;
+    float neighborX = x + toNeighborX * ddx_fine(x);
+    float neighborY = x + toNeighborY * ddy_fine(x);
+    float diagonal = neighborY + toNeighborX * ddx_fine(neighborY);
+    return max(max(x, neighborX), max(neighborY, diagonal));
+}
+
+/// Replaces \p color with the debug view that the draw mode selects. Call it outside of branches that differ between
+/// pixels: the quad steps view reads the steps of the neighboring pixels.
+/// @param pixel the position of the fragment in pixels (SV_Position)
+fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D ray, in float2 pixel) {
+    float quadSteps = quadMax(ray.steps, pixel);
     // every pixel takes the same branch, so the branches cost little
     int drawMode = SDF_DRAW_MODE;
     UNITY_BRANCH
@@ -304,6 +325,8 @@ fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D
         color = mat.occlusion;
     } else if (drawMode == SDF_DRAWMODE_CURVATURE) {
         color = sdf::debug::visualizeCurvature(sdfCurvature(sdf.p, 10 * _EPSILON_NORMAL));
+    } else if (drawMode == SDF_DRAWMODE_QUAD_STEPS) {
+        color = sdf::debug::visualizeOverhead(quadSteps / (float)_MAX_STEPS);
     }
 
     UNITY_BRANCH

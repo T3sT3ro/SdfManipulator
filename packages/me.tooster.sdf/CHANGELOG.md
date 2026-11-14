@@ -97,6 +97,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   replaces the bands of few samples with noise (#32).
 - *Strip Debug Views* in the built-in shader preset leaves the debug views out of the generated shader, e.g. for a
   release (#20).
+- A *Marching steps per quad* draw mode shows the most steps that a pixel took in each 2x2 quad of pixels, which the
+  GPU runs together, so that each pixel waits for the slowest one (#39).
 - A *Curvature* draw mode shows concave surfaces in red and convex ones in blue, from the Laplacian of the SDF (#5).
 - The draw mode, the world grid and depth output are switches on uniforms instead of shader keywords, so changing
   them compiles no shader variant. Forward passes always output the depth of the hit, which the depth test uses also

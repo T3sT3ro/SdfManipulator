@@ -230,7 +230,7 @@ SdfFragmentOutput fragmentShader(SdfVertexOutput i) {
 
     Material mat = SdfMaterial(sdf);
     half4    color = shadeForwardBase(sdf, mat);
-    color = debugOverlay(color, mat, sdf, ray);
+    color = debugOverlay(color, mat, sdf, ray, i.pos.xy);
 
     SdfFragmentOutput o;
     o.color = applyFog(color, sdf.p, unity_FogColor);
@@ -294,11 +294,13 @@ void deferredFragment(
     LightingStandard_GI(o, giInput(o, sdf.p, worldViewDir, gi.light, 1), gi);
     outEmission = LightingStandard_Deferred(o, worldViewDir, gi, outGBuffer0, outGBuffer1, outGBuffer2);
 
+    // outside the branch, since the overlay reads the neighboring pixels
+    half4 overlay = debugOverlay(half4(0, 0, 0, 1), mat, sdf, ray, i.pos.xy);
     UNITY_BRANCH
     if (debugView) {
         outGBuffer0 = half4(0, 0, 0, outGBuffer0.a);
         outGBuffer1 = 0;
-        outEmission = debugOverlay(half4(0, 0, 0, 1), mat, sdf, ray);
+        outEmission = overlay;
     }
     #ifndef UNITY_HDR_ON
     // without HDR, Unity stores the emission buffer encoded for multiplicative blending

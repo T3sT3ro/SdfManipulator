@@ -272,6 +272,40 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void QuadStepsView_ShowsTheMostStepsOfEachQuad() {
+            world.ground.SetActive(false);
+            world.scene.rendering.drawMode = DrawMode.Steps;
+            world.scene.UpdateShaderUniforms(forceUpdateAll: true);
+            var steps = world.Render();
+            world.scene.rendering.drawMode = DrawMode.QuadSteps;
+            world.scene.UpdateShaderUniforms(forceUpdateAll: true);
+            var quadSteps = world.Render();
+
+            // the views go from blue to red as the steps increase
+            const int size = RenderTestScene.Size;
+            int Red(Color32[] image, int x, int y) => image[x + y * size].r;
+            bool Covered(int x, int y) => steps[x + y * size].a > 0;
+            int fullQuads = 0, uniformQuads = 0, slowerPixels = 0, pixelsInFullQuads = 0;
+            for (var y = 0; y < size; y += 2)
+            for (var x = 0; x < size; x += 2) {
+                if (!(Covered(x, y) && Covered(x + 1, y) && Covered(x, y + 1) && Covered(x + 1, y + 1)))
+                    continue;
+                fullQuads++;
+                var quad = new[] { (x, y), (x + 1, y), (x, y + 1), (x + 1, y + 1) };
+                var mostSteps = quad.Max(p => Red(steps, p.Item1, p.Item2));
+                if (quad.All(p => Mathf.Abs(Red(quadSteps, p.Item1, p.Item2) - mostSteps) <= 2))
+                    uniformQuads++;
+                pixelsInFullQuads += 4;
+                slowerPixels += quad.Count(p => Red(quadSteps, p.Item1, p.Item2) > Red(steps, p.Item1, p.Item2) + 2);
+            }
+
+            // the template covers about 50 whole quads of the image
+            Assert.That(fullQuads, Is.GreaterThan(25), "the SDF isn't visible");
+            Assert.That(uniformQuads, Is.GreaterThan(fullQuads * 95 / 100), "the quads don't show the steps of their slowest pixel");
+            Assert.That(slowerPixels, Is.GreaterThan(0), "no pixel waits for another pixel of its quad");
+        }
+
+        [Test]
         public void AlbedoMap_ColorsTheSurface() {
             world.ground.SetActive(false);
             var map = new Texture2D(1, 1);
