@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   SDF surfaces and picks it only where its rays hit, instead of anywhere on its domain mesh.
 - Clicking an SDF surface in the scene view picks the object that the ray hit. The first click selects the scene,
   which is a selection base, and the next click the object. Objects with picking disabled are skipped.
+- The scene view outlines selected SDF objects, and a selected combination with all of its objects.
 
 ### Changed
 

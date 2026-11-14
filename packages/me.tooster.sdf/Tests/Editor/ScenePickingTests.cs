@@ -70,6 +70,28 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void SceneSelectionPass_OutlinesOnlyTheSelectedObject() {
+            var picked = PickedObjects(_ => true);
+            Assert.That(picked, Has.Some.Not.Null, "nothing is picked");
+            var selected = (GameObject)picked.Where(o => o != null).GroupBy(o => o).OrderByDescending(g => g.Count()).First().Key;
+
+            Color32[] outline;
+            Shader.SetGlobalFloatArray("_SdfOutlined", SdfSceneOutline.OutlineFlags(world.scene, new[] { selected }));
+            Shader.SetGlobalFloat("_SdfOutlineSelected", 1);
+            try {
+                world.material.SetFloat("_ObjectId", 1);
+                outline = world.RenderPass("SceneSelectionPass");
+            } finally {
+                Shader.SetGlobalFloat("_SdfOutlineSelected", 0);
+            }
+
+            var selectedPixels = picked.Select(o => o == selected).ToArray();
+            var covered = outline.Select(c => c.r == 255).ToArray();
+            var count = selectedPixels.Count(p => p);
+            Assert.That(covered.Where((c, i) => c != selectedPixels[i]).Count(), Is.LessThan(count / 10 + 5), "the outline covers other objects");
+        }
+
+        [Test]
         public void ObjectPicking_WorksWithMaterialVariants() {
             var variant = new Material(world.material) { parent = world.material };
             try {

@@ -45,7 +45,7 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
   and emission. Where objects blend, e.g. in a smooth union, their materials blend too. A combination with *Override
   Material* uses its own material instead.
 - In the scene view, click an SDF surface to select the scene, and click it again to select the object under the
-  cursor.
+  cursor. The scene view outlines selected objects.
 
 ## Writing your own controllers
 

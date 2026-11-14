@@ -26,8 +26,8 @@ namespace me.tooster.sdf.Editor {
         /// <summary>The name of the pass that writes the picking index of each object.</summary>
         public const string PassName = "SdfObjectPicking";
 
-        /// <summary>Object IDs from this one up can't be picked. Matches <c>SDF_MAX_PICKABLE_IDS</c> in scenePicking.hlsl.</summary>
-        public const int MaxPickableIds = 512;
+        /// <summary>Object IDs from this one up can't be picked or outlined. Matches <c>SDF_MAX_OBJECT_IDS</c> in scenePicking.hlsl.</summary>
+        public const int MaxObjectIds = 512;
 
         static readonly int pickingIndexId = Shader.PropertyToID("_SdfPickingIndex");
         static readonly int pickableId     = Shader.PropertyToID("_SdfPickable");
@@ -36,7 +36,7 @@ namespace me.tooster.sdf.Editor {
         static readonly List<GameObject?> pickableObjects = new();
         // a copy of each renderer material, which holds the uniforms of the renderer's property block while it draws
         static readonly Dictionary<Material, Material> pickingMaterials = new();
-        static readonly float[]                        pickable         = new float[MaxPickableIds];
+        static readonly float[]                        pickable         = new float[MaxObjectIds];
         static readonly MaterialPropertyBlock          block            = new();
 
         static SdfScenePicking() {
@@ -84,7 +84,7 @@ namespace me.tooster.sdf.Editor {
                     continue;
 
                 var objects = ObjectsByNumericId(scene);
-                for (var id = 0; id < MaxPickableIds; id++)
+                for (var id = 0; id < MaxObjectIds; id++)
                     pickable[id] = id < objects.Length && objects[id] is { } go && isPickable(go) ? 1 : 0;
 
                 var drawn = false;

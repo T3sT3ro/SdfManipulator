@@ -8,9 +8,19 @@
 
 #include "builtInShading.hlsl"
 
+/// Object IDs from this one up can't be picked or outlined on their own. Matches SdfScenePicking.MaxObjectIds.
+#define SDF_MAX_OBJECT_IDS 512
+
 /// Set by the editor for the scene selection pass: the selected object and the outline pass
 float _ObjectId;
 float _PassValue;
+/// Set by SdfSceneOutline while it outlines selected objects of a scene: 1 to keep only the object IDs that have a
+/// nonzero entry in _SdfOutlined. 0 while the editor outlines the whole scene.
+float _SdfOutlineSelected;
+float _SdfOutlined[SDF_MAX_OBJECT_IDS];
+
+/// Returns whether the object ID \p id has a nonzero entry in \p flags, which has SDF_MAX_OBJECT_IDS entries
+#define SDF_HAS_FLAG(flags, id) ((id) > 0 && (id) < SDF_MAX_OBJECT_IDS && (flags)[(id)] != 0)
 /// Set by the editor for the picking pass: the picking index of the renderer, encoded as a color
 float4 _SelectionID;
 
@@ -19,6 +29,8 @@ SdfVertexOutput sceneSelectionVertex(appdata_base v) { return sdfVertex(v); }
 float4 sceneSelectionFragment(SdfVertexOutput i, out float depth : SV_Depth) : SV_Target {
     Ray3D     ray;
     SdfResult sdf = marchFragment(i.clipPos, ray);
+    if (_SdfOutlineSelected != 0 && !SDF_HAS_FLAG(_SdfOutlined, (int)round(sdf.id.w)))
+        discard;
     depth = clipSpaceDepth(sdf.p);
     return float4(_ObjectId, _PassValue, 1, 1);
 }
@@ -34,12 +46,10 @@ float4 pickingFragment(SdfVertexOutput i, out float depth : SV_Depth) : SV_Targe
 
 #pragma region object picking
 
-/// Object IDs from this one up can't be picked. Matches SdfScenePicking.MaxPickableIds.
-#define SDF_MAX_PICKABLE_IDS 512
 /// Set by SdfScenePicking: the picking index of object ID 0. Object ID n gets the index _SdfPickingIndex + n.
 int   _SdfPickingIndex;
 /// Set by SdfScenePicking: 1 for the object IDs that can be picked, 0 for the ones that the scene view skips
-float _SdfPickable[SDF_MAX_PICKABLE_IDS];
+float _SdfPickable[SDF_MAX_OBJECT_IDS];
 
 /// Encodes a picking index as a color, the same way as HandleUtility.EncodeSelectionId
 float4 encodePickingIndex(uint index) {
@@ -55,7 +65,7 @@ float4 objectPickingFragment(SdfVertexOutput i, out float depth : SV_Depth) : SV
     Ray3D     ray;
     SdfResult sdf = marchFragment(i.clipPos, ray);
     int       id = (int)round(sdf.id.w);
-    if (id <= 0 || id >= SDF_MAX_PICKABLE_IDS || _SdfPickable[id] == 0)
+    if (!SDF_HAS_FLAG(_SdfPickable, id))
         discard;
     depth = clipSpaceDepth(sdf.p - ray.rd * max(1e-4 * ray.marchedDistance, 1e-5));
     return encodePickingIndex((uint)(_SdfPickingIndex + id));
