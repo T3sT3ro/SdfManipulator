@@ -64,9 +64,10 @@ namespace me.tooster.sdf {
             set => SetField(ref mapSize, value, false);
         }
 
-        /// The space in which the albedo map is projected, so the texture moves with this object
+        /// The space in which the albedo map is projected, relative to the scene's root, so the texture moves with this object
         [CreateProperty] [ShaderProperty(Description = "Map space")]
-        public Matrix4x4 MapSpace => transform.worldToLocalMatrix;
+        public Matrix4x4 MapSpace
+            => SdfScene != null ? transform.worldToLocalMatrix * SdfScene.transform.localToWorldMatrix : transform.worldToLocalMatrix;
 
         protected virtual void Update() {
             if (transform.hasChanged)

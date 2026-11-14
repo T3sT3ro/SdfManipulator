@@ -72,6 +72,11 @@ float3 worldToScene(float3 p) {
     return _SdfWorldToScene._m33 == 0 ? p : mul(_SdfWorldToScene, float4(p, 1)).xyz;
 }
 
+/// Returns the direction \p d in the space of the scene's root, see worldToScene
+float3 worldToSceneDirection(float3 d) {
+    return _SdfWorldToScene._m33 == 0 ? d : mul((float3x3)_SdfWorldToScene, d);
+}
+
 /// Returns the result of empty space: no object, and the largest distance that a ray marches
 SdfResult emptySdfResult() {
     SdfResult result = (SdfResult)0;

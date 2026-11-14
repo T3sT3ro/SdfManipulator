@@ -26,8 +26,8 @@ float4 biplanar(Texture2D tex, SamplerState s, float3 p, float3 n, float k) {
     return (x * w.x + y * w.y) / (w.x + w.y);
 }
 
-/// The surface point and normal of the current shading in world space. SdfMaterial sets them before it evaluates the
-/// materials of the scene; marching doesn't read the materials, so it doesn't need them.
+/// The surface point and normal of the current shading in the space of the scene's root. SdfMaterial sets them before it
+/// evaluates the materials of the scene; marching doesn't read the materials, so it doesn't need them.
 static float3 sdfShadingPosition;
 static float3 sdfShadingNormal;
 SamplerState  sampler_linear_repeat;

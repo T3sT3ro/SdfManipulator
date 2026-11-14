@@ -90,8 +90,8 @@ float clipSpaceDepth(float3 worldPos) {
 /// from the marching loop.
 Material SdfMaterial(SdfResult sdf) {
     // the texture maps of the materials read the shading point
-    sdfShadingPosition = sdf.p;
-    sdfShadingNormal = sdf.normal;
+    sdfShadingPosition = worldToScene(sdf.p);
+    sdfShadingNormal = worldToSceneDirection(sdf.normal);
     Material m = sdfScene(sdf.p).material;
     m.occlusion *= classicAmbientOcclusion(sdf.p, sdf.normal, _AO_MAX_DISTANCE, _AO_FALLOFF, _AO_STEPS, _AO_JITTER);
     return m;
