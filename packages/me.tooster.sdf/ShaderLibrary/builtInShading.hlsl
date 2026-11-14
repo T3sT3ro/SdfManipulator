@@ -1,10 +1,11 @@
 #pragma once
 
 /*
- * Passes of the built-in render pipeline for raymarched SDF scenes: forward base and forward add.
+ * Passes of the built-in render pipeline for raymarched SDF scenes: forward base, forward add and shadow caster.
  *
- * Every fragment marches its own ray, which it builds from the current view and projection matrices. Lighting follows
- * the Standard shader: Unity's PBS lighting from UnityPBSLighting.cginc, with shadows and
+ * Every fragment marches its own ray, which it builds from the current view and projection matrices. The same code
+ * therefore renders for the camera, for the camera depth texture and for shadow maps, where the light takes the place of
+ * the camera. Lighting follows the Standard shader: Unity's PBS lighting from UnityPBSLighting.cginc, with shadows and
  * light attenuation computed at the raymarched hit instead of at the domain mesh.
  */
 
@@ -235,6 +236,43 @@ SdfFragmentOutput forwardAddFragment(SdfVertexOutput i) {
     o.depth = clipSpaceDepth(sdf.p);
     #endif
     return o;
+}
+
+#pragma endregion
+
+#pragma region shadow caster pass
+
+/// Returns the clip-space position of a shadow caster at \p worldPos, moved along its normal by the light's normal bias.
+/// A world-space version of UnityClipSpaceShadowCasterPos from UnityCG.cginc.
+float4 shadowCasterClipPos(float3 worldPos, float3 worldNormal) {
+    if (unity_LightShadowBias.z != 0.0) {
+        float3 toLight = normalize(UnityWorldSpaceLightDir(worldPos));
+        float  shadowCos = dot(worldNormal, toLight);
+        float  shadowSine = sqrt(1 - shadowCos * shadowCos);
+        worldPos -= worldNormal * unity_LightShadowBias.z * shadowSine;
+    }
+    return UnityWorldToClipPos(worldPos);
+}
+
+SdfVertexOutput shadowCasterVertex(appdata_base v) { return sdfVertex(v); }
+
+/// Writes the depth of the hit into a shadow map or the camera depth texture, which this pass also renders. Point light
+/// shadows on platforms without depth cube maps store the distance to the light as a color.
+float4 shadowCasterFragment(SdfVertexOutput i, out float depth : SV_Depth) : SV_Target {
+    Ray3D     ray;
+    SdfResult sdf = marchFragment(i.clipPos, ray);
+    #if defined(SHADOWS_CUBE) && !defined(SHADOWS_CUBE_IN_DEPTH_TEX)
+    depth = clipSpaceDepth(sdf.p);
+    return UnityEncodeCubeShadowDepth((length(sdf.p - _LightPositionRange.xyz) + unity_LightShadowBias.x) * _LightPositionRange.w);
+    #else
+    float3 normal = 0;
+    UNITY_BRANCH
+    if (unity_LightShadowBias.z != 0.0)
+        normal = calculateSdfNormal(sdf.p, _EPSILON_NORMAL);
+    float4 clipPos = UnityApplyLinearShadowBias(shadowCasterClipPos(sdf.p, normal));
+    depth = clipPos.z / clipPos.w;
+    return 0;
+    #endif
 }
 
 #pragma endregion

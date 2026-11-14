@@ -187,6 +187,7 @@ namespace me.tooster.sdf.Generators {
                     new HlslInclude { hlsl = new InjectedLanguage<shaderlab, hlsl>(CommonHlslInclude()) },
                     ForwardBasePass(),
                     ForwardAddPass(),
+                    ShadowCasterPass(),
                 },
             };
 
@@ -249,6 +250,24 @@ namespace me.tooster.sdf.Generators {
                         "vertex forwardAddVertex",
                         "fragment forwardAddFragment"
                     ),
+                },
+            };
+
+        /// <summary>
+        ///     Writes the raymarched depth into shadow maps and into the camera depth texture, from which directional
+        ///     lights build screen-space shadows.
+        /// </summary>
+        Pass ShadowCasterPass()
+            => new()
+            {
+                statements = new List<SubShaderOrPassStatement>
+                {
+                    new Pass.Name { name = "ShadowCaster" },
+                    Tags(("LightMode", "ShadowCaster")),
+                    // the default depth test, LEqual
+                    new Cull { state = MaterialProperty("_Cull") },
+                    new ZWrite { state = new OnKeyword() },
+                    PassProgram("multi_compile_shadowcaster", "vertex shadowCasterVertex", "fragment shadowCasterFragment"),
                 },
             };
 

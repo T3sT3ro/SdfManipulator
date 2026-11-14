@@ -101,8 +101,9 @@ Paths are relative to the package root.
     - `primitives.hlsl` defines SDF primitive functions like `torus` or `sphere`.
     - `raymarching.hlsl` defines structs commonly used by SDFs, like `SdfResult`, and the functions that march rays
       and compute normals and occlusion.
-    - `builtInShading.hlsl` defines the forward passes of the built-in pipeline: forward base and forward add. Each
-      fragment builds its ray from the view and projection matrices.
+    - `builtInShading.hlsl` defines the passes of the built-in pipeline: forward base, forward add and shadow caster.
+      Each fragment builds its ray from the view and projection matrices, so the shadow caster pass renders shadow
+      maps and the camera depth texture with the same code.
     - and more, for easier shader composition.
 - **AST library** (`Runtime/AST`): classes for working with HLSL and ShaderLab syntax trees, modeled after Roslyn's
   Syntax API.
@@ -125,13 +126,12 @@ Paths are relative to the package root.
 - Because of how Unity processes and recompiles shaders and assets, some changes may cause needless shader
   regenerations and recompilations, while others may need a manual refresh to fully regenerate. This is being worked
   on.
-- The built-in generator shades with the lighting of the Standard shader, but objects can't have materials yet: each
-  one gets a color from its ID. You can customize generated shaders by extending the existing generators and
-  implementing your own shading.
+- The built-in generator shades with the lighting of the Standard shader and casts and receives realtime shadows, but
+  objects can't have materials yet: each one gets a color from its ID. You can customize generated shaders by extending
+  the existing generators and implementing your own shading.
 - Some UI elements are still being improved; limitations of the Unity editor API make this ongoing work.
 - Generated shaders aren't tested for VR, for deferred rendering or for render pipelines other than forward
-  Built-in. Lightmaps and shadow masks don't apply to SDF scenes. Support for a shadow caster pass is being worked on,
-  and you can add it yourself by extending the existing generators.
+  Built-in. Lightmaps and shadow masks don't apply to SDF scenes.
 - The HLSL syntax tree API is in its early stages, and a smooth developer experience was preferred over performance.
   This shouldn't matter now: generation isn't frequent, and syntax tree operations aren't a bottleneck in realistic
   use.

@@ -83,7 +83,7 @@ namespace me.tooster.sdf.Tests.Editor {
             scene.RevalidateScene();
             shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
 
-            Assert.That(LightModes(shader), Is.EqualTo(new[] { "ForwardBase", "ForwardAdd" }).IgnoreCase);
+            Assert.That(LightModes(shader), Is.EqualTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster" }).IgnoreCase);
         }
 
         [Test]
@@ -93,6 +93,7 @@ namespace me.tooster.sdf.Tests.Editor {
             var source = scene.AssembleShaderSource();
 
             Assert.That(Occurrences(source, "#pragma vertex vertexShader"), Is.EqualTo(1));
+            Assert.That(Occurrences(source, "#pragma vertex shadowCasterVertex"), Is.EqualTo(1));
             Assert.That(Occurrences(source, "#pragma vertex forwardAddVertex"), Is.EqualTo(1));
             // the scene functions are defined once, in the block that the passes share
             Assert.That(Occurrences(source, "SdfResult sdfScene(float3 p) {"), Is.EqualTo(1));
@@ -107,6 +108,8 @@ namespace me.tooster.sdf.Tests.Editor {
             new object[] { "ForwardAdd", new[] { "SPOT", "SHADOWS_DEPTH" } },
             new object[] { "ForwardAdd", new[] { "POINT_COOKIE" } },
             new object[] { "ForwardAdd", new[] { "DIRECTIONAL_COOKIE", "SHADOWS_SCREEN" } },
+            new object[] { "ShadowCaster", new[] { "SHADOWS_DEPTH" } },
+            new object[] { "ShadowCaster", new[] { "SHADOWS_CUBE" } },
         };
 
         [TestCaseSource(nameof(LightingVariants))]
