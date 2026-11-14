@@ -28,6 +28,7 @@ namespace me.tooster.sdf.Data {
         public const string pParamName                  = "p";
         public const string sdfResultIdMemberName       = "id";
         public const string sdfResultDistanceMemberName = "distance";
+        public const string sdfResultMaterialMemberName = "material";
 
         /// type returned by SdfFunction
         public static readonly Type.UserDefined sdfReturnType = new() { id = "SdfResult" };

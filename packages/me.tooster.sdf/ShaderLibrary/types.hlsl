@@ -9,8 +9,7 @@ typedef fixed4 ID;
 #define NO_ID int4(-1, -1, -1, -1) ///< NO_ID is a special ID that indicates that no hit was found
 
 
-/// basic material model for SDFs TODO: migrate to official shading material properties for unity
-/// @todo use SurfaceOutputStandard instead
+/// The material of a surface, with the properties of Unity's Standard shader in the metallic workflow
 struct Material {
     fixed4 albedo; ///< base diffuse color + alpha (in diffuse or specular workflow)
     half   metallic; ///< 0=non-metal, 1=metal
@@ -18,6 +17,17 @@ struct Material {
     half3  emission; ///< "glow" without bleeding to other objects 
     half   occlusion; ///< occlusion (default 1). How much indirect light should surface receive. 1 is full, 0 is none (e.g. in creases)
 };
+
+/// Returns a material with the values of the Standard shader's properties, and full occlusion
+Material standardMaterial(float4 albedo, float metallic, float smoothness, float4 emission) {
+    Material m;
+    m.albedo = albedo;
+    m.metallic = metallic;
+    m.smoothness = smoothness;
+    m.emission = emission.rgb;
+    m.occlusion = 1;
+    return m;
+}
 
 /// Result of a raymarching operation
 struct SdfResult {

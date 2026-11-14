@@ -17,7 +17,18 @@ using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
 namespace me.tooster.sdf {
     [GeneratePropertyBag]
     public partial class SdfController : Controller, IModifier<VectorData, SdfData> {
+        static readonly PropertyPath albedoProperty     = new(nameof(Albedo));
+        static readonly PropertyPath metallicProperty   = new(nameof(Metallic));
+        static readonly PropertyPath smoothnessProperty = new(nameof(Smoothness));
+        static readonly PropertyPath emissionProperty   = new(nameof(Emission));
+
         [SerializeField] [DontCreateProperty] bool inverted;
+
+        [Header("Material")]
+        [SerializeField] [DontCreateProperty] Color albedo = Color.white;
+        [SerializeField] [DontCreateProperty] [Range(0, 1)] float metallic;
+        [SerializeField] [DontCreateProperty] [Range(0, 1)] float smoothness = 0.5f;
+        [SerializeField] [DontCreateProperty] [ColorUsage(false, true)] Color emission = Color.black;
 
         [ShaderStructural] public Controller[] sdfModifiers = Array.Empty<Controller>();
 
@@ -26,6 +37,32 @@ namespace me.tooster.sdf {
         public bool Inverted {
             get => inverted;
             set => SetField(ref inverted, value, true);
+        }
+
+        /// The base color of the surface, as in the Standard shader
+        [CreateProperty] [ShaderProperty(Description = "Albedo")]
+        public Color Albedo {
+            get => albedo;
+            set => SetField(ref albedo, value, false);
+        }
+
+        [CreateProperty] [ShaderProperty(Description = "Metallic")]
+        public float Metallic {
+            get => metallic;
+            set => SetField(ref metallic, value, false);
+        }
+
+        [CreateProperty] [ShaderProperty(Description = "Smoothness")]
+        public float Smoothness {
+            get => smoothness;
+            set => SetField(ref smoothness, value, false);
+        }
+
+        /// Light that the surface emits, in HDR
+        [CreateProperty] [ShaderProperty(Description = "Emission")]
+        public Color Emission {
+            get => emission;
+            set => SetField(ref emission, value, false);
         }
 
         protected override void OnValidate() {
@@ -75,6 +112,8 @@ namespace me.tooster.sdf {
                                 $"result.{SdfData.sdfResultIdMemberName}",
                                 HlslExtensions.VectorConstructor(0, 0, 0, SdfScene.sceneData.controllers[this].numericId)
                             ),
+                            // result.material = standardMaterial(<albedo>, <metallic>, <smoothness>, <emission>);
+                            MaterialAssignment("result"),
                             // return result;
                             (Return)new Identifier { id = "result" },
                         }
@@ -90,6 +129,19 @@ namespace me.tooster.sdf {
         // redirect to IModifier<..>
         public override Type GetInputType()  => typeof(VectorData);
         public override Type GetOutputType() => typeof(SdfData);
+
+        /// <summary>Assigns the material of this controller to the <c>material</c> member of <paramref name="result" />.</summary>
+        protected AST.Syntax.CommonSyntax.Statement<hlsl> MaterialAssignment(string result)
+            => Extensions.Assignment(
+                $"{result}.{SdfData.sdfResultMaterialMemberName}",
+                Extensions.FunctionCall(
+                    "standardMaterial",
+                    (Identifier)this[albedoProperty].identifier,
+                    (Identifier)this[metallicProperty].identifier,
+                    (Identifier)this[smoothnessProperty].identifier,
+                    (Identifier)this[emissionProperty].identifier
+                )
+            );
 
         /// <summary>
         ///     Puts the controller's place in the hierarchy in a comment above <paramref name="function" />, because function

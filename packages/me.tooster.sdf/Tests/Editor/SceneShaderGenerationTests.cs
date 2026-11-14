@@ -134,6 +134,20 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void Generation_AssignsTheMaterialOfEachObject() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            var objects = templateRoot.GetComponentsInChildren<SdfController>(true).Where(c => c is not SdfCombineController).ToList();
+            Assert.That(objects, Is.Not.Empty);
+            foreach (var sdf in objects) {
+                var albedo = scene.sceneData.controllers[sdf].properties[new Unity.Properties.PropertyPath(nameof(SdfController.Albedo))].identifier;
+                StringAssert.Contains($"result.material = standardMaterial({albedo},", source);
+            }
+        }
+
+        [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);

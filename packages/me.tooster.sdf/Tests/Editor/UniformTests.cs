@@ -60,5 +60,20 @@ namespace me.tooster.sdf.Tests.Editor {
 
             Assert.That(RadiusInPropertyBlock(sphere), Is.EqualTo(sphere.Radius));
         }
+
+        [Test]
+        public void MaterialProperties_SetUniformsOnTheRenderer() {
+            var sdf = root.GetComponentInChildren<SdfSphereController>(true).GetComponent<SdfController>();
+            sdf.Albedo = Color.red;
+            sdf.Smoothness = 0.25f;
+
+            scene.UpdateShaderUniforms(forceUpdateAll: true);
+
+            var block = new MaterialPropertyBlock();
+            scene.GetComponentInChildren<Renderer>(true).GetPropertyBlock(block);
+            var properties = scene.sceneData.controllers[sdf].properties;
+            Assert.That(block.GetVector(properties[new Unity.Properties.PropertyPath(nameof(SdfController.Albedo))].shaderId), Is.EqualTo((Vector4)Color.red));
+            Assert.That(block.GetFloat(properties[new Unity.Properties.PropertyPath(nameof(SdfController.Smoothness))].shaderId), Is.EqualTo(0.25f));
+        }
     }
 }

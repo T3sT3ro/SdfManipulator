@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   raymarched hit instead of at the domain mesh.
 - Generated shaders have a shadow caster pass, so SDF scenes cast shadows and write their raymarched depth into the
   camera depth texture. SDF scenes receive realtime shadows, which are sampled at the raymarched hit.
+- SDF objects have the properties of the Standard material: albedo, metallic, smoothness and emission. They are
+  uniforms, so changing them doesn't regenerate the shader. `Color` properties of controllers become `float4` uniforms.
 
 ### Changed
 

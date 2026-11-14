@@ -364,6 +364,7 @@ namespace me.tooster.sdf {
                 IVisitPropertyAdapter<Vector2>,
                 IVisitPropertyAdapter<Vector3>,
                 IVisitPropertyAdapter<Vector4>,
+                IVisitPropertyAdapter<Color>,
                 IVisitPropertyAdapter<Vector2Int>,
                 IVisitPropertyAdapter<Vector3Int>,
                 IVisitPropertyAdapter<Matrix4x4> {
@@ -399,6 +400,10 @@ namespace me.tooster.sdf {
 
             public void Visit<TContainer>(in VisitContext<TContainer, Vector4> context, ref TContainer container, ref Vector4 value)
                 => scene.propertyBlock!.SetVector(GetShaderId(container, context.Property), value);
+
+            // SetColor converts the color to linear space when the project renders in linear space
+            public void Visit<TContainer>(in VisitContext<TContainer, Color> context, ref TContainer container, ref Color value)
+                => scene.propertyBlock!.SetColor(GetShaderId(container, context.Property), value);
 
             public void Visit<TContainer>(in VisitContext<TContainer, bool> context, ref TContainer container, ref bool value)
                 => scene.propertyBlock!.SetFloat(GetShaderId(container, context.Property), value ? 1 : 0);

@@ -20,6 +20,7 @@ namespace me.tooster.sdf {
                 not null when t == typeof(Vector2) => new VectorTypeToken { type = Constants.ScalarKind.@float, arity = 2 },
                 not null when t == typeof(Vector3) => new VectorTypeToken { type = Constants.ScalarKind.@float, arity = 3 },
                 not null when t == typeof(Vector4) => new VectorTypeToken { type = Constants.ScalarKind.@float, arity = 4 },
+                not null when t == typeof(Color) => new VectorTypeToken { type = Constants.ScalarKind.@float, arity = 4 },
                 not null when t == typeof(Vector2Int) => new VectorTypeToken { type = Constants.ScalarKind.@int, arity = 2 },
                 not null when t == typeof(Vector3Int) => new VectorTypeToken { type = Constants.ScalarKind.@int, arity = 3 },
                 not null when t == typeof(Matrix4x4) => new MatrixTypeToken { type = Constants.ScalarKind.@float, cols = 4, rows = 4 },
