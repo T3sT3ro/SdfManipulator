@@ -51,6 +51,16 @@ float _DrawMode;        ///< one of the SDF_DRAWMODE_ values
 float _SHOW_WORLD_GRID; ///< nonzero to overlay a grid in world space
 #endif
 
+// A preset can define SDF_NO_DEBUG_VIEWS for shaders without debug views: the switches become constants, and the
+// compiler drops the debug code.
+#ifdef SDF_NO_DEBUG_VIEWS
+#define SDF_DRAW_MODE       SDF_DRAWMODE_MATERIAL
+#define SDF_SHOW_WORLD_GRID false
+#else
+#define SDF_DRAW_MODE       ((int)_DrawMode)
+#define SDF_SHOW_WORLD_GRID (_SHOW_WORLD_GRID != 0)
+#endif
+
 # pragma region raymarching functions
 
 /// Returns the result of empty space: no object, and the largest distance that a ray marches
@@ -253,7 +263,7 @@ float classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, 
  */
 fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D ray) {
     // every pixel takes the same branch, so the branches cost little
-    int drawMode = (int)_DrawMode;
+    int drawMode = SDF_DRAW_MODE;
     UNITY_BRANCH
     if (drawMode == SDF_DRAWMODE_ALBEDO) {
         color = mat.albedo;
@@ -280,7 +290,7 @@ fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D
     }
 
     UNITY_BRANCH
-    if (_SHOW_WORLD_GRID != 0) {
+    if (SDF_SHOW_WORLD_GRID) {
         fixed4 gridColor = sdf::debug::grid(sdf.p, 0.25, .04);
         color.rgb = lerp(color, gridColor.rgb, gridColor.a); // mix in the grid
     }

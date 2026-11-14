@@ -244,7 +244,7 @@ SdfFragmentOutput forwardAddFragment(SdfVertexOutput i) {
     SdfFragmentOutput o;
     // the debug draw modes show the forward base pass only
     UNITY_BRANCH
-    if ((int)_DrawMode == SDF_DRAWMODE_MATERIAL)
+    if (SDF_DRAW_MODE == SDF_DRAWMODE_MATERIAL)
         o.color = applyFog(shadeForwardAdd(sdf, SdfMaterial(sdf)), sdf.p, 0);
     else
         o.color = 0;
@@ -275,9 +275,9 @@ void deferredFragment(
     Material mat = SdfMaterial(sdf);
     depth = clipSpaceDepth(sdf.p);
 
-    bool debugView = (int)_DrawMode != SDF_DRAWMODE_MATERIAL;
+    bool debugView = SDF_DRAW_MODE != SDF_DRAWMODE_MATERIAL;
     UNITY_BRANCH
-    if (_SHOW_WORLD_GRID != 0 && !debugView) {
+    if (SDF_SHOW_WORLD_GRID && !debugView) {
         // lit like the surface, since the lights come later
         fixed4 gridColor = sdf::debug::grid(sdf.p, 0.25, .04);
         mat.albedo.rgb = lerp(mat.albedo.rgb, gridColor.rgb, gridColor.a);

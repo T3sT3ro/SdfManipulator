@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using me.tooster.sdf.Util;
 using UnityEngine.Scripting.APIUpdating;
 namespace me.tooster.sdf.Generators {
@@ -18,6 +19,9 @@ namespace me.tooster.sdf.Generators {
             "fragment fragmentShader",
         };
         public string[] defines = { };
+        [UnityEngine.Tooltip("Leave the debug views out of the generated shader, e.g. for a release. The draw mode and the "
+                           + "world grid of the scene's rendering settings then have no effect.")]
+        public bool stripDebugViews;
         /// <summary>
         ///     Files that every pass includes. The generator also includes <see cref="SdfPaths.ShaderLibrary.BuiltInShading" />,
         ///     which defines the passes.
@@ -33,7 +37,7 @@ namespace me.tooster.sdf.Generators {
         };
 
         protected override RaymarchingShaderGenerator CreateProcessorForScene(SdfScene scene)
-            => new BuiltInGenerator(scene, pragmas, defines, includes);
+            => new BuiltInGenerator(scene, pragmas, stripDebugViews ? defines.Append("SDF_NO_DEBUG_VIEWS").ToArray() : defines, includes);
     }
 
 

@@ -293,6 +293,18 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void StrippedDebugViews_CompileWithoutTheDrawMode() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            ((BIRPShaderPreset)scene.shaderPreset).stripDebugViews = true;
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            StringAssert.Contains("#define SDF_NO_DEBUG_VIEWS", source);
+            shader = ShaderUtil.CreateShaderAsset(source);
+            Assert.That(CompileErrors(shader, source), Is.Empty);
+        }
+
+        [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);
