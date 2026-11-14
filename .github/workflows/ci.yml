@@ -62,3 +62,24 @@ jobs:
           unityVersion: 6000.6.8f1
           targetPlatform: StandaloneLinux64
           buildMethod: SdfManipulator.DevTools.CiChecks.Run
+      # A player of the Showcase scene, run headless: the EditMode tests and CiChecks never run the player loop of a
+      # build, which is where #63 threw 48,570 exceptions in 8 seconds.
+      - name: Build the Showcase player
+        if: env.UNITY_LICENSE != ''
+        uses: game-ci/unity-builder@v4
+        with:
+          projectPath: projects/SdfManipulator
+          unityVersion: 6000.6.8f1
+          targetPlatform: StandaloneLinux64
+          buildMethod: SdfManipulator.DevTools.PlayerBuildCheck.Build
+      - name: Run the Showcase player headless
+        if: env.UNITY_LICENSE != ''
+        run: |
+          player=projects/SdfManipulator/Builds/PlayerBuildCheck/SdfShowcase.x86_64
+          sudo chmod +x "$player"
+          # the player doesn't quit by itself; 124 is the exit code of the timeout
+          timeout 10 "$player" -batchmode -nographics -logFile player.log || [ $? -eq 124 ]
+          if grep -n -A3 Exception player.log; then
+            echo "::error::The Showcase player logged exceptions."
+            exit 1
+          fi
