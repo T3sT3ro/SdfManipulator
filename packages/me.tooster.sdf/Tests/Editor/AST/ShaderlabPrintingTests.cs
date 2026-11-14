@@ -73,6 +73,17 @@ namespace me.tooster.sdf.Tests.Editor.AST {
                 },
             };
 
+        static Pass PassWithTagsAndCommands
+            => new()
+            {
+                statements = new SubShaderOrPassStatement[]
+                {
+                    Tags,
+                    new ZWrite { state = new OnKeyword() },
+                    new HlslProgram { hlsl = Hlsl("y") },
+                },
+            };
+
         static IEnumerable<(string name, Tree<shaderlab>.Node node, string expected)> Cases() {
             yield return ("Identifier", (Identifier)"Foo", "Foo");
 
@@ -112,6 +123,8 @@ namespace me.tooster.sdf.Tests.Editor.AST {
             // blocks
             yield return ("HlslInclude", new HlslInclude { hlsl = Hlsl("x") }, "HLSLINCLUDE\nfloat x;\nENDHLSL");
             yield return ("Pass", Pass, "Pass {\n    Name \"Main\"\n    HLSLPROGRAM\n    float y;\n    ENDHLSL\n}");
+            yield return ("Pass with tags and commands", PassWithTagsAndCommands,
+                "Pass {\n    Tags {\n        \"Queue\" = \"Geometry\"\n    }\n    ZWrite On\n    HLSLPROGRAM\n    float y;\n    ENDHLSL\n}");
             yield return ("Shader", new Shader
                 {
                     name = Quoted("Test"),

@@ -68,7 +68,6 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     [TokenNode("CustomEditor")] public partial record CustomEditorKeyword;
     [TokenNode("Properties")] public partial record PropertiesKeyword;
     [TokenNode("Tags")] public partial record TagsKeyword;
-    [TokenNode("On")] public partial record OnKeyword;
     [TokenNode("True")] public partial record TrueKeyword;
     [TokenNode("False")] public partial record FalseKeyword;
     [TokenNode("LOD")] public partial record LodKeyword;
@@ -93,6 +92,7 @@ namespace me.tooster.sdf.AST.Shaderlab.Syntax {
     [TokenNode] public abstract partial record ArgumentKeyword : Token<shaderlab>;
     // Blend
     [TokenNode("Off")] public partial record OffKeyword : ArgumentKeyword;
+    [TokenNode("On")] public partial record OnKeyword : ArgumentKeyword;
     [TokenNode("One")] public partial record OneKeyword : ArgumentKeyword;
     [TokenNode("Zero")] public partial record ZeroKeyword : ArgumentKeyword;
     [TokenNode("SrcColor")] public partial record SrcColorKeyword : ArgumentKeyword;

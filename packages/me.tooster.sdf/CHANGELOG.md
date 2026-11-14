@@ -67,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   material properties, and the step counts (`_MAX_STEPS`, `_AO_STEPS`) are `Integer` properties with `int` uniforms,
   instead of the legacy `Int` type. Materials made with earlier versions keep their step counts in the float values,
   so set them again.
+- ShaderLab `Pass` blocks can hold tags and commands, and `On` is a command argument, e.g. `ZWrite On`.
 
 ### Fixed
 
