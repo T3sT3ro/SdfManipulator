@@ -19,6 +19,10 @@ namespace me.tooster.sdf {
         [SerializeField] [DontCreateProperty] [Range(0, 1)] float metallic;
         [SerializeField] [DontCreateProperty] [Range(0, 1)] float smoothness = 0.5f;
         [SerializeField] [DontCreateProperty] [ColorUsage(false, true)] Color emission = Color.black;
+        [Tooltip("Multiplies the albedo. Projected onto the surface in the space of this object, from the two axes that face the surface most")]
+        [SerializeField] [DontCreateProperty] Texture2D? albedoMap;
+        [Tooltip("The size of one repetition of the albedo map, in the units of this object's space")]
+        [SerializeField] [DontCreateProperty] [Min(0.0001f)] float mapSize = 1;
 
         bool disabledBefore;
 
@@ -47,6 +51,29 @@ namespace me.tooster.sdf {
             get => emission;
             set => SetField(ref emission, value, false);
         }
+
+        [CreateProperty] [ShaderProperty(Description = "Albedo map")]
+        public Texture2D? AlbedoMap {
+            get => albedoMap;
+            set => SetField(ref albedoMap, value, false);
+        }
+
+        [CreateProperty] [ShaderProperty(Description = "Map size")]
+        public float MapSize {
+            get => mapSize;
+            set => SetField(ref mapSize, value, false);
+        }
+
+        /// The space in which the albedo map is projected, so the texture moves with this object
+        [CreateProperty] [ShaderProperty(Description = "Map space")]
+        public Matrix4x4 MapSpace => transform.worldToLocalMatrix;
+
+        protected virtual void Update() {
+            if (transform.hasChanged)
+                OnPropertyChanged(nameof(MapSpace));
+        }
+
+        protected virtual void LateUpdate() => transform.hasChanged = false;
 
         // a disabled material doesn't apply, so toggling the component changes the generated functions; loading doesn't
         protected override void OnEnable() {

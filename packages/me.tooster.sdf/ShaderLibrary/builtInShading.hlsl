@@ -88,6 +88,9 @@ float clipSpaceDepth(float3 worldPos) {
 /// evaluated once more at the hit: marching only reads distances and IDs, so the compiler removes the material code
 /// from the marching loop.
 Material SdfMaterial(SdfResult sdf) {
+    // the texture maps of the materials read the shading point
+    sdfShadingPosition = sdf.p;
+    sdfShadingNormal = sdf.normal;
     Material m = sdfScene(sdf.p).material;
     m.occlusion *= classicAmbientOcclusion(sdf.p, sdf.normal, _AO_MAX_DISTANCE, _AO_FALLOFF, _AO_STEPS);
     return m;

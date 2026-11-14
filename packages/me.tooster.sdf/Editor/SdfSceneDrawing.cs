@@ -44,6 +44,8 @@ namespace me.tooster.sdf.Editor {
                     material.SetInteger(property.shaderId, block.GetInteger(property.shaderId));
                 else if (type == typeof(Matrix4x4))
                     material.SetMatrix(property.shaderId, block.GetMatrix(property.shaderId));
+                else if (type == typeof(Texture2D))
+                    material.SetTexture(property.shaderId, block.GetTexture(property.shaderId));
                 else // vectors and colors, which the block already holds in linear space
                     material.SetVector(property.shaderId, block.GetVector(property.shaderId));
             }

@@ -46,7 +46,9 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
 - Add an *SDF > Material* component to give SDF objects the properties of the Standard shader: albedo, metallic,
   smoothness and emission. A material applies to the SDF object on the same game object and to the objects below it
   that have no material of their own, so one material on the root combination colors the whole scene. Objects without
-  a material are white. Where objects blend, e.g. in a smooth union, their materials blend too.
+  a material are white. Where objects blend, e.g. in a smooth union, their materials blend too. An *Albedo Map*
+  multiplies the albedo; it's projected from the two axes that face the surface most, in the space of the material's
+  object.
 - To drive several controllers with one value, add *SDF > Property Link* components: each makes a shader property of
   its target read the uniform of the same property on the driver.
 - In the scene view, click an SDF surface to select the scene, and click it again to select the object under the

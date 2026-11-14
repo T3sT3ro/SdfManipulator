@@ -11,6 +11,10 @@ using IntKeyword = me.tooster.sdf.AST.Hlsl.Syntax.IntKeyword;
 using Type = System.Type;
 namespace me.tooster.sdf {
     public static class SyntaxUnityExtensions {
+        /// The HLSL type of a uniform for a C# property type: a texture object for <see cref="Texture2D" />, otherwise a predefined type
+        public static AST.Hlsl.Syntax.Type hlslType(this Type t)
+            => t == typeof(Texture2D) ? new AST.Hlsl.Syntax.Type.UserDefined { id = "Texture2D" } : (AST.Hlsl.Syntax.Type.Predefined)t.hlslTypeToken();
+
         public static PredefinedTypeToken hlslTypeToken(this Type t)
             => t switch
             {

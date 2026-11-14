@@ -393,6 +393,7 @@ namespace me.tooster.sdf {
                 IVisitPropertyAdapter<Vector3>,
                 IVisitPropertyAdapter<Vector4>,
                 IVisitPropertyAdapter<Color>,
+                IVisitPropertyAdapter<Texture2D>,
                 IVisitPropertyAdapter<Vector2Int>,
                 IVisitPropertyAdapter<Vector3Int>,
                 IVisitPropertyAdapter<Matrix4x4> {
@@ -428,6 +429,10 @@ namespace me.tooster.sdf {
 
             public void Visit<TContainer>(in VisitContext<TContainer, Vector4> context, ref TContainer container, ref Vector4 value)
                 => scene.propertyBlock!.SetVector(GetShaderId(container, context.Property), value);
+
+            // a missing texture samples as white, which leaves the color unchanged
+            public void Visit<TContainer>(in VisitContext<TContainer, Texture2D> context, ref TContainer container, ref Texture2D value)
+                => scene.propertyBlock!.SetTexture(GetShaderId(container, context.Property), value != null ? value : Texture2D.whiteTexture);
 
             // SetColor converts the color to linear space when the project renders in linear space
             public void Visit<TContainer>(in VisitContext<TContainer, Color> context, ref TContainer container, ref Color value)

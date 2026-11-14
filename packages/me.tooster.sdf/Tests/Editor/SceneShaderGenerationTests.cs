@@ -160,8 +160,8 @@ namespace me.tooster.sdf.Tests.Editor {
             string AlbedoOf(SdfMaterialController material)
                 => scene.sceneData.controllers[material].properties[new Unity.Properties.PropertyPath(nameof(SdfMaterialController.Albedo))].identifier;
             var objects = templateRoot.GetComponentsInChildren<SdfController>(true).Count(c => c is not SdfCombineController);
-            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(sphereMaterial)},"), Is.EqualTo(1), "the sphere doesn't use its own material");
-            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(rootMaterial)},"), Is.EqualTo(objects - 1), "the other objects don't use the root's material");
+            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(sphereMaterial)} *"), Is.EqualTo(1), "the sphere doesn't use its own material");
+            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(rootMaterial)} *"), Is.EqualTo(objects - 1), "the other objects don't use the root's material");
         }
 
         [Test]

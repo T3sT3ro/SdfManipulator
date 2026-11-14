@@ -271,6 +271,26 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(convex, Is.GreaterThan(50), "no convex surface shows in blue");
         }
 
+        [Test]
+        public void AlbedoMap_ColorsTheSurface() {
+            world.ground.SetActive(false);
+            var map = new Texture2D(1, 1);
+            map.SetPixel(0, 0, Color.red);
+            map.Apply();
+            try {
+                // a white material, so only the map makes the surface red
+                var material = world.root.GetComponentInChildren<SdfCombineController>(true).gameObject.AddComponent<SdfMaterialController>();
+                material.AlbedoMap = map;
+                world.Regenerate();
+
+                var covered = world.Render().Where(c => c.r + c.g + c.b > 0).ToList();
+                Assert.That(covered.Count, Is.GreaterThan(100), "the SDF isn't visible");
+                Assert.That(covered.Average(c => c.r), Is.GreaterThan(2 * covered.Average(c => c.g)), "the map doesn't color the surface");
+            } finally {
+                Object.DestroyImmediate(map);
+            }
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

@@ -77,7 +77,7 @@ namespace me.tooster.sdf.Generators {
                         {
                             declarator = new VariableDeclarator
                             {
-                                type = declaredPropertyType.hlslTypeToken(),
+                                type = declaredPropertyType.hlslType(),
                                 variables = new VariableDeclarator.Definition { id = pd.identifier },
                             },
                         };

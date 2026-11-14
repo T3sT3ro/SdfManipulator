@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   material of their own, so one material on the root combination colors the whole scene. Objects without a material
   are white. The values are uniforms, so changing them doesn't regenerate the shader. `Color` properties of
   controllers become `float4` uniforms.
+- An *Albedo Map* on a material multiplies its albedo. It's projected with biplanar mapping in the space of the
+  material's object, so it moves with that object (#10). `Texture2D` properties of controllers become texture uniforms.
 - Generated shaders have scene selection and picking passes, so the scene view outlines a selected scene along its
   SDF surfaces and picks it only where its rays hit, instead of anywhere on its domain mesh.
 - Clicking an SDF surface in the scene view picks the object that the ray hit. The first click selects the scene,

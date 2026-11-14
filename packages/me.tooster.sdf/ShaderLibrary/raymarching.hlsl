@@ -9,6 +9,7 @@
 #include "colors.hlsl"
 #include "debug.hlsl"
 #include "noise.hlsl"
+#include "materialMaps.hlsl"
 #include "types.hlsl"
 
 #pragma region Forward declarations

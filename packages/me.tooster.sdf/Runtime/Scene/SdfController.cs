@@ -21,6 +21,9 @@ namespace me.tooster.sdf {
         static readonly PropertyPath metallicProperty   = new(nameof(SdfMaterialController.Metallic));
         static readonly PropertyPath smoothnessProperty = new(nameof(SdfMaterialController.Smoothness));
         static readonly PropertyPath emissionProperty   = new(nameof(SdfMaterialController.Emission));
+        static readonly PropertyPath albedoMapProperty  = new(nameof(SdfMaterialController.AlbedoMap));
+        static readonly PropertyPath mapSizeProperty    = new(nameof(SdfMaterialController.MapSize));
+        static readonly PropertyPath mapSpaceProperty   = new(nameof(SdfMaterialController.MapSpace));
 
         [SerializeField] [DontCreateProperty] bool inverted;
 
@@ -109,7 +112,17 @@ namespace me.tooster.sdf {
                 MaterialComponent() is { } material
                     ? Extensions.FunctionCall(
                         "standardMaterial",
-                        (Identifier)material[albedoProperty].identifier,
+                        new Binary
+                        {
+                            left = (Identifier)material[albedoProperty].identifier,
+                            operatorToken = new AsteriskToken(),
+                            right = Extensions.FunctionCall(
+                                "sampleShadingMap",
+                                (Identifier)material[albedoMapProperty].identifier,
+                                (Identifier)material[mapSpaceProperty].identifier,
+                                (Identifier)material[mapSizeProperty].identifier
+                            ),
+                        },
                         (Identifier)material[metallicProperty].identifier,
                         (Identifier)material[smoothnessProperty].identifier,
                         (Identifier)material[emissionProperty].identifier
