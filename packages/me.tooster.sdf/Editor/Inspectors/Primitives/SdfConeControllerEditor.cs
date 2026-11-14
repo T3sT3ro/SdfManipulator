@@ -6,15 +6,6 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
     [CustomEditor(typeof(SdfConeController), true)]
     class SdfConeControllerEditor : SdfPrimitiveControllerEditor {
         readonly SphereBoundsHandle radiusHandle = new() { axes = PrimitiveBoundsHandle.Axes.All ^ PrimitiveBoundsHandle.Axes.Y };
-        SerializedProperty          angleProperty;
-        SerializedProperty          heightProperty;
-
-        protected override void OnEnable() {
-            base.OnEnable();
-            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
-            angleProperty = serializedObject.FindProperty("angle");
-            heightProperty = serializedObject.FindProperty("height");
-        }
 
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
@@ -50,10 +41,9 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
             if (!scope.changed)
                 return;
 
-            controller.Angle = angleProperty.floatValue = Mathf.Atan2(radiusHandle.radius, tipPosition.y);
-            controller.Height = heightProperty.floatValue = tipPosition.y;
-
-            serializedObject.ApplyModifiedProperties();
+            Undo.RecordObject(controller, "Resize cone");
+            controller.Angle = Mathf.Atan2(radiusHandle.radius, tipPosition.y);
+            controller.Height = tipPosition.y;
         }
 
 

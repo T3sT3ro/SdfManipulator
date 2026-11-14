@@ -7,12 +7,6 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
     [CustomEditor(typeof(SdfBoxController), true)]
     class SdfBoxControllerEditor : SdfPrimitiveControllerEditor {
         readonly BoxBoundsHandle boxHandle = new();
-        SerializedProperty       boxExtents;
-
-        protected override void OnEnable() {
-            base.OnEnable();
-            boxExtents = serializedObject.FindProperty("boxExtents");
-        }
 
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
@@ -29,8 +23,8 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
 
             if (!extentsCheck.changed)
                 return;
-            controller.BoxExtents = boxExtents.vector3Value = boxHandle.size / 2;
-            serializedObject.ApplyModifiedProperties();
+            Undo.RecordObject(controller, "Resize box");
+            controller.BoxExtents = boxHandle.size / 2;
         }
 
         [MenuItem("GameObject/SDF/Primitives/Box")]

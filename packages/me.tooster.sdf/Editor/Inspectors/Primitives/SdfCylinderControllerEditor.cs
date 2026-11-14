@@ -6,17 +6,6 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
     [CustomEditor(typeof(SdfCylinderController), true)]
     class SdfCylinderControllerEditor : SdfPrimitiveControllerEditor {
         readonly BoxBoundsHandle boxBoundsHandle = new();
-        SerializedProperty       heightProperty;
-        SerializedProperty       radiusProperty;
-        SerializedProperty       roundingProperty;
-
-        protected override void OnEnable() {
-            base.OnEnable();
-            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
-            heightProperty = serializedObject.FindProperty("height");
-            radiusProperty = serializedObject.FindProperty("radius");
-            roundingProperty = serializedObject.FindProperty("rounding");
-        }
 
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
@@ -36,11 +25,9 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
             if (!scope.changed)
                 return;
 
-            controller.Height = heightProperty.floatValue = boxBoundsHandle.size.y / 2;
-            controller.Radius = radiusProperty.floatValue = boxBoundsHandle.size.x / 2;
-
-
-            serializedObject.ApplyModifiedProperties();
+            Undo.RecordObject(controller, "Resize cylinder");
+            controller.Height = boxBoundsHandle.size.y / 2;
+            controller.Radius = boxBoundsHandle.size.x / 2;
         }
 
         [MenuItem("GameObject/SDF/Primitives/Cylinder")]

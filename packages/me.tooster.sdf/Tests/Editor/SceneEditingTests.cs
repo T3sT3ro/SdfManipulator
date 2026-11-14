@@ -34,5 +34,20 @@ namespace me.tooster.sdf.Tests.Editor {
             Undo.PerformUndo();
             Assert.That(sphere == null, "undo doesn't remove the created object");
         }
+
+        // the handle editors record the controller before they call its setter
+        [Test]
+        public void HandleChange_CanBeUndone() {
+            var sphere = SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfSphereController>("sphere", new MenuCommand(parent))
+                .GetComponent<SdfSphereController>();
+            var radius = sphere.Radius;
+            Undo.IncrementCurrentGroup();
+
+            Undo.RecordObject(sphere, "Resize sphere");
+            sphere.Radius = radius + 1;
+            Undo.PerformUndo();
+
+            Assert.That(sphere.Radius, Is.EqualTo(radius));
+        }
     }
 }

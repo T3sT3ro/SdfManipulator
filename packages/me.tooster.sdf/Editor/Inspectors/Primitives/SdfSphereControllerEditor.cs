@@ -6,13 +6,6 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
     [CustomEditor(typeof(SdfSphereController), true)]
     class SdfSphereControllerEditor : SdfPrimitiveControllerEditor {
         readonly SphereBoundsHandle radiusHandle = new();
-        SerializedProperty          radiusProperty;
-
-        protected override void OnEnable() {
-            base.OnEnable();
-            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
-            radiusProperty = serializedObject.FindProperty("radius");
-        }
 
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
@@ -29,8 +22,8 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
                     if (!radiusCheck.changed)
                         return;
 
-                    controller.Radius = radiusProperty.floatValue = radiusHandle.radius;
-                    serializedObject.ApplyModifiedProperties();
+                    Undo.RecordObject(controller, "Resize sphere");
+                    controller.Radius = radiusHandle.radius;
                 }
             }
         }

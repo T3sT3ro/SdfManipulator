@@ -11,23 +11,10 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
         // two ring handles for major and minor radius of torus
         readonly SphereBoundsHandle mainRadiusHandle = new();
         readonly SphereBoundsHandle ringRadiusHandle = new();
-        SerializedProperty          cap;
-        SerializedProperty          mainRadius;
-        SerializedProperty          ringRadius;
-
-        protected override void OnEnable() {
-            base.OnEnable();
-            // FIXME: don't depend on hidden internal property, maybe use source generators, expressions or expose an API 
-            mainRadius = serializedObject.FindProperty("mainRadius");
-            ringRadius = serializedObject.FindProperty("ringRadius");
-            cap = serializedObject.FindProperty("cap");
-        }
 
         protected override void OnSceneGUI() {
             base.OnSceneGUI();
             var controller = (SdfTorusController)target;
-
-            var anyChanged = false;
             // approach from https://docs.unity3d.com/ScriptReference/IMGUI.Controls.ArcHandle.html
 
             using (new Handles.DrawingScope(Matrix4x4.TRS(controller.transform.position, controller.transform.rotation, Vector3.one))) {
@@ -39,9 +26,10 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
 
                     mainRadiusHandle.DrawHandle();
 
-                    anyChanged |= mainRadiusCheck.changed;
-                    if (mainRadiusCheck.changed)
-                        controller.MainRadius = mainRadius.floatValue = mainRadiusHandle.radius;
+                    if (mainRadiusCheck.changed) {
+                        Undo.RecordObject(controller, "Resize torus");
+                        controller.MainRadius = mainRadiusHandle.radius;
+                    }
                 }
 
                 using (var ringRadiusCheck = new EditorGUI.ChangeCheckScope()) {
@@ -51,9 +39,10 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
 
                     ringRadiusHandle.DrawHandle();
 
-                    anyChanged |= ringRadiusCheck.changed;
-                    if (ringRadiusCheck.changed)
-                        controller.RingRadius = ringRadius.floatValue = ringRadiusHandle.radius;
+                    if (ringRadiusCheck.changed) {
+                        Undo.RecordObject(controller, "Resize torus");
+                        controller.RingRadius = ringRadiusHandle.radius;
+                    }
                 }
 
 
@@ -64,15 +53,13 @@ namespace me.tooster.sdf.Editor.Inspectors.Primitives {
 
                         capArcHandle.DrawHandle();
 
-                        anyChanged |= capCheck.changed;
-                        if (capCheck.changed)
-                            controller.Cap = cap.floatValue = Mathf.Deg2Rad * capArcHandle.angle;
+                        if (capCheck.changed) {
+                            Undo.RecordObject(controller, "Change torus cap");
+                            controller.Cap = Mathf.Deg2Rad * capArcHandle.angle;
+                        }
                     }
                 }
             }
-
-            if (anyChanged)
-                serializedObject.ApplyModifiedProperties();
         }
 
 
