@@ -39,5 +39,17 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(InspectorOf(root.GetComponentInChildren<SdfSphereController>(true)).Q("default-inspector"), Is.Not.Null);
             Assert.That(InspectorOf(root.GetComponentInChildren<SdfCombineController>(true)).Q("default-inspector"), Is.Not.Null);
         }
+
+        [TestCase(SdfCombineController.CombinationOperation.SMOOTH_UNION, true)]
+        [TestCase(SdfCombineController.CombinationOperation.SIMPLE_UNION, false)]
+        public void VisibleWhen_ComparesTheEnumValue(SdfCombineController.CombinationOperation operation, bool visible) {
+            var combine = root.GetComponentInChildren<SdfCombineController>(true);
+            combine.Operation = operation;
+            var serialized = new SerializedObject(combine);
+            var attribute = Unity.Properties.PropertyContainer.GetProperty(combine, new Unity.Properties.PropertyPath(nameof(SdfCombineController.BlendFactor)))
+                .GetAttribute<VisibleWhenAttribute>();
+
+            Assert.That(me.tooster.sdf.Editor.Inspectors.ControllerEditor.IsVisible(attribute, serialized.FindProperty("operation")), Is.EqualTo(visible));
+        }
     }
 }

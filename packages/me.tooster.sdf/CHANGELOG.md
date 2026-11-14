@@ -99,6 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `[VisibleWhen]` compared enum values with their position in the enum's declaration (#80).
 - The `SdfScene` inspector showed fields for the controlled material and the target shader and material paths, which
   no longer exist.
 - Player builds failed to compile because runtime code used editor-only APIs.

@@ -66,10 +66,9 @@ namespace me.tooster.sdf.Editor.Inspectors {
 
                         // depends on the implicit change event when a property field is instantiated
                         driverEnumPropertyField.RegisterValueChangeCallback(evt => {
-                                propertyField.style.display =
-                                    visibleWhenAttribute.enumValues.Contains(evt.changedProperty.enumValueIndex)
-                                        ? initialDisplayStyle
-                                        : DisplayStyle.None;
+                                propertyField.style.display = IsVisible(visibleWhenAttribute, evt.changedProperty)
+                                    ? initialDisplayStyle
+                                    : DisplayStyle.None;
                             }
                         );
                     }
@@ -80,6 +79,14 @@ namespace me.tooster.sdf.Editor.Inspectors {
             );
             return root;
         }
+
+        /// <summary>
+        ///     Returns whether a field with <paramref name="visibleWhen" /> shows for the value of its driving enum field.
+        ///     The attribute lists enum values, so compare them with the value, not with the position of the value in the
+        ///     enum's declaration (<c>enumValueIndex</c>).
+        /// </summary>
+        internal static bool IsVisible(VisibleWhenAttribute visibleWhen, SerializedProperty driver)
+            => visibleWhen.enumValues.Contains(driver.intValue);
 
         /// Finds the property that holds the attributes of a serialized field: the field itself, or a property with the name capitalized.
         static bool TryGetPropertyOfField(Controller controller, string fieldName, out IProperty property) {
