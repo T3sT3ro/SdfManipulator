@@ -48,6 +48,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The scene view shows selected SDF objects on their own as translucent ghosts, also where other objects hide them or
   an operation removes them, e.g. an object subtracted from another. *Tools > SDF > Show Selected Objects* turns it on
   and off (#37).
+- *Bake Values* on `SdfScene` writes the current values of the controllers into the shader as constants instead of
+  uniforms, for scenes that don't change. Changing a baked value regenerates the shader in Prefab Mode. Textures stay
+  uniforms (#115).
 
 ### Changed
 

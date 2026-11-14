@@ -31,6 +31,14 @@ namespace me.tooster.sdf {
         [Tooltip("How the scene is raymarched and shown. Saved with the scene, unlike the values of the generated material.")]
         public RenderingSettings rendering = new();
 
+        [Tooltip("Write the values of the controllers into the shader as constants, for scenes that don't change. The "
+               + "compiler can then fold the constants, and the scene sets fewer uniforms. Changing a value regenerates "
+               + "the shader, which only Prefab Mode does, so prefab instances can't change baked values. The scene "
+               + "can still move as a whole. Textures stay uniforms.")]
+        public bool bakeValues;
+
+        bool? bakedValuesOfLastValidation;
+
         // Set only in the prefab's import result, where they point to the shader and the default material that the import
         // generated as sub-assets of the prefab. A prefab file can't reference its own generated sub-assets, so in the
         // file they are always empty.
@@ -109,6 +117,9 @@ namespace me.tooster.sdf {
         // TODO: use more event-driven architecture where creation, move, rename and deletion of individual controllers is detected. 
         void OnValidate() {
             diagnostics.Clear();
+            if (bakedValuesOfLastValidation is { } baked && baked != bakeValues)
+                RequiresRegeneration = true;
+            bakedValuesOfLastValidation = bakeValues;
 
             RevalidateScene(); // fixme: Revalidate triggered without regenerate will cause difference between shader content and scene data
 
@@ -243,6 +254,27 @@ namespace me.tooster.sdf {
             return links;
         }
 
+        /// <summary>Whether the generator writes the value of <paramref name="property" /> into the shader as a constant.</summary>
+        internal bool IsBaked(PropertyData property) => bakeValues && IsBakeable(property.property.DeclaredValueType());
+
+        /// The types that the generator can write as literals; textures stay uniforms
+        internal static bool IsBakeable(System.Type type) => type != typeof(Texture2D);
+
+        /// <summary>The current value of <paramref name="property" />, which the generator writes into a baked shader.</summary>
+        internal static object? CurrentValue(PropertyData property) {
+            var reader = new ValueReader();
+            var controller = property.controller;
+            PropertyContainer.Accept(reader, ref controller, property.path);
+            return reader.value;
+        }
+
+        class ValueReader : PropertyVisitor {
+            public object? value;
+
+            protected override void VisitProperty<TContainer, TValue>(Property<TContainer, TValue> property, ref TContainer container, ref TValue value)
+                => this.value = value;
+        }
+
         void UpdateProperty(PropertyData pd) {
             // make sure the controller hasn't been destroyed
             if (pd.controller is { } controller && controller != null)
@@ -266,6 +298,14 @@ namespace me.tooster.sdf {
              || !sceneData.controllers.TryGetValue(controller, out var controllerData)
              || !controllerData.properties.pathLookup.TryGetValue(new PropertyPath(eventArgs.PropertyName), out var propertyData))
                 return;
+            if (IsBaked(propertyData)) {
+                // the value is a constant in the shader
+                RequiresRegeneration = true;
+#if UNITY_EDITOR
+                EditorApplication.QueuePlayerLoopUpdate();
+#endif
+                return;
+            }
             QueuePropertyUpdate(propertyData);
         }
 
@@ -293,7 +333,8 @@ namespace me.tooster.sdf {
             propertyBlock.SetMatrix(worldToSceneId, transform.worldToLocalMatrix);
             transform.hasChanged = false;
             foreach (var p in sceneData.queuedPropertyUdates)
-                UpdateProperty(p);
+                if (!IsBaked(p))
+                    UpdateProperty(p);
             sceneData.queuedPropertyUdates.Clear();
 
             foreach (var r in renderers)

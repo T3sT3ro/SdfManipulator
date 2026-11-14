@@ -73,6 +73,22 @@ namespace me.tooster.sdf.Generators {
             => scene.sceneData.Properties.Select(pd => {
                     try {
                         var declaredPropertyType = PropertyContainer.GetProperty(pd.controller, pd.path).DeclaredValueType();
+                        if (scene.IsBaked(pd))
+                            // static const <type> <id> = <value>;
+                            return new VariableDefinition
+                            {
+                                declarator = new VariableDeclarator
+                                {
+                                    storageKeywords = new SyntaxOrTokenList<hlsl>(new StaticKeyword()),
+                                    typeModifiers = new SyntaxOrTokenList<hlsl>(new ConstKeyword()),
+                                    type = declaredPropertyType.hlslType(),
+                                    variables = new VariableDeclarator.Definition
+                                    {
+                                        id = pd.identifier,
+                                        initializer = BakedValue(SdfScene.CurrentValue(pd)),
+                                    },
+                                },
+                            };
                         return new VariableDefinition
                         {
                             declarator = new VariableDeclarator
@@ -86,6 +102,28 @@ namespace me.tooster.sdf.Generators {
                     }
                 }
             );
+
+        /// <summary>
+        ///     The literal of a baked value. Colors are written in the color space of the project, as SetColor would set
+        ///     them.
+        /// </summary>
+        static Expression<hlsl> BakedValue(object value)
+            => value switch
+            {
+                float f      => (AST.Hlsl.Syntax.Expressions.LiteralExpression)f,
+                int i        => (AST.Hlsl.Syntax.Expressions.LiteralExpression)i,
+                bool b       => (AST.Hlsl.Syntax.Expressions.LiteralExpression)b,
+                UnityEngine.Vector2 v    => HlslExtensions.VectorConstructor(v),
+                UnityEngine.Vector3 v    => HlslExtensions.VectorConstructor(v),
+                UnityEngine.Vector4 v    => HlslExtensions.VectorConstructor(v),
+                UnityEngine.Vector2Int v => HlslExtensions.VectorConstructor(v),
+                UnityEngine.Vector3Int v => HlslExtensions.VectorConstructor(v),
+                UnityEngine.Color c => HlslExtensions.VectorConstructor(
+                    (UnityEngine.Vector4)(UnityEngine.QualitySettings.activeColorSpace == UnityEngine.ColorSpace.Linear ? c.linear : c)
+                ),
+                UnityEngine.Matrix4x4 m => m.ToMatrixInitializerList(),
+                _ => throw new ArgumentOutOfRangeException(nameof(value), $"Can't bake a value of type {value?.GetType()}"),
+            };
 
         static FunctionDeclaration sceneFunctionDeclaration()
             => new()

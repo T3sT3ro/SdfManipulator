@@ -108,6 +108,10 @@ Paths are relative to the package root.
       declares the uniforms without values and has no material properties for them, so changing a value doesn't change
       the shader. The material only holds the render state. A renderer that no `SdfScene` updates, e.g. in a prefab
       preview, renders nothing: all its uniforms are 0, including the step count.
+    - *Bake Values* writes the current values of the controllers into the shader as `static const` variables instead
+      of uniforms, for scenes that don't change. The compiler can then fold them, and the scene sets fewer uniforms.
+      Changing a baked value regenerates the shader, which happens only in Prefab Mode, so instances of the prefab
+      share the baked values. The scene can still move as a whole, and textures stay uniforms.
 - **Shader presets** (`Runtime/Generators`): for now just `BIRPShaderPreset`, a shader generation preset tailored for
   the built-in forward rendering pipeline. Essentially a stateful factory for shader generators; think of it as a
   "cooking school" for creating chefs.

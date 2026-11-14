@@ -357,6 +357,35 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void BakedValues_AreConstantsThatCompile() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            var sphere = templateRoot.GetComponentInChildren<SdfSphereController>(true);
+            scene.bakeValues = true;
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            var radius = scene.sceneData.controllers[sphere].properties[new Unity.Properties.PropertyPath(nameof(SdfSphereController.Radius))];
+            StringAssert.Contains($"static const float {radius.identifier} =", source);
+            Assert.That(scene.IsBaked(radius), Is.True);
+            shader = ShaderUtil.CreateShaderAsset(source);
+            Assert.That(CompileErrors(shader, source), Is.Empty);
+        }
+
+        [Test]
+        public void BakedValues_ChangeTheShader() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.bakeValues = true;
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+            scene.RequiresRegeneration = false;
+
+            templateRoot.GetComponentInChildren<SdfSphereController>(true).Radius += 0.25f;
+
+            Assert.That(scene.RequiresRegeneration, Is.True, "changing a baked value doesn't ask for a new shader");
+            Assert.That(scene.AssembleShaderSource(), Is.Not.EqualTo(source));
+        }
+
+        [Test]
         public void UniformUpdate_WithoutRendererDoesNotThrow() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             foreach (var renderer in templateRoot.GetComponentsInChildren<Renderer>(true))

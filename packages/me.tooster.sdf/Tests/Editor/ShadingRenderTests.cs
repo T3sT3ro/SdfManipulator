@@ -325,6 +325,28 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(after - before, Is.GreaterThan(3), "the SDF doesn't move with the scene");
         }
 
+        [Test]
+        public void BakedValues_RenderLikeUniforms() {
+            var withUniforms = world.Render();
+            world.scene.bakeValues = true;
+            world.Regenerate();
+            var baked = world.Render();
+
+            var sphere = world.root.GetComponentInChildren<me.tooster.sdf.Primitives.SdfSphereController>(true);
+            sphere.Radius += 0.5f;
+            world.scene.UpdateShaderUniforms();
+            var bakedBeforeRegeneration = world.Render();
+            world.Regenerate();
+            var bakedAfterRegeneration = world.Render();
+
+            Assert.That(DifferentPixels(baked, withUniforms), Is.LessThan(RenderTestScene.Size), "the baked scene looks different");
+            Assert.That(DifferentPixels(bakedBeforeRegeneration, baked), Is.Zero, "the baked shader still reads a uniform");
+            Assert.That(DifferentPixels(bakedAfterRegeneration, baked), Is.GreaterThan(100), "the new shader doesn't bake the new value");
+        }
+
+        static int DifferentPixels(Color32[] image, Color32[] reference)
+            => image.Where((c, i) => Mathf.Abs(c.r - reference[i].r) + Mathf.Abs(c.g - reference[i].g) + Mathf.Abs(c.b - reference[i].b) > 6).Count();
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 
