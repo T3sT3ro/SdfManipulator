@@ -38,9 +38,11 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
 - Create a scene with *Assets > Create > SDF > Scene Asset*. SDF scenes are prefabs: open the prefab to enter the
   prefab stage, where the scene is edited. Modifying prefab instances may not have any effect.
 - Outside the prefab stage, scenes can't be edited structurally (e.g. adding a primitive). They can only be
-  controlled, e.g. by updating a uniform or keyword.
+  controlled, e.g. by changing a value that a uniform holds or the scene's *Rendering* settings.
 - Add primitives and operators by adding components to game objects, or with *GameObject > SDF > Primitives* and
   *GameObject > SDF > Operators* in the hierarchy.
+- A combination unites, intersects or subtracts its children, also with smooth edges, or dyes its first child with the
+  materials of the others. The blend factor sets the width of smooth edges.
 - Add *SDF > Operators > Repeat*, *Mirror* or *Twist* to an SDF object to repeat, mirror or twist its space; the
   component joins the object's SDF stack after the transform.
 - Add an *SDF > Material* component to give SDF objects the properties of the Standard shader: albedo, metallic,
@@ -64,6 +66,8 @@ Refer to the existing controllers in `Runtime/Primitives` and `Runtime/Operators
   notifies the scene. The default inspector edits the field. Give the property the field's name in `PascalCase`, e.g.
   field `someRadius` and property `SomeRadius`: the inspector finds the attributes of a field this way, to mark
   structural fields and to apply `[VisibleWhen]`.
+- Operators that change the point that the rest of the SDF stack evaluates, like *Repeat*, derive from
+  `SdfDomainOperator`, which puts them into the stack after the transform when they're added.
 - Edits that bypass the property setters, e.g. in the inspector or by undo, reach the scene through `OnValidate`: it
   sets all uniforms and compares the values of the `[ShaderStructural]` properties to decide whether to regenerate the
   shader. A field without a property that changes the structure, e.g. a list of other controllers, can carry
