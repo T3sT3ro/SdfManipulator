@@ -262,6 +262,37 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void PropertyLink_MakesControllersShareAUniform() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            var cylinders = templateRoot.GetComponentsInChildren<SdfCylinderController>(true);
+            var link = cylinders[1].gameObject.AddComponent<SdfPropertyLink>();
+            link.target = cylinders[1];
+            link.property = nameof(SdfCylinderController.Radius);
+            link.driver = cylinders[0];
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            string RadiusOf(SdfCylinderController cylinder)
+                => scene.sceneData.controllers[cylinder].properties[new Unity.Properties.PropertyPath(nameof(SdfCylinderController.Radius))].identifier;
+            Assert.That(Occurrences(source, RadiusOf(cylinders[1])), Is.EqualTo(1), "the driven cylinder still reads its own radius");
+            Assert.That(Occurrences(source, RadiusOf(cylinders[0])), Is.EqualTo(3), "the driven cylinder doesn't read the driver's radius");
+        }
+
+        [Test]
+        public void PropertyLink_WithoutTheSamePropertyIsReportedAndIgnored() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            var cylinder = templateRoot.GetComponentInChildren<SdfCylinderController>(true);
+            var link = cylinder.gameObject.AddComponent<SdfPropertyLink>();
+            link.target = cylinder;
+            link.property = nameof(SdfCylinderController.Radius);
+            link.driver = templateRoot.GetComponentInChildren<SdfBoxController>(true);
+            scene.RevalidateScene();
+
+            Assert.That(scene.diagnostics, Has.Some.Matches<SdfScene.Diagnostic>(d => d.message.Contains(link.name)));
+            Assert.That(scene.sceneData.Links, Is.Empty);
+        }
+
+        [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);

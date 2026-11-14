@@ -42,7 +42,8 @@ namespace me.tooster.sdf {
 
         public SdfScene SdfScene => sdfScene == null ? sdfScene = GetComponentInParent<SdfScene>(true) : sdfScene;
 
-        public SdfScene.PropertyData this[PropertyPath p] => SdfScene.sceneData.controllers[this].properties[p];
+        /// <summary>The uniform that property <paramref name="p" /> reads, which is the driver's if an <see cref="SdfPropertyLink" /> drives it.</summary>
+        public SdfScene.PropertyData this[PropertyPath p] => SdfScene.sceneData.Resolve(this, p);
 
         protected virtual void OnEnable() {
             sdfScene = GetComponentInParent<SdfScene>();

@@ -218,7 +218,27 @@ namespace me.tooster.sdf {
                 new HashSet<PropertyData>(
                     controllerData.Values.SelectMany(cd => cd.properties)
                 )
-            );
+            ) { Links = PropertyLinks(controllerData) };
+        }
+
+        /// <summary>
+        ///     Collects the links of the scene that connect two of its controllers through a property that both have, with
+        ///     the same type. Other links are ignored and reported as diagnostics.
+        /// </summary>
+        Dictionary<(Controller, string), PropertyData> PropertyLinks(IReadOnlyDictionary<Controller, ControllerData> controllerData) {
+            var links = new Dictionary<(Controller, string), PropertyData>();
+            foreach (var link in GetComponentsInChildren<SdfPropertyLink>(true)) {
+                var path = new PropertyPath(link.property);
+                if (link.target != null && link.driver != null && link.target != link.driver
+                 && controllerData.TryGetValue(link.target, out var targetData) && controllerData.TryGetValue(link.driver, out var driverData)
+                 && targetData.properties.pathLookup.TryGetValue(path, out var driven)
+                 && driverData.properties.pathLookup.TryGetValue(path, out var driving)
+                 && driven.property.DeclaredValueType() == driving.property.DeclaredValueType())
+                    links[(link.target, link.property)] = driving;
+                else if (diagnostics.All(d => !d.message.Contains($"'{link.name}'")))
+                    diagnostics.Add(Diagnostic.Warn($"The property link on '{link.name}' doesn't connect two controllers of this scene through a shader property that both have."));
+            }
+            return links;
         }
 
         void UpdateProperty(PropertyData pd) {
@@ -452,6 +472,17 @@ namespace me.tooster.sdf {
             HashSet<PropertyData> queuedPropertyUdates
         ) {
             public IEnumerable<PropertyData> Properties => controllers.Values.SelectMany(cd => cd.properties);
+
+            /// The properties that an <see cref="SdfPropertyLink" /> drives, by controller and property name, with the driver's data
+            public IReadOnlyDictionary<(Controller controller, string property), PropertyData> Links { get; init; } =
+                new Dictionary<(Controller, string), PropertyData>();
+
+            /// <summary>
+            ///     Returns the data of the uniform that the property <paramref name="path" /> of <paramref name="controller" />
+            ///     reads: the controller's own, or the driver's if a link drives the property.
+            /// </summary>
+            public PropertyData Resolve(Controller controller, PropertyPath path)
+                => Links.TryGetValue((controller, path.ToString()), out var driver) ? driver : controllers[controller].properties[path];
         }
 
 
