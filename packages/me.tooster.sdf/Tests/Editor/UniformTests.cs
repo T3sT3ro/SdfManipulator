@@ -76,17 +76,18 @@ namespace me.tooster.sdf.Tests.Editor {
 
         [Test]
         public void MaterialProperties_SetUniformsOnTheRenderer() {
-            var sdf = root.GetComponentInChildren<SdfSphereController>(true).GetComponent<SdfController>();
-            sdf.Albedo = Color.red;
-            sdf.Smoothness = 0.25f;
+            var material = root.GetComponentInChildren<SdfSphereController>(true).gameObject.AddComponent<SdfMaterialController>();
+            material.Albedo = Color.red;
+            material.Smoothness = 0.25f;
+            scene.RevalidateScene();
 
             scene.UpdateShaderUniforms(forceUpdateAll: true);
 
             var block = new MaterialPropertyBlock();
             scene.GetComponentInChildren<Renderer>(true).GetPropertyBlock(block);
-            var properties = scene.sceneData.controllers[sdf].properties;
-            Assert.That(block.GetVector(properties[new Unity.Properties.PropertyPath(nameof(SdfController.Albedo))].shaderId), Is.EqualTo((Vector4)Color.red));
-            Assert.That(block.GetFloat(properties[new Unity.Properties.PropertyPath(nameof(SdfController.Smoothness))].shaderId), Is.EqualTo(0.25f));
+            var properties = scene.sceneData.controllers[material].properties;
+            Assert.That(block.GetVector(properties[new Unity.Properties.PropertyPath(nameof(SdfMaterialController.Albedo))].shaderId), Is.EqualTo((Vector4)Color.red));
+            Assert.That(block.GetFloat(properties[new Unity.Properties.PropertyPath(nameof(SdfMaterialController.Smoothness))].shaderId), Is.EqualTo(0.25f));
         }
     }
 }

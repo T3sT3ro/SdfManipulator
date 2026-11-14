@@ -142,28 +142,36 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
-        public void Generation_ObjectsInheritTheMaterialOfTheirParent() {
+        public void Generation_ObjectsUseTheMaterialOnThemOrTheirNearestParent() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
-            var root = scene.GetComponentInChildren<SdfCombineController>(true);
-            var sphere = templateRoot.GetComponentInChildren<SdfSphereController>(true).GetComponent<SdfController>();
-            root.MaterialSource = MaterialSource.Own;
-            sphere.MaterialSource = MaterialSource.Own;
+            var rootMaterial = scene.GetComponentInChildren<SdfCombineController>(true).gameObject.AddComponent<SdfMaterialController>();
+            var sphereMaterial = templateRoot.GetComponentInChildren<SdfSphereController>(true).gameObject.AddComponent<SdfMaterialController>();
             scene.RevalidateScene();
             var source = scene.AssembleShaderSource();
 
-            string AlbedoOf(SdfController sdf)
-                => scene.sceneData.controllers[sdf].properties[new Unity.Properties.PropertyPath(nameof(SdfController.Albedo))].identifier;
+            string AlbedoOf(SdfMaterialController material)
+                => scene.sceneData.controllers[material].properties[new Unity.Properties.PropertyPath(nameof(SdfMaterialController.Albedo))].identifier;
             var objects = templateRoot.GetComponentsInChildren<SdfController>(true).Count(c => c is not SdfCombineController);
-            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(sphere)},"), Is.EqualTo(1), "the sphere doesn't use its own material");
-            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(root)},"), Is.EqualTo(objects - 1), "the other objects don't inherit the root's material");
+            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(sphereMaterial)},"), Is.EqualTo(1), "the sphere doesn't use its own material");
+            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(rootMaterial)},"), Is.EqualTo(objects - 1), "the other objects don't use the root's material");
+        }
+
+        [Test]
+        public void Generation_DisabledMaterialDoesNotApply() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            var material = scene.GetComponentInChildren<SdfCombineController>(true).gameObject.AddComponent<SdfMaterialController>();
+            material.enabled = false;
+            scene.RevalidateScene();
+
+            StringAssert.DoesNotContain("standardMaterial(SDF_", scene.AssembleShaderSource());
         }
 
         // the forward passes evaluate the scene once more at the hit to get the material, so marching only needs distances
         [Test]
         public void ForwardPass_MarchingLoopReadsNoMaterial() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
-            scene.GetComponentInChildren<SdfCombineController>(true).MaterialSource = MaterialSource.Own;
-            templateRoot.GetComponentInChildren<SdfSphereController>(true).GetComponent<SdfController>().MaterialSource = MaterialSource.Own;
+            scene.GetComponentInChildren<SdfCombineController>(true).gameObject.AddComponent<SdfMaterialController>();
+            templateRoot.GetComponentInChildren<SdfSphereController>(true).gameObject.AddComponent<SdfMaterialController>();
             scene.RevalidateScene();
             shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
 

@@ -62,10 +62,9 @@ namespace me.tooster.sdf.Tests.Editor {
         [Test]
         public void SdfScene_ShadesObjectsWithTheInheritedAlbedo() {
             world.ground.SetActive(false);
-            // the other objects inherit the material of the root combination
-            var root = world.root.GetComponentInChildren<SdfCombineController>(true);
-            root.MaterialSource = MaterialSource.Own;
-            root.Albedo = Color.red;
+            // the objects without a material use the material on the root combination
+            var material = world.root.GetComponentInChildren<SdfCombineController>(true).gameObject.AddComponent<SdfMaterialController>();
+            material.Albedo = Color.red;
             world.Regenerate();
 
             var covered = world.Render().Where(c => c.r + c.g + c.b > 0).ToList();

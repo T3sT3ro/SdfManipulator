@@ -29,10 +29,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   raymarched hit instead of at the domain mesh.
 - Generated shaders have a shadow caster pass, so SDF scenes cast shadows and write their raymarched depth into the
   camera depth texture. SDF scenes receive realtime shadows, which are sampled at the raymarched hit.
-- SDF objects have the properties of the Standard material: albedo, metallic, smoothness and emission. They are
-  uniforms, so changing them doesn't regenerate the shader. `Color` properties of controllers become `float4` uniforms.
-- An SDF object without its own material inherits the material of the nearest parent that has one, so one material
-  on the root combination colors the whole scene. Objects that inherit none are white.
+- *SDF Material* components give SDF objects the properties of the Standard material: albedo, metallic, smoothness
+  and emission. A material applies to the SDF object on its game object and to the objects below it that have no
+  material of their own, so one material on the root combination colors the whole scene. Objects without a material
+  are white. The values are uniforms, so changing them doesn't regenerate the shader. `Color` properties of
+  controllers become `float4` uniforms.
 - Generated shaders have scene selection and picking passes, so the scene view outlines a selected scene along its
   SDF surfaces and picks it only where its rays hit, instead of anywhere on its domain mesh.
 - Clicking an SDF surface in the scene view picks the object that the ray hit. The first click selects the scene,
