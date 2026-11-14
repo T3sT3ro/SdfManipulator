@@ -34,22 +34,9 @@ namespace me.tooster.sdf.Editor {
 
         // the objects that the last render drew, by picking index minus the first index of that render
         static readonly List<GameObject?> pickableObjects = new();
-        // a copy of each renderer material, which holds the uniforms of the renderer's property block while it draws
-        static readonly Dictionary<Material, Material> pickingMaterials = new();
-        static readonly float[]                        pickable         = new float[MaxObjectIds];
-        static readonly MaterialPropertyBlock          block            = new();
+        static readonly float[] pickable = new float[MaxObjectIds];
 
-        static SdfScenePicking() {
-            HandleUtility.RegisterRenderPickingCallback(RenderForPicking);
-            AssemblyReloadEvents.beforeAssemblyReload += DestroyPickingMaterials;
-        }
-
-        static void DestroyPickingMaterials() {
-            foreach (var material in pickingMaterials.Values)
-                if (material != null)
-                    Object.DestroyImmediate(material);
-            pickingMaterials.Clear();
-        }
+        static SdfScenePicking() => HandleUtility.RegisterRenderPickingCallback(RenderForPicking);
 
         static RenderPickingResult RenderForPicking(in RenderPickingArgs args) {
             var objectSet = args.renderObjectSet;
@@ -87,27 +74,16 @@ namespace me.tooster.sdf.Editor {
                 for (var id = 0; id < MaxObjectIds; id++)
                     pickable[id] = id < objects.Length && objects[id] is { } go && isPickable(go) ? 1 : 0;
 
-                var drawn = false;
-                foreach (var renderer in scene.Renderers) {
-                    if (renderer is not MeshRenderer { enabled: true } meshRenderer
-                     || !meshRenderer.gameObject.activeInHierarchy
-                     || (camera != null && (camera.cullingMask & (1 << meshRenderer.gameObject.layer)) == 0)
-                     || SceneVisibilityManager.instance.IsHidden(meshRenderer.gameObject)
-                     || !meshRenderer.TryGetComponent<MeshFilter>(out var meshFilter)
-                     || meshFilter.sharedMesh == null
-                     || meshRenderer.sharedMaterial is not { } source)
-                        continue;
-                    var pass = source.FindPass(PassName);
-                    if (pass < 0)
-                        continue;
-
-                    var material = PickingMaterial(source, meshRenderer, scene);
-                    material.SetInteger(pickingIndexId, firstPickingIndex + pickableObjects.Count);
-                    material.SetFloatArray(pickableId, pickable);
-                    material.SetPass(pass);
-                    Graphics.DrawMeshNow(meshFilter.sharedMesh, meshRenderer.localToWorldMatrix);
-                    drawn = true;
-                }
+                var first = firstPickingIndex + pickableObjects.Count;
+                var drawn = SdfSceneDrawing.ForEachRenderer(scene, PassName, camera, (renderer, mesh, source, pass) => {
+                        // both picking passes have to march the same rays
+                        var material = SdfSceneDrawing.MaterialWithUniforms(source, renderer, scene);
+                        material.SetInteger(pickingIndexId, first);
+                        material.SetFloatArray(pickableId, pickable);
+                        material.SetPass(pass);
+                        Graphics.DrawMeshNow(mesh, renderer.localToWorldMatrix);
+                    }
+                );
 
                 if (drawn)
                     pickableObjects.AddRange(objects);
@@ -126,36 +102,6 @@ namespace me.tooster.sdf.Editor {
                 if (controller != null && data.numericId < objects.Length)
                     objects[data.numericId] = controller.gameObject;
             return objects;
-        }
-
-        /// <summary>
-        ///     Returns a copy of <paramref name="source" /> with the uniforms of the renderer's property block and the scene's
-        ///     rendering settings. Immediate drawing can't use a property block, and both picking passes have to march the
-        ///     same rays.
-        /// </summary>
-        static Material PickingMaterial(Material source, Renderer renderer, SdfScene scene) {
-            // a copy of a material variant is a variant too, whose shader can't be set, so build the copy from the shader
-            if (!pickingMaterials.TryGetValue(source, out var material) || material == null || material.shader != source.shader) {
-                if (material != null)
-                    Object.DestroyImmediate(material);
-                pickingMaterials[source] = material = new Material(source.shader) { hideFlags = HideFlags.HideAndDontSave };
-            }
-            material.CopyPropertiesFromMaterial(source);
-
-            renderer.GetPropertyBlock(block);
-            foreach (var property in scene.sceneData.Properties) {
-                var type = property.property.DeclaredValueType();
-                if (type == typeof(float) || type == typeof(bool))
-                    material.SetFloat(property.shaderId, block.GetFloat(property.shaderId));
-                else if (type == typeof(int))
-                    material.SetInteger(property.shaderId, block.GetInteger(property.shaderId));
-                else if (type == typeof(Matrix4x4))
-                    material.SetMatrix(property.shaderId, block.GetMatrix(property.shaderId));
-                else // vectors and colors, which the block already holds in linear space
-                    material.SetVector(property.shaderId, block.GetVector(property.shaderId));
-            }
-            scene.rendering.ApplyTo(material);
-            return material;
         }
     }
 }
