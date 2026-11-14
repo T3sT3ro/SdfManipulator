@@ -99,7 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - *SDF > Operators > Repeat* repeats the space of an SDF object in cells, without limit or a set number of times on each
   axis, *Mirror* mirrors it across the planes of chosen axes, and *Twist* twists it around the y axis. Adding one of
   these components puts it into the object's SDF stack after the transform.
-- A capsule primitive (*GameObject > SDF > Primitives > Capsule*), with a scene handle for its height and radius.
+- Capsule, ellipsoid and octahedron primitives (*GameObject > SDF > Primitives*), with scene handles for their sizes.
 - *SDF > Property Link* components make a shader property of one controller read the uniform of the same property on
   another controller, so one value drives several controllers, e.g. the radius of several spheres (#48).
 - *Clip To Domain Box* in the rendering settings marches rays only inside the box of the domain mesh: they start

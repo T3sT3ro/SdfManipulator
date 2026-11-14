@@ -89,6 +89,19 @@ namespace sdf { namespace primitives3D {
         return length(p) - r;
     }
 
+    /// an ellipsoid with radii \p r; the distance is a bound, exact only for spheres
+    float ellipsoid(float3 p, float3 r) {
+        float k0 = length(p / r);
+        float k1 = length(p / (r * r));
+        return k0 * (k0 - 1.0) / k1;
+    }
+
+    /// a regular octahedron whose vertices lie \p s from the center on each axis; the distance is a bound
+    float octahedron(float3 p, float s) {
+        p = abs(p);
+        return (p.x + p.y + p.z - s) * 0.57735027;
+    }
+
     // plane equation of a plane = xz
     float plane(in float3 p) {
         return p.y;

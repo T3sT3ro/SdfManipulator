@@ -50,17 +50,21 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(sphere.Radius, Is.EqualTo(radius));
         }
 
-        [Test]
-        public void CreatedCapsule_CompilesInTheScene() {
+        [TestCase(typeof(SdfCapsuleController), "capsule")]
+        [TestCase(typeof(SdfEllipsoidController), "ellipsoid")]
+        [TestCase(typeof(SdfOctahedronController), "octahedron")]
+        public void CreatedPrimitive_CompilesInTheScene(System.Type primitive, string function) {
             var template = PrefabUtility.LoadPrefabContents(me.tooster.sdf.Util.SdfPaths.Templates.HelloSdfPrefab);
             try {
                 var scene = template.GetComponentInChildren<SdfScene>(true);
                 var combine = template.GetComponentInChildren<me.tooster.sdf.Operators.SdfCombineController>(true);
-                SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfCapsuleController>("capsule", new MenuCommand(combine.gameObject));
+                typeof(SdfPrimitiveControllerEditor).GetMethod(nameof(SdfPrimitiveControllerEditor.InstantiatePrimitive))
+                    .MakeGenericMethod(primitive)
+                    .Invoke(null, new object[] { function, new MenuCommand(combine.gameObject) });
                 scene.RevalidateScene();
                 var source = scene.AssembleShaderSource();
 
-                StringAssert.Contains("sdf::primitives3D::capsule(", source);
+                StringAssert.Contains($"sdf::primitives3D::{function}(", source);
                 var shader = ShaderUtil.CreateShaderAsset(source);
                 try {
                     Assert.That(ShaderUtil.GetShaderMessages(shader), Has.None.Matches<ShaderMessage>(m => m.severity == UnityEditor.Rendering.ShaderCompilerMessageSeverity.Error));
