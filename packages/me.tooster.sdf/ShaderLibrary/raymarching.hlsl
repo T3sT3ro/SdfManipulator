@@ -52,6 +52,14 @@ float _SHOW_WORLD_GRID; ///< nonzero to overlay a grid in world space
 
 # pragma region raymarching functions
 
+/// Returns the result of empty space: no object, and the largest distance that a ray marches
+SdfResult emptySdfResult() {
+    SdfResult result = (SdfResult)0;
+    result.id = NO_ID;
+    result.distance = _MAX_DISTANCE;
+    return result;
+}
+
 /**
  * \brief Intersects a ray with the box from -0.5 to 0.5 on each axis in the space of \p worldToBox, e.g. Unity's cube
  * mesh in its object space.

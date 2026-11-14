@@ -8,6 +8,10 @@
 
 #include "builtInShading.hlsl"
 
+/// Evaluates the SDF object with the numeric ID \p id on its own, without the operations of its parents. Defined in the
+/// generated shader.
+SdfResult sdfObject(float3 p, int id);
+
 /// Object IDs from this one up can't be picked or outlined on their own. Matches SdfScenePicking.MaxObjectIds.
 #define SDF_MAX_OBJECT_IDS 512
 

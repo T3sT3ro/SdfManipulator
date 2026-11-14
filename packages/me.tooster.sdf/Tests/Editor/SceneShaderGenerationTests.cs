@@ -195,6 +195,20 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void Generation_EvaluatesEachObjectOnItsOwnById() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            StringAssert.Contains("SdfResult sdfObject(float3 p, int id) {", source);
+            foreach (var sdf in templateRoot.GetComponentsInChildren<SdfController>(true)) {
+                var data = scene.sceneData.controllers[sdf];
+                StringAssert.Contains($"case {data.numericId}:", source, $"{sdf.name} has no case");
+                StringAssert.Contains($"return {data.identifier}(p);", source);
+            }
+        }
+
+        [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);

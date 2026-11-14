@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clicking an SDF surface in the scene view picks the object that the ray hit. The first click selects the scene,
   which is a selection base, and the next click the object. Objects with picking disabled are skipped.
 - The scene view outlines selected SDF objects, and a selected combination with all of its objects.
+- Generated shaders have a function that evaluates one object by its ID, `sdfObject(p, id)`, for editor views of
+  single objects.
 
 ### Changed
 

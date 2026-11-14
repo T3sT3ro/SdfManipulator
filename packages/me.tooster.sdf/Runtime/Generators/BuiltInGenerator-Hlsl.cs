@@ -46,6 +46,7 @@ namespace me.tooster.sdf.Generators {
                     .Concat(forwardDeclarations)
                     .Concat(functionDefinitions)
                     .Append(sceneFunction)
+                    .Append(objectFunctionDefinition())
                     .ToSyntaxList()
                     .WithLeadingTrivia(includes())
             );
@@ -93,6 +94,43 @@ namespace me.tooster.sdf.Generators {
                 id = "sdfScene",
                 paramList = new Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
             };
+
+        /// <summary>
+        ///     <c>SdfResult sdfObject(float3 p, int id)</c>: evaluates the SDF object with the numeric ID <c>id</c> on its own,
+        ///     without the operations of its parents, for editor views of one object such as the focus view. Call it after
+        ///     <see cref="sceneFunctionDefinition" />, which generates the functions of the objects.
+        /// </summary>
+        FunctionDefinition objectFunctionDefinition() {
+            var generated = new HashSet<string>(functionDefinitions.Select(f => f.id.ToString().Trim()));
+            var cases = scene.sceneData.controllers
+                .Where(c => c.Key is SdfController && generated.Contains(c.Value.identifier))
+                .OrderBy(c => c.Value.numericId)
+                .Select(c => new Switch.Case
+                    {
+                        label = c.Value.numericId,
+                        body = new Statement<hlsl>[] { new Return { expression = AST.Hlsl.Extensions.FunctionCall(c.Value.identifier, (Identifier)SdfData.pParamName) } },
+                    }
+                )
+                .ToList();
+            return new FunctionDefinition
+            {
+                returnType = SdfData.sdfReturnType,
+                id = "sdfObject",
+                paramList = new[]
+                {
+                    new Parameter { type = SdfData.pData.typeSyntax, id = SdfData.pParamName },
+                    new Parameter { type = (AST.Hlsl.Syntax.Type.Predefined)AST.Hlsl.Constants.ScalarKind.@int, id = "id" },
+                },
+                body = new Block
+                {
+                    statements = new Statement<hlsl>[]
+                    {
+                        new Switch { selector = (Identifier)"id", cases = cases },
+                        new Return { expression = AST.Hlsl.Extensions.FunctionCall("emptySdfResult") },
+                    },
+                },
+            };
+        }
 
         FunctionDefinition sceneFunctionDefinition()
             => new()
