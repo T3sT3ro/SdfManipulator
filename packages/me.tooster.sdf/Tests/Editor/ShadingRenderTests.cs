@@ -204,6 +204,32 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(world.Render().Count(c => c.r + c.g + c.b > 0), Is.GreaterThan(single), "the copies don't show");
         }
 
+        [Test]
+        public void Dye_PaintsTheFirstChildWithoutChangingItsShape() {
+            world.ground.SetActive(false);
+            // in the template, "dice" combines a box and a sphere that crosses the box's surface
+            var dice = world.root.GetComponentsInChildren<SdfCombineController>(true).First(c => c.name == "dice");
+            var children = dice.Children;
+            dice.Operation = SdfCombineController.CombinationOperation.DYE;
+            // a narrow edge, so that the inside of the dye is fully dyed
+            dice.BlendFactor = 0.05f;
+            // the dyes are red, the first child keeps the default white
+            foreach (var dye in children.Skip(1))
+                dye.gameObject.AddComponent<SdfMaterialController>().Albedo = Color.red;
+            world.Regenerate();
+            var dyed = world.Render();
+            var dyedCoverage = dyed.Select(c => c.r + c.g + c.b > 0).ToArray();
+
+            // inactive children are still children of a combination
+            foreach (var dye in children.Skip(1))
+                Object.DestroyImmediate(dye.gameObject);
+            world.Regenerate();
+            var firstOnly = world.Render().Select(c => c.r + c.g + c.b > 0).ToArray();
+
+            Assert.That(dyedCoverage.Where((c, i) => c != firstOnly[i]).Count(), Is.LessThan(dyedCoverage.Count(c => c) / 50), "the dyes change the shape");
+            Assert.That(dyed.Count(c => c.r > 2 * c.g + 20), Is.GreaterThan(10), "nothing is painted red");
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

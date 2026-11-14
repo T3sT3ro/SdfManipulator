@@ -211,6 +211,7 @@ namespace me.tooster.sdf.Tests.Editor {
         [TestCase(SdfCombineController.CombinationOperation.SUBTRACTION)]
         [TestCase(SdfCombineController.CombinationOperation.SMOOTH_INTERSECTION)]
         [TestCase(SdfCombineController.CombinationOperation.SMOOTH_SUBTRACTION)]
+        [TestCase(SdfCombineController.CombinationOperation.DYE)]
         public void Generation_CombinationOperationCompiles(SdfCombineController.CombinationOperation operation) {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             scene.GetComponentInChildren<SdfCombineController>(true).Operation = operation;

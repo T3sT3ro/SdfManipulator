@@ -27,10 +27,12 @@ namespace me.tooster.sdf.Operators {
             [InspectorName("Subtraction")]         SUBTRACTION         = 4,
             [InspectorName("Smooth intersection")] SMOOTH_INTERSECTION = 5,
             [InspectorName("Smooth subtraction")]  SMOOTH_SUBTRACTION  = 6,
+            // the other children paint the first one without changing its shape
+            [InspectorName("Dye")] DYE = 7,
         }
 
         static bool IsSmooth(CombinationOperation operation)
-            => operation is SMOOTH_UNION or SMOOTH_EXP_UNION or SMOOTH_INTERSECTION or SMOOTH_SUBTRACTION;
+            => operation is SMOOTH_UNION or SMOOTH_EXP_UNION or SMOOTH_INTERSECTION or SMOOTH_SUBTRACTION or DYE;
 
 
 
@@ -58,7 +60,7 @@ namespace me.tooster.sdf.Operators {
         }
 
         [CreateProperty] [ShaderProperty(Description = "Blend factor")]
-        [VisibleWhen(nameof(operation), new[] { (int)SMOOTH_UNION, (int)SMOOTH_EXP_UNION, (int)SMOOTH_INTERSECTION, (int)SMOOTH_SUBTRACTION })]
+        [VisibleWhen(nameof(operation), new[] { (int)SMOOTH_UNION, (int)SMOOTH_EXP_UNION, (int)SMOOTH_INTERSECTION, (int)SMOOTH_SUBTRACTION, (int)DYE })]
         public float BlendFactor {
             get => blendFactor;
             set => SetField(ref blendFactor, value, false);
@@ -95,6 +97,7 @@ namespace me.tooster.sdf.Operators {
                 SUBTRACTION         => "sdf::operators::subtractSimple",
                 SMOOTH_INTERSECTION => "sdf::operators::intersectSmooth",
                 SMOOTH_SUBTRACTION  => "sdf::operators::subtractSmooth",
+                DYE                 => "sdf::operators::dye",
                 _                => throw new ArgumentOutOfRangeException(),
             };
 

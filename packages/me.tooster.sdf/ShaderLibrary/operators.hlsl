@@ -131,6 +131,14 @@ namespace sdf { namespace operators {
         return result;
     }
 
+    /// Paints \p a with the material of \p b inside \p b, with an edge \p k wide, and keeps the shape and ID of \p a. Only
+    /// the material depends on \p b, so marching, which reads distances, doesn't evaluate \p b at all.
+    SdfResult dye(SdfResult a, SdfResult b, float k) {
+        float inside = 1 - smoothstep(-k, k, b.distance);
+        a.material = lerpMaterials(a.material, b.material, inside);
+        return a;
+    }
+
     /// \p a without \p b, with a smooth edge where \p b cuts \p a
     SdfResult subtractSmooth(SdfResult a, SdfResult b, float k) {
         b.distance = -b.distance;

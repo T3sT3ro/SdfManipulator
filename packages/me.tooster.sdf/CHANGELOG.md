@@ -87,6 +87,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   without ZWrite.
 - The render state that commands read (`_Cull`, `_ZTest`, `_ZWrite`) uses `Float` material properties, like Unity's
   own shaders, instead of the legacy `Int` type, and the step counts are `int` uniforms.
+- A *Dye* combination paints its first child with the materials of the other children where they overlap it, without
+  changing its shape (#9).
 - Combinations can subtract their other children from the first one, and intersect and subtract with a smooth edge.
   Where a subtraction cuts a surface, the surface belongs to the cutting object, so picking it selects that object.
 - *SDF > Operators > Repeat* repeats the space of an SDF object in cells, without limit or a set number of times on each
