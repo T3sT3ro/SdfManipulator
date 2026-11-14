@@ -62,20 +62,17 @@ namespace me.tooster.sdf.Tests.Editor {
                 Assert.That(shader.keywordSpace.FindKeyword(keyword).isValid, Is.False, $"{keyword} is a keyword");
         }
 
-        // commands and keyword drawers read Float properties, and the legacy Int type also reports Float
-        [TestCase("_Cull", ShaderPropertyType.Float)]
-        [TestCase("_ZTest", ShaderPropertyType.Float)]
-        [TestCase("_DrawMode", ShaderPropertyType.Float)]
-        [TestCase("_MAX_STEPS", ShaderPropertyType.Int)]
-        [TestCase("_AO_STEPS", ShaderPropertyType.Int)]
-        public void TemplateScene_RenderingSettingHasType(string property, ShaderPropertyType type) {
+        // the other settings are uniforms that SdfScene sets, so regenerating the shader doesn't reset them
+        [Test]
+        public void TemplateScene_MaterialHoldsOnlyTheRenderState() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             scene.RevalidateScene();
             shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
 
-            var index = shader.FindPropertyIndex(property);
-            Assert.That(index, Is.Not.EqualTo(-1), $"{property} isn't a material property");
-            Assert.That(shader.GetPropertyType(index), Is.EqualTo(type));
+            var properties = Enumerable.Range(0, shader.GetPropertyCount()).Select(shader.GetPropertyName);
+            Assert.That(properties, Is.EquivalentTo(new[] { "_Cull", "_ZWrite", "_ZTest" }));
+            foreach (var property in new[] { "_Cull", "_ZWrite", "_ZTest" })
+                Assert.That(shader.GetPropertyType(shader.FindPropertyIndex(property)), Is.EqualTo(ShaderPropertyType.Float));
         }
 
         [Test]

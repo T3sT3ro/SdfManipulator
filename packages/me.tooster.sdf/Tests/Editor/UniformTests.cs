@@ -62,6 +62,19 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void RenderingSettings_SetUniformsOnTheRenderer() {
+            scene.rendering.drawMode = DrawMode.Normal;
+            scene.rendering.maxSteps = 77;
+
+            scene.UpdateShaderUniforms(forceUpdateAll: true);
+
+            var block = new MaterialPropertyBlock();
+            scene.GetComponentInChildren<Renderer>(true).GetPropertyBlock(block);
+            Assert.That(block.GetFloat("_DrawMode"), Is.EqualTo((float)DrawMode.Normal));
+            Assert.That(block.GetInteger("_MAX_STEPS"), Is.EqualTo(77));
+        }
+
+        [Test]
         public void MaterialProperties_SetUniformsOnTheRenderer() {
             var sdf = root.GetComponentInChildren<SdfSphereController>(true).GetComponent<SdfController>();
             sdf.Albedo = Color.red;

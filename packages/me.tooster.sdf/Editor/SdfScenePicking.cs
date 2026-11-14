@@ -129,8 +129,9 @@ namespace me.tooster.sdf.Editor {
         }
 
         /// <summary>
-        ///     Returns a copy of <paramref name="source" /> with the uniforms of the renderer's property block. Immediate
-        ///     drawing can't use a property block, and both picking passes have to march the same rays.
+        ///     Returns a copy of <paramref name="source" /> with the uniforms of the renderer's property block and the scene's
+        ///     rendering settings. Immediate drawing can't use a property block, and both picking passes have to march the
+        ///     same rays.
         /// </summary>
         static Material PickingMaterial(Material source, Renderer renderer, SdfScene scene) {
             // a copy of a material variant is a variant too, whose shader can't be set, so build the copy from the shader
@@ -153,6 +154,7 @@ namespace me.tooster.sdf.Editor {
                 else // vectors and colors, which the block already holds in linear space
                     material.SetVector(property.shaderId, block.GetVector(property.shaderId));
             }
+            scene.rendering.ApplyTo(material);
             return material;
         }
     }

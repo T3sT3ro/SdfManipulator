@@ -16,6 +16,10 @@
                  style="padding-top: 12px; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(135, 206, 250); border-right-color: rgb(135, 206, 250); border-top-color: rgb(135, 206, 250); border-bottom-color: rgb(135, 206, 250); border-left-width: 4px; padding-left: 15px;">
         <uie:PropertyField name="sceneRoot" binding-path="sdfSceneRoot"/>
     </ui:GroupBox>
+    <ui:GroupBox name="rendering" text="Rendering"
+                 style="padding-top: 12px; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(144, 238, 144); border-right-color: rgb(144, 238, 144); border-top-color: rgb(144, 238, 144); border-bottom-color: rgb(144, 238, 144); border-left-width: 4px; padding-left: 15px;">
+        <uie:PropertyField name="renderingSettings" binding-path="rendering"/>
+    </ui:GroupBox>
     <ui:VisualElement name="warning" style="flex-grow: 1; margin-top: 6px;"/>
     <ui:VisualElement name="prefabStageGroup" style="flex-grow: 1;">
         <ui:GroupBox name="generation" text="Generation" class="section-title"

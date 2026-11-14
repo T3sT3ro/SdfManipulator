@@ -38,9 +38,9 @@ namespace me.tooster.sdf.Generators {
         static MaterialProperties MaterialProperties() => new() { properties = GlobalShaderProperties.ToList() };
 
         /// <summary>
-        ///     The rendering settings. Properties that commands read (<c>Cull [_Cull]</c>) or that select keywords are
-        ///     <c>Float</c>, as in Unity's own shaders, and integer uniforms are <c>Integer</c>. The legacy <c>Int</c> type
-        ///     stores a float.
+        ///     The render state, which commands read (<c>Cull [_Cull]</c>), so it has to be in the material. Like in Unity's
+        ///     own shaders, these properties are <c>Float</c>. The other rendering settings are uniforms that
+        ///     <see cref="SdfScene" /> sets from <see cref="RenderingSettings" />.
         /// </summary>
         static IEnumerable<PropertySyntax> GlobalShaderProperties {
             get {
@@ -53,7 +53,7 @@ namespace me.tooster.sdf.Generators {
                         initializer = new Property.Number<IntLiteral> { numberLiteral = (int)CullMode.Off },
                         attributes = new[]
                         {
-                            SyntaxUnityExtensions.headerAttribute("global raymarching properties"),
+                            SyntaxUnityExtensions.headerAttribute("render state"),
                             SyntaxUnityExtensions.spaceAttribute(),
                             SyntaxUnityExtensions.tooltipAttribute("turn OFF to raymarch inside object"),
                             SyntaxUnityExtensions.enumAttribute<CullMode>(),
@@ -79,72 +79,6 @@ namespace me.tooster.sdf.Generators {
                         initializer = new Property.Number<IntLiteral>
                             { numberLiteral = (int)CompareFunction.LessEqual },
                         attributes = SyntaxUnityExtensions.enumAttribute<CompareFunction>(),
-                    },
-                    // [Enum(me.tooster.sdf.DrawMode)] _DrawMode ("Draw mode", Float) = 0
-                    new PropertySyntax
-                    {
-                        id = "_DrawMode", displayName = "Draw mode", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<IntLiteral> { numberLiteral = (int)DrawMode.Material },
-                        attributes = SyntaxUnityExtensions.enumAttribute<DrawMode>(),
-                    },
-                    // [ToggleUI] _SHOW_WORLD_GRID ("Show World Grid overlay", Float) = 0
-                    new PropertySyntax
-                    {
-                        id = "_SHOW_WORLD_GRID", displayName = "Show World Grid overlay", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<IntLiteral> { numberLiteral = 0 },
-                        attributes = new[]
-                        {
-                            SyntaxUnityExtensions.toggleUIAttribute(),
-                            SyntaxUnityExtensions.tooltipAttribute("Show world grid overlay"),
-                        },
-                    },
-                    // _EpsilonRay ("epsilon step for ray to consider hit", Float) = 0.001
-                    new PropertySyntax
-                    {
-                        id = "_EPSILON_RAY", displayName = "epsilon step for ray to consider hit", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<FloatLiteral> { numberLiteral = 0.001f },
-                    },
-                    // _EPSILON_NORMAL ("epsilon for calculating normal", Float) = 0.001
-                    new PropertySyntax
-                    {
-                        id = "_EPSILON_NORMAL", displayName = "epsilon for calculating normal", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<FloatLiteral> { numberLiteral = 0.001f },
-                    },
-                    // _MAX_STEPS ("max raymarching steps", Integer) = 200
-                    new PropertySyntax
-                    {
-                        id = "_MAX_STEPS", displayName = "max raymarching steps", propertyType = new IntegerKeyword(),
-                        initializer = new Property.Number<IntLiteral> { numberLiteral = 200 },
-                    },
-                    // _MAX_DISTANCE ("marx raymarching distance", Float) = 200.0
-                    new PropertySyntax
-                    {
-                        id = "_MAX_DISTANCE", displayName = "max raymarching distance", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<FloatLiteral> { numberLiteral = 200.0f },
-                    },
-                    // _RAY_ORIGIN_BIAS ("ray origin bias", Float) = 0
-                    new PropertySyntax
-                    {
-                        id = "_RAY_ORIGIN_BIAS", displayName = "ray origin bias", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<FloatLiteral> { numberLiteral = 0.0f },
-                    },
-                    // _AO_STEPS ("Ambient Occlusion Steps", Integer) = 6;
-                    new PropertySyntax
-                    {
-                        id = "_AO_STEPS", displayName = "Ambient Occlusion Steps", propertyType = new IntegerKeyword(),
-                        initializer = new Property.Number<IntLiteral> { numberLiteral = 6 },
-                    },
-                    // _AO_MAX_DISTANCE ("Ambient Occlusion Max Distance") = 1;
-                    new PropertySyntax
-                    {
-                        id = "_AO_MAX_DISTANCE", displayName = "Ambient Occlusion Max Distance", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<FloatLiteral> { numberLiteral = 1.0f },
-                    },
-                    // _AO_FALLOFF ("Ambient Occlusion Falloff") = 2.5;
-                    new PropertySyntax
-                    {
-                        id = "_AO_FALLOFF", displayName = "Ambient Occlusion Falloff", propertyType = new FloatKeyword(),
-                        initializer = new Property.Number<FloatLiteral> { numberLiteral = 2.5f },
                     },
                 };
             }

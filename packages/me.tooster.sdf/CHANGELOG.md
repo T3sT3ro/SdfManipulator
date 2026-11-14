@@ -58,8 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   changed. Instances of a scene prefab can have different values, and material assets no longer change while you edit.
 - Generated shaders have no material properties for controller values and declare their uniforms without values, so
   changing a value or moving an object no longer changes the shader and recompiles it on save. Materials only hold
-  the rendering settings, such as the draw mode. A renderer that no `SdfScene` updates, e.g. in a prefab preview,
-  renders with all controller uniforms set to 0.
+  the render state. A renderer that no `SdfScene` updates, e.g. in a prefab preview, renders nothing, because all
+  its uniforms are 0.
 - Generated uniform and function names are built from an identifier that each controller gets once, e.g.
   `SDF_3f9a1c2b_Radius`. Renaming or moving objects no longer renames them, and no name contains `__`, which HLSL
   reserves. A comment above each generated function shows the object's place in the hierarchy. Run *Tools > SDF >
@@ -78,10 +78,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The draw mode, the world grid and depth output are switches on uniforms instead of shader keywords, so changing
   them compiles no shader variant. Forward passes always output the depth of the hit, which the depth test uses also
   without ZWrite.
-- The rendering settings that commands read or that select keywords (`_Cull`, `_ZTest`, `_DrawMode`) are `Float`
-  material properties, and the step counts (`_MAX_STEPS`, `_AO_STEPS`) are `Integer` properties with `int` uniforms,
-  instead of the legacy `Int` type. Materials made with earlier versions keep their step counts in the float values,
-  so set them again.
+- The render state that commands read (`_Cull`, `_ZTest`, `_ZWrite`) uses `Float` material properties, like Unity's
+  own shaders, instead of the legacy `Int` type, and the step counts are `int` uniforms.
+- The draw mode, the world grid and the raymarching settings are in the *Rendering* section of `SdfScene` instead of
+  in the material. `SdfScene` sets them with its property block, so they're saved with the scene, prefab instances can
+  override them, and regenerating the shader on save no longer resets them. The generated material only holds the
+  render state. Material assets made with earlier versions keep their render state; set the other values on the
+  scene.
 - ShaderLab `Pass` blocks can hold tags and commands, and `On` is a command argument, e.g. `ZWrite On`.
 - Each fragment builds its ray from the view and projection matrices, instead of each vertex from camera parameters.
 - The scene functions are defined once, in an include block that all passes share, and the pragmas of a shader

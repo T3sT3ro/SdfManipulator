@@ -80,9 +80,10 @@ Paths are relative to the package root.
 - **`SdfScene`**: the root component of an SDF scene, attached to the prefab root.
     - Importing the prefab generates the scene's shader and a default material and adds them to the prefab as
       sub-assets, the way Shader Graph adds them to a graph. They live in the import result, not in the prefab file,
-      so regeneration doesn't change the file. Renderers without a material use the default material. To change
-      material settings such as the draw mode, create a material asset that uses the generated shader and assign it to
-      the renderer.
+      so regeneration doesn't change the file. Renderers without a material use the default material. The draw mode,
+      the world grid and the raymarching settings are in the *Rendering* section of `SdfScene`: they're saved with the
+      scene, and prefab instances can override them. To change the render state (culling, depth test and depth
+      writes), create a material asset that uses the generated shader and assign it to the renderer.
     - In Prefab Mode, structural changes, undo and redo update the shader in memory right away, and saving the prefab
       regenerates it. *Tools > SDF > Regenerate All Scene Shaders* reimports every scene prefab. *Tools > SDF > Migrate
       Scenes* converts scenes that store a standalone `.shader` or an embedded shader and material, and gives
@@ -93,8 +94,8 @@ Paths are relative to the package root.
     - It listens to property change events emitted by controllers and sets the changed uniforms on its renderers with
       a `MaterialPropertyBlock`, so instances of the same prefab can have different values. The generated shader
       declares the uniforms without values and has no material properties for them, so changing a value doesn't change
-      the shader. The material only holds the rendering settings. A renderer that no `SdfScene` updates, e.g. in a
-      prefab preview, renders with all controller uniforms set to 0.
+      the shader. The material only holds the render state. A renderer that no `SdfScene` updates, e.g. in a prefab
+      preview, renders nothing: all its uniforms are 0, including the step count.
 - **Shader presets** (`Runtime/Generators`): for now just `BIRPShaderPreset`, a shader generation preset tailored for
   the built-in forward rendering pipeline. Essentially a stateful factory for shader generators; think of it as a
   "cooking school" for creating chefs.

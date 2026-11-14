@@ -28,6 +28,9 @@ namespace me.tooster.sdf {
 
         public SdfController? sdfSceneRoot;
 
+        [Tooltip("How the scene is raymarched and shown. Saved with the scene, unlike the values of the generated material.")]
+        public RenderingSettings rendering = new();
+
         // Set only in the prefab's import result, where they point to the shader and the default material that the import
         // generated as sub-assets of the prefab. A prefab file can't reference its own generated sub-assets, so in the
         // file they are always empty.
@@ -258,10 +261,12 @@ namespace me.tooster.sdf {
 
             if (forceUpdateAll)
                 sceneData.queuedPropertyUdates.UnionWith(sceneData.Properties);
-            if (sceneData.queuedPropertyUdates.Count <= 0)
+            if (!forceUpdateAll && sceneData.queuedPropertyUdates.Count <= 0)
                 return;
 
             propertyBlock ??= new MaterialPropertyBlock();
+            if (forceUpdateAll)
+                rendering.ApplyTo(propertyBlock);
             foreach (var p in sceneData.queuedPropertyUdates)
                 UpdateProperty(p);
             sceneData.queuedPropertyUdates.Clear();

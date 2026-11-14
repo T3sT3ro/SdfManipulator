@@ -76,7 +76,8 @@ namespace me.tooster.sdf.Tests.Editor {
         public void DrawMode_SwitchesWithoutAnotherVariant() {
             world.ground.SetActive(false);
             var shaded = world.Render();
-            world.material.SetFloat("_DrawMode", (float)DrawMode.Normal);
+            world.scene.rendering.drawMode = DrawMode.Normal;
+            world.scene.UpdateShaderUniforms(forceUpdateAll: true);
             var normals = world.Render();
 
             var changed = shaded.Where((c, i) => Mathf.Abs(c.r - normals[i].r) + Mathf.Abs(c.g - normals[i].g) + Mathf.Abs(c.b - normals[i].b) > 30).Count();
