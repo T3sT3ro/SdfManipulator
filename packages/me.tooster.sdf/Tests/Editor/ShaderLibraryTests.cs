@@ -92,6 +92,8 @@ namespace me.tooster.sdf.Tests.Editor {
         [TestCase(3, 2, -2, 0, 0)]
         // euler_to_rot swapped its second and third rows, so a rotation about z turned x into z
         [TestCase(4, 0, 1, 0, 0)]
+        // the top of a rounded cylinder with half height 1 is at height 1; it used to grow by the rounding
+        [TestCase(5, 0, 0, 0, 0)]
         public void Helper_ReturnsTheExpectedValue(int testCase, float x, float y, float z, float w) {
             var result = Run(testCase);
             Assert.That(Vector4.Distance(result, new Vector4(x, y, z, w)), Is.LessThan(1e-4f), $"got {result}");

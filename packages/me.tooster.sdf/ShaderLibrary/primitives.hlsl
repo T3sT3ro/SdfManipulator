@@ -77,9 +77,9 @@ namespace sdf { namespace primitives3D {
         return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
     }
 
-    // FIXME: is this needed? round operator should solve it...
+    /// a cylinder with radius \p ra and half height \p h, whose edges are rounded with radius \p rb
     float cylinder_rounded(float3 p, float ra, float rb, float h) {
-        float2 d = float2(length(p.xz) - ra + rb, abs(p.y) - h);
+        float2 d = float2(length(p.xz) - ra + rb, abs(p.y) - h + rb);
         return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - rb;
     }
 

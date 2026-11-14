@@ -103,6 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Mode into the prefab instead of the main scene, and the creation of operators can be undone (#77).
 - Undo didn't revert dragging the scene handles of primitives, because the handles changed the controller before
   undo recorded it (#76).
+- Rounded cylinders were taller by twice their rounding; the rounding now stays within their height (#100).
 - Shader library helpers that nothing used yet: `repeat` mirrored negative coordinates, `elongate_fast` returned a
   float, `m_scale` was singular, `euler_to_rot` swapped two rows, `decompose` read the translation from the wrong row,
   the domain matrices of `domain.hlsl` were all scale matrices, `normalSdfOcclusion` compared with the square of the
