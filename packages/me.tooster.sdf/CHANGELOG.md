@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   camera depth texture. SDF scenes receive realtime shadows, which are sampled at the raymarched hit.
 - SDF objects have the properties of the Standard material: albedo, metallic, smoothness and emission. They are
   uniforms, so changing them doesn't regenerate the shader. `Color` properties of controllers become `float4` uniforms.
+- A combination can override the materials of its children with its own (*Override Material*).
 
 ### Changed
 

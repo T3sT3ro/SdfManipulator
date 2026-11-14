@@ -42,7 +42,8 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
 - Add primitives and operators by adding components to game objects, or with *GameObject > SDF > Primitives* and
   *GameObject > SDF > Operators* in the hierarchy.
 - Each SDF object has a *Material* section with the properties of the Standard shader: albedo, metallic, smoothness
-  and emission. Where objects blend, e.g. in a smooth union, their materials blend too.
+  and emission. Where objects blend, e.g. in a smooth union, their materials blend too. A combination with *Override
+  Material* uses its own material instead.
 
 ## Writing your own controllers
 
