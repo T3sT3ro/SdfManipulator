@@ -110,6 +110,35 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(MeanSteps(Render(true, DrawMode.Steps)), Is.LessThan(MeanSteps(Render(false, DrawMode.Steps))));
         }
 
+        // the configurations of #104: both projections and the camera inside the domain, with and without clipping
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void SdfScene_RendersForTheCameraConfiguration(bool insideDomain, bool clipToDomainBox) {
+            world.ground.SetActive(false);
+            world.scene.rendering.clipToDomainBox = clipToDomainBox;
+            world.scene.UpdateShaderUniforms(forceUpdateAll: true);
+            var perspective = world.Render().Count(c => c.r + c.g + c.b > 0);
+
+            world.camera.orthographic = true;
+            world.camera.orthographicSize = 2;
+            var orthographic = world.Render().Count(c => c.r + c.g + c.b > 0);
+
+            Assert.That(perspective, Is.GreaterThan(100), "the SDF isn't visible with a perspective camera");
+            Assert.That(orthographic, Is.GreaterThan(100), "the SDF isn't visible with an orthographic camera");
+
+            if (!insideDomain)
+                return;
+            // the domain is a cube 3 units wide around the origin; look at the sphere from inside it, through no face
+            world.camera.orthographic = false;
+            world.camera.transform.position = new Vector3(0, 0, -1.3f);
+            world.camera.transform.rotation = Quaternion.identity;
+            world.camera.nearClipPlane = 0.05f;
+            var inside = world.Render().Count(c => c.r + c.g + c.b > 0);
+            Assert.That(inside, Is.GreaterThan(RenderTestScene.Size * RenderTestScene.Size / 4), "the SDF isn't visible from inside the domain");
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 
