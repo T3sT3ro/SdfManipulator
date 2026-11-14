@@ -237,6 +237,22 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void MirrorAndTwist_JoinTheStackAndCompile() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            var sphere = templateRoot.GetComponentInChildren<SdfSphereController>(true);
+            var mirror = sphere.gameObject.AddComponent<SdfMirrorController>();
+            var twist = sphere.gameObject.AddComponent<SdfTwistController>();
+            scene.RevalidateScene();
+            var source = scene.AssembleShaderSource();
+
+            Assert.That(sphere.GetComponent<SdfController>().sdfModifiers, Has.Member(mirror).And.Member(twist));
+            StringAssert.Contains("sdf::operators::mirror(", source);
+            StringAssert.Contains("sdf::operators::twist(", source);
+            shader = ShaderUtil.CreateShaderAsset(source);
+            Assert.That(CompileErrors(shader, source), Is.Empty);
+        }
+
+        [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);

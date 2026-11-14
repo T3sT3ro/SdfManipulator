@@ -39,6 +39,8 @@ namespace me.tooster.sdf.Tests.Editor {
                     case 3: return float4(sdf::operators::elongate_fast(float3(3, -3, 0.5), 1), 0);
                     case 4: return mul(euler_to_rot(float3(0, 0, UNITY_PI / 2)), float4(1, 0, 0, 0));
                     case 6: return sdf::primitives3D::capsule(float3(0, 1.5, 0), 1, 0.25);
+                    case 7: return float4(sdf::operators::mirror(float3(-1, 2, -3), float3(1, 0, 1)), 0);
+                    case 8: return float4(sdf::operators::twist(float3(1, 0.5, 0), UNITY_PI), 0);
                     default: return sdf::primitives3D::cylinder_rounded(float3(0, 1, 0), 0.5, 0.2, 1);
                 }
             }
@@ -97,6 +99,9 @@ namespace me.tooster.sdf.Tests.Editor {
         [TestCase(5, 0, 0, 0, 0)]
         // half a unit above the top of the segment, a quarter above the surface
         [TestCase(6, 0.25f, 0.25f, 0.25f, 0.25f)]
+        [TestCase(7, 1, 2, 3, 0)]
+        // a quarter turn at half a unit of height
+        [TestCase(8, 0, 0.5f, 1, 0)]
         public void Helper_ReturnsTheExpectedValue(int testCase, float x, float y, float z, float w) {
             var result = Run(testCase);
             Assert.That(Vector4.Distance(result, new Vector4(x, y, z, w)), Is.LessThan(1e-4f), $"got {result}");

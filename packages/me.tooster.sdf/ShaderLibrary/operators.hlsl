@@ -148,6 +148,18 @@ namespace sdf { namespace operators {
         return p - c * round(p / c);
     }
 
+    /// mirrors p across the planes of the axes whose component in \p axes is 1
+    float3 mirror(in float3 p, in float3 axes) {
+        return lerp(p, abs(p), axes);
+    }
+
+    /// twists p around the y axis by \p k radians for each unit of height
+    float3 twist(in float3 p, in float k) {
+        float s, c;
+        sincos(k * p.y, s, c);
+        return float3(c * p.x - s * p.z, p.y, s * p.x + c * p.z);
+    }
+
     /// repeat in period of c units, with l copies on each side of the original on each axis
     float3 repeatLimited(in float3 p, in float3 c, in float3 l) {
         return p - c * clamp(round(p / c), -l, l);
