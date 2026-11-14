@@ -112,6 +112,7 @@ namespace me.tooster.sdf.Generators {
                     SceneSelectionPass(),
                     PickingPass(),
                     ObjectPickingPass(),
+                    FocusPass(),
                 },
             };
 
@@ -235,6 +236,32 @@ namespace me.tooster.sdf.Generators {
                     Tags(("LightMode", "SdfObjectPicking")),
                     new Cull { state = new OffKeyword() },
                     PassProgram("vertex objectPickingVertex", "fragment objectPickingFragment"),
+                },
+            };
+
+        /// <summary>
+        ///     Draws one object on its own as a translucent ghost, also where other objects hide it or an operation removes
+        ///     it. Unity doesn't draw this pass by itself: the editor draws it for selected objects.
+        /// </summary>
+        Pass FocusPass()
+            => new()
+            {
+                statements = new List<SubShaderOrPassStatement>
+                {
+                    new Pass.Name { name = "SdfFocus" },
+                    Tags(("LightMode", "SdfFocus")),
+                    new Cull { state = new OffKeyword() },
+                    new ZWrite { state = new OffKeyword() },
+                    new ZTest { operation = new AlwaysKeyword() },
+                    new Blend
+                    {
+                        blendArguments = new Blend.SrcDstArguments
+                        {
+                            srcFactorArg = new SrcAlphaKeyword(),
+                            dstFactorArg = new OneMinusSrcAlphaKeyword(),
+                        },
+                    },
+                    PassProgram("vertex focusVertex", "fragment focusFragment"),
                 },
             };
 

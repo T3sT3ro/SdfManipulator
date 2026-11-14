@@ -46,8 +46,8 @@ SdfVertexOutput sdfVertex(appdata_base v) {
     return o;
 }
 
-/// Marches the ray of a fragment and discards the fragment if the ray hits nothing.
-SdfResult marchFragment(float4 clipPos, out Ray3D ray) {
+/// Builds the ray of a fragment with the scene's ray settings. Returns false if the ray misses the domain box.
+bool fragmentRay(float4 clipPos, out Ray3D ray) {
     ray = viewRayFromClipPos(clipPos);
     ray.ro += ray.rd * _RAY_ORIGIN_BIAS;
     ray.maxDistance = _MAX_DISTANCE;
@@ -56,10 +56,17 @@ SdfResult marchFragment(float4 clipPos, out Ray3D ray) {
         // march only where the ray is inside the domain, which skips the empty space in front of it
         float2 span;
         if (!rayBoxIntersection(ray, unity_WorldToObject, span))
-            discard;
+            return false;
         ray.marchedDistance = max(0, span.x);
         ray.maxDistance = min(ray.maxDistance, span.y);
     }
+    return true;
+}
+
+/// Marches the ray of a fragment and discards the fragment if the ray hits nothing.
+SdfResult marchFragment(float4 clipPos, out Ray3D ray) {
+    if (!fragmentRay(clipPos, ray))
+        discard;
     SdfResult sdf = raymarch(ray, _MAX_STEPS, _EPSILON_RAY);
     if (!isHit(sdf))
         discard;

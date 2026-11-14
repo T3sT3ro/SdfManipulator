@@ -41,6 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The scene view outlines selected SDF objects, and a selected combination with all of its objects.
 - Generated shaders have a function that evaluates one object by its ID, `sdfObject(p, id)`, for editor views of
   single objects.
+- The scene view shows selected SDF objects on their own as translucent ghosts, also where other objects hide them or
+  an operation removes them, e.g. an object subtracted from another. *Tools > SDF > Show Selected Objects* turns it on
+  and off (#37).
 
 ### Changed
 

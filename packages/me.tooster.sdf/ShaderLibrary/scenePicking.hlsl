@@ -76,3 +76,51 @@ float4 objectPickingFragment(SdfVertexOutput i, out float depth : SV_Depth) : SV
 }
 
 #pragma endregion
+
+#pragma region focus view
+
+/// Set by SdfSceneFocus: the ID of the object that the focus view shows on its own
+float _SdfFocusId;
+
+/// Marches a ray against the object with the ID \p id only
+SdfResult marchObject(inout Ray3D ray, int id) {
+    SdfResult sdf = emptySdfResult();
+    for (ray.steps = 0; ray.steps < _MAX_STEPS && ray.marchedDistance < ray.maxDistance; ray.steps++) {
+        float3    p = ray.ro + ray.marchedDistance * ray.rd;
+        SdfResult objectAtP = sdfObject(p, id);
+        if (objectAtP.distance < _EPSILON_RAY) {
+            sdf = objectAtP;
+            sdf.p = p;
+            sdf.distance = ray.marchedDistance;
+            return sdf;
+        }
+        ray.marchedDistance += objectAtP.distance;
+    }
+    return sdf;
+}
+
+SdfVertexOutput focusVertex(appdata_base v) { return sdfVertex(v); }
+
+/// Draws the focused object as a translucent ghost, also where other objects hide it or an operation removes it
+float4 focusFragment(SdfVertexOutput i) : SV_Target {
+    Ray3D ray;
+    if (!fragmentRay(i.clipPos, ray))
+        discard;
+    int       id = (int)round(_SdfFocusId);
+    SdfResult sdf = marchObject(ray, id);
+    if (!isHit(sdf))
+        discard;
+
+    const float2 k = float2(1, -1);
+    float3 normal = normalize(
+        k.xyy * sdfObject(sdf.p + k.xyy * _EPSILON_NORMAL, id).distance +
+        k.yyx * sdfObject(sdf.p + k.yyx * _EPSILON_NORMAL, id).distance +
+        k.yxy * sdfObject(sdf.p + k.yxy * _EPSILON_NORMAL, id).distance +
+        k.xxx * sdfObject(sdf.p + k.xxx * _EPSILON_NORMAL, id).distance
+    );
+    // brighter where the surface faces the camera, so the shape reads without lighting
+    float facing = saturate(dot(normal, -ray.rd));
+    return float4(lerp(float3(0.2, 0.45, 1), float3(0.75, 0.9, 1), facing), 0.35);
+}
+
+#pragma endregion

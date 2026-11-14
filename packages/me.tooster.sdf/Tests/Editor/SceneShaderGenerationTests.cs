@@ -81,7 +81,7 @@ namespace me.tooster.sdf.Tests.Editor {
             scene.RevalidateScene();
             shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
 
-            Assert.That(LightModes(shader), Is.EqualTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster", "SceneSelectionPass", "Picking", "SdfObjectPicking" }).IgnoreCase);
+            Assert.That(LightModes(shader), Is.EqualTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster", "SceneSelectionPass", "Picking", "SdfObjectPicking", "SdfFocus" }).IgnoreCase);
         }
 
         [Test]

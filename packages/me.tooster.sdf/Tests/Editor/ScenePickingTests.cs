@@ -115,5 +115,22 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(withoutIt, Has.None.EqualTo(mostPicked));
             Assert.That(withoutIt.Count(o => o != null), Is.GreaterThan(0), "no other object is picked");
         }
+
+        [Test]
+        public void FocusPass_ShowsTheSelectedObject() {
+            var picked = PickedObjects(_ => true);
+            var sphere = world.root.GetComponentInChildren<me.tooster.sdf.Primitives.SdfSphereController>(true).GetComponent<SdfController>();
+            var id = world.scene.sceneData.controllers[sphere].numericId;
+
+            var focus = world.RenderImmediate(() => Assert.That(SdfSceneFocus.Draw(world.scene, id), "nothing has the focus pass"))
+                .Select(c => c.r + c.g + c.b + c.a > 0)
+                .ToArray();
+
+            var spherePixels = picked.Count(o => o == sphere.gameObject);
+            Assert.That(spherePixels, Is.GreaterThan(10), "the sphere isn't visible");
+            var shown = picked.Where((o, i) => o == sphere.gameObject && focus[i]).Count();
+            Assert.That(shown, Is.GreaterThan(spherePixels * 95 / 100), "the focus view doesn't show the sphere");
+            Assert.That(focus.Count(f => f), Is.LessThan(focus.Length / 2), "the focus view covers more than the sphere");
+        }
     }
 }

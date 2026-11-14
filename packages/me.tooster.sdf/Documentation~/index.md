@@ -46,7 +46,8 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
   that have no material of their own, so one material on the root combination colors the whole scene. Objects without
   a material are white. Where objects blend, e.g. in a smooth union, their materials blend too.
 - In the scene view, click an SDF surface to select the scene, and click it again to select the object under the
-  cursor. The scene view outlines selected objects.
+  cursor. The scene view outlines selected objects and shows them on their own as translucent ghosts, also where
+  they're hidden or subtracted. *Tools > SDF > Show Selected Objects* turns the ghosts off.
 
 ## Writing your own controllers
 
