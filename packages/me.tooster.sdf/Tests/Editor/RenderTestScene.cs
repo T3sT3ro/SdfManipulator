@@ -79,6 +79,13 @@ namespace me.tooster.sdf.Tests.Editor {
             camera.scene = root.scene;
         }
 
+        /// <summary>Generates the shader again, after a structural change, and sets the uniforms.</summary>
+        public void Regenerate() {
+            scene.RevalidateScene();
+            ShaderUtil.UpdateShaderAsset(shader, scene.AssembleShaderSource());
+            scene.UpdateShaderUniforms(forceUpdateAll: true);
+        }
+
         /// <summary>Moves <paramref name="go" /> into the preview scene of the template.</summary>
         public void Add(GameObject go) => SceneManager.MoveGameObjectToScene(go, root.scene);
 

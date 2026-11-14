@@ -132,30 +132,30 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
-        public void Generation_AssignsTheMaterialOfEachObject() {
+        public void Generation_ObjectsWithoutAMaterialUseTheDefault() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             scene.RevalidateScene();
             var source = scene.AssembleShaderSource();
 
-            var objects = templateRoot.GetComponentsInChildren<SdfController>(true).Where(c => c is not SdfCombineController).ToList();
-            Assert.That(objects, Is.Not.Empty);
-            foreach (var sdf in objects) {
-                var albedo = scene.sceneData.controllers[sdf].properties[new Unity.Properties.PropertyPath(nameof(SdfController.Albedo))].identifier;
-                StringAssert.Contains($"result.material = standardMaterial({albedo},", source);
-            }
+            StringAssert.Contains("result.material = defaultMaterial();", source);
+            StringAssert.DoesNotContain("standardMaterial(SDF_", source);
         }
 
         [Test]
-        public void Generation_CombinationOverridesMaterialOnlyWhenAsked() {
+        public void Generation_ObjectsInheritTheMaterialOfTheirParent() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
-            var combine = templateRoot.GetComponentInChildren<SdfCombineController>(true);
+            var root = scene.GetComponentInChildren<SdfCombineController>(true);
+            var sphere = templateRoot.GetComponentInChildren<SdfSphereController>(true).GetComponent<SdfController>();
+            root.MaterialSource = MaterialSource.Own;
+            sphere.MaterialSource = MaterialSource.Own;
             scene.RevalidateScene();
-            var albedo = scene.sceneData.controllers[combine].properties[new Unity.Properties.PropertyPath(nameof(SdfController.Albedo))].identifier;
-            var assignment = $"result.material = standardMaterial({albedo},";
+            var source = scene.AssembleShaderSource();
 
-            StringAssert.DoesNotContain(assignment, scene.AssembleShaderSource());
-            combine.OverrideMaterial = true;
-            StringAssert.Contains(assignment, scene.AssembleShaderSource());
+            string AlbedoOf(SdfController sdf)
+                => scene.sceneData.controllers[sdf].properties[new Unity.Properties.PropertyPath(nameof(SdfController.Albedo))].identifier;
+            var objects = templateRoot.GetComponentsInChildren<SdfController>(true).Count(c => c is not SdfCombineController);
+            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(sphere)},"), Is.EqualTo(1), "the sphere doesn't use its own material");
+            Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(root)},"), Is.EqualTo(objects - 1), "the other objects don't inherit the root's material");
         }
 
         [Test]

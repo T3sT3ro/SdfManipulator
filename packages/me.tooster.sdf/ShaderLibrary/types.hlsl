@@ -30,6 +30,9 @@ Material standardMaterial(float4 albedo, float metallic, float smoothness, float
     return m;
 }
 
+/// Returns the material of objects that have none and inherit none: white, non-metallic and half smooth
+Material defaultMaterial() { return standardMaterial(1, 0, 0.5, 0); }
+
 /// Result of a raymarching operation
 struct SdfResult {
     ID       id;

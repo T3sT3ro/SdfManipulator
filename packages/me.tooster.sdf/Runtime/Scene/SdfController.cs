@@ -24,13 +24,15 @@ namespace me.tooster.sdf {
 
         [SerializeField] [DontCreateProperty] bool inverted;
 
+        [ShaderStructural] public Controller[] sdfModifiers = Array.Empty<Controller>();
+
         [Header("Material")]
+        [Tooltip("Inherited uses the material of the nearest parent that has its own, or white if none has one")]
+        [SerializeField] [DontCreateProperty] MaterialSource materialSource;
         [SerializeField] [DontCreateProperty] Color albedo = Color.white;
         [SerializeField] [DontCreateProperty] [Range(0, 1)] float metallic;
         [SerializeField] [DontCreateProperty] [Range(0, 1)] float smoothness = 0.5f;
         [SerializeField] [DontCreateProperty] [ColorUsage(false, true)] Color emission = Color.black;
-
-        [ShaderStructural] public Controller[] sdfModifiers = Array.Empty<Controller>();
 
         /// Should the sdf be inverted, i.e. "inside out"?
         [CreateProperty] [ShaderStructural]
@@ -39,20 +41,33 @@ namespace me.tooster.sdf {
             set => SetField(ref inverted, value, true);
         }
 
+        /// <summary>
+        ///     Whether this object has its own material. Without one, it uses the material of the nearest parent that has
+        ///     its own, so setting the material of a combination sets the material of all of its objects.
+        /// </summary>
+        [CreateProperty] [ShaderStructural]
+        public MaterialSource MaterialSource {
+            get => materialSource;
+            set => SetField(ref materialSource, value, true);
+        }
+
         /// The base color of the surface, as in the Standard shader
         [CreateProperty] [ShaderProperty(Description = "Albedo")]
+        [VisibleWhen(nameof(materialSource), (int)MaterialSource.Own)]
         public Color Albedo {
             get => albedo;
             set => SetField(ref albedo, value, false);
         }
 
         [CreateProperty] [ShaderProperty(Description = "Metallic")]
+        [VisibleWhen(nameof(materialSource), (int)MaterialSource.Own)]
         public float Metallic {
             get => metallic;
             set => SetField(ref metallic, value, false);
         }
 
         [CreateProperty] [ShaderProperty(Description = "Smoothness")]
+        [VisibleWhen(nameof(materialSource), (int)MaterialSource.Own)]
         public float Smoothness {
             get => smoothness;
             set => SetField(ref smoothness, value, false);
@@ -60,6 +75,7 @@ namespace me.tooster.sdf {
 
         /// Light that the surface emits, in HDR
         [CreateProperty] [ShaderProperty(Description = "Emission")]
+        [VisibleWhen(nameof(materialSource), (int)MaterialSource.Own)]
         public Color Emission {
             get => emission;
             set => SetField(ref emission, value, false);
@@ -112,7 +128,7 @@ namespace me.tooster.sdf {
                                 $"result.{SdfData.sdfResultIdMemberName}",
                                 HlslExtensions.VectorConstructor(0, 0, 0, SdfScene.sceneData.controllers[this].numericId)
                             ),
-                            // result.material = standardMaterial(<albedo>, <metallic>, <smoothness>, <emission>);
+                            // result.material = <the material of this object or of the parent it inherits from>;
                             MaterialAssignment("result"),
                             // return result;
                             (Return)new Identifier { id = "result" },
@@ -130,18 +146,38 @@ namespace me.tooster.sdf {
         public override Type GetInputType()  => typeof(VectorData);
         public override Type GetOutputType() => typeof(SdfData);
 
-        /// <summary>Assigns the material of this controller to the <c>material</c> member of <paramref name="result" />.</summary>
+        /// <summary>
+        ///     Assigns the material of this object to the <c>material</c> member of <paramref name="result" />: its own
+        ///     material, the material of the nearest parent that has its own, or the default white material.
+        /// </summary>
         protected AST.Syntax.CommonSyntax.Statement<hlsl> MaterialAssignment(string result)
             => Extensions.Assignment(
                 $"{result}.{SdfData.sdfResultMaterialMemberName}",
-                Extensions.FunctionCall(
-                    "standardMaterial",
-                    (Identifier)this[albedoProperty].identifier,
-                    (Identifier)this[metallicProperty].identifier,
-                    (Identifier)this[smoothnessProperty].identifier,
-                    (Identifier)this[emissionProperty].identifier
-                )
+                MaterialOwner() is { } owner
+                    ? Extensions.FunctionCall(
+                        "standardMaterial",
+                        (Identifier)owner[albedoProperty].identifier,
+                        (Identifier)owner[metallicProperty].identifier,
+                        (Identifier)owner[smoothnessProperty].identifier,
+                        (Identifier)owner[emissionProperty].identifier
+                    )
+                    : Extensions.FunctionCall("defaultMaterial")
             );
+
+        /// <summary>
+        ///     Returns this controller if it has its own material, otherwise the nearest SDF controller among its parents in
+        ///     the same scene that has its own, or null.
+        /// </summary>
+        internal SdfController? MaterialOwner() {
+            for (var t = transform; t != null; t = t.parent) {
+                foreach (var controller in t.GetComponents<SdfController>())
+                    if (controller.materialSource == MaterialSource.Own)
+                        return controller;
+                if (t.TryGetComponent<SdfScene>(out _))
+                    break;
+            }
+            return null;
+        }
 
         /// <summary>
         ///     Puts the controller's place in the hierarchy in a comment above <paramref name="function" />, because function

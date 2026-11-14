@@ -34,8 +34,6 @@ namespace me.tooster.sdf.Operators {
         [SerializeField] [DontCreateProperty] float                blendFactor = 1;
         [Tooltip("Generate one ID for the combination")]
         [SerializeField] [DontCreateProperty] bool singleId;
-        [Tooltip("Use the material of the combination instead of blending the materials of its children")]
-        [SerializeField] [DontCreateProperty] bool overrideMaterial;
 
         /// <summary>
         ///     The nearest descendants that produce an SDF, in hierarchy order. They're derived from the hierarchy on each
@@ -63,12 +61,6 @@ namespace me.tooster.sdf.Operators {
         public bool SingleId {
             get => singleId;
             set => SetField(ref singleId, value, true);
-        }
-
-        [CreateProperty] [ShaderStructural]
-        public bool OverrideMaterial {
-            get => overrideMaterial;
-            set => SetField(ref overrideMaterial, value, true);
         }
 
         void OnTransformChildrenChanged() => OnStructureChanged();
@@ -140,10 +132,6 @@ namespace me.tooster.sdf.Operators {
                     )
                 );
             }
-
-            // result.material = standardMaterial(<albedo>, <metallic>, <smoothness>, <emission>);
-            if (OverrideMaterial)
-                body.Add(MaterialAssignment(result.id.Text));
 
             // if inverted => result.distance *= -1;
             if (Inverted) {

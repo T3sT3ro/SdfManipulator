@@ -1,4 +1,5 @@
 using System.Linq;
+using me.tooster.sdf.Operators;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -59,11 +60,13 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
-        public void SdfScene_ShadesObjectsWithTheirAlbedo() {
+        public void SdfScene_ShadesObjectsWithTheInheritedAlbedo() {
             world.ground.SetActive(false);
-            foreach (var sdf in world.root.GetComponentsInChildren<SdfController>(true))
-                sdf.Albedo = Color.red;
-            world.scene.UpdateShaderUniforms(forceUpdateAll: true);
+            // the other objects inherit the material of the root combination
+            var root = world.root.GetComponentInChildren<SdfCombineController>(true);
+            root.MaterialSource = MaterialSource.Own;
+            root.Albedo = Color.red;
+            world.Regenerate();
 
             var covered = world.Render().Where(c => c.r + c.g + c.b > 0).ToList();
             Assert.That(covered.Count, Is.GreaterThan(100), "the SDF isn't visible");
