@@ -33,6 +33,7 @@ float _MAX_DISTANCE = 10000;
 float _RAY_ORIGIN_BIAS = 0;
 float _CLIP_TO_DOMAIN_BOX; ///< nonzero to march only inside the box of the domain mesh, see rayBoxIntersection
 float4x4 _SdfWorldToScene; ///< world space to the space of the scene's root, where the controllers' transforms apply
+float _SdfSceneDistanceScale; ///< turns distances in the space of the scene's root into world distances, see sceneToWorld
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #endif
 
@@ -76,6 +77,13 @@ float3 worldToScene(float3 p) {
 /// Returns the direction \p d in the space of the scene's root, see worldToScene
 float3 worldToSceneDirection(float3 d) {
     return _SdfWorldToScene._m33 == 0 ? d : mul((float3x3)_SdfWorldToScene, d);
+}
+
+/// Turns the distance of \p result, which the scene computes in the space of its root, into a world distance: exact
+/// when the root has a uniform scale, and a lower bound otherwise
+SdfResult sceneToWorld(SdfResult result) {
+    result.distance *= _SdfWorldToScene._m33 == 0 ? 1 : _SdfSceneDistanceScale;
+    return result;
 }
 
 /// Returns the result of empty space: no object, and the largest distance that a ray marches

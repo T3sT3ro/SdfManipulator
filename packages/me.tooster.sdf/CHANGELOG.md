@@ -135,6 +135,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The distances of scaled SDF objects and scenes are scaled back to world units. Before, rays could march past the
+  surfaces of objects scaled below 1, and marched slower than needed past objects scaled above 1. Non-uniform scale
+  gives a lower bound of the distance, and only non-uniform scale warns now.
 - *GameObject > SDF* menus put the new object under the right-clicked object instead of the selection, in Prefab
   Mode into the prefab instead of the main scene, and the creation of operators can be undone (#77).
 - Undo didn't revert dragging the scene handles of primitives, because the handles changed the controller before

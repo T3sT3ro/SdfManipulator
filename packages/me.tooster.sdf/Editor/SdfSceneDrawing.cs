@@ -51,6 +51,7 @@ namespace me.tooster.sdf.Editor {
             }
             scene.rendering.ApplyTo(material);
             material.SetMatrix(SdfScene.worldToSceneId, scene.transform.worldToLocalMatrix);
+            material.SetFloat(SdfScene.sceneDistanceScaleId, TransformController.DistanceScaleOf(scene.transform.worldToLocalMatrix));
             return material;
         }
 

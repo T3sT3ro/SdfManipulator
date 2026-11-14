@@ -45,6 +45,8 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
   the Visual Effect Graph made from a mesh. The texture fills a box of the given *Size* around the object. *Distance
   Scale* converts the stored values to distances: for textures from the SDF Bake Tool, set it to the largest side of
   the box.
+- SDF objects and whole scenes can be scaled. With uniform scale, the distances stay exact. Non-uniform scale stretches
+  the SDF: the object marches slower, and smooth blends and roundings stretch with it.
 - A combination unites, intersects or subtracts its children, also with smooth edges, or dyes its first child with the
   materials of the others. The blend factor sets the width of smooth edges.
 - Add *SDF > Operators > Repeat*, *Mirror* or *Twist* to an SDF object to repeat, mirror or twist its space; the

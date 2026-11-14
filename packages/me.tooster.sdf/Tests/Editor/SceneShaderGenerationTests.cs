@@ -212,7 +212,8 @@ namespace me.tooster.sdf.Tests.Editor {
             foreach (var sdf in templateRoot.GetComponentsInChildren<SdfController>(true)) {
                 var data = scene.sceneData.controllers[sdf];
                 StringAssert.Contains($"case {data.numericId}:", source, $"{sdf.name} has no case");
-                StringAssert.Contains($"return {data.identifier}(p);", source);
+                // in world distances, like sdfScene
+                StringAssert.Contains($"return sceneToWorld({data.identifier}(p));", source);
             }
         }
 

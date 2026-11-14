@@ -29,6 +29,33 @@ namespace me.tooster.sdf.Tests.Editor {
             return block.GetFloat(RadiusId(sphere));
         }
 
+        // the distance scale is the inverse of the largest singular value of the linear part
+        static readonly object[] stretchedMatrices =
+        {
+            new object[] { Matrix4x4.identity, 1f },
+            new object[] { Matrix4x4.TRS(new Vector3(1, 2, 3), Quaternion.Euler(30, 40, 50), 2 * Vector3.one), 0.5f },
+            new object[] { Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(10, 70, 20), new Vector3(1, 2, 4)), 0.25f },
+            // a shear [[1, 1], [0, 1]] stretches by the golden ratio
+            new object[] { new Matrix4x4(new Vector4(1, 0, 0, 0), new Vector4(1, 1, 0, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 0, 1)), 0.618034f },
+        };
+
+        [TestCaseSource(nameof(stretchedMatrices))]
+        public void DistanceScale_IsTheInverseOfTheLargestStretch(Matrix4x4 matrix, float expected)
+            => Assert.That(TransformController.DistanceScaleOf(matrix), Is.EqualTo(expected).Within(1e-4f));
+
+        [Test]
+        public void ScaledObject_ScalesItsDistancesBack() {
+            var sphere = root.GetComponentInChildren<SdfSphereController>(true);
+            var transformController = sphere.GetComponent<TransformController>();
+            var distanceScale = transformController.DistanceScale;
+
+            sphere.transform.localScale *= 2;
+
+            Assert.That(transformController.DistanceScale, Is.EqualTo(2 * distanceScale).Within(1e-4f));
+            var identifier = scene.sceneData.controllers[transformController].properties[new Unity.Properties.PropertyPath(nameof(TransformController.DistanceScale))].identifier;
+            StringAssert.Contains($"* {identifier}", scene.AssembleShaderSource());
+        }
+
         [Test]
         public void ForcedUpdate_SetsUniformsOnTheRenderer() {
             var sphere = root.GetComponentInChildren<SdfSphereController>(true);

@@ -146,7 +146,16 @@ namespace me.tooster.sdf.Generators {
                 .Select(c => new Switch.Case
                     {
                         label = c.Value.numericId,
-                        body = new Statement<hlsl>[] { new Return { expression = AST.Hlsl.Extensions.FunctionCall(c.Value.identifier, (Identifier)SdfData.pParamName) } },
+                        body = new Statement<hlsl>[]
+                        {
+                            new Return
+                            {
+                                expression = AST.Hlsl.Extensions.FunctionCall(
+                                    "sceneToWorld",
+                                    AST.Hlsl.Extensions.FunctionCall(c.Value.identifier, (Identifier)SdfData.pParamName)
+                                ),
+                            },
+                        },
                     }
                 )
                 .ToList();
@@ -190,7 +199,11 @@ namespace me.tooster.sdf.Generators {
                     {
                         // p = worldToScene(p);
                         SceneSpaceAssignment(),
-                        new Return { expression = scene.sdfSceneRoot.Apply(SdfData.pData, this).evaluationExpression },
+                        // return sceneToWorld(<root>(p));
+                        new Return
+                        {
+                            expression = AST.Hlsl.Extensions.FunctionCall("sceneToWorld", scene.sdfSceneRoot.Apply(SdfData.pData, this).evaluationExpression),
+                        },
                     },
                 },
             };

@@ -17,6 +17,7 @@ using Extensions = me.tooster.sdf.AST.Hlsl.Extensions;
 namespace me.tooster.sdf {
     [GeneratePropertyBag]
     public partial class SdfController : Controller, IModifier<VectorData, SdfData> {
+        static readonly PropertyPath distanceScaleProperty = new(nameof(TransformController.DistanceScale));
         static readonly PropertyPath albedoProperty     = new(nameof(SdfMaterialController.Albedo));
         static readonly PropertyPath metallicProperty   = new(nameof(SdfMaterialController.Metallic));
         static readonly PropertyPath smoothnessProperty = new(nameof(SdfMaterialController.Smoothness));
@@ -47,6 +48,17 @@ namespace me.tooster.sdf {
 
             var sdfModifierStack = ModifierStack.Compose<VectorData, ScalarData>(sdfModifiers.OfType<IModifier>().ToArray());
             var evalSdfData = (ScalarData)sdfModifierStack.Apply(SdfData.pData, processor);
+            // the stack evaluates the SDF in the object's space; scale its distance back to the space of the scene's root
+            var distance = sdfModifiers.OfType<TransformController>()
+                .Aggregate(
+                    evalSdfData.evaluationExpression,
+                    (d, t) => new Binary
+                    {
+                        left = d,
+                        operatorToken = new AsteriskToken(),
+                        right = (Identifier)t[distanceScaleProperty].identifier,
+                    }
+                );
 
             var sdfFunctionName = SdfScene.sceneData.controllers[this].identifier;
             /*
@@ -74,9 +86,9 @@ namespace me.tooster.sdf {
                                     ? new Unary
                                     {
                                         operatorToken = new MinusToken(),
-                                        expression = evalSdfData.evaluationExpression,
+                                        expression = new Parenthesized { expression = distance },
                                     }
-                                    : evalSdfData.evaluationExpression
+                                    : distance
                             ),
                             // result.id = <primitiveID integer>;
                             Extensions.Assignment(

@@ -407,6 +407,31 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void ScaledObject_MarchesLikeTheSameObjectWithoutScale() {
+            world.ground.SetActive(false);
+            var combine = world.root.GetComponentInChildren<SdfCombineController>(true);
+            foreach (var child in combine.Children.ToList())
+                Object.DestroyImmediate(child.gameObject);
+            var sphere = global::me.tooster.sdf.Editor.Inspectors.Primitives.SdfPrimitiveControllerEditor
+                .InstantiatePrimitive<me.tooster.sdf.Primitives.SdfSphereController>("sphere", new UnityEditor.MenuCommand(combine.gameObject))
+                .GetComponent<me.tooster.sdf.Primitives.SdfSphereController>();
+            world.scene.rendering.drawMode = DrawMode.Steps;
+            sphere.Radius = 0.6f;
+            world.Regenerate();
+            var unscaled = world.Render();
+
+            sphere.Radius = 0.3f;
+            sphere.transform.localScale = 2 * Vector3.one;
+            world.scene.UpdateShaderUniforms(forceUpdateAll: true);
+            var scaled = world.Render();
+
+            // the steps view goes from blue to red as the steps increase
+            var covered = unscaled.Count(c => c.a > 0);
+            Assert.That(covered, Is.GreaterThan(100), "the sphere isn't visible");
+            Assert.That(DifferentPixels(scaled, unscaled), Is.LessThan(covered / 50), "the scaled sphere marches differently");
+        }
+
+        [Test]
         public void BakedValues_RenderLikeUniforms() {
             var withUniforms = world.Render();
             world.scene.bakeValues = true;
