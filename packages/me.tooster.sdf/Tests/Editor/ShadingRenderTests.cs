@@ -139,6 +139,38 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(inside, Is.GreaterThan(RenderTestScene.Size * RenderTestScene.Size / 4), "the SDF isn't visible from inside the domain");
         }
 
+        // #13: a depth prepass over back faces cut off the rays of overlapping domains; rays now start on the near plane
+        [Test]
+        public void OverlappingDomains_ShowBothScenes() {
+            world.ground.SetActive(false);
+            var copy = Object.Instantiate(world.root);
+            world.Add(copy);
+            try {
+                copy.transform.position = new Vector3(1, 0, 0.5f);
+                var copyScene = copy.GetComponentInChildren<SdfScene>(true);
+                copyScene.RevalidateScene();
+                copyScene.UpdateShaderUniforms(forceUpdateAll: true);
+                var originalRenderers = world.root.GetComponentsInChildren<Renderer>(true);
+                var copyRenderers = copy.GetComponentsInChildren<Renderer>(true);
+                bool[] Coverage(bool original, bool copied) {
+                    foreach (var r in originalRenderers) r.enabled = original;
+                    foreach (var r in copyRenderers) r.enabled = copied;
+                    return world.Render().Select(c => c.r + c.g + c.b > 0).ToArray();
+                }
+
+                var onlyOriginal = Coverage(true, false);
+                var onlyCopy = Coverage(false, true);
+                var both = Coverage(true, true);
+
+                var union = onlyOriginal.Where((c, i) => c || onlyCopy[i]).Count();
+                var mismatched = both.Where((c, i) => c != (onlyOriginal[i] || onlyCopy[i])).Count();
+                Assert.That(union, Is.GreaterThan(onlyOriginal.Count(c => c)), "the copy doesn't show beside the original");
+                Assert.That(mismatched, Is.LessThan(union / 50), "overlapping domains hide parts of each other's scene");
+            } finally {
+                Object.DestroyImmediate(copy);
+            }
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 
