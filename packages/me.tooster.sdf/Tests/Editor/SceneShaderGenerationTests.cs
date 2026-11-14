@@ -158,6 +158,34 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(Occurrences(source, $"standardMaterial({AlbedoOf(root)},"), Is.EqualTo(objects - 1), "the other objects don't inherit the root's material");
         }
 
+        // the forward passes evaluate the scene once more at the hit to get the material, so marching only needs distances
+        [Test]
+        public void ForwardPass_MarchingLoopReadsNoMaterial() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.GetComponentInChildren<SdfCombineController>(true).MaterialSource = MaterialSource.Own;
+            templateRoot.GetComponentInChildren<SdfSphereController>(true).GetComponent<SdfController>().MaterialSource = MaterialSource.Own;
+            scene.RevalidateScene();
+            shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
+
+            // Metal is the platform whose compiled shaders are source code; the others are SPIR-V or DXBC
+            var forwardBase = LightModes(shader).FindIndex(mode => mode == "FORWARDBASE");
+            var compiled = ShaderUtil.GetShaderData(shader).GetSubshader(0).GetPass(forwardBase)
+                .CompileVariant(ShaderType.Fragment, new[] { "DIRECTIONAL" }, ShaderCompilerPlatform.Metal, BuildTarget.iOS);
+            if (!compiled.Success || compiled.ShaderData == null || compiled.ShaderData.Length == 0)
+                Assert.Ignore("The Metal shader compiler isn't available.");
+            var code = System.Text.Encoding.UTF8.GetString(compiled.ShaderData);
+
+            var start = code.IndexOf("while(true){", System.StringComparison.Ordinal);
+            Assert.That(start, Is.Not.EqualTo(-1), "the compiled shader has no loop");
+            var end = start + "while(true){".Length;
+            for (var depth = 1; depth > 0 && end < code.Length; end++)
+                depth += code[end] == '{' ? 1 : code[end] == '}' ? -1 : 0;
+            var loop = code.Substring(start, end - start);
+            Assert.That(loop, Does.Contain("_EPSILON_RAY"), "the first loop isn't the marching loop");
+            foreach (var material in new[] { "_Albedo", "_Metallic", "_Smoothness", "_Emission" })
+                Assert.That(loop, Does.Not.Contain(material), $"marching reads {material}");
+        }
+
         [Test]
         public void Generation_KeepsElongatedObjectName() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
