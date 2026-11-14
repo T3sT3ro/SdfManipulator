@@ -38,6 +38,7 @@ namespace me.tooster.sdf.Tests.Editor {
                         return float4(position, 0);
                     case 3: return float4(sdf::operators::elongate_fast(float3(3, -3, 0.5), 1), 0);
                     case 4: return mul(euler_to_rot(float3(0, 0, UNITY_PI / 2)), float4(1, 0, 0, 0));
+                    case 6: return sdf::primitives3D::capsule(float3(0, 1.5, 0), 1, 0.25);
                     default: return sdf::primitives3D::cylinder_rounded(float3(0, 1, 0), 0.5, 0.2, 1);
                 }
             }
@@ -94,6 +95,8 @@ namespace me.tooster.sdf.Tests.Editor {
         [TestCase(4, 0, 1, 0, 0)]
         // the top of a rounded cylinder with half height 1 is at height 1; it used to grow by the rounding
         [TestCase(5, 0, 0, 0, 0)]
+        // half a unit above the top of the segment, a quarter above the surface
+        [TestCase(6, 0.25f, 0.25f, 0.25f, 0.25f)]
         public void Helper_ReturnsTheExpectedValue(int testCase, float x, float y, float z, float w) {
             var result = Run(testCase);
             Assert.That(Vector4.Distance(result, new Vector4(x, y, z, w)), Is.LessThan(1e-4f), $"got {result}");

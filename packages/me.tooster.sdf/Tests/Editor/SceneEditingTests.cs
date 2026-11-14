@@ -49,5 +49,27 @@ namespace me.tooster.sdf.Tests.Editor {
 
             Assert.That(sphere.Radius, Is.EqualTo(radius));
         }
+
+        [Test]
+        public void CreatedCapsule_CompilesInTheScene() {
+            var template = PrefabUtility.LoadPrefabContents(me.tooster.sdf.Util.SdfPaths.Templates.HelloSdfPrefab);
+            try {
+                var scene = template.GetComponentInChildren<SdfScene>(true);
+                var combine = template.GetComponentInChildren<me.tooster.sdf.Operators.SdfCombineController>(true);
+                SdfPrimitiveControllerEditor.InstantiatePrimitive<SdfCapsuleController>("capsule", new MenuCommand(combine.gameObject));
+                scene.RevalidateScene();
+                var source = scene.AssembleShaderSource();
+
+                StringAssert.Contains("sdf::primitives3D::capsule(", source);
+                var shader = ShaderUtil.CreateShaderAsset(source);
+                try {
+                    Assert.That(ShaderUtil.GetShaderMessages(shader), Has.None.Matches<ShaderMessage>(m => m.severity == UnityEditor.Rendering.ShaderCompilerMessageSeverity.Error));
+                } finally {
+                    Object.DestroyImmediate(shader);
+                }
+            } finally {
+                PrefabUtility.UnloadPrefabContents(template);
+            }
+        }
     }
 }

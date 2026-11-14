@@ -83,6 +83,12 @@ namespace sdf { namespace primitives3D {
         return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - rb;
     }
 
+    /// a capsule along the y axis: the segment from -\p h to \p h, rounded with radius \p r
+    float capsule(float3 p, float h, float r) {
+        p.y -= clamp(p.y, -h, h);
+        return length(p) - r;
+    }
+
     // plane equation of a plane = xz
     float plane(in float3 p) {
         return p.y;
