@@ -23,6 +23,7 @@
 int   _AO_STEPS = 6;
 float _AO_MAX_DISTANCE = 1;
 float _AO_FALLOFF = 2.5;
+float _AO_JITTER;
 #endif
 
 #pragma region forward declarations
@@ -92,7 +93,7 @@ Material SdfMaterial(SdfResult sdf) {
     sdfShadingPosition = sdf.p;
     sdfShadingNormal = sdf.normal;
     Material m = sdfScene(sdf.p).material;
-    m.occlusion *= classicAmbientOcclusion(sdf.p, sdf.normal, _AO_MAX_DISTANCE, _AO_FALLOFF, _AO_STEPS);
+    m.occlusion *= classicAmbientOcclusion(sdf.p, sdf.normal, _AO_MAX_DISTANCE, _AO_FALLOFF, _AO_STEPS, _AO_JITTER);
     return m;
 }
 

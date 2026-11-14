@@ -21,7 +21,7 @@ SdfResult raymarch(inout Ray3D ray, in int max_steps, in float epsilon_ray);
 float3    calculateSdfNormal(in float3 p, in float epsilon_normal);
 float     depthToMaxRayDepth(in sampler2D depthTexture, in float2 screenUV, in float3 rd, in float4x4 inv);
 float     normalSdfOcclusion(in float3 p, in float3 normal, in int i, in float step_size);
-float     classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, in int aoSteps);
+float     classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, in int aoSteps, in float jitter);
 
 #pragma endregion
 
@@ -239,13 +239,16 @@ float normalSdfOcclusion(in float3 p, in float3 normal, in int i, in float step_
  * @param maxDist max distance for occlusion
  * @param falloff how much to reduce the occlusion
  * @param aoSteps how many steps to apply, 6 is a godo tradeoff between quality and performance
+ * @param jitter from 0 to 1: how much to shift the sample distances for each point, against banding
  * @return an occlusion in a range [0 (none) ... 1 (full)]
  * @remarks <a href="https://www.shadertoy.com/view/4sdGWN">occlusion by XT95</a>
  */
-float classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, in int aoSteps) {
+float classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, in int aoSteps, in float jitter) {
     float ao = 0.0;
+    // the same sample distances at every point draw bands; jitter shifts them for each point, which trades bands for noise
+    float offset = jitter * noise::hashwithoutsine13(p * 1000);
     for (int i = 0; i < aoSteps; i++) {
-        float  l = noise::hash(float(i)) * maxDist;
+        float  l = frac(noise::hash(float(i)) + offset) * maxDist;
         float3 rd = n * l;
 
         ao += (l - max(sdfScene(p + rd).distance, 0.0)) / maxDist * falloff;

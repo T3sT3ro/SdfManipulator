@@ -86,6 +86,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   an elongation are structural.
 - Inspector layouts live in `Editor/UI` and load by their package path instead of from `Resources`, where their names
   could collide with files of other packages.
+- *Occlusion Jitter* in the rendering settings shifts the ambient occlusion samples for each surface point, which
+  replaces the bands of few samples with noise (#32).
 - *Strip Debug Views* in the built-in shader preset leaves the debug views out of the generated shader, e.g. for a
   release (#20).
 - A *Curvature* draw mode shows concave surfaces in red and convex ones in blue, from the Laplacian of the SDF (#5).

@@ -291,6 +291,20 @@ namespace me.tooster.sdf.Tests.Editor {
             }
         }
 
+        [Test]
+        public void OcclusionJitter_ReplacesBandsWithNoise() {
+            world.ground.SetActive(false);
+            world.scene.rendering.drawMode = DrawMode.Occlusion;
+            world.scene.rendering.occlusionSteps = 3;
+            int Levels(bool jitter) {
+                world.scene.rendering.occlusionJitter = jitter;
+                world.scene.UpdateShaderUniforms(forceUpdateAll: true);
+                return world.Render().Where(c => c.r + c.g + c.b > 0).Select(c => c.r).Distinct().Count();
+            }
+
+            Assert.That(Levels(true), Is.GreaterThan(Levels(false)), "jitter doesn't add gray levels to the occlusion");
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

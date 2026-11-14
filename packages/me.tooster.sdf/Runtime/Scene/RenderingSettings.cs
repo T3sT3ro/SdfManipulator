@@ -20,6 +20,7 @@ namespace me.tooster.sdf {
         static readonly int occlusionStepsId    = Shader.PropertyToID("_AO_STEPS");
         static readonly int occlusionDistanceId = Shader.PropertyToID("_AO_MAX_DISTANCE");
         static readonly int occlusionFalloffId  = Shader.PropertyToID("_AO_FALLOFF");
+        static readonly int occlusionJitterId   = Shader.PropertyToID("_AO_JITTER");
 
         [Tooltip("What the scene shows: the shaded materials or a debug view")]
         public DrawMode drawMode = DrawMode.Material;
@@ -46,6 +47,8 @@ namespace me.tooster.sdf {
         [Min(0)] public int occlusionSteps = 6;
         [Min(0)] public float occlusionDistance = 1;
         [Min(0)] public float occlusionFalloff = 2.5f;
+        [Tooltip("Shift the occlusion samples for each surface point, which replaces the bands of few samples with noise")]
+        public bool occlusionJitter;
 
         public void ApplyTo(MaterialPropertyBlock block) {
             block.SetFloat(drawModeId, (int)drawMode);
@@ -59,6 +62,7 @@ namespace me.tooster.sdf {
             block.SetInteger(occlusionStepsId, occlusionSteps);
             block.SetFloat(occlusionDistanceId, occlusionDistance);
             block.SetFloat(occlusionFalloffId, occlusionFalloff);
+            block.SetFloat(occlusionJitterId, occlusionJitter ? 1 : 0);
         }
 
         /// <summary>Sets the values on a material, for drawing without a property block.</summary>
@@ -74,6 +78,7 @@ namespace me.tooster.sdf {
             material.SetInteger(occlusionStepsId, occlusionSteps);
             material.SetFloat(occlusionDistanceId, occlusionDistance);
             material.SetFloat(occlusionFalloffId, occlusionFalloff);
+            material.SetFloat(occlusionJitterId, occlusionJitter ? 1 : 0);
         }
     }
 }
