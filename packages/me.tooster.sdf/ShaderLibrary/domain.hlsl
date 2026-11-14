@@ -26,9 +26,10 @@ static const float4x4 _SDF_MatrixSpaceRescale =
 // used to premultiply before object transformation
 static const float4x4 _SDF_MatrixSpaceRescaleInv = inverse_diagonal(_SDF_MatrixSpaceRescale);
 
-static const float4x4 _SDF_MatrixDomainRotation = mul(m_scale(_DomainScale), _SDF_MatrixSpaceRescaleInv);
+// _DomainRotation holds Euler angles in radians
+static const float4x4 _SDF_MatrixDomainRotation = mul(euler_to_rot(_DomainRotation), _SDF_MatrixSpaceRescaleInv);
 static const float4x4 _SDF_MatrixDomainScale = mul(m_scale(_DomainScale), _SDF_MatrixSpaceRescaleInv);
-static const float4x4 _SDF_MatrixDomainTranslation = mul(m_scale(_DomainScale), _SDF_MatrixSpaceRescaleInv);
+static const float4x4 _SDF_MatrixDomainTranslation = mul(m_translate(_DomainOrigin), _SDF_MatrixSpaceRescaleInv);
 
 // takes care of local local object scale
 static const float4x4 _SDF_MatrixDomainToObject =

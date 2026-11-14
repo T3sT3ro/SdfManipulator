@@ -464,6 +464,10 @@ namespace noise {
 
         return digest + v;
     }
+    #undef A0
+    #undef B0
+    #undef C0
+    #undef D0
 
 
     // Adapted from MurmurHash3_x86_32 from https://github.com/aappleby/smhasher

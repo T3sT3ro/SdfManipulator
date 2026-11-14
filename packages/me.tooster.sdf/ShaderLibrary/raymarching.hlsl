@@ -18,7 +18,7 @@ SdfResult sdfScene(in float3 p);
 
 SdfResult raymarch(inout Ray3D ray, in int max_steps, in float epsilon_ray);
 float3    calculateSdfNormal(in float3 p, in float epsilon_normal);
-float     depthToMaxRayDepth(in Texture2D depthTexture, in float2 screenUV, in float3 rd, in float4x4 inv);
+float     depthToMaxRayDepth(in sampler2D depthTexture, in float2 screenUV, in float3 rd, in float4x4 inv);
 float     normalSdfOcclusion(in float3 p, in float3 normal, in int i, in float step_size);
 float     classicAmbientOcclusion(float3 p, float3 n, float maxDist, float falloff, in int aoSteps);
 
@@ -67,9 +67,8 @@ float depthToMaxRayDepth(in sampler2D depthTexture, in float2 screenUV, in float
     // https://forum.unity.com/threads/does-depth-buffer-update-between-passes.620575/
     float camDepth = CorrectDepth(tex2D(depthTexture, screenUV).rg);
 
-    float4 forward = mul(inv, float4(0, 0, 1, 1)); // central ray end on far plane
-    forward /= forward.w;
-    forward = normalize(forward); // forward in object space
+    float4 farCenter = mul(inv, float4(0, 0, 1, 1)); // central ray end on far plane
+    float3 forward = normalize(farCenter.xyz / farCenter.w); // forward in object space
     return camDepth / dot(forward, rd);
 }
 
@@ -171,7 +170,8 @@ float3 calculateSdfNormal(in float3 p, in float epsilon_normal) {
 float normalSdfOcclusion(in float3 p, in float3 normal, in int i, in float step_size) {
     float occlusion = 1.0;
     while (i > 0) { // steps used as a counter
-        occlusion -= pow(i * i - sdfScene(p + normal * i * step_size).distance, 2) / i;
+        // the distance at the sample compared with the distance that an unoccluded point would have
+        occlusion -= pow(i * step_size - sdfScene(p + normal * i * step_size).distance, 2) / i;
         i--;
     }
     return occlusion;

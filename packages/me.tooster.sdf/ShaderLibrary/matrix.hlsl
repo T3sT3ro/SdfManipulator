@@ -155,7 +155,7 @@ float4x4 quaternion_to_matrix(float4 quat) {
 }
 
 float4x4 m_scale(float3 v) {
-    float4x4 m = { v.x, 0, 0, 0, 0, v.y, 0, 0, 0, 0, 0, v.z, 0, 0, 0, 1 };
+    float4x4 m = { v.x, 0, 0, 0, 0, v.y, 0, 0, 0, 0, v.z, 0, 0, 0, 0, 1 };
     return m;
 }
 
@@ -230,8 +230,8 @@ float4x4 euler_to_rot(float3 v) {
 
     return float4x4(
         float4(sx * sy * sz + cy * cz, sx * sy * cz - cy * sz, cx * sy, 0),
-        float4(sx * cy * sz - sy * cz, sx * cy * cz + sy * sz, cx * cy, 0),
         float4(cx * sz, cx * cz, -sx, 0),
+        float4(sx * cy * sz - sy * cz, sx * cy * cz + sy * sz, cx * cy, 0),
         float4(0, 0, 0, 1)
     );
 }
@@ -262,9 +262,10 @@ void decompose(in float4x4 m, out float3 position, out float4 rotation, out floa
         sx = -sx;
     }
 
-    position.x = m[3][0];
-    position.y = m[3][1];
-    position.z = m[3][2];
+    // m_translate writes the translation into the last column
+    position.x = m[0][3];
+    position.y = m[1][3];
+    position.z = m[2][3];
 
     // scale the rotation part
 

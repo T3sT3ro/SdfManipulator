@@ -116,10 +116,10 @@ namespace sdf { namespace operators {
     }
 
     /**
-     * repeat in period of c units in each axis 
+     * repeat in period of c units in each axis, with a copy centered at the origin
      */
     float3 repeat(in float3 p, in float3 c) {
-        return fmod(abs(p) + 0.5 * c, c) - 0.5 * c;
+        return p - c * round(p / c);
     }
 
     float3 repeatLim(in float3 p, in float3 c, in float3 l, out int3 index) {
@@ -131,7 +131,7 @@ namespace sdf { namespace operators {
      * Elongate the primitive. This is a prefix operation that transforms point passed to primitive.
      * This method produces exact 1D elongations but produces kernel of 0 distances inside 2D/3D elongations.
      */
-    float elongate_fast(in float3 p, in float3 dim) {
+    float3 elongate_fast(in float3 p, in float3 dim) {
         return p - clamp(p, -dim, dim);
     }
 

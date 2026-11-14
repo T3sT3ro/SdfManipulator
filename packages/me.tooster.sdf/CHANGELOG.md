@@ -103,6 +103,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Mode into the prefab instead of the main scene, and the creation of operators can be undone (#77).
 - Undo didn't revert dragging the scene handles of primitives, because the handles changed the controller before
   undo recorded it (#76).
+- Shader library helpers that nothing used yet: `repeat` mirrored negative coordinates, `elongate_fast` returned a
+  float, `m_scale` was singular, `euler_to_rot` swapped two rows, `decompose` read the translation from the wrong row,
+  the domain matrices of `domain.hlsl` were all scale matrices, `normalSdfOcclusion` compared with the square of the
+  step, `depthToMaxRayDepth` normalized a `float4` and had a declaration that didn't match it, and `noise.hlsl` leaked
+  its `A0` to `D0` macros (#100).
 - Scene handles ignored the scale of the object and its parents, so they didn't match the rendered shape (#75).
 - `[VisibleWhen]` compared enum values with their position in the enum's declaration (#80).
 - The `SdfScene` inspector showed fields for the controlled material and the target shader and material paths, which
