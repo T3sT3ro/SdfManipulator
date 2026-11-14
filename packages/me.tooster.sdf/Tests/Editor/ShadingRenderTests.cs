@@ -86,6 +86,30 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(changed, Is.GreaterThan(100), "the draw mode doesn't change the image");
         }
 
+        [Test]
+        public void ClipToDomainBox_KeepsTheImageAndTakesFewerSteps() {
+            world.ground.SetActive(false);
+            var settings = world.scene.rendering;
+            Color32[] Render(bool clip, DrawMode mode) {
+                settings.clipToDomainBox = clip;
+                settings.drawMode = mode;
+                settings.maxSteps = 50;
+                world.scene.UpdateShaderUniforms(forceUpdateAll: true);
+                return world.Render();
+            }
+
+            var full = Render(false, DrawMode.Material);
+            var clipped = Render(true, DrawMode.Material);
+            var covered = full.Count(c => c.r + c.g + c.b > 0);
+            Assert.That(covered, Is.GreaterThan(100), "the SDF isn't visible");
+            var changed = full.Where((c, i) => Mathf.Abs(c.r - clipped[i].r) + Mathf.Abs(c.g - clipped[i].g) + Mathf.Abs(c.b - clipped[i].b) > 30).Count();
+            Assert.That(changed, Is.LessThan(covered / 50), "clipping changes the image of a scene inside its domain");
+
+            // the steps view shows the number of steps in red
+            float MeanSteps(Color32[] image) => (float)image.Where(c => c.r + c.g + c.b > 0).Average(c => c.r);
+            Assert.That(MeanSteps(Render(true, DrawMode.Steps)), Is.LessThan(MeanSteps(Render(false, DrawMode.Steps))));
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

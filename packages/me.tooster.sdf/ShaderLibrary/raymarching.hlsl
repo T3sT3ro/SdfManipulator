@@ -30,6 +30,7 @@ float _EPSILON_NORMAL = 0.0001;
 int   _MAX_STEPS = 500;
 float _MAX_DISTANCE = 10000;
 float _RAY_ORIGIN_BIAS = 0;
+float _CLIP_TO_DOMAIN_BOX; ///< nonzero to march only inside the box of the domain mesh, see rayBoxIntersection
 UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #endif
 
@@ -50,6 +51,25 @@ float _SHOW_WORLD_GRID; ///< nonzero to overlay a grid in world space
 #endif
 
 # pragma region raymarching functions
+
+/**
+ * \brief Intersects a ray with the box from -0.5 to 0.5 on each axis in the space of \p worldToBox, e.g. Unity's cube
+ * mesh in its object space.
+ * \param span the distances along the ray at which it enters and leaves the box. The direction isn't normalized in the
+ * box's space, so the distances are world-space distances.
+ * \return false if the ray misses the box or the box lies behind the ray's origin
+ */
+bool rayBoxIntersection(in Ray3D ray, in float4x4 worldToBox, out float2 span) {
+    float3 ro = mul(worldToBox, float4(ray.ro, 1)).xyz;
+    float3 rd = mul((float3x3)worldToBox, ray.rd);
+    float3 inverse = 1.0 / rd;
+    float3 t0 = (-0.5 - ro) * inverse;
+    float3 t1 = (0.5 - ro) * inverse;
+    float3 tNear = min(t0, t1);
+    float3 tFar = max(t0, t1);
+    span = float2(max(max(tNear.x, tNear.y), tNear.z), min(min(tFar.x, tFar.y), tFar.z));
+    return span.y >= max(span.x, 0);
+}
 
 /**
  * \brief reads the _CameraDepthTexture (rendered BEFORE this shader!) and returns the distance along rd to reach for that depth

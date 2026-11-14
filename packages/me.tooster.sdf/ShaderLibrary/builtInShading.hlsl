@@ -51,6 +51,15 @@ SdfResult marchFragment(float4 clipPos, out Ray3D ray) {
     ray = viewRayFromClipPos(clipPos);
     ray.ro += ray.rd * _RAY_ORIGIN_BIAS;
     ray.maxDistance = _MAX_DISTANCE;
+    UNITY_BRANCH
+    if (_CLIP_TO_DOMAIN_BOX != 0) {
+        // march only where the ray is inside the domain, which skips the empty space in front of it
+        float2 span;
+        if (!rayBoxIntersection(ray, unity_WorldToObject, span))
+            discard;
+        ray.marchedDistance = max(0, span.x);
+        ray.maxDistance = min(ray.maxDistance, span.y);
+    }
     SdfResult sdf = raymarch(ray, _MAX_STEPS, _EPSILON_RAY);
     if (!isHit(sdf))
         discard;

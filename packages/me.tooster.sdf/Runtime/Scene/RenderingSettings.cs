@@ -16,6 +16,7 @@ namespace me.tooster.sdf {
         static readonly int hitDistanceId       = Shader.PropertyToID("_EPSILON_RAY");
         static readonly int normalEpsilonId     = Shader.PropertyToID("_EPSILON_NORMAL");
         static readonly int rayOriginBiasId     = Shader.PropertyToID("_RAY_ORIGIN_BIAS");
+        static readonly int clipToDomainBoxId   = Shader.PropertyToID("_CLIP_TO_DOMAIN_BOX");
         static readonly int occlusionStepsId    = Shader.PropertyToID("_AO_STEPS");
         static readonly int occlusionDistanceId = Shader.PropertyToID("_AO_MAX_DISTANCE");
         static readonly int occlusionFalloffId  = Shader.PropertyToID("_AO_FALLOFF");
@@ -36,6 +37,10 @@ namespace me.tooster.sdf {
         [Min(0)] public float normalEpsilon = 0.001f;
         [Tooltip("Moves the start of each ray forward by this distance")]
         public float rayOriginBias;
+        [Tooltip("March only inside the box of the domain mesh: rays start where they enter the box and stop where they "
+               + "leave it, which skips empty space, especially for shadow maps. Parts of the scene outside the box "
+               + "disappear. The domain mesh must be Unity's cube, from -0.5 to 0.5 on each axis.")]
+        public bool clipToDomainBox;
 
         [Header("Ambient occlusion")]
         [Min(0)] public int occlusionSteps = 6;
@@ -50,6 +55,7 @@ namespace me.tooster.sdf {
             block.SetFloat(hitDistanceId, hitDistance);
             block.SetFloat(normalEpsilonId, normalEpsilon);
             block.SetFloat(rayOriginBiasId, rayOriginBias);
+            block.SetFloat(clipToDomainBoxId, clipToDomainBox ? 1 : 0);
             block.SetInteger(occlusionStepsId, occlusionSteps);
             block.SetFloat(occlusionDistanceId, occlusionDistance);
             block.SetFloat(occlusionFalloffId, occlusionFalloff);
@@ -64,6 +70,7 @@ namespace me.tooster.sdf {
             material.SetFloat(hitDistanceId, hitDistance);
             material.SetFloat(normalEpsilonId, normalEpsilon);
             material.SetFloat(rayOriginBiasId, rayOriginBias);
+            material.SetFloat(clipToDomainBoxId, clipToDomainBox ? 1 : 0);
             material.SetInteger(occlusionStepsId, occlusionSteps);
             material.SetFloat(occlusionDistanceId, occlusionDistance);
             material.SetFloat(occlusionFalloffId, occlusionFalloff);

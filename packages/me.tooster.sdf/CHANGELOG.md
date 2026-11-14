@@ -82,6 +82,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   without ZWrite.
 - The render state that commands read (`_Cull`, `_ZTest`, `_ZWrite`) uses `Float` material properties, like Unity's
   own shaders, instead of the legacy `Int` type, and the step counts are `int` uniforms.
+- *Clip To Domain Box* in the rendering settings marches rays only inside the box of the domain mesh: they start
+  where they enter the box and stop where they leave it, which skips the empty space in front of the domain, also in
+  shadow maps (#111).
 - The draw mode, the world grid and the raymarching settings are in the *Rendering* section of `SdfScene` instead of
   in the material. `SdfScene` sets them with its property block, so they're saved with the scene, prefab instances can
   override them, and regenerating the shader on save no longer resets them. The generated material only holds the
