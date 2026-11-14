@@ -85,6 +85,27 @@ namespace me.tooster.sdf.Tests.Editor {
             return ReadTarget();
         }
 
+        /// <summary>
+        ///     Draws the scene's renderers from the camera's view with the pass <paramref name="passName" /> of their
+        ///     material and their property block, onto a cleared target.
+        /// </summary>
+        public Color32[] RenderPass(string passName) {
+            var commands = new CommandBuffer { name = passName };
+            commands.SetRenderTarget(target);
+            commands.ClearRenderTarget(true, true, Color.clear);
+            commands.SetViewProjectionMatrices(camera.worldToCameraMatrix, camera.projectionMatrix);
+            foreach (var renderer in root.GetComponentsInChildren<MeshRenderer>(true)) {
+                var block = new MaterialPropertyBlock();
+                renderer.GetPropertyBlock(block);
+                var pass = renderer.sharedMaterial.FindPass(passName);
+                Assert.That(pass, Is.Not.EqualTo(-1), $"the material has no {passName} pass");
+                commands.DrawMesh(renderer.GetComponent<MeshFilter>().sharedMesh, renderer.localToWorldMatrix, renderer.sharedMaterial, 0, pass, block);
+            }
+            Graphics.ExecuteCommandBuffer(commands);
+            commands.Release();
+            return ReadTarget();
+        }
+
         Color32[] ReadTarget() {
             var previous = RenderTexture.active;
             RenderTexture.active = target;

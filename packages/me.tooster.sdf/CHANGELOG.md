@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SDF objects have the properties of the Standard material: albedo, metallic, smoothness and emission. They are
   uniforms, so changing them doesn't regenerate the shader. `Color` properties of controllers become `float4` uniforms.
 - A combination can override the materials of its children with its own (*Override Material*).
+- Generated shaders have scene selection and picking passes, so the scene view outlines a selected scene along its
+  SDF surfaces and picks it only where its rays hit, instead of anywhere on its domain mesh.
 
 ### Changed
 

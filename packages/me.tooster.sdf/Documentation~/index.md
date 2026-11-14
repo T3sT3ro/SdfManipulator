@@ -107,6 +107,7 @@ Paths are relative to the package root.
     - `builtInShading.hlsl` defines the passes of the built-in pipeline: forward base, forward add and shadow caster.
       Each fragment builds its ray from the view and projection matrices, so the shadow caster pass renders shadow
       maps and the camera depth texture with the same code.
+    - `scenePicking.hlsl` defines the passes with which the scene view outlines and picks objects.
     - and more, for easier shader composition.
 - **AST library** (`Runtime/AST`): classes for working with HLSL and ShaderLab syntax trees, modeled after Roslyn's
   Syntax API.

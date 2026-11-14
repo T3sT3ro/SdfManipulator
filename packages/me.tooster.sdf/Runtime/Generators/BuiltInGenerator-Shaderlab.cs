@@ -188,6 +188,8 @@ namespace me.tooster.sdf.Generators {
                     ForwardBasePass(),
                     ForwardAddPass(),
                     ShadowCasterPass(),
+                    SceneSelectionPass(),
+                    PickingPass(),
                 },
             };
 
@@ -268,6 +270,33 @@ namespace me.tooster.sdf.Generators {
                     new Cull { state = MaterialProperty("_Cull") },
                     new ZWrite { state = new OnKeyword() },
                     PassProgram("multi_compile_shadowcaster", "vertex shadowCasterVertex", "fragment shadowCasterFragment"),
+                },
+            };
+
+        /// <summary>Draws the outline of a selected scene in the scene view along the SDF surfaces.</summary>
+        Pass SceneSelectionPass()
+            => new()
+            {
+                statements = new List<SubShaderOrPassStatement>
+                {
+                    new Pass.Name { name = "SceneSelectionPass" },
+                    Tags(("LightMode", "SceneSelectionPass")),
+                    // rays start on the near plane, so any face of the domain mesh covers the pixels
+                    new Cull { state = new OffKeyword() },
+                    PassProgram("vertex sceneSelectionVertex", "fragment sceneSelectionFragment"),
+                },
+            };
+
+        /// <summary>Lets the scene view pick the renderer only where its rays hit the SDF.</summary>
+        Pass PickingPass()
+            => new()
+            {
+                statements = new List<SubShaderOrPassStatement>
+                {
+                    new Pass.Name { name = "ScenePickingPass" },
+                    Tags(("LightMode", "Picking")),
+                    new Cull { state = new OffKeyword() },
+                    PassProgram("vertex pickingVertex", "fragment pickingFragment"),
                 },
             };
 

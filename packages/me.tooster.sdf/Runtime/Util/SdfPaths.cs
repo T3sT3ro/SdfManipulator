@@ -21,6 +21,7 @@ namespace me.tooster.sdf.Util {
             public const string Operators        = Root + "/operators.hlsl";
             public const string Primitives       = Root + "/primitives.hlsl";
             public const string Raymarching      = Root + "/raymarching.hlsl";
+            public const string ScenePicking     = Root + "/scenePicking.hlsl";
             public const string Util             = Root + "/util.hlsl";
         }
 

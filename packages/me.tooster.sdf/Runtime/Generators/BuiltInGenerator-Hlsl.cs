@@ -26,8 +26,9 @@ namespace me.tooster.sdf.Generators {
             foreach (var define in defines)
                 yield return new Define { id = define }.ToStructuredTrivia();
 
-            // the passes need their entry points, also when a preset doesn't list the file
-            foreach (var include in includeFiles.Append(SdfPaths.ShaderLibrary.BuiltInShading).Distinct())
+            // the passes need their entry points, also when a preset doesn't list the files
+            var passIncludes = new[] { SdfPaths.ShaderLibrary.BuiltInShading, SdfPaths.ShaderLibrary.ScenePicking };
+            foreach (var include in includeFiles.Concat(passIncludes).Distinct())
                 yield return new Include { includeKeyword = new IncludeWithPragmasKeyword(), filepath = include }.ToStructuredTrivia();
 
             yield return new NewLine<hlsl>();
