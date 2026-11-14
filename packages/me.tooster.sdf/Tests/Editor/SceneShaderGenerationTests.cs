@@ -387,6 +387,24 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void EditorOnlyPasses_ExistInTheShaderAndAreStrippedFromBuilds() {
+            var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+            shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
+            var material = new Material(shader);
+            try {
+                foreach (var pass in global::me.tooster.sdf.Editor.SdfEditorPassStripping.EditorOnlyPasses) {
+                    Assert.That(material.FindPass(pass), Is.GreaterThanOrEqualTo(0), $"the shader has no pass {pass}");
+                    Assert.That(global::me.tooster.sdf.Editor.SdfEditorPassStripping.IsEditorOnly(shader.name, pass), Is.True);
+                }
+            } finally {
+                Object.DestroyImmediate(material);
+            }
+            Assert.That(global::me.tooster.sdf.Editor.SdfEditorPassStripping.IsEditorOnly(shader.name, "FORWARD"), Is.False, "a player pass is stripped");
+            Assert.That(global::me.tooster.sdf.Editor.SdfEditorPassStripping.IsEditorOnly("Standard", "SceneSelectionPass"), Is.False, "passes of other shaders are stripped");
+        }
+
+        [Test]
         public void UniformUpdate_WithoutRendererDoesNotThrow() {
             var scene = templateRoot.GetComponentInChildren<SdfScene>(true);
             foreach (var renderer in templateRoot.GetComponentsInChildren<Renderer>(true))

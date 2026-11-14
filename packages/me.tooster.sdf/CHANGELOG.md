@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - *Bake Values* on `SdfScene` writes the current values of the controllers into the shader as constants instead of
   uniforms, for scenes that don't change. Changing a baked value regenerates the shader in Prefab Mode. Textures stay
   uniforms (#115).
+- Player builds leave out the passes of generated shaders that only the editor draws: scene selection, picking,
+  object picking and focus (#45).
 - A *Volume* primitive draws an SDF stored in a 3D texture, e.g. one that Unity's SDF Bake Tool made from a mesh. The
   texture fills a box, and outside the box the primitive returns a lower bound of the distance (#11).
 

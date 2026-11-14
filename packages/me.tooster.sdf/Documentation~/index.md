@@ -135,7 +135,8 @@ Paths are relative to the package root.
       maps and the camera depth texture with the same code.
     - `scenePicking.hlsl` defines the passes with which the scene view outlines and picks objects, and the object
       picking pass, which `Editor/SdfScenePicking.cs` draws while the scene view picks, so that a click finds the
-      object under the cursor instead of the whole scene.
+      object under the cursor instead of the whole scene. Player builds leave these passes out
+      (`Editor/SdfEditorPassStripping.cs`).
     - and more, for easier shader composition.
 - **AST library** (`Runtime/AST`): classes for working with HLSL and ShaderLab syntax trees, modeled after Roslyn's
   Syntax API.
