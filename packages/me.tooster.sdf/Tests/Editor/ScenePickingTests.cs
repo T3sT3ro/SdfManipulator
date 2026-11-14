@@ -70,6 +70,19 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void ObjectPicking_WorksWithMaterialVariants() {
+            var variant = new Material(world.material) { parent = world.material };
+            try {
+                foreach (var renderer in world.root.GetComponentsInChildren<Renderer>(true))
+                    renderer.sharedMaterial = variant;
+
+                Assert.That(PickedObjects(_ => true), Has.Some.Not.Null);
+            } finally {
+                Object.DestroyImmediate(variant);
+            }
+        }
+
+        [Test]
         public void ObjectPicking_SkipsObjectsThatCantBePicked() {
             var picked = PickedObjects(_ => true);
             Assert.That(picked, Has.Some.Not.Null, "nothing is picked");

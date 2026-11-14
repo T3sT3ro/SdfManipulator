@@ -133,9 +133,12 @@ namespace me.tooster.sdf.Editor {
         ///     drawing can't use a property block, and both picking passes have to march the same rays.
         /// </summary>
         static Material PickingMaterial(Material source, Renderer renderer, SdfScene scene) {
-            if (!pickingMaterials.TryGetValue(source, out var material) || material == null)
-                pickingMaterials[source] = material = new Material(source) { hideFlags = HideFlags.HideAndDontSave };
-            material.shader = source.shader;
+            // a copy of a material variant is a variant too, whose shader can't be set, so build the copy from the shader
+            if (!pickingMaterials.TryGetValue(source, out var material) || material == null || material.shader != source.shader) {
+                if (material != null)
+                    Object.DestroyImmediate(material);
+                pickingMaterials[source] = material = new Material(source.shader) { hideFlags = HideFlags.HideAndDontSave };
+            }
             material.CopyPropertiesFromMaterial(source);
 
             renderer.GetPropertyBlock(block);
