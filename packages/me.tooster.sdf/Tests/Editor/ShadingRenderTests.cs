@@ -326,6 +326,53 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void Volume_RendersLikeTheShapeItStores() {
+            world.ground.SetActive(false);
+            var combine = world.root.GetComponentInChildren<SdfCombineController>(true);
+            foreach (var child in combine.Children.ToList())
+                Object.DestroyImmediate(child.gameObject);
+            var texture = SphereVolume(32, 2, 0.6f);
+            try {
+                var volume = global::me.tooster.sdf.Editor.Inspectors.Primitives.SdfPrimitiveControllerEditor
+                    .InstantiatePrimitive<me.tooster.sdf.Primitives.SdfVolumeController>("volume", new UnityEditor.MenuCommand(combine.gameObject))
+                    .GetComponent<me.tooster.sdf.Primitives.SdfVolumeController>();
+                volume.Volume = texture;
+                volume.Size = 2 * Vector3.one;
+                volume.DistanceScale = 2;
+                world.Regenerate();
+                var fromVolume = world.Render().Select(c => c.r + c.g + c.b > 0).ToArray();
+
+                Object.DestroyImmediate(volume.gameObject);
+                global::me.tooster.sdf.Editor.Inspectors.Primitives.SdfPrimitiveControllerEditor
+                    .InstantiatePrimitive<me.tooster.sdf.Primitives.SdfSphereController>("sphere", new UnityEditor.MenuCommand(combine.gameObject))
+                    .GetComponent<me.tooster.sdf.Primitives.SdfSphereController>().Radius = 0.6f;
+                world.Regenerate();
+                var fromSphere = world.Render().Select(c => c.r + c.g + c.b > 0).ToArray();
+
+                var covered = fromSphere.Count(c => c);
+                Assert.That(covered, Is.GreaterThan(100), "the sphere isn't visible");
+                Assert.That(fromVolume.Where((c, i) => c != fromSphere[i]).Count(), Is.LessThan(covered / 25), "the volume doesn't look like the sphere");
+            } finally {
+                Object.DestroyImmediate(texture);
+            }
+        }
+
+        /// A texture of n^3 texels with the SDF of a sphere in a box of the given size, divided by the size
+        static Texture3D SphereVolume(int n, float size, float radius) {
+            var distances = new float[n * n * n];
+            for (var z = 0; z < n; z++)
+            for (var y = 0; y < n; y++)
+            for (var x = 0; x < n; x++) {
+                var p = ((new Vector3(x, y, z) + 0.5f * Vector3.one) / n - 0.5f * Vector3.one) * size;
+                distances[x + n * (y + n * z)] = (p.magnitude - radius) / size;
+            }
+            var texture = new Texture3D(n, n, n, TextureFormat.RFloat, false);
+            texture.SetPixelData(distances, 0);
+            texture.Apply(false);
+            return texture;
+        }
+
+        [Test]
         public void BakedValues_RenderLikeUniforms() {
             var withUniforms = world.Render();
             world.scene.bakeValues = true;

@@ -258,7 +258,7 @@ namespace me.tooster.sdf {
         internal bool IsBaked(PropertyData property) => bakeValues && IsBakeable(property.property.DeclaredValueType());
 
         /// The types that the generator can write as literals; textures stay uniforms
-        internal static bool IsBakeable(System.Type type) => type != typeof(Texture2D);
+        internal static bool IsBakeable(System.Type type) => type != typeof(Texture2D) && type != typeof(Texture3D);
 
         /// <summary>The current value of <paramref name="property" />, which the generator writes into a baked shader.</summary>
         internal static object? CurrentValue(PropertyData property) {
@@ -440,6 +440,7 @@ namespace me.tooster.sdf {
                 IVisitPropertyAdapter<Vector4>,
                 IVisitPropertyAdapter<Color>,
                 IVisitPropertyAdapter<Texture2D>,
+                IVisitPropertyAdapter<Texture3D>,
                 IVisitPropertyAdapter<Vector2Int>,
                 IVisitPropertyAdapter<Vector3Int>,
                 IVisitPropertyAdapter<Matrix4x4> {
@@ -479,6 +480,24 @@ namespace me.tooster.sdf {
             // a missing texture samples as white, which leaves the color unchanged
             public void Visit<TContainer>(in VisitContext<TContainer, Texture2D> context, ref TContainer container, ref Texture2D value)
                 => scene.propertyBlock!.SetTexture(GetShaderId(container, context.Property), value != null ? value : Texture2D.whiteTexture);
+
+            // a missing volume holds no shape
+            public void Visit<TContainer>(in VisitContext<TContainer, Texture3D> context, ref TContainer container, ref Texture3D value)
+                => scene.propertyBlock!.SetTexture(GetShaderId(container, context.Property), value != null ? value : EmptyVolume);
+
+            static Texture3D? emptyVolume;
+
+            /// A texture of one texel that is far from any shape
+            static Texture3D EmptyVolume {
+                get {
+                    if (emptyVolume != null)
+                        return emptyVolume;
+                    emptyVolume = new Texture3D(1, 1, 1, TextureFormat.RFloat, false) { hideFlags = HideFlags.HideAndDontSave, name = "Empty SDF volume" };
+                    emptyVolume.SetPixelData(new[] { 1e6f }, 0);
+                    emptyVolume.Apply(false, true);
+                    return emptyVolume;
+                }
+            }
 
             // SetColor converts the color to linear space when the project renders in linear space
             public void Visit<TContainer>(in VisitContext<TContainer, Color> context, ref TContainer container, ref Color value)

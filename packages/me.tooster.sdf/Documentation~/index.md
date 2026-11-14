@@ -41,6 +41,10 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
   controlled, e.g. by changing a value that a uniform holds or the scene's *Rendering* settings.
 - Add primitives and operators by adding components to game objects, or with *GameObject > SDF > Primitives* and
   *GameObject > SDF > Operators* in the hierarchy.
+- The *Volume* primitive draws an SDF stored in the red channel of a 3D texture, e.g. one that the SDF Bake Tool of
+  the Visual Effect Graph made from a mesh. The texture fills a box of the given *Size* around the object. *Distance
+  Scale* converts the stored values to distances: for textures from the SDF Bake Tool, set it to the largest side of
+  the box.
 - A combination unites, intersects or subtracts its children, also with smooth edges, or dyes its first child with the
   materials of the others. The blend factor sets the width of smooth edges.
 - Add *SDF > Operators > Repeat*, *Mirror* or *Twist* to an SDF object to repeat, mirror or twist its space; the

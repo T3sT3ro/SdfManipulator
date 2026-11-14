@@ -16,6 +16,9 @@
  * - \p e       extrude factor
  * </p>
  */
+// an inline sampler, which needs no sampler uniform; Unity reads the filter and the wrap mode from the name
+SamplerState sdf_volume_linear_clamp_sampler;
+
 namespace sdf { namespace primitives3D {
     // TODO: dashed line https://www.shadertoy.com/view/Ntyczt
 
@@ -100,6 +103,24 @@ namespace sdf { namespace primitives3D {
     float octahedron(float3 p, float s) {
         p = abs(p);
         return (p.x + p.y + p.z - s) * 0.57735027;
+    }
+
+    /**
+     * An SDF stored in a 3D texture that fills a box of size \p size centered at the origin.
+     * @param volume the texture; its red channel holds the distances
+     * @param distanceScale the distance in object units that a stored value of 1 stands for
+     * @return inside the box, the interpolated distance; outside, a lower bound of the distance to the shape in the box
+     */
+    float volume(float3 p, Texture3D volume, float3 size, float distanceScale) {
+        float3 halfSize = 0.5 * size;
+        float3 q = clamp(p, -halfSize, halfSize); // the nearest point of the box
+        // marching can't compute derivatives, so sample the top mip level
+        float d = volume.SampleLevel(sdf_volume_linear_clamp_sampler, q / size + 0.5, 0).r * distanceScale;
+        // The shape lies in the box, and p - q points away from the box, so every point s of the shape has
+        // |p - s|^2 >= |p - q|^2 + |q - s|^2 >= |p - q|^2 + d^2. Adding the distances instead could overshoot.
+        float3 outside = p - q;
+        float o2 = dot(outside, outside);
+        return o2 > 0 ? sqrt(o2 + max(d, 0) * max(d, 0)) : d;
     }
 
     // plane equation of a plane = xz

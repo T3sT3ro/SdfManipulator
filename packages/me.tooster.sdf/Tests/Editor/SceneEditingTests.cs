@@ -53,6 +53,7 @@ namespace me.tooster.sdf.Tests.Editor {
         [TestCase(typeof(SdfCapsuleController), "capsule")]
         [TestCase(typeof(SdfEllipsoidController), "ellipsoid")]
         [TestCase(typeof(SdfOctahedronController), "octahedron")]
+        [TestCase(typeof(SdfVolumeController), "volume")]
         public void CreatedPrimitive_CompilesInTheScene(System.Type primitive, string function) {
             var template = PrefabUtility.LoadPrefabContents(me.tooster.sdf.Util.SdfPaths.Templates.HelloSdfPrefab);
             try {
