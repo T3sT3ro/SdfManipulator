@@ -14,5 +14,7 @@ namespace me.tooster.sdf {
         [InspectorName("Marching steps")] Steps = 5,
         Depth     = 6,
         Occlusion = 7,
+        /// red where the surface is concave, blue where it's convex
+        Curvature = 8,
     }
 }

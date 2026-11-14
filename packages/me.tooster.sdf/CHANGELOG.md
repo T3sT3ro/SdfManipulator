@@ -84,6 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   an elongation are structural.
 - Inspector layouts live in `Editor/UI` and load by their package path instead of from `Resources`, where their names
   could collide with files of other packages.
+- A *Curvature* draw mode shows concave surfaces in red and convex ones in blue, from the Laplacian of the SDF (#5).
 - The draw mode, the world grid and depth output are switches on uniforms instead of shader keywords, so changing
   them compiles no shader variant. Forward passes always output the depth of the hit, which the depth test uses also
   without ZWrite.

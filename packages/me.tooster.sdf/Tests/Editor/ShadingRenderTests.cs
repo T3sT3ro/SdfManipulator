@@ -261,6 +261,16 @@ namespace me.tooster.sdf.Tests.Editor {
             }
         }
 
+        [Test]
+        public void CurvatureView_ShowsConvexSurfacesInBlue() {
+            world.ground.SetActive(false);
+            world.scene.rendering.drawMode = DrawMode.Curvature;
+            world.scene.UpdateShaderUniforms(forceUpdateAll: true);
+
+            var convex = world.Render().Count(c => c.b > c.r + 40);
+            Assert.That(convex, Is.GreaterThan(50), "no convex surface shows in blue");
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

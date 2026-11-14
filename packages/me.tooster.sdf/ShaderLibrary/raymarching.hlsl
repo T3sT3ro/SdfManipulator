@@ -44,6 +44,7 @@ UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 #define SDF_DRAWMODE_STEPS     5
 #define SDF_DRAWMODE_DEPTH     6
 #define SDF_DRAWMODE_OCCLUSION 7
+#define SDF_DRAWMODE_CURVATURE 8
 
 #ifndef EXPLICIT_DEBUG_PARAMETERS
 float _DrawMode;        ///< one of the SDF_DRAWMODE_ values
@@ -168,6 +169,21 @@ float softShadow(Ray3D ray, float dampening) {
 }
 
 /**
+ * \brief Returns the mean curvature of the SDF at \p p, estimated from its Laplacian with central differences:
+ * positive where the surface is convex, negative where it's concave.
+ * \param epsilon the offset of the samples; larger values smooth out small details
+ */
+float sdfCurvature(in float3 p, in float epsilon) {
+    float2 e = float2(epsilon, 0);
+    float  laplacian = sdfScene(p + e.xyy).distance + sdfScene(p - e.xyy).distance
+        + sdfScene(p + e.yxy).distance + sdfScene(p - e.yxy).distance
+        + sdfScene(p + e.yyx).distance + sdfScene(p - e.yyx).distance
+        - 6 * sdfScene(p).distance;
+    // the Laplacian of a distance field is twice the mean curvature
+    return laplacian / (2 * epsilon * epsilon);
+}
+
+/**
  * \brief calculates normal as a gradient of the sdf using tetrahedron technique
  * \remarks see <a href="https://iquilezles.org/www/articles/normalsSDF/normalsSDF.htm">calculating normals by iq</a>
  */
@@ -259,6 +275,8 @@ fixed4 debugOverlay(in fixed4 color, in Material mat, in SdfResult sdf, in Ray3D
         color = fixed4((float3)eyeDepth / 5., 1);
     } else if (drawMode == SDF_DRAWMODE_OCCLUSION) {
         color = mat.occlusion;
+    } else if (drawMode == SDF_DRAWMODE_CURVATURE) {
+        color = sdf::debug::visualizeCurvature(sdfCurvature(sdf.p, 10 * _EPSILON_NORMAL));
     }
 
     UNITY_BRANCH

@@ -41,6 +41,7 @@ namespace me.tooster.sdf.Tests.Editor {
                     case 6: return sdf::primitives3D::capsule(float3(0, 1.5, 0), 1, 0.25);
                     case 7: return float4(sdf::operators::mirror(float3(-1, 2, -3), float3(1, 0, 1)), 0);
                     case 8: return float4(sdf::operators::twist(float3(1, 0.5, 0), UNITY_PI), 0);
+                    case 9: return sdfCurvature(float3(0, 0, 1), 0.01);
                     default: return sdf::primitives3D::cylinder_rounded(float3(0, 1, 0), 0.5, 0.2, 1);
                 }
             }
@@ -105,6 +106,12 @@ namespace me.tooster.sdf.Tests.Editor {
         public void Helper_ReturnsTheExpectedValue(int testCase, float x, float y, float z, float w) {
             var result = Run(testCase);
             Assert.That(Vector4.Distance(result, new Vector4(x, y, z, w)), Is.LessThan(1e-4f), $"got {result}");
+        }
+
+        // the scene of the test shader is a sphere of radius 1, whose mean curvature is 1
+        [Test]
+        public void Curvature_OfASphereIsTheInverseOfItsRadius() {
+            Assert.That(Run(9).x, Is.EqualTo(1).Within(0.02f));
         }
     }
 }
