@@ -111,7 +111,8 @@ Paths are relative to the package root.
     - `primitives.hlsl` defines SDF primitive functions like `torus` or `sphere`.
     - `raymarching.hlsl` defines structs commonly used by SDFs, like `SdfResult`, and the functions that march rays
       and compute normals and occlusion.
-    - `builtInShading.hlsl` defines the passes of the built-in pipeline: forward base, forward add and shadow caster.
+    - `builtInShading.hlsl` defines the passes of the built-in pipeline: forward base, forward add, deferred and shadow
+      caster.
       Each fragment builds its ray from the view and projection matrices, so the shadow caster pass renders shadow
       maps and the camera depth texture with the same code.
     - `scenePicking.hlsl` defines the passes with which the scene view outlines and picks objects, and the object
@@ -143,8 +144,8 @@ Paths are relative to the package root.
   Objects have the albedo, metallic, smoothness and emission of the Standard material, but no textures. You can
   customize generated shaders by extending the existing generators and implementing your own shading.
 - Some UI elements are still being improved; limitations of the Unity editor API make this ongoing work.
-- Generated shaders aren't tested for VR, for deferred rendering or for render pipelines other than forward
-  Built-in. Lightmaps and shadow masks don't apply to SDF scenes.
+- Generated shaders aren't tested for VR or for render pipelines other than the Built-in one. In deferred rendering,
+  Unity's fog doesn't apply to SDF scenes. Lightmaps and shadow masks don't apply to SDF scenes.
 - The HLSL syntax tree API is in its early stages, and a smooth developer experience was preferred over performance.
   This shouldn't matter now: generation isn't frequent, and syntax tree operations aren't a bottleneck in realistic
   use.

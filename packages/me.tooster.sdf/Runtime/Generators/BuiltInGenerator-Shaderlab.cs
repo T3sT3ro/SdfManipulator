@@ -108,6 +108,7 @@ namespace me.tooster.sdf.Generators {
                     new HlslInclude { hlsl = new InjectedLanguage<shaderlab, hlsl>(CommonHlslInclude()) },
                     ForwardBasePass(),
                     ForwardAddPass(),
+                    DeferredPass(),
                     ShadowCasterPass(),
                     SceneSelectionPass(),
                     PickingPass(),
@@ -174,6 +175,30 @@ namespace me.tooster.sdf.Generators {
                         "multi_compile_fog",
                         "vertex forwardAddVertex",
                         "fragment forwardAddFragment"
+                    ),
+                },
+            };
+
+        /// <summary>
+        ///     Writes the G-buffer for cameras in the Deferred rendering path, which Unity then lights with every light, so
+        ///     each pixel is marched once.
+        /// </summary>
+        Pass DeferredPass()
+            => new()
+            {
+                statements = new List<SubShaderOrPassStatement>
+                {
+                    new Pass.Name { name = "DEFERRED" },
+                    Tags(("LightMode", "Deferred")),
+                    new ZTest { operation = MaterialProperty("_ZTest") },
+                    new Cull { state = MaterialProperty("_Cull") },
+                    new ZWrite { state = MaterialProperty("_ZWrite") },
+                    PassProgram(
+                        "multi_compile_prepassfinal",
+                        // like the forward passes: SDF surfaces have no lightmap coordinates
+                        "skip_variants LIGHTMAP_ON DYNAMICLIGHTMAP_ON DIRLIGHTMAP_COMBINED SHADOWS_SHADOWMASK",
+                        "vertex deferredVertex",
+                        "fragment deferredFragment"
                     ),
                 },
             };

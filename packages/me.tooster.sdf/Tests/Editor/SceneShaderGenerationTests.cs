@@ -81,7 +81,11 @@ namespace me.tooster.sdf.Tests.Editor {
             scene.RevalidateScene();
             shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
 
-            Assert.That(LightModes(shader), Is.EqualTo(new[] { "ForwardBase", "ForwardAdd", "ShadowCaster", "SceneSelectionPass", "Picking", "SdfObjectPicking", "SdfFocus" }).IgnoreCase);
+            var expected = new List<string> { "ForwardBase", "ForwardAdd", "Deferred", "ShadowCaster", "SceneSelectionPass", "Picking", "SdfObjectPicking", "SdfFocus" };
+            // Unity drops the deferred pass on a device without deferred rendering, like the null device of -nographics
+            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
+                expected.Remove("Deferred");
+            Assert.That(LightModes(shader), Is.EqualTo(expected).IgnoreCase);
         }
 
         [Test]
@@ -106,6 +110,8 @@ namespace me.tooster.sdf.Tests.Editor {
             new object[] { "ForwardAdd", new[] { "SPOT", "SHADOWS_DEPTH" } },
             new object[] { "ForwardAdd", new[] { "POINT_COOKIE" } },
             new object[] { "ForwardAdd", new[] { "DIRECTIONAL_COOKIE", "SHADOWS_SCREEN" } },
+            new object[] { "Deferred", new[] { "UNITY_HDR_ON", "LIGHTPROBE_SH" } },
+            new object[] { "Deferred", new string[0] },
             new object[] { "ShadowCaster", new[] { "SHADOWS_DEPTH" } },
             new object[] { "ShadowCaster", new[] { "SHADOWS_CUBE" } },
         };
@@ -117,6 +123,8 @@ namespace me.tooster.sdf.Tests.Editor {
             shader = ShaderUtil.CreateShaderAsset(scene.AssembleShaderSource());
 
             var passIndex = LightModes(shader).FindIndex(mode => string.Equals(mode, lightMode, System.StringComparison.OrdinalIgnoreCase));
+            if (passIndex == -1 && lightMode == "Deferred" && SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
+                Assert.Ignore("Unity drops the deferred pass on the null device.");
             Assert.That(passIndex, Is.Not.EqualTo(-1), $"no {lightMode} pass");
             var pass = ShaderUtil.GetShaderData(shader).GetSubshader(0).GetPass(passIndex);
             var errors = new List<string>();

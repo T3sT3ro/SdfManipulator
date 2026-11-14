@@ -1,7 +1,8 @@
 #pragma once
 
 /*
- * Passes of the built-in render pipeline for raymarched SDF scenes: forward base, forward add and shadow caster.
+ * Passes of the built-in render pipeline for raymarched SDF scenes: forward base, forward add, deferred and shadow
+ * caster.
  *
  * Every fragment marches its own ray, which it builds from the current view and projection matrices. The same code
  * therefore renders for the camera, for the camera depth texture and for shadow maps, where the light takes the place of
@@ -136,6 +137,34 @@ half lightAttenuation(float3 worldPos) {
     return atten;
 }
 
+/// The input of Unity's GI functions for a surface at \p worldPos: ambient light from light probes and the reflection
+/// probes, plus \p light with \p atten
+UnityGIInput giInput(SurfaceOutputStandard o, float3 worldPos, half3 worldViewDir, UnityLight light, half atten) {
+    UnityGIInput result = (UnityGIInput)0;
+    result.light = light;
+    result.worldPos = worldPos;
+    result.worldViewDir = worldViewDir;
+    result.atten = atten;
+    result.lightmapUV = 0;
+    #if UNITY_SHOULD_SAMPLE_SH && !UNITY_SAMPLE_FULL_SH_PER_PIXEL
+    // the per-pixel part (L0 and L1) is added by the GI function, which expects the per-vertex part (L2) here
+    result.ambient = SHEvalLinearL2(half4(o.Normal, 1));
+    #endif
+    result.probeHDR[0] = unity_SpecCube0_HDR;
+    result.probeHDR[1] = unity_SpecCube1_HDR;
+    #if defined(UNITY_SPECCUBE_BLENDING) || defined(UNITY_SPECCUBE_BOX_PROJECTION) || defined(UNITY_ENABLE_REFLECTION_BUFFERS)
+    result.boxMin[0] = unity_SpecCube0_BoxMin;
+    #endif
+    #ifdef UNITY_SPECCUBE_BOX_PROJECTION
+    result.boxMax[0] = unity_SpecCube0_BoxMax;
+    result.probePosition[0] = unity_SpecCube0_ProbePosition;
+    result.boxMax[1] = unity_SpecCube1_BoxMax;
+    result.boxMin[1] = unity_SpecCube1_BoxMin;
+    result.probePosition[1] = unity_SpecCube1_ProbePosition;
+    #endif
+    return result;
+}
+
 /// Standard lighting of the main directional light, ambient light and reflection probes, for the forward base pass
 half4 shadeForwardBase(SdfResult sdf, Material mat) {
     SurfaceOutputStandard o = surfaceOutput(sdf, mat);
@@ -146,30 +175,7 @@ half4 shadeForwardBase(SdfResult sdf, Material mat) {
     gi.light.color = _LightColor0.rgb;
     gi.light.dir = normalize(UnityWorldSpaceLightDir(worldPos));
 
-    UnityGIInput giInput = (UnityGIInput)0;
-    giInput.light = gi.light;
-    giInput.worldPos = worldPos;
-    giInput.worldViewDir = worldViewDir;
-    giInput.atten = lightAttenuation(worldPos);
-    giInput.lightmapUV = 0;
-    #if UNITY_SHOULD_SAMPLE_SH && !UNITY_SAMPLE_FULL_SH_PER_PIXEL
-    // the per-pixel part (L0 and L1) is added by the GI function, which expects the per-vertex part (L2) here
-    giInput.ambient = SHEvalLinearL2(half4(o.Normal, 1));
-    #endif
-    giInput.probeHDR[0] = unity_SpecCube0_HDR;
-    giInput.probeHDR[1] = unity_SpecCube1_HDR;
-    #if defined(UNITY_SPECCUBE_BLENDING) || defined(UNITY_SPECCUBE_BOX_PROJECTION) || defined(UNITY_ENABLE_REFLECTION_BUFFERS)
-    giInput.boxMin[0] = unity_SpecCube0_BoxMin;
-    #endif
-    #ifdef UNITY_SPECCUBE_BOX_PROJECTION
-    giInput.boxMax[0] = unity_SpecCube0_BoxMax;
-    giInput.probePosition[0] = unity_SpecCube0_ProbePosition;
-    giInput.boxMax[1] = unity_SpecCube1_BoxMax;
-    giInput.boxMin[1] = unity_SpecCube1_BoxMin;
-    giInput.probePosition[1] = unity_SpecCube1_ProbePosition;
-    #endif
-
-    LightingStandard_GI(o, giInput, gi);
+    LightingStandard_GI(o, giInput(o, worldPos, worldViewDir, gi.light, lightAttenuation(worldPos)), gi);
     half4 color = LightingStandard(o, worldViewDir, gi);
     color.rgb += o.Emission;
     color.a = 1;
@@ -244,6 +250,56 @@ SdfFragmentOutput forwardAddFragment(SdfVertexOutput i) {
         o.color = 0;
     o.depth = clipSpaceDepth(sdf.p);
     return o;
+}
+
+#pragma endregion
+
+#pragma region deferred pass
+
+SdfVertexOutput deferredVertex(appdata_base v) { return sdfVertex(v); }
+
+/// Writes the G-buffer of the hit, which Unity lights with every light, so cameras in the Deferred rendering path march
+/// each pixel once. The emission buffer gets ambient light, reflections and emission. The debug views write their color
+/// into the emission buffer over a black surface, which the lights leave black.
+void deferredFragment(
+    SdfVertexOutput i,
+    out half4       outGBuffer0 : SV_Target0,
+    out half4       outGBuffer1 : SV_Target1,
+    out half4       outGBuffer2 : SV_Target2,
+    out half4       outEmission : SV_Target3,
+    out float       depth : SV_Depth
+) {
+    Ray3D     ray;
+    SdfResult sdf = marchFragment(i.clipPos, ray);
+    sdf.normal = calculateSdfNormal(sdf.p, _EPSILON_NORMAL);
+    Material mat = SdfMaterial(sdf);
+    depth = clipSpaceDepth(sdf.p);
+
+    bool debugView = (int)_DrawMode != SDF_DRAWMODE_MATERIAL;
+    UNITY_BRANCH
+    if (_SHOW_WORLD_GRID != 0 && !debugView) {
+        // lit like the surface, since the lights come later
+        fixed4 gridColor = sdf::debug::grid(sdf.p, 0.25, .04);
+        mat.albedo.rgb = lerp(mat.albedo.rgb, gridColor.rgb, gridColor.a);
+    }
+
+    SurfaceOutputStandard o = surfaceOutput(sdf, mat);
+    half3                 worldViewDir = normalize(UnityWorldSpaceViewDir(sdf.p));
+    UnityGI               gi = (UnityGI)0;
+    gi.light.dir = half3(0, 1, 0); // no direct light: the deferred lights add it
+    LightingStandard_GI(o, giInput(o, sdf.p, worldViewDir, gi.light, 1), gi);
+    outEmission = LightingStandard_Deferred(o, worldViewDir, gi, outGBuffer0, outGBuffer1, outGBuffer2);
+
+    UNITY_BRANCH
+    if (debugView) {
+        outGBuffer0 = half4(0, 0, 0, outGBuffer0.a);
+        outGBuffer1 = 0;
+        outEmission = debugOverlay(half4(0, 0, 0, 1), mat, sdf, ray);
+    }
+    #ifndef UNITY_HDR_ON
+    // without HDR, Unity stores the emission buffer encoded for multiplicative blending
+    outEmission.rgb = exp2(-outEmission.rgb);
+    #endif
 }
 
 #pragma endregion

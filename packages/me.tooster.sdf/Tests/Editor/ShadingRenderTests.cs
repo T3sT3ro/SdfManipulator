@@ -230,6 +230,37 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(dyed.Count(c => c.r > 2 * c.g + 20), Is.GreaterThan(10), "nothing is painted red");
         }
 
+        [Test]
+        public void DeferredShading_WritesTheSdfIntoTheGBuffer() {
+            world.ground.SetActive(false);
+            var sdfMask = world.Render().Select(c => c.r + c.g + c.b > 0).ToArray();
+            var sdfPixels = sdfMask.Count(c => c);
+            Assert.That(sdfPixels, Is.GreaterThan(100), "the SDF isn't visible");
+
+            // copy the albedo buffer right after the G-buffer pass
+            var albedo = new RenderTexture(RenderTestScene.Size, RenderTestScene.Size, 0, RenderTextureFormat.ARGB32);
+            var copy = new CommandBuffer { name = "copy albedo" };
+            copy.Blit(BuiltinRenderTextureType.GBuffer0, albedo);
+            world.camera.renderingPath = RenderingPath.DeferredShading;
+            world.camera.AddCommandBuffer(CameraEvent.AfterGBuffer, copy);
+            try {
+                var shaded = world.Render();
+                var readback = new Texture2D(RenderTestScene.Size, RenderTestScene.Size, TextureFormat.RGBA32, false);
+                RenderTexture.active = albedo;
+                readback.ReadPixels(new Rect(0, 0, RenderTestScene.Size, RenderTestScene.Size), 0, 0);
+                RenderTexture.active = null;
+                var written = readback.GetPixels32().Where((c, i) => sdfMask[i] && c.r + c.g + c.b > 0).Count();
+                Object.DestroyImmediate(readback);
+
+                Assert.That(written, Is.GreaterThan(sdfPixels * 9 / 10), "the deferred pass doesn't write the SDF's albedo");
+                Assert.That(shaded.Count(c => c.r + c.g + c.b > 0), Is.GreaterThan(sdfPixels * 9 / 10), "the deferred lights don't show the SDF");
+            } finally {
+                world.camera.RemoveCommandBuffer(CameraEvent.AfterGBuffer, copy);
+                copy.Release();
+                Object.DestroyImmediate(albedo);
+            }
+        }
+
         static int DarkerPixels(Color32[] image, Color32[] reference, bool[] mask = null)
             => image.Where((c, i) => (mask == null || mask[i]) && Luminance(reference[i]) - Luminance(c) > 0.1f).Count();
 

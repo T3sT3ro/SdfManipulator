@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   removed, reordered or moved.
 - Generated shaders have a forward add pass for each additional pixel light. Light attenuation is computed at the
   raymarched hit instead of at the domain mesh.
+- Generated shaders have a deferred pass, which writes the G-buffer of the hit: cameras in the Deferred rendering path
+  march each pixel once, and Unity lights it with every light (#117).
 - Generated shaders have a shadow caster pass, so SDF scenes cast shadows and write their raymarched depth into the
   camera depth texture. SDF scenes receive realtime shadows, which are sampled at the raymarched hit.
 - *SDF Material* components give SDF objects the properties of the Standard material: albedo, metallic, smoothness
