@@ -17,7 +17,8 @@ namespace me.tooster.sdf.Editor {
         internal const string ShaderIdentifier   = "sdf-shader";
         internal const string MaterialIdentifier = "sdf-material";
 
-        public override uint GetVersion() => 1;
+        // 2: the default material holds the values of the scene
+        public override uint GetVersion() => 2;
 
         void OnPostprocessPrefab(GameObject root) {
             // A scene in a nested prefab belongs to that prefab, which generates its own shader.
@@ -45,6 +46,12 @@ namespace me.tooster.sdf.Editor {
             context.AddObjectToAsset(MaterialIdentifier, material);
 
             scene.UseGeneratedAssets(shader, material);
+
+            // Renderers that no SdfScene updates, e.g. in the preview of the material or the thumbnail of the prefab, draw
+            // with the values of the material. The material has no properties for them, but it keeps values set by name.
+            scene.UpdateShaderUniforms(forceUpdateAll: true);
+            if (scene.Renderers.FirstOrDefault(r => r != null) is { } renderer)
+                SdfSceneDrawing.CopyUniforms(material, renderer, scene, onlyAssets: true);
         }
     }
 

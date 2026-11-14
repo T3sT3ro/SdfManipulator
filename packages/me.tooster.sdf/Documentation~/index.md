@@ -112,8 +112,9 @@ Paths are relative to the package root.
     - It listens to property change events emitted by controllers and sets the changed uniforms on its renderers with
       a `MaterialPropertyBlock`, so instances of the same prefab can have different values. The generated shader
       declares the uniforms without values and has no material properties for them, so changing a value doesn't change
-      the shader. The material only holds the render state. A renderer that no `SdfScene` updates, e.g. in a prefab
-      preview, renders nothing: all its uniforms are 0, including the step count.
+      the shader. The material holds the render state, and the generated default material also holds the values of the
+      scene from the last import, without material properties for them. So a renderer that no `SdfScene` updates, e.g.
+      in the preview of the material or the thumbnail of the prefab, draws the scene as it was saved.
     - *Bake Values* writes the current values of the controllers into the shader as `static const` variables instead
       of uniforms, for scenes that don't change. The compiler can then fold them, and the scene sets fewer uniforms.
       Changing a baked value regenerates the shader, which happens only in Prefab Mode, so instances of the prefab

@@ -49,6 +49,20 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void Import_WritesTheValuesOfTheSceneIntoTheDefaultMaterial() {
+            // load the material again from the import result, instead of the object that the import created
+            Resources.UnloadAsset(AssetDatabase.LoadAllAssetRepresentationsAtPath(prefabPath).OfType<Material>().Single());
+            var material = AssetDatabase.LoadAllAssetRepresentationsAtPath(prefabPath).OfType<Material>().Single();
+            var scene = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath).GetComponentInChildren<SdfScene>(true);
+            scene.RevalidateScene();
+
+            var sphere = scene.GetComponentInChildren<SdfSphereController>(true);
+            var radius = scene.sceneData.controllers[sphere].properties[new Unity.Properties.PropertyPath(nameof(SdfSphereController.Radius))];
+            Assert.That(material.GetFloat(radius.shaderId), Is.EqualTo(sphere.Radius), "the material lacks the radius of the sphere");
+            Assert.That(material.GetInteger("_MAX_STEPS"), Is.EqualTo(scene.rendering.maxSteps), "the material lacks the rendering settings");
+        }
+
+        [Test]
         public void Import_NamesShaderAfterPrefabAndItsGuid() {
             var shader = AssetDatabase.LoadAllAssetRepresentationsAtPath(prefabPath).OfType<Shader>().Single();
 

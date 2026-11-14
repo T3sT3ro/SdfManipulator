@@ -34,7 +34,18 @@ namespace me.tooster.sdf.Editor {
                 copies[source] = material = new Material(source.shader) { hideFlags = HideFlags.HideAndDontSave };
             }
             material.CopyPropertiesFromMaterial(source);
+            CopyUniforms(material, renderer, scene);
+            return material;
+        }
 
+        /// <summary>
+        ///     Sets the uniforms of the renderer's property block, the scene's rendering settings and the scene's space on
+        ///     <paramref name="material" />, so that the material draws the scene like the renderer does.
+        /// </summary>
+        /// <param name="onlyAssets">
+        ///     Skip textures that aren't assets, e.g. the white texture of a missing map, for a material that is saved
+        /// </param>
+        internal static void CopyUniforms(Material material, Renderer renderer, SdfScene scene, bool onlyAssets = false) {
             renderer.GetPropertyBlock(block);
             foreach (var property in scene.sceneData.Properties) {
                 var type = property.property.DeclaredValueType();
@@ -44,15 +55,17 @@ namespace me.tooster.sdf.Editor {
                     material.SetInteger(property.shaderId, block.GetInteger(property.shaderId));
                 else if (type == typeof(Matrix4x4))
                     material.SetMatrix(property.shaderId, block.GetMatrix(property.shaderId));
-                else if (type == typeof(Texture2D) || type == typeof(Texture3D))
-                    material.SetTexture(property.shaderId, block.GetTexture(property.shaderId));
+                else if (type == typeof(Texture2D) || type == typeof(Texture3D)) {
+                    var texture = block.GetTexture(property.shaderId);
+                    if (!onlyAssets || (texture != null && EditorUtility.IsPersistent(texture)))
+                        material.SetTexture(property.shaderId, texture);
+                }
                 else // vectors and colors, which the block already holds in linear space
                     material.SetVector(property.shaderId, block.GetVector(property.shaderId));
             }
             scene.rendering.ApplyTo(material);
             material.SetMatrix(SdfScene.worldToSceneId, scene.transform.worldToLocalMatrix);
             material.SetFloat(SdfScene.sceneDistanceScaleId, TransformController.DistanceScaleOf(scene.transform.worldToLocalMatrix));
-            return material;
         }
 
         /// <summary>

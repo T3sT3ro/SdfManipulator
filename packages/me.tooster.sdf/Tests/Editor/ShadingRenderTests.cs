@@ -432,6 +432,29 @@ namespace me.tooster.sdf.Tests.Editor {
         }
 
         [Test]
+        public void MaterialWithTheValues_DrawsTheSceneWithoutAPropertyBlock() {
+            world.ground.SetActive(false);
+            var withBlock = world.Render();
+            var renderers = world.root.GetComponentsInChildren<Renderer>(true);
+            var material = new Material(world.material);
+            try {
+                global::me.tooster.sdf.Editor.SdfSceneDrawing.CopyUniforms(material, renderers[0], world.scene);
+                world.scene.enabled = false;
+                foreach (var renderer in renderers) {
+                    renderer.SetPropertyBlock(null);
+                    renderer.sharedMaterial = material;
+                }
+                var withoutBlock = world.Render();
+
+                var covered = withBlock.Count(c => c.a > 0);
+                Assert.That(covered, Is.GreaterThan(100), "the SDF isn't visible");
+                Assert.That(DifferentPixels(withoutBlock, withBlock), Is.LessThan(covered / 50), "the material draws something else");
+            } finally {
+                Object.DestroyImmediate(material);
+            }
+        }
+
+        [Test]
         public void BakedValues_RenderLikeUniforms() {
             var withUniforms = world.Render();
             world.scene.bakeValues = true;
