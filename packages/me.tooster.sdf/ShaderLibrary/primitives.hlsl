@@ -87,8 +87,10 @@ namespace sdf { namespace primitives3D {
         return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
     }
 
-    /// a cylinder with radius \p ra and half height \p h, whose edges are rounded with radius \p rb
+    /// a cylinder with radius \p ra and half height \p h, whose edges are rounded with radius \p rb. The rounding keeps
+    /// the size of the cylinder, so it's at most the smaller of \p ra and \p h.
     float cylinder_rounded(float3 p, float ra, float rb, float h) {
+        rb = clamp(rb, 0, max(min(ra, h), 0));
         float2 d = float2(length(p.xz) - ra + rb, abs(p.y) - h + rb);
         return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - rb;
     }

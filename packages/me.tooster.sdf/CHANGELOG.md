@@ -146,7 +146,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Mode into the prefab instead of the main scene, and the creation of operators can be undone (#77).
 - Undo didn't revert dragging the scene handles of primitives, because the handles changed the controller before
   undo recorded it (#76).
-- Rounded cylinders were taller by twice their rounding; the rounding now stays within their height (#100).
+- Rounded cylinders were taller by twice their rounding; the rounding now stays within their height (#100). A
+  rounding larger than the radius or the half height is clamped to the smaller of them.
 - The scene handle of a capped torus showed only half of the arc that the torus keeps, because the arc started at the
   z axis while the torus keeps the cap on both sides of it. The handle now draws the whole arc, with a handle at each
   end that follows the cursor. Its radius handle, which changed nothing, is gone.
