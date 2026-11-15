@@ -32,6 +32,13 @@ namespace sdf { namespace primitives3D {
         return length(max(v, 0.0)) + min(max(v), 0.0);
     }
 
+    /// a box with half size \p halfsize, whose edges and corners are rounded with radius \p r. The rounding keeps the
+    /// size of the box, so it's at most the smallest half size.
+    float box_rounded(float3 p, float3 halfsize, float r) {
+        r = clamp(r, 0, max(min(halfsize.x, min(halfsize.y, halfsize.z)), 0));
+        return box(p, halfsize - r) - r;
+    }
+
 
     float box_frame(float3 p, float3 halfsize, float extrude) {
         p = abs(p) - halfsize;

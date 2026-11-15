@@ -44,6 +44,11 @@ namespace me.tooster.sdf.Tests.Editor {
                     case 9: return sdfCurvature(float3(0, 0, 1), 0.01);
                     case 10: return sdf::primitives3D::ellipsoid(float3(1, 0, 0), float3(0.5, 0.3, 0.3));
                     case 11: return sdf::primitives3D::octahedron(float3(1, 0, 0), 0.5);
+                    case 12: return float4(
+                        sdf::primitives3D::box_rounded(float3(1, 0, 0), float3(0.5, 0.5, 0.5), 0.25),
+                        sdf::primitives3D::box_rounded(float3(1, 1, 1), float3(0.5, 0.5, 0.5), 0.25),
+                        sdf::primitives3D::box_rounded(float3(1, 1, 1), float3(0.5, 0.5, 0.5), 2),
+                        sdf::primitives3D::box_rounded(float3(1, 1, 1), float3(0.5, 0.5, 0.5), -1));
                     default: return sdf::primitives3D::cylinder_rounded(float3(0, 1, 0), 0.5, 0.2, 1);
                 }
             }
@@ -108,6 +113,9 @@ namespace me.tooster.sdf.Tests.Editor {
         // along an axis, the bounds of the ellipsoid and the octahedron are exact
         [TestCase(10, 0.5f, 0.5f, 0.5f, 0.5f)]
         [TestCase(11, 0.288675f, 0.288675f, 0.288675f, 0.288675f)]
+        // the rounding of a box keeps its faces in place, the corner is a sphere of the rounding's radius, and the
+        // rounding is clamped between 0 and the smallest half size
+        [TestCase(12, 0.5f, 1.049038f, 1.232051f, 0.866025f)]
         public void Helper_ReturnsTheExpectedValue(int testCase, float x, float y, float z, float w) {
             var result = Run(testCase);
             Assert.That(Vector4.Distance(result, new Vector4(x, y, z, w)), Is.LessThan(1e-4f), $"got {result}");

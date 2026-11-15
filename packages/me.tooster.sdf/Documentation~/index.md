@@ -45,6 +45,8 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
   the Visual Effect Graph made from a mesh. The texture fills a box of the given *Size* around the object. *Distance
   Scale* converts the stored values to distances: for textures from the SDF Bake Tool, set it to the largest side of
   the box.
+- *Rounding* on a box and on a rounded cylinder rounds their edges and keeps their size, like the corner radius in a
+  vector drawing app. The *Rounding* operator instead grows any SDF by its radius.
 - SDF objects and whole scenes can be scaled. With uniform scale, the distances stay exact. Non-uniform scale stretches
   the SDF: the object marches slower, and smooth blends and roundings stretch with it.
 - A combination unites, intersects or subtracts its children, also with smooth edges, or dyes its first child with the
