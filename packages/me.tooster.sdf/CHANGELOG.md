@@ -117,6 +117,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   these components puts it into the object's SDF stack after the transform.
 - Capsule, ellipsoid and octahedron primitives (*GameObject > SDF > Primitives*), with scene handles for their sizes.
 - *Rounding* on a box rounds its edges and corners and keeps its size. It's at most the smallest of the extents.
+- Boxes and rounded cylinders have a scene handle for their rounding, like the corner widgets of vector drawing apps:
+  a ring at the center of the rounding, on the corner or edge that faces the camera. Drag it toward the inside of the
+  shape to make the rounding larger. Arcs show the rounding between the faces.
 - *SDF > Property Link* components make a shader property of one controller read the uniform of the same property on
   another controller, so one value drives several controllers, e.g. the radius of several spheres (#48).
 - *Clip To Domain Box* in the rendering settings marches rays only inside the box of the domain mesh: they start
