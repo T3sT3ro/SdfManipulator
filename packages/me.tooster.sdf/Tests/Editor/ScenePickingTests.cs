@@ -116,21 +116,42 @@ namespace me.tooster.sdf.Tests.Editor {
             Assert.That(withoutIt.Count(o => o != null), Is.GreaterThan(0), "no other object is picked");
         }
 
-        [Test]
-        public void FocusPass_ShowsTheSelectedObject() {
-            var picked = PickedObjects(_ => true);
-            var sphere = world.root.GetComponentInChildren<me.tooster.sdf.Primitives.SdfSphereController>(true).GetComponent<SdfController>();
-            var id = world.scene.sceneData.controllers[sphere].numericId;
+        SdfController Sphere() => world.root.GetComponentInChildren<me.tooster.sdf.Primitives.SdfSphereController>(true).GetComponent<SdfController>();
 
-            var focus = world.RenderImmediate(() => Assert.That(SdfSceneFocus.Draw(world.scene, id), "nothing has the focus pass"))
-                .Select(c => c.r + c.g + c.b + c.a > 0)
-                .ToArray();
+        /// <summary>
+        ///     Draws the focus view of <paramref name="sphere" /> and checks that it covers the pixels where the sphere is
+        ///     visible in <paramref name="picked" />, and not much more. Returns the colors of those pixels.
+        /// </summary>
+        Color32[] FocusOnSphere(SdfController sphere, Object[] picked) {
+            var focus = world.RenderImmediate(() => Assert.That(SdfSceneFocus.Draw(world.scene, sphere), "nothing has the focus pass"));
+            var covered = focus.Select(c => c.r + c.g + c.b + c.a > 0).ToArray();
 
             var spherePixels = picked.Count(o => o == sphere.gameObject);
             Assert.That(spherePixels, Is.GreaterThan(10), "the sphere isn't visible");
-            var shown = picked.Where((o, i) => o == sphere.gameObject && focus[i]).Count();
-            Assert.That(shown, Is.GreaterThan(spherePixels * 95 / 100), "the focus view doesn't show the sphere");
-            Assert.That(focus.Count(f => f), Is.LessThan(focus.Length / 2), "the focus view covers more than the sphere");
+            var shown = focus.Where((c, i) => picked[i] == sphere.gameObject && covered[i]).ToArray();
+            Assert.That(shown.Length, Is.GreaterThan(spherePixels * 95 / 100), "the focus view doesn't show the sphere");
+            Assert.That(covered.Count(f => f), Is.LessThan(covered.Length / 2), "the focus view covers more than the sphere");
+            return shown;
+        }
+
+        [Test]
+        public void FocusPass_ShowsTheSelectedObject() {
+            var sphere = Sphere();
+            var shown = FocusOnSphere(sphere, PickedObjects(_ => true));
+            Assert.That(shown, Has.All.Matches<Color32>(c => c.b > c.r), "the sphere isn't blue");
+        }
+
+        [Test]
+        public void FocusPass_ShowsTheShapeOfAnInvertedObjectInRed() {
+            var sphere = Sphere();
+            // the pixels where the sphere is visible before it's turned inside out
+            var picked = PickedObjects(_ => true);
+
+            sphere.Inverted = true;
+            world.Regenerate();
+
+            var shown = FocusOnSphere(sphere, picked);
+            Assert.That(shown, Has.All.Matches<Color32>(c => c.r > c.b), "the inverted sphere isn't red");
         }
     }
 }

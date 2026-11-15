@@ -81,13 +81,25 @@ float4 objectPickingFragment(SdfVertexOutput i, out float depth : SV_Depth) : SV
 
 /// Set by SdfSceneFocus: the ID of the object that the focus view shows on its own
 float _SdfFocusId;
+/// Set by SdfSceneFocus: 1 if the focused object is inverted, 0 otherwise. An inverted object fills all the space around
+/// its shape, so the focus view shows the shape itself instead, which is the volume that the object removes.
+float _SdfFocusInverted;
+
+/// Evaluates the object with the ID \p id on its own. The distance of an inverted object gets its sign flipped back, so
+/// that the shape of the object is inside.
+SdfResult focusedObject(float3 p, int id) {
+    SdfResult sdf = sdfObject(p, id);
+    if (_SdfFocusInverted != 0)
+        sdf.distance = -sdf.distance;
+    return sdf;
+}
 
 /// Marches a ray against the object with the ID \p id only
 SdfResult marchObject(inout Ray3D ray, int id) {
     SdfResult sdf = emptySdfResult();
     for (ray.steps = 0; ray.steps < _MAX_STEPS && ray.marchedDistance < ray.maxDistance; ray.steps++) {
         float3    p = ray.ro + ray.marchedDistance * ray.rd;
-        SdfResult objectAtP = sdfObject(p, id);
+        SdfResult objectAtP = focusedObject(p, id);
         if (objectAtP.distance < _EPSILON_RAY) {
             sdf = objectAtP;
             sdf.p = p;
@@ -101,7 +113,8 @@ SdfResult marchObject(inout Ray3D ray, int id) {
 
 SdfVertexOutput focusVertex(appdata_base v) { return sdfVertex(v); }
 
-/// Draws the focused object as a translucent ghost, also where other objects hide it or an operation removes it
+/// Draws the focused object as a translucent ghost, also where other objects hide it or an operation removes it. An
+/// inverted object is red.
 float4 focusFragment(SdfVertexOutput i) : SV_Target {
     Ray3D ray;
     if (!fragmentRay(i.clipPos, ray))
@@ -113,14 +126,16 @@ float4 focusFragment(SdfVertexOutput i) : SV_Target {
 
     const float2 k = float2(1, -1);
     float3 normal = normalize(
-        k.xyy * sdfObject(sdf.p + k.xyy * _EPSILON_NORMAL, id).distance +
-        k.yyx * sdfObject(sdf.p + k.yyx * _EPSILON_NORMAL, id).distance +
-        k.yxy * sdfObject(sdf.p + k.yxy * _EPSILON_NORMAL, id).distance +
-        k.xxx * sdfObject(sdf.p + k.xxx * _EPSILON_NORMAL, id).distance
+        k.xyy * focusedObject(sdf.p + k.xyy * _EPSILON_NORMAL, id).distance +
+        k.yyx * focusedObject(sdf.p + k.yyx * _EPSILON_NORMAL, id).distance +
+        k.yxy * focusedObject(sdf.p + k.yxy * _EPSILON_NORMAL, id).distance +
+        k.xxx * focusedObject(sdf.p + k.xxx * _EPSILON_NORMAL, id).distance
     );
     // brighter where the surface faces the camera, so the shape reads without lighting
-    float facing = saturate(dot(normal, -ray.rd));
-    return float4(lerp(float3(0.2, 0.45, 1), float3(0.75, 0.9, 1), facing), 0.35);
+    float  facing = saturate(dot(normal, -ray.rd));
+    float3 edgeColor = _SdfFocusInverted != 0 ? float3(1, 0.25, 0.2) : float3(0.2, 0.45, 1);
+    float3 faceColor = _SdfFocusInverted != 0 ? float3(1, 0.8, 0.75) : float3(0.75, 0.9, 1);
+    return float4(lerp(edgeColor, faceColor, facing), 0.35);
 }
 
 #pragma endregion

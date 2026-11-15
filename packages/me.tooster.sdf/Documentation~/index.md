@@ -61,7 +61,8 @@ and material, and `Showcase.unity`, which places all of them under an HDRI sky.
   its target read the uniform of the same property on the driver.
 - In the scene view, click an SDF surface to select the scene, and click it again to select the object under the
   cursor. The scene view outlines selected objects and shows them on their own as translucent ghosts, also where
-  they're hidden or subtracted. *Tools > SDF > Show Selected Objects* turns the ghosts off.
+  they're hidden or subtracted. The ghost of an inverted object is red and shows the volume that the object removes.
+  *Tools > SDF > Show Selected Objects* turns the ghosts off.
 
 ## Writing your own controllers
 
